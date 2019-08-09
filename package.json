@@ -1,0 +1,25 @@
+{
+  "name": "tidyblocks",
+  "version": "0.2.0",
+  "description": "A blocks-based tool for tidy data manipulation and analysis.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tidyblocks/tidyblocks.git"
+  },
+  "keywords": [
+    "blocks",
+    "JavaScript",
+    "tidy",
+    "data"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tidyblocks/tidyblocks/issues"
+  },
+  "homepage": "https://github.com/tidyblocks/tidyblocks#readme"
+}
