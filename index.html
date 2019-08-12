@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script language="javascript" type="text/javascript" src="node_modules/data-forge/dist/web/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
+
+    <link href="static/tidyblocks.css" rel="stylesheet" type="text/css">
+    <script src="static/tidyblocks.js"></script>
+  </head>
+  <body>
+    <div id="blocklyArea">Blockly Area</div>
+    <div id="displayArea">
+      <button id="showCode" onclick="showCode()"><i class="fa fa-bug"></i></button>
+      <div id="codeOutput">
+        Generated Code
+      </div>
+      <div id="plotOutput">
+        Plot Output
+      </div>
+      <div id="dataOutput">
+        Data Output
+      </div>
+    </div>
+  </body>
+</html>
