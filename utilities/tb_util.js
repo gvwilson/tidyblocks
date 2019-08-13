@@ -60,7 +60,7 @@ function runCode() {
   } else {
     console.log(code)
     dfArray = eval(code).toArray()
-    document.getElementById('dataTableOutput').innerHTML = json2table(dfArray);
+    document.getElementById('dataOutput').innerHTML = json2table(dfArray);
   }
   
 }
