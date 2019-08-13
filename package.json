@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/tidyblocks/tidyblocks#readme",
   "dependencies": {
-    "blockly": "^1.0.0",
     "data-forge": "^1.7.2"
   }
 }

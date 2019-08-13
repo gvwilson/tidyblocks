@@ -3,33 +3,31 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
+    <!-- Visual appearance -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
-
-    <script language="javascript" type="text/javascript" src="node_modules/data-forge/dist/web/index.js"></script>
-
     <link href="static/tidyblocks.css" rel="stylesheet" type="text/css">
-    <script src="static/tidyblocks.js"></script>
-
   </head>
   <body>
   
-  
     <div id="codeArea">
-     <button id="blockToText" onclick="blockToText()"> Block to Text
-     <i class="fa fa-bug"></i>
-     </button>
-     <button id="runCode" onclick="runCode()"> Run Code
-     <i class="fa fa-bug"></i>
-     </button>
-    	<div class="input" id="blockOutput">
-    	Block Code
-    	</div>
-    	<div class="input" id="codeOutput">
-    	Generated Code
-    	</div>
+      <button id="blockToText" onclick="blockToText()">
+        Block to Text
+        <i class="fa fa-bug"></i>
+      </button>
+      <button id="runCode" onclick="runCode()">
+        Run Code
+        <i class="fa fa-play"></i>
+      </button>
+      <div class="input" id="blockDisplay">
+        <xml id="toolbox">
+          <category name="Data">
+            <block type="unit"></block>
+          </category>
+        </xml>
+      </div>
+      <div class="input" id="codeOutput">
+        Generated Code
+      </div>
     </div>
     
     <div id="displayArea">
@@ -40,5 +38,25 @@
         Data Output
       </div>
     </div>
+
+    <!-- Blockly itself -->
+    <script language="javascript" type="text/javascript" src="blockly/blockly_compressed.js"></script>
+    <script language="javascript" type="text/javascript" src="blockly/blocks_compressed.js"></script>
+    <script language="javascript" type="text/javascript" src="blockly/javascript_compressed.js"></script>
+    <script language="javascript" type="text/javascript" src="msg/js/en.js"></script>
+
+    <!-- DataForge, Vega-Lite, and what-not -->
+    <script src="node_modules/data-forge/dist/web/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
+
+    <!-- TidyBlocks supports -->
+    <script src="utilities/tb_dataframe.js"></script>
+    <script src="utilities/tb_util.js"></script>
+
+    <!-- TidyBlocks blocks -->
+    <script src="blocks/unit.js"></script>
+    <script src="generators/js/unit.js"></script>
   </body>
 </html>

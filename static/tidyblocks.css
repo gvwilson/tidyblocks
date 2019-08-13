@@ -42,6 +42,11 @@ body {
     overflow-x: scroll;
 }
 
+/* Block display area within block area. */
+#blockDisplay {
+    background-color: #e0f0e0;
+}
+
 /* Code output area within block area. */
 #codeOutput {
     background-color: #f0e0f0;

@@ -25,3 +25,5 @@ and that your work may be made available under the terms of [our license](LICENS
 
 1.  Go into the newly-created `tidyblocks` directory
     and run `npm install` to install all of the packages we depend on.
+    -   Note: do *not* install `blockly` itself from NPM: madness will ensue.
+        We have included a *working* copy of the library in this repository.

@@ -1,8 +1,6 @@
-// goog.provide('Blockly.Blocks.texts')
-// goog.provide('Blockly.Constants.Text')
-// goog.require('Blockly.Blocks')
-goog.require('Blockly')
-// FIXME: require data-forge instead of relying on inclusion in HTML
+//
+// Generate code to create 1x1 data frame for testing purposes.
+//
 
 Blockly.JavaScript['unit'] = function(block) {
   return `new TidyBlocksDataFrame([{"single": 1}])`
