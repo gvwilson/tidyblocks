@@ -1,19 +1,18 @@
 //
-// Set the display property of the three output panes.
+// Set the display property of the two input panes.
 //
 function initializeDisplay() {
   for (let [nodeId, state] of [['codeOutput', 'none'],
-                               ['plotOutput', 'block'],
-                               ['dataOutput', 'block']]) {
+                               ['blockOutput', 'block']]) {
     document.getElementById(nodeId).style.display = state
   }
 }
 
 //
-// Toggle between code output and plot output panes.
+// Toggle between block input and text input panes.
 //
-function toggleCodeAndPlot() {
-  for (let nodeId of ['codeOutput', 'plotOutput']) {
+function blockToText() {
+  for (let nodeId of ['codeOutput', 'blockOutput']) {
     const node = document.getElementById(nodeId)
     if (node.style.display === 'none') {
       node.style.display = 'block'

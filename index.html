@@ -15,14 +15,24 @@
 
   </head>
   <body>
-    <div id="blocklyArea">Blockly Area</div>
+  
+  
+    <div id="codeArea">
+     <button id="blockToText" onclick="blockToText()"> Block to Text
+     <i class="fa fa-bug"></i>
+     </button>
+     <button id="runCode" onclick="runCode()"> Run Code
+     <i class="fa fa-bug"></i>
+     </button>
+    	<div class="input" id="blockOutput">
+    	Block Code
+    	</div>
+    	<div class="input" id="codeOutput">
+    	Generated Code
+    	</div>
+    </div>
+    
     <div id="displayArea">
-      <button id="toggleCodeAndPlot" onclick="toggleCodeAndPlot()">
-        <i class="fa fa-bug"></i>
-      </button>
-      <div class="output" id="codeOutput">
-        Generated Code
-      </div>
       <div class="output" id="plotOutput">
         Plot Output
       </div>

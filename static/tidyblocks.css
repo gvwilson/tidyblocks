@@ -7,8 +7,8 @@ body {
     margin: 0px;
 }
 
-/* Blockly area fills left half */
-#blocklyArea {
+/* Code area fills left half */
+#codeArea {
     display: inline-block;
     width: 50%;
     height: 100%;
@@ -26,6 +26,14 @@ body {
     float: left;
 }
 
+/* Input panes within code area */
+.input {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: scroll;
+}
+
 /* Output panes within display area. */
 .output {
     width: 100%;
@@ -34,7 +42,7 @@ body {
     overflow-x: scroll;
 }
 
-/* Code output area within display area. */
+/* Code output area within block area. */
 #codeOutput {
     background-color: #f0e0f0;
 }
@@ -49,11 +57,7 @@ body {
     background-color: #e0f0f0;
 }
 
-/* Button used to toggle between code and plot. */
-button#toggleCodeAndPlot {
-    height: 3em;
-    width: 3em;
-    border: none;
-    border-radius: 10px;
-    background-color: #f0e0e0;
+/* Button used to run code */
+button#runCode {
+    float: right;
 }
