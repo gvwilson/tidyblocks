@@ -23,18 +23,14 @@ function blockToText() {
 }
 
 //
-// Run the code corresponding to the user's blocks.
-//
-function runCode() {
-  console.log(`I'm in your code and running it.`) // FIXME
-}
-
-//
 // Set up Blockly display.
 //
+let blocklyDiv = null
+let demoWorkspace = null
+
 function setUpBlockly() {
-  const blocklyDiv = document.getElementById('blockDisplay')
-  const demoWorkspace = Blockly.inject(
+  blocklyDiv = document.getElementById('blockDisplay')
+  demoWorkspace = Blockly.inject(
     blocklyDiv,
     {
       media: 'media/',
@@ -44,6 +40,29 @@ function setUpBlockly() {
       theme: Blockly.Themes.Tidy
     }
   )
+}
+
+//
+// Run the code corresponding to the user's blocks.
+//
+
+function runCode() {
+  // run code and show in field
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  if (code.includes("vega")) {
+    console.log(code)
+    splitdf = code.split("SPLIT", 2)
+    console.log(splitdf)
+    const dfArray = eval(splitdf[0]).toArray()
+    console.log(dfArray)
+    eval(splitdf[1])
+  } else {
+    console.log(code)
+    dfArray = eval(code).toArray()
+    document.getElementById('dataTableOutput').innerHTML = json2table(dfArray);
+  }
+  
 }
 
 //
