@@ -1,11 +1,11 @@
 //
-// Define visuals for creating mtcars dataset block
+// Define visuals for creating toothGrowth dataset block
 //
 
 Blockly.defineBlocksWithJsonArray([
     {
-      type: 'data_mtcars',
-      message0: 'Create mtcars dataset',
+      type: 'data_toothGrowth',
+      message0: 'Create tooth growth dataset',
       nextStatement: null,
       style: {
         hat: 'cap'

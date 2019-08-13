@@ -1,11 +1,11 @@
 //
-// Define visuals for creating earthquake dataset block
+// Define visuals for creating earthquakes dataset block
 //
 
 Blockly.defineBlocksWithJsonArray([
     {
-      type: 'data_earthquake',
-      message0: 'Create earthquake dataset',
+      type: 'data_earthquakes',
+      message0: 'Create earthquakes dataset',
       nextStatement: null,
       style: {
         hat: 'cap'
