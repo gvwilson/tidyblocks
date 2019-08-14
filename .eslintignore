@@ -1,2 +1,3 @@
 blockly/*.js
+dist/*.js
 msg/*.js
