@@ -4,6 +4,7 @@
   "description": "A blocks-based tool for tidy data manipulation and analysis.",
   "main": "index.js",
   "scripts": {
+    "jsdoc": "jsdoc --destination docs utilities/*.js",
     "lint": "eslint */*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +31,7 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "jsdoc": "^3.6.3"
+    "jsdoc": "^3.6.3",
+    "parcel-plugin-jsdoc": "0.0.1"
   }
 }
