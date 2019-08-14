@@ -51,11 +51,26 @@
     <script language="javascript" type="text/javascript" src="msg/js/en.js"></script>
 
     <!-- DataForge, Vega-Lite, and what-not -->
-    <script src="node_modules/data-forge/dist/web/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.0.2/papaparse.min.js"></script>
+    <!--
+        FIXME: the script below is a horrible hack and I should be ashamed of myself but none of the following work
+        because GitHub doesn't serve JS files with the right MIME type and the bundle distributed by jsdelivr.net
+        includes exports and require calls and a lot of other command-line Node stuff.
+
+        <script src="https://cdn.jsdelivr.net/npm/data-forge@1.7.2/build/index.min.js"></script>
+        <script src="https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/node_modules/data-forge/dist/web/index.js"></script>
+        <script src="node_modules/data-forge/dist/web/index.js"></script>
+      -->
+    <script>
+      // This is a horrible hack and I should be ashamed of myself.
+      const request = new XMLHttpRequest()
+      request.open('GET', 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/node_modules/data-forge/dist/web/index.js', false)
+      request.send(null)
+      eval(request.responseText)
+    </script>
 
     <!-- TidyBlocks supports -->
     <script src="utilities/tb_dataframe.js"></script>
