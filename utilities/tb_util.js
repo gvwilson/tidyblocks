@@ -20,7 +20,7 @@ function readCSV (url) {
     const result = Papa.parse(request.responseText, {
       header: true
     })
-    return new TidyBlocksDataFrame(result.data)
+    return data = new TidyBlocksDataFrame(result.data)
   }
 }
 
