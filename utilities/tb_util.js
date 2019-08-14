@@ -3,11 +3,10 @@
 //
 let DemoWorkspace = null
 
-//
-// Create function to synchronously parse CSV to JSON
-// Convert JSON to TidyBlocksDataFrame object
-//
-
+/**
+ * Read CSV from a URL and parse to create TidyBlocks data frame.
+ * @param {string} url - URL to read from.
+ */
 function readCSV (url) {
   const request = new XMLHttpRequest()
   request.open('GET', url, false)
