@@ -4,6 +4,55 @@
 let DemoWorkspace = null
 
 //
+// Create function to synchronously parse CSV to JSON
+// Convert JSON to TidyBlocksDataFrame object
+//
+
+function readCSV (url) {
+  const request = new XMLHttpRequest()
+  request.open('GET', url, false)
+  request.send(null)
+  if (request.status !== 200) {
+    console.log(`ERROR: ${request.status}`)
+    return null
+  }
+  else {
+    const result = Papa.parse(request.responseText, {
+      header: true
+    })
+    return new TidyBlocksDataFrame(result.data)
+  }
+}
+
+// 
+// Create dynamic table from array from JSON.
+// One table column per property (each object has the same properties).
+//
+
+function json2table (json) {
+  // get key names and set as column headers
+  const cols = Object.keys(json[0])
+
+  // create column headers from col
+  let headerRow = ''
+  cols.forEach(col => {
+    headerRow += `<th>${col}</th>`
+  })
+
+  // build the rows
+  let bodyRows = ''
+  json.forEach(row => {
+    bodyRows += '<tr>'
+    cols.forEach(colName => {
+      bodyRows += `<td>${row[colName]}</td>`
+    })
+    bodyRows += '</tr>'
+  })
+
+  return `<table><thead><tr>${headerRow}</tr></thead><tbody>${bodyRows}</tbody></table>`
+}
+
+//
 // Set the display property of the two input panes.
 //
 function initializeDisplay () {
