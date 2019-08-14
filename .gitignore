@@ -4,6 +4,9 @@
 # Mac OS shrapnel
 .DS_Store
 
+# Parcel-generated files
+dist
+
 # Logs
 logs
 *.log
