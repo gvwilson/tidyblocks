@@ -62,6 +62,16 @@ body {
     background-color: #e0f0f0;
 }
 
+#dataOutput table, th, td {
+    border: 1px solid #000000;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#dataOutput th, td {
+    padding: 3px;
+}
+
 /* Button used to run code */
 button#runCode {
     float: right;
