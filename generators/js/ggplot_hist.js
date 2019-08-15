@@ -6,8 +6,8 @@ Blockly.JavaScript['ggplot_hist'] = function(block) {
     
     var histogram = `SPLIT 
     let spec = {
-      "width": 700,
-      "height": 200,
+      "width": 500,
+      "height": 300,
       "data": { "values": dfArray },
       "mark": "bar",
       "encoding": {

@@ -13,7 +13,7 @@ Blockly.JavaScript['ggplot_point'] = function(block) {
     if (block.getFieldValue('lm') == 'FALSE') {
       bar = `SPLIT 
       let spec = {
-        "width": 700,
+        "width": 500,
         "data": { "values": dfArray },
         "mark": "point",
         "encoding": {
@@ -48,7 +48,7 @@ Blockly.JavaScript['ggplot_point'] = function(block) {
   console.log(lineDat[1])
   
     let spec = {
-      "width": 700,
+      "width": 500,
       "layer": [
       { 
          "data": { "values": dfArray },

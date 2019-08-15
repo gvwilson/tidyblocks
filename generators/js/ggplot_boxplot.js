@@ -7,7 +7,7 @@ Blockly.JavaScript['ggplot_boxplot'] = function(block) {
 
     var bar = `SPLIT 
     let spec = {
-      "width": 700,
+      "width": 500,
       "data": { "values": dfArray },
         "mark": {
           "type": "boxplot",
