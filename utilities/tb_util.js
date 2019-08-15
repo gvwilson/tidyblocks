@@ -1,13 +1,12 @@
-//
-// Need to share the demo workspace between functions.
-//
+/**
+ * Used to share the demo workspace between functions.
+ */
 let DemoWorkspace = null
 
-//
-// Create function to synchronously parse CSV to JSON
-// Convert JSON to TidyBlocksDataFrame object
-//
-
+/**
+ * Read CSV from a URL and parse to create TidyBlocks data frame.
+ * @param {string} url - URL to read from.
+ */
 function readCSV (url) {
   const request = new XMLHttpRequest()
   request.open('GET', url, false)
@@ -24,11 +23,11 @@ function readCSV (url) {
   }
 }
 
-// 
-// Create dynamic table from array from JSON.
-// One table column per property (each object has the same properties).
-//
-
+/**
+ * Create dynamic table from array from JSON with one table column per property.
+ * Each object must have the same properties.
+ * @param {JSON} json - JSON object to convert to table.
+ */
 function json2table (json) {
   // get key names and set as column headers
   const cols = Object.keys(json[0])
@@ -52,9 +51,10 @@ function json2table (json) {
   return `<table><thead><tr>${headerRow}</tr></thead><tbody>${bodyRows}</tbody></table>`
 }
 
-//
-// Set the display property of the two input panes.
-//
+/**
+ * Set the display property of the two input toggleable panes.
+ * (Has to be done manually rather than in CSS because properties are being reset.)
+ */
 function initializeDisplay () {
   for (let [nodeId, state] of [
     ['codeOutput', 'none'],
@@ -63,9 +63,9 @@ function initializeDisplay () {
   }
 }
 
-//
-// Toggle between block input and text input panes.
-//
+/**
+ * Toggle between block input and text input panes.
+ */
 function blockToText () {
   for (let nodeId of ['codeOutput', 'blockDisplay']) {
     const node = document.getElementById(nodeId)
@@ -78,9 +78,10 @@ function blockToText () {
   }
 }
 
-//
-// Set up Blockly display.
-//
+/**
+ * Set up Blockly display by injecting XML data into blockDisplay div.
+ * As a side effect, sets the global DemoWorkspace variable for later use.
+ */
 function setUpBlockly () {
   blocklyDiv = document.getElementById('blockDisplay')
   DemoWorkspace = Blockly.inject(
@@ -95,9 +96,10 @@ function setUpBlockly () {
   )
 }
 
-//
-// Run the code corresponding to the user's blocks.
-//
+/**
+ * Run the code generated from the user's blocks.
+ * Depends on the global DemoWorkspace variable.
+ */
 function runCode () {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
   const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
