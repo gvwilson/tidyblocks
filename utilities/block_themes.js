@@ -1,0 +1,60 @@
+const tidyBlockStyles = {
+
+  data_blocks: {
+    colourPrimary: '#FEBE4C',
+    colourSecondary: '#64C7FF',
+    colourTertiary: '#9B732F',
+    hat: 'cap'
+  },
+
+  dplyr_blocks: {
+    colourPrimary: '#76AADB',
+    colourSecondary: '#3976AD',
+    colourTertiary: '#BF9000'
+  },
+
+  ggplot_blocks: {
+    colourPrimary: '#A4C588',
+    colourSecondary: '#64C7FF',
+    colourTertiary: '#586B4B'
+  },
+
+  hat_blocks: {
+    colourPrimary: '#FEBE4C',
+    colourSecondary: '#FEBE4C',
+    colourTertiary: '#BF9000',
+    hat: 'cap'
+  },
+
+  stats_blocks: {
+    colourPrimary: '#AF43B7',
+    colourSecondary: '#DFA8E3',
+    colourTertiary: '#6D1174'
+  },
+
+  variable_blocks: {
+    colourPrimary: '#E7553C',
+    colourSecondary: '#64C7FF',
+    colourTertiary: '#760918'
+  }
+}
+
+const tidyCategoryStyles = {
+  data: {
+    colour: '#FEBE4C'
+  },
+  dplyr: {
+    colour: '#76AADB'
+  },
+  ggplot: {
+    colour: '#A4C588'
+  },
+  stats: {
+    colour: '#AF43B7'
+  },
+  variables: {
+    colour: '#E7553C'
+  }
+}
+
+Blockly.Themes.Tidy = new Blockly.Theme(tidyBlockStyles, tidyCategoryStyles)
