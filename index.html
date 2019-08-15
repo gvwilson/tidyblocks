@@ -39,7 +39,12 @@
             <block type="dplyr_select"></block>
             <block type="dplyr_mutate"></block>
           </category>
-          <category name="ggplot" categorystyle="ggplot"></category>
+          <category name="ggplot" categorystyle="ggplot">
+            <block type="ggplot_hist"></block>
+            <block type="ggplot_bar"></block>
+            <block type="ggplot_point"></block>
+            <block type="ggplot_boxplot"></block>
+          </category>
           <category name="stats" categorystyle="stats">
             <block type="stats_sum"></block>
             <block type="stats_mean"></block>
@@ -159,6 +164,18 @@
 
     <script src="blocks/stats_median.js"></script>
     <script src="generators/js/stats_median.js"></script>
+
+    <script src="blocks/ggplot_hist.js"></script>
+    <script src="generators/js/ggplot_hist.js"></script>
+
+    <script src="blocks/ggplot_bar.js"></script>
+    <script src="generators/js/ggplot_bar.js"></script>
+
+    <script src="blocks/ggplot_point.js"></script>
+    <script src="generators/js/ggplot_point.js"></script>
+
+    <script src="blocks/ggplot_boxplot.js"></script>
+    <script src="generators/js/ggplot_boxplot.js"></script>
 
 <!-- Block Colors/Theme -->
     <script src="static/block_themes.js"></script>
