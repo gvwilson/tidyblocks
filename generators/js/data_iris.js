@@ -4,7 +4,7 @@
 //
 Blockly.JavaScript['data_iris'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/iris.csv'
-  const result = `readCSV('${URL}')
+  const result = `readCSV('${URL}') \n
     data`
   tbLog('data_iris:', result)
   return result
