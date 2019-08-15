@@ -25,15 +25,17 @@
       </button>
       <div class="input" id="blockDisplay">
         <xml id="toolbox">
-          <category name="Data">
-            <block type="data_unit"></block>
+          <category name="data" categorystyle="data">
             <block type="data_iris"></block>
             <block type="data_toothGrowth"></block>
             <block type="data_mtcars"></block>
             <block type="data_earthquakes"></block>
             <block type="data_urlCSV"></block>
-            <block type="data_urlJSON"></block>
           </category>
+          <category name="dplyr" categorystyle="dplyr"></category>
+          <category name="ggplot" categorystyle="ggplot"></category>
+          <category name="stats" categorystyle="stats"></category>
+          <category name="variables" categorystyle="variables"></category>
         </xml>
       </div>
       <div class="input" id="codeOutput">
@@ -86,7 +88,7 @@
     <script src="blocks/data_urlCSV.js"></script>
     <script src="generators/js/data_urlCSV.js"></script>
 
-    <script src="blocks/data_urlJSON.js"></script>
-    <script src="generators/js/data_urlJSON.js"></script>
+<!-- Block Colors/Theme -->
+    <script src="static/block_themes.js"></script>
   </body>
 </html>

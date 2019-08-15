@@ -6,9 +6,7 @@ Blockly.defineBlocksWithJsonArray([
     type: 'data_iris',
     message0: 'Create iris dataset',
     nextStatement: null,
-    style: {
-      hat: 'cap'
-    },
-    colour: '#FEBE4C' // FIXME define color palette
+    style: 'data_blocks',
+    hat: 'cap'
   }
 ])
