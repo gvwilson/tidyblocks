@@ -40,7 +40,15 @@
             <block type="dplyr_mutate"></block>
           </category>
           <category name="ggplot" categorystyle="ggplot"></category>
-          <category name="stats" categorystyle="stats"></category>
+          <category name="stats" categorystyle="stats">
+            <block type="stats_sum"></block>
+            <block type="stats_mean"></block>
+            <block type="stats_median"></block>
+            <block type="stats_sd"></block>
+            <block type="stats_min"></block>
+            <block type="stats_max"></block>
+            <block type="stats_arithmetic"></block>
+          </category>
           <category name="variables" categorystyle="variables">
             <block type="variable_text"></block>
             <block type="variable_number"></block>
@@ -128,9 +136,30 @@
     <script src="blocks/variable_compare.js"></script>
     <script src="generators/js/variable_compare.js"></script>
 
-
     <script src="blocks/variable_columnName.js"></script>
     <script src="generators/js/variable_columnName.js"></script>
+
+    <script src="blocks/stats_artithmetic.js"></script>
+    <script src="generators/js/stats_artithmetic.js"></script>
+
+    <script src="blocks/stats_mean.js"></script>
+    <script src="generators/js/stats_mean.js"></script>
+
+    <script src="blocks/stats_sd.js"></script>
+    <script src="generators/js/stats_sd.js"></script>
+
+    <script src="blocks/stats_max.js"></script>
+    <script src="generators/js/stats_max.js"></script>
+
+    <script src="blocks/stats_min.js"></script>
+    <script src="generators/js/stats_min.js"></script>
+
+    <script src="blocks/stats_sum.js"></script>
+    <script src="generators/js/stats_sum.js"></script>
+
+    <script src="blocks/stats_median.js"></script>
+    <script src="generators/js/stats_median.js"></script>
+
 <!-- Block Colors/Theme -->
     <script src="static/block_themes.js"></script>
   </body>
