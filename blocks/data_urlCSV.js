@@ -13,11 +13,9 @@ Blockly.defineBlocksWithJsonArray([
       }
     ],
     nextStatement: null,
-    style: {
-      hat: 'cap'
-    },
+    style: 'data_blocks',
+    hat: 'cap',
     tooltip: '',
     helpUrl: '',
-    colour: '#FEBE4C' // FIXME define color palette
   }
 ])
