@@ -59,17 +59,21 @@ body {
 
 /* Data output area within display area. */
 #dataOutput {
-    background-color: #e0f0f0;
+    background-color: #fff;
 }
 
 #dataOutput table, th, td {
+    height: 100%;
+    margin: 0%;
+    font-family: "Lucida Console";
     border: 1px solid #000000;
     border-collapse: collapse;
     text-align: left;
 }
 
-#dataOutput th, td {
-    padding: 3px;
+#dataOutput tr {
+    width: 100%;
+    padding: .35em;
 }
 
 /* Button used to run code */
