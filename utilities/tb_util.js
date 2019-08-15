@@ -84,10 +84,17 @@ function initializeDisplay () {
   }
 }
 
+<<<<<<< HEAD
 /**
  * Toggle between block input and text input panes.
  */
 function blockToText () {
+=======
+//
+// Toggle between block input and text input panes.
+//
+function generateCodePane () {
+>>>>>>> c709ab6ce43176fc26241a15abdf43a2c131cd38
   for (let nodeId of ['codeOutput', 'blockDisplay']) {
     const node = document.getElementById(nodeId)
     if (node.style.display === 'none') {
@@ -99,10 +106,27 @@ function blockToText () {
   }
 }
 
+<<<<<<< HEAD
 /**
  * Set up Blockly display by injecting XML data into blockDisplay div.
  * As a side effect, sets the global DemoWorkspace variable for later use.
  */
+=======
+//
+// Show the text based code corresponding to selected blocks
+//
+
+function showCode () {
+  // Generate JavaScript code and display it.
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  var code = Blockly.JavaScript.workspaceToCode(DemoWorkspace);
+  document.getElementById('codeOutput').innerHTML = code
+}
+
+//
+// Set up Blockly display.
+//
+>>>>>>> c709ab6ce43176fc26241a15abdf43a2c131cd38
 function setUpBlockly () {
   blocklyDiv = document.getElementById('blockDisplay')
   DemoWorkspace = Blockly.inject(
