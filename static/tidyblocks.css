@@ -1,7 +1,7 @@
 /* Body of page */
 body {
     height: 100%;
-    background-color: #f0f0f0;
+    background-color: #f0f0e0;
     font-family: sans-serif;
     overflow: hidden;
     margin: 0px;
@@ -54,7 +54,8 @@ body {
 
 /* Plot output area within display area. */
 #plotOutput {
-    background-color: #e0e0f0;
+    background-color: #fff;
+    margin-bottom: 5px;
 }
 
 /* Data output area within display area. */
