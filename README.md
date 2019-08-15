@@ -1,3 +1,5 @@
+![](static/featured.png)
+
 # tidyblocks
 
 A blocks-based tool for tidy data manipulation and analysis.
