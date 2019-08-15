@@ -28,7 +28,7 @@ const tbLog = (...args) => {
  * Read CSV from a URL and parse to create TidyBlocks data frame.
  * @param {string} url - URL to read from.
  */
-function readCSV (url) {
+const readCSV  = (url) => {
   const request = new XMLHttpRequest()
   request.open('GET', url, false)
   request.send(null)
@@ -49,7 +49,7 @@ function readCSV (url) {
  * Each object must have the same properties.
  * @param {JSON} json - JSON object to convert to table.
  */
-function json2table (json) {
+const json2table = (json) => {
   // get key names and set as column headers
   const cols = Object.keys(json[0])
 
@@ -76,7 +76,7 @@ function json2table (json) {
  * Set the display property of the two input toggleable panes.
  * (Has to be done manually rather than in CSS because properties are being reset.)
  */
-function initializeDisplay () {
+const initializeDisplay = () => {
   for (let [nodeId, state] of [
     ['codeOutput', 'none'],
     ['blockDisplay', 'block']]) {
@@ -84,17 +84,10 @@ function initializeDisplay () {
   }
 }
 
-<<<<<<< HEAD
 /**
  * Toggle between block input and text input panes.
  */
-function blockToText () {
-=======
-//
-// Toggle between block input and text input panes.
-//
-function generateCodePane () {
->>>>>>> c709ab6ce43176fc26241a15abdf43a2c131cd38
+const generateCodePane = () => {
   for (let nodeId of ['codeOutput', 'blockDisplay']) {
     const node = document.getElementById(nodeId)
     if (node.style.display === 'none') {
@@ -106,31 +99,22 @@ function generateCodePane () {
   }
 }
 
-<<<<<<< HEAD
+/**
+ * Show the text based code corresponding to selected blocks.
+ */
+const showCode = () => {
+  // Blockly.JavaScript.INFINITE_LOOP_TRAP = null
+  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
+  document.getElementById('codeOutput').innerHTML = code
+}
+
 /**
  * Set up Blockly display by injecting XML data into blockDisplay div.
  * As a side effect, sets the global DemoWorkspace variable for later use.
  */
-=======
-//
-// Show the text based code corresponding to selected blocks
-//
-
-function showCode () {
-  // Generate JavaScript code and display it.
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-  var code = Blockly.JavaScript.workspaceToCode(DemoWorkspace);
-  document.getElementById('codeOutput').innerHTML = code
-}
-
-//
-// Set up Blockly display.
-//
->>>>>>> c709ab6ce43176fc26241a15abdf43a2c131cd38
 function setUpBlockly () {
-  blocklyDiv = document.getElementById('blockDisplay')
   DemoWorkspace = Blockly.inject(
-    blocklyDiv,
+    document.getElementById('blockDisplay'),
     {
       media: 'media/',
       toolbox: document.getElementById('toolbox'),

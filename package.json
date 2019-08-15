@@ -33,12 +33,9 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-<<<<<<< HEAD
     "jsdoc": "^3.6.3",
     "parcel": "^1.12.3",
-    "parcel-plugin-jsdoc": "0.0.1"
-=======
+    "parcel-plugin-jsdoc": "0.0.1",
     "vega-lite": "^3.3.0"
->>>>>>> c709ab6ce43176fc26241a15abdf43a2c131cd38
   }
 }
