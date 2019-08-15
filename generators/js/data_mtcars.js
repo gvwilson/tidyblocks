@@ -1,13 +1,10 @@
 //
-// Generate code to pull mtcars.csv from GitHub
+// Generate code to pull mtcars.csv from GitHub.
 //
-
-Blockly.JavaScript['data_mtcars'] = function(block) {
-
-    var argument0 = block.getFieldValue("ext")
-
-    const dfURL = `readCSV("https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/mtcars.csv")
+Blockly.JavaScript['data_mtcars'] = (block) => {
+  const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/mtcars.csv'
+  const result = `readCSV('${URL}')
     data`
-    console.log(dfURL)
-    return dfURL
+  tbLog('data_mtcars:', result)
+  return result
 }
