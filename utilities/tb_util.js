@@ -66,7 +66,7 @@ function initializeDisplay () {
 //
 // Toggle between block input and text input panes.
 //
-function blockToText () {
+function generateCodePane () {
   for (let nodeId of ['codeOutput', 'blockDisplay']) {
     const node = document.getElementById(nodeId)
     if (node.style.display === 'none') {
@@ -76,6 +76,17 @@ function blockToText () {
       node.style.display = 'none'
     }
   }
+}
+
+//
+// Show the text based code corresponding to selected blocks
+//
+
+function showCode () {
+  // Generate JavaScript code and display it.
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  var code = Blockly.JavaScript.workspaceToCode(DemoWorkspace);
+  document.getElementById('codeOutput').innerHTML = code
 }
 
 //
