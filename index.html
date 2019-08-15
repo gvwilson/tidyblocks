@@ -15,6 +15,10 @@
         Block to Text
         <i class="fa fa-bug"></i>
       </button>
+      <button id="logging" onclick="toggleLogging()">
+        Toggle Logging
+        <i class="fa fa-flag"></i>
+      </button>
       <button id="runCode" onclick="runCode()">
         Run Code
         <i class="fa fa-play"></i>
@@ -27,6 +31,8 @@
             <block type="data_toothGrowth"></block>
             <block type="data_mtcars"></block>
             <block type="data_earthquakes"></block>
+            <block type="data_urlCSV"></block>
+            <block type="data_urlJSON"></block>
           </category>
         </xml>
       </div>
@@ -79,13 +85,23 @@
     <!-- TidyBlocks blocks -->
     <script src="blocks/unit.js"></script>
     <script src="generators/js/unit.js"></script>
+
     <script src="blocks/data_iris.js"></script>
     <script src="generators/js/data_iris.js"></script>
+
     <script src="blocks/data_toothGrowth.js"></script>
     <script src="generators/js/data_toothGrowth.js"></script>
+
     <script src="blocks/data_mtcars.js"></script>
     <script src="generators/js/data_mtcars.js"></script>
+
     <script src="blocks/data_earthquakes.js"></script>
     <script src="generators/js/data_earthquakes.js"></script>
+
+    <script src="blocks/data_urlCSV.js"></script>
+    <script src="generators/js/data_urlCSV.js"></script>
+
+    <script src="blocks/data_urlJSON.js"></script>
+    <script src="generators/js/data_urlJSON.js"></script>
   </body>
 </html>

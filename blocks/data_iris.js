@@ -1,7 +1,6 @@
 //
-// Define visuals for creating iris dataset block
+// Define visuals for creating iris dataset block.
 //
-
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'data_iris',

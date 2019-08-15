@@ -1,7 +1,8 @@
 //
 // Generate code to create 1x1 data frame for testing purposes.
 //
-
-Blockly.JavaScript['unit'] = function(block) {
-  return `new TidyBlocksDataFrame([{"single": 1}])`
+Blockly.JavaScript['unit'] = (block) => {
+  const result = `new TidyBlocksDataFrame([{single: 1}])`
+  tbLog('unit:', result)
+  return result
 }

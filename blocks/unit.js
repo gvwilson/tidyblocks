@@ -1,7 +1,6 @@
 //
-// Define visuals for creating 1x1 data frame for testing purposes.
+// Define visuals for creating 1x1 data frame for testing.
 //
-
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'unit',

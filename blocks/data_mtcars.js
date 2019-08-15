@@ -1,7 +1,6 @@
 //
-// Define visuals for creating mtcars dataset block
+// Define visuals for creating mtcars dataset block.
 //
-
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'data_mtcars',
