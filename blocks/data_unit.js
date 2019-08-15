@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'unit',
+    type: 'data_unit',
     message0: 'Create unit dataset',
     nextStatement: null,
     style: {
