@@ -1,8 +1,8 @@
-![](static/featured.png)
-
 # tidyblocks
 
 A blocks-based tool for tidy data manipulation and analysis.
+
+<img src="static/featured.png"  width="50%" height="50%">
 
 This work is made freely available under the [MIT License](LICENSE.md).
 Contributions of all kinds are welcome:
