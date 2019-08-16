@@ -71,19 +71,77 @@ const makeBlock = (blockName, settings) => {
 
 const Tests = {
 
-  testCreateDataEarthquakes: () => {
+  createDataEarthquakes: () => {
     return makeBlock('data_earthquakes',
                      {})
   },
 
-  testCreateDplyrMutate: () => {
+  createDataIris: () => {
+    return makeBlock('data_iris',
+                     {})
+  },
+
+  createDataMtcars: () => {
+    return makeBlock('data_mtcars',
+                     {})
+  },
+
+  createDataToothGrowth: () => {
+    return makeBlock('data_toothGrowth',
+                     {})
+  },
+
+  createDataUnit: () => {
+    return makeBlock('data_unit',
+                     {})
+  },
+
+  createDataUrlCSV: () => {
+    return makeBlock('data_urlCSV',
+                     {'ext': 'http://rstudio.com/tidyblocks.csv'})
+  },
+
+  createDplyrFilter: () => {
+    return makeBlock('dplyr_filter',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createDplyrGroupBy: () => {
+    return makeBlock('dplyr_groupby',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createDplyrMutate: () => {
     return makeBlock('dplyr_mutate',
                      {newCol: 'newColumnName',
                       Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  testCreateGgplotBox: () => {
+  createDplyrSelect: () => {
+    return makeBlock('dplyr_select',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createDplyrSummarise: () => {
+    // FIXME: add this in when summarise is working.
+    // return makeBlock('dplyr_summarise',
+    //                  {Columns: makeBlock('variable_columnName',
+    //                                      {TEXT: 'existingColumn'})})
+  },
+
+  createGgplotBar: () => {
+    return makeBlock('ggplot_bar',
+                     {X: makeBlock('variable_columnName',
+                                   {TEXT: 'X_axis_column'}),
+                      Y: makeBlock('variable_columnName',
+                                   {TEXT: 'Y_axis_column'})})
+  },
+
+  createGgplotBox: () => {
     return makeBlock('ggplot_boxplot',
                      {X: makeBlock('variable_columnName',
                                    {TEXT: 'X_axis_column'}),
@@ -91,13 +149,86 @@ const Tests = {
                                    {TEXT: 'Y_axis_column'})})
   },
 
-  testCreateStatsMax: () => {
+  createGgplotHist: () => {
+    return makeBlock('ggplot_hist',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createGgplotPointLm: () => {
+    return makeBlock('ggplot_point',
+                     {X: makeBlock('variable_columnName',
+                                   {TEXT: 'X_axis_column'}),
+                      Y: makeBlock('variable_columnName',
+                                   {TEXT: 'Y_axis_column'}),
+                      color: makeBlock('variable_text',
+                                       {TEXT: 'purple'}),
+                      lm: 'FALSE'})
+  },
+
+  createGgplotPointNotLm: () => {
+    return makeBlock('ggplot_point',
+                     {X: makeBlock('variable_columnName',
+                                   {TEXT: 'X_axis_column'}),
+                      Y: makeBlock('variable_columnName',
+                                   {TEXT: 'Y_axis_column'}),
+                      color: makeBlock('variable_text',
+                                       {TEXT: 'purple'}),
+                      lm: 'TRUE'})
+  },
+
+  createStatsArithmetic: () => {
+    return makeBlock('stats_arithmetic',
+                     {OP: makeBlock('variable_text',
+                                    {TEXT: 'ADD'}),
+                      A: makeBlock('variable_columnName',
+                                   {TEXT: 'left'}),
+                      B: makeBlock('variable_columnName',
+                                   {TEXT: 'right'})})
+  },
+
+  createStatsMax: () => {
     return makeBlock('stats_max',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  testCreateVariableCompare: () => {
+  createStatsMean: () => {
+    return makeBlock('stats_mean',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createStatsMedian: () => {
+    return makeBlock('stats_median',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createStatsMin: () => {
+    return makeBlock('stats_min',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createStatsSd: () => {
+    return makeBlock('stats_sd',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createStatsSum: () => {
+    return makeBlock('stats_sum',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  createVariableColumnName: () => {
+    return makeBlock('variable_columnName',
+                     {TEXT: 'TheColumnName'})
+  },
+
+  createVariableCompare: () => {
     return makeBlock('variable_compare',
                      {OP: makeBlock('variable_text',
                                     {TEXT: 'NEQ'}),
@@ -105,8 +236,27 @@ const Tests = {
                                    {TEXT: 'left'}),
                       B: makeBlock('variable_columnName',
                                    {TEXT: 'right'})})
-  }
+  },
 
+  createVariableNumber: () => {
+    return makeBlock('variable_number',
+                     {NUM: '3.14'})
+  },
+
+  createVariableOperation: () => {
+    return makeBlock('variable_operation',
+                     {OP: makeBlock('variable_text',
+                                    {TEXT: 'OR'}),
+                      A: makeBlock('variable_columnName',
+                                   {TEXT: 'left'}),
+                      B: makeBlock('variable_columnName',
+                                   {TEXT: 'right'})})
+  },
+
+  createVariableText: () => {
+    return makeBlock('variable_text',
+                     {TEXT: 'Look on my blocks, ye coders, and despair!'})
+  }
 }
 
 const runAllTests = () => {

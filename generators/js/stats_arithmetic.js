@@ -1,19 +1,17 @@
-Blockly.JavaScript['stats_arithmetic'] = function(block) {
-    // Basic arithmetic operators, and power.
-    
-  var OPERATORS = {
-      'ADD': '+',
-      'SUBTRACT': '-',
-      'MULTIPLY': '*',
-      'DIVIDE': '/',
-    };
-    
-    var operator = OPERATORS[block.getFieldValue('OP')];
-    var order = Blockly.JavaScript.ORDER_NONE
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'A', order);
-    var argument1 = Blockly.JavaScript.valueToCode(block, 'B', order);
-    
-    code = argument0 + operator + argument1;
-    
-   return [code, order]
-  };
+//
+// Implement binary arithmetic.
+//
+Blockly.JavaScript['stats_arithmetic'] = (block) => {
+  const OPERATORS = {
+    ADD: '+',
+    SUBTRACT: '-',
+    MULTIPLY: '*',
+    DIVIDE: '/'
+  }
+  const order = Blockly.JavaScript.ORDER_NONE
+  const operator = OPERATORS[block.getFieldValue('OP')]
+  const argument0 = Blockly.JavaScript.valueToCode(block, 'A', order)
+  const argument1 = Blockly.JavaScript.valueToCode(block, 'B', order)
+  const code = argument0 + operator + argument1
+  return [code, order]
+}

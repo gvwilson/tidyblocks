@@ -1,3 +1,6 @@
+//
+// Represent a column name.
+//
 Blockly.JavaScript['variable_columnName'] = (block) => {
   const code = 'row.' +
         Blockly.JavaScript.quote_(block.getFieldValue('TEXT'))

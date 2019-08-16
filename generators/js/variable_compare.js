@@ -1,3 +1,6 @@
+//
+// Implement comparison operators.
+//
 Blockly.JavaScript['variable_compare'] = (block) => {
   const OPERATORS = {
     EQ: '==',

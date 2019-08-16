@@ -1,3 +1,6 @@
+//
+// Create a box plot.
+//
 Blockly.JavaScript['ggplot_boxplot'] = (block) => {
   const argument0 = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
         .replace(/row./gi, '')

@@ -1,4 +1,8 @@
-Blockly.JavaScript['dplyr_summarise'] = function(block) {
+//
+// Summarise data.
+// FIXME: clean up.
+//
+Blockly.JavaScript['dplyr_summarise'] = (block) => {
    
     var argument0 =  Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE);
     var argarray = argument0.split("&&")
