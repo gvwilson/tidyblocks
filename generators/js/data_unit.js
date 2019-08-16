@@ -3,6 +3,5 @@
 //
 Blockly.JavaScript['unit'] = (block) => {
   const result = `new TidyBlocksDataFrame([{'single': 1}])`
-  tbLog('unit:', result)
   return result
 }
