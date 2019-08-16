@@ -15,6 +15,7 @@ const Blockly = {
   // JavaScript generation utilities.
   JavaScript: {
     ORDER_ATOMIC: 'order=atomic',
+    ORDER_EQUALITY: 'order=equality',
     ORDER_NONE: 'order=none',
     ORDER_RELATIONAL: 'order=relational',
     ORDER_UNARY_NEGATION: 'order=negation',
@@ -70,10 +71,40 @@ const makeBlock = (blockName, settings) => {
 
 const Tests = {
 
-  testCreateMutateBlock: () => {
-    return makeBlock('dplyr_mutate', {newCol: 'newColumnName',
-                                      Columns: makeBlock('variable_columnName',
-                                                         {TEXT: 'existingColumn'})})
+  testCreateDataEarthquakes: () => {
+    return makeBlock('data_earthquakes',
+                     {})
+  },
+
+  testCreateDplyrMutate: () => {
+    return makeBlock('dplyr_mutate',
+                     {newCol: 'newColumnName',
+                      Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  testCreateGgplotBox: () => {
+    return makeBlock('ggplot_boxplot',
+                     {X: makeBlock('variable_columnName',
+                                   {TEXT: 'X_axis_column'}),
+                      Y: makeBlock('variable_columnName',
+                                   {TEXT: 'Y_axis_column'})})
+  },
+
+  testCreateStatsMax: () => {
+    return makeBlock('stats_max',
+                     {Columns: makeBlock('variable_columnName',
+                                         {TEXT: 'existingColumn'})})
+  },
+
+  testCreateVariableCompare: () => {
+    return makeBlock('variable_compare',
+                     {OP: makeBlock('variable_text',
+                                    {TEXT: 'NEQ'}),
+                      A: makeBlock('variable_columnName',
+                                   {TEXT: 'left'}),
+                      B: makeBlock('variable_columnName',
+                                   {TEXT: 'right'})})
   }
 
 }
@@ -81,7 +112,7 @@ const Tests = {
 const runAllTests = () => {
   for (let testName of Object.keys(Tests)) {
     const result = Tests[testName]()
-    console.log(`${testName}::`)
+    console.log(`\n# ${testName}`)
     console.log(result)
   }
 }
