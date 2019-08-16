@@ -144,15 +144,6 @@ function runCode () {
 }
 
 /**
-* Setup after DOM has initialized.
-**/
-document.addEventListener('DOMContentLoaded', (event) => {
-  initializeDisplay()
-  setUpBlockly()
-})
-
-
-/**
 * LM
 * Statistical functions to apply to plots
 * As an example, here is a linear model using least squares
