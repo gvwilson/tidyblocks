@@ -4,27 +4,6 @@
 let DemoWorkspace = null
 
 /**
- * Control whether logging is on or off.
- */
-let LoggingEnabled = true
-
-/**
- * Turn logging on and off (used by tbLog).
- */
-const toggleLogging = () => {
-  LoggingEnabled = !LoggingEnabled
-}
-
-/**
- * Log a message (or not).
- */
-const tbLog = (...args) => {
-  if (LoggingEnabled) {
-    console.log(...args)
-  }
-}
-
-/**
  * Read CSV from a URL and parse to create TidyBlocks data frame.
  * @param {string} url - URL to read from.
  */

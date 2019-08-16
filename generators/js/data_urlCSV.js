@@ -5,6 +5,5 @@ Blockly.JavaScript['data_urlCSV'] = (block) => {
   const argument0 = block.getFieldValue('ext')
   const result = `readCSV('${argument0}')
     data`
-  tbLog('data_urlCSV:', result)
   return result
 }
