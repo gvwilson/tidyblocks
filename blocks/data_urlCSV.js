@@ -1,5 +1,5 @@
 //
-// Define visuals for block that downloads CSV from the web.
+// Visuals for block that downloads CSV from the web.
 //
 Blockly.defineBlocksWithJsonArray([
   {

@@ -1,5 +1,5 @@
 //
-// Define visuals for creating earthquakes dataset block.
+// Visuals earthquakes dataset block.
 //
 Blockly.defineBlocksWithJsonArray([
   {

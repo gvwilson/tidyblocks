@@ -22,6 +22,5 @@ Blockly.JavaScript['ggplot_boxplot'] = function(block) {
         }
       }
     vegaEmbed("#plotOutput", spec, {})`
-   console.log(bar)
   return bar
   };

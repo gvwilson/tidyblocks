@@ -1,5 +1,5 @@
 //
-// Define visuals for creating toothGrowth dataset block.
+// Visuals for tooth growth dataset block.
 //
 Blockly.defineBlocksWithJsonArray([
   {

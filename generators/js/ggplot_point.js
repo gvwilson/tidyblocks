@@ -24,7 +24,6 @@ Blockly.JavaScript['ggplot_point'] = function(block) {
       }
       vegaEmbed("#plotOutput", spec, {})`
   
-     console.log(bar)
      return bar
      
   } else {
@@ -39,7 +38,6 @@ Blockly.JavaScript['ggplot_point'] = function(block) {
       return obj; //Continue to the next object in the array
   });
   
-  console.log(result.data)
   
   var lineDat = findLineByLeastSquares(result.${argument0}.map(parseFloat), 
   									   result.${argument1}.map(parseFloat))
@@ -79,7 +77,6 @@ Blockly.JavaScript['ggplot_point'] = function(block) {
     
     vegaEmbed("#plotOutput", spec, {})`
 
-  console.log(bar)
   return bar
 
   }

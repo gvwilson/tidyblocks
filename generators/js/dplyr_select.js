@@ -9,6 +9,5 @@ Blockly.JavaScript['dplyr_select'] = function(block) {
       selectString = selectString.replace(/ /gi, "")
       selectString = selectString.replace(/,/gi, "\",\"")
   
-     console.log(selectString)
     return selectString
   };

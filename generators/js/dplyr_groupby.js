@@ -10,6 +10,5 @@ Blockly.JavaScript['dplyr_groupby'] = function(block) {
         }
       }).orderBy(column => column.Index)`
       groupString = groupString.replace(/&&/gi, "+")
-      console.log(groupString)
     return groupString
   };

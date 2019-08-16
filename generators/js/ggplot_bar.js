@@ -18,6 +18,5 @@ Blockly.JavaScript['ggplot_bar'] = function(block) {
     }
   }  
     vegaEmbed("#plotOutput", spec, {})`
-   console.log(bar)
   return bar
   };

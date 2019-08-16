@@ -38,7 +38,6 @@ Blockly.JavaScript['dplyr_summarise'] = function(block) {
     functionToString = JSON.stringify(functionToString)
     
     functionToString = functionToString.replace(/"/g, "").replace(/[[\]]/g,'')
-    console.log(functionToString)
   
     //////////////////////////////
     /////////////////////////////
@@ -60,7 +59,6 @@ Blockly.JavaScript['dplyr_summarise'] = function(block) {
   
   summariseString = summariseString.replace(/AND/g, ",").replace(/&&/g, ",")
   summariseString = summariseString.replace("} , {", ",")
-  console.log(summariseString)
   return summariseString
     
   };
