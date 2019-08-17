@@ -1,6 +1,7 @@
 const assert = require('assert')
 const fs = require('fs')
 const {parse} = require('node-html-parser')
+const papa = require('papaparse')
 const dataForge = require('data-forge')
 
 module.paths.unshift(process.cwd()) // In order to load the DataFrame class
@@ -57,9 +58,11 @@ class MockBlock {
   }
 }
 
+//
 // Make a block by name.  If the construction function returns a string, that's
 // what we want; otherwise, it's a two-element list with the desired text and
 // the order, so we return the first element.
+//
 const makeBlock = (blockName, settings) => {
   const result = Blockly.JavaScript[blockName](new MockBlock(settings))
   if (typeof result === 'string') {
@@ -70,73 +73,93 @@ const makeBlock = (blockName, settings) => {
   }
 }
 
+//
+// Read a CSV file.
+//
+const readCSV = (url) => {
+  if (url.includes('raw.githubusercontent.com')) {
+    url = url.split('/').pop()
+  }
+  const path = `${process.cwd()}/data/${url}`
+  const text = fs.readFileSync(path, 'utf-8')
+  const result = papa.parse(text, {header: true})
+  return new TidyBlocksDataFrame(result.data)
+}
+
+//
+// Display a plot (ish).
+//
+const vegaEmbed = (htmlID, spec, props) => {
+  return `PLOT: ${spec.mark} with ${spec.data.values.length} values`
+}
+
 //--------------------------------------------------------------------------------
 
 const Tests = {
 
-  generateDataEarthquakes: () => {
+  codeDataEarthquakes: () => {
     return makeBlock('data_earthquakes',
                      {})
   },
 
-  generateDataIris: () => {
+  codeDataIris: () => {
     return makeBlock('data_iris',
                      {})
   },
 
-  generateDataMtcars: () => {
+  codeDataMtcars: () => {
     return makeBlock('data_mtcars',
                      {})
   },
 
-  generateDataToothGrowth: () => {
+  codeDataToothGrowth: () => {
     return makeBlock('data_toothGrowth',
                      {})
   },
 
-  generateDataUnit: () => {
+  codeDataUnit: () => {
     return makeBlock('data_unit',
                      {})
   },
 
-  generateDataUrlCSV: () => {
+  codeDataUrlCSV: () => {
     return makeBlock('data_urlCSV',
                      {'ext': 'http://rstudio.com/tidyblocks.csv'})
   },
 
-  generateDplyrFilter: () => {
+  codeDplyrFilter: () => {
     return makeBlock('dplyr_filter',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateDplyrGroupBy: () => {
+  codeDplyrGroupBy: () => {
     return makeBlock('dplyr_groupby',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateDplyrMutate: () => {
+  codeDplyrMutate: () => {
     return makeBlock('dplyr_mutate',
                      {newCol: 'newColumnName',
                       Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateDplyrSelect: () => {
+  codeDplyrSelect: () => {
     return makeBlock('dplyr_select',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateDplyrSummarise: () => {
+  codeDplyrSummarise: () => {
     // FIXME: add this in when summarise is working.
     // return makeBlock('dplyr_summarise',
     //                  {Columns: makeBlock('variable_columnName',
     //                                      {TEXT: 'existingColumn'})})
   },
 
-  generateGgplotBar: () => {
+  codeGgplotBar: () => {
     return makeBlock('ggplot_bar',
                      {X: makeBlock('variable_columnName',
                                    {TEXT: 'X_axis_column'}),
@@ -144,7 +167,7 @@ const Tests = {
                                    {TEXT: 'Y_axis_column'})})
   },
 
-  generateGgplotBox: () => {
+  codeGgplotBox: () => {
     return makeBlock('ggplot_boxplot',
                      {X: makeBlock('variable_columnName',
                                    {TEXT: 'X_axis_column'}),
@@ -152,15 +175,15 @@ const Tests = {
                                    {TEXT: 'Y_axis_column'})})
   },
 
-  generateGgplotHist: () => {
+  codeGgplotHist: () => {
     return makeBlock('ggplot_hist',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'}),
                       bins: makeBlock('variable_number',
-                                      {NUM: '20'})})
+                                      {NUM: 20})})
   },
 
-  generateGgplotPointLm: () => {
+  codeGgplotPointLm: () => {
     return makeBlock('ggplot_point',
                      {X: makeBlock('variable_columnName',
                                    {TEXT: 'X_axis_column'}),
@@ -171,7 +194,7 @@ const Tests = {
                       lm: 'FALSE'})
   },
 
-  generateGgplotPointNotLm: () => {
+  codeGgplotPointNotLm: () => {
     return makeBlock('ggplot_point',
                      {X: makeBlock('variable_columnName',
                                    {TEXT: 'X_axis_column'}),
@@ -182,7 +205,7 @@ const Tests = {
                       lm: 'TRUE'})
   },
 
-  generateStatsArithmetic: () => {
+  codeStatsArithmetic: () => {
     return makeBlock('stats_arithmetic',
                      {OP: makeBlock('variable_text',
                                     {TEXT: 'ADD'}),
@@ -192,48 +215,48 @@ const Tests = {
                                    {TEXT: 'right'})})
   },
 
-  generateStatsMax: () => {
+  codeStatsMax: () => {
     return makeBlock('stats_max',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateStatsMean: () => {
+  codeStatsMean: () => {
     return makeBlock('stats_mean',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateStatsMedian: () => {
+  codeStatsMedian: () => {
     return makeBlock('stats_median',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateStatsMin: () => {
+  codeStatsMin: () => {
     return makeBlock('stats_min',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateStatsSd: () => {
+  codeStatsSd: () => {
     return makeBlock('stats_sd',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateStatsSum: () => {
+  codeStatsSum: () => {
     return makeBlock('stats_sum',
                      {Columns: makeBlock('variable_columnName',
                                          {TEXT: 'existingColumn'})})
   },
 
-  generateVariableColumnName: () => {
+  codeVariableColumnName: () => {
     return makeBlock('variable_columnName',
                      {TEXT: 'TheColumnName'})
   },
 
-  generateVariableCompare: () => {
+  codeVariableCompare: () => {
     return makeBlock('variable_compare',
                      {OP: makeBlock('variable_text',
                                     {TEXT: 'NEQ'}),
@@ -243,12 +266,12 @@ const Tests = {
                                    {TEXT: 'right'})})
   },
 
-  generateVariableNumber: () => {
+  codeVariableNumber: () => {
     return makeBlock('variable_number',
-                     {NUM: '3.14'})
+                     {NUM: 3.14})
   },
 
-  generateVariableOperation: () => {
+  codeVariableOperation: () => {
     return makeBlock('variable_operation',
                      {OP: makeBlock('variable_text',
                                     {TEXT: 'OR'}),
@@ -258,12 +281,12 @@ const Tests = {
                                    {TEXT: 'right'})})
   },
 
-  generateVariableText: () => {
+  codeVariableText: () => {
     return makeBlock('variable_text',
                      {TEXT: 'Look on my blocks, ye coders, and despair!'})
   },
 
-  createDataAndPlot: () => {
+  execDataAndPlot: () => {
     return [
       makeBlock('data_iris',
                 {}),
@@ -271,11 +294,11 @@ const Tests = {
                 {Columns: makeBlock('variable_columnName',
                                     {TEXT: 'Petal_Length'}),
                  bins: makeBlock('variable_number',
-                                 {NUM: '20'})})
+                                 {NUM: 20})})
     ]
   },
 
-  createDataThenSelectAndPlot: () => {
+  execDataThenSelectAndPlot: () => {
     return [
       makeBlock('data_iris',
                 {}),
@@ -286,7 +309,26 @@ const Tests = {
                 {Columns: makeBlock('variable_columnName',
                                     {TEXT: 'Petal_Length'}),
                  bins: makeBlock('variable_number',
-                                 {NUM: '20'})})
+                                 {NUM: 20})})
+    ]
+  },
+
+  execDataThenFilterAndPlot: () => {
+    return [
+      makeBlock('data_iris',
+                {}),
+      makeBlock('dplyr_filter',
+                {Columns: makeBlock('variable_compare',
+                                    {OP: 'GT',
+                                     A: makeBlock('variable_columnName',
+                                                  {TEXT: 'Petal_Length'}),
+                                     B: makeBlock('variable_number',
+                                                  {NUM: 5.0})})}),
+      makeBlock('ggplot_hist',
+                {Columns: makeBlock('variable_columnName',
+                                    {TEXT: 'Petal_Length'}),
+                 bins: makeBlock('variable_number',
+                                 {NUM: 20})})
     ]
   }
 }
@@ -317,6 +359,10 @@ const runTests = (testNames) => {
     }
     else {
       console.log(result)
+    }
+    if (name.startsWith('exec')) {
+      console.log('--------------------')
+      console.log(eval(result.join('\n')))
     }
   }
 }

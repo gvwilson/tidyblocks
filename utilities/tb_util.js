@@ -11,10 +11,8 @@ const readCSV = (url) => {
     return null
   }
   else {
-    const result = Papa.parse(request.responseText, {
-      header: true
-    })
-    return data = new TidyBlocksDataFrame(result.data)
+    const result = Papa.parse(request.responseText, {header: true})
+    return new TidyBlocksDataFrame(result.data)
   }
 }
 

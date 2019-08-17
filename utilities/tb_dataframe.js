@@ -35,17 +35,13 @@ class TidyBlocksDataFrame {
     return this
   }
 
-  plot (spec) {
+  plot (plotFxn, htmlID, spec) {
     spec.data.values = this.df.toArray()
-    vegaEmbed('#plotOutput', spec, {})
+    return plotFxn(htmlID, spec, {}) // return for testing purposes
   }
 
   toArray () {
     return this.df.toArray()
-  }
-
-  toString () {
-    return this.df.toString()
   }
 }
 
