@@ -1,7 +1,9 @@
+//
+// Mutate values.
+//
 Blockly.JavaScript['dplyr_mutate'] = (block) => {
-  const argument0 = block.getFieldValue('newCol')
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
-  const mutateString = `.generateSeries({ ${argument0}: row => ${argument1}})`
-        .replace(/["']/g, '')
-  return mutateString
+  const argNewCol = block.getFieldValue('newCol')
+  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
+  return `.generateSeries({ ${argNewCol}: row => ${argColumns}})`
+         .replace(/["']/g, '')
 }

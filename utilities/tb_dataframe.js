@@ -3,8 +3,16 @@
  */
 class TidyBlocksDataFrame {
 
-  constructor (initial) => {
-    this.df = new dataForge.DataFrame(initial)
+  constructor (initial) {
+    // Create dataForge dataframe when running on the command line.
+    if (typeof module !== 'undefined') {
+      const dataForge = require('data-forge')
+      this.df = new dataForge.DataFrame(initial)
+    }
+    // Create dataForge dataframe when running in the browser.
+    else {
+      this.df = new dataForge.DataFrame(initial)
+    }
   }
 
   generateSeries (props) {
@@ -28,6 +36,22 @@ class TidyBlocksDataFrame {
   }
 
   plot (spec) {
+    spec.data.values = this.df.toArray()
     vegaEmbed('#plotOutput', spec, {})
   }
+
+  toArray () {
+    return this.df.toArray()
+  }
+
+  toString () {
+    return this.df.toString()
+  }
+}
+
+//
+// Make this file require'able if running from the command line.
+//
+if (typeof module !== 'undefined') {
+  module.exports = TidyBlocksDataFrame
 }

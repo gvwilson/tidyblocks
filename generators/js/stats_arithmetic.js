@@ -9,9 +9,9 @@ Blockly.JavaScript['stats_arithmetic'] = (block) => {
     DIVIDE: '/'
   }
   const order = Blockly.JavaScript.ORDER_NONE
-  const operator = OPERATORS[block.getFieldValue('OP')]
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'A', order)
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'B', order)
-  const code = argument0 + operator + argument1
+  const argOperator = OPERATORS[block.getFieldValue('OP')]
+  const argLeft = Blockly.JavaScript.valueToCode(block, 'A', order)
+  const argRight = Blockly.JavaScript.valueToCode(block, 'B', order)
+  const code = `${argLeft} ${argOperator} ${argRight}`
   return [code, order]
 }

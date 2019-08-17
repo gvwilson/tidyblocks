@@ -1,9 +1,9 @@
 //
-// Find the mean of data.
+// Find the mean.
 //
 Blockly.JavaScript['stats_mean'] = (block) => {
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
+  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
         .replace('row.', '')
-  const code = `{ ${argument0}: {Average_${argument0}: series => series.average() }}`
+  const code = `{ ${argColumns}: {Average_${argColumns}: series => series.average() }}`
   return [code, Blockly.JavaScript.ORDER_NONE]
 }

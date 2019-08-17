@@ -2,23 +2,24 @@
 // Make a point plot.
 //
 Blockly.JavaScript['ggplot_point'] = (block) => {
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
+  const argX = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
         .replace(/row./gi, '')
-  const argument1 = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_NONE)
+  const argY = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_NONE)
         .replace(/row./gi, '')
-  const argument2 = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE)
+  const argColor = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE)
         .replace(/row./gi, '')
+  const useLM = (block.getFieldValue('lm') == 'FALSE')
 
-  if (block.getFieldValue('lm') == 'FALSE') {
+  if (useLM) {
     return `SPLIT 
       let spec = {
         "width": 500,
         "data": { "values": dfArray },
         "mark": "point",
         "encoding": {
-          "x": {"field": "${argument0}","type": "quantitative"},
-          "y": {"field": "${argument1}","type": "quantitative"},
-          "color": {"field": "${argument2}", "type": "nominal"}
+          "x": {"field": "${argX}","type": "quantitative"},
+          "y": {"field": "${argY}","type": "quantitative"},
+          "color": {"field": "${argColor}", "type": "nominal"}
         }
       }
       vegaEmbed("#plotOutput", spec, {})`
@@ -34,8 +35,8 @@ Blockly.JavaScript['ggplot_point'] = (block) => {
         return obj; //Continue to the next object in the array
       })
   
-      var lineDat = findLineByLeastSquares(result.${argument0}.map(parseFloat),
-                                           result.${argument1}.map(parseFloat))
+      var lineDat = findLineByLeastSquares(result.${argX}.map(parseFloat),
+                                           result.${argY}.map(parseFloat))
   
       let spec = {
         "width": 500,
@@ -44,17 +45,17 @@ Blockly.JavaScript['ggplot_point'] = (block) => {
            "data": { "values": dfArray },
             "mark": "point",
             "encoding": {
-              "x": {"field": "${argument0}","type": "quantitative"},
-              "y": {"field": "${argument1}","type": "quantitative"},
-              "color": {"field": "${argument2}", "type": "nominal"}
+              "x": {"field": "${argX}","type": "quantitative"},
+              "y": {"field": "${argY}","type": "quantitative"},
+              "color": {"field": "${argColor}", "type": "nominal"}
             }
           },
           {
             "data": {
               "values": [
                 {"x": 0, "y": lineDat[1]},
-                {"x": Math.max.apply(Math, result.${argument0}), 
-                "y": (Math.max.apply(Math, result.${argument0})) * lineDat[0] + lineDat[1]}
+                {"x": Math.max.apply(Math, result.${argX}), 
+                "y": (Math.max.apply(Math, result.${argX})) * lineDat[0] + lineDat[1]}
               ]
             },
             "mark": {"type": "line"},

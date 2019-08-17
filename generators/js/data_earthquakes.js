@@ -4,7 +4,5 @@
 //
 Blockly.JavaScript['data_earthquakes'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/earthquakes.csv'
-  const result = `readCSV('${URL}')
-    data`
-  return result
+  return `readCSV('${URL}')`
 }
