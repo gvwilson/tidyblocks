@@ -16,9 +16,7 @@ const readCSV  = (url) => {
     return null
   }
   else {
-    const result = Papa.parse(request.responseText, {
-      header: true
-    })
+    const result = Papa.parse(request.responseText, {header: true})
     return data = new TidyBlocksDataFrame(result.data)
   }
 }
@@ -91,7 +89,7 @@ const showCode = () => {
  * Set up Blockly display by injecting XML data into blockDisplay div.
  * As a side effect, sets the global DemoWorkspace variable for later use.
  */
-function setUpBlockly () {
+const setUpBlockly = () => {
   DemoWorkspace = Blockly.inject(
     document.getElementById('blockDisplay'),
     {
@@ -108,7 +106,7 @@ function setUpBlockly () {
  * Run the code generated from the user's blocks.
  * Depends on the global DemoWorkspace variable.
  */
-function runCode () {
+const runCode = () => {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
   const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
   if (code.includes('vega')) {
@@ -123,48 +121,49 @@ function runCode () {
 }
 
 /**
-* LM
-* Statistical functions to apply to plots
-* As an example, here is a linear model using least squares
-**/
-
-function findLineByLeastSquares(values_x, values_y) {
-  var x_sum = 0;
-  var y_sum = 0;
-  var xy_sum = 0;
-  var xx_sum = 0;
-  var count = 0;
-
-  // The above is just for quick access, makes the program faster
-  var x = 0;
-  var y = 0;
-  var values_length = values_x.length;
-
+ * LM
+ * Statistical functions to apply to plots
+ * As an example, here is a linear model using least squares
+ * @param {values_x} array - X-axis values.
+ * @param {values_y} array - Y-axis values.
+ **/
+const findLineByLeastSquares = (values_x, values_y) => {
+  var x_sum = 0
+  var y_sum = 0
+  var xy_sum = 0
+  var xx_sum = 0
+  var count = 0
+  
+  // The above is just for quick access, makes the program faster. (FIXME: really?)
+  var x = 0
+  var y = 0
+  var values_length = values_x.length
+  
   if (values_length != values_y.length) {
-      throw new Error('The parameters values_x and values_y need to have same size!');
+    throw new Error('The parameters values_x and values_y need to have same size!')
   }
-
+  
   // Above and below cover edge cases
   if (values_length === 0) {
-      return [ [], [] ];
+    return [ [], [] ]
   }
-
+  
   // Calculate the sum for each of the parts necessary.
-  for (let i = 0; i< values_length; i++) {
-      x = values_x[i];
-      y = values_y[i];
-      x_sum+= x;
-      y_sum+= y;
-      xx_sum += x*x;
-      xy_sum += x*y;
-      count++;
+  for (let i = 0; i < values_length; i++) {
+    x = values_x[i]
+    y = values_y[i]
+    x_sum+= x
+    y_sum+= y
+    xx_sum += x*x
+    xy_sum += x*y
+    count++
   }
-
+  
   // Calculate m and b for the line equation:
   // y = x * m + b
-  var m = (count*xy_sum - x_sum*y_sum) / (count*xx_sum - x_sum*x_sum);
-  var b = (y_sum/count) - (m*x_sum)/count;
-
+  var m = (count*xy_sum - x_sum*y_sum) / (count*xx_sum - x_sum*x_sum)
+  var b = (y_sum/count) - (m*x_sum)/count
+  
   // solve for x and y intercept
   return [m, b]
 }

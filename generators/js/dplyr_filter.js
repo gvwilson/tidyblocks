@@ -2,7 +2,7 @@
 // Filter data.
 //
 Blockly.JavaScript['dplyr_filter'] = (block) => {
-  const argument0 = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
-  const result = `.where(row => (${argument0}))`
+  const arg_columns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
+  const result = `.dplyr_filter(${arg_columns})`
   return result
 }
