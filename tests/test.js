@@ -226,8 +226,7 @@ const Tests = {
 
   codeStatsArithmetic: () => {
     return makeBlock('stats_arithmetic',
-                     {OP: makeBlock('variable_text',
-                                    {TEXT: 'ADD'}),
+                     {OP: 'ADD',
                       A: makeBlock('variable_columnName',
                                    {TEXT: 'left'}),
                       B: makeBlock('variable_columnName',
@@ -277,8 +276,7 @@ const Tests = {
 
   codeVariableCompare: () => {
     return makeBlock('variable_compare',
-                     {OP: makeBlock('variable_text',
-                                    {TEXT: 'NEQ'}),
+                     {OP: 'NEQ',
                       A: makeBlock('variable_columnName',
                                    {TEXT: 'left'}),
                       B: makeBlock('variable_columnName',
@@ -292,8 +290,7 @@ const Tests = {
 
   codeVariableOperation: () => {
     return makeBlock('variable_operation',
-                     {OP: makeBlock('variable_text',
-                                    {TEXT: 'OR'}),
+                     {OP: 'OR',
                       A: makeBlock('variable_columnName',
                                    {TEXT: 'left'}),
                       B: makeBlock('variable_columnName',
@@ -358,6 +355,21 @@ const Tests = {
       makeBlock('dplyr_filter',
                 {Columns: makeBlock('variable_compare',
                                     {OP: 'GTE',
+                                     A: makeBlock('variable_columnName',
+                                                  {TEXT: 'red'}),
+                                     B: makeBlock('variable_columnName',
+                                                  {TEXT: 'green'})})})
+    ]
+  },
+
+  execColorAddRedGreen: () => {
+    return [
+      makeBlock('data_colors',
+                {}),
+      makeBlock('dplyr_mutate',
+                {newCol: 'red_green',
+                 Columns: makeBlock('stats_arithmetic',
+                                    {OP: 'ADD',
                                      A: makeBlock('variable_columnName',
                                                   {TEXT: 'red'}),
                                      B: makeBlock('variable_columnName',
