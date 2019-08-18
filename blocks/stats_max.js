@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'stats_max',
-    message0: 'MAX %1 %2',
+    message0: 'Max %1 %2',
     args0: [
       {
         type: 'input_dummy'

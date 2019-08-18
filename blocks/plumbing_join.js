@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'plumbing_join',
-    message0: 'JOIN %1 %2 %3 %4 %5',
+    message0: 'Join %1 %2 %3 %4 %5',
     args0: [
       {
         type: 'input_dummy'

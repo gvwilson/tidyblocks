@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'ggplot_boxplot',
-    message0: 'BOX %1 %2 %3 %4 %5',
+    message0: 'Box %1 %2 %3 %4 %5',
     args0: [
       {
         type: 'input_dummy'

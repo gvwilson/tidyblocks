@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'data_unit',
-    message0: 'Create unit dataset',
+    message0: 'Unit dataset',
     nextStatement: null,
     style: 'data_blocks',
     hat: 'cap'

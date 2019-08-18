@@ -5,7 +5,7 @@ Blockly.Blocks['dplyr_summarize'] = {
   init: function() {
     this
       .appendDummyInput()
-      .appendField('SUMMARIZE')
+      .appendField('Summarize')
     this
       .appendValueInput('Columns')
       .setCheck(null)

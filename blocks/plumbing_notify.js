@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'plumbing_notify',
-    message0: 'NOTIFY %1',
+    message0: 'Notify %1',
     args0: [
       {
         type: 'field_input',

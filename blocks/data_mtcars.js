@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'data_mtcars',
-    message0: 'Create mtcars dataset',
+    message0: 'Cars dataset',
     nextStatement: null,
     style: 'data_blocks',
     hat: 'cap'

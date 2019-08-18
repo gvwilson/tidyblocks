@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'stats_count',
-    message0: 'COUNT %1 %2',
+    message0: 'Count %1 %2',
     args0: [
       {
         type: 'input_dummy'
