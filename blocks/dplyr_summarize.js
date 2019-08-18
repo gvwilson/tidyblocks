@@ -1,11 +1,11 @@
 //
-// Visuals for summarise block.
+// Visuals for summarize block.
 //
-Blockly.Blocks['dplyr_summarise'] = {
+Blockly.Blocks['dplyr_summarize'] = {
   init: function() {
     this
       .appendDummyInput()
-      .appendField('SUMMARISE')
+      .appendField('SUMMARIZE')
     this
       .appendValueInput('Columns')
       .setCheck(null)

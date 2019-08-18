@@ -3,6 +3,49 @@
  */
 class TidyBlocksDataFrame {
 
+  static GetSummarizeFunction (name) {
+    return {
+      count: (values) => {
+        return values.length
+      },
+
+      max: (values) => {
+        return (values.length === 0)
+          ? NaN
+          : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
+      },
+
+      mean: (values) => {
+        return (values.length === 0)
+          ? NaN
+          : values.reduce((total, num) => total + num, 0) / values.length
+      },
+
+      median: (values) => {
+        if (values.length === 0) {
+          return NaN
+        }
+        else {
+          // FIXME
+        }
+      },
+
+      min: (values) => {
+        return (values.length === 0)
+          ? NaN
+          : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
+      },
+
+      sd: (values) => {
+        return NaN // FIXME
+      },
+
+      sum: (values) => {
+        return values.reduce((total, num) => total + num, 0)
+      }
+    }[name]
+  }
+
   constructor (initial) {
     // Create dataForge dataframe when running on the command line.
     if (typeof module !== 'undefined') {
@@ -27,6 +70,48 @@ class TidyBlocksDataFrame {
 
   subset (columns) {
     this.df = this.df.subset(columns)
+    return this
+  }
+
+  summarize (whatToDo) {
+    // Setup.
+    const {func, column} = whatToDo
+    const summarizer = TidyBlocksDataFrame.GetSummarizeFunction(func)
+    const result = []
+
+    // Aggregate the whole thing?
+    if (! this.df.hasSeries('Index')) {
+      const values = this.df.getSeries(column).toArray()
+      const record = {}
+      record[column] = summarizer(values)
+      result.push(record)
+    }
+
+    // Aggregate by groups
+    else {
+      // Group values in column by index.
+      const grouped = new Map()
+      this.df.forEach(row => {
+        const key = ('Index' in row) ? row.Index : '_'
+        if (grouped.has(key)) {
+          grouped.get(key).push(row[column])
+        }
+        else {
+          grouped.set(key, [row[column]])
+        }
+      })
+
+      // Operate by index.
+      grouped.forEach((values, key) => {
+        const record = {}
+        record['Index'] = key
+        record[column] = summarizer(values)
+        result.push(record)
+      })
+    }
+
+    // Create new dataframe.
+    this.df = new TidyBlocksDataFrame(result)
     return this
   }
 

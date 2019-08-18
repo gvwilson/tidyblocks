@@ -171,11 +171,11 @@ const Tests = {
                                          {TEXT: 'existingColumn'})})
   },
 
-  codeDplyrSummarise: () => {
-    // FIXME: add this in when summarise is working.
-    // return makeBlock('dplyr_summarise',
-    //                  {Columns: makeBlock('variable_columnName',
-    //                                      {TEXT: 'existingColumn'})})
+  codeDplyrSummarize: () => {
+    return makeBlock('dplyr_summarize',
+                     {Columns: makeBlock('stats_mean',
+                                         {Columns: makeBlock('variable_columnName',
+                                                             {TEXT: 'existingColumn'})})})
   },
 
   codeGgplotBar: () => {
@@ -362,6 +362,51 @@ const Tests = {
                                                   {TEXT: 'red'}),
                                      B: makeBlock('variable_columnName',
                                                   {TEXT: 'green'})})})
+    ]
+  },
+
+  execColorSelectBlue: () => {
+    return [
+      makeBlock('data_colors',
+                {}),
+      makeBlock('dplyr_select',
+                {Columns: makeBlock('variable_columnName',
+                                    {TEXT: 'blue'})})
+    ]
+  },
+
+  execSumRed: () => {
+    return [
+      makeBlock('data_colors',
+                {}),
+      makeBlock('dplyr_summarize',
+                {Columns: makeBlock('stats_sum',
+                                    {Columns: makeBlock('variable_columnName',
+                                                        {TEXT: 'red'})})})
+    ]
+  },
+
+  execColorGroupbyBlue: () => {
+    return [
+      makeBlock('data_colors',
+                {}),
+      makeBlock('dplyr_groupby',
+                {Columns: makeBlock('variable_columnName',
+                                    {TEXT: 'blue'})})
+    ]
+  },
+
+  execColorGroupbyBlueAverageGreen: () => {
+    return [
+      makeBlock('data_colors',
+                {}),
+      makeBlock('dplyr_groupby',
+                {Columns: makeBlock('variable_columnName',
+                                    {TEXT: 'blue'})}),
+      makeBlock('dplyr_summarize',
+                {Columns: makeBlock('stats_mean',
+                                    {Columns: makeBlock('variable_columnName',
+                                                        {TEXT: 'green'})})})
     ]
   }
 }

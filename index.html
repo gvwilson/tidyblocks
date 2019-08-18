@@ -22,42 +22,43 @@
       <div class="input" id="blockDisplay">
         <xml id="toolbox">
           <category name="data" categorystyle="data">
-            <block type="data_unit"></block>
             <block type="data_colors"></block>
-            <block type="data_iris"></block>
-            <block type="data_toothGrowth"></block>
-            <block type="data_mtcars"></block>
             <block type="data_earthquakes"></block>
+            <block type="data_iris"></block>
+            <block type="data_mtcars"></block>
+            <block type="data_toothGrowth"></block>
+            <block type="data_unit"></block>
             <block type="data_urlCSV"></block>
           </category>
           <category name="dplyr" categorystyle="dplyr">
             <block type="dplyr_filter"></block>
             <block type="dplyr_groupby"></block>
-            <block type="dplyr_summarise"></block>
-            <block type="dplyr_select"></block>
             <block type="dplyr_mutate"></block>
+            <block type="dplyr_select"></block>
+            <block type="dplyr_summarize"></block>
           </category>
           <category name="ggplot" categorystyle="ggplot">
-            <block type="ggplot_hist"></block>
             <block type="ggplot_bar"></block>
-            <block type="ggplot_point"></block>
             <block type="ggplot_boxplot"></block>
+            <block type="ggplot_hist"></block>
+            <block type="ggplot_point"></block>
           </category>
           <category name="stats" categorystyle="stats">
-            <block type="stats_sum"></block>
+            <block type="stats_arithmetic"></block>
+            <block type="stats_count"></block>
+            <block type="stats_max"></block>
             <block type="stats_mean"></block>
             <block type="stats_median"></block>
-            <block type="stats_sd"></block>
             <block type="stats_min"></block>
-            <block type="stats_max"></block>
-            <block type="stats_arithmetic"></block>
+            <block type="stats_sd"></block>
+            <block type="stats_sum"></block>
           </category>
           <category name="variables" categorystyle="variables">
-            <block type="variable_text"></block>
-            <block type="variable_number"></block>
-            <block type="variable_compare"></block>
-            <block type="variable_operation"></block>
             <block type="variable_columnName"></block>
+            <block type="variable_compare"></block>
+            <block type="variable_number"></block>
+            <block type="variable_operation"></block>
+            <block type="variable_text"></block>
           </category>
         </xml>
       </div>
@@ -131,8 +132,8 @@
       <script src="blocks/dplyr_mutate.js"></script>
       <script src="generators/js/dplyr_mutate.js"></script>
 
-      <script src="blocks/dplyr_summarise.js"></script>
-      <script src="generators/js/dplyr_summarise.js"></script>
+      <script src="blocks/dplyr_summarize.js"></script>
+      <script src="generators/js/dplyr_summarize.js"></script>
 
       <script src="blocks/variable_text.js"></script>
       <script src="generators/js/variable_text.js"></script>
@@ -151,6 +152,9 @@
 
       <script src="blocks/stats_arithmetic.js"></script>
       <script src="generators/js/stats_arithmetic.js"></script>
+
+      <script src="blocks/stats_count.js"></script>
+      <script src="generators/js/stats_count.js"></script>
 
       <script src="blocks/stats_mean.js"></script>
       <script src="generators/js/stats_mean.js"></script>

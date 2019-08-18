@@ -1,9 +1,9 @@
 //
-// Calculate the sum of the data.
+// Count the number of items.
 //
-Blockly.JavaScript['stats_sum'] = (block) => {
+Blockly.JavaScript['stats_count'] = (block) => {
   const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
         .replace('row.', '')
-  const code = `{ func: 'sum', column: '${argColumns}' }`
+  const code = `{ func: 'count', column: '${argColumns}' }`
   return [code, Blockly.JavaScript.ORDER_NONE]
 }
