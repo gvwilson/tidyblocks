@@ -121,9 +121,14 @@ class TidyBlocksDataFrame {
   }
 
   plot (tableFxn, plotFxn, htmlID, spec) {
-    spec.data.values = this.df.toArray()
-    tableFxn(spec.data.values)
-    plotFxn(htmlID, spec, {})
+    const asArray = this.df.toArray()
+    if (tableFxn !== null) {
+      tableFxn(asArray)
+    }
+    if (plotFxn !== null) {
+      spec.data.values = asArray
+      plotFxn(htmlID, spec, {})
+    }
     return this
   }
 
