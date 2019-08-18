@@ -83,7 +83,7 @@ const generateCodePane = () => {
  */
 const showCode = () => {
   // Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
+  const code = Blockly.R.workspaceToCode(DemoWorkspace)
   document.getElementById('codeOutput').innerHTML = code
 }
 
