@@ -26,5 +26,5 @@ Blockly.JavaScript['ggplot_bar'] = (block) => {
       }
     }
   }`
-  return `.plot(vegaEmbed, '#plotOutput', ${spec})`
+  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec})`
 }

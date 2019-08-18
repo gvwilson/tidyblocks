@@ -205,6 +205,12 @@
         initializeDisplay()
         setUpBlockly()
       })
+
+      // Display a table.
+      const tableEmbed = (result) => {
+        const table = json2table(result)
+        document.getElementById('dataOutput').innerHTML = table
+      }
     </script>
   </body>
 </html>
