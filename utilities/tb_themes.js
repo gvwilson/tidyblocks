@@ -26,6 +26,13 @@ const tidyBlockStyles = {
     hat: 'cap'
   },
 
+  plumbing_blocks: {
+    colourPrimary: '#404040',
+    colourSecondary: '#404040',
+    colourTertiary: '#A0A0A0',
+    hat: 'cap'
+  },
+
   stats_blocks: {
     colourPrimary: '#AF43B7',
     colourSecondary: '#DFA8E3',
@@ -48,6 +55,9 @@ const tidyCategoryStyles = {
   },
   ggplot: {
     colour: '#A4C588'
+  },
+  plumbing: {
+    colour: '#808080'
   },
   stats: {
     colour: '#AF43B7'

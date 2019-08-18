@@ -16,6 +16,6 @@ Blockly.defineBlocksWithJsonArray([
     style: 'data_blocks',
     hat: 'cap',
     tooltip: '',
-    helpUrl: '',
+    helpUrl: ''
   }
 ])
