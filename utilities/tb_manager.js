@@ -4,10 +4,15 @@
 class TidyBlocksPipelineManagerClass {
 
   constructor () {
+    this.queue = []
   }
 
   register (depends, func, produces) {
-    // FIXME: manage dependencies.
+    this.queue.push(func)
+  }
+
+  run () {
+    const func = this.queue.pop()
     func()
   }
 }

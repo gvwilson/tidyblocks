@@ -568,6 +568,7 @@ const runTests = (testNames) => {
     if (name.startsWith('exec')) {
       console.log('--------------------')
       eval(code)
+      TidyBlocksPipelineManager.run()
     }
   }
 }

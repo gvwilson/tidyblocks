@@ -7,5 +7,5 @@ Blockly.JavaScript['plumbing_join'] = (block) => {
   const argLeftColumn = Blockly.JavaScript.valueToCode(block, 'leftColumn', order)
   const argRightName = block.getFieldValue('rightName')
   const argRightColumn = Blockly.JavaScript.valueToCode(block, 'rightColumn', order)
-  return `join('${argLeftName}', '${argLeftColumn}', '${argRightName}', '${argRightColumn}')`
+  return `TidyBlocksPipelineManager.register({'${argLeftName}', '${argRightName}'}, () => {join('${argLeftName}', '${argLeftColumn}', '${argRightName}', '${argRightColumn}')`
 }
