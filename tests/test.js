@@ -6,8 +6,8 @@ const dataForge = require('data-forge')
 
 module.paths.unshift(process.cwd()) // In order to load the DataFrame class
 const TidyBlocksDataFrame = require('utilities/tb_dataframe')
-const TidyBlocksPipelineManager = require('utilities/tb_manager')
-const {fixCode} = require('utilities/tb_util')
+const TidyBlocksManager = require('utilities/tb_manager')
+const {registerPrefix, registerSuffix, fixCode} = require('utilities/tb_util')
 
 //--------------------------------------------------------------------------------
 
@@ -253,19 +253,23 @@ const Tests = {
        lm: 'FALSE'})
   },
 
-  codeGgplotPointNotLm: () => {
+  codePlumbingJoin: () => {
     return makeBlock(
-      'ggplot_point',
-      {X: makeBlock(
-        'variable_columnName',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+      'plumbing_join',
+      {leftName: 'left_table',
+       leftColumn: makeBlock(
          'variable_columnName',
-         {TEXT: 'Y_axis_column'}),
-       color: makeBlock(
-         'variable_text',
-         {TEXT: 'purple'}),
-       lm: 'TRUE'})
+         {TEXT: 'left_column'}),
+       rightName: 'right_table',
+       rightColumn: makeBlock(
+         'variable_columnName',
+         {TEXT: 'right_column'})})
+  },
+
+  codePlumbingNotify: () => {
+    return makeBlock(
+      'plumbing_notify',
+      {name: 'output_name'})
   },
 
   codeStatsArithmetic: () => {
@@ -555,7 +559,7 @@ const loadBlockFiles = () => {
  */
 const runTests = (testNames) => {
   for (let name of testNames) {
-    console.log(`\n# ${name}`)
+    console.log(`\n# ${name}\n`)
     let code = Tests[name]()
     if (Array.isArray(code)){
       code = code.join('\n') // multiple blocks
@@ -563,12 +567,12 @@ const runTests = (testNames) => {
     else if (typeof code !== 'string') {
       code = `${code}` // numbers
     }
-    code = fixCode(code)
     console.log(code)
     if (name.startsWith('exec')) {
-      console.log('--------------------')
-      eval(code)
-      TidyBlocksPipelineManager.run()
+      const terminated = fixCode(code)
+      console.log(`\nfixed: ${code !== terminated}\n`)
+      eval(terminated)
+      TidyBlocksManager.run()
     }
   }
 }

@@ -17,13 +17,28 @@ const readCSV = (url) => {
 }
 
 /**
+ * Get the prefix for registering blocks.
+ */
+const registerPrefix = (fill) => {
+  return `TidyBlocksManager.register([${fill}], () => {`
+}
+
+/**
+ * Get the suffix for registering blocks.  (Has to be here to be visible in fixCode.)
+ */
+const registerSuffix = (fill) => {
+  return `}, [${fill}]) // terminated`
+}
+
+/**
  * Fix up runnable code if it doesn't end with a display block.  See the ggplot_*
  * blocks for corresponding code.
  * @param {string} code - code to patch up.
  */
 const fixCode = (code) => {
   if (! code.includes('// terminated')) {
-    code += ".plot(tableEmbed, null, '#plotOutput', {})}, {})"
+    const suffix = registerSuffix('')
+    code += `.plot(tableEmbed, null, '#plotOutput', {}) ${suffix}`
   }
   return code
 }
@@ -106,5 +121,5 @@ const findLineByLeastSquares = (values_x, values_y) => {
 // Make this file require'able if running from the command line.
 //
 if (typeof module !== 'undefined') {
-  module.exports = {fixCode}
+  module.exports = {registerPrefix, registerSuffix, fixCode}
 }

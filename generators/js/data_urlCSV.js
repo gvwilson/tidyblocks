@@ -3,5 +3,6 @@
 //
 Blockly.JavaScript['data_urlCSV'] = (block) => {
   const argURL = block.getFieldValue('ext')
-  return `TidyBlocksPipelineManager.register({}, () => {readCSV('${argURL}')`
+  const prefix = registerPrefix('')
+  return `${prefix} readCSV('${argURL}')`
 }

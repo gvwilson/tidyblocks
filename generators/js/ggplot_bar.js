@@ -26,5 +26,6 @@ Blockly.JavaScript['ggplot_bar'] = (block) => {
       }
     }
   }`
-  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec})}, {}) // terminated`
+  const suffix = registerSuffix('')
+  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec}) ${suffix}`
 }

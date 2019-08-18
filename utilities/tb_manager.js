@@ -1,7 +1,7 @@
 /**
  * Manage all pipelines.
  */
-class TidyBlocksPipelineManagerClass {
+class TidyBlocksManagerClass {
 
   constructor () {
     this.queue = []
@@ -17,11 +17,11 @@ class TidyBlocksPipelineManagerClass {
   }
 }
 
-const TidyBlocksPipelineManager = new TidyBlocksPipelineManagerClass()
+const TidyBlocksManager = new TidyBlocksManagerClass()
 
 //
 // Make this file require'able if running from the command line.
 //
 if (typeof module !== 'undefined') {
-  module.exports = TidyBlocksPipelineManager
+  module.exports = TidyBlocksManager
 }

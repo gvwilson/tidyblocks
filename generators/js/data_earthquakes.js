@@ -3,5 +3,6 @@
 //
 Blockly.JavaScript['data_earthquakes'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/earthquakes.csv'
-  return `TidyBlocksPipelineManager.register({}, () => {readCSV('${URL}')`
+  const prefix = registerPrefix('')
+  return `${prefix} readCSV('${URL}')`
 }

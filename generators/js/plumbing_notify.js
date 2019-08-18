@@ -3,5 +3,6 @@
 //
 Blockly.JavaScript['plumbing_notify'] = (block) => {
   const argName = block.getFieldValue('name')
-  return `.notify('${argName}')}, {'${argName}'}) // terminated`
+  const suffix = registerSuffix(`'${argName}'`)
+  return `.notify('${argName}') ${suffix}`
 }

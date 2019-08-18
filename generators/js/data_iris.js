@@ -3,5 +3,6 @@
 //
 Blockly.JavaScript['data_iris'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/iris.csv'
-  return `TidyBlocksPipelineManager.register({}, () => {readCSV('${URL}')`
+  const prefix = registerPrefix('')
+  return `${prefix} readCSV('${URL}')`
 }
