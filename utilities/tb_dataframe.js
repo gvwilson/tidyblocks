@@ -16,22 +16,22 @@ class TidyBlocksDataFrame {
   }
 
   generateSeries (props) {
-    this.df.generateSeries(props)
+    this.df = this.df.generateSeries(props)
     return this
   }
 
   orderBy (func) {
-    this.df.orderBy(func)
+    this.df = this.df.orderBy(func)
     return this
   }
 
   subset (columns) {
-    this.df.subset(columns)
+    this.df = this.df.subset(columns)
     return this
   }
 
   where (func) {
-    this.df.where(func)
+    this.df = this.df.where(func)
     return this
   }
 

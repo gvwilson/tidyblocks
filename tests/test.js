@@ -97,6 +97,11 @@ const vegaEmbed = (htmlID, spec, props) => {
 
 const Tests = {
 
+  codeDataColors: () => {
+    return makeBlock('data_colors',
+                     {})
+  },
+
   codeDataEarthquakes: () => {
     return makeBlock('data_earthquakes',
                      {})
@@ -286,7 +291,7 @@ const Tests = {
                      {TEXT: 'Look on my blocks, ye coders, and despair!'})
   },
 
-  execDataAndPlot: () => {
+  execDataPlot: () => {
     return [
       makeBlock('data_iris',
                 {}),
@@ -298,7 +303,7 @@ const Tests = {
     ]
   },
 
-  execDataThenSelectAndPlot: () => {
+  execDataSelectPlot: () => {
     return [
       makeBlock('data_iris',
                 {}),
@@ -313,7 +318,7 @@ const Tests = {
     ]
   },
 
-  execDataThenFilterAndPlot: () => {
+  execDataFilterPlot: () => {
     return [
       makeBlock('data_iris',
                 {}),
@@ -329,6 +334,20 @@ const Tests = {
                                     {TEXT: 'Petal_Length'}),
                  bins: makeBlock('variable_number',
                                  {NUM: 20})})
+    ]
+  },
+
+  execColorFilterRedGteGreen: () => {
+    return [
+      makeBlock('data_colors',
+                {}),
+      makeBlock('dplyr_filter',
+                {Columns: makeBlock('variable_compare',
+                                    {OP: 'GTE',
+                                     A: makeBlock('variable_columnName',
+                                                  {TEXT: 'red'}),
+                                     B: makeBlock('variable_columnName',
+                                                  {TEXT: 'green'})})})
     ]
   }
 }
@@ -352,17 +371,23 @@ const loadBlockFiles = () => {
 //
 const runTests = (testNames) => {
   for (let name of testNames) {
-    const result = Tests[name]()
+    const code = Tests[name]()
     console.log(`\n# ${name}`)
-    if (Array.isArray(result)){
-      result.forEach(x => console.log(x))
+    if (Array.isArray(code)){
+      code.forEach(x => console.log(x))
     }
     else {
-      console.log(result)
+      console.log(code)
     }
     if (name.startsWith('exec')) {
       console.log('--------------------')
-      console.log(eval(result.join('\n')))
+      const result = eval(code.join('\n'))
+      if (result instanceof TidyBlocksDataFrame) {
+        console.log(result.toArray())
+      }
+      else {
+        console.log(result)
+      }
     }
   }
 }
