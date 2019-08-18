@@ -122,7 +122,8 @@ class TidyBlocksDataFrame {
 
   plot (plotFxn, htmlID, spec) {
     spec.data.values = this.df.toArray()
-    return plotFxn(htmlID, spec, {}) // return for testing purposes
+    plotFxn(htmlID, spec, {})
+    return this
   }
 
   toArray () {

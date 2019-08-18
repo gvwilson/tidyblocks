@@ -101,7 +101,7 @@ const readCSV = (url) => {
  * @param props {Object} - unused, but required for compatibility.
  */
 const vegaEmbed = (htmlID, spec, props) => {
-  return `PLOT: ${spec.mark} with ${spec.data.values.length} values`
+  console.log(`PLOT: ${spec.mark} with ${spec.data.values.length} values`)
 }
 
 //--------------------------------------------------------------------------------

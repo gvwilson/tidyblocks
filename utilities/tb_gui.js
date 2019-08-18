@@ -62,6 +62,7 @@ const setUpBlockly = () => {
 function runCode () {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
   const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
-  const result = eval(code).toArray()
-  document.getElementById('dataOutput').innerHTML = json2table(result)
+  const result = eval(code)
+  const table = json2table(result.toArray())
+  document.getElementById('dataOutput').innerHTML = table
 }
