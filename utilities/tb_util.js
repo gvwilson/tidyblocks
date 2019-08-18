@@ -17,6 +17,18 @@ const readCSV = (url) => {
 }
 
 /**
+ * Fix up runnable code if it doesn't end with a display block.  See the ggplot_*
+ * blocks for corresponding code.
+ * @param {string} code - code to patch up.
+ */
+const fixCode = (code) => {
+  if (! code.includes('// terminated')) {
+    code += ".plot(tableEmbed, null, '#plotOutput', {})}, {})"
+  }
+  return code
+}
+
+/**
  * Create dynamic table from array from JSON with one table column per property.
  * Each object must have the same properties.
  * @param {JSON} json - JSON object to convert to table.
@@ -88,4 +100,11 @@ const findLineByLeastSquares = (values_x, values_y) => {
 
   // solve for x and y intercept
   return [m, b]
+}
+
+//
+// Make this file require'able if running from the command line.
+//
+if (typeof module !== 'undefined') {
+  module.exports = {fixCode}
 }

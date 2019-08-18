@@ -2,7 +2,7 @@
 // Generate code to create colors data frame for testing.
 //
 Blockly.JavaScript['data_colors'] = (block) => {
-  return `new TidyBlocksDataFrame([
+  return `TidyBlocksPipelineManager.register({}, () => {new TidyBlocksDataFrame([
   {'name': 'black',   'red':   0, 'green':   0, 'blue':   0},
   {'name': 'red',     'red': 255, 'green':   0, 'blue':   0},
   {'name': 'maroon',  'red': 128, 'green':   0, 'blue':   0},

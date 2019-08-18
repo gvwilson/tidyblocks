@@ -6,6 +6,8 @@ const dataForge = require('data-forge')
 
 module.paths.unshift(process.cwd()) // In order to load the DataFrame class
 const TidyBlocksDataFrame = require('utilities/tb_dataframe')
+const TidyBlocksPipelineManager = require('utilities/tb_manager')
+const {fixCode} = require('utilities/tb_util')
 
 //--------------------------------------------------------------------------------
 
@@ -102,6 +104,14 @@ const readCSV = (url) => {
  */
 const vegaEmbed = (htmlID, spec, props) => {
   console.log(`PLOT: ${spec.mark} with ${spec.data.values.length} values`)
+}
+
+/**
+ * Display a table (ish).
+ * @param result {JSON[]} - data to display.
+ */
+const tableEmbed = (result) => {
+  console.log(result)
 }
 
 //--------------------------------------------------------------------------------
@@ -545,23 +555,19 @@ const loadBlockFiles = () => {
  */
 const runTests = (testNames) => {
   for (let name of testNames) {
-    const code = Tests[name]()
     console.log(`\n# ${name}`)
+    let code = Tests[name]()
     if (Array.isArray(code)){
-      code.forEach(x => console.log(x))
+      code = code.join('\n') // multiple blocks
     }
-    else {
-      console.log(code)
+    else if (typeof code !== 'string') {
+      code = `${code}` // numbers
     }
+    code = fixCode(code)
+    console.log(code)
     if (name.startsWith('exec')) {
       console.log('--------------------')
-      const result = eval(code.join('\n'))
-      if (result instanceof TidyBlocksDataFrame) {
-        console.log(result.toArray())
-      }
-      else {
-        console.log(result)
-      }
+      eval(code)
     }
   }
 }

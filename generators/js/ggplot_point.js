@@ -30,5 +30,5 @@ Blockly.JavaScript['ggplot_point'] = (block) => {
       }
     }
   }`
-  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec})`
+  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec})}, {}) // terminated`
 }

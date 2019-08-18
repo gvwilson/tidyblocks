@@ -61,6 +61,6 @@ const setUpBlockly = () => {
  */
 function runCode () {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
+  const code = fixCode(Blockly.JavaScript.workspaceToCode(DemoWorkspace))
   eval(code)
 }
