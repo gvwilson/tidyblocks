@@ -1,6 +1,9 @@
-Blockly.JavaScript['variable_columnName'] = function(block) {
-    // Text value.
-    var code = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
-    code = "row." + code.replace(/["']/g, "")
-    return [code, Blockly.JavaScript.ORDER_ATOMIC];
-  };
+//
+// Represent a column name.
+//
+Blockly.JavaScript['variable_columnName'] = (block) => {
+  const code = 'row.' +
+        Blockly.JavaScript.quote_(block.getFieldValue('TEXT'))
+        .replace(/["']/g, '')
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}

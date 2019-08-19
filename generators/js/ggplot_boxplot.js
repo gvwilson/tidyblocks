@@ -1,27 +1,28 @@
-Blockly.JavaScript['ggplot_boxplot'] = function(block) {
-  
-    var argument0 =  Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
-    argument0 = argument0.replace(/row./gi, "")
-    var argument1 =  Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_NONE);
-    argument1 = argument1.replace(/row./gi, "")
-
-    var bar = `SPLIT 
-    let spec = {
-      "width": 500,
-      "data": { "values": dfArray },
-        "mark": {
-          "type": "boxplot",
-          "extent": 1.5
-        },
-        "encoding": {
-          "x": {"field": "${argument0}","type": "ordinal"},
-          "y": {
-            "field": "${argument1}",
-            "type": "quantitative",
-          }
-        }
+//
+// Create a box plot.
+//
+Blockly.JavaScript['ggplot_boxplot'] = (block) => {
+  const argX = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
+        .replace(/row./gi, '')
+  const argY = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_NONE)
+        .replace(/row./gi, '')
+  const spec = `{
+    "width": 500,
+    "data": { "values": null }, // set to dataframe inside plotting function
+    "mark": {
+      "type": "boxplot",
+      "extent": 1.5
+    },
+    "encoding": {
+      "x": {
+        "field": "${argX}",
+        "type": "ordinal"
+      },
+      "y": {
+        "field": "${argY}",
+        "type": "quantitative",
       }
-    vegaEmbed("#plotOutput", spec, {})`
-   console.log(bar)
-  return bar
-  };
+    }
+  }`
+  return `.plot(vegaEmbed, '#plotOutput', ${spec})`
+}

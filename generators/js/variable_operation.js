@@ -1,11 +1,13 @@
-Blockly.JavaScript['variable_operation'] = function(block) {
-    // Operations 'and', 'or'.
-    
-    var order = Blockly.JavaScript.ORDER_NONE
-
-    var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-    var A = Blockly.JavaScript.valueToCode(block, 'A', Blockly.JavaScript.ORDER_NONE);
-    var B = Blockly.JavaScript.valueToCode(block, 'B', Blockly.JavaScript.ORDER_NONE);
-    var code = A + ' ' + operator + ' ' + B;
-    return [code, order];
-  };
+//
+// Implement logical operations.
+// FIXME: rename this to logicalOperation and check for 'OR'.
+//
+Blockly.JavaScript['variable_operation'] = (block) => {
+  const operator = (block.getFieldValue('OP') == 'AND')
+        ? '&&'
+        : '||'
+  const A = Blockly.JavaScript.valueToCode(block, 'A', Blockly.JavaScript.ORDER_NONE)
+  const B = Blockly.JavaScript.valueToCode(block, 'B', Blockly.JavaScript.ORDER_NONE)
+  const code = `${A} ${operator} ${B}`
+  return [code, Blockly.JavaScript.ORDER_NONE]
+}

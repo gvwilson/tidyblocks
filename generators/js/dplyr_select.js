@@ -1,14 +1,11 @@
-Blockly.JavaScript['dplyr_select'] = function(block) {
-
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'Columns',
-      Blockly.JavaScript.ORDER_NONE);
-      
-     var selectString = `.subset([\" ${argument0} \"])`
-      selectString = selectString.replace(/row./gi, " ")
-      selectString = selectString.replace(/&&/g, ",")
-      selectString = selectString.replace(/ /gi, "")
-      selectString = selectString.replace(/,/gi, "\",\"")
-  
-     console.log(selectString)
-    return selectString
-  };
+//
+// Select columns.
+//
+Blockly.JavaScript['dplyr_select'] = (block) => {
+  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
+        .replace(/row./gi, ' ')
+        .replace(/&&/g, ',')
+        .replace(/ /gi, '')
+        .replace(/,/gi, '","')
+  return `.subset(["${argColumns}"])`
+}

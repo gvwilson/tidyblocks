@@ -1,22 +1,29 @@
-Blockly.JavaScript['ggplot_hist'] = function(block) {
-  
-    var argument0 =  Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
-    argument0 = argument0.replace(/row./gi, "")
-    var argument1 =  block.getFieldValue("bins")
-    
-    var histogram = `SPLIT 
-    let spec = {
-      "width": 500,
-      "height": 300,
-      "data": { "values": dfArray },
-      "mark": "bar",
-      "encoding": {
-        "x": { "bin": {"maxbins": ${argument1}}, "field": "${argument0}", "type": "quantitative"},
-        "y": { "aggregate": "count", "type": 'quantitative'},
-        "tooltip": null
-  
-      }
+//
+// Create a histogram.
+//
+Blockly.JavaScript['ggplot_hist'] = (block) => {
+  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
+        .replace(/row./gi, '')
+  const argBins = block.getFieldValue('bins')
+  const spec = `{
+    "width": 500,
+    "height": 300,
+    "data": { "values": null }, // set to dataframe inside plotting function
+    "mark": "bar",
+    "encoding": {
+      "x": {
+        "bin": {
+          "maxbins": ${argBins}
+        },
+        "field": "${argColumns}",
+        "type": "quantitative"
+      },
+      "y": {
+        "aggregate": "count",
+        "type": 'quantitative'
+      },
+      "tooltip": null
     }
-    vegaEmbed("#plotOutput", spec, {})`
-    return histogram
-  };
+  }`
+  return `.plot(vegaEmbed, '#plotOutput', ${spec})`
+}

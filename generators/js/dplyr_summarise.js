@@ -1,4 +1,8 @@
-Blockly.JavaScript['dplyr_summarise'] = function(block) {
+//
+// Summarise data.
+// FIXME: clean up.
+//
+Blockly.JavaScript['dplyr_summarise'] = (block) => {
    
     var argument0 =  Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE);
     var argarray = argument0.split("&&")
@@ -38,7 +42,6 @@ Blockly.JavaScript['dplyr_summarise'] = function(block) {
     functionToString = JSON.stringify(functionToString)
     
     functionToString = functionToString.replace(/"/g, "").replace(/[[\]]/g,'')
-    console.log(functionToString)
   
     //////////////////////////////
     /////////////////////////////
@@ -60,7 +63,6 @@ Blockly.JavaScript['dplyr_summarise'] = function(block) {
   
   summariseString = summariseString.replace(/AND/g, ",").replace(/&&/g, ",")
   summariseString = summariseString.replace("} , {", ",")
-  console.log(summariseString)
   return summariseString
     
   };

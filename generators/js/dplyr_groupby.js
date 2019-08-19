@@ -1,15 +1,10 @@
-Blockly.JavaScript['dplyr_groupby'] = function(block) {
-
-    var argument0 = Blockly.JavaScript.valueToCode(block, 'Columns',
-        Blockly.JavaScript.ORDER_NONE);
-  
-      var groupString = 
-      `.generateSeries({
-        Index: row => {
-          return ${argument0};
-        }
-      }).orderBy(column => column.Index)`
-      groupString = groupString.replace(/&&/gi, "+")
-      console.log(groupString)
-    return groupString
-  };
+//
+// Group data.
+//
+Blockly.JavaScript['dplyr_groupby'] = (block) => {
+  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
+  return `.generateSeries({
+  Index: row => {return ${argColumns}}
+}).orderBy(column => column.Index)`
+    .replace(/&&/gi, '+')
+}

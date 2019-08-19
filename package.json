@@ -6,9 +6,9 @@
   "scripts": {
     "build": "parcel build index.html",
     "dev": "parcel index.html",
-    "jsdoc": "jsdoc --destination docs utilities/*.js",
+    "jsdoc": "jsdoc --destination docs --readme README.md utilities/*.js tests/*.js",
     "lint": "eslint */*.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test.js < index.html"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "jsdoc": "^3.6.3",
+    "node-html-parser": "^1.1.16",
     "parcel": "^1.12.3",
     "parcel-plugin-jsdoc": "0.0.1",
     "vega-lite": "^3.3.0"
