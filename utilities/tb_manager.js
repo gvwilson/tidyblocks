@@ -4,12 +4,16 @@
 class TidyBlocksManagerClass {
 
   constructor () {
+    this.reset()
+  }
+
+  reset () {
     this.queue = []
     this.waiting = new Map()
   }
 
   register (depends, func, produces) {
-    if (depends === []) {
+    if (depends.length == 0) {
       this.queue.push(func)
     }
     else {
@@ -31,6 +35,11 @@ class TidyBlocksManagerClass {
       const func = this.queue.shift()
       func()
     }
+    this.reset()
+  }
+
+  toString () {
+    return 'queue ' + this.queue + ' waiting ' + this.waiting
   }
 }
 
