@@ -1,7 +1,7 @@
 /* Body of page */
 body {
     height: 100%;
-    background-color: #f0f0e0;
+    background-color: #F6F8FA;
     font-family: sans-serif;
     overflow: hidden;
     margin: 0px;
@@ -13,7 +13,7 @@ body {
     width: 50%;
     height: 100%;
     float: left;
-    background-color: #f0f0e0;
+    background-color: #F6F8FA;
     padding: 5px;
 }
 
@@ -63,19 +63,55 @@ body {
     background-color: #fff;
 }
 
-#dataOutput table, th, td {
-    height: 100%;
-    margin: 0%;
-    font-family: "Lucida Console";
-    border: 1px solid #000000;
-    border-collapse: collapse;
-    text-align: left;
-}
+#dataOutput tbody {
+    display: block;
+  }
 
-#dataOutput tr {
+#dataOutput thead tr {
+    height: 20px;
+    top: 0;
+    font-size: 1em;
+    position: sticky;
+  }
+
+#dataOutput table  {
+    border-collapse: collapse;
+  }
+
+#dataOutput tr, td {
+    background-color: white;
+    border: 1px solid #D7DADC;
+    padding: .425em;
     width: 100%;
-    padding: .35em;
-}
+    padding: .425em;
+    text-align: left;
+    word-wrap: break-word;
+    font-size: 1em;
+    border: 1px solid #D7DADC;
+  }
+  
+#dataOutput th {
+    background-color: #F7F9FA;
+    color: black;
+    padding: .425em;
+    text-align: center;
+    word-wrap: break-word;
+    border: 1px solid #D7DADC;
+    font-size: 1em;
+    letter-spacing: .1em;
+    text-align: left;
+    border: 1px solid #D7DADC;
+  }
+  
+#dataOutput tr {
+    display: table;
+    table-layout: fixed;
+    border: 1px solid #D7DADC;
+    white-space: wrap;
+    word-wrap: break-word;
+    padding: .425em;
+    width: 100%;
+  }
 
 /* Button used to run code */
 button#runCode {
