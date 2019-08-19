@@ -15,5 +15,5 @@ Blockly.JavaScript['data_colors'] = (block) => {
   {'name': 'fuchsia', 'red': 255, 'green':   0, 'blue': 255},
   {'name': 'aqua',    'red':   0, 'green': 255, 'blue': 255},
   {'name': 'white',   'red': 255, 'green': 255, 'blue': 255}
-])`
+]).parseInts('red', 'green', 'blue')`
 }

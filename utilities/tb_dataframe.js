@@ -67,6 +67,11 @@ class TidyBlocksDataFrame {
     return this
   }
 
+  parseInts (columns) {
+    this.df.parseInts(columns)
+    return this
+  }
+
   orderBy (func) {
     this.df = this.df.orderBy(func)
     return this
