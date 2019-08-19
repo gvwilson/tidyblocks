@@ -536,6 +536,38 @@ const Tests = {
             'variable_columnName',
             {TEXT: 'green'})})})
     ]
+  },
+
+  execNotifyJoin: () => {
+    return [
+      // Left data stream.
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'plumbing_notify',
+        {name: 'left'}),
+
+      // Right data stream.
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'plumbing_notify',
+        {name: 'right'}),
+
+      // Join.
+      makeBlock(
+        'plumbing_join',
+        {leftName: 'left',
+         leftColumn: makeBlock(
+           'variable_columnName',
+           {TEXT: 'red'}),
+         rightName: 'right',
+         rightColumn: makeBlock(
+           'variable_columnName',
+           {TEXT: 'green'})})
+    ]
   }
 }
 
@@ -554,19 +586,28 @@ const loadBlockFiles = () => {
 }
 
 /**
+ * Assemble the code for a test.
+ * @param name {string} - name of test.
+ */
+const assembleCode = (name) => {
+  let code = Tests[name]()
+  if (Array.isArray(code)){
+    code = code.join('\n') // multiple blocks
+  }
+  else if (typeof code !== 'string') {
+    code = `${code}` // numbers
+  }
+  return code
+}
+
+/**
  * Run tests identified by name.
  * @param testNames {string[]} - names of tests to run.
  */
 const runTests = (testNames) => {
   for (let name of testNames) {
     console.log(`\n# ${name}\n`)
-    let code = Tests[name]()
-    if (Array.isArray(code)){
-      code = code.join('\n') // multiple blocks
-    }
-    else if (typeof code !== 'string') {
-      code = `${code}` // numbers
-    }
+    const code = assembleCode(name)
     console.log(code)
     if (name.startsWith('exec')) {
       const terminated = fixCode(code)

@@ -47,14 +47,18 @@ class TidyBlocksDataFrame {
   }
 
   constructor (initial) {
+    this.df = this.makeDataFrame(initial)
+  }
+
+  makeDataFrame (initial) {
     // Create dataForge dataframe when running on the command line.
     if (typeof module !== 'undefined') {
       const dataForge = require('data-forge')
-      this.df = new dataForge.DataFrame(initial)
+      return new dataForge.DataFrame(initial)
     }
     // Create dataForge dataframe when running in the browser.
     else {
-      this.df = new dataForge.DataFrame(initial)
+      return new dataForge.DataFrame(initial)
     }
   }
 
@@ -111,7 +115,7 @@ class TidyBlocksDataFrame {
     }
 
     // Create new dataframe.
-    this.df = new TidyBlocksDataFrame(result)
+    this.df = this.makeDataFrame(result)
     return this
   }
 
@@ -130,6 +134,18 @@ class TidyBlocksDataFrame {
       plotFxn(htmlID, spec, {})
     }
     return this
+  }
+
+  join (leftTable, leftColumn, rightTable, rightColumn) {
+    this.df = this.makeDataFrame([
+      {table: leftTable,  column: leftColumn},
+      {table: rightTable, column: rightColumn}
+    ])
+    return this
+  }
+
+  notify (notifyFxn, name) {
+    notifyFxn(name)
   }
 
   toArray () {

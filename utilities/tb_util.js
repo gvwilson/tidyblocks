@@ -36,7 +36,7 @@ const registerSuffix = (fill) => {
  * @param {string} code - code to patch up.
  */
 const fixCode = (code) => {
-  if (! code.includes('// terminated')) {
+  if (! code.endsWith('// terminated')) {
     const suffix = registerSuffix('')
     code += `.plot(tableEmbed, null, '#plotOutput', {}) ${suffix}`
   }

@@ -8,5 +8,5 @@ Blockly.JavaScript['plumbing_join'] = (block) => {
   const rightName = block.getFieldValue('rightName')
   const rightColumn = Blockly.JavaScript.valueToCode(block, 'rightColumn', order)
   const prefix = registerPrefix(`'${leftName}', '${rightName}'`)
-  return `${prefix} join('${leftName}', '${leftColumn}', '${rightName}', '${rightColumn}')`
+  return `${prefix} new TidyBlocksDataFrame([]).join('${leftName}', '${leftColumn}', '${rightName}', '${rightColumn}')`
 }
