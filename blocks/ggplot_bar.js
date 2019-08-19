@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'ggplot_bar',
-    message0: 'BAR %1 %2 %3 %4 %5',
+    message0: 'Bar %1 %2 %3 %4 %5',
     args0: [
       {
         type: 'input_dummy'

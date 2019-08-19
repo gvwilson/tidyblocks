@@ -1,10 +1,10 @@
 //
-// Visuals for summation block.
+// Visuals for row-counting block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'stats_sum',
-    message0: 'Sum %1 %2',
+    type: 'stats_count',
+    message0: 'Count %1 %2',
     args0: [
       {
         type: 'input_dummy'

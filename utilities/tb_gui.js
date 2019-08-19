@@ -61,7 +61,7 @@ const setUpBlockly = () => {
  */
 function runCode () {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
-  const result = eval(code).toArray()
-  document.getElementById('dataOutput').innerHTML = json2table(result)
+  const code = fixCode(Blockly.JavaScript.workspaceToCode(DemoWorkspace))
+  eval(code)
+  TidyBlocksManager.run()
 }

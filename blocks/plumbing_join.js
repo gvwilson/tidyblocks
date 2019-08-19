@@ -1,36 +1,37 @@
 //
-// Visuals for box plot block.
+// Visuals for join block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'ggplot_boxplot',
-    message0: 'Box %1 %2 %3 %4 %5',
+    type: 'plumbing_join',
+    message0: 'Join %1 %2 %3 %4 %5',
     args0: [
       {
         type: 'input_dummy'
       },
       {
         type: 'field_input',
-        name: 'X',
-        text: 'X'
+        name: 'leftName',
+        text: 'left name'
       },
       {
         type: 'input_value',
-        name: 'X'
+        name: 'leftColumn'
       },
       {
         type: 'field_input',
-        name: 'Y',
-        text: 'Y'
+        name: 'rightName',
+        text: 'right name'
       },
       {
         type: 'input_value',
-        name: 'Y'
+        name: 'rightColumn'
       }
     ],
     inputsInline: true,
-    previousStatement: null,
-    style: 'ggplot_blocks',
+    nextStatement: null,
+    style: 'plumbing_blocks',
+    hat: 'cap',
     tooltip: '',
     helpUrl: ''
   }

@@ -1,5 +1,6 @@
 //
 // Make a point plot.
+// FIXME: restore the LM material.
 //
 Blockly.JavaScript['ggplot_point'] = (block) => {
   const argX = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
@@ -10,63 +11,25 @@ Blockly.JavaScript['ggplot_point'] = (block) => {
         .replace(/row./gi, '')
   const useLM = (block.getFieldValue('lm') == 'FALSE')
 
-  if (useLM) {
-    return `SPLIT 
-      let spec = {
-        "width": 500,
-        "data": { "values": dfArray },
-        "mark": "point",
-        "encoding": {
-          "x": {"field": "${argX}","type": "quantitative"},
-          "y": {"field": "${argY}","type": "quantitative"},
-          "color": {"field": "${argColor}", "type": "nominal"}
-        }
+  const spec = `{
+    "width": 500,
+    "data": { "values": null }, // set to dataframe inside plotting function
+    "mark": "point",
+    "encoding": {
+      "x": {
+        "field": "${argX}",
+        "type": "quantitative"
+      },
+      "y": {
+        "field": "${argY}",
+        "type": "quantitative"
+      },
+      "color": {
+        "field": "${argColor}",
+        "type": "nominal"
       }
-      vegaEmbed("#plotOutput", spec, {})`
-  }
-  else {
-    return `SPLIT
-      var result = dfArray.reduce(function(obj, current) {
-        Object.keys(current).forEach(key => {
-            obj[key] = obj[key] || []; //Has to be an array if not exists
-            obj[key] = Array.isArray(obj[key]) ? obj[key] : [obj[key]]; //Has to be an array if not an array
-            obj[key].push(current[key]); //Add current item to array of matching key
-        })
-        return obj; //Continue to the next object in the array
-      })
-  
-      var lineDat = findLineByLeastSquares(result.${argX}.map(parseFloat),
-                                           result.${argY}.map(parseFloat))
-  
-      let spec = {
-        "width": 500,
-        "layer": [
-          { 
-           "data": { "values": dfArray },
-            "mark": "point",
-            "encoding": {
-              "x": {"field": "${argX}","type": "quantitative"},
-              "y": {"field": "${argY}","type": "quantitative"},
-              "color": {"field": "${argColor}", "type": "nominal"}
-            }
-          },
-          {
-            "data": {
-              "values": [
-                {"x": 0, "y": lineDat[1]},
-                {"x": Math.max.apply(Math, result.${argX}), 
-                "y": (Math.max.apply(Math, result.${argX})) * lineDat[0] + lineDat[1]}
-              ]
-            },
-            "mark": {"type": "line"},
-            "encoding": {
-              "x": {"type": "quantitative", "field": "x"},
-              "y": {"type": "quantitative", "field": "y"},
-              "color": {"value": "red"}
-            }
-          }
-        ]
-      }
-      vegaEmbed("#plotOutput", spec, {})`
-  }
+    }
+  }`
+  const suffix = registerSuffix('')
+  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec}) ${suffix}`
 }

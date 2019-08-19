@@ -25,5 +25,6 @@ Blockly.JavaScript['ggplot_hist'] = (block) => {
       "tooltip": null
     }
   }`
-  return `.plot(vegaEmbed, '#plotOutput', ${spec})`
+  const suffix = registerSuffix('')
+  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec}) ${suffix}`
 }

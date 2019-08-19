@@ -5,11 +5,11 @@ Blockly.Blocks['dplyr_mutate'] = {
   init: function() {
     this
       .appendDummyInput()
-      .appendField('MUTATE')
+      .appendField('Mutate')
     this
       .appendValueInput('Columns')
       .setCheck(null)
-      .appendField(new Blockly.FieldTextInput('newColName'), 'newCol')
+      .appendField(new Blockly.FieldTextInput('new column'), 'newCol')
     this.setInputsInline(true)
     this.setPreviousStatement(true, null)
     this.setNextStatement(true, null)

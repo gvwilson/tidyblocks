@@ -5,7 +5,7 @@ Blockly.Blocks['dplyr_groupby'] = {
   init: function() {
     this
       .appendDummyInput()
-      .appendField('GROUP BY')
+      .appendField('Group by')
     this
       .appendValueInput('Columns')
       .setCheck(null)

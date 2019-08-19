@@ -22,42 +22,48 @@
       <div class="input" id="blockDisplay">
         <xml id="toolbox">
           <category name="data" categorystyle="data">
-            <block type="data_unit"></block>
             <block type="data_colors"></block>
-            <block type="data_iris"></block>
-            <block type="data_toothGrowth"></block>
-            <block type="data_mtcars"></block>
             <block type="data_earthquakes"></block>
+            <block type="data_iris"></block>
+            <block type="data_mtcars"></block>
+            <block type="data_toothGrowth"></block>
+            <block type="data_unit"></block>
             <block type="data_urlCSV"></block>
           </category>
           <category name="dplyr" categorystyle="dplyr">
             <block type="dplyr_filter"></block>
             <block type="dplyr_groupby"></block>
-            <block type="dplyr_summarise"></block>
-            <block type="dplyr_select"></block>
             <block type="dplyr_mutate"></block>
+            <block type="dplyr_select"></block>
+            <block type="dplyr_summarize"></block>
           </category>
           <category name="ggplot" categorystyle="ggplot">
-            <block type="ggplot_hist"></block>
             <block type="ggplot_bar"></block>
-            <block type="ggplot_point"></block>
             <block type="ggplot_boxplot"></block>
+            <block type="ggplot_hist"></block>
+            <block type="ggplot_point"></block>
+            <block type="ggplot_table"></block>
+          </category>
+          <category name="plumbing" categorystyle="plumbing">
+            <block type="plumbing_join"></block>
+            <block type="plumbing_notify"></block>
           </category>
           <category name="stats" categorystyle="stats">
-            <block type="stats_sum"></block>
+            <block type="stats_arithmetic"></block>
+            <block type="stats_count"></block>
+            <block type="stats_max"></block>
             <block type="stats_mean"></block>
             <block type="stats_median"></block>
-            <block type="stats_sd"></block>
             <block type="stats_min"></block>
-            <block type="stats_max"></block>
-            <block type="stats_arithmetic"></block>
+            <block type="stats_sd"></block>
+            <block type="stats_sum"></block>
           </category>
           <category name="variables" categorystyle="variables">
-            <block type="variable_text"></block>
-            <block type="variable_number"></block>
-            <block type="variable_compare"></block>
-            <block type="variable_operation"></block>
             <block type="variable_columnName"></block>
+            <block type="variable_compare"></block>
+            <block type="variable_number"></block>
+            <block type="variable_operation"></block>
+            <block type="variable_text"></block>
           </category>
         </xml>
       </div>
@@ -93,106 +99,115 @@
     <div id="tidyblocks">
       <!-- TidyBlocks supports -->
       <script src="utilities/tb_dataframe.js"></script>
+      <script src="utilities/tb_manager.js"></script>
       <script src="utilities/tb_util.js"></script>
       <script src="utilities/tb_gui.js"></script>
-      <script src="utilities/block_themes.js"></script>
+      <script src="utilities/tb_themes.js"></script>
 
       <!-- TidyBlocks blocks -->
 
-      <script src="blocks/data_unit.js"></script>
-      <script src="generators/js/data_unit.js"></script>
-      <script src="generators/r/data_unit.js"></script>
-
       <script src="blocks/data_colors.js"></script>
       <script src="generators/js/data_colors.js"></script>
-
-      <script src="blocks/data_iris.js"></script>
-      <script src="generators/js/data_iris.js"></script>
-      <script src="generators/r/data_iris.js"></script>
-
-      <script src="blocks/data_toothGrowth.js"></script>
-      <script src="generators/js/data_toothGrowth.js"></script>
-      <script src="generators/r/data_toothGrowth.js"></script>
-
-      <script src="blocks/data_mtcars.js"></script>
-      <script src="generators/js/data_mtcars.js"></script>
-      <script src="generators/r/data_mtcars.js"></script>
 
       <script src="blocks/data_earthquakes.js"></script>
       <script src="generators/js/data_earthquakes.js"></script>
       <script src="generators/r/data_earthquakes.js"></script>
 
+      <script src="blocks/data_iris.js"></script>
+      <script src="generators/js/data_iris.js"></script>
+      <script src="generators/r/data_iris.js"></script>
+
+      <script src="blocks/data_mtcars.js"></script>
+      <script src="generators/js/data_mtcars.js"></script>
+      <script src="generators/r/data_mtcars.js"></script>
+
+      <script src="blocks/data_toothGrowth.js"></script>
+      <script src="generators/js/data_toothGrowth.js"></script>
+      <script src="generators/r/data_toothGrowth.js"></script>
+
+      <script src="blocks/data_unit.js"></script>
+      <script src="generators/js/data_unit.js"></script>
+
       <script src="blocks/data_urlCSV.js"></script>
       <script src="generators/js/data_urlCSV.js"></script>
       <script src="generators/r/data_urlCSV.js"></script>
 
-      <script src="blocks/dplyr_groupby.js"></script>
-      <script src="generators/js/dplyr_groupby.js"></script>
-      
       <script src="blocks/dplyr_filter.js"></script>
       <script src="generators/js/dplyr_filter.js"></script>
       <script src="generators/r/dplyr_filter.js"></script>
-    
-      <script src="blocks/dplyr_filter.js"></script>
-      <script src="generators/js/dplyr_filter.js"></script>
+
+      <script src="blocks/dplyr_groupby.js"></script>
+      <script src="generators/js/dplyr_groupby.js"></script>
 
       <script src="blocks/dplyr_mutate.js"></script>
       <script src="generators/js/dplyr_mutate.js"></script>
 
-      <script src="blocks/dplyr_summarise.js"></script>
-      <script src="generators/js/dplyr_summarise.js"></script>
-
       <script src="blocks/dplyr_select.js"></script>
       <script src="generators/js/dplyr_select.js"></script>
 
-      <script src="blocks/variable_text.js"></script>
-      <script src="generators/js/variable_text.js"></script>
+      <script src="blocks/dplyr_summarize.js"></script>
+      <script src="generators/js/dplyr_summarize.js"></script>
 
-      <script src="blocks/variable_number.js"></script>
-      <script src="generators/js/variable_number.js"></script>
+      <script src="blocks/ggplot_bar.js"></script>
+      <script src="generators/js/ggplot_bar.js"></script>
+
+      <script src="blocks/ggplot_boxplot.js"></script>
+      <script src="generators/js/ggplot_boxplot.js"></script>
+
+      <script src="blocks/ggplot_hist.js"></script>
+      <script src="generators/js/ggplot_hist.js"></script>
+
+      <script src="blocks/ggplot_point.js"></script>
+      <script src="generators/js/ggplot_point.js"></script>
+
+      <script src="blocks/ggplot_table.js"></script>
+      <script src="generators/js/ggplot_table.js"></script>
+
+      <script src="blocks/plumbing_join.js"></script>
+      <script src="generators/js/plumbing_join.js"></script>
+
+      <script src="blocks/plumbing_notify.js"></script>
+      <script src="generators/js/plumbing_notify.js"></script>
+
+      <script src="blocks/stats_arithmetic.js"></script>
+      <script src="generators/js/stats_arithmetic.js"></script>
+
+      <script src="blocks/stats_count.js"></script>
+      <script src="generators/js/stats_count.js"></script>
+
+      <script src="blocks/stats_max.js"></script>
+      <script src="generators/js/stats_max.js"></script>
+
+      <script src="blocks/stats_mean.js"></script>
+      <script src="generators/js/stats_mean.js"></script>
+
+      <script src="blocks/stats_median.js"></script>
+      <script src="generators/js/stats_median.js"></script>
+
+      <script src="blocks/stats_min.js"></script>
+      <script src="generators/js/stats_min.js"></script>
+
+      <script src="blocks/stats_sd.js"></script>
+      <script src="generators/js/stats_sd.js"></script>
+
+      <script src="blocks/stats_sum.js"></script>
+      <script src="generators/js/stats_sum.js"></script>
+
+      <script src="blocks/variable_columnName.js"></script>
+      <script src="generators/js/variable_columnName.js"></script>
 
       <script src="blocks/variable_compare.js"></script>
       <script src="generators/js/variable_compare.js"></script>
       <script src="generators/r/variable_compare.js"></script>
 
+      <script src="blocks/variable_number.js"></script>
+      <script src="generators/js/variable_number.js"></script>
+
       <script src="blocks/variable_operation.js"></script>
       <script src="generators/js/variable_operation.js"></script>
 
-      <script src="blocks/variable_columnName.js"></script>
-      <script src="generators/js/variable_columnName.js"></script>
-
-      <script src="blocks/stats_arithmetic.js"></script>
-      <script src="generators/js/stats_arithmetic.js"></script>
-
-      <script src="blocks/stats_mean.js"></script>
-      <script src="generators/js/stats_mean.js"></script>
-
-      <script src="blocks/stats_sd.js"></script>
-      <script src="generators/js/stats_sd.js"></script>
-
-      <script src="blocks/stats_max.js"></script>
-      <script src="generators/js/stats_max.js"></script>
-
-      <script src="blocks/stats_min.js"></script>
-      <script src="generators/js/stats_min.js"></script>
-
-      <script src="blocks/stats_sum.js"></script>
-      <script src="generators/js/stats_sum.js"></script>
-
-      <script src="blocks/stats_median.js"></script>
-      <script src="generators/js/stats_median.js"></script>
-
-      <script src="blocks/ggplot_hist.js"></script>
-      <script src="generators/js/ggplot_hist.js"></script>
-
-      <script src="blocks/ggplot_bar.js"></script>
-      <script src="generators/js/ggplot_bar.js"></script>
-
-      <script src="blocks/ggplot_point.js"></script>
-      <script src="generators/js/ggplot_point.js"></script>
-
-      <script src="blocks/ggplot_boxplot.js"></script>
-      <script src="generators/js/ggplot_boxplot.js"></script>
+      <script src="blocks/variable_text.js"></script>
+      <script src="generators/js/variable_text.js"></script>
     </div>
     
     <script>
@@ -203,6 +218,12 @@
         initializeDisplay()
         setUpBlockly()
       })
+
+      // Display a table.
+      const tableEmbed = (result) => {
+        const table = json2table(result)
+        document.getElementById('dataOutput').innerHTML = table
+      }
     </script>
   </body>
 </html>

@@ -17,6 +17,33 @@ const readCSV = (url) => {
 }
 
 /**
+ * Get the prefix for registering blocks.
+ */
+const registerPrefix = (fill) => {
+  return `TidyBlocksManager.register([${fill}], () => {`
+}
+
+/**
+ * Get the suffix for registering blocks.  (Has to be here to be visible in fixCode.)
+ */
+const registerSuffix = (fill) => {
+  return `}, [${fill}]) // terminated`
+}
+
+/**
+ * Fix up runnable code if it doesn't end with a display block.  See the ggplot_*
+ * blocks for corresponding code.
+ * @param {string} code - code to patch up.
+ */
+const fixCode = (code) => {
+  if (! code.endsWith('// terminated')) {
+    const suffix = registerSuffix('')
+    code += `.plot(tableEmbed, null, '#plotOutput', {}) ${suffix}`
+  }
+  return code
+}
+
+/**
  * Create dynamic table from array from JSON with one table column per property.
  * Each object must have the same properties.
  * @param {JSON} json - JSON object to convert to table.
@@ -88,4 +115,11 @@ const findLineByLeastSquares = (values_x, values_y) => {
 
   // solve for x and y intercept
   return [m, b]
+}
+
+//
+// Make this file require'able if running from the command line.
+//
+if (typeof module !== 'undefined') {
+  module.exports = {registerPrefix, registerSuffix, fixCode}
 }

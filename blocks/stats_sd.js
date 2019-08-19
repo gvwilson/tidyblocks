@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'stats_sd',
-    message0: 'SD %1 %2',
+    message0: 'Std dev %1 %2',
     args0: [
       {
         type: 'input_dummy'

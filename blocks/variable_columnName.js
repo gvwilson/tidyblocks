@@ -8,7 +8,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [{
       type: 'field_input',
       name: 'TEXT',
-      text: 'columnName'
+      text: 'column'
     }],
     output: 'String',
     style: 'variable_blocks',
