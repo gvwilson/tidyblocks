@@ -5,15 +5,32 @@ class TidyBlocksManagerClass {
 
   constructor () {
     this.queue = []
+    this.waiting = new Map()
   }
 
   register (depends, func, produces) {
-    this.queue.push(func)
+    if (depends === []) {
+      this.queue.push(func)
+    }
+    else {
+      this.waiting.set(func, new Set(depends))
+    }
+  }
+
+  notify (name) {
+    this.waiting.forEach((dependencies, func) => {
+      dependencies.delete(name)
+      if (dependencies.size === 0) {
+        this.queue.push(func)
+      }
+    })
   }
 
   run () {
-    const func = this.queue.pop()
-    func()
+    while (this.queue.length > 0) {
+      const func = this.queue.shift()
+      func()
+    }
   }
 }
 
