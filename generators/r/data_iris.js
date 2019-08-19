@@ -4,6 +4,6 @@
 //
 Blockly.R['data_iris'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/iris.csv'
-  const result = `iris %>%`
+  const result = `iris`
   return result
 }
