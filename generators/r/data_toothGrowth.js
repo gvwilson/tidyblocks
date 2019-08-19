@@ -4,6 +4,6 @@
 //
 Blockly.R['data_toothGrowth'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/toothGrowth.csv'
-  const result = `toothGrowth %>%`
+  const result = `toothGrowth`
   return result
 }
