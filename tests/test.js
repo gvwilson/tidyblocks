@@ -181,7 +181,7 @@ const Tests = {
     return makeBlock(
       'dplyr_filter',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -189,7 +189,7 @@ const Tests = {
     return makeBlock(
       'dplyr_groupby',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -198,7 +198,7 @@ const Tests = {
       'dplyr_mutate',
       {newCol: 'newColumnName',
        Columns: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'existingColumn'})})
   },
 
@@ -206,7 +206,7 @@ const Tests = {
     return makeBlock(
       'dplyr_select',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -216,7 +216,7 @@ const Tests = {
       {Columns: makeBlock(
         'stats_mean',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'existingColumn'})})})
   },
 
@@ -224,10 +224,10 @@ const Tests = {
     return makeBlock(
       'ggplot_bar',
       {X: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'X_axis_column'}),
        Y: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'Y_axis_column'})})
   },
 
@@ -235,10 +235,10 @@ const Tests = {
     return makeBlock(
       'ggplot_boxplot',
       {X: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'X_axis_column'}),
        Y: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'Y_axis_column'})})
   },
 
@@ -246,7 +246,7 @@ const Tests = {
     return makeBlock(
       'ggplot_hist',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'}),
        bins: makeBlock(
          'variable_number',
@@ -257,10 +257,10 @@ const Tests = {
     return makeBlock(
       'ggplot_point',
       {X: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'X_axis_column'}),
        Y: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'Y_axis_column'}),
        color: makeBlock(
          'variable_text',
@@ -273,11 +273,11 @@ const Tests = {
       'plumbing_join',
       {leftName: 'left_table',
        leftColumn: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'left_column'}),
        rightName: 'right_table',
        rightColumn: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'right_column'})})
   },
 
@@ -292,10 +292,10 @@ const Tests = {
       'stats_arithmetic',
       {OP: 'ADD',
        A: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'left'}),
        B: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'right'})})
   },
 
@@ -303,7 +303,7 @@ const Tests = {
     return makeBlock(
       'stats_max',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -311,7 +311,7 @@ const Tests = {
     return makeBlock(
       'stats_mean',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -319,7 +319,7 @@ const Tests = {
     return makeBlock(
       'stats_median',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -327,7 +327,7 @@ const Tests = {
     return makeBlock(
       'stats_min',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -335,7 +335,7 @@ const Tests = {
     return makeBlock(
       'stats_sd',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
@@ -343,13 +343,13 @@ const Tests = {
     return makeBlock(
       'stats_sum',
       {Columns: makeBlock(
-        'variable_columnName',
+        'variable_column',
         {TEXT: 'existingColumn'})})
   },
 
   codeVariableColumnName: () => {
     return makeBlock(
-      'variable_columnName',
+      'variable_column',
       {TEXT: 'TheColumnName'})
   },
 
@@ -358,10 +358,10 @@ const Tests = {
       'variable_compare',
       {OP: 'NEQ',
        A: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'left'}),
        B: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'right'})})
   },
 
@@ -376,10 +376,10 @@ const Tests = {
       'variable_operation',
       {OP: 'OR',
        A: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'left'}),
        B: makeBlock(
-         'variable_columnName',
+         'variable_column',
          {TEXT: 'right'})})
   },
 
@@ -397,7 +397,7 @@ const Tests = {
       makeBlock(
         'ggplot_hist',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
            'variable_number',
@@ -413,12 +413,12 @@ const Tests = {
       makeBlock(
         'dplyr_select',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'Petal_Length'})}),
       makeBlock(
         'ggplot_hist',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
            'variable_number',
@@ -437,7 +437,7 @@ const Tests = {
           'variable_compare',
           {OP: 'GT',
            A: makeBlock(
-             'variable_columnName',
+             'variable_column',
              {TEXT: 'Petal_Length'}),
            B: makeBlock(
              'variable_number',
@@ -445,7 +445,7 @@ const Tests = {
       makeBlock(
         'ggplot_hist',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
            'variable_number',
@@ -464,10 +464,10 @@ const Tests = {
           'variable_compare',
           {OP: 'GTE',
            A: makeBlock(
-             'variable_columnName',
+             'variable_column',
              {TEXT: 'red'}),
            B: makeBlock(
-             'variable_columnName',
+             'variable_column',
              {TEXT: 'green'})})})
     ]
   },
@@ -484,10 +484,10 @@ const Tests = {
            'stats_arithmetic',
            {OP: 'ADD',
             A: makeBlock(
-              'variable_columnName',
+              'variable_column',
               {TEXT: 'red'}),
             B: makeBlock(
-              'variable_columnName',
+              'variable_column',
               {TEXT: 'green'})})})
     ]
   },
@@ -500,7 +500,7 @@ const Tests = {
       makeBlock(
         'dplyr_select',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'blue'})})
     ]
   },
@@ -515,7 +515,7 @@ const Tests = {
         {Columns: makeBlock(
           'stats_sum',
           {Columns: makeBlock(
-            'variable_columnName',
+            'variable_column',
             {TEXT: 'red'})})})
     ]
   },
@@ -528,7 +528,7 @@ const Tests = {
       makeBlock(
         'dplyr_groupby',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'blue'})})
     ]
   },
@@ -541,14 +541,14 @@ const Tests = {
       makeBlock(
         'dplyr_groupby',
         {Columns: makeBlock(
-          'variable_columnName',
+          'variable_column',
           {TEXT: 'blue'})}),
       makeBlock(
         'dplyr_summarize',
         {Columns: makeBlock(
           'stats_mean',
           {Columns: makeBlock(
-            'variable_columnName',
+            'variable_column',
             {TEXT: 'green'})})})
     ]
   },
@@ -576,11 +576,11 @@ const Tests = {
         'plumbing_join',
         {leftName: 'left',
          leftColumn: makeBlock(
-           'variable_columnName',
+           'variable_column',
            {TEXT: 'red'}),
          rightName: 'right',
          rightColumn: makeBlock(
-           'variable_columnName',
+           'variable_column',
            {TEXT: 'green'})})
     ]
   }
