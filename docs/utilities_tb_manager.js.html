@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utilities/tb_gui.js</title>
+    <title>JSDoc: Source: utilities/tb_manager.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utilities/tb_gui.js</h1>
+    <h1 class="page-title">Source: utilities/tb_manager.js</h1>
 
     
 
@@ -27,72 +27,99 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * Share the demo workspace between functions.
+ * Manage execution of all data pipelines.
  */
-let DemoWorkspace = null
+class TidyBlocksManagerClass {
 
-/**
- * Set the display property of the two input toggleable panes.
- * (Has to be done manually rather than in CSS because properties are being reset.)
- */
-const initializeDisplay = () => {
-  for (let [nodeId, state] of [
-    ['codeOutput', 'none'],
-    ['blockDisplay', 'block']]) {
-    document.getElementById(nodeId).style.display = state
+  /**
+   * Create manager.
+   */
+  constructor () {
+    this.reset()
   }
-}
 
-/**
- * Toggle between block input and text input panes.
- */
-const generateCodePane = () => {
-  for (let nodeId of ['codeOutput', 'blockDisplay']) {
-    const node = document.getElementById(nodeId)
-    if (node.style.display === 'none') {
-      node.style.display = 'block'
+  /**
+   * Re-set internal variables used to track state of execution.
+   * `queue` is the queue of pipeline functions that are ready to run.
+   * `waiting` maps those functions to the names of the things they depend on.
+   * `data` maps notification names to finished dataframes.
+   */
+  reset () {
+    this.queue = []
+    this.waiting = new Map()
+    this.data = new Map()
+  }
+
+  /**
+   * Register a new pipeline function with what it depends on and what it produces.
+   * @param depends {string[]} - names of things this pipeline depends on (if it starts with a join).
+   * @param func {function} - function encapsulating pipeline to run.
+   * @param produces {function} - name of this pipeline (used to trigger things waiting for it).
+   */
+  register (depends, func, produces) {
+    if (depends.length == 0) {
+      this.queue.push(func)
     }
     else {
-      node.style.display = 'none'
+      this.waiting.set(func, new Set(depends))
     }
+  }
+
+  /**
+   * Notify the manager that a named pipeline has finished running.
+   * This enqueues pipeline functions to run if their dependencies are satisfied.
+   * @param name {string} - name of the pipeline that just completed.
+   * @param dataFrame {Object} - the TidyBlocksDataFrame produced by the pipeline.
+   */
+  notify (name, dataFrame) {
+    this.data.set(name, dataFrame)
+    this.waiting.forEach((dependencies, func) => {
+      dependencies.delete(name)
+      if (dependencies.size === 0) {
+        this.queue.push(func)
+      }
+    })
+  }
+
+  /**
+   * Run all pipelines in an order that respects dependencies.
+   * This depends on `notify` to add pipelines to the queue.
+   */
+  run () {
+    while (this.queue.length > 0) {
+      const func = this.queue.shift()
+      func()
+    }
+    this.reset()
+  }
+
+  /**
+   * Get the data associated with the name of a completed pipeline.
+   * @param name {string} - name of completed pipeline.
+   * @return TidyBlocksDataFrame.
+   */
+  get (name) {
+    return this.data.get(name)
+  }
+
+  /**
+   * Show the manager as a string for debugging.
+   */
+  toString () {
+    return 'queue ' + this.queue + ' waiting ' + this.waiting
   }
 }
 
 /**
- * Show the text based code corresponding to selected blocks.
+ * Singleton instance of manager.
  */
-const showCode = () => {
-  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
-  document.getElementById('codeOutput').innerHTML = code
-}
+const TidyBlocksManager = new TidyBlocksManagerClass()
 
-/**
- * Set up Blockly display by injecting XML data into blockDisplay div.
- * As a side effect, sets the global DemoWorkspace variable for later use.
- */
-const setUpBlockly = () => {
-  DemoWorkspace = Blockly.inject(
-    document.getElementById('blockDisplay'),
-    {
-      media: 'media/',
-      toolbox: document.getElementById('toolbox'),
-      horizontalLayout: false,
-      scrollbars: false, 
-      theme: Blockly.Themes.Tidy
-    }
-  )
-  DemoWorkspace.addChangeListener(Blockly.Events.disableOrphans);
-}
-
-/**
- * Run the code generated from the user's blocks.
- * Depends on the global DemoWorkspace variable.
- */
-function runCode () {
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  const code = fixCode(Blockly.JavaScript.workspaceToCode(DemoWorkspace))
-  eval(code)
-  TidyBlocksManager.run()
+//
+// Make this file require'able if running from the command line.
+//
+if (typeof module !== 'undefined') {
+  module.exports = TidyBlocksManager
 }
 </code></pre>
         </article>
