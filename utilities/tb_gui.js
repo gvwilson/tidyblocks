@@ -53,6 +53,7 @@ const setUpBlockly = () => {
       theme: Blockly.Themes.Tidy
     }
   )
+  DemoWorkspace.addChangeListener(Blockly.Events.disableOrphans);
 }
 
 /**
