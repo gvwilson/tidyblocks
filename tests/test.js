@@ -115,10 +115,18 @@ const vegaEmbed = (htmlID, spec, props) => {
 
 /**
  * Display a table (ish).
- * @param result {JSON[]} - data to display.
+ * @param data {JSON[]} - data to display.
  */
-const tableEmbed = (result) => {
-  console.log(result)
+const tableEmbed = (data) => {
+  console.log(data)
+}
+
+/**
+ * Display a plot (ish).
+ * @param spec {JSON[]} - Vega-Lite spec to display.
+ */
+const plotEmbed = (spec) => {
+  console.log(spec)
 }
 
 //--------------------------------------------------------------------------------

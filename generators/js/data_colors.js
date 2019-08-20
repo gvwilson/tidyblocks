@@ -1,5 +1,6 @@
 //
 // Generate code to create colors data frame for testing.
+// FIXME: how does this work when `parseInts` takes a single argument?
 //
 Blockly.JavaScript['data_colors'] = (block) => {
   const prefix = registerPrefix('')

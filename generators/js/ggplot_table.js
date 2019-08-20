@@ -3,5 +3,5 @@
 //
 Blockly.JavaScript['ggplot_table'] = (block) => {
   const suffix = registerSuffix('')
-  return `.plot(tableEmbed, null, '#plotOutput', {}) ${suffix}`
+  return `.plot(tableEmbed, null, {}) ${suffix}`
 }
