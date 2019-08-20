@@ -225,6 +225,11 @@
         setUpBlockly()
       })
 
+      // Display a plot.
+      const plotEmbed = (spec) => {
+        vegaEmbed('#plotOutput', spec, {})
+      }
+
       // Display a table.
       const tableEmbed = (result) => {
         const table = json2table(result)

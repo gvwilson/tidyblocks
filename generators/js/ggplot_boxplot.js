@@ -25,5 +25,5 @@ Blockly.JavaScript['ggplot_boxplot'] = (block) => {
     }
   }`
   const suffix = registerSuffix('')
-  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec}) ${suffix}`
+  return `.plot(tableEmbed, plotEmbed, ${spec}) ${suffix}`
 }

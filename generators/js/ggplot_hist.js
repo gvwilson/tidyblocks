@@ -26,5 +26,5 @@ Blockly.JavaScript['ggplot_hist'] = (block) => {
     }
   }`
   const suffix = registerSuffix('')
-  return `.plot(tableEmbed, vegaEmbed, '#plotOutput', ${spec}) ${suffix}`
+  return `.plot(tableEmbed, plotEmbed, ${spec}) ${suffix}`
 }
