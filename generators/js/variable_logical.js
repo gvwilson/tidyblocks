@@ -1,8 +1,7 @@
 //
 // Implement logical operations.
-// FIXME: rename this to logicalOperation and check for 'OR'.
 //
-Blockly.JavaScript['variable_operation'] = (block) => {
+Blockly.JavaScript['variable_logical'] = (block) => {
   const operator = (block.getFieldValue('OP') == 'AND')
         ? '&&'
         : '||'

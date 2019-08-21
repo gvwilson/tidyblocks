@@ -373,7 +373,7 @@ const Tests = {
 
   codeVariableOperation: () => {
     return makeBlock(
-      'variable_operation',
+      'variable_logical',
       {OP: 'OR',
        A: makeBlock(
          'variable_column',
