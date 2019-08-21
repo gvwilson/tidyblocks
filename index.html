@@ -100,7 +100,8 @@
       <!-- TidyBlocks supports -->
       <script src="utilities/tb_dataframe.js"></script>
       <script src="utilities/tb_manager.js"></script>
-      <script src="utilities/tb_util.js"></script>
+      <script src="utilities/tb_codegen.js"></script>
+      <script src="utilities/tb_runtime.js"></script>
       <script src="utilities/tb_gui.js"></script>
       <script src="utilities/tb_themes.js"></script>
 
@@ -224,17 +225,6 @@
         initializeDisplay()
         setUpBlockly()
       })
-
-      // Display a plot.
-      const plotEmbed = (spec) => {
-        vegaEmbed('#plotOutput', spec, {})
-      }
-
-      // Display a table.
-      const tableEmbed = (result) => {
-        const table = json2table(result)
-        document.getElementById('dataOutput').innerHTML = table
-      }
     </script>
   </body>
 </html>
