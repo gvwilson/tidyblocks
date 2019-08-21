@@ -11,6 +11,8 @@ Contributions of all kinds are welcome:
 please see [CONTRIBUTING.md](CONTRIBUTING.md) for details,
 and please note that all contributors are required to abide by our [Code of Conduct](CONDUCT.md).
 
+[![Build Status](https://travis-ci.org/tidyblocks/tidyblocks.svg?branch=master)](https://travis-ci.org/tidyblocks/tidyblocks)
+
 ## Contributors
 
 -   [Maya Gans](https://maya.rbind.io/)
