@@ -34,7 +34,7 @@ const generateCodePane = () => {
  * Show the text based code corresponding to selected blocks.
  */
 const showCode = () => {
-  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
+  const code = Blockly.R.workspaceToCode(DemoWorkspace)
   document.getElementById('codeOutput').innerHTML = code
 }
 
