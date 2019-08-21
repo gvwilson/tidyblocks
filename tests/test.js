@@ -13,7 +13,7 @@ const dataForge = require('data-forge')
 module.paths.unshift(process.cwd())
 const TidyBlocksDataFrame = require('utilities/tb_dataframe')
 const TidyBlocksManager = require('utilities/tb_manager')
-const {registerPrefix, registerSuffix, fixCode, colName, colValue} = require('utilities/tb_util')
+const {registerPrefix, registerSuffix, fixCode, colName, colValue} = require('utilities/tb_codegen')
 
 //--------------------------------------------------------------------------------
 
