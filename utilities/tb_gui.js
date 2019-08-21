@@ -64,6 +64,7 @@ function runCode () {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
   const code = fixCode(Blockly.JavaScript.workspaceToCode(DemoWorkspace))
   eval(code)
+  console.log(code)
   TidyBlocksManager.run()
 }
 
