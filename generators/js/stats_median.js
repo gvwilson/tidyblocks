@@ -2,8 +2,7 @@
 // Find the median of the data.
 //
 Blockly.JavaScript['stats_median'] = (block) => {
-  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
-        .replace('row.', '')
-  const code = `{ func: 'median', column: '${argColumns}' }`
+  const argColumn = colName(Blockly.JavaScript.valueToCode(block, 'Column', Blockly.JavaScript.ORDER_NONE))
+  const code = `{func: 'median', column: '${argColumn}'}`
   return [code, Blockly.JavaScript.ORDER_NONE]
 }
