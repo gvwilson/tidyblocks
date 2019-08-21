@@ -66,3 +66,19 @@ function runCode () {
   eval(code)
   TidyBlocksManager.run()
 }
+
+/**
+ * Callback for displaying a plot.
+ * @param spec {Object} - Vega-Lite spec for plot with data filled in.
+ */
+const plotEmbed = (spec) => {
+  vegaEmbed('#plotOutput', spec, {})
+}
+
+/**
+ * Callback for displaying a table as HTML.
+ * @param table {Object} - JSON array of uniform objects.
+ */
+const tableEmbed = (table) => {
+  document.getElementById('dataOutput').innerHTML = json2table(table)
+}
