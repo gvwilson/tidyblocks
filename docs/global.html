@@ -104,7 +104,8 @@
 
 
 <div class="description">
-    Singleton replacement for Blockly object.
+    Replacement for singleton Blockly object. This defines only the methods and
+values used by block creation code.
 </div>
 
 
@@ -142,7 +143,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line15">line 15</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -266,7 +267,69 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line112">line 112</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line137">line 137</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="TidyBlocksManager"><span class="type-signature">(constant) </span>TidyBlocksManager<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    Singleton instance of manager.
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -287,6 +350,143 @@
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="assembleCode"><span class="type-signature"></span>assembleCode<span class="signature">(name)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Assemble the code for a test.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">name of test.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line609">line 609</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -348,7 +548,145 @@ As an example, here is a linear model using least squares
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line52">line 52</a>
+        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="fixCode"><span class="type-signature"></span>fixCode<span class="signature">(code)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Fix up runnable code if it doesn't end with a display block.  See the ggplot_*
+blocks for corresponding code.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>code</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">code to patch up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -663,7 +1001,7 @@ Each object must have the same properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line24">line 24</a>
+        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -708,6 +1046,7 @@ Each object must have the same properties.
 
 <div class="description">
     Read 'index.html' from standard input, find block files, and eval those.
+Does _not_ read R files (for now).
 </div>
 
 
@@ -751,7 +1090,7 @@ Each object must have the same properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line374">line 374</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line595">line 595</a>
     </li></ul></dd>
     
 
@@ -840,7 +1179,7 @@ test names as parameters. (If none are given, it runs all tests.)
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line414">line 414</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line642">line 642</a>
     </li></ul></dd>
     
 
@@ -1002,7 +1341,7 @@ the order, so we return the first element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line71">line 71</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line80">line 80</a>
     </li></ul></dd>
     
 
@@ -1032,6 +1371,291 @@ the order, so we return the first element.
         
 <div class="param-desc">
     text for block.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="plotEmbed"><span class="type-signature"></span>plotEmbed<span class="signature">(spec)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Display a plot (ish).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>spec</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;JSON></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Vega-Lite spec to display.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="readCSV"><span class="type-signature"></span>readCSV<span class="signature">(string)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
+'eval' of generated code.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>string</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">url</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">URL of data.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    dataframe containing that data.
 </div>
 
 
@@ -1185,7 +1809,7 @@ the order, so we return the first element.
     
 
     
-    <h4 class="name" id="readCSV"><span class="type-signature"></span>readCSV<span class="signature">(string)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="registerPrefix"><span class="type-signature"></span>registerPrefix<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1193,8 +1817,7 @@ the order, so we return the first element.
 
 
 <div class="description">
-    Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
-'eval' of generated code.
+    Get the prefix for registering blocks.
 </div>
 
 
@@ -1203,55 +1826,6 @@ the order, so we return the first element.
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>string</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">url</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">URL of data.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -1287,7 +1861,7 @@ the order, so we return the first element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line87">line 87</a>
+        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -1312,16 +1886,94 @@ the order, so we return the first element.
 
 
 
-<h5>Returns:</h5>
+
+
+
+
 
         
-<div class="param-desc">
-    dataframe containing that data.
+            
+
+    
+
+    
+    <h4 class="name" id="registerSuffix"><span class="type-signature"></span>registerSuffix<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the suffix for registering blocks.  (Has to be here to be visible in fixCode.)
 </div>
 
 
 
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
     
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_util.js.html">utilities/tb_util.js</a>, <a href="utilities_tb_util.js.html#line29">line 29</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1386,7 +2038,7 @@ Depends on the global DemoWorkspace variable.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_gui.js.html">utilities/tb_gui.js</a>, <a href="utilities_tb_gui.js.html#line62">line 62</a>
+        <a href="utilities_tb_gui.js.html">utilities/tb_gui.js</a>, <a href="utilities_tb_gui.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -1523,7 +2175,7 @@ Depends on the global DemoWorkspace variable.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line387">line 387</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line624">line 624</a>
     </li></ul></dd>
     
 
@@ -1736,6 +2388,143 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
 
     
+    <h4 class="name" id="tableEmbed"><span class="type-signature"></span>tableEmbed<span class="signature">(data)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Display a table (ish).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>data</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;JSON></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">data to display.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line120">line 120</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="vegaEmbed"><span class="type-signature"></span>vegaEmbed<span class="signature">(htmlID, spec, props)</span><span class="type-signature"></span></h4>
     
 
@@ -1883,7 +2672,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line103">line 103</a>
+        <a href="tests_test.js.html">tests/test.js</a>, <a href="tests_test.js.html#line112">line 112</a>
     </li></ul></dd>
     
 
@@ -1929,13 +2718,13 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#runTests">runTests</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#Tests">Tests</a></li><li><a href="global.html#vegaEmbed">vegaEmbed</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assembleCode">assembleCode</a></li><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#plotEmbed">plotEmbed</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#runTests">runTests</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tableEmbed">tableEmbed</a></li><li><a href="global.html#Tests">Tests</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li><li><a href="global.html#vegaEmbed">vegaEmbed</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Aug 17 2019 21:42:45 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Aug 20 2019 17:31:28 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
