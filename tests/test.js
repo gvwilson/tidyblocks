@@ -13,7 +13,7 @@ const dataForge = require('data-forge')
 module.paths.unshift(process.cwd())
 const TidyBlocksDataFrame = require('utilities/tb_dataframe')
 const TidyBlocksManager = require('utilities/tb_manager')
-const {registerPrefix, registerSuffix, fixCode} = require('utilities/tb_util')
+const {registerPrefix, registerSuffix, fixCode, colName, colValue} = require('utilities/tb_util')
 
 //--------------------------------------------------------------------------------
 
@@ -180,7 +180,7 @@ const Tests = {
   codeDplyrFilter: () => {
     return makeBlock(
       'dplyr_filter',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -188,7 +188,7 @@ const Tests = {
   codeDplyrGroupBy: () => {
     return makeBlock(
       'dplyr_groupby',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -197,7 +197,7 @@ const Tests = {
     return makeBlock(
       'dplyr_mutate',
       {newCol: 'newColumnName',
-       Columns: makeBlock(
+       Column: makeBlock(
          'variable_column',
          {TEXT: 'existingColumn'})})
   },
@@ -205,7 +205,7 @@ const Tests = {
   codeDplyrSelect: () => {
     return makeBlock(
       'dplyr_select',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -213,9 +213,9 @@ const Tests = {
   codeDplyrSummarize: () => {
     return makeBlock(
       'dplyr_summarize',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'stats_mean',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'existingColumn'})})})
   },
@@ -245,7 +245,7 @@ const Tests = {
   codeGgplotHist: () => {
     return makeBlock(
       'ggplot_hist',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'}),
        bins: makeBlock(
@@ -263,8 +263,8 @@ const Tests = {
          'variable_column',
          {TEXT: 'Y_axis_column'}),
        color: makeBlock(
-         'variable_text',
-         {TEXT: 'purple'}),
+         'variable_column',
+         {TEXT: 'COLOR_axis_column'}),
        lm: 'FALSE'})
   },
 
@@ -302,7 +302,7 @@ const Tests = {
   codeStatsMax: () => {
     return makeBlock(
       'stats_max',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -310,7 +310,7 @@ const Tests = {
   codeStatsMean: () => {
     return makeBlock(
       'stats_mean',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -318,7 +318,7 @@ const Tests = {
   codeStatsMedian: () => {
     return makeBlock(
       'stats_median',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -326,7 +326,7 @@ const Tests = {
   codeStatsMin: () => {
     return makeBlock(
       'stats_min',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -334,7 +334,7 @@ const Tests = {
   codeStatsSd: () => {
     return makeBlock(
       'stats_sd',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -342,7 +342,7 @@ const Tests = {
   codeStatsSum: () => {
     return makeBlock(
       'stats_sum',
-      {Columns: makeBlock(
+      {Column: makeBlock(
         'variable_column',
         {TEXT: 'existingColumn'})})
   },
@@ -396,7 +396,7 @@ const Tests = {
         {}),
       makeBlock(
         'ggplot_hist',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
@@ -412,12 +412,12 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_select',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'Petal_Length'})}),
       makeBlock(
         'ggplot_hist',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
@@ -433,7 +433,7 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_compare',
           {OP: 'GT',
            A: makeBlock(
@@ -444,7 +444,7 @@ const Tests = {
              {NUM: 5.0})})}),
       makeBlock(
         'ggplot_hist',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
@@ -460,7 +460,7 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_compare',
           {OP: 'GTE',
            A: makeBlock(
@@ -480,7 +480,7 @@ const Tests = {
       makeBlock(
         'dplyr_mutate',
         {newCol: 'red_green',
-         Columns: makeBlock(
+         Column: makeBlock(
            'stats_arithmetic',
            {OP: 'ADD',
             A: makeBlock(
@@ -499,7 +499,7 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_select',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'blue'})})
     ]
@@ -512,9 +512,9 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_summarize',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'stats_sum',
-          {Columns: makeBlock(
+          {Column: makeBlock(
             'variable_column',
             {TEXT: 'red'})})})
     ]
@@ -527,7 +527,7 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_groupby',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'blue'})})
     ]
@@ -540,14 +540,14 @@ const Tests = {
         {}),
       makeBlock(
         'dplyr_groupby',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'variable_column',
           {TEXT: 'blue'})}),
       makeBlock(
         'dplyr_summarize',
-        {Columns: makeBlock(
+        {Column: makeBlock(
           'stats_mean',
-          {Columns: makeBlock(
+          {Column: makeBlock(
             'variable_column',
             {TEXT: 'green'})})})
     ]

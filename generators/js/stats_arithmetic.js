@@ -10,8 +10,8 @@ Blockly.JavaScript['stats_arithmetic'] = (block) => {
   }
   const order = Blockly.JavaScript.ORDER_NONE
   const argOperator = OPERATORS[block.getFieldValue('OP')]
-  const argLeft = Blockly.JavaScript.valueToCode(block, 'A', order)
-  const argRight = Blockly.JavaScript.valueToCode(block, 'B', order)
-  const code = `parseFloat(${argLeft}) ${argOperator} parseFloat(${argRight})`
+  const argLeft = colValue(Blockly.JavaScript.valueToCode(block, 'A', order))
+  const argRight = colValue(Blockly.JavaScript.valueToCode(block, 'B', order))
+  const code = `${argLeft} ${argOperator} ${argRight}`
   return [code, order]
 }

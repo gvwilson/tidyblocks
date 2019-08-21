@@ -4,7 +4,7 @@
 Blockly.Blocks['ggplot_hist'] = {
   init: function() {
     this
-      .appendValueInput('Columns')
+      .appendValueInput('Column')
       .setCheck(null)
       .appendField('Histogram')
     this

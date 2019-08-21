@@ -7,7 +7,7 @@ Blockly.Blocks['dplyr_mutate'] = {
       .appendDummyInput()
       .appendField('Mutate')
     this
-      .appendValueInput('Columns')
+      .appendValueInput('Column')
       .setCheck(null)
       .appendField(new Blockly.FieldTextInput('new column'), 'newCol')
     this.setInputsInline(true)

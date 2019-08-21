@@ -3,7 +3,6 @@
 //
 Blockly.JavaScript['dplyr_mutate'] = (block) => {
   const argNewCol = block.getFieldValue('newCol')
-  const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
-  return `.generateSeries({ ${argNewCol}: row => ${argColumns} })`
-         .replace(/["']/g, '')
+  const argColumn = colValue(Blockly.JavaScript.valueToCode(block, 'Column', Blockly.JavaScript.ORDER_NONE))
+  return `.generateSeries({${argNewCol}: row => ${argColumn}})`
 }

@@ -11,7 +11,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: 'input_value',
-        name: 'Columns'
+        name: 'Column'
       }
     ],
     inputsInline: true,

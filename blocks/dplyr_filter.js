@@ -7,7 +7,7 @@ Blockly.Blocks['dplyr_filter'] = {
       .appendDummyInput()
       .appendField('Filter')
     this
-      .appendValueInput('Columns')
+      .appendValueInput('Column')
       .setCheck(null)
     this.setInputsInline(true)
     this.setPreviousStatement(true, 'Array')
