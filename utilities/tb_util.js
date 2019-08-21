@@ -44,6 +44,34 @@ const fixCode = (code) => {
 }
 
 /**
+ * Get a column name from an @-prefixed column identifier.
+ * @param input {string} - column identifier prefixed with '@'.
+ * @return column name without '@'.
+ */
+const colName = (input) => {
+  if (! input.startsWith('@')) {
+    console.log('ERROR ERROR ERROR in colname', input)
+  }
+  return input.substring(1)
+}
+
+/**
+ * Get the value of a column by cases.
+ * 1. If the input isn't a string, leave it alone.
+ * 2. If the input doesn't start with '@', leave it alone.
+ * 3. If the input is '@name', convert it to 'row["name"]'.
+ */
+const colValue = (input) => {
+  if (typeof input !== 'string') {
+    return input
+  }
+  if (! input.startsWith('@')) {
+    return input
+  }
+  return `row["${colName(input)}"]`
+}
+
+/**
  * Create dynamic table from array from JSON with one table column per property.
  * Each object must have the same properties.
  * @param {JSON} json - JSON object to convert to table.
@@ -121,5 +149,5 @@ const findLineByLeastSquares = (values_x, values_y) => {
 // Make this file require'able if running from the command line.
 //
 if (typeof module !== 'undefined') {
-  module.exports = {registerPrefix, registerSuffix, fixCode}
+  module.exports = {registerPrefix, registerSuffix, fixCode, colName, colValue}
 }

@@ -3,12 +3,9 @@
 // FIXME: restore the LM material.
 //
 Blockly.JavaScript['ggplot_point'] = (block) => {
-  const argX = Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE)
-        .replace(/row./gi, '')
-  const argY = Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_NONE)
-        .replace(/row./gi, '')
-  const argColor = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE)
-        .replace(/row./gi, '')
+  const argX = colName(Blockly.JavaScript.valueToCode(block, 'X', Blockly.JavaScript.ORDER_NONE))
+  const argY = colName(Blockly.JavaScript.valueToCode(block, 'Y', Blockly.JavaScript.ORDER_NONE))
+  const argColor = colName(Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE))
   const useLM = (block.getFieldValue('lm') == 'FALSE')
 
   const spec = `{
