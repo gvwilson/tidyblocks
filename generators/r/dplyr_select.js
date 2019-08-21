@@ -7,6 +7,6 @@ Blockly.R['dplyr_select'] = (block) => {
           .replace(/&&/g, ',')
           .replace(/ /gi, '')
           .replace(/,/gi, '","')
-    return `%>% \n\t select(${argColumns})`
+    return ` %>% \n\t select(${argColumns})`
   }
   
