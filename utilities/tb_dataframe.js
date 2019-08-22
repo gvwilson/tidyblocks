@@ -209,9 +209,15 @@ class TidyBlocksDataFrame {
    * @result this object (for method chaining) with new joined DataForge dataframe.
    */
   join (getDataFxn, leftTable, leftColumn, rightTable, rightColumn) {
+    
+    const left = leftTable.toArray()
+    const right = rightTable.toArray()
+
+    const r = left.filter(({ leftColumn: idv }) => right.every(({ rightColumn: idc }) => idv !== idc));
+    const newArr = right.concat(r).map((v) => v.position ? v : { ...v, position: null });
+
     this.df = this.makeDataFrame([
-      {table: leftTable,  column: leftColumn},
-      {table: rightTable, column: rightColumn}
+      newArr
     ])
     return this
   }
@@ -233,7 +239,6 @@ class TidyBlocksDataFrame {
   toArray () {
     return this.df.toArray()
   }
-}
 
 //
 // Make this file require'able if running from the command line.
