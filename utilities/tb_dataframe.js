@@ -210,14 +210,22 @@ class TidyBlocksDataFrame {
    */
   join (getDataFxn, leftTable, leftColumn, rightTable, rightColumn) {
     
-    const left = leftTable.toArray()
-    const right = rightTable.toArray()
+    var left = leftTable.toArray()
+    var right = rightTable.toArray()
 
-    const r = left.filter(({ leftColumn: idv }) => right.every(({ rightColumn: idc }) => idv !== idc));
-    const newArr = right.concat(r).map((v) => v.position ? v : { ...v, position: null });
+    function join(df_a, df_b, by_a, by_b) { 
+      var result = []; 
+      for (let i of df_a) { 
+        for (let j of df_b) { 
+          if ( i[by_a] === j[by_b] ) 
+          result.push( Object.assign({}, i, j) ) 
+        }
+      } 
+      return result;
+    }
 
     this.df = this.makeDataFrame([
-      newArr
+      join(left, right, leftColumn, rightColumn)
     ])
     return this
   }
