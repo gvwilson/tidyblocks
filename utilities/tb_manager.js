@@ -11,10 +11,7 @@ class TidyBlocksManagerClass {
   }
 
   /**
-   * Re-set internal variables used to track state of execution.
-   * `queue` is the queue of pipeline functions that are ready to run.
-   * `waiting` maps those functions to the names of the things they depend on.
-   * `data` maps notification names to finished dataframes.
+   * Reset internal state.
    */
   reset () {
     this.queue = []
@@ -62,7 +59,6 @@ class TidyBlocksManagerClass {
       const func = this.queue.shift()
       func()
     }
-    this.reset()
   }
 
   /**

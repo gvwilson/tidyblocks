@@ -2,7 +2,7 @@
 // Create a notification block.
 //
 Blockly.JavaScript['plumbing_notify'] = (block) => {
-  const argName = block.getFieldValue('name')
-  const suffix = registerSuffix(`'${argName}'`)
-  return `.notify((name) => TidyBlocksManager.notify(name), '${argName}') ${suffix}`
+  const notifyName = block.getFieldValue('name')
+  const suffix = registerSuffix(`'${notifyName}'`)
+  return `.notify((name, frame) => TidyBlocksManager.notify(name, frame), '${notifyName}') ${suffix}`
 }

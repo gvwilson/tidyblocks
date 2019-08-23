@@ -86,7 +86,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a 1x1 dataframe', (done) => {
     const pipeline = makeBlock(
-      'data_unit',
+      'data_single',
       {})
     const code = generateCode(pipeline)
     assert(code.includes('TidyBlocksManager.register'),
@@ -286,7 +286,7 @@ describe('generate code for single blocks', () => {
       'plumbing_notify',
       {name: 'output_name'})
     const code = generateCode(pipeline)
-    assert(code.includes(".notify((name) => TidyBlocksManager.notify(name), 'output_name') }, ['output_name'])"),
+    assert(code.includes(".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated"),
            'pipeine does not notify properly')
     done()
   })

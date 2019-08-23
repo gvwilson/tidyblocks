@@ -208,11 +208,27 @@ class TidyBlocksDataFrame {
    * @param rightColumn {string} - name of column from right table.
    * @result this object (for method chaining) with new joined DataForge dataframe.
    */
-  join (getDataFxn, leftTable, leftColumn, rightTable, rightColumn) {
-    this.df = this.makeDataFrame([
-      {table: leftTable,  column: leftColumn},
-      {table: rightTable, column: rightColumn}
-    ])
+  join (getDataFxn, leftTableName, leftColumn, rightTableName, rightColumn) {
+    const _addJoinFields = (result, tableName, keyColumnName, record) => {
+      Object.keys(record)
+        .filter(key => (key != keyColumnName))
+        .forEach(key => {result[`${tableName}.${key}`] = record[key]})
+    }
+
+    const leftTable = getDataFxn(leftTableName).toArray()
+    const rightTable = getDataFxn(rightTableName).toArray()
+    const resultTable = []
+    for (let leftRecord of leftTable) {
+      for (let rightRecord of rightTable) {
+        if (leftRecord[leftColumn] === rightRecord[rightColumn]) {
+          const resultRecord = {'Join': leftRecord[leftColumn]}
+          _addJoinFields(resultRecord, leftTableName, leftColumn, leftRecord)
+          _addJoinFields(resultRecord, rightTableName, rightColumn, rightRecord)
+          resultTable.push(resultRecord)
+        }
+      }
+    }
+    this.df = this.makeDataFrame(resultTable)
     return this
   }
 

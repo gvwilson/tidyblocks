@@ -44,9 +44,10 @@ const evalCode = (code) => {
 
 describe('execute blocks for entire pipelines', () => {
 
-  // Reset embedded plot and table before each test so that their after-test
-  // states can be checked.
+  // Reset run queue and embedded plot and table before each test so that their
+  // after-test states can be checked.
   beforeEach(() => {
+    TidyBlocksManager.reset()
     tableEmbed(null)
     plotEmbed(null)
   })
@@ -107,6 +108,61 @@ describe('execute blocks for entire pipelines', () => {
            'Result table does not contain expected key')
     assert(Result.plot.data.values.length === 150,
            'Result plot data is the wrong length')
+    done()
+  })
+
+  it('filters data using not-equals', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_filter',
+        {Column: makeBlock(
+          'variable_compare',
+          {OP: 'NEQ',
+           A: makeBlock(
+             'variable_column',
+             {TEXT: 'red'}),
+           B: makeBlock(
+             'variable_number',
+             {NUM: 0})})})
+    ]
+    const code = generateCode(pipeline)
+    evalCode(code)
+    assert(Result.table.length == 5,
+           'Expected 5 rows with red != 0')
+    done()
+  })
+
+  it('filters data using not-equals and registers the result', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_filter',
+        {Column: makeBlock(
+          'variable_compare',
+          {OP: 'NEQ',
+           A: makeBlock(
+             'variable_column',
+             {TEXT: 'red'}),
+           B: makeBlock(
+             'variable_number',
+             {NUM: 0})})}),
+      makeBlock(
+        'plumbing_notify',
+        {name: 'left'})
+    ]
+    const code = generateCode(pipeline)
+    evalCode(code)
+    assert(TidyBlocksManager.get('left'),
+           'Expected something registered under "left"')
+    assert(TidyBlocksManager.get('left').toArray().length == 5,
+           'Expected five rows with red != 0')
+    assert(TidyBlocksManager.get('left').toArray().every(row => (row.red != 0)),
+           'Expected all rows to have red != 0')
     done()
   })
 
@@ -280,7 +336,7 @@ describe('execute blocks for entire pipelines', () => {
     const pipeline = [
       // Left data stream.
       makeBlock(
-        'data_colors',
+        'data_single',
         {}),
       makeBlock(
         'plumbing_notify',
@@ -288,7 +344,7 @@ describe('execute blocks for entire pipelines', () => {
 
       // Right data stream.
       makeBlock(
-        'data_colors',
+        'data_double',
         {}),
       makeBlock(
         'plumbing_notify',
@@ -300,18 +356,111 @@ describe('execute blocks for entire pipelines', () => {
         {leftName: 'left',
          leftColumn: makeBlock(
            'variable_column',
-           {TEXT: 'red'}),
+           {TEXT: 'first'}),
          rightName: 'right',
          rightColumn: makeBlock(
            'variable_column',
-           {TEXT: 'green'})})
+           {TEXT: 'first'})})
     ]
     const code = generateCode(pipeline)
     evalCode(code)
     assert.deepEqual(Result.table,
-                     [{table: 'left', column: 'red'},
-                      {table: 'right', column: 'green'}],
+                     [{'Join': 1, 'right.second': 100}],
                      'Incorrect join result')
     done()
   })
+
+  it('filters data in two pipelines, joins their results, and filters that', (done) => {
+    const pipeline = [
+      // Left data stream is colors with red != 0.
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_filter',
+        {Column: makeBlock(
+          'variable_compare',
+          {OP: 'NEQ',
+           A: makeBlock(
+             'variable_column',
+             {TEXT: 'red'}),
+           B: makeBlock(
+             'variable_number',
+             {NUM: 0})})}),
+      makeBlock(
+        'plumbing_notify',
+        {name: 'left'}),
+
+      // Right data stream is colors with green != 0.
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_filter',
+        {Column: makeBlock(
+          'variable_compare',
+          {OP: 'NEQ',
+           A: makeBlock(
+             'variable_column',
+             {TEXT: 'green'}),
+           B: makeBlock(
+             'variable_number',
+             {NUM: 0})})}),
+      makeBlock(
+        'plumbing_notify',
+        {name: 'right'}),
+
+      // Join, then keep entries with blue != 0.
+      makeBlock(
+        'plumbing_join',
+        {leftName: 'left',
+         leftColumn: makeBlock(
+           'variable_column',
+           {TEXT: 'red'}),
+         rightName: 'right',
+         rightColumn: makeBlock(
+           'variable_column',
+           {TEXT: 'green'})}),
+      makeBlock(
+        'dplyr_filter',
+        {Column: makeBlock(
+          'variable_compare',
+          {OP: 'NEQ',
+           A: makeBlock(
+             'variable_column',
+             {TEXT: 'left.blue'}),
+           B: makeBlock(
+             'variable_number',
+             {NUM: 0})})}),
+      makeBlock(
+        'dplyr_filter',
+        {Column: makeBlock(
+          'variable_compare',
+          {OP: 'NEQ',
+           A: makeBlock(
+             'variable_column',
+             {TEXT: 'right.blue'}),
+           B: makeBlock(
+             'variable_number',
+             {NUM: 0})})})
+    ]
+    const code = generateCode(pipeline)
+    evalCode(code)
+    assert.deepEqual(Result.table,
+                     [{Join: 255,
+                       'left.name': 'fuchsia', 'left.green': 0, 'left.blue': 255,
+                       'right.name': 'aqua', 'right.red': 0, 'right.blue': 255},
+                      {Join: 255,
+                       'left.name': 'fuchsia', 'left.green': 0, 'left.blue': 255,
+                       'right.name': 'white', 'right.red': 255, 'right.blue': 255},
+                      {Join: 255,
+                       'left.name': 'white', 'left.green': 255, 'left.blue': 255,
+                       'right.name': 'aqua', 'right.red': 0, 'right.blue': 255},
+                      {Join: 255,
+                       'left.name': 'white', 'left.green': 255, 'left.blue': 255,
+                       'right.name': 'white', 'right.red': 255, 'right.blue': 255}],
+                     'Incorrect join result')
+    done()
+  })
+
 })
