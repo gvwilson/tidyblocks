@@ -213,12 +213,27 @@ class TidyBlocksDataFrame {
     var left = leftTable.toArray()
     var right = rightTable.toArray()
 
-    function join(df_a, df_b, by_a, by_b) { 
+    const renameKey = (o, key_old, key_new) => {
+      const o_new = {}
+      delete Object.assign(o_new, o, {[key_new]: o[key_old]})[key_old]
+      return o_new
+    }
+    
+    function join(x, y, by_x, by_y) { 
       var result = []; 
-      for (let i of df_a) { 
-        for (let j of df_b) { 
-          if ( i[by_a] === j[by_b] ) 
-          result.push( Object.assign({}, i, j) ) 
+      y = y.map(o => renameKey(o, by_y, by_x))
+      for (let i of x) { 
+        for (let j of y) { 
+          if ( i[by_x] === j[by_x] ) {
+            for (let k in i) {
+              if (k !== by_x && Object.keys(j).includes(k)) {
+                // overlapping key name!
+                i = renameKey(i, k, k + "_x")
+                j = renameKey(j, k, k + "_y")
+              }
+            }
+            result.push( Object.assign({}, i, j) )
+          }
         }
       } 
       return result;
