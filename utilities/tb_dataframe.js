@@ -208,40 +208,32 @@ class TidyBlocksDataFrame {
    * @param rightColumn {string} - name of column from right table.
    * @result this object (for method chaining) with new joined DataForge dataframe.
    */
-  join (getDataFxn, leftTable, leftColumn, rightTable, rightColumn) {
-    
-    var left = leftTable.toArray()
-    var right = rightTable.toArray()
+  join (getDataFxn, leftTableName, leftColumn, rightTableName, rightColumn) {
 
-    const renameKey = (o, key_old, key_new) => {
-      const o_new = {}
-      delete Object.assign(o_new, o, {[key_new]: o[key_old]})[key_old]
-      return o_new
+    const _addFieldsExcept = (result, tableName, row, exceptName) => {
+      Object.keys(row)
+        .filter(key => (key != exceptName))
+        .forEach(key => {result[`${tableName}_${key}`] = row[key]})
     }
-    
-    function join(x, y, by_x, by_y) { 
-      var result = []; 
-      y = y.map(o => renameKey(o, by_y, by_x))
-      for (let i of x) { 
-        for (let j of y) { 
-          if ( i[by_x] === j[by_x] ) {
-            for (let k in i) {
-              if (k !== by_x && Object.keys(j).includes(k)) {
-                // overlapping key name!
-                i = renameKey(i, k, k + "_x")
-                j = renameKey(j, k, k + "_y")
-              }
-            }
-            result.push( Object.assign({}, i, j) )
-          }
+
+    const leftTable = getDataFxn(leftTableName)
+          .toArray()
+    const rightTable = getDataFxn(rightTableName)
+          .toArray()
+
+    const result = []
+    for (let leftRow of leftTable) { 
+      for (let rightRow of rightTable) { 
+        if (leftRow[leftColumn] === rightRow[rightColumn]) {
+          const row = {'_join_': leftRow[leftColumn]}
+          _addFieldsExcept(row, leftTableName, leftRow, leftColumn)
+          _addFieldsExcept(row, rightTableName, rightRow, rightColumn)
+          result.push(row)
         }
-      } 
-      return result;
-    }
+      }
+    } 
 
-    this.df = this.makeDataFrame([
-      join(left, right, leftColumn, rightColumn)
-    ])
+    this.df = this.makeDataFrame(result)
     return this
   }
 
@@ -262,6 +254,7 @@ class TidyBlocksDataFrame {
   toArray () {
     return this.df.toArray()
   }
+}
 
 //
 // Make this file require'able if running from the command line.

@@ -3,8 +3,8 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'data_unit',
-    message0: 'Unit dataset',
+    type: 'data_single',
+    message0: '1x1 dataset',
     nextStatement: null,
     style: 'data_blocks',
     hat: 'cap'
