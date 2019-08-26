@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
       }
     ],
     inputsInline: true,
-    output: 'String',
+    output: 'Number',
     style: 'stats_blocks',
     tooltip: '',
     helpUrl: ''
