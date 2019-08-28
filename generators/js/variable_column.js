@@ -1,8 +1,14 @@
-//
-// Represent a column name. Prefix with an '@' to indicate that it's a column
-// name; other code will then handle.
-//
 Blockly.JavaScript['variable_column'] = (block) => {
-  const code = '@' + block.getFieldValue('TEXT')
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
-}
+    var fieldText = [];
+    var index = 0;
+    while(true) {
+      var field = this.getField('TEXT' + index);
+      if (field) {
+        fieldText .push(field.getValue());
+        index++;
+      } else {
+        break;
+      }
+    }
+    return code = fieldText.join(",")
+  }
