@@ -28,5 +28,5 @@ Blockly.JavaScript['ggplot_point'] = (block) => {
     }
   }`
   const suffix = registerSuffix('')
-  return `.plot(tableEmbed, plotEmbed, ${spec}) ${suffix}`
+  return `.plot(displayTable, displayPlot, ${spec}) ${suffix}`
 }

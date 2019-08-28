@@ -9,9 +9,14 @@ const papa = require('papaparse')
 // check if 'module' is defined before trying to define the exports.
 //
 module.paths.unshift(process.cwd())
-const TidyBlocksDataFrame = require('utilities/tb_dataframe')
-const TidyBlocksManager = require('utilities/tb_manager')
-const {registerPrefix, registerSuffix, fixCode, colName, colValue} = require('utilities/tb_codegen')
+const {
+  registerPrefix,
+  registerSuffix,
+  colName,
+  colValue,
+  TidyBlocksDataFrame,
+  TidyBlocksManager
+} = require('utilities/tb_support')
 
 /**
  * Replacement for singleton Blockly object. This defines only the methods and
@@ -99,22 +104,6 @@ const generateCode = (code) => {
 }
 
 /**
- * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
- * 'eval' of generated code.
- * @param {url} string - URL of data.
- * @return dataframe containing that data.
- */
-const readCSV = (url) => {
-  if (url.includes('raw.githubusercontent.com')) {
-    url = url.split('/').pop()
-  }
-  const path = `${process.cwd()}/data/${url}`
-  const text = fs.readFileSync(path, 'utf-8')
-  const result = papa.parse(text, {header: true})
-  return new TidyBlocksDataFrame(result.data)
-}
-
-/**
  * Read 'index.html', find block files, and eval those.
  * Does _not_ read R files (for now).
  */
@@ -128,6 +117,76 @@ const loadBlockFiles = () => {
     .forEach(src => eval(src))
 }
 
+/**
+ * Record results for testing purposes.
+ */
+const Result = {
+  table: null,
+  plot: null,
+  error: null
+}
+
+/**
+ * "Display" a table (record for testing purposes).
+ * @param data {Object} - data to record.
+ */
+const displayTable = (data) => {
+  Result.table = data
+}
+
+/**
+ * "Display" a plot (record for testing purposes).
+ * @param spec {Object} - Vega-Lite spec for plot.
+ */
+const displayPlot = (spec) => {
+  Result.plot = spec
+}
+
+/**
+ * Display an error (record for testing purposes).
+ * @param error {string} - message to record.
+ */
+const displayError = (error) => {
+  Result.error = error
+}
+
+/**
+ * Reset the displays (clear old data between tests).
+ */
+const resetDisplay = () => {
+  displayTable(null)
+  displayPlot(null)
+  displayError(null)
+}
+
+/**
+ * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
+ * 'eval' of generated code.
+ * @param url {string} - URL of data.
+ * @return dataframe containing that data.
+ */
+const readCSV = (url) => {
+  if (url.includes('raw.githubusercontent.com')) {
+    url = url.split('/').pop()
+  }
+  const path = `${process.cwd()}/data/${url}`
+  const text = fs.readFileSync(path, 'utf-8')
+  const result = papa.parse(text, {header: true})
+  return new TidyBlocksDataFrame(result.data)
+}
+
+/**
+ * Run code block.
+ * @param code {string} - code to evaluate.
+ */
+const evalCode = (code) => {
+  if (typeof code !== 'string') {
+    code = generateCode(code)
+  }
+  TidyBlocksManager.run(() => code,
+                        displayTable, displayPlot, displayError, readCSV)
+}
+
 //
 // Exports.
 //
@@ -138,5 +197,7 @@ module.exports = {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  fixCode
+  resetDisplay,
+  evalCode,
+  Result
 }

@@ -25,5 +25,5 @@ Blockly.JavaScript['ggplot_bar'] = (block) => {
     }
   }`
   const suffix = registerSuffix('')
-  return `.plot(tableEmbed, plotEmbed, ${spec}) ${suffix}`
+  return `.plot(displayTable, displayPlot, ${spec}) ${suffix}`
 }
