@@ -41,6 +41,17 @@ const colName = (input) => {
 }
 
 /**
+ * Within the select block we need to place perentheses 
+ * arround the comma seperate values
+ * 
+ */
+const commaSeperate = (input)  => {
+  input = `${input.replace(/ /g,'')
+                  .replace(/,/g, "\",\"")}`
+  return input
+}
+
+/**
  * Get the value of a column by cases.
  * 1. If the input isn't a string, leave it alone.
  * 2. If the input doesn't start with '@', leave it alone.
