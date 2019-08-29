@@ -56,8 +56,8 @@ const json2table = (json) => {
   let bodyRows = ''
   json.forEach(row => {
     bodyRows += '<tr>'
-    cols.forEach(colName => {
-      bodyRows += `<td>${row[colName]}</td>`
+    cols.forEach(col => {
+      bodyRows += `<td>${row[col]}</td>`
     })
     bodyRows += '</tr>'
   })
@@ -102,11 +102,4 @@ const findLineByLeastSquares = (values_x, values_y) => {
 
   // Solve for slope and intercept.
   return [m, b]
-}
-
-//
-// Make this file require'able if running from the command line.
-//
-if (typeof module !== 'undefined') {
-  module.exports = {registerPrefix, registerSuffix, fixCode, colName, colValue}
 }

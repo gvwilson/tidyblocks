@@ -1,4 +1,77 @@
 /**
+ * Terminator for code blocks.
+ */
+const TERMINATOR = '// terminated'
+
+/**
+ * Get the prefix for registering blocks.
+ */
+const registerPrefix = (fill) => {
+  return `TidyBlocksManager.register([${fill}], () => {`
+}
+
+/**
+ * Get the suffix for registering blocks.
+ */
+const registerSuffix = (fill) => {
+  return `}, [${fill}]) ${TERMINATOR}`
+}
+
+/**
+ * Get a column name from an @-prefixed column identifier.
+ * @param input {string} - column identifier prefixed with '@'.
+ * @return column name without '@'.
+ */
+const colName = (input) => {
+  if (! input.startsWith('@')) {
+    console.log('ERROR ERROR ERROR in colname', input)
+  }
+  return input.substring(1)
+}
+
+/**
+ * Get the value of a column by cases.
+ * 1. If the input isn't a string, leave it alone.
+ * 2. If the input doesn't start with '@', leave it alone.
+ * 3. If the input is '@name', convert it to 'row["name"]'.
+ * @param input {any} - string or array or...
+ */
+const colValue = (input) => {
+  if (typeof input !== 'string') {
+    return input
+  }
+  if (! input.startsWith('@')) {
+    return input
+  }
+  return `getField(row, "${colName(input)}")`
+}
+
+/**
+ * Make sure a field's value is defined.
+ * @param obj {Object} - object to check.
+ * @param name {string} - field to check.
+ */
+const getField = (obj, name) => {
+  const result = obj[name]
+  if (typeof result === 'undefined') {
+    throw `Missing field "${name}"`
+  }
+  return result
+}
+
+/**
+ * Fix up runnable code if it doesn't end with a display block.
+ * @param {string} code - code to patch up.
+ */
+const fixCode = (code) => {
+  if (! code.endsWith(TERMINATOR)) {
+    const suffix = registerSuffix('')
+    code += `.plot(displayTable, null, '#plotOutput', {}) ${suffix}`
+  }
+  return code
+}
+
+/**
  * DataFrame wrapper class.
  */
 class TidyBlocksDataFrame {
@@ -116,6 +189,7 @@ class TidyBlocksDataFrame {
    * @return this object (for method chaining).
    */
   subset (columns) {
+    columns.forEach(col => this.requireColumn(col))
     this.df = this.df.subset(columns)
     return this
   }
@@ -129,6 +203,7 @@ class TidyBlocksDataFrame {
   summarize (whatToDo) {
     // Setup.
     const {func, column} = whatToDo
+    this.requireColumn(column)
     const summarizer = TidyBlocksDataFrame.GetSummarizeFunction(func)
     const result = []
 
@@ -216,10 +291,13 @@ class TidyBlocksDataFrame {
         .forEach(key => {result[`${tableName}_${key}`] = row[key]})
     }
 
-    const leftTable = getDataFxn(leftTableName)
-          .toArray()
-    const rightTable = getDataFxn(rightTableName)
-          .toArray()
+    const leftFrame = getDataFxn(leftTableName)
+    leftFrame.requireColumn(leftColumn)
+    const rightFrame = getDataFxn(rightTableName)
+    rightFrame.requireColumn(rightColumn)
+
+    const leftTable = leftFrame.toArray()
+    const rightTable = rightFrame.toArray()
 
     const result = []
     for (let leftRow of leftTable) { 
@@ -254,11 +332,127 @@ class TidyBlocksDataFrame {
   toArray () {
     return this.df.toArray()
   }
+
+  /**
+   * Raise an exception if this dataframe doesn't have the required column.
+   * @param name {string} - required column name.
+   */
+  requireColumn (name) {
+    if (! this.df.hasSeries(name)) {
+      throw `dataframe does not have column "${name}"`
+    }
+  }
 }
+
+/**
+ * Manage execution of all data pipelines.
+ */
+class TidyBlocksManagerClass {
+
+  /**
+   * Create manager.
+   */
+  constructor () {
+    this.reset()
+  }
+
+  /**
+   * Reset internal state.
+   */
+  reset () {
+    this.queue = []
+    this.waiting = new Map()
+    this.data = new Map()
+  }
+
+  /**
+   * Register a new pipeline function with what it depends on and what it produces.
+   * @param depends {string[]} - names of things this pipeline depends on (if it starts with a join).
+   * @param func {function} - function encapsulating pipeline to run.
+   * @param produces {function} - name of this pipeline (used to trigger things waiting for it).
+   */
+  register (depends, func, produces) {
+    if (depends.length == 0) {
+      this.queue.push(func)
+    }
+    else {
+      this.waiting.set(func, new Set(depends))
+    }
+  }
+
+  /**
+   * Notify the manager that a named pipeline has finished running.
+   * This enqueues pipeline functions to run if their dependencies are satisfied.
+   * @param name {string} - name of the pipeline that just completed.
+   * @param dataFrame {Object} - the TidyBlocksDataFrame produced by the pipeline.
+   */
+  notify (name, dataFrame) {
+    this.data.set(name, dataFrame)
+    this.waiting.forEach((dependencies, func) => {
+      dependencies.delete(name)
+      if (dependencies.size === 0) {
+        this.queue.push(func)
+      }
+    })
+  }
+
+  /**
+   * Run all pipelines in an order that respects dependencies.
+   * This depends on `notify` to add pipelines to the queue.
+   * @param getCode {function} - how to get the code to run.
+   * @param displayTable {function} - how to display a table (used in 'eval').
+   * @param displayPlot {function} - how to display a plot (used in 'eval').
+   * @param displayError {function} - how to display an error (used in 'eval' and here).
+   * @param readCSV {function} - how to read a CSV file (used in 'eval').
+   */
+  run (getCode, displayTable, displayPlot, displayError, readCSV) {
+    try {
+      let code = getCode()
+      code = fixCode(code)
+      eval(code)
+      while (this.queue.length > 0) {
+        const func = this.queue.shift()
+        func()
+      }
+    }
+    catch (err) {
+      displayError(err)
+    }
+  }
+
+  /**
+   * Get the data associated with the name of a completed pipeline.
+   * @param name {string} - name of completed pipeline.
+   * @return TidyBlocksDataFrame.
+   */
+  get (name) {
+    return this.data.get(name)
+  }
+
+  /**
+   * Show the manager as a string for debugging.
+   */
+  toString () {
+    return 'queue ' + this.queue + ' waiting ' + this.waiting
+  }
+}
+
+/**
+ * Singleton instance of manager.
+ */
+const TidyBlocksManager = new TidyBlocksManagerClass()
 
 //
 // Make this file require'able if running from the command line.
 //
 if (typeof module !== 'undefined') {
-  module.exports = TidyBlocksDataFrame
+  module.exports = {
+    registerPrefix,
+    registerSuffix,
+    colName,
+    colValue,
+    getField,
+    TidyBlocksDataFrame,
+    TidyBlocksManager
+  }
 }

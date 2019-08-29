@@ -8,23 +8,10 @@ const {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  fixCode
+  resetDisplay,
+  evalCode,
+  Result
 } = require('./utils')
-
-//
-// Callbacks for displaying table and plot.
-//
-const Result = {
-  table: null,
-  plot: null
-}
-const tableEmbed = (data) => {
-  Result.table = data
-}
-
-const plotEmbed = (spec) => {
-  Result.plot = spec
-}
 
 //
 // Load blocks before running tests.
@@ -33,23 +20,13 @@ before(() => {
   loadBlockFiles()
 })
 
-//
-// Terminate and evaluate code block.
-//
-const evalCode = (code) => {
-  const terminated = fixCode(code)
-  eval(terminated)
-  TidyBlocksManager.run()
-}
-
 describe('execute blocks for entire pipelines', () => {
 
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
   beforeEach(() => {
     TidyBlocksManager.reset()
-    tableEmbed(null)
-    plotEmbed(null)
+    resetDisplay()
   })
 
   it('makes a histogram', (done) => {
@@ -66,8 +43,7 @@ describe('execute blocks for entire pipelines', () => {
            'variable_number',
            {NUM: 20})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Array.isArray(Result.table),
            'Result table is not an array')
     assert(Result.table.length === 150,
@@ -100,8 +76,7 @@ describe('execute blocks for entire pipelines', () => {
            'variable_number',
            {NUM: 20})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Object.keys(Result.table[0]).length === 1,
            'Wrong number of columns in result table')
     assert('Petal_Length' in Result.table[0],
@@ -128,8 +103,7 @@ describe('execute blocks for entire pipelines', () => {
              'variable_number',
              {NUM: 0})})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Result.table.length == 5,
            'Expected 5 rows with red != 0')
     done()
@@ -155,8 +129,7 @@ describe('execute blocks for entire pipelines', () => {
         'plumbing_notify',
         {name: 'left'})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(TidyBlocksManager.get('left'),
            'Expected something registered under "left"')
     assert(TidyBlocksManager.get('left').toArray().length == 5,
@@ -191,8 +164,7 @@ describe('execute blocks for entire pipelines', () => {
            'variable_number',
            {NUM: 20})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Object.keys(Result.table[0]).length === 5,
            'Wrong number of columns in result table')
     assert(Result.plot.data.values.length === 42,
@@ -217,8 +189,7 @@ describe('execute blocks for entire pipelines', () => {
              'variable_column',
              {TEXT: 'green'})})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Result.table.length === 8,
            'Wrong number of rows in output')
     assert(Result.table.every(row => (row.red >= row.green)),
@@ -244,8 +215,7 @@ describe('execute blocks for entire pipelines', () => {
               'variable_column',
               {TEXT: 'green'})})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Result.table.length === 11,
            'Wrong number of rows in output')
     assert(Object.keys(Result.table[0]).length === 5,
@@ -268,8 +238,7 @@ describe('execute blocks for entire pipelines', () => {
             'variable_column',
             {TEXT: 'red'})})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Result.table.length === 1,
            'Expected one row of output')
     assert(Object.keys(Result.table[0]).length === 1,
@@ -290,8 +259,7 @@ describe('execute blocks for entire pipelines', () => {
           'variable_column',
           {TEXT: 'blue'})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert(Result.table.length === 11,
            'Wrong number of rows in output')
     assert(Result.table.filter(row => (row.Index === 0)).length === 6,
@@ -321,8 +289,7 @@ describe('execute blocks for entire pipelines', () => {
             'variable_column',
             {TEXT: 'green'})})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert.deepEqual(Result.table,
                      [{Index: 0, green: 106.33333333333333},
                       {Index: 255, green: 127.5},
@@ -362,8 +329,7 @@ describe('execute blocks for entire pipelines', () => {
            'variable_column',
            {TEXT: 'first'})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert.deepEqual(Result.table,
                      [{'_join_': 1, 'right_second': 100}],
                      'Incorrect join result')
@@ -444,8 +410,7 @@ describe('execute blocks for entire pipelines', () => {
              'variable_number',
              {NUM: 0})})})
     ]
-    const code = generateCode(pipeline)
-    evalCode(code)
+    evalCode(pipeline)
     assert.deepEqual(Result.table,
                      [{'_join_': 255,
                        'left_name': 'fuchsia', 'left_green': 0, 'left_blue': 255,

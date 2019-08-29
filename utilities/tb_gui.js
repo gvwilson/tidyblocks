@@ -58,21 +58,10 @@ const setUpBlockly = () => {
 }
 
 /**
- * Run the code generated from the user's blocks.
- * Depends on the global DemoWorkspace variable.
- */
-function runCode () {
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  const code = fixCode(Blockly.JavaScript.workspaceToCode(DemoWorkspace))
-  eval(code)
-  TidyBlocksManager.run()
-}
-
-/**
  * Callback for displaying a plot.
  * @param spec {Object} - Vega-Lite spec for plot with data filled in.
  */
-const plotEmbed = (spec) => {
+const displayPlot = (spec) => {
   vegaEmbed('#plotOutput', spec, {})
 }
 
@@ -80,6 +69,24 @@ const plotEmbed = (spec) => {
  * Callback for displaying a table as HTML.
  * @param table {Object} - JSON array of uniform objects.
  */
-const tableEmbed = (table) => {
+const displayTable = (table) => {
   document.getElementById('dataOutput').innerHTML = json2table(table)
+}
+
+/**
+ * Callback fro displaying an error online.
+ * @param error {string} - the message to display.
+ */
+const displayError = (error) => {
+  console.log(error) // FIXME display in the GUI
+}
+
+/**
+ * Run the code generated from the user's blocks.
+ * Depends on the global DemoWorkspace variable.
+ */
+function runCode () {
+  Blockly.JavaScript.INFINITE_LOOP_TRAP = null
+  TidyBlocksManager.run(() => Blockly.JavaScript.workspaceToCode(DemoWorkspace),
+                        displayTable, displayPlot, displayError, readCSV)
 }

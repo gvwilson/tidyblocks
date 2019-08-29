@@ -8,7 +8,9 @@ const {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  fixCode
+  resetDisplay,
+  evalCode,
+  Result
 } = require('./utils')
 
 //
@@ -19,6 +21,13 @@ before(() => {
 })
 
 describe('generate code for single blocks', () => {
+
+  // Reset run queue and embedded plot and table before each test so that their
+  // after-test states can be checked.
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+    resetDisplay()
+  })
 
   it('generates code to re-create the colors data', (done) => {
     const pipeline = makeBlock(
@@ -116,7 +125,7 @@ describe('generate code for single blocks', () => {
         'variable_column',
         {TEXT: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code === '.where(row => (row["existingColumn"]))',
+    assert(code === '.where(row => (getField(row, "existingColumn")))',
            'pipeline does not select expected column')
     done()
   })
@@ -128,7 +137,7 @@ describe('generate code for single blocks', () => {
         'variable_column',
         {TEXT: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code === '.generateSeries({Index: row => row["existingColumn"]})',
+    assert(code === '.generateSeries({Index: row => getField(row, "existingColumn")})',
            'pipeline does not generateSeries for expected column')
     done()
   })
@@ -141,7 +150,7 @@ describe('generate code for single blocks', () => {
          'variable_column',
          {TEXT: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code === '.generateSeries({newColumnName: row => row["existingColumn"]})',
+    assert(code === '.generateSeries({newColumnName: row => getField(row, "existingColumn")})',
            'pipeline does not generate series for new column')
     done()
   })
@@ -182,7 +191,7 @@ describe('generate code for single blocks', () => {
          'variable_column',
          {TEXT: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(tableEmbed, plotEmbed'),
+    assert(code.includes('.plot(displayTable, displayPlot'),
            'pipeline does not call .plot')
     assert(code.includes('X_axis_column'),
            'pipeline does not reference X axis column')
@@ -203,7 +212,7 @@ describe('generate code for single blocks', () => {
          'variable_column',
          {TEXT: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(tableEmbed, plotEmbed'),
+    assert(code.includes('.plot(displayTable, displayPlot'),
            'pipeline does not call .plot')
     assert(code.includes('X_axis_column'),
            'pipeline does not reference X axis column')
@@ -247,7 +256,7 @@ describe('generate code for single blocks', () => {
          {TEXT: 'COLOR_axis_column'}),
        lm: 'FALSE'})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(tableEmbed, plotEmbed'),
+    assert(code.includes('.plot(displayTable, displayPlot'),
            'pipeline does not call .plot')
     assert(code.includes('X_axis_column'),
            'pipeline does not reference X axis column')
@@ -302,7 +311,7 @@ describe('generate code for single blocks', () => {
          'variable_column',
          {TEXT: 'right'})})
     const code = generateCode(pipeline)
-    assert(code === 'row["left"] + row["right"]',
+    assert(code === 'getField(row, "left") + getField(row, "right")',
            'pipeline does not add left and right')
     done()
   })
@@ -400,7 +409,7 @@ describe('generate code for single blocks', () => {
          'variable_column',
          {TEXT: 'right'})})
     const code = generateCode(pipeline)
-    assert(code === 'row["left"] != row["right"]',
+    assert(code === 'getField(row, "left") != getField(row, "right")',
            'pipeline does not generate not-equals comparison')
     done()
   })
@@ -426,7 +435,7 @@ describe('generate code for single blocks', () => {
          'variable_column',
          {TEXT: 'right'})})
     const code = generateCode(pipeline)
-    assert(code === 'row["left"] || row["right"]',
+    assert(code === 'getField(row, "left") || getField(row, "right")',
            'pipeline does not generate logical OR')
     done()
   })
