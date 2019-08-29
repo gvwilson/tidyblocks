@@ -90,6 +90,7 @@ const tableEmbed = (table) => {
  * for dataframe and error pane
  */
 
+document.getElementById("dataButton").click()
 function displayTab(evt, displayTab) {
   var i, tabcontent, tabLink;
   tabcontent = document.getElementsByClassName("tabcontent");
