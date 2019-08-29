@@ -84,17 +84,22 @@ const tableEmbed = (table) => {
   document.getElementById('dataOutput').innerHTML = json2table(table)
 }
 
+/**
+ * 
+ * toggle between tabs
+ * for dataframe and error pane
+ */
 
-function displayTab(evt, tabs) {
-  var i, tabcontent, tablink;
-  tabcontent = document.getElementsByClassName("tabContent");
+function displayTab(evt, displayTab) {
+  var i, tabcontent, tabLink;
+  tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
   }
-  tablink = document.getElementsByClassName("tabLink");
+  tablink = document.getElementsByClassName("tablink");
   for (i = 0; i < tablink.length; i++) {
-    tablink[i].className = tablink[i].displayTab.replace(" active", "");
+    tablink[i].className = tablink[i].className.replace(" active", "");
   }
-  document.getElementById(tabs).style.display = "block";
+  document.getElementById(displayTab).style.display = "block";
   evt.currentTarget.className += " active";
 }
