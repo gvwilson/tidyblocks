@@ -77,8 +77,13 @@
       <div class="output" id="plotOutput">
         Plot Output
       </div>
-      <div class="output" id="dataOutput">
-        Data Output
+      <div class="output" id="tabArea">
+        <div class="tab">
+          <button class="tabLink" onclick="displayTab(event, 'data')">Data Output</button>
+          <button class="tabLink" onclick="displayTab(event, 'error')">Error Output</button>
+        </div>
+        <div class="tabContent" id="data"><p>Data Output</p>></div>
+        <div class="tabContent" id="error"><p>Error Output</p></div>
       </div>
     </div>
 

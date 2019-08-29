@@ -83,3 +83,18 @@ const plotEmbed = (spec) => {
 const tableEmbed = (table) => {
   document.getElementById('dataOutput').innerHTML = json2table(table)
 }
+
+
+function displayTab(evt, tabs) {
+  var i, tabcontent, tablink;
+  tabcontent = document.getElementsByClassName("tabContent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablink = document.getElementsByClassName("tabLink");
+  for (i = 0; i < tablink.length; i++) {
+    tablink[i].className = tablink[i].displayTab.replace(" active", "");
+  }
+  document.getElementById(tabs).style.display = "block";
+  evt.currentTarget.className += " active";
+}
