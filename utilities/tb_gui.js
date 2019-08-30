@@ -85,8 +85,39 @@ const displayError = (error) => {
  * Run the code generated from the user's blocks.
  * Depends on the global DemoWorkspace variable.
  */
-function runCode () {
+const runCode = () => {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
   TidyBlocksManager.run(() => Blockly.JavaScript.workspaceToCode(DemoWorkspace),
                         displayTable, displayPlot, displayError, readCSV)
+}
+
+/**
+ * Save the code generated from the user's workspace.
+ * Depends on the global DemoWorkspace variable.
+ */
+const saveCode = () => {
+  const filename = document.getElementById('filename').value
+  if (! filename) {
+    window.alert("Empty filename")
+  }
+  else {
+    const xml = Blockly.Xml.workspaceToDom(DemoWorkspace)
+    const text = Blockly.Xml.domToText(xml)
+    const link = document.getElementById('download')
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+    link.setAttribute('download', filename)
+  }
+}
+
+/**
+ * Load saved code.
+ * Depends on the global DemoWorkspace variable.
+ * @param {Array[string]} fileList List of files (only first element is valid).
+ */
+const loadCode = (fileList) => {
+  const file = fileList[0]
+  const text = file.text().then((text) => {
+    const xml = Blockly.Xml.textToDom(text)
+    Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, DemoWorkspace)
+  })
 }
