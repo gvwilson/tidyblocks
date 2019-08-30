@@ -1,5 +1,4 @@
 const assert = require('assert')
-const dataForge = require('data-forge')
 
 const {
   TidyBlocksDataFrame,
@@ -29,6 +28,23 @@ describe('execute blocks for entire pipelines', () => {
     resetDisplay()
   })
 
+  it('creates a table that can be checked', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_iris',
+        {}),
+      makeBlock(
+        'ggplot_table',
+        {})
+    ]
+    evalCode(pipeline)
+    assert(Result.table !== null,
+           'Result table has not been set')
+    assert(Array.isArray(Result.table),
+           'Result table is not an array')
+    done()
+  })
+
   it('makes a histogram', (done) => {
     const pipeline = [
       makeBlock(
@@ -36,12 +52,8 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'ggplot_hist',
-        {Column: makeBlock(
-          'variable_column',
-          {TEXT: 'Petal_Length'}),
-         bins: makeBlock(
-           'variable_number',
-           {NUM: 20})})
+        {column: 'Petal_Length',
+         bins: '20'})
     ]
     evalCode(pipeline)
     assert(Array.isArray(Result.table),
@@ -64,17 +76,11 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_select',
-        {Column: makeBlock(
-          'variable_column',
-          {TEXT: 'Petal_Length'})}),
+        {columns: 'Petal_Length'}),
       makeBlock(
         'ggplot_hist',
-        {Column: makeBlock(
-          'variable_column',
-          {TEXT: 'Petal_Length'}),
-         bins: makeBlock(
-           'variable_number',
-           {NUM: 20})})
+        {column: 'Petal_Length',
+         bins: '20'})
     ]
     evalCode(pipeline)
     assert(Object.keys(Result.table[0]).length === 1,
@@ -94,13 +100,13 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'NEQ',
+          'value_compare',
+          {OP: 'tbNeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'red'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 0})})})
     ]
     evalCode(pipeline)
@@ -117,13 +123,13 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'NEQ',
+          'value_compare',
+          {OP: 'tbNeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'red'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 0})})}),
       makeBlock(
         'plumbing_notify',
@@ -147,21 +153,21 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'GT',
+          'value_compare',
+          {OP: 'tbGt',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'Petal_Length'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 5.0})})}),
       makeBlock(
         'ggplot_hist',
         {Column: makeBlock(
-          'variable_column',
+          'value_column',
           {TEXT: 'Petal_Length'}),
          bins: makeBlock(
-           'variable_number',
+           'value_number',
            {NUM: 20})})
     ]
     evalCode(pipeline)
@@ -180,13 +186,13 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'GTE',
+          'value_compare',
+          {OP: 'tbGeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'red'}),
            B: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'green'})})})
     ]
     evalCode(pipeline)
@@ -206,13 +212,13 @@ describe('execute blocks for entire pipelines', () => {
         'dplyr_mutate',
         {newCol: 'red_green',
          Column: makeBlock(
-           'stats_arithmetic',
-           {OP: 'ADD',
+           'value_arithmetic',
+           {OP: 'tbAdd',
             A: makeBlock(
-              'variable_column',
+              'value_column',
               {TEXT: 'red'}),
             B: makeBlock(
-              'variable_column',
+              'value_column',
               {TEXT: 'green'})})})
     ]
     evalCode(pipeline)
@@ -232,11 +238,8 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_summarize',
-        {Column: makeBlock(
-          'stats_sum',
-          {Column: makeBlock(
-            'variable_column',
-            {TEXT: 'red'})})})
+        {func: 'sum',
+         column: 'red'})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 1,
@@ -254,20 +257,18 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_groupby',
-        {Column: makeBlock(
-          'variable_column',
-          {TEXT: 'blue'})})
+        'dplyr_groupBy',
+        {column: 'blue'})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 11,
            'Wrong number of rows in output')
-    assert(Result.table.filter(row => (row.Index === 0)).length === 6,
+    assert(Result.table.filter(row => (row._group_ === 0)).length === 6,
            'Wrong number of rows for index 0')
-    assert(Result.table.filter(row => (row.Index === 128)).length === 1,
-           'Wrong number of rows for index 128')
-    assert(Result.table.filter(row => (row.Index === 255)).length === 4,
+    assert(Result.table.filter(row => (row._group_ === 1)).length === 4,
            'Wrong number of rows for index 255')
+    assert(Result.table.filter(row => (row._group_ === 2)).length === 1,
+           'Wrong number of rows for index 128')
     done()
   })
 
@@ -277,25 +278,19 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_groupby',
-        {Column: makeBlock(
-          'variable_column',
-          {TEXT: 'blue'})}),
+        'dplyr_groupBy',
+        {column: 'blue'}),
       makeBlock(
         'dplyr_summarize',
-        {Column: makeBlock(
-          'stats_mean',
-          {Column: makeBlock(
-            'variable_column',
-            {TEXT: 'green'})})})
+        {func: 'mean',
+         column: 'green'})
     ]
     evalCode(pipeline)
     assert.deepEqual(Result.table,
-                     [{Index: 0, green: 106.33333333333333},
-                      {Index: 255, green: 127.5},
-                      {Index: 128, green: 0}],
+                     [{_group_: 0, green: 106.33333333333333},
+                      {_group_: 1, green: 127.5},
+                      {_group_: 2, green: 0}],
                      'Incorrect averaging')
-
     done()
   })
 
@@ -321,13 +316,9 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'plumbing_join',
         {leftName: 'left',
-         leftColumn: makeBlock(
-           'variable_column',
-           {TEXT: 'first'}),
+         leftColumn: 'first',
          rightName: 'right',
-         rightColumn: makeBlock(
-           'variable_column',
-           {TEXT: 'first'})})
+         rightColumn: 'first'})
     ]
     evalCode(pipeline)
     assert.deepEqual(Result.table,
@@ -345,13 +336,13 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'NEQ',
+          'value_compare',
+          {OP: 'tbNeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'red'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 0})})}),
       makeBlock(
         'plumbing_notify',
@@ -364,13 +355,13 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'NEQ',
+          'value_compare',
+          {OP: 'tbNeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'green'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 0})})}),
       makeBlock(
         'plumbing_notify',
@@ -380,34 +371,30 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'plumbing_join',
         {leftName: 'left',
-         leftColumn: makeBlock(
-           'variable_column',
-           {TEXT: 'red'}),
+         leftColumn: 'red',
          rightName: 'right',
-         rightColumn: makeBlock(
-           'variable_column',
-           {TEXT: 'green'})}),
+         rightColumn: 'green'}),
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'NEQ',
+          'value_compare',
+          {OP: 'tbNeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'left_blue'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 0})})}),
       makeBlock(
         'dplyr_filter',
         {Column: makeBlock(
-          'variable_compare',
-          {OP: 'NEQ',
+          'value_compare',
+          {OP: 'tbNeq',
            A: makeBlock(
-             'variable_column',
+             'value_column',
              {TEXT: 'right_blue'}),
            B: makeBlock(
-             'variable_number',
+             'value_number',
              {NUM: 0})})})
     ]
     evalCode(pipeline)

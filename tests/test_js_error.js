@@ -1,5 +1,4 @@
 const assert = require('assert')
-const dataForge = require('data-forge')
 
 const {
   TidyBlocksDataFrame,
@@ -30,7 +29,7 @@ describe('execute blocks for entire pipelines', () => {
   })
 
   it('raises an error when constructing a block with an empty column name', (done) => {
-    assert.throws(() => makeBlock('variable_column',
+    assert.throws(() => makeBlock('value_column',
                                   {TEXT: ''}),
                   /Empty column name/)
     done()
@@ -45,13 +44,13 @@ describe('execute blocks for entire pipelines', () => {
         'dplyr_mutate',
         {newCol: 'should_fail',
          Column: makeBlock(
-           'stats_arithmetic',
+           'value_arithmetic',
            {OP: 'ADD',
             A: makeBlock(
-              'variable_column',
+              'value_column',
               {TEXT: 'nonexistent'}),
             B: makeBlock(
-              'variable_number',
+              'value_number',
               {NUM: 0})})})
     ]
     evalCode(pipeline)

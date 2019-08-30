@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([  
   {
-    type: 'variable_logical',
+    type: 'value_logical',
     message0: '%1 %2 %3',
     args0: [
       {
@@ -14,8 +14,8 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'OP',
         options: [
-          ['AND', 'AND'],
-          ['OR', 'OR']
+          ['AND', 'tbAnd'],
+          ['OR', 'tbOr']
         ]
       },
       {
@@ -25,7 +25,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'variable_blocks',
+    style: 'value_blocks',
     helpUrl: ''
   }
 ])

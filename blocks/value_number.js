@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([ 
   {
-    type: 'variable_number',
+    type: 'value_number',
     message0: '%1',
     args0: [{
       type: 'field_number',
@@ -12,7 +12,7 @@ Blockly.defineBlocksWithJsonArray([
     }],
     output: 'Number',
     helpUrl: '',
-    style: 'variable_blocks',
+    style: 'value_blocks',
     tooltip: ''
   }
 ])

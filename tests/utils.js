@@ -1,3 +1,4 @@
+const assert = require('assert')
 const fs = require('fs')
 const {parse} = require('node-html-parser')
 const papa = require('papaparse')
@@ -12,8 +13,6 @@ module.paths.unshift(process.cwd())
 const {
   registerPrefix,
   registerSuffix,
-  colName,
-  colValue,
   TidyBlocksDataFrame,
   TidyBlocksManager
 } = require('utilities/tb_support')
@@ -79,6 +78,8 @@ class MockBlock {
  * @return text for block.
  */
 const makeBlock = (blockName, settings) => {
+  assert(blockName in Blockly.JavaScript,
+         `Unknown block name "${blockName}"`)
   const result = Blockly.JavaScript[blockName](new MockBlock(settings))
   if (typeof result === 'string') {
     return result
@@ -178,6 +179,7 @@ const readCSV = (url) => {
 /**
  * Run code block.
  * @param code {string} - code to evaluate.
+ * @return generated code (for checking).
  */
 const evalCode = (code) => {
   if (typeof code !== 'string') {
@@ -185,6 +187,7 @@ const evalCode = (code) => {
   }
   TidyBlocksManager.run(() => code,
                         displayTable, displayPlot, displayError, readCSV)
+  return code
 }
 
 //

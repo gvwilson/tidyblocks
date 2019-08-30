@@ -1,10 +1,12 @@
 /**
- * Terminator for code blocks.
+ * Terminator for well-formed pipelines.
  */
 const TERMINATOR = '// terminated'
 
 /**
  * Get the prefix for registering blocks.
+ * @param {string} fill Comma-separated list of quoted strings identifying pipelines to wait for.
+ * @returns {string} Text to insert into generated code.
  */
 const registerPrefix = (fill) => {
   return `TidyBlocksManager.register([${fill}], () => {`
@@ -12,56 +14,16 @@ const registerPrefix = (fill) => {
 
 /**
  * Get the suffix for registering blocks.
+ * @param {string} fill Single quoted string identifying pipeline produced.
+ * @returns {string} Text to insert into generated code.
  */
 const registerSuffix = (fill) => {
   return `}, [${fill}]) ${TERMINATOR}`
 }
 
 /**
- * Get a column name from an @-prefixed column identifier.
- * @param input {string} - column identifier prefixed with '@'.
- * @return column name without '@'.
- */
-const colName = (input) => {
-  if (! input.startsWith('@')) {
-    console.log('ERROR ERROR ERROR in colname', input)
-  }
-  return input.substring(1)
-}
-
-/**
- * Get the value of a column by cases.
- * 1. If the input isn't a string, leave it alone.
- * 2. If the input doesn't start with '@', leave it alone.
- * 3. If the input is '@name', convert it to 'row["name"]'.
- * @param input {any} - string or array or...
- */
-const colValue = (input) => {
-  if (typeof input !== 'string') {
-    return input
-  }
-  if (! input.startsWith('@')) {
-    return input
-  }
-  return `getField(row, "${colName(input)}")`
-}
-
-/**
- * Make sure a field's value is defined.
- * @param obj {Object} - object to check.
- * @param name {string} - field to check.
- */
-const getField = (obj, name) => {
-  const result = obj[name]
-  if (typeof result === 'undefined') {
-    throw `Missing field "${name}"`
-  }
-  return result
-}
-
-/**
- * Fix up runnable code if it doesn't end with a display block.
- * @param {string} code - code to patch up.
+ * Fix up runnable code if it isn't properly terminated yet.
+ * @param {string} code Pipeline code to be terminated if necessary.
  */
 const fixCode = (code) => {
   if (! code.endsWith(TERMINATOR)) {
@@ -72,144 +34,284 @@ const fixCode = (code) => {
 }
 
 /**
- * DataFrame wrapper class.
+ * Lookup table of summarization functions.
+ * Each takes a vector of values as input and produces a scalar output.
  */
+const Summarizers = {
+  count: (values) => {
+    return values.length
+  },
+
+  max: (values) => {
+    return (values.length === 0)
+      ? NaN
+      : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
+  },
+
+  mean: (values) => {
+    return (values.length === 0)
+      ? NaN
+      : values.reduce((total, num) => total + num, 0) / values.length
+  },
+
+  median: (values) => {
+    if (values.length === 0) {
+      return NaN
+    }
+    else {
+      // FIXME
+    }
+  },
+
+  min: (values) => {
+    return (values.length === 0)
+      ? NaN
+      : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
+  },
+
+  sd: (values) => {
+    return NaN // FIXME
+  },
+
+  sum: (values) => {
+    return values.reduce((total, num) => total + num, 0)
+  }
+}
+
+/**
+ * Raise exception if a condition doesn't hold.
+ * @param {Boolean} check Condition that must be true.
+ * @param {string} message What to say if it isn't.
+ */
+const tbAssert = (check, message) => {
+  if (! check) {
+    throw message
+  }
+}
+
+const tbIsNumber = (value) => {
+  tbAssert(typeof value === 'number',
+           `Value ${value} is not a number`)
+  return value
+}
+
+const tbToLogical = (value) => {
+  return value ? true : false
+}
+
+const tbTypeEqual = (left, right) => {
+  tbAssert(typeof left === typeof right,
+           `Values ${left} and ${right} have different types`)
+}
+
+//
+// Everything created by the code generator is a function of one argument "row"
+// that returns a value.
+//
+
+//
+// Generate "(row) => tbGet(row, column)" to get column value.
+//
+const tbGet = (row, key) => {
+  tbAssert(key in row,
+           `Key ${key} not in row ${Object.keys(row).join(',')}`)
+  return row[key]
+}
+
+//
+// Generate "(row) => tbAdd(row, LEFT, RIGHT)" to add two values,
+// where LEFT and RIGHT are functions of one argument (the row).
+//
+const tbAdd = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left + right
+}
+
+const tbSub = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left - right
+}
+
+const tbMul = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left * right
+}
+
+const tbDiv = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left / right
+}
+
+const tbMod = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left % right
+}
+
+const tbExp = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left ** right
+}
+
+const tbAnd = (row, getLeft, getRight) => {
+  const left = tbToLogical(getLeft(row))
+  const right = tbToLogical(getRight(row))
+  return left && right
+}
+
+const tbOr = (row, getLeft, getRight) => {
+  const left = tbToLogical(getLeft(row))
+  const right = tbToLogical(getRight(row))
+  return left || right
+}
+
+const tbGt = (row, getLeft, getRight) => {
+  const left = getLeft(row)
+  const right = getRight(row)
+  tbTypeEqual(left, right)
+  return left > right
+}
+
+const tbGeq = (row, getLeft, getRight) => {
+  const left = getLeft(row)
+  const right = getRight(row)
+  tbTypeEqual(left, right)
+  return left >= right
+}
+
+const tbEq = (row, getLeft, getRight) => {
+  const left = getLeft(row)
+  const right = getRight(row)
+  tbTypeEqual(left, right)
+  return left === right
+}
+
+const tbNeq = (row, getLeft, getRight) => {
+  const left = getLeft(row)
+  const right = getRight(row)
+  tbTypeEqual(left, right)
+  return left !== right
+}
+
+const tbLeq = (row, getLeft, getRight) => {
+  const left = getLeft(row)
+  const right = getRight(row)
+  tbTypeEqual(left, right)
+  return left <= right
+}
+
+const tbLt = (row, getLeft, getRight) => {
+  const left = getLeft(row)
+  const right = getRight(row)
+  tbTypeEqual(left, right)
+  return left < right
+}
+
+//
+// The dataframe class.
+//
 class TidyBlocksDataFrame {
 
-  /**
-   * Lookup table of summarization functions.  Each takes an array of values as
-   * input and returns a single value as output.
-   * FIXME: replace this with DataForge summarization.
-   */
-  static GetSummarizeFunction (name) {
-    return {
-      count: (values) => {
-        return values.length
-      },
+  // Make one.
+  constructor (values) {
+    this.data = values
+  }
 
-      max: (values) => {
-        return (values.length === 0)
-          ? NaN
-          : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
-      },
+  //
+  // To mutate, provide a new column name and a function of one argument (the
+  // row) that produces the new value given that row.
+  //
+  mutate (newName, op) {
+    const newData = this.data.map(row => {
+      const newRow = {...row}
+      newRow[newName] = op(row)
+      return newRow
+    })
+    return new TidyBlocksDataFrame(newData)
+  }
 
-      mean: (values) => {
-        return (values.length === 0)
-          ? NaN
-          : values.reduce((total, num) => total + num, 0) / values.length
-      },
+  //
+  // To filter, provide the operation used to select the rows to keep.
+  //
+  filter (op) {
+    const newData = this.data.filter(row => {
+      return op(row)
+    })
+    return new TidyBlocksDataFrame(newData)
+  }
 
-      median: (values) => {
-        if (values.length === 0) {
-          return NaN
-        }
-        else {
-          // FIXME
-        }
-      },
+  //
+  // To select columns, provide an array with the names of the columns.
+  // This is *not* the same as providing the columns (which gets the values).
+  //
+  select (columns) {
+    const newData = this.data.map(row => {
+      const result = {}
+      columns.forEach(key => {
+        result[key] = tbGet(row, key)
+      })
+      return result
+    })
+    return new TidyBlocksDataFrame(newData)
+  }
 
-      min: (values) => {
-        return (values.length === 0)
-          ? NaN
-          : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
-      },
-
-      sd: (values) => {
-        return NaN // FIXME
-      },
-
-      sum: (values) => {
-        return values.reduce((total, num) => total + num, 0)
+  //
+  // To group by, provide the name of the column to group by.
+  // This creates a new column _group_.
+  // Only a single column can be used: if you want multi-column grouping,
+  // you have to mutate to create a key column first.
+  //
+  groupBy (column) {
+    const seen = new Map()
+    let groupId = 0
+    const grouped = this.data.map(row => {
+      row = {...row}
+      const value = tbGet(row, column)
+      if (! seen.has(value)) {
+        seen.set(value, groupId)
+        groupId += 1
       }
-    }[name]
+      row._group_ = seen.get(value)
+      return row
+    })
+    return new TidyBlocksDataFrame(grouped)
   }
 
-  /**
-   * Build a TidyBlocks dataframe that wraps a DataForge dataframe.
-   * @param initial {array} - array of JSON records.
-   */
-  constructor (initial) {
-    this.df = this.makeDataFrame(initial)
-  }
-
-  /**
-   * Construct the underlying DataForge dataframe.  If 'module' is defined, this
-   * class is being loaded by Node on the command line for testing purposes, so
-   * we need to use 'require'. If 'modules' isn't defined, this file is being
-   * loaded by the browser, so no 'require' is needed.
-   * @param initial {array} - array of JSON records.
-   * @return dataForge.DataFrame
-   */
-  makeDataFrame (initial) {
-    // Create dataForge dataframe when running on the command line.
-    if (typeof module !== 'undefined') {
-      const dataForge = require('data-forge')
-      return new dataForge.DataFrame(initial)
-    }
-    // Create dataForge dataframe when running in the browser.
-    else {
-      return new dataForge.DataFrame(initial)
-    }
-  }
-
-  /**
-   * Generate a new series (e.g. for mutating).
-   * @param props {Object} - parameters for DataForge series generation.
-   * @return this object (for method chaining)
-   */
-  generateSeries (props) {
-    this.df = this.df.generateSeries(props)
-    return this
-  }
-
-  /**
-   * Turn one or more columns into integer values (from text).
-   * FIXME: the call in `generators/js/data_colors.js` passes in multiple arguments?
-   * @param columns {array} - columns to convert.
-   * @return this object (for method chaining)
-   */
-  parseInts (columns) {
-    this.df.parseInts(columns)
-    return this
-  }
-
-  /**
-   * Order according to the given function.
-   * @param func {function} - calculate ordering index.
-   * @return this object (for method chaining)
-   */
-  orderBy (func) {
-    this.df = this.df.orderBy(func)
-    return this
-  }
-
-  /**
-   * Extract subset of columns.
-   * @param columns {string[]} - columns to subset.
-   * @return this object (for method chaining).
-   */
-  subset (columns) {
-    columns.forEach(col => this.requireColumn(col))
-    this.df = this.df.subset(columns)
-    return this
+  //
+  // No parameters needed to remove grouping, but it's an error to ungroup
+  // un-grouped data.
+  //
+  ungroup () {
+    tbAssert(this.hasColumn('_group_'),
+             'Cannot ungroup data that is not grouped')
+    const newData = this.data.map(row => {
+      row = {...row}
+      delete row._group_
+      return row
+    })
+    return new TidyBlocksDataFrame(newData)
   }
 
   /**
    * Replace internal dataframe with a summarized dataframe.
-   * FIXME: replace with DataForge summarization.
-   * @param whatToDo {object} - function name and column name.
-   * @return this object (for method chaining)
+   * @param funcName {string} - name of summarizer.
+   * @param column {string} - column to summarize.
+   * @return new dataframe.
    */
-  summarize (whatToDo) {
-    // Setup.
-    const {func, column} = whatToDo
-    this.requireColumn(column)
-    const summarizer = TidyBlocksDataFrame.GetSummarizeFunction(func)
+  summarize (funcName, column) {
+    tbAssert(funcName in Summarizers,
+             `Unknown summarization function ${funcName}`)
+    const summarizer = Summarizers[funcName]
     const result = []
 
     // Aggregate the whole thing?
-    if (! this.df.hasSeries('Index')) {
-      const values = this.df.getSeries(column).toArray()
+    if (! this.hasColumn('_group_')) {
+      const values = this.getColumn(column)
       const record = {}
       record[column] = summarizer(values)
       result.push(record)
@@ -217,61 +319,38 @@ class TidyBlocksDataFrame {
 
     // Aggregate by groups
     else {
-      // Group values in column by index.
+      // _group_ values in column by index.
       const grouped = new Map()
-      this.df.forEach(row => {
-        const key = ('Index' in row) ? row.Index : '_'
-        if (grouped.has(key)) {
-          grouped.get(key).push(row[column])
+      this.data.forEach(row => {
+        if (grouped.has(row._group_)) {
+          grouped.get(row._group_).push(row[column])
         }
         else {
-          grouped.set(key, [row[column]])
+          grouped.set(row._group_, [row[column]])
         }
       })
 
-      // Operate by index.
-      grouped.forEach((values, key) => {
+      // Operate by group.
+      grouped.forEach((values, group) => {
         const record = {}
-        record['Index'] = key
+        record['_group_'] = group
         record[column] = summarizer(values)
         result.push(record)
       })
     }
 
     // Create new dataframe.
-    this.df = this.makeDataFrame(result)
-    return this
-  }
-
-  /*
-   * Filter rows, keeping those that pass function test.
-   * @param func {function} - filter test.
-   * @return this object (for method chaining)
-   */
-  where (func) {
-    this.df = this.df.where(func)
-    return this
+    return new TidyBlocksDataFrame(result)
   }
 
   /**
-   * Call a plotting function. This is in this class to support method chaining
-   * and to decouple this class from the real plotting functions so that tests
-   * will run.
-   * @param tableFxn {function} - callback to display table as table.
-   * @param plotFxn {function} - callback to display table graphically.
-   * @param spec {object} - Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
-   * @return this object (for method chaining)
+   * Notify the pipeline manager that this pipeline has completed so that downstream joins can run.
+   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
+   * @param notifyFxn {function} - callback functon to do notification (to decouple this class from the manager).
+   * @param name {string} - name of this pipeline.
    */
-  plot (tableFxn, plotFxn, spec) {
-    const asArray = this.df.toArray()
-    if (tableFxn !== null) {
-      tableFxn(asArray)
-    }
-    if (plotFxn !== null) {
-      spec.data.values = asArray
-      plotFxn(spec)
-    }
-    return this
+  notify (notifyFxn, name) {
+    notifyFxn(name, this)
   }
 
   /**
@@ -292,16 +371,15 @@ class TidyBlocksDataFrame {
     }
 
     const leftFrame = getDataFxn(leftTableName)
-    leftFrame.requireColumn(leftColumn)
+    tbAssert(leftFrame.hasColumn(leftColumn),
+             `left table does not have column ${leftColumn}`)
     const rightFrame = getDataFxn(rightTableName)
-    rightFrame.requireColumn(rightColumn)
-
-    const leftTable = leftFrame.toArray()
-    const rightTable = rightFrame.toArray()
+    tbAssert(rightFrame.hasColumn(rightColumn),
+             `right table does not have column ${rightColumn}`)
 
     const result = []
-    for (let leftRow of leftTable) { 
-      for (let rightRow of rightTable) { 
+    for (let leftRow of leftFrame.data) { 
+      for (let rightRow of rightFrame.data) { 
         if (leftRow[leftColumn] === rightRow[rightColumn]) {
           const row = {'_join_': leftRow[leftColumn]}
           _addFieldsExcept(row, leftTableName, leftRow, leftColumn)
@@ -311,36 +389,77 @@ class TidyBlocksDataFrame {
       }
     } 
 
-    this.df = this.makeDataFrame(result)
+    return new TidyBlocksDataFrame(result)
+  }
+
+  /**
+   * Call a plotting function. This is in this class to support method chaining
+   * and to decouple this class from the real plotting functions so that tests
+   * will run.
+   * @param tableFxn {function} - callback to display table as table.
+   * @param plotFxn {function} - callback to display table graphically.
+   * @param spec {object} - Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
+   * @return this object (for method chaining)
+   */
+  plot (tableFxn, plotFxn, spec) {
+    if (tableFxn !== null) {
+      tableFxn(this.data)
+    }
+    if (plotFxn !== null) {
+      spec.data.values = this.data
+      plotFxn(spec)
+    }
     return this
   }
 
-  /**
-   * Notify the pipeline manager that this pipeline has completed so that downstream joins can run.
-   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
-   * @param notifyFxn {function} - callback functon to do notification (to decouple this class from the manager).
-   * @param name {string} - name of this pipeline.
-   */
-  notify (notifyFxn, name) {
-    notifyFxn(name, this)
+  //
+  // Does this dataframe have this column?
+  // FIXME: how to handle empty case?
+  //
+  hasColumn (name) {
+    return name in this.data[0]
   }
 
-  /**
-   * Extract data from underlying DataForge dataframe as JavaScript array of objects.
-   * @return array of objects.
-   */
+  //
+  // Get a column as an array.
+  //
+  getColumn (name) {
+    tbAssert(this.hasColumn(name),
+             `Table does not have column ${name}`)
+    return this.data.map(row => row[name])
+  }
+
+  //
+  // Convert columns to numbers.
+  //
+  toNumber (columns) {
+    this.data.forEach(row => {
+      columns.forEach(col => {
+        row[col] = parseFloat(tbGet(row, col))
+      })
+    })
+    return this
+  }
+
+  //
+  // Get contained array.
+  //
   toArray () {
-    return this.df.toArray()
+    return this.data
   }
 
-  /**
-   * Raise an exception if this dataframe doesn't have the required column.
-   * @param name {string} - required column name.
-   */
-  requireColumn (name) {
-    if (! this.df.hasSeries(name)) {
-      throw `dataframe does not have column "${name}"`
+  //
+  // Convert to string for printing.
+  //
+  toString () {
+    const str = (row, i) => {
+      return '{'
+        + Object.keys(row).map(key => `${key}: ${row[key]}`).join(', ')
+        + '}'
+        + (this.groups === null ? '' : ` @ ${this.groups[i]}`)
     }
+    return `= ${this.data.length} =\n`
+      + this.data.map((r, i) => str(r, i)).join('\n')
   }
 }
 
@@ -449,9 +568,6 @@ if (typeof module !== 'undefined') {
   module.exports = {
     registerPrefix,
     registerSuffix,
-    colName,
-    colValue,
-    getField,
     TidyBlocksDataFrame,
     TidyBlocksManager
   }

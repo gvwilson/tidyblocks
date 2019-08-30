@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/tidyblocks/tidyblocks#readme",
   "dependencies": {
-    "data-forge": "^1.7.2",
     "eslint": "^6.2.2",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
@@ -36,9 +35,9 @@
     "jsdoc": "^3.6.3",
     "mocha": "^6.2.0",
     "node-html-parser": "^1.1.16",
+    "papaparse": "^5.0.2",
     "parcel": "^1.12.3",
     "parcel-plugin-jsdoc": "0.0.1",
-    "serialize-to-js": "^3.0.0",
     "vega-lite": "^3.3.0"
   }
 }

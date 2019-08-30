@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'variable_compare',
+    type: 'value_compare',
     message0: '%1 %2 %3',
     args0: [
       {
@@ -14,12 +14,12 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'OP',
         options: [
-          ['=', 'EQ'],
-          ['\u2260', 'NEQ'],
-          ['\u200F<', 'LT'],
-          ['\u200F\u2264', 'LTE'],
-          ['\u200F>', 'GT'],
-          ['\u200F\u2265', 'GTE']
+          ['=', 'tbEq'],
+          ['\u2260', 'tbNeq'],
+          ['\u200F<', 'tbLt'],
+          ['\u200F\u2264', 'tbLeq'],
+          ['\u200F>', 'tbGt'],
+          ['\u200F\u2265', 'tbGeq']
         ]
       },
       {
@@ -29,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'variable_blocks',
+    style: 'value_blocks',
     helpUrl: ''
   }
 ])
