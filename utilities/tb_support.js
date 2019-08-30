@@ -223,39 +223,11 @@ class TidyBlocksDataFrame {
   }
 
   //
-  // To mutate, provide a new column name and a function of one argument (the
-  // row) that produces the new value given that row.
-  //
-  mutate (newName, op) {
-    const newData = this.data.map(row => {
-      const newRow = {...row}
-      newRow[newName] = op(row)
-      return newRow
-    })
-    return new TidyBlocksDataFrame(newData)
-  }
-
-  //
   // To filter, provide the operation used to select the rows to keep.
   //
   filter (op) {
     const newData = this.data.filter(row => {
       return op(row)
-    })
-    return new TidyBlocksDataFrame(newData)
-  }
-
-  //
-  // To select columns, provide an array with the names of the columns.
-  // This is *not* the same as providing the columns (which gets the values).
-  //
-  select (columns) {
-    const newData = this.data.map(row => {
-      const result = {}
-      columns.forEach(key => {
-        result[key] = tbGet(row, key)
-      })
-      return result
     })
     return new TidyBlocksDataFrame(newData)
   }
@@ -283,18 +255,57 @@ class TidyBlocksDataFrame {
   }
 
   //
-  // No parameters needed to remove grouping, but it's an error to ungroup
-  // un-grouped data.
+  // To mutate, provide a new column name and a function of one argument (the
+  // row) that produces the new value given that row.
   //
-  ungroup () {
-    tbAssert(this.hasColumn('_group_'),
-             'Cannot ungroup data that is not grouped')
+  mutate (newName, op) {
     const newData = this.data.map(row => {
-      row = {...row}
-      delete row._group_
-      return row
+      const newRow = {...row}
+      newRow[newName] = op(row)
+      return newRow
     })
     return new TidyBlocksDataFrame(newData)
+  }
+
+  //
+  // To select columns, provide an array with the names of the columns.
+  // This is *not* the same as providing the columns (which gets the values).
+  //
+  select (columns) {
+    const newData = this.data.map(row => {
+      const result = {}
+      columns.forEach(key => {
+        result[key] = tbGet(row, key)
+      })
+      return result
+    })
+    return new TidyBlocksDataFrame(newData)
+  }
+
+  /**
+   * Sort data by values in specified columns.
+   * @param {Array[string]} columns Names of columns to sort by.
+   * @returns New data frame with sorted data.
+   */
+  sort (columns) {
+    columns.forEach(col => tbAssert(this.hasColumn(col),
+                                    `No such column ${col}`))
+    const result = [...this.data]
+    result.sort((left, right) => {
+      return columns.reduce((soFar, col) => {
+        if (soFar !== 0) {
+          return soFar
+        }
+        if (left[col] < right[col]) {
+          return -1
+        }
+        if (left[col] > right[col]) {
+          return 1
+        }
+        return 0
+      }, 0)
+    })
+    return new TidyBlocksDataFrame(result)
   }
 
   /**
@@ -341,6 +352,21 @@ class TidyBlocksDataFrame {
 
     // Create new dataframe.
     return new TidyBlocksDataFrame(result)
+  }
+
+  //
+  // No parameters needed to remove grouping, but it's an error to ungroup
+  // un-grouped data.
+  //
+  ungroup () {
+    tbAssert(this.hasColumn('_group_'),
+             'Cannot ungroup data that is not grouped')
+    const newData = this.data.map(row => {
+      row = {...row}
+      delete row._group_
+      return row
+    })
+    return new TidyBlocksDataFrame(newData)
   }
 
   /**
