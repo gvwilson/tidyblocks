@@ -297,6 +297,34 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to negate a column', (done) => {
+    const pipeline = makeBlock(
+      'value_negate',
+      {A: makeBlock(
+        'value_column',
+        {TEXT: 'existing'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbNeg'),
+           'generated code does not appear to negate')
+    done()
+  })
+
+  it('generates code to do logical negation', (done) => {
+    const pipeline = makeBlock(
+      'value_not',
+      {A: makeBlock(
+        'value_column',
+        {TEXT: 'existing'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbNot'),
+           'generated code does not appear to do logical negation')
+    done()
+  })
+
   it('generates code to add two columns', (done) => {
     const pipeline = makeBlock(
       'value_arithmetic',
