@@ -238,7 +238,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_summarize',
-        {func: 'sum',
+        {FUNC: 'tbSum',
          column: 'red'})
     ]
     evalCode(pipeline)
@@ -282,7 +282,7 @@ describe('execute blocks for entire pipelines', () => {
         {column: 'blue'}),
       makeBlock(
         'dplyr_summarize',
-        {func: 'mean',
+        {FUNC: 'tbMean',
          column: 'green'})
     ]
     evalCode(pipeline)

@@ -34,48 +34,77 @@ const fixCode = (code) => {
 }
 
 /**
- * Lookup table of summarization functions.
- * Each takes a vector of values as input and produces a scalar output.
+ * Summarize: count number of values.
+ * @param {Array} values The values to be counted.
+ * @return {number} Number of values.
  */
-const Summarizers = {
-  count: (values) => {
-    return values.length
-  },
+const tbCount = (values) => {
+  return values.length
+}
 
-  max: (values) => {
-    return (values.length === 0)
-      ? NaN
-      : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
-  },
+/**
+ * Summarize: find maximum value.
+ * @param {Array} values The values to be searched.
+ * @return {number} Maximum value.
+ */
+const tbMax = (values) => {
+  return (values.length === 0)
+    ? NaN
+    : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
+}
 
-  mean: (values) => {
-    return (values.length === 0)
-      ? NaN
-      : values.reduce((total, num) => total + num, 0) / values.length
-  },
+/**
+ * Summarize: find mean value.
+ * @param {Array} values The values to be averaged.
+ * @return {number} Mean value.
+ */
+const tbMean = (values) => {
+  return (values.length === 0)
+    ? NaN
+    : values.reduce((total, num) => total + num, 0) / values.length
+}
 
-  median: (values) => {
-    if (values.length === 0) {
-      return NaN
-    }
-    else {
-      // FIXME
-    }
-  },
-
-  min: (values) => {
-    return (values.length === 0)
-      ? NaN
-      : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
-  },
-
-  sd: (values) => {
-    return NaN // FIXME
-  },
-
-  sum: (values) => {
-    return values.reduce((total, num) => total + num, 0)
+/**
+ * Summarize: find median value.
+ * @param {Array} values The values to be searched.
+ * @return {number} Median value.
+ */
+const tbMedian = (values) => {
+  if (values.length === 0) {
+    return NaN
   }
+  else {
+    // FIXME
+  }
+}
+
+/**
+ * Summarize: find median value.
+ * @param {Array} values The values to be searched.
+ * @return {number} Minimum value.
+ */
+const tbMin = (values) => {
+  return (values.length === 0)
+    ? NaN
+    : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
+}
+
+/**
+ * Summarize: find standard deviation.
+ * @param {Array} values The values to be summarized.
+ * @return {number} Standard deviation.
+ */
+const tbStd = (values) => {
+  return NaN // FIXME
+}
+
+/**
+ * Summarize: find sum.
+ * @param {Array} values The values to be added.
+ * @return {number} Total.
+ */
+const tbSum = (values) => {
+  return values.reduce((total, num) => total + num, 0)
 }
 
 /**
@@ -89,25 +118,35 @@ const tbAssert = (check, message) => {
   }
 }
 
+/**
+ * Check that a value is numeric.
+ * @param value What to check.
+ * @returns The input value if it passes the test.
+ */
 const tbIsNumber = (value) => {
   tbAssert(typeof value === 'number',
            `Value ${value} is not a number`)
   return value
 }
 
+/**
+ * Convert a value to a Boolean.
+ * @param value What to convert.
+ * @returns {Boolean} Either true or false.
+ */
 const tbToLogical = (value) => {
   return value ? true : false
 }
 
+/**
+ * Check that the types of two values are the same.
+ * @param left One of the values.
+ * @param right The other value.
+ */
 const tbTypeEqual = (left, right) => {
   tbAssert(typeof left === typeof right,
            `Values ${left} and ${right} have different types`)
 }
-
-//
-// Everything created by the code generator is a function of one argument "row"
-// that returns a value.
-//
 
 //
 // Generate "(row) => tbGet(row, column)" to get column value.
@@ -303,17 +342,14 @@ class TidyBlocksDataFrame {
    * @param column {string} - column to summarize.
    * @return new dataframe.
    */
-  summarize (funcName, column) {
-    tbAssert(funcName in Summarizers,
-             `Unknown summarization function ${funcName}`)
-    const summarizer = Summarizers[funcName]
+  summarize (func, column) {
     const result = []
 
     // Aggregate the whole thing?
     if (! this.hasColumn('_group_')) {
       const values = this.getColumn(column)
       const record = {}
-      record[column] = summarizer(values)
+      record[column] = func(values)
       result.push(record)
     }
 
@@ -334,7 +370,7 @@ class TidyBlocksDataFrame {
       grouped.forEach((values, group) => {
         const record = {}
         record['_group_'] = group
-        record[column] = summarizer(values)
+        record[column] = func(values)
         result.push(record)
       })
     }
