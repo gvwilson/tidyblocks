@@ -115,6 +115,21 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to convert types', (done) => {
+    const pipeline = makeBlock(
+      'value_convert',
+      {OP: 'tbToString',
+       A: makeBlock(
+         'value_column',
+         {TEXT: 'left'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbToString'),
+           'Generated code does not start with correct function')
+    done()
+  })
+
   it('generates code to filter rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_filter',
