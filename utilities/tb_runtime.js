@@ -15,19 +15,16 @@ const readCSV = (url) => {
     console.log(`ERROR: ${request.status}`)
     return null
   }
-
-  const result = Papa.parse(request.responseText, {
-    header: true,
-    dynamicTyping: true,
-    transformHeader: (h) => {
-      h = h.replace(/\/|\.|\(|\)| /g, '_').replace(/__/g, "_")
-      if (h.endsWith('_')) {
-        h = h.substring(0, h.length - 1)
+  else {
+    const result = Papa.parse(
+      request.responseText.trim(),
+      {
+        header: true,
+        dynamicTyping: true
       }
-      return h
-    }
-  })
-  return new TidyBlocksDataFrame(result.data)
+    )
+    return new TidyBlocksDataFrame(result.data)
+  }
 }
 
 /**
