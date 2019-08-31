@@ -363,6 +363,26 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('ungroups values', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_groupBy',
+        {column: 'blue'}),
+      makeBlock(
+        'dplyr_ungroup',
+        {})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Table has the wrong number of rows')
+    assert(! ('_group_' in Result.table[0]),
+           'Table still has group index column')
+    done()
+  })
+
   it('groups by one column and averages another', (done) => {
     const pipeline = [
       makeBlock(
