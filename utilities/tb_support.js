@@ -725,12 +725,43 @@ class TidyBlocksManagerClass {
   }
 
   /**
-   * Get the data associated with the name of a completed pipeline.
+   * Record a newly-created block and add the ID to its tooltip.
+   * @param {block} block Newly-created block.
+   */
+  addNewBlock (block) {
+    block.tbId = this.nextBlockId
+    block.tooltip = `[${block.tbId}] ${block.tooltip}`
+    this.blocks.set(this.nextBlockId, block)
+    this.nextBlockId += 1
+  }
+
+  /**
+   * Get the number of blocks that have been created (including ones that have
+   * now been deleted).
+   */
+  getNumBlocks () {
+    return this.blocks.size
+  }
+
+  /**
+   * Get a block by serial number.
+   * @param {number} blockId Serial number of block.
+   * @returns {block} The block or null.
+   */
+  getBlock (blockId) {
+    if (this.blocks.has(blockId)) {
+      return this.blocks.get(blockId)
+    }
+    return null
+  }
+
+  /**
+   * Get the output of a completed pipeline.
    * @param {string} name Name of completed pipeline.
    * @return TidyBlocksDataFrame.
    */
-  get (name) {
-    return this.data.get(name)
+  getResult (name) {
+    return this.results.get(name)
   }
 
   /**
@@ -740,7 +771,7 @@ class TidyBlocksManagerClass {
    * @param {Object} dataFrame The TidyBlocksDataFrame produced by the pipeline.
    */
   notify (name, dataFrame) {
-    this.data.set(name, dataFrame)
+    this.results.set(name, dataFrame)
     this.waiting.forEach((dependencies, func) => {
       dependencies.delete(name)
       if (dependencies.size === 0) {
@@ -770,7 +801,9 @@ class TidyBlocksManagerClass {
   reset () {
     this.queue = []
     this.waiting = new Map()
-    this.data = new Map()
+    this.results = new Map()
+    this.blocks = new Map()
+    this.nextBlockId = 0
   }
 
   /**
@@ -801,7 +834,7 @@ class TidyBlocksManagerClass {
    * Show the manager as a string for debugging.
    */
   toString () {
-    return 'queue ' + this.queue + ' waiting ' + this.waiting
+    return `queue ${this.queue.length} waiting ${this.waiting.length} blocks ${this.blocks.size}`
   }
 }
 

@@ -16,7 +16,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
+    tooltip: 'sort rows by values in columns',
     helpUrl: ''
   }
 ])

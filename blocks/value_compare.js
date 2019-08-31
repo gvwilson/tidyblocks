@@ -30,6 +30,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     output: 'Boolean',
     style: 'value_blocks',
+    tooltip: 'compare two columns',
     helpUrl: ''
   }
 ])

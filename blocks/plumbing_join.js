@@ -31,7 +31,7 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     style: 'plumbing_blocks',
     hat: 'cap',
-    tooltip: '',
+    tooltip: 'join two tables',
     helpUrl: ''
   }
 ])

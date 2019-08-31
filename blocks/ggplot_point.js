@@ -25,7 +25,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     style: 'ggplot_blocks',
-    tooltip: '',
+    tooltip: 'create scatter plot',
     helpUrl: ''
   }
 ])

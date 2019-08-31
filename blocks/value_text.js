@@ -15,6 +15,6 @@ Blockly.defineBlocksWithJsonArray([
     output: 'String',
     style: 'value_blocks',
     helpUrl: '',
-    tooltip: ''
+    tooltip: 'constant text'
   }
 ])

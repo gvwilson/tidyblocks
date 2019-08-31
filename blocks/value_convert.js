@@ -23,6 +23,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     output: 'Number',
     style: 'value_blocks',
+    tooltip: 'change the datatype of a column',
     helpUrl: ''
   }
 ])

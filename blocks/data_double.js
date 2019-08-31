@@ -1,5 +1,5 @@
 //
-// Visuals for 2x2 data frame for testing.
+// Visuals for 2x2 dataframe for testing.
 //
 Blockly.defineBlocksWithJsonArray([
   {
@@ -7,6 +7,7 @@ Blockly.defineBlocksWithJsonArray([
     message0: '2x2 dataset',
     nextStatement: null,
     style: 'data_blocks',
-    hat: 'cap'
+    hat: 'cap',
+    tooltip: '2x2 dataframe for testing'
   }
 ])

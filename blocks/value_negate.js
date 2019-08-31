@@ -14,6 +14,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     output: 'Number',
     style: 'value_blocks',
+    tooltip: 'negate a numeric column',
     helpUrl: ''
   }
 ])

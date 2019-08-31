@@ -18,6 +18,6 @@ Blockly.defineBlocksWithJsonArray([
     output: 'Boolean',
     helpUrl: '',
     style: 'value_blocks',
-    tooltip: ''
+    tooltip: 'constant Boolean'
   }
 ])

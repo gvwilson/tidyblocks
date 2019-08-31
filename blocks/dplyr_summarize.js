@@ -29,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
+    tooltip: 'summarize values',
     helpUrl: ''
   }
 ])

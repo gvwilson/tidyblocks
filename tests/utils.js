@@ -62,6 +62,7 @@ const Blockly = {
 class MockBlock {
   constructor (settings) {
     Object.assign(this, settings)
+    TidyBlocksManager.addNewBlock(this)
   }
 
   getFieldValue (key) {
@@ -87,6 +88,13 @@ const makeBlock = (blockName, settings) => {
   else {
     return result[0]
   }
+}
+
+/**
+ * Delete an existing block. (Emulates the drag-and-drop delete in the GUI.)
+ */
+const deleteBlock = (block) => {
+  TidyBlocksManager.deleteBlock(block)
 }
 
 /**

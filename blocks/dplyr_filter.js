@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
+    tooltip: 'filter rows by condition',
     helpUrl: ''
   }
 ])

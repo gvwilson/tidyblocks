@@ -20,7 +20,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
+    tooltip: 'create new column from existing columns',
     helpUrl: ''
   }
 ])

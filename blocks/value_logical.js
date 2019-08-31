@@ -26,6 +26,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     output: 'Boolean',
     style: 'value_blocks',
+    tooltip: 'combine logical values of two columns',
     helpUrl: ''
   }
 ])

@@ -30,6 +30,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     output: 'Number',
     style: 'value_blocks',
+    tooltip: 'do arithmetic',
     helpUrl: ''
   }
 ])

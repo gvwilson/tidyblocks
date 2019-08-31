@@ -13,6 +13,6 @@ Blockly.defineBlocksWithJsonArray([
     output: 'Number',
     helpUrl: '',
     style: 'value_blocks',
-    tooltip: ''
+    tooltip: 'constant number'
   }
 ])

@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     style: 'data_blocks',
     hat: 'cap',
-    tooltip: '',
+    tooltip: 'download CSV data from a URL',
     helpUrl: ''
   }
 ])
