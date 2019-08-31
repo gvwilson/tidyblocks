@@ -65,18 +65,18 @@ body {
 
 #dataOutput tbody {
     display: block;
-  }
+}
 
 #dataOutput thead tr {
     height: 20px;
     top: 0;
     font-size: 1em;
     position: sticky;
-  }
+}
 
 #dataOutput table  {
     border-collapse: collapse;
-  }
+}
 
 #dataOutput tr, td {
     background-color: white;
@@ -88,7 +88,7 @@ body {
     word-wrap: break-word;
     font-size: 1em;
     border: 1px solid #D7DADC;
-  }
+}
   
 #dataOutput th {
     background-color: #F7F9FA;
@@ -101,7 +101,7 @@ body {
     letter-spacing: .1em;
     text-align: left;
     border: 1px solid #D7DADC;
-  }
+}
   
 #dataOutput tr {
     display: table;
@@ -111,7 +111,7 @@ body {
     word-wrap: break-word;
     padding: .425em;
     width: 100%;
-  }
+}
 
 /* Button used to run code */
 button#runCode {
