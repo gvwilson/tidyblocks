@@ -313,6 +313,15 @@ class TidyBlocksDataFrame {
     return new TidyBlocksDataFrame(newData)
   }
 
+  /**
+   * Reverse the order of rows.
+   */
+  reverse () {
+    const result = [...this.data]
+    result.reverse()
+    return new TidyBlocksDataFrame(result)
+  }
+
   //
   // To group by, provide the name of the column to group by.
   // This creates a new column _group_.
