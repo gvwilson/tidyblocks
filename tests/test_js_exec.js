@@ -92,6 +92,31 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('converts numeric data to string', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_mutate',
+        {newCol: 'textual',
+         Column: makeBlock(
+           'value_convert',
+           {OP: 'tbToString',
+            A: makeBlock(
+              'value_column',
+              {TEXT: 'red'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Wrong number of rows in output')
+    assert('textual' in Result.table[0],
+           'Result lacks expected column')
+    assert(typeof Result.table[0].textual === 'string',
+           'New column has wrong type')
+    done()
+  })
+
   it('filters data using not-equals', (done) => {
     const pipeline = [
       makeBlock(
