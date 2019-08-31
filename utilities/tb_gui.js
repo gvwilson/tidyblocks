@@ -111,7 +111,7 @@ const saveCode = () => {
 /**
  * Load saved code.
  * Depends on the global DemoWorkspace variable.
- * @param {Array[string]} fileList List of files (only first element is valid).
+ * @param {string[]} fileList List of files (only first element is valid).
  */
 const loadCode = (fileList) => {
   const file = fileList[0]

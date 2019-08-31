@@ -506,7 +506,7 @@ class TidyBlocksDataFrame {
 
   /**
    * Sort data by values in specified columns.
-   * @param {Array[string]} columns Names of columns to sort by.
+   * @param {string[]} columns Names of columns to sort by.
    * @returns New data frame with sorted data.
    */
   sort (columns) {

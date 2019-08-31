@@ -391,7 +391,7 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line700">line 700</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line811">line 811</a>
     </li></ul></dd>
     
 
@@ -412,6 +412,148 @@ values used by block creation code.
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="colTypeName"><span class="type-signature"></span>colTypeName<span class="signature">(value)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Produce a human-friendly name for the type of a column.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The value whose type is checked.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_runtime.js.html">utilities/tb_runtime.js</a>, <a href="utilities_tb_runtime.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The name of the type
+</div>
+
+
+
+    
+
+
+
+
 
         
             
@@ -701,143 +843,6 @@ values used by block creation code.
 
 
 <div class="description">
-    "Display" a plot (record for testing purposes).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>spec</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Vega-Lite spec for plot.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line142">line 142</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayPlot"><span class="type-signature"></span>displayPlot<span class="signature">(spec)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
     Callback for displaying a plot.
 </div>
 
@@ -932,6 +937,143 @@ values used by block creation code.
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="utilities_tb_gui.js.html">utilities/tb_gui.js</a>, <a href="utilities_tb_gui.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayPlot"><span class="type-signature"></span>displayPlot<span class="signature">(spec)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    "Display" a plot (record for testing purposes).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>spec</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Vega-Lite spec for plot.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -1512,7 +1654,7 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_runtime.js.html">utilities/tb_runtime.js</a>, <a href="utilities_tb_runtime.js.html#line53">line 53</a>
+        <a href="utilities_tb_runtime.js.html">utilities/tb_runtime.js</a>, <a href="utilities_tb_runtime.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -2139,7 +2281,7 @@ Each object must have the same properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_runtime.js.html">utilities/tb_runtime.js</a>, <a href="utilities_tb_runtime.js.html#line38">line 38</a>
+        <a href="utilities_tb_runtime.js.html">utilities/tb_runtime.js</a>, <a href="utilities_tb_runtime.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -2229,6 +2371,144 @@ Does _not_ read R files (for now).
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line111">line 111</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="loadCode"><span class="type-signature"></span>loadCode<span class="signature">(fileList)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Load saved code.
+Depends on the global DemoWorkspace variable.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">List of files (only first element is valid).</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_gui.js.html">utilities/tb_gui.js</a>, <a href="utilities_tb_gui.js.html#line116">line 116</a>
     </li></ul></dd>
     
 
@@ -3216,6 +3496,95 @@ Depends on the global DemoWorkspace variable.
     
 
     
+    <h4 class="name" id="saveCode"><span class="type-signature"></span>saveCode<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Save the code generated from the user's workspace.
+Depends on the global DemoWorkspace variable.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_gui.js.html">utilities/tb_gui.js</a>, <a href="utilities_tb_gui.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="setUpBlockly"><span class="type-signature"></span>setUpBlockly<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
@@ -3540,7 +3909,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line170">line 170</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -3733,7 +4102,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line248">line 248</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line301">line 301</a>
     </li></ul></dd>
     
 
@@ -3903,7 +4272,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line115">line 115</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -3947,7 +4316,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
 
 <div class="description">
-    Summarize: count number of values.
+    Count number of values.
 </div>
 
 
@@ -4040,7 +4409,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line41">line 41</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -4245,7 +4614,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line209">line 209</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line223">line 223</a>
     </li></ul></dd>
     
 
@@ -4438,7 +4807,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line302">line 302</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line368">line 368</a>
     </li></ul></dd>
     
 
@@ -4631,7 +5000,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line235">line 235</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line236">line 236</a>
     </li></ul></dd>
     
 
@@ -4824,7 +5193,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line288">line 288</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line354">line 354</a>
     </li></ul></dd>
     
 
@@ -4994,7 +5363,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line157">line 157</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -5187,7 +5556,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line274">line 274</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line340">line 340</a>
     </li></ul></dd>
     
 
@@ -5329,7 +5698,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line126">line 126</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -5522,7 +5891,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line330">line 330</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line396">line 396</a>
     </li></ul></dd>
     
 
@@ -5715,7 +6084,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line344">line 344</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line410">line 410</a>
     </li></ul></dd>
     
 
@@ -5769,484 +6138,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
 
 <div class="description">
-    Summarize: find maximum value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>values</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The values to be searched.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line50">line 50</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Maximum value.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbMean"><span class="type-signature"></span>tbMean<span class="signature">(values)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Summarize: find mean value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>values</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The values to be averaged.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line61">line 61</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Mean value.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbMedian"><span class="type-signature"></span>tbMedian<span class="signature">(values)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Summarize: find median value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>values</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The values to be searched.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line72">line 72</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Median value.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">number</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbMin"><span class="type-signature"></span>tbMin<span class="signature">(values)</span><span class="type-signature"> &rarr; {number}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Summarize: find median value.
+    Find maximum value.
 </div>
 
 
@@ -6340,6 +6232,483 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Maximum value.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbMean"><span class="type-signature"></span>tbMean<span class="signature">(values)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Find mean value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>values</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The values to be averaged.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line97">line 97</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Mean value.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbMedian"><span class="type-signature"></span>tbMedian<span class="signature">(values)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Find median value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>values</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The values to be searched.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line108">line 108</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Median value.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbMin"><span class="type-signature"></span>tbMin<span class="signature">(values)</span><span class="type-signature"> &rarr; {number}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Find median value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>values</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The values to be searched.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -6544,7 +6913,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line222">line 222</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line249">line 249</a>
     </li></ul></dd>
     
 
@@ -6737,7 +7106,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line196">line 196</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line262">line 262</a>
     </li></ul></dd>
     
 
@@ -6767,6 +7136,176 @@ As a side effect, sets the global DemoWorkspace variable for later use.
         
 <div class="param-desc">
     The product.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbNeg"><span class="type-signature"></span>tbNeg<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Negate a value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row to get values from.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the value from the row.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line274">line 274</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The numerical negation.
 </div>
 
 
@@ -6930,7 +7469,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line316">line 316</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line382">line 382</a>
     </li></ul></dd>
     
 
@@ -6960,6 +7499,176 @@ As a side effect, sets the global DemoWorkspace variable for later use.
         
 <div class="param-desc">
     The comparison's result.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbNot"><span class="type-signature"></span>tbNot<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Logical negation of a value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row to get values from.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the value from the row.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line313">line 313</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The logical conjunction.
 </div>
 
 
@@ -7123,7 +7832,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line261">line 261</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line325">line 325</a>
     </li></ul></dd>
     
 
@@ -7177,7 +7886,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
 
 <div class="description">
-    Summarize: find standard deviation.
+    Find standard deviation.
 </div>
 
 
@@ -7270,7 +7979,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line97">line 97</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -7475,7 +8184,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line183">line 183</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line286">line 286</a>
     </li></ul></dd>
     
 
@@ -7529,7 +8238,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
 
 <div class="description">
-    Summarize: find sum.
+    Find sum.
 </div>
 
 
@@ -7622,7 +8331,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line106">line 106</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -7680,7 +8389,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbToLogical"><span class="type-signature"></span>tbToLogical<span class="signature">(value)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="tbToBoolean"><span class="type-signature"></span>tbToBoolean<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
     
 
     
@@ -7688,7 +8397,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
 
 <div class="description">
-    Convert a value to a Boolean.
+    Convert row value to Boolean.
 </div>
 
 
@@ -7724,10 +8433,15 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>row</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
             
             </td>
 
@@ -7735,7 +8449,30 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
             
 
-            <td class="description last">What to convert.</td>
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
         </tr>
 
     
@@ -7776,7 +8513,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line137">line 137</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line154">line 154</a>
     </li></ul></dd>
     
 
@@ -7805,22 +8542,350 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 
         
 <div class="param-desc">
-    Either true or false.
+    Boolean value.
 </div>
 
 
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+    
+
+
+
+
+
         
-<span class="param-type">Boolean</span>
+            
+
+    
+
+    
+    <h4 class="name" id="tbToNumber"><span class="type-signature"></span>tbToNumber<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
-    </dd>
+
+<div class="description">
+    Convert row value to number.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line164">line 164</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
 </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Numeric value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToString"><span class="type-signature"></span>tbToString<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Convert row value to string.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    String value.
+</div>
+
+
 
     
 
@@ -7948,7 +9013,7 @@ As a side effect, sets the global DemoWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line146">line 146</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -7994,13 +9059,13 @@ As a side effect, sets the global DemoWorkspace variable for later use.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToLogical">tbToLogical</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Aug 30 2019 22:09:50 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Aug 31 2019 08:38:22 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
