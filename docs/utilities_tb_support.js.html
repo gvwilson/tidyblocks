@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utilities/tb_support.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utilities/tb_support.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Terminator for well-formed pipelines.
  */
 const TERMINATOR = '// terminated'
@@ -33,7 +61,79 @@ const fixCode = (code) => {
   return code
 }
 
-//--------------------------------------------------------------------------------
+/**
+ * Summarize: count number of values.
+ * @param {Array} values The values to be counted.
+ * @return {number} Number of values.
+ */
+const tbCount = (values) => {
+  return values.length
+}
+
+/**
+ * Summarize: find maximum value.
+ * @param {Array} values The values to be searched.
+ * @return {number} Maximum value.
+ */
+const tbMax = (values) => {
+  return (values.length === 0)
+    ? NaN
+    : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
+}
+
+/**
+ * Summarize: find mean value.
+ * @param {Array} values The values to be averaged.
+ * @return {number} Mean value.
+ */
+const tbMean = (values) => {
+  return (values.length === 0)
+    ? NaN
+    : values.reduce((total, num) => total + num, 0) / values.length
+}
+
+/**
+ * Summarize: find median value.
+ * @param {Array} values The values to be searched.
+ * @return {number} Median value.
+ */
+const tbMedian = (values) => {
+  if (values.length === 0) {
+    return NaN
+  }
+  else {
+    // FIXME
+  }
+}
+
+/**
+ * Summarize: find median value.
+ * @param {Array} values The values to be searched.
+ * @return {number} Minimum value.
+ */
+const tbMin = (values) => {
+  return (values.length === 0)
+    ? NaN
+    : values.reduce((soFar, val) => (val &lt; soFar) ? val : soFar)
+}
+
+/**
+ * Summarize: find standard deviation.
+ * @param {Array} values The values to be summarized.
+ * @return {number} Standard deviation.
+ */
+const tbStd = (values) => {
+  return NaN // FIXME
+}
+
+/**
+ * Summarize: find sum.
+ * @param {Array} values The values to be added.
+ * @return {number} Total.
+ */
+const tbSum = (values) => {
+  return values.reduce((total, num) => total + num, 0)
+}
 
 /**
  * Raise exception if a condition doesn't hold.
@@ -58,6 +158,15 @@ const tbIsNumber = (value) => {
 }
 
 /**
+ * Convert a value to a Boolean.
+ * @param value What to convert.
+ * @returns {Boolean} Either true or false.
+ */
+const tbToLogical = (value) => {
+  return value ? true : false
+}
+
+/**
  * Check that the types of two values are the same.
  * @param left One of the values.
  * @param right The other value.
@@ -66,127 +175,6 @@ const tbTypeEqual = (left, right) => {
   tbAssert(typeof left === typeof right,
            `Values ${left} and ${right} have different types`)
 }
-
-//--------------------------------------------------------------------------------
-
-/**
- * Count number of values.
- * @param {Array} values The values to be counted.
- * @return {number} Number of values.
- */
-const tbCount = (values) => {
-  return values.length
-}
-
-/**
- * Find maximum value.
- * @param {Array} values The values to be searched.
- * @return {number} Maximum value.
- */
-const tbMax = (values) => {
-  return (values.length === 0)
-    ? NaN
-    : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
-}
-
-/**
- * Find mean value.
- * @param {Array} values The values to be averaged.
- * @return {number} Mean value.
- */
-const tbMean = (values) => {
-  return (values.length === 0)
-    ? NaN
-    : values.reduce((total, num) => total + num, 0) / values.length
-}
-
-/**
- * Find median value.
- * @param {Array} values The values to be searched.
- * @return {number} Median value.
- */
-const tbMedian = (values) => {
-  if (values.length === 0) {
-    return NaN
-  }
-  else {
-    // FIXME
-  }
-}
-
-/**
- * Find median value.
- * @param {Array} values The values to be searched.
- * @return {number} Minimum value.
- */
-const tbMin = (values) => {
-  return (values.length === 0)
-    ? NaN
-    : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
-}
-
-/**
- * Find standard deviation.
- * @param {Array} values The values to be summarized.
- * @return {number} Standard deviation.
- */
-const tbStd = (values) => {
-  return NaN // FIXME
-}
-
-/**
- * Find sum.
- * @param {Array} values The values to be added.
- * @return {number} Total.
- */
-const tbSum = (values) => {
-  return values.reduce((total, num) => total + num, 0)
-}
-
-//--------------------------------------------------------------------------------
-
-/**
- * Convert row value to Boolean.
- * @param {Object} row Row containing values.
- * @param {function} getValue How to get desired value.
- * @returns Boolean value.
- */
-const tbToBoolean = (row, getValue) => {
-  return getValue(row) ? true : false
-}
-
-/**
- * Convert row value to number.
- * @param {Object} row Row containing values.
- * @param {function} getValue How to get desired value.
- * @returns Numeric value.
- */
-const tbToNumber = (row, getValue) => {
-  const value = getValue(row)
-  if (typeof value == 'boolean') {
-    return value ? 1 : 0
-  }
-  if (typeof value == 'string') {
-    return parseFloat(string)
-  }
-  return value
-}
-
-/**
- * Convert row value to string.
- * @param {Object} row Row containing values.
- * @param {function} getValue How to get desired value.
- * @returns String value.
- */
-const tbToString = (row, getValue) => {
-  const value = getValue(row)
-  if (typeof value == 'string') {
-    return value
-  }
-  return `${value}`
-}
-
-//--------------------------------------------------------------------------------
 
 /**
  * Get a column's value from a row, failing if the column doesn't exist.
@@ -214,6 +202,32 @@ const tbAdd = (row, getLeft, getRight) => {
 }
 
 /**
+ * Subtract two values.
+ * @param {Object} row The row to get values from.
+ * @param {function} getLeft How to get the left value from the row.
+ * @param {function} getRight How to get the right value from the row.
+ * @returns The difference.
+ */
+const tbSub = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left - right
+}
+
+/**
+ * Multiply two values.
+ * @param {Object} row The row to get values from.
+ * @param {function} getLeft How to get the left value from the row.
+ * @param {function} getRight How to get the right value from the row.
+ * @returns The product.
+ */
+const tbMul = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left * right
+}
+
+/**
  * Divide two values.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
@@ -224,6 +238,19 @@ const tbDiv = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left / right
+}
+
+/**
+ * Find the remainder of two values.
+ * @param {Object} row The row to get values from.
+ * @param {function} getLeft How to get the left value from the row.
+ * @param {function} getRight How to get the right value from the row.
+ * @returns The remainder.
+ */
+const tbMod = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left % right
 }
 
 /**
@@ -240,58 +267,6 @@ const tbExp = (row, getLeft, getRight) => {
 }
 
 /**
- * Find the remainder of two values.
- * @param {Object} row The row to get values from.
- * @param {function} getLeft How to get the left value from the row.
- * @param {function} getRight How to get the right value from the row.
- * @returns The remainder.
- */
-const tbMod = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
-  return left * right
-}
-
-/**
- * Multiply two values.
- * @param {Object} row The row to get values from.
- * @param {function} getLeft How to get the left value from the row.
- * @param {function} getRight How to get the right value from the row.
- * @returns The product.
- */
-const tbMul = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
-  return left % right
-}
-
-/**
- * Negate a value.
- * @param {Object} row The row to get values from.
- * @param {function} getValue How to get the value from the row.
- * @returns The numerical negation.
- */
-const tbNeg = (row, getValue) => {
-  const value = tbIsNumber(getValue(row))
-  return - value
-}
-
-/**
- * Subtract two values.
- * @param {Object} row The row to get values from.
- * @param {function} getLeft How to get the left value from the row.
- * @param {function} getRight How to get the right value from the row.
- * @returns The difference.
- */
-const tbSub = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
-  return left - right
-}
-
-//--------------------------------------------------------------------------------
-
-/**
  * Logical conjunction of two values.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
@@ -299,20 +274,9 @@ const tbSub = (row, getLeft, getRight) => {
  * @returns The conjunction.
  */
 const tbAnd = (row, getLeft, getRight) => {
-  const left = tbToBoolean(row, getLeft)
-  const right = tbToBoolean(row, getRight)
-  return left && right
-}
-
-/**
- * Logical negation of a value.
- * @param {Object} row The row to get values from.
- * @param {function} getValue How to get the value from the row.
- * @returns The logical conjunction.
- */
-const tbNot = (row, getValue) => {
-  const value = tbToLogical(getValue(row))
-  return ! value
+  const left = tbToLogical(getLeft(row))
+  const right = tbToLogical(getRight(row))
+  return left &amp;&amp; right
 }
 
 /**
@@ -323,12 +287,10 @@ const tbNot = (row, getValue) => {
  * @returns The disjunction.
  */
 const tbOr = (row, getLeft, getRight) => {
-  const left = tbToBoolean(row, getLeft)
-  const right = tbToBoolean(row, getRight)
+  const left = tbToLogical(getLeft(row))
+  const right = tbToLogical(getRight(row))
   return left || right
 }
-
-//--------------------------------------------------------------------------------
 
 /**
  * Strict greater than.
@@ -397,7 +359,7 @@ const tbLeq = (row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
-  return left <= right
+  return left &lt;= right
 }
 
 /**
@@ -411,10 +373,8 @@ const tbLt = (row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
-  return left < right
+  return left &lt; right
 }
-
-//--------------------------------------------------------------------------------
 
 /**
  * Store a dataframe.
@@ -429,7 +389,20 @@ class TidyBlocksDataFrame {
     this.data = values
   }
 
-  //------------------------------------------------------------------------------
+  /**
+   * Create a new column by operating on existing columns.
+   * @param {string} newName New column's name.
+   * @param {function} op How to create new values from a row.
+   * @returns A new dataframe.
+   */
+  mutate (newName, op) {
+    const newData = this.data.map(row => {
+      const newRow = {...row}
+      newRow[newName] = op(row)
+      return newRow
+    })
+    return new TidyBlocksDataFrame(newData)
+  }
 
   /**
    * Filter rows, keeping those that pass a test.
@@ -439,6 +412,22 @@ class TidyBlocksDataFrame {
   filter (op) {
     const newData = this.data.filter(row => {
       return op(row)
+    })
+    return new TidyBlocksDataFrame(newData)
+  }
+
+  /**
+   * Select columns.
+   * @param {string[]} columns The names of the columns to keep.
+   * @returns A new dataframe.
+   */
+  select (columns) {
+    const newData = this.data.map(row => {
+      const result = {}
+      columns.forEach(key => {
+        result[key] = tbGet(row, key)
+      })
+      return result
     })
     return new TidyBlocksDataFrame(newData)
   }
@@ -465,69 +454,18 @@ class TidyBlocksDataFrame {
   }
 
   /**
-   * Create a new column by operating on existing columns.
-   * @param {string} newName New column's name.
-   * @param {function} op How to create new values from a row.
+   * Remove grouping if present.
    * @returns A new dataframe.
    */
-  mutate (newName, op) {
+  ungroup () {
+    tbAssert(this.hasColumn('_group_'),
+             'Cannot ungroup data that is not grouped')
     const newData = this.data.map(row => {
-      const newRow = {...row}
-      newRow[newName] = op(row)
-      return newRow
+      row = {...row}
+      delete row._group_
+      return row
     })
     return new TidyBlocksDataFrame(newData)
-  }
-
-  /**
-   * Reverse the order of rows.
-   */
-  reverse () {
-    const result = [...this.data]
-    result.reverse()
-    return new TidyBlocksDataFrame(result)
-  }
-
-  /**
-   * Select columns.
-   * @param {string[]} columns The names of the columns to keep.
-   * @returns A new dataframe.
-   */
-  select (columns) {
-    const newData = this.data.map(row => {
-      const result = {}
-      columns.forEach(key => {
-        result[key] = tbGet(row, key)
-      })
-      return result
-    })
-    return new TidyBlocksDataFrame(newData)
-  }
-
-  /**
-   * Sort data by values in specified columns.
-   * @param {Array[string]} columns Names of columns to sort by.
-   * @returns New data frame with sorted data.
-   */
-  sort (columns) {
-    columns.forEach(col => tbAssert(this.hasColumn(col),
-                                    `No such column ${col}`))
-    const result = [...this.data]
-    result.sort((left, right) => {
-      return columns.reduce((soFar, col) => {
-        if (soFar !== 0) {
-          return soFar
-        }
-        if (left[col] < right[col]) {
-          return -1
-        }
-        if (left[col] > right[col]) {
-          return 1
-        }
-        return 0
-      }, 0)
-    })
-    return new TidyBlocksDataFrame(result)
   }
 
   /**
@@ -574,21 +512,14 @@ class TidyBlocksDataFrame {
   }
 
   /**
-   * Remove grouping if present.
-   * @returns A new dataframe.
+   * Notify the pipeline manager that this pipeline has completed so that downstream joins can run.
+   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
+   * @param {function} notifyFxn Callback functon to do notification (to decouple this class from the manager).
+   * @param {string} name Name of this pipeline.
    */
-  ungroup () {
-    tbAssert(this.hasColumn('_group_'),
-             'Cannot ungroup data that is not grouped')
-    const newData = this.data.map(row => {
-      row = {...row}
-      delete row._group_
-      return row
-    })
-    return new TidyBlocksDataFrame(newData)
+  notify (notifyFxn, name) {
+    notifyFxn(name, this)
   }
-
-  //------------------------------------------------------------------------------
 
   /**
    * Join two tables on equality between values in specified columns.
@@ -630,18 +561,6 @@ class TidyBlocksDataFrame {
   }
 
   /**
-   * Notify the pipeline manager that this pipeline has completed so that downstream joins can run.
-   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
-   * @param {function} notifyFxn Callback functon to do notification (to decouple this class from the manager).
-   * @param {string} name Name of this pipeline.
-   */
-  notify (notifyFxn, name) {
-    notifyFxn(name, this)
-  }
-
-  //------------------------------------------------------------------------------
-
-  /**
    * Call a plotting function. This is in this class to support method chaining
    * and to decouple this class from the real plotting functions so that tests
    * will run.
@@ -661,7 +580,14 @@ class TidyBlocksDataFrame {
     return this
   }
 
-  //------------------------------------------------------------------------------
+  /**
+   * Test whether the dataframe has the specified column.
+   * @param {string} name Name of column to check for.
+   * @returns {Boolean} Is column present?
+   */
+  hasColumn (name) {
+    return name in this.data[0]
+  }
 
   /**
    * Get a column as a JavaScript array.
@@ -672,15 +598,6 @@ class TidyBlocksDataFrame {
     tbAssert(this.hasColumn(name),
              `Table does not have column ${name}`)
     return this.data.map(row => row[name])
-  }
-
-  /**
-   * Test whether the dataframe has the specified column.
-   * @param {string} name Name of column to check for.
-   * @returns {Boolean} Is column present?
-   */
-  hasColumn (name) {
-    return name in this.data[0]
   }
 
   /**
@@ -725,28 +642,12 @@ class TidyBlocksManagerClass {
   }
 
   /**
-   * Get the data associated with the name of a completed pipeline.
-   * @param {string} name Name of completed pipeline.
-   * @return TidyBlocksDataFrame.
+   * Reset internal state.
    */
-  get (name) {
-    return this.data.get(name)
-  }
-
-  /**
-   * Notify the manager that a named pipeline has finished running.
-   * This enqueues pipeline functions to run if their dependencies are satisfied.
-   * @param {string} name Name of the pipeline that just completed.
-   * @param {Object} dataFrame The TidyBlocksDataFrame produced by the pipeline.
-   */
-  notify (name, dataFrame) {
-    this.data.set(name, dataFrame)
-    this.waiting.forEach((dependencies, func) => {
-      dependencies.delete(name)
-      if (dependencies.size === 0) {
-        this.queue.push(func)
-      }
-    })
+  reset () {
+    this.queue = []
+    this.waiting = new Map()
+    this.data = new Map()
   }
 
   /**
@@ -765,12 +666,19 @@ class TidyBlocksManagerClass {
   }
 
   /**
-   * Reset internal state.
+   * Notify the manager that a named pipeline has finished running.
+   * This enqueues pipeline functions to run if their dependencies are satisfied.
+   * @param {string} name Name of the pipeline that just completed.
+   * @param {Object} dataFrame The TidyBlocksDataFrame produced by the pipeline.
    */
-  reset () {
-    this.queue = []
-    this.waiting = new Map()
-    this.data = new Map()
+  notify (name, dataFrame) {
+    this.data.set(name, dataFrame)
+    this.waiting.forEach((dependencies, func) => {
+      dependencies.delete(name)
+      if (dependencies.size === 0) {
+        this.queue.push(func)
+      }
+    })
   }
 
   /**
@@ -798,6 +706,15 @@ class TidyBlocksManagerClass {
   }
 
   /**
+   * Get the data associated with the name of a completed pipeline.
+   * @param {string} name Name of completed pipeline.
+   * @return TidyBlocksDataFrame.
+   */
+  get (name) {
+    return this.data.get(name)
+  }
+
+  /**
    * Show the manager as a string for debugging.
    */
   toString () {
@@ -819,3 +736,26 @@ if (typeof module !== 'undefined') {
     TidyBlocksManager
   }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToLogical">tbToLogical</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Aug 30 2019 22:09:50 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

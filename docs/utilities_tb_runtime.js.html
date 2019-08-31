@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utilities/tb_gui.js</title>
+    <title>JSDoc: Source: utilities/tb_runtime.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utilities/tb_gui.js</h1>
+    <h1 class="page-title">Source: utilities/tb_runtime.js</h1>
 
     
 
@@ -26,96 +26,90 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * Share the demo workspace between functions.
- */
-let DemoWorkspace = null
+            <pre class="prettyprint source linenums"><code>//
+// Utilities needed at runtime for block execution.
+//
 
 /**
- * Set the display property of the two input toggleable panes.
- * (Has to be done manually rather than in CSS because properties are being reset.)
+ * Read CSV from a URL and parse to create TidyBlocks data frame.
+ * @param {string} url URL to read from.
  */
-const initializeDisplay = () => {
-  for (let [nodeId, state] of [
-    ['codeOutput', 'none'],
-    ['blockDisplay', 'block']]) {
-    document.getElementById(nodeId).style.display = state
+const readCSV = (url) => {
+  const request = new XMLHttpRequest()
+  request.open('GET', url, false)
+  request.send(null)
+
+  if (request.status !== 200) {
+    console.log(`ERROR: ${request.status}`)
+    return null
   }
+
+  const result = Papa.parse(request.responseText, {
+    header: true,
+    dynamicTyping: true,
+    transformHeader: (h) => {
+      h = h.replace(/\/|\.|\(|\)| /g, '_').replace(/__/g, "_")
+      if (h.endsWith('_')) {
+        h = h.substring(0, h.length - 1)
+      }
+      return h
+    }
+  })
+  return new TidyBlocksDataFrame(result.data)
 }
 
 /**
- * Toggle between block input and text input panes.
+ * Create dynamic table from array from JSON with one table column per property.
+ * Each object must have the same properties.
+ * @param {JSON} json JSON object to convert to table.
  */
-const generateCodePane = () => {
-  for (let nodeId of ['codeOutput', 'blockDisplay']) {
-    const node = document.getElementById(nodeId)
-    if (node.style.display === 'none') {
-      node.style.display = 'block'
-    }
-    else {
-      node.style.display = 'none'
-    }
+const json2table = (json) => {
+  const cols = Object.keys(json[0])
+  const headerRow = '&lt;tr>' + cols.map(c => `&lt;th>${c}&lt;/th>`).join('') + '&lt;/tr>'
+  const bodyRows = json.map(row => {
+    return '&lt;tr>' + cols.map(c => `&lt;td>${row[c]}&lt;/td>`).join('') + '&lt;/tr>'
+  }).join('')
+  return `&lt;table>&lt;thead>${headerRow}&lt;/thead>&lt;tbody>${bodyRows}&lt;/tbody>&lt;/table>`
+}
+
+/**
+ * Find linear model for plotting.
+ * @param {number[]} values_x X-axis values.
+ * @param {number[]} values_y Y-axis values.
+ * @returns {number[]} Slope and intercept.
+ */
+const findLineByLeastSquares = (values_x, values_y) => {
+  const len = values_x.length
+  if (len != values_y.length) {
+    throw 'values_x and values_y have different lengths'
   }
-}
 
-/**
- * Show the text based code corresponding to selected blocks.
- */
-const showCode = () => {
-  const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
-  document.getElementById('codeOutput').innerHTML = code
-}
+  // Empty case.
+  if (len === 0) {
+    return [NaN, NaN]
+  }
 
-/**
- * Set up Blockly display by injecting XML data into blockDisplay div.
- * As a side effect, sets the global DemoWorkspace variable for later use.
- */
-const setUpBlockly = () => {
-  DemoWorkspace = Blockly.inject(
-    document.getElementById('blockDisplay'),
-    {
-      media: 'media/',
-      toolbox: document.getElementById('toolbox'),
-      horizontalLayout: false,
-      scrollbars: false, 
-      theme: Blockly.Themes.Tidy
-    }
-  )
-  DemoWorkspace.addChangeListener(Blockly.Events.disableOrphans);
-}
+  // Calculate the sum for each of the parts necessary.
+  let x_sum = 0
+  let y_sum = 0
+  let xy_sum = 0
+  let xx_sum = 0
+  for (let i = 0; i&lt;len; i++) {
+    const x = values_x[i]
+    const y = values_y[i]
+    x_sum += x
+    y_sum += y
+    xx_sum += x * x
+    xy_sum += x * y
+  }
 
-/**
- * Callback for displaying a plot.
- * @param {Object} spec Vega-Lite spec for plot with data filled in.
- */
-const displayPlot = (spec) => {
-  vegaEmbed('#plotOutput', spec, {})
-}
+  // Calculate m and b for the line equation:
+  // y = x * m + b
+  var m = (len * xy_sum - x_sum * y_sum) / (len * xx_sum - x_sum * x_sum)
+  var b = (y_sum / len) - (m * x_sum) / len
 
-/**
- * Callback for displaying a table as HTML.
- * @param {Object} table JSON array of uniform objects.
- */
-const displayTable = (table) => {
-  document.getElementById('dataOutput').innerHTML = json2table(table)
-}
-
-/**
- * Callback fro displaying an error online.
- * @param {string} error The message to display.
- */
-const displayError = (error) => {
-  console.log(error) // FIXME display in the GUI
-}
-
-/**
- * Run the code generated from the user's blocks.
- * Depends on the global DemoWorkspace variable.
- */
-function runCode () {
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  TidyBlocksManager.run(() => Blockly.JavaScript.workspaceToCode(DemoWorkspace),
-                        displayTable, displayPlot, displayError, readCSV)
+  // Solve for slope and intercept.
+  return [m, b]
 }
 </code></pre>
         </article>
