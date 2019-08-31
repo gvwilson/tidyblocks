@@ -231,6 +231,34 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('does subtraction correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'dplyr_mutate',
+        {newCol: 'difference',
+         Column: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbSub',
+            A: makeBlock(
+              'value_column',
+              {TEXT: 'second'}),
+            B: makeBlock(
+              'value_column',
+              {TEXT: 'first'})})})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 2,
+           'Wrong number of rows in output')
+    assert(Object.keys(Result.table[0]).length === 3,
+           'Wrong number of columns in output')
+    assert(Result.table.every(row => (row.difference === (row.second - row.first))),
+           'Difference column does not contain correct values')
+    done()
+  })
+
   it('summarizes an entire column using summation', (done) => {
     const pipeline = [
       makeBlock(
