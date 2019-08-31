@@ -8,13 +8,13 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'X',
-        text: 'X'
+        name: 'X_AXIS',
+        text: 'X axis'
       },
       {
         type: 'field_input',
-        name: 'Y',
-        text: 'Y'
+        name: 'Y_AXIS',
+        text: 'Y axis'
       }
     ],
     inputsInline: true,

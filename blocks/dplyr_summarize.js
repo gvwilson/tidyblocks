@@ -21,7 +21,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: 'field_input',
-        name: 'column',
+        name: 'COLUMN',
         text: 'column'
       }
     ],

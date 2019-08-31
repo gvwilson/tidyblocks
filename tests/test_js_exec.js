@@ -71,8 +71,8 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'ggplot_hist',
-        {column: 'Petal_Length',
-         bins: '20'})
+        {COLUMN: 'Petal_Length',
+         BINS: '20'})
     ]
     evalCode(pipeline)
     assert(Array.isArray(Result.table),
@@ -95,11 +95,11 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_select',
-        {columns: 'Petal_Length'}),
+        {COLUMNS: 'Petal_Length'}),
       makeBlock(
         'ggplot_hist',
-        {column: 'Petal_Length',
-         bins: '20'})
+        {COLUMN: 'Petal_Length',
+         BINS: '20'})
     ]
     evalCode(pipeline)
     assert(Object.keys(Result.table[0]).length === 1,
@@ -118,7 +118,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_sort',
-        {columns: 'red, green'})
+        {COLUMNS: 'red, green'})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 11,
@@ -137,13 +137,13 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {newCol: 'textual',
-         Column: makeBlock(
+        {NEW_COLUMN: 'textual',
+         VALUE: makeBlock(
            'value_convert',
-           {OP: 'tbToString',
-            A: makeBlock(
+           {TYPE: 'tbToString',
+            VALUE: makeBlock(
               'value_column',
-              {TEXT: 'red'})})})
+              {COLUMN: 'red'})})})
     ]
     const code = evalCode(pipeline)
     assert(Result.table.length === 11,
@@ -162,13 +162,13 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'red'}),
-           B: makeBlock(
+             {COLUMN: 'red'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 0})})})
     ]
@@ -185,18 +185,18 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'red'}),
-           B: makeBlock(
+             {COLUMN: 'red'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 0})})}),
       makeBlock(
         'plumbing_notify',
-        {name: 'left'})
+        {NAME: 'left'})
     ]
     evalCode(pipeline)
     assert(TidyBlocksManager.getResult('left'),
@@ -215,21 +215,21 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbGt',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'Petal_Length'}),
-           B: makeBlock(
+             {COLUMN: 'Petal_Length'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 5.0})})}),
       makeBlock(
         'ggplot_hist',
         {Column: makeBlock(
           'value_column',
-          {TEXT: 'Petal_Length'}),
-         bins: makeBlock(
+          {COLUMN: 'Petal_Length'}),
+         BINS: makeBlock(
            'value_number',
            {NUM: 20})})
     ]
@@ -248,15 +248,15 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbGeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'red'}),
-           B: makeBlock(
+             {COLUMN: 'red'}),
+           RIGHT: makeBlock(
              'value_column',
-             {TEXT: 'green'})})})
+             {COLUMN: 'green'})})})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 8,
@@ -273,16 +273,16 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {newCol: 'red_green',
-         Column: makeBlock(
+        {NEW_COLUMN: 'red_green',
+         VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'tbAdd',
-            A: makeBlock(
+            LEFT: makeBlock(
               'value_column',
-              {TEXT: 'red'}),
-            B: makeBlock(
+              {COLUMN: 'red'}),
+            RIGHT: makeBlock(
               'value_column',
-              {TEXT: 'green'})})})
+              {COLUMN: 'green'})})})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 11,
@@ -301,16 +301,16 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {newCol: 'difference',
-         Column: makeBlock(
+        {NEW_COLUMN: 'difference',
+         VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'tbSub',
-            A: makeBlock(
+            LEFT: makeBlock(
               'value_column',
-              {TEXT: 'second'}),
-            B: makeBlock(
+              {COLUMN: 'second'}),
+            RIGHT: makeBlock(
               'value_column',
-              {TEXT: 'first'})})})
+              {COLUMN: 'first'})})})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 2,
@@ -330,7 +330,7 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'dplyr_summarize',
         {FUNC: 'tbSum',
-         column: 'red'})
+         COLUMN: 'red'})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 1,
@@ -349,7 +349,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_groupBy',
-        {column: 'blue'})
+        {COLUMN: 'blue'})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 11,
@@ -370,7 +370,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_groupBy',
-        {column: 'blue'}),
+        {COLUMN: 'blue'}),
       makeBlock(
         'dplyr_ungroup',
         {})
@@ -390,11 +390,11 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_groupBy',
-        {column: 'blue'}),
+        {COLUMN: 'blue'}),
       makeBlock(
         'dplyr_summarize',
         {FUNC: 'tbMean',
-         column: 'green'})
+         COLUMN: 'green'})
     ]
     evalCode(pipeline)
     assert.deepEqual(Result.table,
@@ -413,7 +413,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'plumbing_notify',
-        {name: 'left'}),
+        {NAME: 'left'}),
 
       // Right data stream.
       makeBlock(
@@ -421,15 +421,15 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'plumbing_notify',
-        {name: 'right'}),
+        {NAME: 'right'}),
 
       // Join.
       makeBlock(
         'plumbing_join',
-        {leftName: 'left',
-         leftColumn: 'first',
-         rightName: 'right',
-         rightColumn: 'first'})
+        {LEFT_TABLE: 'left',
+         LEFT_COLUMN: 'first',
+         RIGHT_TABLE: 'right',
+         RIGHT_COLUMN: 'first'})
     ]
     evalCode(pipeline)
     assert.deepEqual(Result.table,
@@ -446,18 +446,18 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'red'}),
-           B: makeBlock(
+             {COLUMN: 'red'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 0})})}),
       makeBlock(
         'plumbing_notify',
-        {name: 'left'}),
+        {NAME: 'left'}),
 
       // Right data stream is colors with green != 0.
       makeBlock(
@@ -465,46 +465,46 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'green'}),
-           B: makeBlock(
+             {COLUMN: 'green'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 0})})}),
       makeBlock(
         'plumbing_notify',
-        {name: 'right'}),
+        {NAME: 'right'}),
 
       // Join, then keep entries with blue != 0.
       makeBlock(
         'plumbing_join',
-        {leftName: 'left',
-         leftColumn: 'red',
-         rightName: 'right',
-         rightColumn: 'green'}),
+        {LEFT_TABLE: 'left',
+         LEFT_COLUMN: 'red',
+         RIGHT_TABLE: 'right',
+         RIGHT_COLUMN: 'green'}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'left_blue'}),
-           B: makeBlock(
+             {COLUMN: 'left_blue'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 0})})}),
       makeBlock(
         'dplyr_filter',
-        {Column: makeBlock(
+        {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
-           A: makeBlock(
+           LEFT: makeBlock(
              'value_column',
-             {TEXT: 'right_blue'}),
-           B: makeBlock(
+             {COLUMN: 'right_blue'}),
+           RIGHT: makeBlock(
              'value_number',
              {NUM: 0})})})
     ]

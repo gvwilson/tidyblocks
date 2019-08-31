@@ -1,5 +1,5 @@
 //
-// Visuals for point display block.
+// Visuals for scatter plot block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
@@ -8,17 +8,17 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'X',
-        text: 'X'
+        name: 'X_AXIS',
+        text: 'X axis'
       },
       {
         type: 'field_input',
-        name: 'Y',
-        text: 'Y'
+        name: 'Y_AXIS',
+        text: 'Y axis'
       },
       {
         type: 'field_input',
-        name: 'color',
+        name: 'COLOR',
         text: 'color'
       }
     ],

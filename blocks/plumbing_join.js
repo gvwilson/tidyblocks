@@ -8,22 +8,22 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'leftName',
+        name: 'LEFT_TABLE',
         text: 'left table'
       },
       {
         type: 'field_input',
-        name: 'leftColumn',
+        name: 'LEFT_COLUMN',
         text: 'left column'
       },
       {
         type: 'field_input',
-        name: 'rightName',
+        name: 'RIGHT_TABLE',
         text: 'right table'
       },
       {
         type: 'field_input',
-        name: 'rightColumn',
+        name: 'RIGHT_COLUMN',
         text: 'right column'
       }
     ],

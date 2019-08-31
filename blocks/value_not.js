@@ -8,7 +8,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'input_value',
-        name: 'A'
+        name: 'VALUE'
       }
     ],
     inputsInline: true,

@@ -106,7 +106,7 @@ describe('generate code for single blocks', () => {
     const filePath = 'http://rstudio.com/tidyblocks.csv'
     const pipeline = makeBlock(
       'data_urlCSV',
-      {'ext': filePath})
+      {URL: filePath})
     const code = generateCode(pipeline)
     assert(code.includes('readCSV'),
            'pipeline does not read CSV')
@@ -118,10 +118,10 @@ describe('generate code for single blocks', () => {
   it('generates code to convert types', (done) => {
     const pipeline = makeBlock(
       'value_convert',
-      {OP: 'tbToString',
-       A: makeBlock(
+      {TYPE: 'tbToString',
+       VALUE: makeBlock(
          'value_column',
-         {TEXT: 'left'})})
+         {COLUMN: 'left'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('(row) =>'),
            'generated code does not appear to be a function')
@@ -133,9 +133,9 @@ describe('generate code for single blocks', () => {
   it('generates code to filter rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_filter',
-      {Column: makeBlock(
+      {TEST: makeBlock(
         'value_column',
-        {TEXT: 'existingColumn'})})
+        {COLUMN: 'existingColumn'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('.filter'),
            'pipeline does not start with filter call')
@@ -157,7 +157,7 @@ describe('generate code for single blocks', () => {
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_groupBy',
-      {column: 'existingColumn'})
+      {COLUMN: 'existingColumn'})
     const code = generateCode(pipeline)
     assert(code === '.groupBy("existingColumn")',
            'pipeline does not group rows by existing column')
@@ -177,10 +177,10 @@ describe('generate code for single blocks', () => {
   it('generates code to copy columns using mutate', (done) => {
     const pipeline = makeBlock(
       'dplyr_mutate',
-      {newCol: 'newColumnName',
-       Column: makeBlock(
+      {NEW_COLUMN: 'newColumnName',
+       VALUE: makeBlock(
          'value_column',
-         {TEXT: 'existingColumn'})})
+         {COLUMN: 'existingColumn'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('.mutate'),
            'pipeline does not start with mutate call')
@@ -196,7 +196,7 @@ describe('generate code for single blocks', () => {
   it('generates code to select a single column', (done) => {
     const pipeline = makeBlock(
       'dplyr_select',
-      {columns: 'existingColumn'})
+      {COLUMNS: 'existingColumn'})
     const code = generateCode(pipeline)
     assert(code.startsWith('.select'),
            'pipeline does not start with select call')
@@ -208,7 +208,7 @@ describe('generate code for single blocks', () => {
   it('generates code to sort by two columns', (done) => {
     const pipeline = makeBlock(
       'dplyr_sort',
-      {columns: 'red,green'})
+      {COLUMNS: 'red,green'})
     const code = generateCode(pipeline)
     assert(code === '.sort(["red","green"])',
            'pipeline does not sort by expected columns')
@@ -219,7 +219,7 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'dplyr_summarize',
       {FUNC: 'tbMean',
-       column: 'someColumn'}
+       COLUMN: 'someColumn'}
     )
     const code = generateCode(pipeline)
     assert(code === ".summarize(tbMean, 'someColumn')",
@@ -230,12 +230,12 @@ describe('generate code for single blocks', () => {
   it('generates a bar plot', (done) => {
     const pipeline = makeBlock(
       'ggplot_bar',
-      {X: makeBlock(
+      {X_AXIS: makeBlock(
         'value_column',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+        {COLUMN: 'X_axis_column'}),
+       Y_AXIS: makeBlock(
          'value_column',
-         {TEXT: 'Y_axis_column'})})
+         {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
     assert(code.includes('.plot(displayTable, displayPlot'),
            'pipeline does not call .plot')
@@ -251,12 +251,12 @@ describe('generate code for single blocks', () => {
   it('generates a box plot', (done) => {
     const pipeline = makeBlock(
       'ggplot_boxplot',
-      {X: makeBlock(
+      {X_AXIS: makeBlock(
         'value_column',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+        {COLUMN: 'X_axis_column'}),
+       Y_AXIS: makeBlock(
          'value_column',
-         {TEXT: 'Y_axis_column'})})
+         {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
     assert(code.includes('.plot(displayTable, displayPlot'),
            'pipeline does not call .plot')
@@ -272,8 +272,8 @@ describe('generate code for single blocks', () => {
   it('generates a histogram', (done) => {
     const pipeline = makeBlock(
       'ggplot_hist',
-      {column: 'existingColumn',
-       bins: '20'})
+      {COLUMN: 'existingColumn',
+       BINS: '20'})
     const code = generateCode(pipeline)
     assert(code.includes('"maxbins":'),
            'pipeline does not include maxbins')
@@ -287,15 +287,15 @@ describe('generate code for single blocks', () => {
   it('generates a point plot', (done) => {
     const pipeline = makeBlock(
       'ggplot_point',
-      {X: makeBlock(
+      {X_AXIS: makeBlock(
         'value_column',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+        {COLUMN: 'X_axis_column'}),
+       Y_AXIS: makeBlock(
          'value_column',
-         {TEXT: 'Y_axis_column'}),
-       color: makeBlock(
+         {COLUMN: 'Y_axis_column'}),
+       COLOR: makeBlock(
          'value_column',
-         {TEXT: 'COLOR_axis_column'}),
+         {COLUMN: 'COLOR_axis_column'}),
        lm: 'FALSE'})
     const code = generateCode(pipeline)
     assert(code.includes('.plot(displayTable, displayPlot'),
@@ -314,14 +314,14 @@ describe('generate code for single blocks', () => {
   it('generates code to joins two pipelines', (done) => {
     const pipeline = makeBlock(
       'plumbing_join',
-      {leftName: 'left_table',
-       leftColumn: makeBlock(
+      {LEFT_TABLE: 'left_table',
+       LEFT_COLUMN: makeBlock(
          'value_column',
-         {TEXT: 'left_column'}),
-       rightName: 'right_table',
-       rightColumn: makeBlock(
+         {COLUMN: 'left_column'}),
+       RIGHT_TABLE: 'right_table',
+       RIGHT_COLUMN: makeBlock(
          'value_column',
-         {TEXT: 'right_column'})})
+         {COLUMN: 'right_column'})})
     const code = generateCode(pipeline)
     assert(code.includes('TidyBlocksManager.register'),
            'pipeline is not registered')
@@ -335,7 +335,7 @@ describe('generate code for single blocks', () => {
   it('generates code to notify that a pipeline has completed', (done) => {
     const pipeline = makeBlock(
       'plumbing_notify',
-      {name: 'output_name'})
+      {NAME: 'output_name'})
     const code = generateCode(pipeline)
     assert(code.includes(".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated"),
            'pipeine does not notify properly')
@@ -345,9 +345,9 @@ describe('generate code for single blocks', () => {
   it('generates code to negate a column', (done) => {
     const pipeline = makeBlock(
       'value_negate',
-      {A: makeBlock(
+      {VALUE: makeBlock(
         'value_column',
-        {TEXT: 'existing'})})
+        {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('(row) =>'),
            'generated code does not appear to be a function')
@@ -359,9 +359,9 @@ describe('generate code for single blocks', () => {
   it('generates code to do logical negation', (done) => {
     const pipeline = makeBlock(
       'value_not',
-      {A: makeBlock(
+      {LEFT: makeBlock(
         'value_column',
-        {TEXT: 'existing'})})
+        {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('(row) =>'),
            'generated code does not appear to be a function')
@@ -374,12 +374,12 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'value_arithmetic',
       {OP: 'tbAdd',
-       A: makeBlock(
+       LEFT: makeBlock(
          'value_column',
-         {TEXT: 'left'}),
-       B: makeBlock(
+         {COLUMN: 'left'}),
+       RIGHT: makeBlock(
          'value_column',
-         {TEXT: 'right'})})
+         {COLUMN: 'right'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('(row) =>'),
            'generated code does not appear to be a function')
@@ -393,7 +393,7 @@ describe('generate code for single blocks', () => {
   it('generates code for a column name', (done) => {
     const pipeline = makeBlock(
       'value_column',
-      {TEXT: 'TheColumnName'})
+      {COLUMN: 'TheColumnName'})
     const code = generateCode(pipeline)
     assert(code === "(row) => tbGet(row, 'TheColumnName')",
            'pipeline does not use function to get column value')
@@ -404,12 +404,12 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'value_compare',
       {OP: 'tbNeq',
-       A: makeBlock(
+       LEFT: makeBlock(
          'value_column',
-         {TEXT: 'left'}),
-       B: makeBlock(
+         {COLUMN: 'left'}),
+       RIGHT: makeBlock(
          'value_column',
-         {TEXT: 'right'})})
+         {COLUMN: 'right'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('(row) =>'),
            'generated code does not appear to be a function')
@@ -434,12 +434,12 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'value_logical',
       {OP: 'tbOr',
-       A: makeBlock(
+       LEFT: makeBlock(
          'value_column',
-         {TEXT: 'left'}),
-       B: makeBlock(
+         {COLUMN: 'left'}),
+       RIGHT: makeBlock(
          'value_column',
-         {TEXT: 'right'})})
+         {COLUMN: 'right'})})
     const code = generateCode(pipeline)
     assert(code.startsWith('(row) =>'),
            'generated code does not appear to be a function')
@@ -453,7 +453,7 @@ describe('generate code for single blocks', () => {
   it('generates code for a constant string', (done) => {
     const pipeline = makeBlock(
       'value_text',
-      {TEXT: 'Look on my blocks, ye coders, and despair!'})
+      {VALUE: 'Look on my blocks, ye coders, and despair!'})
     const code = generateCode(pipeline)
     assert(code === '(row) => "Look on my blocks, ye coders, and despair!"',
            'pipeline does not generate constant string')

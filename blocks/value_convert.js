@@ -8,11 +8,11 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'input_value',
-        name: 'A'
+        name: 'VALUE'
       },
       {
         type: 'field_dropdown',
-        name: 'OP',
+        name: 'TYPE',
         options: [
           ['boolean', 'tbToBoolean'],
           ['number', 'tbToNumber'],

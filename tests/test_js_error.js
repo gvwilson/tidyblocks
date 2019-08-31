@@ -35,14 +35,14 @@ describe('blocks are given IDs and can be looked up', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {newCol: 'should_fail',
-         Column: makeBlock(
+        {NEW_COLUMN: 'should_fail',
+         VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'ADD',
-            A: makeBlock(
+            LEFT: makeBlock(
               'value_column',
-              {TEXT: 'nonexistent'}),
-            B: makeBlock(
+              {COLUMN: 'nonexistent'}),
+            RIGHT: makeBlock(
               'value_number',
               {NUM: 0})})})
     ]
@@ -81,18 +81,18 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {newCol: 'should_fail',
-         Column: makeBlock(
+        {NEW_COLUMN: 'should_fail',
+         VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'ADD',
-            A: makeBlock(
+            LEFT: makeBlock(
               'value_column',
-              {TEXT: 'nonexistent'}),
-            B: makeBlock(
+              {COLUMN: 'nonexistent'}),
+            RIGHT: makeBlock(
               'value_number',
               {NUM: 0})})})
     ]
-    evalCode(pipeline)
+    const code = evalCode(pipeline)
     assert(Result.error != null,
            `Expected an error message when accessing a nonexistent column`)
     done()

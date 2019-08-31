@@ -4,11 +4,11 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'data_urlCSV',
-    message0: 'import CSV %1',
+    message0: 'Import CSV %1',
     args0: [
       {
         type: 'field_input',
-        name: 'ext',
+        name: 'URL',
         text: 'url'
       }
     ],

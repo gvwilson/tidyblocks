@@ -60,7 +60,7 @@ const json2table = (json) => {
 const findLineByLeastSquares = (values_x, values_y) => {
   const len = values_x.length
   if (len != values_y.length) {
-    throw 'values_x and values_y have different lengths'
+    throw new Error('values_x and values_y have different lengths')
   }
 
   // Empty case.

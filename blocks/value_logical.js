@@ -8,7 +8,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'input_value',
-        name: 'A',
+        name: 'LEFT'
       },
       {
         type: 'field_dropdown',
@@ -20,7 +20,7 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: 'input_value',
-        name: 'B',
+        name: 'RIGHT'
       }
     ],
     inputsInline: true,

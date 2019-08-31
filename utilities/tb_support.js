@@ -42,7 +42,7 @@ const fixCode = (code) => {
  */
 const tbAssert = (check, message) => {
   if (! check) {
-    throw message
+    throw new Error(message)
   }
 }
 
