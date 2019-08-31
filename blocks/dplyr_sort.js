@@ -4,7 +4,7 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'dplyr_sort',
-    message0: 'Select %1',
+    message0: 'Sort %1',
     args0: [
       {
         type: 'field_input',
