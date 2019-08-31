@@ -97,7 +97,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line9">line 9</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line612">line 612</a>
     </li></ul></dd>
     
 
@@ -213,7 +213,7 @@
 
             
 
-            <td class="description last">name of completed pipeline.</td>
+            <td class="description last">Name of completed pipeline.</td>
         </tr>
 
     
@@ -254,7 +254,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line73">line 73</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line685">line 685</a>
     </li></ul></dd>
     
 
@@ -361,7 +361,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
 
             
 
-            <td class="description last">name of the pipeline that just completed.</td>
+            <td class="description last">Name of the pipeline that just completed.</td>
         </tr>
 
     
@@ -384,7 +384,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
 
             
 
-            <td class="description last">the TidyBlocksDataFrame produced by the pipeline.</td>
+            <td class="description last">The TidyBlocksDataFrame produced by the pipeline.</td>
         </tr>
 
     
@@ -425,7 +425,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line46">line 46</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line646">line 646</a>
     </li></ul></dd>
     
 
@@ -521,7 +521,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
 
             
 
-            <td class="description last">names of things this pipeline depends on (if it starts with a join).</td>
+            <td class="description last">Names of things this pipeline depends on (if it starts with a join).</td>
         </tr>
 
     
@@ -544,7 +544,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
 
             
 
-            <td class="description last">function encapsulating pipeline to run.</td>
+            <td class="description last">Function encapsulating pipeline to run.</td>
         </tr>
 
     
@@ -567,7 +567,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
 
             
 
-            <td class="description last">name of this pipeline (used to trigger things waiting for it).</td>
+            <td class="description last">Name of this pipeline (used to trigger things waiting for it).</td>
         </tr>
 
     
@@ -608,7 +608,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line31">line 31</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line631">line 631</a>
     </li></ul></dd>
     
 
@@ -652,10 +652,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
 
 
 <div class="description">
-    Re-set internal variables used to track state of execution.
-`queue` is the queue of pipeline functions that are ready to run.
-`waiting` maps those functions to the names of the things they depend on.
-`data` maps notification names to finished dataframes.
+    Reset internal state.
 </div>
 
 
@@ -699,7 +696,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line19">line 19</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line619">line 619</a>
     </li></ul></dd>
     
 
@@ -735,7 +732,7 @@ This enqueues pipeline functions to run if their dependencies are satisfied.
     
 
     
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(getCode, displayTable, displayPlot, displayError, readCSV)</span><span class="type-signature"></span></h4>
     
 
     
@@ -753,6 +750,147 @@ This depends on `notify` to add pipelines to the queue.
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>getCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the code to run.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>displayTable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to display a table (used in 'eval').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>displayPlot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to display a plot (used in 'eval').</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>displayError</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to display an error (used in 'eval' and here).</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>readCSV</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to read a CSV file (used in 'eval').</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -788,7 +926,7 @@ This depends on `notify` to add pipelines to the queue.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line60">line 60</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line665">line 665</a>
     </li></ul></dd>
     
 
@@ -876,7 +1014,7 @@ This depends on `notify` to add pipelines to the queue.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_manager.js.html">utilities/tb_manager.js</a>, <a href="utilities_tb_manager.js.html#line80">line 80</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line692">line 692</a>
     </li></ul></dd>
     
 
@@ -922,13 +1060,13 @@ This depends on `notify` to add pipelines to the queue.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assembleCode">assembleCode</a></li><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#plotEmbed">plotEmbed</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#runTests">runTests</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tableEmbed">tableEmbed</a></li><li><a href="global.html#Tests">Tests</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li><li><a href="global.html#vegaEmbed">vegaEmbed</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToLogical">tbToLogical</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Aug 20 2019 17:31:28 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Aug 30 2019 21:43:45 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

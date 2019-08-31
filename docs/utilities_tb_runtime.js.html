@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: utilities/tb_runtime.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,50 +17,123 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: utilities/tb_runtime.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
     <section>
-        <article><h1>tidyblocks</h1>
-<p>A blocks-based tool for tidy data manipulation and analysis.
-Please see <a href="http:%5C/%5C/tidyblocks.tech">http://tidyblocks.tech</a> for a free online version
-or visit <a href="https://github.com/tidyblocks/tidyblocks">our GitHub repository</a>.</p>
-<img width="80%" src="https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/static/screenshot.png" alt="Screenshot" />
-<p>This work is made freely available under the <a href="LICENSE.md">MIT License</a>.
-Contributions of all kinds are welcome:
-please see <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for details,
-and please note that all contributors are required to abide by our <a href="CONDUCT.md">Code of Conduct</a>.</p>
-<p><a href="https://travis-ci.org/tidyblocks/tidyblocks"><img src="https://travis-ci.org/tidyblocks/tidyblocks.svg?branch=master" alt="Build Status"></a></p>
-<h2>Contributors</h2>
-<ul>
-<li><a href="https://maya.rbind.io/">Maya Gans</a></li>
-<li><a href="http://third-bit.com">Greg Wilson</a></li>
-</ul></article>
+        <article>
+            <pre class="prettyprint source linenums"><code>//
+// Utilities needed at runtime for block execution.
+//
+
+/**
+ * Read CSV from a URL and parse to create TidyBlocks data frame.
+ * @param {string} url - URL to read from.
+ */
+const readCSV = (url) => {
+  const request = new XMLHttpRequest()
+  request.open('GET', url, false)
+  request.send(null)
+  if (request.status !== 200) {
+    console.log(`ERROR: ${request.status}`)
+    return null
+  }
+  else {
+    const result = Papa.parse(request.responseText, 
+        {
+          header: true,
+          dynamicTyping: true,
+          transformHeader:function(h){
+            var h = h.replace(/\/|\.|\(|\)| /g, '_').replace(/__/g, "_")
+
+            var t = h[h.length -1]
+
+            if (h[h.length -1] === "_") {
+              h = h.substring(0, h.length - 1)
+            } else {
+              h = h
+            }
+
+            return h
+          }
+        })
+    return new TidyBlocksDataFrame(result.data)
+  }
+}
+
+/**
+ * Create dynamic table from array from JSON with one table column per property.
+ * Each object must have the same properties.
+ * @param {JSON} json - JSON object to convert to table.
+ */
+const json2table = (json) => {
+  // get key names and set as column headers
+  const cols = Object.keys(json[0])
+
+  // create column headers from col
+  let headerRow = ''
+  cols.forEach(col => {
+    headerRow += `&lt;th>${col}&lt;/th>`
+  })
+
+  // build the rows
+  let bodyRows = ''
+  json.forEach(row => {
+    bodyRows += '&lt;tr>'
+    cols.forEach(col => {
+      bodyRows += `&lt;td>${row[col]}&lt;/td>`
+    })
+    bodyRows += '&lt;/tr>'
+  })
+
+  return `&lt;table>&lt;thead>&lt;tr>${headerRow}&lt;/tr>&lt;/thead>&lt;tbody>${bodyRows}&lt;/tbody>&lt;/table>`
+}
+
+/**
+ * Statistical functions to find linear model for plotting.
+ * As an example, here is a linear model using least squares
+ **/
+const findLineByLeastSquares = (values_x, values_y) => {
+  // The above is just for quick access, makes the program faster
+  const len = values_x.length
+  if (len != values_y.length) {
+    throw new Error('The parameters values_x and values_y need to have same size!')
+  }
+
+  // Above and below cover edge cases
+  if (len === 0) {
+    return [ [], [] ]
+  }
+
+  // Calculate the sum for each of the parts necessary.
+  let x_sum = 0
+  let y_sum = 0
+  let xy_sum = 0
+  let xx_sum = 0
+  for (let i = 0; i&lt;len; i++) {
+    const x = values_x[i]
+    const y = values_y[i]
+    x_sum += x
+    y_sum += y
+    xx_sum += x * x
+    xy_sum += x * y
+  }
+
+  // Calculate m and b for the line equation:
+  // y = x * m + b
+  var m = (len * xy_sum - x_sum * y_sum) / (len * xx_sum - x_sum * x_sum)
+  var b = (y_sum / len) - (m * x_sum) / len
+
+  // Solve for slope and intercept.
+  return [m, b]
+}
+</code></pre>
+        </article>
     </section>
-
-
 
 
 
