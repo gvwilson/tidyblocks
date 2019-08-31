@@ -129,6 +129,16 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to reverse rows', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_reverse',
+      {})
+    const code = generateCode(pipeline)
+    assert(code === '.reverse()',
+           'pipeline does not call reverse method')
+    done()
+  })
+
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_groupBy',

@@ -245,6 +245,15 @@ class TidyBlocksDataFrame {
     return new TidyBlocksDataFrame(newData)
   }
 
+  /**
+   * Reverse the order of rows.
+   */
+  reverse () {
+    const result = [...this.data]
+    result.reverse()
+    return new TidyBlocksDataFrame(result)
+  }
+
   //
   // To select columns, provide an array with the names of the columns.
   // This is *not* the same as providing the columns (which gets the values).
