@@ -113,6 +113,14 @@ body {
     width: 100%;
 }
 
+button {
+    font-size: 1em;
+}
+
+input {
+    font-size: 1em;
+}
+
 /* Button used to run code */
 button#runCode {
     float: right;
