@@ -16,7 +16,8 @@ Blockly.defineBlocksWithJsonArray([
           ['median', 'tbMedian'],
           ['min', 'tbMin'],
           ['std', 'tbStd'],
-          ['sum', 'tbSum']
+          ['sum', 'tbSum'],
+          ['variance', 'tbVariance']
         ]
       },
       {
