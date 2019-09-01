@@ -15,13 +15,15 @@
         As Text
         <i class="fa fa-bug"></i>
       </button>
-      <input type="text" id="filename" name="filename" />
-      <a id="download" href="#" onclick="saveCode()"><button>Download</button></a>
-      <input type="file" onchange="loadCode(this.files)"/>
       <button id="runCode" onclick="runCode()">
         Run
         <i class="fa fa-play"></i>
       </button>
+      <br/>
+      <input type="text" id="filename" name="filename" />
+      <a id="download" href="#" onclick="saveCode()"><button>Download</button></a>
+      <input type="file" onchange="loadCode(this.files)"/>
+      <a href="./guide/"><i class="fa fa-info-circle"></i> Guide</a>
       <div class="input" id="blockDisplay">
         <xml id="toolbox">
           <category name="data" categorystyle="data">

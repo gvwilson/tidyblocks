@@ -6,7 +6,11 @@
   </head>
   <body>
     <main>
-      <h1>{{site.title}}{% if page.title %}: {{page.title}}{% endif %}</h1>
+      {% if page.title %}
+      <h1><a href="{{ '/' | relative_url }}">{{site.title}}</a>: {{page.title}}</h1>
+      {% else %}
+      <h1>{{site.title}}</h1>
+      {% endif %}
       {{content}}
     </main>
     <hr/>
