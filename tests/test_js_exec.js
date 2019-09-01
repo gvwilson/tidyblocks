@@ -141,7 +141,7 @@ describe('execute blocks for entire pipelines', () => {
          VALUE: makeBlock(
            'value_convert',
            {TYPE: 'tbToString',
-            COLUMN: makeBlock(
+            VALUE: makeBlock(
               'value_column',
               {COLUMN: 'red'})})})
     ]
