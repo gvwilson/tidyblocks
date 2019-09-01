@@ -15,6 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     style: 'plumbing_blocks',
     tooltip: 'notify a join that a table is available',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_NAME']
   }
 ])

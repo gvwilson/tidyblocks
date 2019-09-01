@@ -9,22 +9,22 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: 'field_input',
         name: 'LEFT_TABLE',
-        text: 'left table'
+        text: 'left_table'
       },
       {
         type: 'field_input',
         name: 'LEFT_COLUMN',
-        text: 'left column'
+        text: 'left_column'
       },
       {
         type: 'field_input',
         name: 'RIGHT_TABLE',
-        text: 'right table'
+        text: 'right_table'
       },
       {
         type: 'field_input',
         name: 'RIGHT_COLUMN',
-        text: 'right column'
+        text: 'right_column'
       }
     ],
     inputsInline: true,
@@ -32,6 +32,7 @@ Blockly.defineBlocksWithJsonArray([
     style: 'plumbing_blocks',
     hat: 'cap',
     tooltip: 'join two tables',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
   }
 ])

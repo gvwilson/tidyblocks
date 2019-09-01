@@ -9,12 +9,12 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: 'field_input',
         name: 'X_AXIS',
-        text: 'X axis'
+        text: 'X_axis'
       },
       {
         type: 'field_input',
         name: 'Y_AXIS',
-        text: 'Y axis'
+        text: 'Y_axis'
       },
       {
         type: 'field_input',
@@ -26,6 +26,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     style: 'ggplot_blocks',
     tooltip: 'create scatter plot',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
   }
 ])

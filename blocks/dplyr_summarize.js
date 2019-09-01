@@ -30,6 +30,7 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     style: 'dplyr_blocks',
     tooltip: 'summarize values',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

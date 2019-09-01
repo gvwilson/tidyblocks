@@ -177,7 +177,7 @@ describe('generate code for single blocks', () => {
   it('generates code to copy columns using mutate', (done) => {
     const pipeline = makeBlock(
       'dplyr_mutate',
-      {NEW_COLUMN: 'newColumnName',
+      {COLUMN: 'newColumnName',
        VALUE: makeBlock(
          'value_column',
          {COLUMN: 'existingColumn'})})

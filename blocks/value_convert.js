@@ -8,7 +8,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'input_value',
-        name: 'VALUE'
+        name: 'COLUMN'
       },
       {
         type: 'field_dropdown',
@@ -24,6 +24,7 @@ Blockly.defineBlocksWithJsonArray([
     output: 'Number',
     style: 'value_blocks',
     tooltip: 'change the datatype of a column',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

@@ -13,6 +13,7 @@ Blockly.defineBlocksWithJsonArray([
     output: 'String',
     style: 'value_blocks',
     helpUrl: '',
-    tooltip: 'get the value of a column'
+    tooltip: 'get the value of a column',
+    extensions: ['validate_COLUMN']
   }
 ])

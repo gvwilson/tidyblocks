@@ -3,6 +3,9 @@
  */
 let TidyBlocksWorkspace = null
 
+const SINGLE_COLUMN_NAME = /^ *[A-Za-z][A-Za-z0-9_]* *$/
+const MULTIPLE_COLUMN_NAMES = /^ *([A-Za-z][A-Za-z0-9_]*)( *, *[A-Za-z][A-Za-z0-9_]*)* *$/
+
 /**
  * Set the display property of the two input toggleable panes.
  * (Has to be done manually rather than in CSS because properties are being reset.)
@@ -53,7 +56,9 @@ const setUpBlockly = () => {
       theme: Blockly.Themes.Tidy
     }
   )
+
   TidyBlocksWorkspace.addChangeListener(Blockly.Events.disableOrphans)
+
   TidyBlocksWorkspace.addChangeListener((event) => {
     if (event.type === Blockly.Events.CREATE) {
       const block = TidyBlocksWorkspace.getBlockById(event.blockId)
@@ -63,6 +68,29 @@ const setUpBlockly = () => {
       // FIXME: handle deletion
     }
   })
+
+  Blockly.Extensions.register('validate_COLUMN', createValidator('COLUMN', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_MULTIPLE_COLUMNS', createValidator('COLUMNS', MULTIPLE_COLUMN_NAMES))
+  Blockly.Extensions.register('validate_LEFT_TABLE', createValidator('LEFT_TABLE', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_LEFT_COLUMN', createValidator('LEFT_COLUMN', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_RIGHT_TABLE', createValidator('RIGHT_TABLE', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_RIGHT_COLUMN', createValidator('RIGHT_COLUMN', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_NAME', createValidator('NAME', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_COLOR', createValidator('COLOR', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_X_AXIS', createValidator('X_AXIS', SINGLE_COLUMN_NAME))
+  Blockly.Extensions.register('validate_Y_AXIS', createValidator('Y_AXIS', SINGLE_COLUMN_NAME))
+}
+
+const createValidator = (columnName, pattern) => {
+  return function () {
+    const field = this.getField(columnName)
+    field.setValidator((newValue) => {
+      if (newValue.match(pattern)) {
+        return newValue.trim() // strip leading and trailing spaces
+      }
+      return null // fails validation
+    })
+  }
 }
 
 /**

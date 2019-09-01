@@ -21,6 +21,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     style: 'ggplot_blocks',
     tooltip: 'create histogram',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

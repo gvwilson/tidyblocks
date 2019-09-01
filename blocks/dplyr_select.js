@@ -17,6 +17,7 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     style: 'dplyr_blocks',
     tooltip: 'select columns by name',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_MULTIPLE_COLUMNS']
   }
 ])

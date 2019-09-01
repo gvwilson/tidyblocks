@@ -4,7 +4,7 @@
 Blockly.JavaScript['value_convert'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
-  const code = `(row) => ${type}(row, ${value})`
+  const column = Blockly.JavaScript.valueToCode(block, 'COLUMN', order)
+  const code = `(row) => ${type}(row, ${column})`
   return [code, order]
 }

@@ -8,8 +8,8 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'NEW_COLUMN',
-        text: 'new column'
+        name: 'COLUMN',
+        text: 'new_column'
       },
       {
         type: 'input_value',
@@ -21,6 +21,7 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     style: 'dplyr_blocks',
     tooltip: 'create new column from existing columns',
-    helpUrl: ''
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

@@ -137,11 +137,11 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {NEW_COLUMN: 'textual',
+        {COLUMN: 'textual',
          VALUE: makeBlock(
            'value_convert',
            {TYPE: 'tbToString',
-            VALUE: makeBlock(
+            COLUMN: makeBlock(
               'value_column',
               {COLUMN: 'red'})})})
     ]
@@ -273,7 +273,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {NEW_COLUMN: 'red_green',
+        {COLUMN: 'red_green',
          VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'tbAdd',
@@ -301,7 +301,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {NEW_COLUMN: 'difference',
+        {COLUMN: 'difference',
          VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'tbSub',
