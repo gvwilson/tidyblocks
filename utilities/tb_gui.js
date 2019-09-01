@@ -1,10 +1,27 @@
-/**
- * Share the demo workspace between functions.
- */
+// Share the workspace between functions.
 let TidyBlocksWorkspace = null
 
+// Regular expressions to match valid single column names and multiple column names.
 const SINGLE_COLUMN_NAME = /^ *[A-Za-z][A-Za-z0-9_]* *$/
 const MULTIPLE_COLUMN_NAMES = /^ *([A-Za-z][A-Za-z0-9_]*)( *, *[A-Za-z][A-Za-z0-9_]*)* *$/
+
+// Names of single-column fields in various blocks (for generating validators).
+const SINGLE_COLUMN_FIELDS = [
+  'COLUMN',
+  'LEFT_TABLE',
+  'LEFT_COLUMN',
+  'RIGHT_TABLE',
+  'RIGHT_COLUMN',
+  'NAME',
+  'COLOR',
+  'X_AXIS',
+  'Y_AXIS'
+]
+
+// Names of multiple-column fields in various blocks (for generating validators).
+const MULTIPLE_COLUMN_FIELDS = [
+  'MULTIPLE_COLUMNS'
+]
 
 /**
  * Set the display property of the two input toggleable panes.
@@ -69,18 +86,23 @@ const setUpBlockly = () => {
     }
   })
 
-  Blockly.Extensions.register('validate_COLUMN', createValidator('COLUMN', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_MULTIPLE_COLUMNS', createValidator('COLUMNS', MULTIPLE_COLUMN_NAMES))
-  Blockly.Extensions.register('validate_LEFT_TABLE', createValidator('LEFT_TABLE', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_LEFT_COLUMN', createValidator('LEFT_COLUMN', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_RIGHT_TABLE', createValidator('RIGHT_TABLE', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_RIGHT_COLUMN', createValidator('RIGHT_COLUMN', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_NAME', createValidator('NAME', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_COLOR', createValidator('COLOR', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_X_AXIS', createValidator('X_AXIS', SINGLE_COLUMN_NAME))
-  Blockly.Extensions.register('validate_Y_AXIS', createValidator('Y_AXIS', SINGLE_COLUMN_NAME))
+  SINGLE_COLUMN_FIELDS.forEach(col => {
+    Blockly.Extensions.register(`validate_${col}`, createValidator(col, SINGLE_COLUMN_NAME))
+  })
+
+  MULTIPLE_COLUMN_FIELDS.forEach(col => {
+    Blockly.Extensions.register(`validate_${col}`, createValidator(col, MULTIPLE_COLUMN_NAMES))
+  })
 }
 
+/**
+ * Create a Blockly field validation function for a column.
+ * See https://developers.google.com/blockly/guides/create-custom-blocks/fields/validators
+ * and https://developers.google.com/blockly/guides/create-custom-blocks/extensions for details.
+ * @param {string} columnName Name of column to be validated.
+ * @param {regex} pattern Regular expression that must be matched.
+ * @returns A function (defined with old-style syntax so that 'this' manipulation will work) to validate column values.
+ */
 const createValidator = (columnName, pattern) => {
   return function () {
     const field = this.getField(columnName)
