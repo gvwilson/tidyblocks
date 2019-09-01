@@ -1,6 +1,9 @@
 const assert = require('assert')
 
 const {
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   TidyBlocksDataFrame,
   TidyBlocksManager,
   readCSV,
@@ -33,10 +36,10 @@ describe('generate code for single blocks', () => {
       'data_colors',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('TidyBlocksManager.register'),
-           'pipeline is not registered')
-    assert(code.includes('new TidyBlocksDataFrame'),
-           'pipeline does not create dataframe')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create dataframe')
     done()
   })
 
@@ -45,10 +48,10 @@ describe('generate code for single blocks', () => {
       'data_earthquakes',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('earthquakes.csv'),
-           'pipeline does not read earthquake data')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'earthquakes.csv',
+                    'pipeline does not read earthquake data')
     done()
   })
 
@@ -57,12 +60,12 @@ describe('generate code for single blocks', () => {
       'data_iris',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('iris.csv'),
-           'pipeline does not read earthquake data')
-    assert(code.includes('toNumber'),
-           'pipeline does not convert data to numeric')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'iris.csv',
+                    'pipeline does not read earthquake data')
+    assert_includes(code, 'toNumber',
+                    'pipeline does not convert data to numeric')
     done()
   })
 
@@ -71,10 +74,10 @@ describe('generate code for single blocks', () => {
       'data_mtcars',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('mtcars.csv'),
-           'pipeline does not read mtcars data')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'mtcars.csv',
+                    'pipeline does not read mtcars data')
     done()
   })
 
@@ -83,10 +86,10 @@ describe('generate code for single blocks', () => {
       'data_toothGrowth',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('toothGrowth.csv'),
-           'pipeline does not read tooth growth data')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'toothGrowth.csv',
+                    'pipeline does not read tooth growth data')
     done()
   })
 
@@ -95,10 +98,10 @@ describe('generate code for single blocks', () => {
       'data_single',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('TidyBlocksManager.register'),
-           'pipeline is not registered')
-    assert(code.includes('new TidyBlocksDataFrame'),
-           'pipeline does not create dataframe')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create dataframe')
     done()
   })
 
@@ -108,10 +111,10 @@ describe('generate code for single blocks', () => {
       'data_urlCSV',
       {URL: filePath})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes(filePath),
-           `pipeline does not include "${filePath}"`)
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, filePath,
+                    `pipeline does not include "${filePath}"`)
     done()
   })
 
@@ -123,10 +126,10 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'left'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbToString'),
-           'Generated code does not start with correct function')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbToString',
+                    'Generated code does not start with correct function')
     done()
   })
 
@@ -137,10 +140,10 @@ describe('generate code for single blocks', () => {
         'value_column',
         {COLUMN: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('.filter'),
-           'pipeline does not start with filter call')
-    assert(code.includes('=>'),
-           'pipeline does not include arrow function')
+    assert_startsWith(code, '.filter',
+                      'pipeline does not start with filter call')
+    assert_includes(code, '=>',
+                    'pipeline does not include arrow function')
     done()
   })
 
@@ -149,8 +152,8 @@ describe('generate code for single blocks', () => {
       'dplyr_reverse',
       {})
     const code = generateCode(pipeline)
-    assert(code === '.reverse()',
-           'pipeline does not call reverse method')
+    assert.equal(code, '.reverse()',
+                 'pipeline does not call reverse method')
     done()
   })
 
@@ -159,8 +162,8 @@ describe('generate code for single blocks', () => {
       'dplyr_groupBy',
       {COLUMN: 'existingColumn'})
     const code = generateCode(pipeline)
-    assert(code === '.groupBy("existingColumn")',
-           'pipeline does not group rows by existing column')
+    assert.equal(code, '.groupBy("existingColumn")',
+                 'pipeline does not group rows by existing column')
     done()
   })
 
@@ -169,8 +172,8 @@ describe('generate code for single blocks', () => {
       'dplyr_ungroup',
       {})
     const code = generateCode(pipeline)
-    assert(code === '.ungroup()',
-           'pipeline does not ungroup rows')
+    assert.equal(code, '.ungroup()',
+                 'pipeline does not ungroup rows')
     done()
   })
 
@@ -182,14 +185,14 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('.mutate'),
-           'pipeline does not start with mutate call')
-    assert(code.includes('=>'),
-           'pipeline does not include arrow function')
-    assert(code.includes('newColumnName'),
-           'pipeline does not include new column name')
-    assert(code.includes('existingColumn'),
-           'pipeline does not include existing column name')
+    assert_startsWith(code, '.mutate',
+                      'pipeline does not start with mutate call')
+    assert_includes(code, '=>',
+                    'pipeline does not include arrow function')
+    assert_includes(code, 'newColumnName',
+                    'pipeline does not include new column name')
+    assert_includes(code, 'existingColumn',
+                    'pipeline does not include existing column name')
     done()
   })
 
@@ -198,10 +201,10 @@ describe('generate code for single blocks', () => {
       'dplyr_select',
       {COLUMNS: 'existingColumn'})
     const code = generateCode(pipeline)
-    assert(code.startsWith('.select'),
-           'pipeline does not start with select call')
-    assert(code.includes('existingColumn'),
-           'pipeline does not include existing column name')
+    assert_startsWith(code, '.select',
+                      'pipeline does not start with select call')
+    assert_includes(code, 'existingColumn',
+                    'pipeline does not include existing column name')
     done()
   })
 
@@ -210,8 +213,8 @@ describe('generate code for single blocks', () => {
       'dplyr_sort',
       {COLUMNS: 'red,green'})
     const code = generateCode(pipeline)
-    assert(code === '.sort(["red","green"])',
-           'pipeline does not sort by expected columns')
+    assert.equal(code, '.sort(["red","green"])',
+                 'pipeline does not sort by expected columns')
     done()
   })
 
@@ -222,8 +225,8 @@ describe('generate code for single blocks', () => {
        COLUMN: 'someColumn'}
     )
     const code = generateCode(pipeline)
-    assert(code === ".summarize(tbMean, 'someColumn')",
-           'code does not call summarize correctly')
+    assert.equal(code, ".summarize(tbMean, 'someColumn')",
+                 'code does not call summarize correctly')
     done()
   })
 
@@ -237,14 +240,14 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(displayTable, displayPlot'),
-           'pipeline does not call .plot')
-    assert(code.includes('X_axis_column'),
-           'pipeline does not reference X axis column')
-    assert(code.includes('Y_axis_column'),
-           'pipeline does not reference Y axis column')
-    assert(code.includes('"mark": "bar"'),
-           'pipeline does not use a bar')
+    assert_includes(code, '.plot(displayTable, displayPlot',
+                    'pipeline does not call .plot')
+    assert_includes(code, 'X_axis_column',
+                    'pipeline does not reference X axis column')
+    assert_includes(code, 'Y_axis_column',
+                    'pipeline does not reference Y axis column')
+    assert_includes(code, '"mark": "bar"',
+                    'pipeline does not use a bar')
     done()
   })
 
@@ -258,14 +261,14 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(displayTable, displayPlot'),
-           'pipeline does not call .plot')
-    assert(code.includes('X_axis_column'),
-           'pipeline does not reference X axis column')
-    assert(code.includes('Y_axis_column'),
-           'pipeline does not reference Y axis column')
-    assert(code.includes('"type": "boxplot"'),
-           'pipeline is not a boxplot')
+    assert_includes(code, '.plot(displayTable, displayPlot',
+                    'pipeline does not call .plot')
+    assert_includes(code, 'X_axis_column',
+                    'pipeline does not reference X axis column')
+    assert_includes(code, 'Y_axis_column',
+                    'pipeline does not reference Y axis column')
+    assert_includes(code, '"type": "boxplot"',
+                    'pipeline is not a boxplot')
     done()
   })
 
@@ -275,12 +278,12 @@ describe('generate code for single blocks', () => {
       {COLUMN: 'existingColumn',
        BINS: '20'})
     const code = generateCode(pipeline)
-    assert(code.includes('"maxbins":'),
-           'pipeline does not include maxbins')
-    assert(code.includes('"field": "existingColumn"'),
-           'pipeline does not reference existing column')
-    assert(code.includes('"mark": "bar"'),
-           'pipeline does not use a bar')
+    assert_includes(code, '"maxbins":',
+                    'pipeline does not include maxbins')
+    assert_includes(code, '"field": "existingColumn"',
+                    'pipeline does not reference existing column')
+    assert_includes(code, '"mark": "bar"',
+                    'pipeline does not use a bar')
     done()
   })
 
@@ -298,16 +301,16 @@ describe('generate code for single blocks', () => {
          {COLUMN: 'COLOR_axis_column'}),
        lm: 'FALSE'})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(displayTable, displayPlot'),
-           'pipeline does not call .plot')
-    assert(code.includes('X_axis_column'),
-           'pipeline does not reference X axis column')
-    assert(code.includes('Y_axis_column'),
-           'pipeline does not reference Y axis column')
-    assert(code.includes('COLOR_axis_column'),
-           'pipeline does not reference color axis column')
-    assert(code.includes('"mark": "point"'),
-           'pipeline does not set the mark to point')
+    assert_includes(code, '.plot(displayTable, displayPlot',
+                    'pipeline does not call .plot')
+    assert_includes(code, 'X_axis_column',
+                    'pipeline does not reference X axis column')
+    assert_includes(code, 'Y_axis_column',
+                    'pipeline does not reference Y axis column')
+    assert_includes(code, 'COLOR_axis_column',
+                    'pipeline does not reference color axis column')
+    assert_includes(code, '"mark": "point"',
+                    'pipeline does not set the mark to point')
     done()
   })
 
@@ -323,12 +326,12 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'right_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('TidyBlocksManager.register'),
-           'pipeline is not registered')
-    assert(code.includes("['left_table', 'right_table']"),
-           'pipeline does not register dependencies')
-    assert(code.includes('new TidyBlocksDataFrame'),
-           'pipeline does not create a new dataframe')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, "['left_table', 'right_table']",
+                    'pipeline does not register dependencies')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create a new dataframe')
     done()
   })
 
@@ -337,8 +340,8 @@ describe('generate code for single blocks', () => {
       'plumbing_notify',
       {NAME: 'output_name'})
     const code = generateCode(pipeline)
-    assert(code.includes(".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated"),
-           'pipeine does not notify properly')
+    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated",
+                 'pipeine does not notify properly')
     done()
   })
 
@@ -349,10 +352,10 @@ describe('generate code for single blocks', () => {
         'value_column',
         {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbNeg'),
-           'generated code does not appear to negate')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbNeg',
+                    'generated code does not appear to negate')
     done()
   })
 
@@ -363,10 +366,10 @@ describe('generate code for single blocks', () => {
         'value_column',
         {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbNot'),
-           'generated code does not appear to do logical negation')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbNot',
+                    'generated code does not appear to do logical negation')
     done()
   })
 
@@ -381,12 +384,12 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'right'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbAdd'),
-           'generated code does not include tbAdd call')
-    assert(code.includes('tbGet'),
-           'generated code does not include tbGet calls')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbAdd',
+                    'generated code does not include tbAdd call')
+    assert_includes(code, 'tbGet',
+                    'generated code does not include tbGet calls')
     done()
   })
 
@@ -395,8 +398,8 @@ describe('generate code for single blocks', () => {
       'value_column',
       {COLUMN: 'TheColumnName'})
     const code = generateCode(pipeline)
-    assert(code === "(row) => tbGet(row, 'TheColumnName')",
-           'pipeline does not use function to get column value')
+    assert.equal(code, "(row) => tbGet(row, 'TheColumnName')",
+                 'pipeline does not use function to get column value')
     done()
   })
 
@@ -411,12 +414,12 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'right'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbNeq'),
-           'generated code does not include tbNeq call')
-    assert(code.includes('tbGet'),
-           'generated code does not include tbGet calls')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbNeq',
+                    'generated code does not include tbNeq call')
+    assert_includes(code, 'tbGet',
+                    'generated code does not include tbGet calls')
     done()
   })
 
@@ -425,8 +428,8 @@ describe('generate code for single blocks', () => {
       'value_number',
       {NUM: 3.14})
     const code = generateCode(pipeline)
-    assert(code === '(row) => (3.14)',
-           'pipeline does not generate expected number')
+    assert.equal(code, '(row) => (3.14)',
+                 'pipeline does not generate expected number')
     done()
   })
 
@@ -441,12 +444,12 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'right'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbOr'),
-           'generated code does not include tbOr call')
-    assert(code.includes('tbGet'),
-           'generated code does not include tbGet calls')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbOr',
+                    'generated code does not include tbOr call')
+    assert_includes(code, 'tbGet',
+                    'generated code does not include tbGet calls')
     done()
   })
 
@@ -455,8 +458,8 @@ describe('generate code for single blocks', () => {
       'value_text',
       {VALUE: 'Look on my blocks, ye coders, and despair!'})
     const code = generateCode(pipeline)
-    assert(code === '(row) => "Look on my blocks, ye coders, and despair!"',
-           'pipeline does not generate constant string')
+    assert.equal(code, '(row) => "Look on my blocks, ye coders, and despair!"',
+                 'pipeline does not generate constant string')
     done()
   })
 
@@ -465,8 +468,8 @@ describe('generate code for single blocks', () => {
       'value_boolean',
       {VALUE: 'false'})
     const code = generateCode(pipeline)
-    assert(code === '(row) => (false)',
-           'pipeline does not generate constant Boolean')
+    assert.equal(code, '(row) => (false)',
+                 'pipeline does not generate constant Boolean')
     done()
   })
   

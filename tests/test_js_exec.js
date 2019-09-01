@@ -1,6 +1,9 @@
 const assert = require('assert')
 
 const {
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   TidyBlocksDataFrame,
   TidyBlocksManager,
   readCSV,
@@ -38,8 +41,8 @@ describe('execute blocks for entire pipelines', () => {
         {})
     ]
     evalCode(pipeline)
-    assert(Result.table !== null,
-           'Result table has not been set')
+    assert.notEqual(Result.table, null,
+                    'Result table has not been set')
     assert(Array.isArray(Result.table),
            'Result table is not an array')
     done()
@@ -77,14 +80,14 @@ describe('execute blocks for entire pipelines', () => {
     evalCode(pipeline)
     assert(Array.isArray(Result.table),
            'Result table is not an array')
-    assert(Result.table.length === 150,
-           'Result table is the wrong length')
-    assert('Sepal_Length' in Result.table[0],
+    assert.equal(Result.table.length, 150,
+                 'Result table is the wrong length')
+    assert_hasKey(Result.table[0], 'Sepal_Length',
            'Result table missing expected keys')
-    assert(typeof Result.plot === 'object',
-           'Result plot is not an object')
-    assert(Result.plot.data.values.length === 150,
-           'Result plot data is the wrong length')
+    assert.equal(typeof Result.plot, 'object',
+                 'Result plot is not an object')
+    assert.equal(Result.plot.data.values.length, 150,
+                 'Result plot data is the wrong length')
     done()
   })
 
@@ -102,12 +105,12 @@ describe('execute blocks for entire pipelines', () => {
          BINS: '20'})
     ]
     evalCode(pipeline)
-    assert(Object.keys(Result.table[0]).length === 1,
-           'Wrong number of columns in result table')
-    assert('Petal_Length' in Result.table[0],
-           'Result table does not contain expected key')
-    assert(Result.plot.data.values.length === 150,
-           'Result plot data is the wrong length')
+    assert.equal(Object.keys(Result.table[0]).length, 1,
+                 'Wrong number of columns in result table')
+    assert_hasKey(Result.table[0], 'Petal_Length',
+                  'Result table does not contain expected key')
+    assert.equal(Result.plot.data.values.length, 150,
+                 'Result plot data is the wrong length')
     done()
   })
 
@@ -121,8 +124,8 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMNS: 'red, green'})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 11,
-           'Wrong number of rows in result')
+    assert.equal(Result.table.length, 11,
+                 'Wrong number of rows in result')
     const ordering = Result.table.map((row) => (1000 * row.red) + row.green)
     const check = [...ordering].sort((left, right) => (left - right))
     assert.deepEqual(ordering, check,
@@ -146,12 +149,12 @@ describe('execute blocks for entire pipelines', () => {
               {COLUMN: 'red'})})})
     ]
     const code = evalCode(pipeline)
-    assert(Result.table.length === 11,
-           'Wrong number of rows in output')
-    assert('textual' in Result.table[0],
-           'Result lacks expected column')
-    assert(typeof Result.table[0].textual === 'string',
-           'New column has wrong type')
+    assert.equal(Result.table.length, 11,
+                 'Wrong number of rows in output')
+    assert_hasKey(Result.table[0], 'textual',
+                  'Result lacks expected column')
+    assert.equal(typeof Result.table[0].textual, 'string',
+                 'New column has wrong type')
     done()
   })
 
@@ -173,8 +176,8 @@ describe('execute blocks for entire pipelines', () => {
              {NUM: 0})})})
     ]
     evalCode(pipeline)
-    assert(Result.table.length == 5,
-           'Expected 5 rows with red != 0')
+    assert.equal(Result.table.length, 5,
+                 'Expected 5 rows with red != 0')
     done()
   })
 
@@ -201,8 +204,8 @@ describe('execute blocks for entire pipelines', () => {
     evalCode(pipeline)
     assert(TidyBlocksManager.getResult('left'),
            'Expected something registered under "left"')
-    assert(TidyBlocksManager.getResult('left').data.length == 5,
-           'Expected five rows with red != 0')
+    assert.equal(TidyBlocksManager.getResult('left').data.length, 5,
+                 'Expected five rows with red != 0')
     assert(TidyBlocksManager.getResult('left').data.every(row => (row.red != 0)),
            'Expected all rows to have red != 0')
     done()
@@ -234,10 +237,10 @@ describe('execute blocks for entire pipelines', () => {
            {NUM: 20})})
     ]
     evalCode(pipeline)
-    assert(Object.keys(Result.table[0]).length === 5,
-           'Wrong number of columns in result table')
-    assert(Result.plot.data.values.length === 42,
-           'Result plot data is the wrong length')
+    assert.equal(Object.keys(Result.table[0]).length, 5,
+                 'Wrong number of columns in result table')
+    assert.equal(Result.plot.data.values.length, 42,
+                 'Result plot data is the wrong length')
     done()
   })
 
@@ -259,8 +262,8 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'green'})})})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 8,
-           'Wrong number of rows in output')
+    assert.equal(Result.table.length, 8,
+                 'Wrong number of rows in output')
     assert(Result.table.every(row => (row.red >= row.green)),
           'Wrong rows have survived filtering')
     done()
@@ -285,10 +288,10 @@ describe('execute blocks for entire pipelines', () => {
               {COLUMN: 'green'})})})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 11,
-           'Wrong number of rows in output')
-    assert(Object.keys(Result.table[0]).length === 5,
-           'Wrong number of columns in output')
+    assert.equal(Result.table.length, 11,
+                 'Wrong number of rows in output')
+    assert.equal(Object.keys(Result.table[0]).length, 5,
+                 'Wrong number of columns in output')
     assert(Result.table.every(row => (row.red_green === (row.red + row.green))),
            'Sum column does not contain correct values')
     done()
@@ -313,10 +316,10 @@ describe('execute blocks for entire pipelines', () => {
               {COLUMN: 'first'})})})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 2,
-           'Wrong number of rows in output')
-    assert(Object.keys(Result.table[0]).length === 3,
-           'Wrong number of columns in output')
+    assert.equal(Result.table.length, 2,
+                 'Wrong number of rows in output')
+    assert.equal(Object.keys(Result.table[0]).length, 3,
+                 'Wrong number of columns in output')
     assert(Result.table.every(row => (row.difference === (row.second - row.first))),
            'Difference column does not contain correct values')
     done()
@@ -333,12 +336,12 @@ describe('execute blocks for entire pipelines', () => {
          COLUMN: 'red'})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 1,
-           'Expected one row of output')
-    assert(Object.keys(Result.table[0]).length === 1,
-           'Expected a single column of output')
-    assert(Result.table[0].red === 1148,
-           'Incorrect sum')
+    assert.equal(Result.table.length, 1,
+                 'Expected one row of output')
+    assert.equal(Object.keys(Result.table[0]).length, 1,
+                 'Expected a single column of output')
+    assert.equal(Result.table[0].red, 1148,
+                 'Incorrect sum')
     done()
   })
 
@@ -352,14 +355,14 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'blue'})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 11,
-           'Wrong number of rows in output')
-    assert(Result.table.filter(row => (row._group_ === 0)).length === 6,
-           'Wrong number of rows for index 0')
-    assert(Result.table.filter(row => (row._group_ === 1)).length === 4,
-           'Wrong number of rows for index 255')
-    assert(Result.table.filter(row => (row._group_ === 2)).length === 1,
-           'Wrong number of rows for index 128')
+    assert.equal(Result.table.length, 11,
+                 'Wrong number of rows in output')
+    assert.equal(Result.table.filter(row => (row._group_ === 0)).length, 6,
+                 'Wrong number of rows for index 0')
+    assert.equal(Result.table.filter(row => (row._group_ === 1)).length, 4,
+                 'Wrong number of rows for index 255')
+    assert.equal(Result.table.filter(row => (row._group_ === 2)).length, 1,
+                 'Wrong number of rows for index 128')
     done()
   })
 
@@ -376,9 +379,9 @@ describe('execute blocks for entire pipelines', () => {
         {})
     ]
     evalCode(pipeline)
-    assert(Result.table.length === 11,
-           'Table has the wrong number of rows')
-    assert(! ('_group_' in Result.table[0]),
+    assert.equal(Result.table.length, 11,
+                 'Table has the wrong number of rows')
+    assert(!('_group_' in Result.table[0]),
            'Table still has group index column')
     done()
   })

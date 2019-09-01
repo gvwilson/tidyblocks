@@ -1,6 +1,9 @@
 const assert = require('assert')
 
 const {
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   TidyBlocksDataFrame,
   TidyBlocksManager,
   readCSV,
@@ -46,12 +49,14 @@ describe('blocks are given IDs and can be looked up', () => {
               'value_number',
               {NUM: 0})})})
     ]
-    assert(TidyBlocksManager.getNumBlocks() == 5,
-           'Wrong number of blocks recorded')
+    assert.equal(TidyBlocksManager.getNumBlocks(), 5,
+                 'Wrong number of blocks recorded')
     for (let i=0; i<5; i++) {
       const block = TidyBlocksManager.getBlock(i)
-      assert(block && (block.tbId === i),
-             'Block does not exist or has wrong ID')
+      assert(block,
+             'Block does not exist')
+      assert.equal(block.tbId, i,
+                   'Block has wrong ID')
     }
     done()
   })
@@ -93,8 +98,8 @@ describe('execute blocks for entire pipelines', () => {
               {NUM: 0})})})
     ]
     const code = evalCode(pipeline)
-    assert(Result.error != null,
-           `Expected an error message when accessing a nonexistent column`)
+    assert.notEqual(Result.error, null,
+                    `Expected an error message when accessing a nonexistent column`)
     done()
   })
 

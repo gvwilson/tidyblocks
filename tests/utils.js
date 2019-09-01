@@ -18,6 +18,51 @@ const {
 } = require('utilities/tb_support')
 
 /**
+ * Assert that an object has a key.
+ * @param {string} actual Object being examined.
+ * @param {string} required Key that must be present.
+ * @param {string} message Error message.
+ */
+const assert_hasKey = (actual, required, message) => {
+  if (! (required in actual)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: Object.keys(actual),
+      expected: required})
+  }
+}
+
+/**
+ * Assert that one string contains another.
+ * @param {string} actual String being examined.
+ * @param {string} required String to look for.
+ * @param {string} message Error message.
+ */
+const assert_includes = (actual, required, message) => {
+  if (! actual.includes(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
+ * Assert that one string starts with another.
+ * @param {string} actual String being examined.
+ * @param {string} required String to look for.
+ * @param {string} message Error message.
+ */
+const assert_startsWith = (actual, required, message) => {
+  if (! actual.startsWith(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
  * Replacement for singleton Blockly object. This defines only the methods and
  * values used by block creation code.
  */
@@ -202,6 +247,9 @@ const evalCode = (code) => {
 // Exports.
 //
 module.exports = {
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   TidyBlocksDataFrame,
   TidyBlocksManager,
   readCSV,
