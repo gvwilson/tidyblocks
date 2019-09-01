@@ -110,7 +110,9 @@ const tbMedian = (values) => {
     return NaN
   }
   else {
-    // FIXME
+    const temp = [...values]
+    temp.sort()
+    return temp[Math.floor(temp.length / 2)]
   }
 }
 
@@ -131,7 +133,7 @@ const tbMin = (values) => {
  * @return {number} Standard deviation.
  */
 const tbStd = (values) => {
-  return NaN // FIXME
+  return Math.sqrt(tbVariance(values))
 }
 
 /**
@@ -141,6 +143,20 @@ const tbStd = (values) => {
  */
 const tbSum = (values) => {
   return values.reduce((total, num) => total + num, 0)
+}
+
+/**
+ * Find variance.
+ * @param {Array} values The values to be summarized.
+ * @return {number} Variance.
+ */
+const tbVariance = (values) => {
+  if (! values) {
+    return NaN
+  }
+  const m = tbMean(values)
+  const squareDiffs = values.map(v => (v - m)**2)
+  return tbMean(squareDiffs)
 }
 
 //--------------------------------------------------------------------------------
