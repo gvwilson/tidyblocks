@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>{{site.title}}{% if page.title %}: {{page.title}}{% endif %}</title>
+    <link href="{{ '/static/site.css' | relative_url }}" rel="stylesheet" type="text/css">
+    <link href="{{ '/static/tango.css' | relative_url }}" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <main>
+      <h1>{{site.title}}{% if page.title %}: {{page.title}}{% endif %}</h1>
+      {{content}}
+    </main>
+    <hr/>
+    <footer>
+      <p>
+        <a href="{{ '/license/' | relative_url }}"><img class="footer" src="{{ '/static/cc-by.svg' | relative_url }}" alt="License" /></a>
+        <a href="{{ site.repo }}"><img class="footer" src="{{ '/static/github.svg' | relative_url }}" alt="Repository" /></a>
+        <br/>
+        © {{ site.year }} <a href="{{ '/team/' | relative_url }}">The Team</a>
+      </p>
+    </footer>
+  </body>
+</html>
