@@ -1,11 +1,11 @@
 const assert = require('assert')
 
 const {
-  csv2TidyBlocksDataFrame,
+  csv2DataFrame,
   registerPrefix,
   registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  DataFrame,
+  PipelineManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
@@ -30,7 +30,7 @@ describe('raises errors at the right times', () => {
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    PipelineManager.reset()
     resetDisplay()
   })
 

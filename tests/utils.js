@@ -11,11 +11,11 @@ const Papa = require('papaparse')
 //
 module.paths.unshift(process.cwd())
 const {
-  csv2TidyBlocksDataFrame,
+  csv2DataFrame,
   registerPrefix,
   registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager
+  DataFrame,
+  PipelineManager
 } = require('utilities/tb_support')
 
 /**
@@ -108,7 +108,7 @@ const Blockly = {
 class MockBlock {
   constructor (settings) {
     Object.assign(this, settings)
-    TidyBlocksManager.addNewBlock(this)
+    PipelineManager.addNewBlock(this)
   }
 
   getFieldValue (key) {
@@ -140,7 +140,7 @@ const makeBlock = (blockName, settings) => {
  * Delete an existing block. (Emulates the drag-and-drop delete in the GUI.)
  */
 const deleteBlock = (block) => {
-  TidyBlocksManager.deleteBlock(block)
+  PipelineManager.deleteBlock(block)
 }
 
 /**
@@ -226,7 +226,7 @@ const readCSV = (url) => {
   }
   const path = `${process.cwd()}/data/${url}`
   const text = fs.readFileSync(path, 'utf-8')
-  return csv2TidyBlocksDataFrame(text, Papa.parse)
+  return csv2DataFrame(text, Papa.parse)
 }
 
 /**
@@ -238,7 +238,7 @@ const evalCode = (code) => {
   if (typeof code !== 'string') {
     code = generateCode(code)
   }
-  TidyBlocksManager.run(() => code,
+  PipelineManager.run(() => code,
                         displayTable, displayPlot, displayError, readCSV)
   return code
 }
@@ -247,11 +247,11 @@ const evalCode = (code) => {
 // Exports.
 //
 module.exports = {
-  csv2TidyBlocksDataFrame,
+  csv2DataFrame,
   registerPrefix,
   registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  DataFrame,
+  PipelineManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,

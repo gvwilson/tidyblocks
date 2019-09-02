@@ -16,7 +16,7 @@ const readCSV = (url) => {
     return null
   }
   else {
-    return csv2TidyBlocksDataFrame(request.responseText, Papa.parse)
+    return csv2DataFrame(request.responseText, Papa.parse)
   }
 }
 

@@ -2,11 +2,11 @@ const assert = require('assert')
 const Papa = require('papaparse')
 
 const {
-  csv2TidyBlocksDataFrame,
+  csv2DataFrame,
   registerPrefix,
   registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  DataFrame,
+  PipelineManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
@@ -31,7 +31,7 @@ describe('CSV headers are sanitized correctly', () => {
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    PipelineManager.reset()
     resetDisplay()
   })
 
@@ -39,7 +39,7 @@ describe('CSV headers are sanitized correctly', () => {
     const text = `
 First
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = csv2DataFrame(text, Papa.parse)
     assert.deepEqual(result.data, [{First: 'value'}],
                      'CSV not parsed correctly')
     done()
@@ -49,7 +49,7 @@ value`
     const text = `
  First 
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = csv2DataFrame(text, Papa.parse)
     assert.deepEqual(result.data, [{First: 'value'}],
                      'CSV header not corrected')
     done()
@@ -59,7 +59,7 @@ value`
     const text = `
  First Header 
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = csv2DataFrame(text, Papa.parse)
     assert.deepEqual(result.data, [{First_Header: 'value'}],
                      'CSV header not corrected')
     done()
@@ -69,7 +69,7 @@ value`
     const text = `
  "First (Header)" 
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = csv2DataFrame(text, Papa.parse)
     assert.deepEqual(result.data, [{First_Header: 'value'}],
                      'CSV header not corrected')
     done()
@@ -79,7 +79,7 @@ value`
     const text = `
  "First (Header)" , 123Second, =+~$%^#@
 value, 123, something`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = csv2DataFrame(text, Papa.parse)
     assert.deepEqual(result.data,
                      [{First_Header: 'value', _123Second: 123, EMPTY: ' something'}],
                      'CSV header not corrected')
@@ -90,7 +90,7 @@ value, 123, something`
     const text = `
 Header,Header,Header
 value,value,value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = csv2DataFrame(text, Papa.parse)
     assert.deepEqual(result.data,
                      [{Header: 'value', Header_1: 'value', Header_2: 'value'}],
                      'Repeated column names not corrected')
@@ -104,7 +104,7 @@ describe('blocks are given IDs and can be looked up', () => {
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    PipelineManager.reset()
     resetDisplay()
   })
 
@@ -126,10 +126,10 @@ describe('blocks are given IDs and can be looked up', () => {
               'value_number',
               {NUM: 0})})})
     ]
-    assert.equal(TidyBlocksManager.getNumBlocks(), 5,
+    assert.equal(PipelineManager.getNumBlocks(), 5,
                  'Wrong number of blocks recorded')
     for (let i=0; i<5; i++) {
-      const block = TidyBlocksManager.getBlock(i)
+      const block = PipelineManager.getBlock(i)
       assert(block,
              'Block does not exist')
       assert.equal(block.tbId, i,

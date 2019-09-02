@@ -79,7 +79,7 @@ const setUpBlockly = () => {
   TidyBlocksWorkspace.addChangeListener((event) => {
     if (event.type === Blockly.Events.CREATE) {
       const block = TidyBlocksWorkspace.getBlockById(event.blockId)
-      TidyBlocksManager.addNewBlock(block)
+      PipelineManager.addNewBlock(block)
     }
     else if (event.type === Blockly.Events.DELETE) {
       // FIXME: handle deletion
@@ -145,7 +145,7 @@ const displayError = (error) => {
  */
 const runCode = () => {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  TidyBlocksManager.run(() => Blockly.JavaScript.workspaceToCode(TidyBlocksWorkspace),
+  PipelineManager.run(() => Blockly.JavaScript.workspaceToCode(TidyBlocksWorkspace),
                         displayTable, displayPlot, displayError, readCSV)
 }
 

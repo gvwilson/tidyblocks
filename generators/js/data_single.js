@@ -3,5 +3,5 @@
 //
 Blockly.JavaScript['data_single'] = (block) => {
   const prefix = registerPrefix('')
-  return `${prefix} new TidyBlocksDataFrame([{'first': 1}])`
+  return `${prefix} new DataFrame([{'first': 1}])`
 }

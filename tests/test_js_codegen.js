@@ -1,11 +1,11 @@
 const assert = require('assert')
 
 const {
-  csv2TidyBlocksDataFrame,
+  csv2DataFrame,
   registerPrefix,
   registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  DataFrame,
+  PipelineManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
@@ -30,7 +30,7 @@ describe('generate code for single blocks', () => {
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    PipelineManager.reset()
     resetDisplay()
   })
 
@@ -39,9 +39,9 @@ describe('generate code for single blocks', () => {
       'data_colors',
       {})
     const code = generateCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
+    assert_includes(code, 'PipelineManager.register',
                     'pipeline is not registered')
-    assert_includes(code, 'new TidyBlocksDataFrame',
+    assert_includes(code, 'new DataFrame',
                     'pipeline does not create dataframe')
     done()
   })
@@ -101,9 +101,9 @@ describe('generate code for single blocks', () => {
       'data_single',
       {})
     const code = generateCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
+    assert_includes(code, 'PipelineManager.register',
                     'pipeline is not registered')
-    assert_includes(code, 'new TidyBlocksDataFrame',
+    assert_includes(code, 'new DataFrame',
                     'pipeline does not create dataframe')
     done()
   })
@@ -329,11 +329,11 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'right_column'})})
     const code = generateCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
+    assert_includes(code, 'PipelineManager.register',
                     'pipeline is not registered')
     assert_includes(code, "['left_table', 'right_table']",
                     'pipeline does not register dependencies')
-    assert_includes(code, 'new TidyBlocksDataFrame',
+    assert_includes(code, 'new DataFrame',
                     'pipeline does not create a new dataframe')
     done()
   })
@@ -343,7 +343,7 @@ describe('generate code for single blocks', () => {
       'plumbing_notify',
       {NAME: 'output_name'})
     const code = generateCode(pipeline)
-    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated",
+    assert.equal(code, ".notify((name, frame) => PipelineManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated",
                  'pipeine does not notify properly')
     done()
   })

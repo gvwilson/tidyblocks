@@ -4,13 +4,13 @@
 const TERMINATOR = '// terminated'
 
 /**
- * Turn block of CSV text into TidyBlocksDataFrame. The parser argument should be Papa.parse;
+ * Turn block of CSV text into DataFrame. The parser argument should be Papa.parse;
  * it is passed in here so that this file can be loaded both in the browser and for testing.
  * @param {string} text Text to parse.
  * @param {function} parser Function to turn CSV text into array of objects.
  * @returns New dataframe with sanitized column headers.
  */
-const csv2TidyBlocksDataFrame = (text, parser) => {
+const csv2DataFrame = (text, parser) => {
 
   const seen = new Map() // global to transformHeader
   const transformHeader = (name) => {
@@ -52,7 +52,7 @@ const csv2TidyBlocksDataFrame = (text, parser) => {
       transformHeader: transformHeader
     }
   )
-  return new TidyBlocksDataFrame(result.data)
+  return new DataFrame(result.data)
 }
 
 /**
@@ -61,7 +61,7 @@ const csv2TidyBlocksDataFrame = (text, parser) => {
  * @returns {string} Text to insert into generated code.
  */
 const registerPrefix = (fill) => {
-  return `TidyBlocksManager.register([${fill}], () => {`
+  return `PipelineManager.register([${fill}], () => {`
 }
 
 /**
@@ -487,7 +487,7 @@ const tbLt = (row, getLeft, getRight) => {
 /**
  * Store a dataframe.
  */
-class TidyBlocksDataFrame {
+class DataFrame {
 
   /**
    * Construct a new dataframe.
@@ -508,7 +508,7 @@ class TidyBlocksDataFrame {
     const newData = this.data.filter(row => {
       return op(row)
     })
-    return new TidyBlocksDataFrame(newData)
+    return new DataFrame(newData)
   }
 
   /**
@@ -529,7 +529,7 @@ class TidyBlocksDataFrame {
       row._group_ = seen.get(value)
       return row
     })
-    return new TidyBlocksDataFrame(grouped)
+    return new DataFrame(grouped)
   }
 
   /**
@@ -544,7 +544,7 @@ class TidyBlocksDataFrame {
       newRow[newName] = op(row)
       return newRow
     })
-    return new TidyBlocksDataFrame(newData)
+    return new DataFrame(newData)
   }
 
   /**
@@ -553,7 +553,7 @@ class TidyBlocksDataFrame {
   reverse () {
     const result = [...this.data]
     result.reverse()
-    return new TidyBlocksDataFrame(result)
+    return new DataFrame(result)
   }
 
   /**
@@ -569,7 +569,7 @@ class TidyBlocksDataFrame {
       })
       return result
     })
-    return new TidyBlocksDataFrame(newData)
+    return new DataFrame(newData)
   }
 
   /**
@@ -595,7 +595,7 @@ class TidyBlocksDataFrame {
         return 0
       }, 0)
     })
-    return new TidyBlocksDataFrame(result)
+    return new DataFrame(result)
   }
 
   /**
@@ -638,7 +638,7 @@ class TidyBlocksDataFrame {
     }
 
     // Create new dataframe.
-    return new TidyBlocksDataFrame(result)
+    return new DataFrame(result)
   }
 
   /**
@@ -653,7 +653,7 @@ class TidyBlocksDataFrame {
       delete row._group_
       return row
     })
-    return new TidyBlocksDataFrame(newData)
+    return new DataFrame(newData)
   }
 
   //------------------------------------------------------------------------------
@@ -694,7 +694,7 @@ class TidyBlocksDataFrame {
       }
     } 
 
-    return new TidyBlocksDataFrame(result)
+    return new DataFrame(result)
   }
 
   /**
@@ -783,7 +783,7 @@ class TidyBlocksDataFrame {
 /**
  * Manage execution of all data pipelines.
  */
-class TidyBlocksManagerClass {
+class PipelineManagerClass {
 
   /**
    * Create manager.
@@ -826,7 +826,7 @@ class TidyBlocksManagerClass {
   /**
    * Get the output of a completed pipeline.
    * @param {string} name Name of completed pipeline.
-   * @return TidyBlocksDataFrame.
+   * @return DataFrame.
    */
   getResult (name) {
     return this.results.get(name)
@@ -836,7 +836,7 @@ class TidyBlocksManagerClass {
    * Notify the manager that a named pipeline has finished running.
    * This enqueues pipeline functions to run if their dependencies are satisfied.
    * @param {string} name Name of the pipeline that just completed.
-   * @param {Object} dataFrame The TidyBlocksDataFrame produced by the pipeline.
+   * @param {Object} dataFrame The DataFrame produced by the pipeline.
    */
   notify (name, dataFrame) {
     this.results.set(name, dataFrame)
@@ -909,15 +909,15 @@ class TidyBlocksManagerClass {
 /**
  * Singleton instance of manager.
  */
-const TidyBlocksManager = new TidyBlocksManagerClass()
+const PipelineManager = new PipelineManagerClass()
 
 // Make this file require'able if running from the command line.
 if (typeof module !== 'undefined') {
   module.exports = {
-    csv2TidyBlocksDataFrame,
+    csv2DataFrame,
     registerPrefix,
     registerSuffix,
-    TidyBlocksDataFrame,
-    TidyBlocksManager
+    DataFrame,
+    PipelineManager
   }
 }

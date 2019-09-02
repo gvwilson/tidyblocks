@@ -3,7 +3,7 @@
 //
 Blockly.JavaScript['data_colors'] = (block) => {
   const prefix = registerPrefix('')
-  return `${prefix} new TidyBlocksDataFrame([
+  return `${prefix} new DataFrame([
   {'name': 'black',   'red':   0, 'green':   0, 'blue':   0},
   {'name': 'red',     'red': 255, 'green':   0, 'blue':   0},
   {'name': 'maroon',  'red': 128, 'green':   0, 'blue':   0},

@@ -1,11 +1,11 @@
 const assert = require('assert')
 
 const {
-  csv2TidyBlocksDataFrame,
+  csv2DataFrame,
   registerPrefix,
   registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  DataFrame,
+  PipelineManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
@@ -30,7 +30,7 @@ describe('execute blocks for entire pipelines', () => {
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    PipelineManager.reset()
     resetDisplay()
   })
 
@@ -219,11 +219,11 @@ describe('execute blocks for entire pipelines', () => {
         {NAME: 'left'})
     ]
     evalCode(pipeline)
-    assert(TidyBlocksManager.getResult('left'),
+    assert(PipelineManager.getResult('left'),
            'Expected something registered under "left"')
-    assert.equal(TidyBlocksManager.getResult('left').data.length, 5,
+    assert.equal(PipelineManager.getResult('left').data.length, 5,
                  'Expected five rows with red != 0')
-    assert(TidyBlocksManager.getResult('left').data.every(row => (row.red != 0)),
+    assert(PipelineManager.getResult('left').data.every(row => (row.red != 0)),
            'Expected all rows to have red != 0')
     done()
   })
