@@ -16,7 +16,7 @@ const {
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager
-} = require('utilities/tb_support')
+} = require('tidyblocks/tidyblocks')
 
 /**
  * Assert that an object has a key.

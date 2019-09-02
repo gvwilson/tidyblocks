@@ -780,6 +780,8 @@ class TidyBlocksDataFrame {
   }
 }
 
+//--------------------------------------------------------------------------------
+
 /**
  * Manage execution of all data pipelines.
  */
@@ -904,6 +906,48 @@ class TidyBlocksManagerClass {
   toString () {
     return `queue ${this.queue.length} waiting ${this.waiting.length} blocks ${this.blocks.size}`
   }
+}
+
+//--------------------------------------------------------------------------------
+
+/**
+ * Find linear model for plotting.
+ * @param {number[]} values_x X-axis values.
+ * @param {number[]} values_y Y-axis values.
+ * @returns {number[]} Slope and intercept.
+ */
+const findLineByLeastSquares = (values_x, values_y) => {
+  const len = values_x.length
+  if (len != values_y.length) {
+    throw new Error('values_x and values_y have different lengths')
+  }
+
+  // Empty case.
+  if (len === 0) {
+    return [NaN, NaN]
+  }
+
+  // Calculate the sum for each of the parts necessary.
+  let x_sum = 0
+  let y_sum = 0
+  let xy_sum = 0
+  let xx_sum = 0
+  for (let i = 0; i<len; i++) {
+    const x = values_x[i]
+    const y = values_y[i]
+    x_sum += x
+    y_sum += y
+    xx_sum += x * x
+    xy_sum += x * y
+  }
+
+  // Calculate m and b for the line equation:
+  // y = x * m + b
+  var m = (len * xy_sum - x_sum * y_sum) / (len * xx_sum - x_sum * x_sum)
+  var b = (y_sum / len) - (m * x_sum) / len
+
+  // Solve for slope and intercept.
+  return [m, b]
 }
 
 /**

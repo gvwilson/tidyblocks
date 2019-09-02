@@ -179,3 +179,45 @@ const loadCode = (fileList) => {
     Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, TidyBlocksWorkspace)
   })
 }
+
+/**
+ * Read CSV from a URL and parse to create TidyBlocks data frame.
+ * @param {string} url URL to read from.
+ */
+const readCSV = (url) => {
+  const request = new XMLHttpRequest()
+  request.open('GET', url, false)
+  request.send(null)
+
+  if (request.status !== 200) {
+    console.log(`ERROR: ${request.status}`)
+    return null
+  }
+  else {
+    return csv2TidyBlocksDataFrame(request.responseText, Papa.parse)
+  }
+}
+
+/**
+ * Produce a human-friendly name for the type of a column.
+ * @param value The value whose type is checked.
+ * @returns The name of the type
+ */
+const colTypeName = (value) => {
+  return typeof value
+}
+
+/**
+ * Create dynamic table from array from JSON with one table column per property.
+ * Each object must have the same properties.
+ * @param {JSON} json JSON object to convert to table.
+ */
+const json2table = (json) => {
+  const cols = Object.keys(json[0])
+  const headerRow = '<tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr>'
+  const typeRow = '<tr>' + cols.map(c => `<th>${colTypeName(json[0][c])}</th>`).join('') + '</tr>'
+  const bodyRows = json.map(row => {
+    return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
+  }).join('')
+  return `<table><thead>${headerRow}${typeRow}</thead><tbody>${bodyRows}</tbody></table>`
+}
