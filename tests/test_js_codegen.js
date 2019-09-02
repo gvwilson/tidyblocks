@@ -196,7 +196,7 @@ describe('generate code for single blocks', () => {
   it('generates code to select a single column', (done) => {
     const pipeline = makeBlock(
       'dplyr_select',
-      {COLUMNS: 'existingColumn'})
+      {MULTIPLE_COLUMNS: 'existingColumn'})
     const code = generateCode(pipeline)
     assert(code.startsWith('.select'),
            'pipeline does not start with select call')
@@ -208,7 +208,7 @@ describe('generate code for single blocks', () => {
   it('generates code to sort by two columns', (done) => {
     const pipeline = makeBlock(
       'dplyr_sort',
-      {COLUMNS: 'red,green'})
+      {MULTIPLE_COLUMNS: 'red,green'})
     const code = generateCode(pipeline)
     assert(code === '.sort(["red","green"])',
            'pipeline does not sort by expected columns')
