@@ -2,8 +2,8 @@
 let TidyBlocksWorkspace = null
 
 // Regular expressions to match valid single column names and multiple column names.
-const SINGLE_COLUMN_NAME = /^ *[A-Za-z][A-Za-z0-9_]* *$/
-const MULTIPLE_COLUMN_NAMES = /^ *([A-Za-z][A-Za-z0-9_]*)( *, *[A-Za-z][A-Za-z0-9_]*)* *$/
+const SINGLE_COLUMN_NAME = /^ *[_A-Za-z][_A-Za-z0-9]* *$/
+const MULTIPLE_COLUMN_NAMES = /^ *([_A-Za-z][_A-Za-z0-9]*)( *, *[_A-Za-z][_A-Za-z0-9]*)* *$/
 
 // Names of single-column fields in various blocks (for generating validators).
 const SINGLE_COLUMN_FIELDS = [
