@@ -1,7 +1,7 @@
 const assert = require('assert')
 const fs = require('fs')
 const {parse} = require('node-html-parser')
-const papa = require('papaparse')
+const Papa = require('papaparse')
 
 //
 // Loading our own utilities using 'require' instead of relying on them to be
@@ -11,6 +11,7 @@ const papa = require('papaparse')
 //
 module.paths.unshift(process.cwd())
 const {
+  csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
   TidyBlocksDataFrame,
@@ -225,8 +226,7 @@ const readCSV = (url) => {
   }
   const path = `${process.cwd()}/data/${url}`
   const text = fs.readFileSync(path, 'utf-8')
-  const result = papa.parse(text, {header: true})
-  return new TidyBlocksDataFrame(result.data)
+  return csv2TidyBlocksDataFrame(text, Papa.parse)
 }
 
 /**
@@ -247,11 +247,14 @@ const evalCode = (code) => {
 // Exports.
 //
 module.exports = {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
+  TidyBlocksDataFrame,
+  TidyBlocksManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
   readCSV,
   loadBlockFiles,
   makeBlock,

@@ -4,6 +4,58 @@
 const TERMINATOR = '// terminated'
 
 /**
+ * Turn block of CSV text into TidyBlocksDataFrame. The parser argument should be Papa.parse;
+ * it is passed in here so that this file can be loaded both in the browser and for testing.
+ * @param {string} text Text to parse.
+ * @param {function} parser Function to turn CSV text into array of objects.
+ * @returns New dataframe with sanitized column headers.
+ */
+const csv2TidyBlocksDataFrame = (text, parser) => {
+
+  const seen = new Map() // global to transformHeader
+  const transformHeader = (name) => {
+    // Simple character fixes.
+    name = name
+      .trim()
+      .replace(/ /g, '_')
+      .replace(/[^A-Za-z0-9_]/g, '')
+
+    // Ensure header is not empty after character fixes.
+    if (name.length === 0) {
+      name = 'EMPTY'
+    }
+
+    // Name must start with underscore or letter.
+    if (! name.match(/^[_A-Za-z]/)) {
+      name = `_${name}`
+    }
+
+    // Name must be unique.
+    if (seen.has(name)) {
+      const serial = seen.get(name) + 1
+      seen.set(name, serial)
+      name = `${name}_${serial}`
+    }
+    else {
+      seen.set(name, 0)
+    }
+
+    return name
+  }
+
+  const result = parser(
+    text.trim(),
+    {
+      dynamicTyping: true,
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: transformHeader
+    }
+  )
+  return new TidyBlocksDataFrame(result.data)
+}
+
+/**
  * Get the prefix for registering blocks.
  * @param {string} fill Comma-separated list of quoted strings identifying pipelines to wait for.
  * @returns {string} Text to insert into generated code.
@@ -862,6 +914,7 @@ const TidyBlocksManager = new TidyBlocksManagerClass()
 // Make this file require'able if running from the command line.
 if (typeof module !== 'undefined') {
   module.exports = {
+    csv2TidyBlocksDataFrame,
     registerPrefix,
     registerSuffix,
     TidyBlocksDataFrame,

@@ -1,11 +1,14 @@
 const assert = require('assert')
 
 const {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
+  TidyBlocksDataFrame,
+  TidyBlocksManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
   readCSV,
   loadBlockFiles,
   makeBlock,
@@ -22,48 +25,7 @@ before(() => {
   loadBlockFiles()
 })
 
-describe('blocks are given IDs and can be looked up', () => {
-
-  // Reset run queue and embedded plot and table before each test so that their
-  // after-test states can be checked.
-  beforeEach(() => {
-    TidyBlocksManager.reset()
-    resetDisplay()
-  })
-
-  it('gives each block a sequential ID', (done) => {
-    const pipeline = [
-      makeBlock( // because the pipeline has to start with a data block
-        'data_single',
-        {}),
-      makeBlock(
-        'dplyr_mutate',
-        {NEW_COLUMN: 'should_fail',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'ADD',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'nonexistent'}),
-            RIGHT: makeBlock(
-              'value_number',
-              {NUM: 0})})})
-    ]
-    assert.equal(TidyBlocksManager.getNumBlocks(), 5,
-                 'Wrong number of blocks recorded')
-    for (let i=0; i<5; i++) {
-      const block = TidyBlocksManager.getBlock(i)
-      assert(block,
-             'Block does not exist')
-      assert.equal(block.tbId, i,
-                   'Block has wrong ID')
-    }
-    done()
-  })
-
-})
-
-describe('execute blocks for entire pipelines', () => {
+describe('raises errors at the right times', () => {
 
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.

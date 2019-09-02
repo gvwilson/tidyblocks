@@ -1,11 +1,14 @@
 const assert = require('assert')
 
 const {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
+  TidyBlocksDataFrame,
+  TidyBlocksManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
   readCSV,
   loadBlockFiles,
   makeBlock,

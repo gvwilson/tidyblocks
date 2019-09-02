@@ -1,11 +1,14 @@
 const assert = require('assert')
 
 const {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
+  TidyBlocksDataFrame,
+  TidyBlocksManager,
   assert_hasKey,
   assert_includes,
   assert_startsWith,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
   readCSV,
   loadBlockFiles,
   makeBlock,
@@ -30,6 +33,20 @@ describe('execute blocks for entire pipelines', () => {
     TidyBlocksManager.reset()
     resetDisplay()
   })
+
+  it('creates a dataset by parsing a local CSV file', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_mtcars',
+        {})
+    ]
+    evalCode(pipeline)
+    assert.notEqual(Result.table, null,
+                    'Result table has not been set')
+    assert.equal(Result.table.length, 32,
+                 'Result table has wrong number of rows')
+    done()
+  }),
 
   it('creates a table that can be checked', (done) => {
     const pipeline = [
