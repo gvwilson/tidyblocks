@@ -95,7 +95,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_select',
-        {COLUMNS: 'Petal_Length'}),
+        {MULTIPLE_COLUMNS: 'Petal_Length'}),
       makeBlock(
         'ggplot_hist',
         {COLUMN: 'Petal_Length',
@@ -118,7 +118,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_sort',
-        {COLUMNS: 'red, green'})
+        {MULTIPLE_COLUMNS: 'red, green'})
     ]
     evalCode(pipeline)
     assert(Result.table.length === 11,
@@ -141,7 +141,7 @@ describe('execute blocks for entire pipelines', () => {
          VALUE: makeBlock(
            'value_convert',
            {TYPE: 'tbToString',
-            COLUMN: makeBlock(
+            VALUE: makeBlock(
               'value_column',
               {COLUMN: 'red'})})})
     ]
