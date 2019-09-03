@@ -459,5 +459,15 @@ describe('generate code for single blocks', () => {
            'pipeline does not generate constant string')
     done()
   })
+
+  it('generates code for a constant boolean', (done) => {
+    const pipeline = makeBlock(
+      'value_boolean',
+      {VALUE: 'false'})
+    const code = generateCode(pipeline)
+    assert(code === '(row) => (false)',
+           'pipeline does not generate constant Boolean')
+    done()
+  })
   
 })
