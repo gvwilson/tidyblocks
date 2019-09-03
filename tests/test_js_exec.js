@@ -45,6 +45,25 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('reverses the order of rows', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'dplyr_reverse',
+        {})
+    ]
+    evalCode(pipeline)
+    assert(Array.isArray(Result.table),
+           'Result table is not an array')
+    assert.deepEqual(Result.table,
+                     [{'first': 2, 'second': 200},
+                      {'first': 1, 'second': 100}],
+                     'Data has not been reversed')
+    done()
+  })
+
   it('makes a histogram', (done) => {
     const pipeline = [
       makeBlock(
@@ -89,6 +108,25 @@ describe('execute blocks for entire pipelines', () => {
            'Result table does not contain expected key')
     assert(Result.plot.data.values.length === 150,
            'Result plot data is the wrong length')
+    done()
+  })
+
+  it('sorts data by multiple columns', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_sort',
+        {columns: 'red, green'})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Wrong number of rows in result')
+    const ordering = Result.table.map((row) => (1000 * row.red) + row.green)
+    const check = [...ordering].sort((left, right) => (left - right))
+    assert.deepEqual(ordering, check,
+                     'Rows not in order')
     done()
   })
 
@@ -231,6 +269,34 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('does subtraction correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'dplyr_mutate',
+        {newCol: 'difference',
+         Column: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbSub',
+            A: makeBlock(
+              'value_column',
+              {TEXT: 'second'}),
+            B: makeBlock(
+              'value_column',
+              {TEXT: 'first'})})})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 2,
+           'Wrong number of rows in output')
+    assert(Object.keys(Result.table[0]).length === 3,
+           'Wrong number of columns in output')
+    assert(Result.table.every(row => (row.difference === (row.second - row.first))),
+           'Difference column does not contain correct values')
+    done()
+  })
+
   it('summarizes an entire column using summation', (done) => {
     const pipeline = [
       makeBlock(
@@ -269,6 +335,26 @@ describe('execute blocks for entire pipelines', () => {
            'Wrong number of rows for index 255')
     assert(Result.table.filter(row => (row._group_ === 2)).length === 1,
            'Wrong number of rows for index 128')
+    done()
+  })
+
+  it('ungroups values', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_groupBy',
+        {column: 'blue'}),
+      makeBlock(
+        'dplyr_ungroup',
+        {})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Table has the wrong number of rows')
+    assert(! ('_group_' in Result.table[0]),
+           'Table still has group index column')
     done()
   })
 

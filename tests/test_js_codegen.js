@@ -129,6 +129,16 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to reverse rows', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_reverse',
+      {})
+    const code = generateCode(pipeline)
+    assert(code === '.reverse()',
+           'pipeline does not call reverse method')
+    done()
+  })
+
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_groupBy',
@@ -136,6 +146,16 @@ describe('generate code for single blocks', () => {
     const code = generateCode(pipeline)
     assert(code === '.groupBy("existingColumn")',
            'pipeline does not group rows by existing column')
+    done()
+  })
+
+  it('generates code to ungroup', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_ungroup',
+      {})
+    const code = generateCode(pipeline)
+    assert(code === '.ungroup()',
+           'pipeline does not ungroup rows')
     done()
   })
 
@@ -167,6 +187,16 @@ describe('generate code for single blocks', () => {
            'pipeline does not start with select call')
     assert(code.includes('existingColumn'),
            'pipeline does not include existing column name')
+    done()
+  })
+
+  it('generates code to sort by two columns', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_sort',
+      {columns: 'red,green'})
+    const code = generateCode(pipeline)
+    assert(code === '.sort(["red","green"])',
+           'pipeline does not sort by expected columns')
     done()
   })
 
@@ -294,6 +324,34 @@ describe('generate code for single blocks', () => {
     const code = generateCode(pipeline)
     assert(code.includes(".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated"),
            'pipeine does not notify properly')
+    done()
+  })
+
+  it('generates code to negate a column', (done) => {
+    const pipeline = makeBlock(
+      'value_negate',
+      {A: makeBlock(
+        'value_column',
+        {TEXT: 'existing'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbNeg'),
+           'generated code does not appear to negate')
+    done()
+  })
+
+  it('generates code to do logical negation', (done) => {
+    const pipeline = makeBlock(
+      'value_not',
+      {A: makeBlock(
+        'value_column',
+        {TEXT: 'existing'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbNot'),
+           'generated code does not appear to do logical negation')
     done()
   })
 
