@@ -1,0 +1,249 @@
+/*
+  The color palette is taken from classic Canadian stamps of the mid-1950s.
+  Please see etc/stamps-1954.jpg for images.
+  orange #fb3800: (251, 56, 0)
+  blue #1c0092: (28, 0, 146)
+  purple #070223: (7, 2, 35)
+  red #b40000: (180, 0, 0)
+  green #003a06: (0, 58, 6)
+  brown #1d0b00: (29, 11, 0)
+*/
+
+/* General */
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 1em;
+    width: 60em;
+    line-height: 120%;
+    font-size: 110%;
+}
+
+/* Navigation header */
+
+nav {
+    position: fixed;
+    top: 0;
+    width: 60em;
+    background-color: #f8f8f8;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    border-bottom: solid 2px #808080;
+}
+
+nav div.left {
+    float: left;
+    width: 50%;
+    text-align: left;
+}
+
+nav div.right {
+    float: right;
+    width: 50%;
+    text-align: right;
+}
+
+nav img {
+    vertical-align: middle;
+}
+
+span.navtitle {
+    border: 1px solid #c0c0c0;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Dropdown menu */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #ffffff;
+    box-shadow: 2px 8px 16px 2px rgba(0,0,0,0.2);
+    padding: 8px;
+    z-index: 1;
+    text-align: left;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+/* Main content */
+
+main {
+    margin-top: 1em;
+}
+
+/* Table of contents  */
+
+div.toc {
+    background-color: #f8f8f8;
+    padding-left: 5px;
+    border-radius: 10px;
+    border-left: solid 2px;
+}
+
+div.toc h3 {
+    padding-top: 5px;
+    margin-bottom: 0px;
+}
+
+div.toc ul {
+    margin-top: 0.5em;
+    padding-bottom: 10px;
+}
+
+/* Footer */
+
+footer {
+    text-align: center;
+}
+
+img.footer {
+    vertical-align: middle;
+    height: 2em;
+    padding: 0.25em;
+}
+
+/* Code */
+
+code {
+    font-family: Monaco,Courier New;
+    font-size: 80%;
+}
+
+div[class^=language] pre.highlight {
+    border-radius: 10px;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+div.highlight {
+    border-radius: 10px;
+}
+
+div.language-js pre.highlight {
+    border-left: solid 2px;
+}
+
+div.language-sh pre.highlight {
+    border-left: solid 2px #1c0092;
+}
+
+div.language-text pre.highlight {
+    border-left: solid 2px #b40000;
+}
+
+/* Definition lists */
+
+dl {
+    padding-left: 1em;
+}
+
+dt {
+    clear: left;
+    float: left;
+    margin-left: -1em;
+    margin-right: 0.25em;
+}
+
+dt::before {
+    content: "";
+    display: block;
+    height: 0.25em;
+}
+
+dd::before {
+    content: "";
+    display: block;
+    height: 0.25em;
+}
+
+dd {
+    margin-left: 0em;
+}
+
+dd p {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+/* Personas */
+
+div.persona {
+    display: flex;
+}
+
+div.persona img {
+    flex: 10em;
+    height: 8em;
+    padding-top: 0.5em;
+    padding-right: 1em;
+}
+
+div.persona p {
+}
+
+/* Content */
+
+ol, ul {
+    padding-left: 1.2em;
+}
+
+ul {
+    list-style-type: disc;
+}
+
+dt {
+    font-weight: bold;
+}
+
+/* Biographies */
+
+div.bio {
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+img.bio-img {
+    float: left;
+    border-radius: 10px;
+    width: 200px;
+}
+
+div.bio-details {
+    flex: 1;
+    padding-left: 1em;
+}
+
+/* Tables */
+
+th {
+    text-align: left;
+    vertical-align: top;
+}
+
+td {
+    vertical-align: top;
+    padding-left: 0.25em;
+    padding-right: 0.25em;
+    padding-bottom: 0.5em;
+}
+
+tr:nth-child(odd) {
+    background-color: #f8f8f8;
+}

@@ -1,8 +1,14 @@
 const assert = require('assert')
 
 const {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   readCSV,
   loadBlockFiles,
   makeBlock,
@@ -33,10 +39,10 @@ describe('generate code for single blocks', () => {
       'data_colors',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('TidyBlocksManager.register'),
-           'pipeline is not registered')
-    assert(code.includes('new TidyBlocksDataFrame'),
-           'pipeline does not create dataframe')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create dataframe')
     done()
   })
 
@@ -45,10 +51,10 @@ describe('generate code for single blocks', () => {
       'data_earthquakes',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('earthquakes.csv'),
-           'pipeline does not read earthquake data')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'earthquakes.csv',
+                    'pipeline does not read earthquake data')
     done()
   })
 
@@ -57,12 +63,12 @@ describe('generate code for single blocks', () => {
       'data_iris',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('iris.csv'),
-           'pipeline does not read earthquake data')
-    assert(code.includes('toNumber'),
-           'pipeline does not convert data to numeric')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'iris.csv',
+                    'pipeline does not read earthquake data')
+    assert_includes(code, 'toNumber',
+                    'pipeline does not convert data to numeric')
     done()
   })
 
@@ -71,10 +77,10 @@ describe('generate code for single blocks', () => {
       'data_mtcars',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('mtcars.csv'),
-           'pipeline does not read mtcars data')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'mtcars.csv',
+                    'pipeline does not read mtcars data')
     done()
   })
 
@@ -83,10 +89,10 @@ describe('generate code for single blocks', () => {
       'data_toothGrowth',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes('toothGrowth.csv'),
-           'pipeline does not read tooth growth data')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'toothGrowth.csv',
+                    'pipeline does not read tooth growth data')
     done()
   })
 
@@ -95,10 +101,10 @@ describe('generate code for single blocks', () => {
       'data_single',
       {})
     const code = generateCode(pipeline)
-    assert(code.includes('TidyBlocksManager.register'),
-           'pipeline is not registered')
-    assert(code.includes('new TidyBlocksDataFrame'),
-           'pipeline does not create dataframe')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create dataframe')
     done()
   })
 
@@ -106,26 +112,41 @@ describe('generate code for single blocks', () => {
     const filePath = 'http://rstudio.com/tidyblocks.csv'
     const pipeline = makeBlock(
       'data_urlCSV',
-      {'ext': filePath})
+      {URL: filePath})
     const code = generateCode(pipeline)
-    assert(code.includes('readCSV'),
-           'pipeline does not read CSV')
-    assert(code.includes(filePath),
-           `pipeline does not include "${filePath}"`)
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, filePath,
+                    `pipeline does not include "${filePath}"`)
+    done()
+  })
+
+  it('generates code to convert types', (done) => {
+    const pipeline = makeBlock(
+      'value_convert',
+      {TYPE: 'tbToString',
+       VALUE: makeBlock(
+         'value_column',
+         {COLUMN: 'left'})})
+    const code = generateCode(pipeline)
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbToString',
+                    'Generated code does not start with correct function')
     done()
   })
 
   it('generates code to filter rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_filter',
-      {Column: makeBlock(
+      {TEST: makeBlock(
         'value_column',
-        {TEXT: 'existingColumn'})})
+        {COLUMN: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('.filter'),
-           'pipeline does not start with filter call')
-    assert(code.includes('=>'),
-           'pipeline does not include arrow function')
+    assert_startsWith(code, '.filter',
+                      'pipeline does not start with filter call')
+    assert_includes(code, '=>',
+                    'pipeline does not include arrow function')
     done()
   })
 
@@ -134,18 +155,18 @@ describe('generate code for single blocks', () => {
       'dplyr_reverse',
       {})
     const code = generateCode(pipeline)
-    assert(code === '.reverse()',
-           'pipeline does not call reverse method')
+    assert.equal(code, '.reverse()',
+                 'pipeline does not call reverse method')
     done()
   })
 
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_groupBy',
-      {column: 'existingColumn'})
+      {COLUMN: 'existingColumn'})
     const code = generateCode(pipeline)
-    assert(code === '.groupBy("existingColumn")',
-           'pipeline does not group rows by existing column')
+    assert.equal(code, '.groupBy("existingColumn")',
+                 'pipeline does not group rows by existing column')
     done()
   })
 
@@ -154,49 +175,49 @@ describe('generate code for single blocks', () => {
       'dplyr_ungroup',
       {})
     const code = generateCode(pipeline)
-    assert(code === '.ungroup()',
-           'pipeline does not ungroup rows')
+    assert.equal(code, '.ungroup()',
+                 'pipeline does not ungroup rows')
     done()
   })
 
   it('generates code to copy columns using mutate', (done) => {
     const pipeline = makeBlock(
       'dplyr_mutate',
-      {newCol: 'newColumnName',
-       Column: makeBlock(
+      {COLUMN: 'newColumnName',
+       VALUE: makeBlock(
          'value_column',
-         {TEXT: 'existingColumn'})})
+         {COLUMN: 'existingColumn'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('.mutate'),
-           'pipeline does not start with mutate call')
-    assert(code.includes('=>'),
-           'pipeline does not include arrow function')
-    assert(code.includes('newColumnName'),
-           'pipeline does not include new column name')
-    assert(code.includes('existingColumn'),
-           'pipeline does not include existing column name')
+    assert_startsWith(code, '.mutate',
+                      'pipeline does not start with mutate call')
+    assert_includes(code, '=>',
+                    'pipeline does not include arrow function')
+    assert_includes(code, 'newColumnName',
+                    'pipeline does not include new column name')
+    assert_includes(code, 'existingColumn',
+                    'pipeline does not include existing column name')
     done()
   })
 
   it('generates code to select a single column', (done) => {
     const pipeline = makeBlock(
       'dplyr_select',
-      {columns: 'existingColumn'})
+      {MULTIPLE_COLUMNS: 'existingColumn'})
     const code = generateCode(pipeline)
-    assert(code.startsWith('.select'),
-           'pipeline does not start with select call')
-    assert(code.includes('existingColumn'),
-           'pipeline does not include existing column name')
+    assert_startsWith(code, '.select',
+                      'pipeline does not start with select call')
+    assert_includes(code, 'existingColumn',
+                    'pipeline does not include existing column name')
     done()
   })
 
   it('generates code to sort by two columns', (done) => {
     const pipeline = makeBlock(
       'dplyr_sort',
-      {columns: 'red,green'})
+      {MULTIPLE_COLUMNS: 'red,green'})
     const code = generateCode(pipeline)
-    assert(code === '.sort(["red","green"])',
-           'pipeline does not sort by expected columns')
+    assert.equal(code, '.sort(["red","green"])',
+                 'pipeline does not sort by expected columns')
     done()
   })
 
@@ -204,154 +225,154 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'dplyr_summarize',
       {FUNC: 'tbMean',
-       column: 'someColumn'}
+       COLUMN: 'someColumn'}
     )
     const code = generateCode(pipeline)
-    assert(code === ".summarize(tbMean, 'someColumn')",
-           'code does not call summarize correctly')
+    assert.equal(code, ".summarize(tbMean, 'someColumn')",
+                 'code does not call summarize correctly')
     done()
   })
 
   it('generates a bar plot', (done) => {
     const pipeline = makeBlock(
       'ggplot_bar',
-      {X: makeBlock(
+      {X_AXIS: makeBlock(
         'value_column',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+        {COLUMN: 'X_axis_column'}),
+       Y_AXIS: makeBlock(
          'value_column',
-         {TEXT: 'Y_axis_column'})})
+         {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(displayTable, displayPlot'),
-           'pipeline does not call .plot')
-    assert(code.includes('X_axis_column'),
-           'pipeline does not reference X axis column')
-    assert(code.includes('Y_axis_column'),
-           'pipeline does not reference Y axis column')
-    assert(code.includes('"mark": "bar"'),
-           'pipeline does not use a bar')
+    assert_includes(code, '.plot(displayTable, displayPlot',
+                    'pipeline does not call .plot')
+    assert_includes(code, 'X_axis_column',
+                    'pipeline does not reference X axis column')
+    assert_includes(code, 'Y_axis_column',
+                    'pipeline does not reference Y axis column')
+    assert_includes(code, '"mark": "bar"',
+                    'pipeline does not use a bar')
     done()
   })
 
   it('generates a box plot', (done) => {
     const pipeline = makeBlock(
       'ggplot_boxplot',
-      {X: makeBlock(
+      {X_AXIS: makeBlock(
         'value_column',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+        {COLUMN: 'X_axis_column'}),
+       Y_AXIS: makeBlock(
          'value_column',
-         {TEXT: 'Y_axis_column'})})
+         {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(displayTable, displayPlot'),
-           'pipeline does not call .plot')
-    assert(code.includes('X_axis_column'),
-           'pipeline does not reference X axis column')
-    assert(code.includes('Y_axis_column'),
-           'pipeline does not reference Y axis column')
-    assert(code.includes('"type": "boxplot"'),
-           'pipeline is not a boxplot')
+    assert_includes(code, '.plot(displayTable, displayPlot',
+                    'pipeline does not call .plot')
+    assert_includes(code, 'X_axis_column',
+                    'pipeline does not reference X axis column')
+    assert_includes(code, 'Y_axis_column',
+                    'pipeline does not reference Y axis column')
+    assert_includes(code, '"type": "boxplot"',
+                    'pipeline is not a boxplot')
     done()
   })
 
   it('generates a histogram', (done) => {
     const pipeline = makeBlock(
       'ggplot_hist',
-      {column: 'existingColumn',
-       bins: '20'})
+      {COLUMN: 'existingColumn',
+       BINS: '20'})
     const code = generateCode(pipeline)
-    assert(code.includes('"maxbins":'),
-           'pipeline does not include maxbins')
-    assert(code.includes('"field": "existingColumn"'),
-           'pipeline does not reference existing column')
-    assert(code.includes('"mark": "bar"'),
-           'pipeline does not use a bar')
+    assert_includes(code, '"maxbins":',
+                    'pipeline does not include maxbins')
+    assert_includes(code, '"field": "existingColumn"',
+                    'pipeline does not reference existing column')
+    assert_includes(code, '"mark": "bar"',
+                    'pipeline does not use a bar')
     done()
   })
 
   it('generates a point plot', (done) => {
     const pipeline = makeBlock(
       'ggplot_point',
-      {X: makeBlock(
+      {X_AXIS: makeBlock(
         'value_column',
-        {TEXT: 'X_axis_column'}),
-       Y: makeBlock(
+        {COLUMN: 'X_axis_column'}),
+       Y_AXIS: makeBlock(
          'value_column',
-         {TEXT: 'Y_axis_column'}),
-       color: makeBlock(
+         {COLUMN: 'Y_axis_column'}),
+       COLOR: makeBlock(
          'value_column',
-         {TEXT: 'COLOR_axis_column'}),
+         {COLUMN: 'COLOR_axis_column'}),
        lm: 'FALSE'})
     const code = generateCode(pipeline)
-    assert(code.includes('.plot(displayTable, displayPlot'),
-           'pipeline does not call .plot')
-    assert(code.includes('X_axis_column'),
-           'pipeline does not reference X axis column')
-    assert(code.includes('Y_axis_column'),
-           'pipeline does not reference Y axis column')
-    assert(code.includes('COLOR_axis_column'),
-           'pipeline does not reference color axis column')
-    assert(code.includes('"mark": "point"'),
-           'pipeline does not set the mark to point')
+    assert_includes(code, '.plot(displayTable, displayPlot',
+                    'pipeline does not call .plot')
+    assert_includes(code, 'X_axis_column',
+                    'pipeline does not reference X axis column')
+    assert_includes(code, 'Y_axis_column',
+                    'pipeline does not reference Y axis column')
+    assert_includes(code, 'COLOR_axis_column',
+                    'pipeline does not reference color axis column')
+    assert_includes(code, '"mark": "point"',
+                    'pipeline does not set the mark to point')
     done()
   })
 
   it('generates code to joins two pipelines', (done) => {
     const pipeline = makeBlock(
       'plumbing_join',
-      {leftName: 'left_table',
-       leftColumn: makeBlock(
+      {LEFT_TABLE: 'left_table',
+       LEFT_COLUMN: makeBlock(
          'value_column',
-         {TEXT: 'left_column'}),
-       rightName: 'right_table',
-       rightColumn: makeBlock(
+         {COLUMN: 'left_column'}),
+       RIGHT_TABLE: 'right_table',
+       RIGHT_COLUMN: makeBlock(
          'value_column',
-         {TEXT: 'right_column'})})
+         {COLUMN: 'right_column'})})
     const code = generateCode(pipeline)
-    assert(code.includes('TidyBlocksManager.register'),
-           'pipeline is not registered')
-    assert(code.includes("['left_table', 'right_table']"),
-           'pipeline does not register dependencies')
-    assert(code.includes('new TidyBlocksDataFrame'),
-           'pipeline does not create a new dataframe')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, "['left_table', 'right_table']",
+                    'pipeline does not register dependencies')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create a new dataframe')
     done()
   })
 
   it('generates code to notify that a pipeline has completed', (done) => {
     const pipeline = makeBlock(
       'plumbing_notify',
-      {name: 'output_name'})
+      {NAME: 'output_name'})
     const code = generateCode(pipeline)
-    assert(code.includes(".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated"),
-           'pipeine does not notify properly')
+    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated",
+                 'pipeine does not notify properly')
     done()
   })
 
   it('generates code to negate a column', (done) => {
     const pipeline = makeBlock(
       'value_negate',
-      {A: makeBlock(
+      {VALUE: makeBlock(
         'value_column',
-        {TEXT: 'existing'})})
+        {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbNeg'),
-           'generated code does not appear to negate')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbNeg',
+                    'generated code does not appear to negate')
     done()
   })
 
   it('generates code to do logical negation', (done) => {
     const pipeline = makeBlock(
       'value_not',
-      {A: makeBlock(
+      {LEFT: makeBlock(
         'value_column',
-        {TEXT: 'existing'})})
+        {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbNot'),
-           'generated code does not appear to do logical negation')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbNot',
+                    'generated code does not appear to do logical negation')
     done()
   })
 
@@ -359,29 +380,29 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'value_arithmetic',
       {OP: 'tbAdd',
-       A: makeBlock(
+       LEFT: makeBlock(
          'value_column',
-         {TEXT: 'left'}),
-       B: makeBlock(
+         {COLUMN: 'left'}),
+       RIGHT: makeBlock(
          'value_column',
-         {TEXT: 'right'})})
+         {COLUMN: 'right'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbAdd'),
-           'generated code does not include tbAdd call')
-    assert(code.includes('tbGet'),
-           'generated code does not include tbGet calls')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbAdd',
+                    'generated code does not include tbAdd call')
+    assert_includes(code, 'tbGet',
+                    'generated code does not include tbGet calls')
     done()
   })
 
   it('generates code for a column name', (done) => {
     const pipeline = makeBlock(
       'value_column',
-      {TEXT: 'TheColumnName'})
+      {COLUMN: 'TheColumnName'})
     const code = generateCode(pipeline)
-    assert(code === "(row) => tbGet(row, 'TheColumnName')",
-           'pipeline does not use function to get column value')
+    assert.equal(code, "(row) => tbGet(row, 'TheColumnName')",
+                 'pipeline does not use function to get column value')
     done()
   })
 
@@ -389,19 +410,19 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'value_compare',
       {OP: 'tbNeq',
-       A: makeBlock(
+       LEFT: makeBlock(
          'value_column',
-         {TEXT: 'left'}),
-       B: makeBlock(
+         {COLUMN: 'left'}),
+       RIGHT: makeBlock(
          'value_column',
-         {TEXT: 'right'})})
+         {COLUMN: 'right'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbNeq'),
-           'generated code does not include tbNeq call')
-    assert(code.includes('tbGet'),
-           'generated code does not include tbGet calls')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbNeq',
+                    'generated code does not include tbNeq call')
+    assert_includes(code, 'tbGet',
+                    'generated code does not include tbGet calls')
     done()
   })
 
@@ -410,8 +431,8 @@ describe('generate code for single blocks', () => {
       'value_number',
       {NUM: 3.14})
     const code = generateCode(pipeline)
-    assert(code === '(row) => (3.14)',
-           'pipeline does not generate expected number')
+    assert.equal(code, '(row) => (3.14)',
+                 'pipeline does not generate expected number')
     done()
   })
 
@@ -419,29 +440,39 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'value_logical',
       {OP: 'tbOr',
-       A: makeBlock(
+       LEFT: makeBlock(
          'value_column',
-         {TEXT: 'left'}),
-       B: makeBlock(
+         {COLUMN: 'left'}),
+       RIGHT: makeBlock(
          'value_column',
-         {TEXT: 'right'})})
+         {COLUMN: 'right'})})
     const code = generateCode(pipeline)
-    assert(code.startsWith('(row) =>'),
-           'generated code does not appear to be a function')
-    assert(code.includes('tbOr'),
-           'generated code does not include tbOr call')
-    assert(code.includes('tbGet'),
-           'generated code does not include tbGet calls')
+    assert_startsWith(code, '(row) =>',
+                      'generated code does not appear to be a function')
+    assert_includes(code, 'tbOr',
+                    'generated code does not include tbOr call')
+    assert_includes(code, 'tbGet',
+                    'generated code does not include tbGet calls')
     done()
   })
 
   it('generates code for a constant string', (done) => {
     const pipeline = makeBlock(
       'value_text',
-      {TEXT: 'Look on my blocks, ye coders, and despair!'})
+      {VALUE: 'Look on my blocks, ye coders, and despair!'})
     const code = generateCode(pipeline)
-    assert(code === '(row) => "Look on my blocks, ye coders, and despair!"',
-           'pipeline does not generate constant string')
+    assert.equal(code, '(row) => "Look on my blocks, ye coders, and despair!"',
+                 'pipeline does not generate constant string')
+    done()
+  })
+
+  it('generates code for a constant boolean', (done) => {
+    const pipeline = makeBlock(
+      'value_boolean',
+      {VALUE: 'false'})
+    const code = generateCode(pipeline)
+    assert.equal(code, '(row) => (false)',
+                 'pipeline does not generate constant Boolean')
     done()
   })
   

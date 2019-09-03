@@ -7,6 +7,7 @@ Blockly.defineBlocksWithJsonArray([
     message0: 'Earthquakes dataset',
     nextStatement: null,
     style: 'data_blocks',
-    hat: 'cap'
+    hat: 'cap',
+    tooltip: 'earthquake data'
   }
 ])

@@ -8,19 +8,20 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'X',
-        text: 'X'
+        name: 'X_AXIS',
+        text: 'X_axis'
       },
       {
         type: 'field_input',
-        name: 'Y',
-        text: 'Y'
+        name: 'Y_AXIS',
+        text: 'Y_axis'
       }
     ],
     inputsInline: true,
     previousStatement: null,
     style: 'ggplot_blocks',
-    tooltip: '',
-    helpUrl: ''
+    tooltip: 'create bar plot',
+    helpUrl: '',
+    extensions: ['validate_X_AXIS', 'validate_Y_AXIS']
   }
 ])

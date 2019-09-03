@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>TidyBlocksDataFrame<span class="signature">(initial)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>TidyBlocksDataFrame<span class="signature">(values)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">DataFrame wrapper class.</div>
+            <div class="class-description">Store a dataframe.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="TidyBlocksDataFrame"><span class="type-signature"></span>new TidyBlocksDataFrame<span class="signature">(initial)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="TidyBlocksDataFrame"><span class="type-signature"></span>new TidyBlocksDataFrame<span class="signature">(values)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +53,7 @@
 
 
 <div class="description">
-    Build a TidyBlocks dataframe that wraps a DataForge dataframe.
+    Construct a new dataframe.
 </div>
 
 
@@ -89,13 +89,13 @@
 
         <tr>
             
-                <td class="name"><code>initial</code></td>
+                <td class="name"><code>values</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">Array.&lt;Object></span>
 
 
             
@@ -105,7 +105,7 @@
 
             
 
-            <td class="description last">array of JSON records.</td>
+            <td class="description last">The initial values (aliased).</td>
         </tr>
 
     
@@ -146,7 +146,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line58">line 58</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line428">line 428</a>
     </li></ul></dd>
     
 
@@ -202,7 +202,7 @@
     
 
     
-    <h4 class="name" id=".GetSummarizeFunction"><span class="type-signature">(static) </span>GetSummarizeFunction<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="filter"><span class="type-signature"></span>filter<span class="signature">(op)</span><span class="type-signature"></span></h4>
     
 
     
@@ -210,97 +210,7 @@
 
 
 <div class="description">
-    Lookup table of summarization functions.  Each takes an array of values as
-input and returns a single value as output.
-FIXME: replace this with DataForge summarization.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="generateSeries"><span class="type-signature"></span>generateSeries<span class="signature">(props)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Generate a new series (e.g. for mutating).
+    Filter rows, keeping those that pass a test.
 </div>
 
 
@@ -336,13 +246,13 @@ FIXME: replace this with DataForge summarization.
 
         <tr>
             
-                <td class="name"><code>props</code></td>
+                <td class="name"><code>op</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">function</span>
 
 
             
@@ -352,7 +262,7 @@ FIXME: replace this with DataForge summarization.
 
             
 
-            <td class="description last">parameters for DataForge series generation.</td>
+            <td class="description last">How to test rows.</td>
         </tr>
 
     
@@ -393,7 +303,7 @@ FIXME: replace this with DataForge summarization.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line87">line 87</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line439">line 439</a>
     </li></ul></dd>
     
 
@@ -422,10 +332,475 @@ FIXME: replace this with DataForge summarization.
 
         
 <div class="param-desc">
-    this object (for method chaining)
+    A new dataframe.
 </div>
 
 
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getColumn"><span class="type-signature"></span>getColumn<span class="signature">(name)</span><span class="type-signature"> &rarr; {Array}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get a column as a JavaScript array.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of column to get.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line671">line 671</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Column as JavaScript array.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="groupBy"><span class="type-signature"></span>groupBy<span class="signature">(column)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Group by the values in a column, storing the result in a new _group_ column.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>column</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The column that determines groups.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line451">line 451</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A new dataframe.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="hasColumn"><span class="type-signature"></span>hasColumn<span class="signature">(name)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Test whether the dataframe has the specified column.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Name of column to check for.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line682">line 682</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Is column present?
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Boolean</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -499,7 +874,7 @@ FIXME: replace this with DataForge summarization.
 
             
 
-            <td class="description last">how to look up data by name.</td>
+            <td class="description last">How to look up data by name.</td>
         </tr>
 
     
@@ -522,7 +897,7 @@ FIXME: replace this with DataForge summarization.
 
             
 
-            <td class="description last">notification name of left table to join.</td>
+            <td class="description last">Notification name of left table to join.</td>
         </tr>
 
     
@@ -545,7 +920,7 @@ FIXME: replace this with DataForge summarization.
 
             
 
-            <td class="description last">name of column from left table.</td>
+            <td class="description last">Name of column from left table.</td>
         </tr>
 
     
@@ -568,7 +943,7 @@ FIXME: replace this with DataForge summarization.
 
             
 
-            <td class="description last">notification name of right table to join.</td>
+            <td class="description last">Notification name of right table to join.</td>
         </tr>
 
     
@@ -591,7 +966,7 @@ FIXME: replace this with DataForge summarization.
 
             
 
-            <td class="description last">name of column from right table.</td>
+            <td class="description last">Name of column from right table.</td>
         </tr>
 
     
@@ -632,7 +1007,7 @@ FIXME: replace this with DataForge summarization.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line211">line 211</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line602">line 602</a>
     </li></ul></dd>
     
 
@@ -657,6 +1032,16 @@ FIXME: replace this with DataForge summarization.
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A new dataframe.
+</div>
+
+
+
+    
 
 
 
@@ -668,7 +1053,7 @@ FIXME: replace this with DataForge summarization.
     
 
     
-    <h4 class="name" id="makeDataFrame"><span class="type-signature"></span>makeDataFrame<span class="signature">(initial)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="mutate"><span class="type-signature"></span>mutate<span class="signature">(newName, op)</span><span class="type-signature"></span></h4>
     
 
     
@@ -676,10 +1061,7 @@ FIXME: replace this with DataForge summarization.
 
 
 <div class="description">
-    Construct the underlying DataForge dataframe.  If 'module' is defined, this
-class is being loaded by Node on the command line for testing purposes, so
-we need to use 'require'. If 'modules' isn't defined, this file is being
-loaded by the browser, so no 'require' is needed.
+    Create a new column by operating on existing columns.
 </div>
 
 
@@ -715,13 +1097,13 @@ loaded by the browser, so no 'require' is needed.
 
         <tr>
             
-                <td class="name"><code>initial</code></td>
+                <td class="name"><code>newName</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">array</span>
+<span class="param-type">string</span>
 
 
             
@@ -731,7 +1113,30 @@ loaded by the browser, so no 'require' is needed.
 
             
 
-            <td class="description last">array of JSON records.</td>
+            <td class="description last">New column's name.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>op</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to create new values from a row.</td>
         </tr>
 
     
@@ -772,7 +1177,7 @@ loaded by the browser, so no 'require' is needed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line70">line 70</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line473">line 473</a>
     </li></ul></dd>
     
 
@@ -801,7 +1206,7 @@ loaded by the browser, so no 'require' is needed.
 
         
 <div class="param-desc">
-    dataForge.DataFrame
+    A new dataframe.
 </div>
 
 
@@ -879,7 +1284,7 @@ Note that this function is called at the end of a pipeline, so it does not retur
 
             
 
-            <td class="description last">callback functon to do notification (to decouple this class from the manager).</td>
+            <td class="description last">Callback functon to do notification (to decouple this class from the manager).</td>
         </tr>
 
     
@@ -902,7 +1307,7 @@ Note that this function is called at the end of a pipeline, so it does not retur
 
             
 
-            <td class="description last">name of this pipeline.</td>
+            <td class="description last">Name of this pipeline.</td>
         </tr>
 
     
@@ -943,7 +1348,7 @@ Note that this function is called at the end of a pipeline, so it does not retur
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line225">line 225</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line638">line 638</a>
     </li></ul></dd>
     
 
@@ -968,301 +1373,6 @@ Note that this function is called at the end of a pipeline, so it does not retur
 
 
 
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="orderBy"><span class="type-signature"></span>orderBy<span class="signature">(func)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Order according to the given function.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>func</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">calculate ordering index.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line108">line 108</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    this object (for method chaining)
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="parseInts"><span class="type-signature"></span>parseInts<span class="signature">(columns)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Turn one or more columns into integer values (from text).
-FIXME: the call in `generators/js/data_colors.js` passes in multiple arguments?
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>columns</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">array</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">columns to convert.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line98">line 98</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    this object (for method chaining)
-</div>
-
-
-
-    
 
 
 
@@ -1336,7 +1446,7 @@ will run.
 
             
 
-            <td class="description last">callback to display table as table.</td>
+            <td class="description last">Callback to display table as table.</td>
         </tr>
 
     
@@ -1359,7 +1469,7 @@ will run.
 
             
 
-            <td class="description last">callback to display table graphically.</td>
+            <td class="description last">Callback to display table graphically.</td>
         </tr>
 
     
@@ -1423,7 +1533,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line190">line 190</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line653">line 653</a>
     </li></ul></dd>
     
 
@@ -1452,7 +1562,7 @@ will run.
 
         
 <div class="param-desc">
-    this object (for method chaining)
+    This object.
 </div>
 
 
@@ -1469,7 +1579,7 @@ will run.
     
 
     
-    <h4 class="name" id="subset"><span class="type-signature"></span>subset<span class="signature">(columns)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="reverse"><span class="type-signature"></span>reverse<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -1477,7 +1587,95 @@ will run.
 
 
 <div class="description">
-    Extract subset of columns.
+    Reverse the order of rows.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line485">line 485</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="select"><span class="type-signature"></span>select<span class="signature">(columns)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Select columns.
 </div>
 
 
@@ -1529,7 +1727,7 @@ will run.
 
             
 
-            <td class="description last">columns to subset.</td>
+            <td class="description last">The names of the columns to keep.</td>
         </tr>
 
     
@@ -1570,7 +1768,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line118">line 118</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line496">line 496</a>
     </li></ul></dd>
     
 
@@ -1599,7 +1797,7 @@ will run.
 
         
 <div class="param-desc">
-    this object (for method chaining).
+    A new dataframe.
 </div>
 
 
@@ -1616,7 +1814,7 @@ will run.
     
 
     
-    <h4 class="name" id="summarize"><span class="type-signature"></span>summarize<span class="signature">(whatToDo)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="sort"><span class="type-signature"></span>sort<span class="signature">(columns)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1624,8 +1822,7 @@ will run.
 
 
 <div class="description">
-    Replace internal dataframe with a summarized dataframe.
-FIXME: replace with DataForge summarization.
+    Sort data by values in specified columns.
 </div>
 
 
@@ -1661,13 +1858,13 @@ FIXME: replace with DataForge summarization.
 
         <tr>
             
-                <td class="name"><code>whatToDo</code></td>
+                <td class="name"><code>columns</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -1677,7 +1874,7 @@ FIXME: replace with DataForge summarization.
 
             
 
-            <td class="description last">function name and column name.</td>
+            <td class="description last">Names of columns to sort by.</td>
         </tr>
 
     
@@ -1718,7 +1915,7 @@ FIXME: replace with DataForge summarization.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line129">line 129</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line512">line 512</a>
     </li></ul></dd>
     
 
@@ -1747,7 +1944,7 @@ FIXME: replace with DataForge summarization.
 
         
 <div class="param-desc">
-    this object (for method chaining)
+    New data frame with sorted data.
 </div>
 
 
@@ -1764,7 +1961,7 @@ FIXME: replace with DataForge summarization.
     
 
     
-    <h4 class="name" id="toArray"><span class="type-signature"></span>toArray<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="summarize"><span class="type-signature"></span>summarize<span class="signature">(func, column)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1772,7 +1969,324 @@ FIXME: replace with DataForge summarization.
 
 
 <div class="description">
-    Extract data from underlying DataForge dataframe as JavaScript array of objects.
+    Replace internal dataframe with a summarized dataframe.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Summarization function.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>column</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Column to summarize.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line539">line 539</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    A new dataframe.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toNumber"><span class="type-signature"></span>toNumber<span class="signature">(columns)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Convert columns to numeric values.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>columns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The names of the columns to convert.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line691">line 691</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    This object.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Convert to string for printing.
 </div>
 
 
@@ -1816,7 +2330,95 @@ FIXME: replace with DataForge summarization.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="utilities_tb_dataframe.js.html">utilities/tb_dataframe.js</a>, <a href="utilities_tb_dataframe.js.html#line233">line 233</a>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line703">line 703</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="ungroup"><span class="type-signature"></span>ungroup<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Remove grouping if present.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utilities_tb_support.js.html">utilities/tb_support.js</a>, <a href="utilities_tb_support.js.html#line580">line 580</a>
     </li></ul></dd>
     
 
@@ -1845,7 +2447,7 @@ FIXME: replace with DataForge summarization.
 
         
 <div class="param-desc">
-    array of objects.
+    A new dataframe.
 </div>
 
 
@@ -1872,13 +2474,13 @@ FIXME: replace with DataForge summarization.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assembleCode">assembleCode</a></li><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#main">main</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#plotEmbed">plotEmbed</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#runTests">runTests</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tableEmbed">tableEmbed</a></li><li><a href="global.html#Tests">Tests</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li><li><a href="global.html#vegaEmbed">vegaEmbed</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#deleteBlock">deleteBlock</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li><li><a href="global.html#TidyBlocksWorkspace">TidyBlocksWorkspace</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Tue Aug 20 2019 17:31:28 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Aug 31 2019 20:25:05 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

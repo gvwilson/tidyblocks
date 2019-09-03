@@ -2,8 +2,8 @@
 // Create a bar plot.
 //
 Blockly.JavaScript['ggplot_bar'] = (block) => {
-  const argX = block.getFieldValue('X')
-  const argY = block.getFieldValue('Y')
+  const x_axis = block.getFieldValue('X_AXIS')
+  const y_axis = block.getFieldValue('Y_AXIS')
   const spec = `{
     "width": 500,
     "height": 300,
@@ -11,15 +11,15 @@ Blockly.JavaScript['ggplot_bar'] = (block) => {
     "mark": "bar",
     "encoding": {
       "x": {
-        "field": "${argX}",
+        "field": "${x_axis}",
         "type": "ordinal"
       },
       "y": {
-        "field": "${argY}",
+        "field": "${y_axis}",
         "type": "quantitative"
       },
       "tooltip": {
-        "field": "${argY}",
+        "field": "${y_axis}",
         "type": "quantitative"
       }
     }

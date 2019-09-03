@@ -2,8 +2,8 @@
 // Create a histogram.
 //
 Blockly.JavaScript['ggplot_hist'] = (block) => {
-  const argColumn = block.getFieldValue('column')
-  const argBins = block.getFieldValue('bins')
+  const column = block.getFieldValue('COLUMN')
+  const bins = block.getFieldValue('BINS')
   const spec = `{
     "width": 500,
     "height": 300,
@@ -12,9 +12,9 @@ Blockly.JavaScript['ggplot_hist'] = (block) => {
     "encoding": {
       "x": {
         "bin": {
-          "maxbins": ${argBins}
+          "maxbins": ${bins}
         },
-        "field": "${argColumn}",
+        "field": "${column}",
         "type": "quantitative"
       },
       "y": {

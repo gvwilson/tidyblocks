@@ -7,7 +7,7 @@ Blockly.defineBlocksWithJsonArray([
     message0: 'Show table',
     previousStatement: null,
     style: 'ggplot_blocks',
-    tooltip: '',
+    tooltip: 'display table as HTML',
     helpUrl: ''
   }
 ])

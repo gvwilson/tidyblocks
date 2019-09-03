@@ -10,7 +10,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
+    tooltip: 'remove grouping',
     helpUrl: ''
   }
 ])

@@ -1,7 +1,7 @@
 const assert = require('assert')
 const fs = require('fs')
 const {parse} = require('node-html-parser')
-const papa = require('papaparse')
+const Papa = require('papaparse')
 
 //
 // Loading our own utilities using 'require' instead of relying on them to be
@@ -11,11 +11,57 @@ const papa = require('papaparse')
 //
 module.paths.unshift(process.cwd())
 const {
+  csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager
-} = require('utilities/tb_support')
+} = require('tidyblocks/tidyblocks')
+
+/**
+ * Assert that an object has a key.
+ * @param {string} actual Object being examined.
+ * @param {string} required Key that must be present.
+ * @param {string} message Error message.
+ */
+const assert_hasKey = (actual, required, message) => {
+  if (! (required in actual)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: Object.keys(actual),
+      expected: required})
+  }
+}
+
+/**
+ * Assert that one string contains another.
+ * @param {string} actual String being examined.
+ * @param {string} required String to look for.
+ * @param {string} message Error message.
+ */
+const assert_includes = (actual, required, message) => {
+  if (! actual.includes(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
+ * Assert that one string starts with another.
+ * @param {string} actual String being examined.
+ * @param {string} required String to look for.
+ * @param {string} message Error message.
+ */
+const assert_startsWith = (actual, required, message) => {
+  if (! actual.startsWith(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
 
 /**
  * Replacement for singleton Blockly object. This defines only the methods and
@@ -62,6 +108,7 @@ const Blockly = {
 class MockBlock {
   constructor (settings) {
     Object.assign(this, settings)
+    TidyBlocksManager.addNewBlock(this)
   }
 
   getFieldValue (key) {
@@ -87,6 +134,13 @@ const makeBlock = (blockName, settings) => {
   else {
     return result[0]
   }
+}
+
+/**
+ * Delete an existing block. (Emulates the drag-and-drop delete in the GUI.)
+ */
+const deleteBlock = (block) => {
+  TidyBlocksManager.deleteBlock(block)
 }
 
 /**
@@ -172,8 +226,7 @@ const readCSV = (url) => {
   }
   const path = `${process.cwd()}/data/${url}`
   const text = fs.readFileSync(path, 'utf-8')
-  const result = papa.parse(text, {header: true})
-  return new TidyBlocksDataFrame(result.data)
+  return csv2TidyBlocksDataFrame(text, Papa.parse)
 }
 
 /**
@@ -194,8 +247,14 @@ const evalCode = (code) => {
 // Exports.
 //
 module.exports = {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   readCSV,
   loadBlockFiles,
   makeBlock,

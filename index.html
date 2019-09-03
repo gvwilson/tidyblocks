@@ -15,13 +15,15 @@
         As Text
         <i class="fa fa-bug"></i>
       </button>
-      <input type="text" id="filename" name="filename" />
-      <a id="download" href="#" onclick="saveCode()"><button>Download</button></a>
-      <input type="file" onchange="loadCode(this.files)"/>
       <button id="runCode" onclick="runCode()">
         Run
         <i class="fa fa-play"></i>
       </button>
+      <br/>
+      <input type="text" id="filename" name="filename" />
+      <a id="download" href="#" onclick="saveCode()"><button>Download</button></a>
+      <input type="file" onchange="loadCode(this.files)"/>
+      <a href="./guide/"><i class="fa fa-info-circle"></i> Guide</a>
       <div class="input" id="blockDisplay">
         <xml id="toolbox">
           <category name="data" categorystyle="data">
@@ -57,8 +59,10 @@
           </category>
           <category name="values" categorystyle="values">
             <block type="value_arithmetic"></block>
+            <block type="value_boolean"></block>
             <block type="value_column"></block>
             <block type="value_compare"></block>
+            <block type="value_convert"></block>
             <block type="value_negate"></block>
             <block type="value_not"></block>
             <block type="value_number"></block>
@@ -82,10 +86,10 @@
     </div>
 
     <!-- Blockly itself -->
-    <script language="javascript" type="text/javascript" src="blockly/blockly_compressed.js"></script>
-    <script language="javascript" type="text/javascript" src="blockly/blocks_compressed.js"></script>
-    <script language="javascript" type="text/javascript" src="blockly/javascript_compressed.js"></script>
-    <script language="javascript" type="text/javascript" src="msg/js/en.js"></script>
+    <script language="javascript" type="text/javascript" src="static/blockly_compressed.js"></script>
+    <script language="javascript" type="text/javascript" src="static/blocks_compressed.js"></script>
+    <script language="javascript" type="text/javascript" src="static/javascript_compressed.js"></script>
+    <script language="javascript" type="text/javascript" src="static/msg/js/en.js"></script>
 
     <!-- DataForge, Vega-Lite, and what-not -->
     <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
@@ -96,10 +100,9 @@
     <!-- Put all blocks code in a div so it's easy to find and load for testing. -->
     <div id="tidyblocks">
       <!-- TidyBlocks supports -->
-      <script src="utilities/tb_support.js"></script>
-      <script src="utilities/tb_runtime.js"></script>
-      <script src="utilities/tb_gui.js"></script>
-      <script src="utilities/tb_themes.js"></script>
+      <script src="tidyblocks/tidyblocks.js"></script>
+      <script src="tidyblocks/gui.js"></script>
+      <script src="tidyblocks/themes.js"></script>
 
       <!-- TidyBlocks blocks -->
 
@@ -175,11 +178,17 @@
       <script src="blocks/value_arithmetic.js"></script>
       <script src="generators/js/value_arithmetic.js"></script>
 
+      <script src="blocks/value_boolean.js"></script>
+      <script src="generators/js/value_boolean.js"></script>
+
       <script src="blocks/value_column.js"></script>
       <script src="generators/js/value_column.js"></script>
 
       <script src="blocks/value_compare.js"></script>
       <script src="generators/js/value_compare.js"></script>
+
+      <script src="blocks/value_convert.js"></script>
+      <script src="generators/js/value_convert.js"></script>
 
       <script src="blocks/value_negate.js"></script>
       <script src="generators/js/value_negate.js"></script>

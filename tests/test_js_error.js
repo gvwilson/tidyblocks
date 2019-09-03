@@ -1,8 +1,14 @@
 const assert = require('assert')
 
 const {
+  csv2TidyBlocksDataFrame,
+  registerPrefix,
+  registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_hasKey,
+  assert_includes,
+  assert_startsWith,
   readCSV,
   loadBlockFiles,
   makeBlock,
@@ -19,7 +25,7 @@ before(() => {
   loadBlockFiles()
 })
 
-describe('execute blocks for entire pipelines', () => {
+describe('raises errors at the right times', () => {
 
   // Reset run queue and embedded plot and table before each test so that their
   // after-test states can be checked.
@@ -42,20 +48,20 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_mutate',
-        {newCol: 'should_fail',
-         Column: makeBlock(
+        {NEW_COLUMN: 'should_fail',
+         VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'ADD',
-            A: makeBlock(
+            LEFT: makeBlock(
               'value_column',
-              {TEXT: 'nonexistent'}),
-            B: makeBlock(
+              {COLUMN: 'nonexistent'}),
+            RIGHT: makeBlock(
               'value_number',
               {NUM: 0})})})
     ]
-    evalCode(pipeline)
-    assert(Result.error != null,
-           `Expected an error message when accessing a nonexistent column`)
+    const code = evalCode(pipeline)
+    assert.notEqual(Result.error, null,
+                    `Expected an error message when accessing a nonexistent column`)
     done()
   })
 

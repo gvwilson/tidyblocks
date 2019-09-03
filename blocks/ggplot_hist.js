@@ -8,19 +8,20 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'column',
+        name: 'COLUMN',
         text: 'column'
       },
       {
         type: 'field_input',
-        name: 'bins',
+        name: 'BINS',
         text: '10'
       }
     ],
     inputsInline: true,
     previousStatement: null,
     style: 'ggplot_blocks',
-    tooltip: '',
-    helpUrl: ''
+    tooltip: 'create histogram',
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

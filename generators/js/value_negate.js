@@ -3,7 +3,7 @@
 //
 Blockly.JavaScript['value_negate'] = (block) => {
   const order = Blockly.JavaScript.ORDER_NONE
-  const A = Blockly.JavaScript.valueToCode(block, 'A', order)
-  const code = `(row) => tbNeg(row, ${A})`
+  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
+  const code = `(row) => tbNeg(row, ${value})`
   return [code, order]
 }

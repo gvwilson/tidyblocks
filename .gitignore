@@ -1,6 +1,10 @@
 # Editor backup files
 *~
 
+# Jekyll files
+.jekyll-metadata
+_site
+
 # Mac OS shrapnel
 .DS_Store
 

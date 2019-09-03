@@ -8,7 +8,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'columns',
+        name: 'MULTIPLE_COLUMNS',
         text: 'column, column'
       }
     ],
@@ -16,7 +16,8 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
-    helpUrl: ''
+    tooltip: 'select columns by name',
+    helpUrl: '',
+    extensions: ['validate_MULTIPLE_COLUMNS']
   }
 ])

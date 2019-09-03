@@ -8,7 +8,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'column',
+        name: 'COLUMN',
         text: 'column'
       }
     ],
@@ -16,7 +16,8 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
-    helpUrl: ''
+    tooltip: 'group data by values in column',
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

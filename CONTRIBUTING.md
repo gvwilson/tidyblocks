@@ -1,3 +1,6 @@
+---
+permalink: /contributing/
+---
 # Contributing
 
 Contributions of all kinds are welcome.

@@ -16,12 +16,13 @@ Blockly.defineBlocksWithJsonArray([
           ['median', 'tbMedian'],
           ['min', 'tbMin'],
           ['std', 'tbStd'],
-          ['sum', 'tbSum']
+          ['sum', 'tbSum'],
+          ['variance', 'tbVariance']
         ]
       },
       {
         type: 'field_input',
-        name: 'column',
+        name: 'COLUMN',
         text: 'column'
       }
     ],
@@ -29,7 +30,8 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'dplyr_blocks',
-    tooltip: '',
-    helpUrl: ''
+    tooltip: 'summarize values',
+    helpUrl: '',
+    extensions: ['validate_COLUMN']
   }
 ])

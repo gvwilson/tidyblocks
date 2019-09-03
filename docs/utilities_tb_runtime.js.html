@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utilities/tb_runtime.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utilities/tb_runtime.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>//
+// Utilities needed at runtime for block execution.
+//
+
+/**
+ * Read CSV from a URL and parse to create TidyBlocks data frame.
+ * @param {string} url URL to read from.
+ */
+const readCSV = (url) => {
+  const request = new XMLHttpRequest()
+  request.open('GET', url, false)
+  request.send(null)
+
+  if (request.status !== 200) {
+    console.log(`ERROR: ${request.status}`)
+    return null
+  }
+  else {
+    const result = Papa.parse(
+      request.responseText.trim(),
+      {
+        header: true,
+        dynamicTyping: true
+      }
+    )
+    return new TidyBlocksDataFrame(result.data)
+  }
+}
+
+/**
+ * Produce a human-friendly name for the type of a column.
+ * @param value The value whose type is checked.
+ * @returns The name of the type
+ */
+const colTypeName = (value) => {
+  return typeof value
+}
+
+/**
+ * Create dynamic table from array from JSON with one table column per property.
+ * Each object must have the same properties.
+ * @param {JSON} json JSON object to convert to table.
+ */
+const json2table = (json) => {
+  const cols = Object.keys(json[0])
+  const headerRow = '&lt;tr>' + cols.map(c => `&lt;th>${c}&lt;/th>`).join('') + '&lt;/tr>'
+  const typeRow = '&lt;tr>' + cols.map(c => `&lt;th>${colTypeName(json[0][c])}&lt;/th>`).join('') + '&lt;/tr>'
+  const bodyRows = json.map(row => {
+    return '&lt;tr>' + cols.map(c => `&lt;td>${row[c]}&lt;/td>`).join('') + '&lt;/tr>'
+  }).join('')
+  return `&lt;table>&lt;thead>${headerRow}${typeRow}&lt;/thead>&lt;tbody>${bodyRows}&lt;/tbody>&lt;/table>`
+}
+
+/**
+ * Find linear model for plotting.
+ * @param {number[]} values_x X-axis values.
+ * @param {number[]} values_y Y-axis values.
+ * @returns {number[]} Slope and intercept.
+ */
+const findLineByLeastSquares = (values_x, values_y) => {
+  const len = values_x.length
+  if (len != values_y.length) {
+    throw new Error('values_x and values_y have different lengths')
+  }
+
+  // Empty case.
+  if (len === 0) {
+    return [NaN, NaN]
+  }
+
+  // Calculate the sum for each of the parts necessary.
+  let x_sum = 0
+  let y_sum = 0
+  let xy_sum = 0
+  let xx_sum = 0
+  for (let i = 0; i&lt;len; i++) {
+    const x = values_x[i]
+    const y = values_y[i]
+    x_sum += x
+    y_sum += y
+    xx_sum += x * x
+    xy_sum += x * y
+  }
+
+  // Calculate m and b for the line equation:
+  // y = x * m + b
+  var m = (len * xy_sum - x_sum * y_sum) / (len * xx_sum - x_sum * x_sum)
+  var b = (y_sum / len) - (m * x_sum) / len
+
+  // Solve for slope and intercept.
+  return [m, b]
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#deleteBlock">deleteBlock</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li><li><a href="global.html#TidyBlocksWorkspace">TidyBlocksWorkspace</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Aug 31 2019 20:25:05 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

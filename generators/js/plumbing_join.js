@@ -3,10 +3,10 @@
 //
 Blockly.JavaScript['plumbing_join'] = (block) => {
   const order = Blockly.JavaScript.ORDER_NONE
-  const leftName = block.getFieldValue('leftName')
-  const leftColumn = block.getFieldValue('leftColumn')
-  const rightName = block.getFieldValue('rightName')
-  const rightColumn = block.getFieldValue('rightColumn')
-  const prefix = registerPrefix(`'${leftName}', '${rightName}'`)
-  return `${prefix} new TidyBlocksDataFrame([]).join((name) => TidyBlocksManager.get(name), '${leftName}', '${leftColumn}', '${rightName}', '${rightColumn}')`
+  const leftTable = block.getFieldValue('LEFT_TABLE')
+  const leftColumn = block.getFieldValue('LEFT_COLUMN')
+  const rightTable = block.getFieldValue('RIGHT_TABLE')
+  const rightColumn = block.getFieldValue('RIGHT_COLUMN')
+  const prefix = registerPrefix(`'${leftTable}', '${rightTable}'`)
+  return `${prefix} new TidyBlocksDataFrame([]).join((name) => TidyBlocksManager.getResult(name), '${leftTable}', '${leftColumn}', '${rightTable}', '${rightColumn}')`
 }

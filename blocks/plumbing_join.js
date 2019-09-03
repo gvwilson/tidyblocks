@@ -8,30 +8,31 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'leftName',
-        text: 'left table'
+        name: 'LEFT_TABLE',
+        text: 'left_table'
       },
       {
         type: 'field_input',
-        name: 'leftColumn',
-        text: 'left column'
+        name: 'LEFT_COLUMN',
+        text: 'left_column'
       },
       {
         type: 'field_input',
-        name: 'rightName',
-        text: 'right table'
+        name: 'RIGHT_TABLE',
+        text: 'right_table'
       },
       {
         type: 'field_input',
-        name: 'rightColumn',
-        text: 'right column'
+        name: 'RIGHT_COLUMN',
+        text: 'right_column'
       }
     ],
     inputsInline: true,
     nextStatement: null,
     style: 'plumbing_blocks',
     hat: 'cap',
-    tooltip: '',
-    helpUrl: ''
+    tooltip: 'join two tables',
+    helpUrl: '',
+    extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
   }
 ])
