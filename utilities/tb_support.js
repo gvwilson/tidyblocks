@@ -167,28 +167,10 @@ const tbAdd = (row, getLeft, getRight) => {
   return left + right
 }
 
-const tbSub = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
-  return left - right
-}
-
-const tbMul = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
-  return left * right
-}
-
 const tbDiv = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left / right
-}
-
-const tbMod = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
-  return left % right
 }
 
 const tbExp = (row, getLeft, getRight) => {
@@ -197,10 +179,38 @@ const tbExp = (row, getLeft, getRight) => {
   return left ** right
 }
 
+const tbMod = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left % right
+}
+
+const tbMul = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left * right
+}
+
+const tbNeg = (row, getValue) => {
+  const value = tbIsNumber(getValue(row))
+  return - value
+}
+
+const tbSub = (row, getLeft, getRight) => {
+  const left = tbIsNumber(getLeft(row))
+  const right = tbIsNumber(getRight(row))
+  return left - right
+}
+
 const tbAnd = (row, getLeft, getRight) => {
   const left = tbToLogical(getLeft(row))
   const right = tbToLogical(getRight(row))
   return left && right
+}
+
+const tbNot = (row, getValue) => {
+  const value = tbToLogical(getValue(row))
+  return ! value
 }
 
 const tbOr = (row, getLeft, getRight) => {
