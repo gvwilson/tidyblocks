@@ -2,7 +2,7 @@
 // Create a histogram.
 //
 Blockly.JavaScript['ggplot_hist'] = (block) => {
-  const argColumn = colName(Blockly.JavaScript.valueToCode(block, 'Column', Blockly.JavaScript.ORDER_NONE))
+  const argColumn = block.getFieldValue('column')
   const argBins = block.getFieldValue('bins')
   const spec = `{
     "width": 500,

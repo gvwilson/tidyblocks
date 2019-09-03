@@ -4,28 +4,27 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'plumbing_join',
-    message0: 'Join %1 %2 %3 %4 %5',
+    message0: 'Join %1 %2 %3 %4',
     args0: [
-      {
-        type: 'input_dummy'
-      },
       {
         type: 'field_input',
         name: 'leftName',
-        text: 'left name'
+        text: 'left table'
       },
       {
-        type: 'input_value',
-        name: 'leftColumn'
+        type: 'field_input',
+        name: 'leftColumn',
+        text: 'left column'
       },
       {
         type: 'field_input',
         name: 'rightName',
-        text: 'right name'
+        text: 'right table'
       },
       {
-        type: 'input_value',
-        name: 'rightColumn'
+        type: 'field_input',
+        name: 'rightColumn',
+        text: 'right column'
       }
     ],
     inputsInline: true,

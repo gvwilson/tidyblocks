@@ -1,20 +1,22 @@
 //
 // Visuals for grouping block.
 //
-Blockly.Blocks['dplyr_groupby'] = {
-  init: function() {
-    this
-      .appendDummyInput()
-      .appendField('Group by')
-    this
-      .appendValueInput('Column')
-      .setCheck(null)
-    this.setInputsInline(true)
-    this.setPreviousStatement(true, 'Array')
-    this.setNextStatement(true, 'Array')
-    this.setNextStatement(true, null)
-    this.setTooltip('')
-    this.setHelpUrl('')
-    this.setStyle('dplyr_blocks')
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'dplyr_groupBy',
+    message0: 'Group by %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'column',
+        text: 'column'
+      }
+    ],
+    inputsInline: true,
+    previousStatement: null,
+    nextStatement: null,
+    style: 'dplyr_blocks',
+    tooltip: '',
+    helpUrl: ''
   }
-}
+])

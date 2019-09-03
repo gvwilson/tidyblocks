@@ -1,20 +1,26 @@
 //
 // Visuals for histogram plot block.
 //
-Blockly.Blocks['ggplot_hist'] = {
-  init: function() {
-    this
-      .appendValueInput('Column')
-      .setCheck(null)
-      .appendField('Histogram')
-    this
-      .appendDummyInput()
-      .appendField('bins:')
-      .appendField(new Blockly.FieldTextInput('bins'), 'bins')
-    this.setInputsInline(true)
-    this.setPreviousStatement(true, null)
-    this.setStyle('ggplot_blocks')
-    this.setTooltip('')
-    this.setHelpUrl('')
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'ggplot_hist',
+    message0: 'Histogram %1 %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'column',
+        text: 'column'
+      },
+      {
+        type: 'field_input',
+        name: 'bins',
+        text: '10'
+      }
+    ],
+    inputsInline: true,
+    previousStatement: null,
+    style: 'ggplot_blocks',
+    tooltip: '',
+    helpUrl: ''
   }
-}
+])

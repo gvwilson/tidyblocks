@@ -1,7 +1,10 @@
 //
-// Select columns.
+// Select columns by name.
 //
 Blockly.JavaScript['dplyr_select'] = (block) => {
-  const argColumn = colName(Blockly.JavaScript.valueToCode(block, 'Column', Blockly.JavaScript.ORDER_NONE))
-  return `.subset(["${argColumn}"])`
+  const columns = block.getFieldValue('columns')
+        .split(',')
+        .map(c => `"${c.trim()}"`)
+        .join(',')
+  return `.select([${columns}])`
 }

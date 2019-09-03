@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'variable_text',
+    type: 'value_text',
     message0: '%1',
     args0: [
       {
@@ -13,7 +13,7 @@ Blockly.defineBlocksWithJsonArray([
       }
     ],
     output: 'String',
-    style: 'variable_blocks',
+    style: 'value_blocks',
     helpUrl: '',
     tooltip: ''
   }

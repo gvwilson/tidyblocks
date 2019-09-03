@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'stats_arithmetic',
+    type: 'value_arithmetic',
     message0: '%1 %2 %3',
     args0: [
       {
@@ -14,10 +14,12 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'OP',
         options: [
-          ['+', 'ADD'],
-          ['-', 'MINUS'],
-          ['\u00D7', 'MULTIPLY'],
-          ['\u00F7', 'DIVIDE']
+          ['+', 'tbAdd'],
+          ['-', 'tbSub'],
+          ['\u00D7', 'tbMul'],
+          ['\u00F7', 'tbDiv'],
+          ['%', 'tbMod'],
+          ['^', 'tbExp']
         ]
       },
       {
@@ -27,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Number',
-    style: 'stats_blocks',
+    style: 'value_blocks',
     helpUrl: ''
   }
 ])

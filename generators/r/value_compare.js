@@ -1,4 +1,4 @@
-Blockly.R['variable_compare'] = function(block) {
+Blockly.R['value_compare'] = function(block) {
     // Comparison operator.
     var OPERATORS = {
       'EQ': '==',

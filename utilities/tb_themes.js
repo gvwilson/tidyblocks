@@ -33,13 +33,7 @@ const tidyBlockStyles = {
     hat: 'cap'
   },
 
-  stats_blocks: {
-    colourPrimary: '#AF43B7',
-    colourSecondary: '#DFA8E3',
-    colourTertiary: '#6D1174'
-  },
-
-  variable_blocks: {
+  value_blocks: {
     colourPrimary: '#E7553C',
     colourSecondary: '#64C7FF',
     colourTertiary: '#760918'
@@ -62,7 +56,7 @@ const tidyCategoryStyles = {
   stats: {
     colour: '#AF43B7'
   },
-  variables: {
+  values: {
     colour: '#E7553C'
   }
 }

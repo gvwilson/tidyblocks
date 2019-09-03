@@ -1,20 +1,22 @@
 //
 // Visuals for select block.
 //
-Blockly.Blocks['dplyr_select'] = {
-  init: function() {
-    this
-      .appendDummyInput()
-      .appendField('Select')
-    this
-      .appendValueInput('Column')
-      .setCheck(null)
-    this.setInputsInline(true)
-    this.setPreviousStatement(true, 'Array')
-    this.setNextStatement(true, 'Array')
-    this.setNextStatement(true, null)
-    this.setTooltip('')
-    this.setHelpUrl('')
-    this.setStyle('dplyr_blocks')
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'dplyr_select',
+    message0: 'Select %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'columns',
+        text: 'column, column'
+      }
+    ],
+    inputsInline: true,
+    previousStatement: null,
+    nextStatement: null,
+    style: 'dplyr_blocks',
+    tooltip: '',
+    helpUrl: ''
   }
-}
+])
