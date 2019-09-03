@@ -4,12 +4,13 @@
 
 /**
  * Read CSV from a URL and parse to create TidyBlocks data frame.
- * @param {string} url - URL to read from.
+ * @param {string} url URL to read from.
  */
 const readCSV = (url) => {
   const request = new XMLHttpRequest()
   request.open('GET', url, false)
   request.send(null)
+
   if (request.status !== 200) {
     console.log(`ERROR: ${request.status}`)
     return null
@@ -29,45 +30,33 @@ const readCSV = (url) => {
 /**
  * Create dynamic table from array from JSON with one table column per property.
  * Each object must have the same properties.
- * @param {JSON} json - JSON object to convert to table.
+ * @param {JSON} json JSON object to convert to table.
  */
 const json2table = (json) => {
-  // get key names and set as column headers
   const cols = Object.keys(json[0])
-
-  // create column headers from col
-  let headerRow = ''
-  cols.forEach(col => {
-    headerRow += `<th>${col}</th>`
-  })
-
-  // build the rows
-  let bodyRows = ''
-  json.forEach(row => {
-    bodyRows += '<tr>'
-    cols.forEach(col => {
-      bodyRows += `<td>${row[col]}</td>`
-    })
-    bodyRows += '</tr>'
-  })
-
-  return `<table><thead><tr>${headerRow}</tr></thead><tbody>${bodyRows}</tbody></table>`
+  const headerRow = '<tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr>'
+  const typeRow = '<tr>' + cols.map(c => `<th>${colTypeName(json[0][c])}</th>`).join('') + '</tr>'
+  const bodyRows = json.map(row => {
+    return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
+  }).join('')
+  return `<table><thead>${headerRow}${typeRow}</thead><tbody>${bodyRows}</tbody></table>`
 }
 
 /**
- * Statistical functions to find linear model for plotting.
- * As an example, here is a linear model using least squares
- **/
+ * Find linear model for plotting.
+ * @param {number[]} values_x X-axis values.
+ * @param {number[]} values_y Y-axis values.
+ * @returns {number[]} Slope and intercept.
+ */
 const findLineByLeastSquares = (values_x, values_y) => {
-  // The above is just for quick access, makes the program faster
   const len = values_x.length
   if (len != values_y.length) {
-    throw new Error('The parameters values_x and values_y need to have same size!')
+    throw 'values_x and values_y have different lengths'
   }
 
-  // Above and below cover edge cases
+  // Empty case.
   if (len === 0) {
-    return [ [], [] ]
+    return [NaN, NaN]
   }
 
   // Calculate the sum for each of the parts necessary.

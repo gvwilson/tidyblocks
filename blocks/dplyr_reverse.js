@@ -1,16 +1,11 @@
 //
-// Visuals for filter block.
+// Visuals for reverse block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_filter',
-    message0: 'Filter %1',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'Column'
-      }
-    ],
+    type: 'dplyr_reverse',
+    message0: 'Reverse',
+    args0: [],
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,

@@ -45,6 +45,25 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('reverses the order of rows', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'dplyr_reverse',
+        {})
+    ]
+    evalCode(pipeline)
+    assert(Array.isArray(Result.table),
+           'Result table is not an array')
+    assert.deepEqual(Result.table,
+                     [{'first': 2, 'second': 200},
+                      {'first': 1, 'second': 100}],
+                     'Data has not been reversed')
+    done()
+  })
+
   it('makes a histogram', (done) => {
     const pipeline = [
       makeBlock(
@@ -89,6 +108,31 @@ describe('execute blocks for entire pipelines', () => {
            'Result table does not contain expected key')
     assert(Result.plot.data.values.length === 150,
            'Result plot data is the wrong length')
+    done()
+  })
+
+  it('converts numeric data to string', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_mutate',
+        {newCol: 'textual',
+         Column: makeBlock(
+           'value_convert',
+           {OP: 'tbToString',
+            A: makeBlock(
+              'value_column',
+              {TEXT: 'red'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Wrong number of rows in output')
+    assert('textual' in Result.table[0],
+           'Result lacks expected column')
+    assert(typeof Result.table[0].textual === 'string',
+           'New column has wrong type')
     done()
   })
 
@@ -138,9 +182,9 @@ describe('execute blocks for entire pipelines', () => {
     evalCode(pipeline)
     assert(TidyBlocksManager.get('left'),
            'Expected something registered under "left"')
-    assert(TidyBlocksManager.get('left').toArray().length == 5,
+    assert(TidyBlocksManager.get('left').data.length == 5,
            'Expected five rows with red != 0')
-    assert(TidyBlocksManager.get('left').toArray().every(row => (row.red != 0)),
+    assert(TidyBlocksManager.get('left').data.every(row => (row.red != 0)),
            'Expected all rows to have red != 0')
     done()
   })
@@ -231,6 +275,34 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('does subtraction correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'dplyr_mutate',
+        {newCol: 'difference',
+         Column: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbSub',
+            A: makeBlock(
+              'value_column',
+              {TEXT: 'second'}),
+            B: makeBlock(
+              'value_column',
+              {TEXT: 'first'})})})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 2,
+           'Wrong number of rows in output')
+    assert(Object.keys(Result.table[0]).length === 3,
+           'Wrong number of columns in output')
+    assert(Result.table.every(row => (row.difference === (row.second - row.first))),
+           'Difference column does not contain correct values')
+    done()
+  })
+
   it('summarizes an entire column using summation', (done) => {
     const pipeline = [
       makeBlock(
@@ -238,7 +310,7 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'dplyr_summarize',
-        {func: 'sum',
+        {FUNC: 'tbSum',
          column: 'red'})
     ]
     evalCode(pipeline)
@@ -272,6 +344,26 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('ungroups values', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_groupBy',
+        {column: 'blue'}),
+      makeBlock(
+        'dplyr_ungroup',
+        {})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Table has the wrong number of rows')
+    assert(! ('_group_' in Result.table[0]),
+           'Table still has group index column')
+    done()
+  })
+
   it('groups by one column and averages another', (done) => {
     const pipeline = [
       makeBlock(
@@ -282,7 +374,7 @@ describe('execute blocks for entire pipelines', () => {
         {column: 'blue'}),
       makeBlock(
         'dplyr_summarize',
-        {func: 'mean',
+        {FUNC: 'tbMean',
          column: 'green'})
     ]
     evalCode(pipeline)

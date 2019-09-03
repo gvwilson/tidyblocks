@@ -1,19 +1,15 @@
 //
-// Visuals for mutate block.
+// Visuals for sorting block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_mutate',
-    message0: 'Mutate %1 %2',
+    type: 'dplyr_sort',
+    message0: 'Sort %1',
     args0: [
       {
         type: 'field_input',
-        name: 'newCol',
-        text: 'new column'
-      },
-      {
-        type: 'input_value',
-        name: 'Column'
+        name: 'columns',
+        text: 'column, column'
       }
     ],
     inputsInline: true,

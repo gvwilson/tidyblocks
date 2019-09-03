@@ -115,6 +115,21 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to convert types', (done) => {
+    const pipeline = makeBlock(
+      'value_convert',
+      {OP: 'tbToString',
+       A: makeBlock(
+         'value_column',
+         {TEXT: 'left'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbToString'),
+           'Generated code does not start with correct function')
+    done()
+  })
+
   it('generates code to filter rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_filter',
@@ -129,6 +144,16 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to reverse rows', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_reverse',
+      {})
+    const code = generateCode(pipeline)
+    assert(code === '.reverse()',
+           'pipeline does not call reverse method')
+    done()
+  })
+
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
       'dplyr_groupBy',
@@ -136,6 +161,16 @@ describe('generate code for single blocks', () => {
     const code = generateCode(pipeline)
     assert(code === '.groupBy("existingColumn")',
            'pipeline does not group rows by existing column')
+    done()
+  })
+
+  it('generates code to ungroup', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_ungroup',
+      {})
+    const code = generateCode(pipeline)
+    assert(code === '.ungroup()',
+           'pipeline does not ungroup rows')
     done()
   })
 
@@ -170,14 +205,24 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to sort by two columns', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_sort',
+      {columns: 'red,green'})
+    const code = generateCode(pipeline)
+    assert(code === '.sort(["red","green"])',
+           'pipeline does not sort by expected columns')
+    done()
+  })
+
   it('generates code to summarize values', (done) => {
     const pipeline = makeBlock(
       'dplyr_summarize',
-      {func: 'mean',
+      {FUNC: 'tbMean',
        column: 'someColumn'}
     )
     const code = generateCode(pipeline)
-    assert(code === ".summarize('mean', 'someColumn')",
+    assert(code === ".summarize(tbMean, 'someColumn')",
            'code does not call summarize correctly')
     done()
   })
@@ -297,6 +342,34 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to negate a column', (done) => {
+    const pipeline = makeBlock(
+      'value_negate',
+      {A: makeBlock(
+        'value_column',
+        {TEXT: 'existing'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbNeg'),
+           'generated code does not appear to negate')
+    done()
+  })
+
+  it('generates code to do logical negation', (done) => {
+    const pipeline = makeBlock(
+      'value_not',
+      {A: makeBlock(
+        'value_column',
+        {TEXT: 'existing'})})
+    const code = generateCode(pipeline)
+    assert(code.startsWith('(row) =>'),
+           'generated code does not appear to be a function')
+    assert(code.includes('tbNot'),
+           'generated code does not appear to do logical negation')
+    done()
+  })
+
   it('generates code to add two columns', (done) => {
     const pipeline = makeBlock(
       'value_arithmetic',
@@ -384,6 +457,16 @@ describe('generate code for single blocks', () => {
     const code = generateCode(pipeline)
     assert(code === '(row) => "Look on my blocks, ye coders, and despair!"',
            'pipeline does not generate constant string')
+    done()
+  })
+
+  it('generates code for a constant boolean', (done) => {
+    const pipeline = makeBlock(
+      'value_boolean',
+      {VALUE: 'false'})
+    const code = generateCode(pipeline)
+    assert(code === '(row) => (false)',
+           'pipeline does not generate constant Boolean')
     done()
   })
   
