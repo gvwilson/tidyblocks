@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: utilities/tb_support.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: utilities/tb_support.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Terminator for well-formed pipelines.
  */
 const TERMINATOR = '// terminated'
@@ -86,7 +114,7 @@ const tbMedian = (values) => {
 const tbMin = (values) => {
   return (values.length === 0)
     ? NaN
-    : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
+    : values.reduce((soFar, val) => (val &lt; soFar) ? val : soFar)
 }
 
 /**
@@ -183,7 +211,7 @@ const tbAdd = (row, getLeft, getRight) => {
 const tbSub = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
-  return left / right
+  return left - right
 }
 
 /**
@@ -196,7 +224,7 @@ const tbSub = (row, getLeft, getRight) => {
 const tbMul = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
-  return left ** right
+  return left * right
 }
 
 /**
@@ -209,7 +237,7 @@ const tbMul = (row, getLeft, getRight) => {
 const tbDiv = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
-  return left % right
+  return left / right
 }
 
 /**
@@ -222,7 +250,7 @@ const tbDiv = (row, getLeft, getRight) => {
 const tbMod = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
-  return left * right
+  return left % right
 }
 
 /**
@@ -235,7 +263,7 @@ const tbMod = (row, getLeft, getRight) => {
 const tbExp = (row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
-  return left - right
+  return left ** right
 }
 
 /**
@@ -248,7 +276,7 @@ const tbExp = (row, getLeft, getRight) => {
 const tbAnd = (row, getLeft, getRight) => {
   const left = tbToLogical(getLeft(row))
   const right = tbToLogical(getRight(row))
-  return left && right
+  return left &amp;&amp; right
 }
 
 /**
@@ -331,7 +359,7 @@ const tbLeq = (row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
-  return left <= right
+  return left &lt;= right
 }
 
 /**
@@ -345,7 +373,7 @@ const tbLt = (row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
-  return left < right
+  return left &lt; right
 }
 
 /**
@@ -433,52 +461,11 @@ class TidyBlocksDataFrame {
     tbAssert(this.hasColumn('_group_'),
              'Cannot ungroup data that is not grouped')
     const newData = this.data.map(row => {
-      const newRow = {...row}
-      newRow[newName] = op(row)
-      return newRow
+      row = {...row}
+      delete row._group_
+      return row
     })
     return new TidyBlocksDataFrame(newData)
-  }
-
-  //
-  // To select columns, provide an array with the names of the columns.
-  // This is *not* the same as providing the columns (which gets the values).
-  //
-  select (columns) {
-    const newData = this.data.map(row => {
-      const result = {}
-      columns.forEach(key => {
-        result[key] = tbGet(row, key)
-      })
-      return result
-    })
-    return new TidyBlocksDataFrame(newData)
-  }
-
-  /**
-   * Sort data by values in specified columns.
-   * @param {Array[string]} columns Names of columns to sort by.
-   * @returns New data frame with sorted data.
-   */
-  sort (columns) {
-    columns.forEach(col => tbAssert(this.hasColumn(col),
-                                    `No such column ${col}`))
-    const result = [...this.data]
-    result.sort((left, right) => {
-      return columns.reduce((soFar, col) => {
-        if (soFar !== 0) {
-          return soFar
-        }
-        if (left[col] < right[col]) {
-          return -1
-        }
-        if (left[col] > right[col]) {
-          return 1
-        }
-        return 0
-      }, 0)
-    })
-    return new TidyBlocksDataFrame(result)
   }
 
   /**
@@ -522,21 +509,6 @@ class TidyBlocksDataFrame {
 
     // Create new dataframe.
     return new TidyBlocksDataFrame(result)
-  }
-
-  //
-  // No parameters needed to remove grouping, but it's an error to ungroup
-  // un-grouped data.
-  //
-  ungroup () {
-    tbAssert(this.hasColumn('_group_'),
-             'Cannot ungroup data that is not grouped')
-    const newData = this.data.map(row => {
-      row = {...row}
-      delete row._group_
-      return row
-    })
-    return new TidyBlocksDataFrame(newData)
   }
 
   /**
@@ -764,3 +736,26 @@ if (typeof module !== 'undefined') {
     TidyBlocksManager
   }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#DemoWorkspace">DemoWorkspace</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToLogical">tbToLogical</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Aug 30 2019 22:09:50 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

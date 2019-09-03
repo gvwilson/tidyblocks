@@ -34,7 +34,6 @@ const generateCodePane = () => {
  * Show the text based code corresponding to selected blocks.
  */
 const showCode = () => {
-  // const code = Blockly.R.workspaceToCode(DemoWorkspace)
   const code = Blockly.JavaScript.workspaceToCode(DemoWorkspace)
   document.getElementById('codeOutput').innerHTML = code
 }
@@ -59,7 +58,7 @@ const setUpBlockly = () => {
 
 /**
  * Callback for displaying a plot.
- * @param spec {Object} - Vega-Lite spec for plot with data filled in.
+ * @param {Object} spec Vega-Lite spec for plot with data filled in.
  */
 const displayPlot = (spec) => {
   vegaEmbed('#plotOutput', spec, {})
@@ -67,7 +66,7 @@ const displayPlot = (spec) => {
 
 /**
  * Callback for displaying a table as HTML.
- * @param table {Object} - JSON array of uniform objects.
+ * @param {Object} table JSON array of uniform objects.
  */
 const displayTable = (table) => {
   document.getElementById('dataOutput').innerHTML = json2table(table)
@@ -75,7 +74,7 @@ const displayTable = (table) => {
 
 /**
  * Callback fro displaying an error online.
- * @param error {string} - the message to display.
+ * @param {string} error The message to display.
  */
 const displayError = (error) => {
   console.log(error) // FIXME display in the GUI

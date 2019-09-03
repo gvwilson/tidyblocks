@@ -176,9 +176,9 @@ describe('execute blocks for entire pipelines', () => {
     evalCode(pipeline)
     assert(TidyBlocksManager.get('left'),
            'Expected something registered under "left"')
-    assert(TidyBlocksManager.get('left').toArray().length == 5,
+    assert(TidyBlocksManager.get('left').data.length == 5,
            'Expected five rows with red != 0')
-    assert(TidyBlocksManager.get('left').toArray().every(row => (row.red != 0)),
+    assert(TidyBlocksManager.get('left').data.every(row => (row.red != 0)),
            'Expected all rows to have red != 0')
     done()
   })
