@@ -139,6 +139,16 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to ungroup', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_ungroup',
+      {})
+    const code = generateCode(pipeline)
+    assert(code === '.ungroup()',
+           'pipeline does not ungroup rows')
+    done()
+  })
+
   it('generates code to copy columns using mutate', (done) => {
     const pipeline = makeBlock(
       'dplyr_mutate',
