@@ -12,11 +12,14 @@
   
     <div id="codeArea">
       <button id="blockToText" onclick="generateCodePane(); showCode();">
-        Block to Text
+        As Text
         <i class="fa fa-bug"></i>
       </button>
+      <input type="text" id="filename" name="filename" />
+      <a id="download" href="#" onclick="saveCode()"><button>Download</button></a>
+      <input type="file" onchange="loadCode(this.files)"/>
       <button id="runCode" onclick="runCode()">
-        Run Code
+        Run
         <i class="fa fa-play"></i>
       </button>
       <div class="input" id="blockDisplay">
