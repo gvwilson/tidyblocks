@@ -7,9 +7,17 @@ Blockly.defineBlocksWithJsonArray([
     message0: 'Summarize %1 %2',
     args0: [
       {
-        type: 'field_input',
-        name: 'func',
-        text: 'function'
+        type: 'field_dropdown',
+        name: 'FUNC',
+        options: [
+          ['count', 'tbCount'],
+          ['max', 'tbMax'],
+          ['mean', 'tbMean'],
+          ['median', 'tbMedian'],
+          ['min', 'tbMin'],
+          ['std', 'tbStd'],
+          ['sum', 'tbSum']
+        ]
       },
       {
         type: 'field_input',

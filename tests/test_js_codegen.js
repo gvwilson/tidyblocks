@@ -173,11 +173,11 @@ describe('generate code for single blocks', () => {
   it('generates code to summarize values', (done) => {
     const pipeline = makeBlock(
       'dplyr_summarize',
-      {func: 'mean',
+      {FUNC: 'tbMean',
        column: 'someColumn'}
     )
     const code = generateCode(pipeline)
-    assert(code === ".summarize('mean', 'someColumn')",
+    assert(code === ".summarize(tbMean, 'someColumn')",
            'code does not call summarize correctly')
     done()
   })
