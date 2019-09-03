@@ -84,15 +84,17 @@ const tableEmbed = (table) => {
   document.getElementById('dataOutput').innerHTML = json2table(table)
 }
 
+
 /**
- * 
- * toggle between tabs
- * for dataframe and error pane
+ * Toggle between tabs for dataframe and error pane
  */
 
+ // Set default to the data frame button is highlighted 
+ // and the data table tab is displayed
 document.getElementById("dataButton").click()
+
 function displayTab(evt, displayTab) {
-  var i, tabcontent, tabLink;
+  let i, tabcontent, tabLink;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";

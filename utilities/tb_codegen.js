@@ -42,10 +42,9 @@ const colName = (input) => {
 
 /**
  * Within the select block we need to place perentheses 
- * arround the comma seperate values
- * 
+ * around the comma seperate values
  */
-const commaSeperate = (input)  => {
+const commaSeparate = (input)  => {
   input = `${input.replace(/ /g,'')
                   .replace(/,/g, "\",\"")}`
   return input
