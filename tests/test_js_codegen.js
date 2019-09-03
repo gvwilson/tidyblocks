@@ -170,6 +170,16 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to sort by two columns', (done) => {
+    const pipeline = makeBlock(
+      'dplyr_sort',
+      {columns: 'red,green'})
+    const code = generateCode(pipeline)
+    assert(code === '.sort(["red","green"])',
+           'pipeline does not sort by expected columns')
+    done()
+  })
+
   it('generates code to summarize values', (done) => {
     const pipeline = makeBlock(
       'dplyr_summarize',

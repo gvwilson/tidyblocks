@@ -92,6 +92,25 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('sorts data by multiple columns', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'dplyr_sort',
+        {columns: 'red, green'})
+    ]
+    evalCode(pipeline)
+    assert(Result.table.length === 11,
+           'Wrong number of rows in result')
+    const ordering = Result.table.map((row) => (1000 * row.red) + row.green)
+    const check = [...ordering].sort((left, right) => (left - right))
+    assert.deepEqual(ordering, check,
+                     'Rows not in order')
+    done()
+  })
+
   it('filters data using not-equals', (done) => {
     const pipeline = [
       makeBlock(
