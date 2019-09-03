@@ -111,22 +111,28 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('sorts data by multiple columns', (done) => {
+  it('converts numeric data to string', (done) => {
     const pipeline = [
       makeBlock(
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_sort',
-        {columns: 'red, green'})
+        'dplyr_mutate',
+        {newCol: 'textual',
+         Column: makeBlock(
+           'value_convert',
+           {OP: 'tbToString',
+            A: makeBlock(
+              'value_column',
+              {TEXT: 'red'})})})
     ]
-    evalCode(pipeline)
+    const code = evalCode(pipeline)
     assert(Result.table.length === 11,
-           'Wrong number of rows in result')
-    const ordering = Result.table.map((row) => (1000 * row.red) + row.green)
-    const check = [...ordering].sort((left, right) => (left - right))
-    assert.deepEqual(ordering, check,
-                     'Rows not in order')
+           'Wrong number of rows in output')
+    assert('textual' in Result.table[0],
+           'Result lacks expected column')
+    assert(typeof Result.table[0].textual === 'string',
+           'New column has wrong type')
     done()
   })
 

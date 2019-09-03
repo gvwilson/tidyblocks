@@ -130,12 +130,44 @@ const tbIsNumber = (value) => {
 }
 
 /**
- * Convert a value to a Boolean.
- * @param value What to convert.
- * @returns {Boolean} Either true or false.
+ * Convert row value to Boolean.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Boolean value.
  */
-const tbToLogical = (value) => {
-  return value ? true : false
+const tbToBoolean = (row, getValue) => {
+  return getValue(row) ? true : false
+}
+
+/**
+ * Convert row value to number.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Numeric value.
+ */
+const tbToNumber = (row, getValue) => {
+  const value = getValue(row)
+  if (typeof value == 'boolean') {
+    return value ? 1 : 0
+  }
+  if (typeof value == 'string') {
+    return parseFloat(string)
+  }
+  return value
+}
+
+/**
+ * Convert row value to string.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns String value.
+ */
+const tbToString = (row, getValue) => {
+  const value = getValue(row)
+  if (typeof value == 'string') {
+    return value
+  }
+  return `${value}`
 }
 
 /**
@@ -246,8 +278,8 @@ const tbExp = (row, getLeft, getRight) => {
  * @returns The conjunction.
  */
 const tbAnd = (row, getLeft, getRight) => {
-  const left = tbToLogical(getLeft(row))
-  const right = tbToLogical(getRight(row))
+  const left = tbToBoolean(row, getLeft)
+  const right = tbToBoolean(row, getRight)
   return left && right
 }
 
@@ -259,8 +291,8 @@ const tbAnd = (row, getLeft, getRight) => {
  * @returns The disjunction.
  */
 const tbOr = (row, getLeft, getRight) => {
-  const left = tbToLogical(getLeft(row))
-  const right = tbToLogical(getRight(row))
+  const left = tbToBoolean(row, getLeft)
+  const right = tbToBoolean(row, getRight)
   return left || right
 }
 
