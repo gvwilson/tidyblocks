@@ -1,3 +1,13 @@
+footer {
+    text-align: center;
+}
+
+img.logo {
+    vertical-align: middle;
+    height: 2em;
+    padding: 0.25em;
+}
+
 /*! normalize.css v2.1.0 | MIT License | git.io/normalize */
 
 /* ==========================================================================
@@ -404,7 +414,7 @@ body {
 }
 
 body {
-  background: #fff;
+  background: #F6F8FA;
 }
 
 body,
@@ -433,13 +443,11 @@ code {
   margin: 0 0 20px;
 }
 
-code {
-  font-family: 'Monaco', monospace, sans-serif;
-}
+
 
 /* SIDEBAR */
 #sidebar {
-  background: #191919;
+  background: #DDDDDD;
   color: #fff;
   float: left;  
   height: 100%;
@@ -450,7 +458,7 @@ code {
 }
 
 #sidebar h1 {
-  background: #111;
+  background: #DDDDDD;
   font-size: 14px;
   margin: 0;
   padding: 20px;
@@ -458,7 +466,7 @@ code {
 }
 
 #sidebar h2 {
-  color: #888;
+  color: black;
   font-size: 14px;
   margin: 0;
 }
@@ -478,7 +486,7 @@ code {
 }
 
 #sidebar ul li a {
-  color: #fff;
+  color: black;
   display: block;
   padding: 0 0 15px;
 }
@@ -502,7 +510,7 @@ code {
 }
 #sidebar input:active,
 #sidebar input:focus {
-  border-color: #ccc;
+  border-color: black;
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.1);
@@ -528,7 +536,6 @@ code {
 }
 
 #content article > a {
-  background: #333;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -550,16 +557,7 @@ code {
 
 #content a h2 code {
   float: right;
-  font-size: 14px;
-}
-
-#content a h2 code b {
-  border-radius: 2px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  color: #fff;
-  font-weight: normal;
-  padding: 3px 6px;
+  font-size: 0;
 }
 
 /* Default */
@@ -576,40 +574,42 @@ code {
   text-transform: uppercase;
 }
 
-/* GET */
-#content article.GET a h2 code {
-  color: #119bdf;
+/* DATA */
+#content article.DATA {
+  background: #F5C162;
 }
 
-#content article.GET a h2 code b {
-  background: #119bdf;
-}
-
-/* POST */
-#content article.POST a h2 code {
-  color: #52ce0e;
-}
-
-#content article.POST a h2 code b {
-  background: #52ce0e;
-}
-
-/* PUT */
 #content article.PUT a h2 code {
-  color: #e08f10;
+  color: #F5C162;
 }
 
 #content article.PUT a h2 code b {
-  background: #e08f10;
+  background: #F5C162;
 }
 
-/* DELETE */
-#content article.DELETE a h2 code {
-  color: #e02a10;
+/* DPLYR */
+#content article.DPLYR {
+  background-color: #81A8D6;
 }
 
-#content article.DELETE a h2 code b {
-  background: #e02a10;
+/* GGPLOT */
+#content article.GGPLOT {
+  background-color: #ABC48E;
+}
+
+/* PLUMBING */
+#content article.PLUMBING {
+  background-color: #808080;
+}
+
+/* VALUES */
+#content article.VALUES {
+  background-color: #D65E46;
+}
+
+/* LICENSE */
+#content article.LICENSE {
+  background-color:black;
 }
 
 /* Reference's body */
@@ -636,4 +636,8 @@ code {
   display: block;
   padding: 15px;
   white-space: pre;
+}
+
+section.body {
+  background-color: #F6F8FA;
 }
