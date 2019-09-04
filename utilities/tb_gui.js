@@ -94,6 +94,7 @@ const tableEmbed = (table) => {
 document.getElementById("dataButton").click()
 
 function displayTab(evt, displayTab) {
+  // tabcontent = Array.from(document.getElementsByClassName("tabcontent"));
   let i, tabcontent, tabLink;
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
