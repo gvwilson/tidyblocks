@@ -1,0 +1,9 @@
+footer {
+    text-align: center;
+}
+
+img.logo {
+    vertical-align: middle;
+    height: 2em;
+    padding: 0.25em;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<head>
+  <title>{{ site.title }}</title>
+  <meta charset='utf-8'/>
+  <meta name='description' content='Documentation website'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
+  <link href="{{'/static/assets.css'|relative_url}}" rel='stylesheet' type='text/css'>
+  <link href="{{'/static/custom.css'|relative_url}}" rel='stylesheet' type='text/css'>
+</head>
+<body>  
+  {{ content }}
+  <footer>
+    <hr/>
+    <p>
+      <a href="{{ '/license/' | relative_url }}"><img class="logo" src="{{ '/static/cc-by.svg' | relative_url }}" alt="License" /></a>
+      <a href="{{ site.repo }}"><img class="logo" src="{{ '/static/github.svg' | relative_url }}" alt="Repository" /></a>
+      <a href="{{ site.theme_repo }}"><img class="logo" src="{{ '/static/jekyll-logo-black.svg' | relative_url }}" alt="Theme" /></a>
+      <br/>
+      © {{ site.year }} <a href="{{ '/team/' | relative_url }}">The Team</a>
+    </p>
+  </footer>
+  
+  <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
+  <script src="{{'/static/assets.js'|relative_url}}" type='text/javascript'></script>
+  <script>require('boot');</script>
+</body>
+</html>
