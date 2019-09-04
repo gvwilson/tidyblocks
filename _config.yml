@@ -4,6 +4,7 @@ year: 2019
 repository: <USERNAME>/<PROJECT>
 kramdown:
   toc_levels: "2"
+theme_repo: "https://github.com/wiredcraft/carte/"
 
 authors:
 - name: "Maya Gans"
