@@ -1,7 +1,7 @@
 # tidyblocks
 
 A blocks-based tool for tidy data manipulation and analysis.
-Please see <http://tidyblocks.tech> for a free online version
+Please see <https://tidyblocks.tech> for a free online version
 or visit [our GitHub repository](https://github.com/tidyblocks/tidyblocks).
 
 <img width="80%" src="https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/static/screenshot.png" alt="Screenshot" />
