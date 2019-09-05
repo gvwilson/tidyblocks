@@ -532,7 +532,7 @@ code {
 
 #content article {
   clear: both;
-  margin: 15px 0;
+  margin: 10px 0;
 }
 
 #content article > a {
@@ -640,4 +640,17 @@ code {
 
 section.body {
   background-color: #F6F8FA;
+}
+
+#wrapper {
+  display: flex;
+}
+#first {
+    display: block;
+    width: 30%;
+}
+#second {
+  display: block;
+  padding: 4px;
+  width: 95%;
 }
