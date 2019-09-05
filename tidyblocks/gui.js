@@ -33,6 +33,7 @@ const initializeDisplay = () => {
     ['blockDisplay', 'block']]) {
     document.getElementById(nodeId).style.display = state
   }
+  document.getElementById('dataButton').click()
 }
 
 /**
@@ -220,4 +221,18 @@ const json2table = (json) => {
     return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
   }).join('')
   return `<table><thead>${headerRow}${typeRow}</thead><tbody>${bodyRows}</tbody></table>`
+}
+
+/**
+ * Toggle between tabs for dataframe and error pane
+ */
+const displayTab = (event, tabName) => {
+  Array.from(document.getElementsByClassName('tabContent')).forEach(element => {
+    element.style.display = 'none'
+  })
+  Array.from(document.getElementsByClassName('tablink')).forEach(element => {
+    element.className = element.classList.remove('active')
+  })
+  document.getElementById(tabName).style.display = 'block';
+  event.currentTarget.classList.add('active')
 }
