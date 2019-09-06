@@ -342,6 +342,34 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('does if-else correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'choice',
+         VALUE: makeBlock(
+           'value_ifElse',
+           {COND: makeBlock(
+             'value_column',
+             {COLUMN: 'red'}),
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'green'}),
+            RIGHT: makeBlock(
+              'value_column',
+              {COLUMN: 'blue'})})})
+    ]
+    evalCode(pipeline)
+    assert.equal(Result.table.length, 11,
+                 'Wrong number of rows in output')
+    assert(Result.table.every(row => (row.choice == (row.red ? row.green : row.blue))),
+           'Incorrect value(s) in result')
+    done()
+  })
+
   it('summarizes an entire column using summation', (done) => {
     const pipeline = [
       makeBlock(
