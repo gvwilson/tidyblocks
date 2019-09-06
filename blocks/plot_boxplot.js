@@ -1,10 +1,10 @@
 //
-// Visuals for bar plot block.
+// Visuals for box plot block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'ggplot_bar',
-    message0: 'Bar %1 %2',
+    type: 'plot_boxplot',
+    message0: 'Boxplot %1 %2',
     args0: [
       {
         type: 'field_input',
@@ -19,8 +19,8 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     previousStatement: null,
-    style: 'ggplot_blocks',
-    tooltip: 'create bar plot',
+    style: 'plot_blocks',
+    tooltip: 'create boxplot',
     helpUrl: '',
     extensions: ['validate_X_AXIS', 'validate_Y_AXIS']
   }

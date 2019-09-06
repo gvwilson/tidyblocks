@@ -1,7 +1,7 @@
 //
 // Create a histogram.
 //
-Blockly.JavaScript['ggplot_hist'] = (block) => {
+Blockly.JavaScript['plot_hist'] = (block) => {
   const column = block.getFieldValue('COLUMN')
   const bins = block.getFieldValue('BINS')
   const spec = `{

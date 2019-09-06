@@ -1,14 +1,16 @@
 //
-// Create a bar plot.
+// Create a box plot.
 //
-Blockly.JavaScript['ggplot_bar'] = (block) => {
+Blockly.JavaScript['plot_boxplot'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
   const spec = `{
     "width": 500,
-    "height": 300,
     "data": { "values": null }, // set to dataframe inside plotting function
-    "mark": "bar",
+    "mark": {
+      "type": "boxplot",
+      "extent": 1.5
+    },
     "encoding": {
       "x": {
         "field": "${x_axis}",
@@ -16,11 +18,7 @@ Blockly.JavaScript['ggplot_bar'] = (block) => {
       },
       "y": {
         "field": "${y_axis}",
-        "type": "quantitative"
-      },
-      "tooltip": {
-        "field": "${y_axis}",
-        "type": "quantitative"
+        "type": "quantitative",
       }
     }
   }`

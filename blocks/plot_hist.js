@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'ggplot_hist',
+    type: 'plot_hist',
     message0: 'Histogram %1 %2',
     args0: [
       {
@@ -19,7 +19,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     previousStatement: null,
-    style: 'ggplot_blocks',
+    style: 'plot_blocks',
     tooltip: 'create histogram',
     helpUrl: '',
     extensions: ['validate_COLUMN']

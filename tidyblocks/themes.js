@@ -13,7 +13,7 @@ const tidyBlockStyles = {
     colourTertiary: '#BF9000'
   },
 
-  ggplot_blocks: {
+  plot_blocks: {
     colourPrimary: '#A4C588',
     colourSecondary: '#64C7FF',
     colourTertiary: '#586B4B'
@@ -47,7 +47,7 @@ const tidyCategoryStyles = {
   transform: {
     colour: '#76AADB'
   },
-  ggplot: {
+  plot: {
     colour: '#A4C588'
   },
   plumbing: {

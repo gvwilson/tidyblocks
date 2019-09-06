@@ -235,7 +235,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a bar plot', (done) => {
     const pipeline = makeBlock(
-      'ggplot_bar',
+      'plot_bar',
       {X_AXIS: makeBlock(
         'value_column',
         {COLUMN: 'X_axis_column'}),
@@ -256,7 +256,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a box plot', (done) => {
     const pipeline = makeBlock(
-      'ggplot_boxplot',
+      'plot_boxplot',
       {X_AXIS: makeBlock(
         'value_column',
         {COLUMN: 'X_axis_column'}),
@@ -277,7 +277,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a histogram', (done) => {
     const pipeline = makeBlock(
-      'ggplot_hist',
+      'plot_hist',
       {COLUMN: 'existingColumn',
        BINS: '20'})
     const code = generateCode(pipeline)
@@ -292,7 +292,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a point plot', (done) => {
     const pipeline = makeBlock(
-      'ggplot_point',
+      'plot_point',
       {X_AXIS: makeBlock(
         'value_column',
         {COLUMN: 'X_axis_column'}),

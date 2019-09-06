@@ -1,10 +1,10 @@
 //
-// Visuals for box plot block.
+// Visuals for scatter plot block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'ggplot_boxplot',
-    message0: 'Boxplot %1 %2',
+    type: 'plot_point',
+    message0: 'Point %1 %2 %3',
     args0: [
       {
         type: 'field_input',
@@ -15,13 +15,18 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_input',
         name: 'Y_AXIS',
         text: 'Y_axis'
+      },
+      {
+        type: 'field_input',
+        name: 'COLOR',
+        text: 'color'
       }
     ],
     inputsInline: true,
     previousStatement: null,
-    style: 'ggplot_blocks',
-    tooltip: 'create boxplot',
+    style: 'plot_blocks',
+    tooltip: 'create scatter plot',
     helpUrl: '',
-    extensions: ['validate_X_AXIS', 'validate_Y_AXIS']
+    extensions: ['validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
   }
 ])

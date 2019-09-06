@@ -54,7 +54,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_iris',
         {}),
       makeBlock(
-        'ggplot_table',
+        'plot_table',
         {})
     ]
     evalCode(pipeline)
@@ -90,7 +90,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_iris',
         {}),
       makeBlock(
-        'ggplot_hist',
+        'plot_hist',
         {COLUMN: 'Petal_Length',
          BINS: '20'})
     ]
@@ -117,7 +117,7 @@ describe('execute blocks for entire pipelines', () => {
         'transform_select',
         {MULTIPLE_COLUMNS: 'Petal_Length'}),
       makeBlock(
-        'ggplot_hist',
+        'plot_hist',
         {COLUMN: 'Petal_Length',
          BINS: '20'})
     ]
@@ -245,7 +245,7 @@ describe('execute blocks for entire pipelines', () => {
              'value_number',
              {NUM: 5.0})})}),
       makeBlock(
-        'ggplot_hist',
+        'plot_hist',
         {Column: makeBlock(
           'value_column',
           {COLUMN: 'Petal_Length'}),

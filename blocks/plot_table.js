@@ -3,10 +3,10 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'ggplot_table',
+    type: 'plot_table',
     message0: 'Show table',
     previousStatement: null,
-    style: 'ggplot_blocks',
+    style: 'plot_blocks',
     tooltip: 'display table as HTML',
     helpUrl: ''
   }

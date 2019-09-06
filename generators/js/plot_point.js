@@ -1,24 +1,26 @@
 //
-// Create a box plot.
+// Make a scatter plot.
 //
-Blockly.JavaScript['ggplot_boxplot'] = (block) => {
+Blockly.JavaScript['plot_point'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
+  const color = block.getFieldValue('COLOR')
   const spec = `{
     "width": 500,
     "data": { "values": null }, // set to dataframe inside plotting function
-    "mark": {
-      "type": "boxplot",
-      "extent": 1.5
-    },
+    "mark": "point",
     "encoding": {
       "x": {
         "field": "${x_axis}",
-        "type": "ordinal"
+        "type": "quantitative"
       },
       "y": {
         "field": "${y_axis}",
-        "type": "quantitative",
+        "type": "quantitative"
+      },
+      "color": {
+        "field": "${color}",
+        "type": "nominal"
       }
     }
   }`
