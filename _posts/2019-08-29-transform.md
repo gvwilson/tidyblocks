@@ -74,29 +74,16 @@ layout: null
 <h1><a id="#sort">Sort</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="/guide/images/transform_sort.png" width="100%"> 
+    <img src="{{'/guide/images/transform_sort.png'| relative_url}}" width="100%">
     </div>
     <div id="second">
     <h3>Description:</h3>
-    <p>Order table rows by an expression involving its variables.</p>
+    <p>Order table rows by an expression involving its variables. Use the checkbox for descending the order of rows.</p>
     <h3>Arguments</h3>
-    <p>The name of the column(s) to arrange the rows by -- seperated by commas.</p>
+    <p><b>column, column: </b>The name of the column(s) to arrange the rows by -- seperated by commas.</p>
+    <p><b>Checkbox: </b>The name of the column(s) to arrange the rows by -- seperated by commas.</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/transform_sort_example.png'| relative_url}}" width="40%">
-    <img src="{{'/guide/images/transform_sort_example_multiple.png'| relative_url}}" width="60%">
-    </div>
-</div>
-
-<h1><a id="#reverse">Reverse</a></h1>
-<div id="wrapper">
-    <div id="first">
-    <img src="{{'/guide/images/transform_reverse.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
-    <h3>Description:</h3>
-    <p>Rearrange table rows in descending order using the column specified within the sort block.</p>
-    <h3>Examples:</h3>
-    <img src="{{'/guide/images/transform_reverse_example.png'| relative_url}}" width="40%">
     </div>
 </div>
 
