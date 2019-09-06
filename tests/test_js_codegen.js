@@ -475,5 +475,23 @@ describe('generate code for single blocks', () => {
                  'pipeline does not generate constant Boolean')
     done()
   })
+
+  it('generates code for if-else', (done) => {
+    const pipeline = makeBlock(
+      'value_ifElse',
+      {COND: makeBlock(
+        'value_column',
+        {COLUMN: 'red'}),
+       LEFT: makeBlock(
+         'value_column',
+         {COLUMN: 'green'}),
+       RIGHT: makeBlock(
+         'value_column',
+         {COLUMN: 'blue'})})
+    const code = generateCode(pipeline)
+    assert.equal(code, "(row) => tbIfElse(row, (row) => tbGet(row, 'red'), (row) => tbGet(row, 'green'), (row) => tbGet(row, 'blue'))",
+                 'pipeline does not generate correct code for if-else')
+    done()
+  })
   
 })
