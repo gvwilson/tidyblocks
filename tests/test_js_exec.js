@@ -314,34 +314,6 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('does subtraction correctly', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'difference',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbSub',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'second'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'first'})})})
-    ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 2,
-                 'Wrong number of rows in output')
-    assert.equal(Object.keys(Result.table[0]).length, 3,
-                 'Wrong number of columns in output')
-    assert(Result.table.every(row => (row.difference === (row.second - row.first))),
-           'Difference column does not contain correct values')
-    done()
-  })
-
   it('summarizes an entire column using summation', (done) => {
     const pipeline = [
       makeBlock(
@@ -543,6 +515,68 @@ describe('execute blocks for entire pipelines', () => {
                        'left_name': 'white', 'left_green': 255, 'left_blue': 255,
                        'right_name': 'white', 'right_red': 255, 'right_blue': 255}],
                      'Incorrect join result')
+    done()
+  })
+
+})
+
+describe('check that specific bugs have been fixed', () => {
+
+  // Reset run queue and embedded plot and table before each test so that their
+  // after-test states can be checked.
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+    resetDisplay()
+  })
+
+  it('does subtraction correctly (#58)', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'difference',
+         VALUE: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbSub',
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'second'}),
+            RIGHT: makeBlock(
+              'value_column',
+              {COLUMN: 'first'})})})
+    ]
+    evalCode(pipeline)
+    assert.equal(Result.table.length, 2,
+                 'Wrong number of rows in output')
+    assert.equal(Object.keys(Result.table[0]).length, 3,
+                 'Wrong number of columns in output')
+    assert(Result.table.every(row => (row.difference === (row.second - row.first))),
+           'Difference column does not contain correct values')
+    done()
+  })
+
+  it('filters strings correctly (#143)', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_iris',
+        {}),
+      makeBlock(
+        'transform_filter',
+        {TEST: makeBlock(
+           'value_compare',
+           {OP: 'tbEq',
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'Species'}),
+            RIGHT: makeBlock(
+              'value_text',
+              {VALUE: 'setosa'})})})
+    ]
+    evalCode(pipeline)
+    assert.equal(Result.table.length, 50,
+                 'Wrong number of results in output')
     done()
   })
 
