@@ -396,6 +396,19 @@ const tbOr = (row, getLeft, getRight) => {
   return left || right
 }
 
+/**
+ * Choosing a value based on a logical condition.
+ * @param {Object} row The row to get values from.
+ * @param {function} getCond How to get the condition's value.
+ * @param {function} getLeft How to get the left value from the row.
+ * @param {function} getRight How to get the right value from the row.
+ * @returns The left (right) value if the condition is true (false).
+ */
+const tbIfElse = (row, getCond, getLeft, getRight) => {
+  const cond = tbToBoolean(row, getCond)
+  return cond ? getLeft(row) : getRight(row)
+}
+
 //--------------------------------------------------------------------------------
 
 /**
