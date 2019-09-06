@@ -54,7 +54,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_iris',
         {}),
       makeBlock(
-        'ggplot_table',
+        'plot_table',
         {})
     ]
     evalCode(pipeline)
@@ -71,7 +71,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_double',
         {}),
       makeBlock(
-        'dplyr_reverse',
+        'transform_reverse',
         {})
     ]
     evalCode(pipeline)
@@ -90,7 +90,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_iris',
         {}),
       makeBlock(
-        'ggplot_hist',
+        'plot_hist',
         {COLUMN: 'Petal_Length',
          BINS: '20'})
     ]
@@ -114,10 +114,10 @@ describe('execute blocks for entire pipelines', () => {
         'data_iris',
         {}),
       makeBlock(
-        'dplyr_select',
+        'transform_select',
         {MULTIPLE_COLUMNS: 'Petal_Length'}),
       makeBlock(
-        'ggplot_hist',
+        'plot_hist',
         {COLUMN: 'Petal_Length',
          BINS: '20'})
     ]
@@ -137,7 +137,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_sort',
+        'transform_sort',
         {MULTIPLE_COLUMNS: 'red, green'})
     ]
     evalCode(pipeline)
@@ -156,7 +156,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_mutate',
+        'transform_mutate',
         {COLUMN: 'textual',
          VALUE: makeBlock(
            'value_convert',
@@ -181,7 +181,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
@@ -204,7 +204,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
@@ -234,7 +234,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_iris',
         {}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbGt',
@@ -245,7 +245,7 @@ describe('execute blocks for entire pipelines', () => {
              'value_number',
              {NUM: 5.0})})}),
       makeBlock(
-        'ggplot_hist',
+        'plot_hist',
         {Column: makeBlock(
           'value_column',
           {COLUMN: 'Petal_Length'}),
@@ -267,7 +267,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbGeq',
@@ -292,7 +292,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_mutate',
+        'transform_mutate',
         {COLUMN: 'red_green',
          VALUE: makeBlock(
            'value_arithmetic',
@@ -320,7 +320,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_double',
         {}),
       makeBlock(
-        'dplyr_mutate',
+        'transform_mutate',
         {COLUMN: 'difference',
          VALUE: makeBlock(
            'value_arithmetic',
@@ -348,7 +348,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_summarize',
+        'transform_summarize',
         {FUNC: 'tbSum',
          COLUMN: 'red'})
     ]
@@ -368,7 +368,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_groupBy',
+        'transform_groupBy',
         {COLUMN: 'blue'})
     ]
     evalCode(pipeline)
@@ -389,10 +389,10 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_groupBy',
+        'transform_groupBy',
         {COLUMN: 'blue'}),
       makeBlock(
-        'dplyr_ungroup',
+        'transform_ungroup',
         {})
     ]
     evalCode(pipeline)
@@ -409,10 +409,10 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_groupBy',
+        'transform_groupBy',
         {COLUMN: 'blue'}),
       makeBlock(
-        'dplyr_summarize',
+        'transform_summarize',
         {FUNC: 'tbMean',
          COLUMN: 'green'})
     ]
@@ -465,7 +465,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
@@ -484,7 +484,7 @@ describe('execute blocks for entire pipelines', () => {
         'data_colors',
         {}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
@@ -506,7 +506,7 @@ describe('execute blocks for entire pipelines', () => {
          RIGHT_TABLE: 'right',
          RIGHT_COLUMN: 'green'}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',
@@ -517,7 +517,7 @@ describe('execute blocks for entire pipelines', () => {
              'value_number',
              {NUM: 0})})}),
       makeBlock(
-        'dplyr_filter',
+        'transform_filter',
         {TEST: makeBlock(
           'value_compare',
           {OP: 'tbNeq',

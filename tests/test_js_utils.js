@@ -114,7 +114,7 @@ describe('blocks are given IDs and can be looked up', () => {
         'data_single',
         {}),
       makeBlock(
-        'dplyr_mutate',
+        'transform_mutate',
         {NEW_COLUMN: 'should_fail',
          VALUE: makeBlock(
            'value_arithmetic',

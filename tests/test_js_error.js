@@ -47,7 +47,7 @@ describe('raises errors at the right times', () => {
         'data_single',
         {}),
       makeBlock(
-        'dplyr_mutate',
+        'transform_mutate',
         {NEW_COLUMN: 'should_fail',
          VALUE: makeBlock(
            'value_arithmetic',

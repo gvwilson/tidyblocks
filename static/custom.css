@@ -587,13 +587,13 @@ code {
   background: #F5C162;
 }
 
-/* DPLYR */
-#content article.DPLYR {
+/* TRANSFORM */
+#content article.TRANSFORM {
   background-color: #81A8D6;
 }
 
-/* GGPLOT */
-#content article.GGPLOT {
+/* PLOT */
+#content article.PLOT {
   background-color: #ABC48E;
 }
 

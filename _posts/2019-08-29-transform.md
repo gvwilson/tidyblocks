@@ -1,0 +1,127 @@
+---
+title: 'Transforming Blocks'
+type: 'TRANSFORM'
+layout: null
+---
+
+### These blocks can be used after you've brought in a data block into the workspace and want to tidy or transform the data. If you need to create a new variable, summarize the data, or just want to rename a column then these are the blocks for you. 
+
+<h1><a id="#filter">Filter</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    <img src="{{'/guide/images/transform_filter.png'| relative_url}}" width="100%">
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>Use the Filter block to find rows/cases where conditions are true.</p>
+    <h3>Arguments</h3>
+    <p>Logical predicates defined in terms of the variables within the data block. Multiple conditions are combined with AND blocks. Only rows where the condition evaluates to TRUE are kept.</p>
+    <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_filter_example.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_filter_example_multiple.png'| relative_url}}" width="80%">
+    </div>
+</div>
+
+<h1><a id="#groupby">Group By</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    <img src="{{'/guide/images/transform_groupBy.png'| relative_url}}" width="100%">
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>Most data operations are done on groups defined by variables. The group by block takes an existing table and converts it into a grouped table where operations are performed "by group". The ungroup() block can be used to remove grouping.</p>
+    <h3>Arguments</h3>
+    <p>The name of the column(s) to group by. </p>
+    <h3>Examples:</h3>
+    FIXME
+    </div>
+</div>
+
+<h1><a id="#mutate">Mutate</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    <img src="{{'/guide/images/transform_mutate.png'| relative_url}}" width="100%">
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>Add new variables, while preserving existing variables. Columns can be overwritten if the new column is given the same name as the existing column.</p>
+    <h3>Arguments</h3>
+    <p>In line: New name of column (using the name of an existing column will overwrite that column).</p>
+    <p>Field: Expression to calculate the new column.</p>
+    <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_mutate_example.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_mutate_example_multiple.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_mutate_example_type.png'| relative_url}}" width="80%">
+    </div>
+</div>
+
+<h1><a id="#select">Select</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    <img src="/guide/images/transform_select.png" width="100%"> 
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>Choose or rename variables from a table. The select block keeps only the variables you mention.</p>
+    <h3>Arguments</h3>
+    <p>The name of the column(s) to keep -- seperated by commas.</p>
+    <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_select_example.png'| relative_url}}" width="40%">
+    <img src="{{'/guide/images/transform_select_example_multiple.png'| relative_url}}" width="60%">
+    </div>
+</div>
+
+<h1><a id="#sort">Sort</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    <img src="/guide/images/transform_sort.png" width="100%"> 
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>Order table rows by an expression involving its variables.</p>
+    <h3>Arguments</h3>
+    <p>The name of the column(s) to arrange the rows by -- seperated by commas.</p>
+    <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_sort_example.png'| relative_url}}" width="40%">
+    <img src="{{'/guide/images/transform_sort_example_multiple.png'| relative_url}}" width="60%">
+    </div>
+</div>
+
+<h1><a id="#reverse">Reverse</a></h1>
+<div id="wrapper">
+    <div id="first">
+    <img src="{{'/guide/images/transform_reverse.png'| relative_url}}" width="100%">
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>Rearrange table rows in descending order using the column specified within the sort block.</p>
+    <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_reverse_example.png'| relative_url}}" width="40%">
+    </div>
+</div>
+
+<h1><a id="#summarize">Summarize</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p></p>
+    <h3>Arguments</h3>
+    <p></p>
+    <h3>Examples:</h3>
+    </div>
+</div>
+
+<h1><a id="#ungroup">Ungroup</a></h1>
+<div id="wrapper">
+    <div id="first"> 
+    <img src="{{'/guide/images/transform_ungroup.png'| relative_url}}" width="100%">
+    </div>
+    <div id="second">
+    <h3>Description:</h3>
+    <p>The ungroup block removes the grouping done with the group by block. This is useful if after calculating summary statistics for a group, you'd like to perform further aggregate statistics on the entire dataset.</p>
+    <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_ungroup_example.png'| relative_url}}" width="80%">
+    </div>
+</div>

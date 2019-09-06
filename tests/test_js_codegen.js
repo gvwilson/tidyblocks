@@ -138,7 +138,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to filter rows', (done) => {
     const pipeline = makeBlock(
-      'dplyr_filter',
+      'transform_filter',
       {TEST: makeBlock(
         'value_column',
         {COLUMN: 'existingColumn'})})
@@ -152,7 +152,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to reverse rows', (done) => {
     const pipeline = makeBlock(
-      'dplyr_reverse',
+      'transform_reverse',
       {})
     const code = generateCode(pipeline)
     assert.equal(code, '.reverse()',
@@ -162,7 +162,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
-      'dplyr_groupBy',
+      'transform_groupBy',
       {COLUMN: 'existingColumn'})
     const code = generateCode(pipeline)
     assert.equal(code, '.groupBy("existingColumn")',
@@ -172,7 +172,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to ungroup', (done) => {
     const pipeline = makeBlock(
-      'dplyr_ungroup',
+      'transform_ungroup',
       {})
     const code = generateCode(pipeline)
     assert.equal(code, '.ungroup()',
@@ -182,7 +182,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to copy columns using mutate', (done) => {
     const pipeline = makeBlock(
-      'dplyr_mutate',
+      'transform_mutate',
       {COLUMN: 'newColumnName',
        VALUE: makeBlock(
          'value_column',
@@ -201,7 +201,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to select a single column', (done) => {
     const pipeline = makeBlock(
-      'dplyr_select',
+      'transform_select',
       {MULTIPLE_COLUMNS: 'existingColumn'})
     const code = generateCode(pipeline)
     assert_startsWith(code, '.select',
@@ -213,7 +213,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to sort by two columns', (done) => {
     const pipeline = makeBlock(
-      'dplyr_sort',
+      'transform_sort',
       {MULTIPLE_COLUMNS: 'red,green'})
     const code = generateCode(pipeline)
     assert.equal(code, '.sort(["red","green"])',
@@ -223,7 +223,7 @@ describe('generate code for single blocks', () => {
 
   it('generates code to summarize values', (done) => {
     const pipeline = makeBlock(
-      'dplyr_summarize',
+      'transform_summarize',
       {FUNC: 'tbMean',
        COLUMN: 'someColumn'}
     )
@@ -235,7 +235,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a bar plot', (done) => {
     const pipeline = makeBlock(
-      'ggplot_bar',
+      'plot_bar',
       {X_AXIS: makeBlock(
         'value_column',
         {COLUMN: 'X_axis_column'}),
@@ -256,7 +256,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a box plot', (done) => {
     const pipeline = makeBlock(
-      'ggplot_boxplot',
+      'plot_boxplot',
       {X_AXIS: makeBlock(
         'value_column',
         {COLUMN: 'X_axis_column'}),
@@ -277,7 +277,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a histogram', (done) => {
     const pipeline = makeBlock(
-      'ggplot_hist',
+      'plot_hist',
       {COLUMN: 'existingColumn',
        BINS: '20'})
     const code = generateCode(pipeline)
@@ -292,7 +292,7 @@ describe('generate code for single blocks', () => {
 
   it('generates a point plot', (done) => {
     const pipeline = makeBlock(
-      'ggplot_point',
+      'plot_point',
       {X_AXIS: makeBlock(
         'value_column',
         {COLUMN: 'X_axis_column'}),
