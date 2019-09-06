@@ -220,7 +220,7 @@ const json2table = (json) => {
   const bodyRows = json.map(row => {
     return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
   }).join('')
-  return `<table><thead>${headerRow}${typeRow}</thead><tbody>${bodyRows}</tbody></table>`
+  return `<table><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
 }
 
 /**

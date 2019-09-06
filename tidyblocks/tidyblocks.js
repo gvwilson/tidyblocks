@@ -169,7 +169,7 @@ const tbMedian = (values) => {
 }
 
 /**
- * Find median value.
+ * Find minimum value.
  * @param {Array} values The values to be searched.
  * @return {number} Minimum value.
  */
