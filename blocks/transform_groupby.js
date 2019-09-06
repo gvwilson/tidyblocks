@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_groupBy',
+    type: 'transform_groupBy',
     message0: 'Group by %1',
     args0: [
       {
@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,
-    style: 'dplyr_blocks',
+    style: 'transform_blocks',
     tooltip: 'group data by values in column',
     helpUrl: '',
     extensions: ['validate_COLUMN']

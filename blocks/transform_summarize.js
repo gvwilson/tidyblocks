@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_summarize',
+    type: 'transform_summarize',
     message0: 'Summarize %1 %2',
     args0: [
       {
@@ -29,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,
-    style: 'dplyr_blocks',
+    style: 'transform_blocks',
     tooltip: 'summarize values',
     helpUrl: '',
     extensions: ['validate_COLUMN']

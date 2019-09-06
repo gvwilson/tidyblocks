@@ -1,4 +1,4 @@
-Blockly.R['dplyr_filter'] = function(block) {
+Blockly.R['transform_filter'] = function(block) {
 
     var argument0 = Blockly.JavaScript.valueToCode(block, 'Columns',
          Blockly.JavaScript.ORDER_NONE);

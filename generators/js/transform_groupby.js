@@ -1,7 +1,7 @@
 //
 // Group data.
 //
-Blockly.JavaScript['dplyr_groupBy'] = (block) => {
+Blockly.JavaScript['transform_groupBy'] = (block) => {
   const column = block.getFieldValue('COLUMN')
   return `.groupBy("${column}")`
 }

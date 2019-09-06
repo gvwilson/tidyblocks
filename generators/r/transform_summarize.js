@@ -1,4 +1,4 @@
-Blockly.R['dplyr_summarize'] = (block) => {
+Blockly.R['transform_summarize'] = (block) => {
     const argColumns = Blockly.JavaScript.valueToCode(block, 'Columns', Blockly.JavaScript.ORDER_NONE)
     return ` %>% \n\t summarize(${argColumns})`
   }

@@ -109,8 +109,8 @@ and that your work may be made available under the terms of [our license](LICENS
 -   Code generation is complicated by the fact that Data-Forge uses callback functions for most operations.
     For example,
     the code we need for filtering is `dataframe.where(row => (row["columnName"]))`,
-    but the blocks that implement this are a `dplyr_filter` block
-    that contains a `dplyr_column` block that in turn contains the column name.
+    but the blocks that implement this are a `transform_filter` block
+    that contains a `transform_column` block that in turn contains the column name.
     The column name block could return `row["columnName"]`
     for insertion into a filter template `.where(row => (${EXPRESSION}))`,
     but if it does,

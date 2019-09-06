@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_mutate',
+    type: 'transform_mutate',
     message0: 'Mutate %1 %2',
     args0: [
       {
@@ -19,7 +19,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,
-    style: 'dplyr_blocks',
+    style: 'transform_blocks',
     tooltip: 'create new column from existing columns',
     helpUrl: '',
     extensions: ['validate_COLUMN']

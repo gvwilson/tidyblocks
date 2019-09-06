@@ -1,6 +1,6 @@
 ---
 title: 'Transforming Blocks'
-type: 'DPLYR'
+type: 'TRANSFORM'
 layout: null
 ---
 
@@ -9,7 +9,7 @@ layout: null
 <h1><a id="#filter">Filter</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="{{'/guide/images/dplyr_filter.png'| relative_url}}" width="100%">
+    <img src="{{'/guide/images/transform_filter.png'| relative_url}}" width="100%">
     </div>
     <div id="second">
     <h3>Description:</h3>
@@ -17,15 +17,15 @@ layout: null
     <h3>Arguments</h3>
     <p>Logical predicates defined in terms of the variables within the data block. Multiple conditions are combined with AND blocks. Only rows where the condition evaluates to TRUE are kept.</p>
     <h3>Examples:</h3>
-    <img src="{{'/guide/images/dplyr_filter_example.png'| relative_url}}" width="80%">
-    <img src="{{'/guide/images/dplyr_filter_example_multiple.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_filter_example.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_filter_example_multiple.png'| relative_url}}" width="80%">
     </div>
 </div>
 
 <h1><a id="#groupby">Group By</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="{{'/guide/images/dplyr_groupBy.png'| relative_url}}" width="100%">
+    <img src="{{'/guide/images/transform_groupBy.png'| relative_url}}" width="100%">
     </div>
     <div id="second">
     <h3>Description:</h3>
@@ -40,7 +40,7 @@ layout: null
 <h1><a id="#mutate">Mutate</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="{{'/guide/images/dplyr_mutate.png'| relative_url}}" width="100%">
+    <img src="{{'/guide/images/transform_mutate.png'| relative_url}}" width="100%">
     </div>
     <div id="second">
     <h3>Description:</h3>
@@ -49,16 +49,16 @@ layout: null
     <p>In line: New name of column (using the name of an existing column will overwrite that column).</p>
     <p>Field: Expression to calculate the new column.</p>
     <h3>Examples:</h3>
-    <img src="{{'/guide/images/dplyr_mutate_example.png'| relative_url}}" width="80%">
-    <img src="{{'/guide/images/dplyr_mutate_example_multiple.png'| relative_url}}" width="80%">
-    <img src="{{'/guide/images/dplyr_mutate_example_type.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_mutate_example.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_mutate_example_multiple.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_mutate_example_type.png'| relative_url}}" width="80%">
     </div>
 </div>
 
 <h1><a id="#select">Select</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="/guide/images/dplyr_select.png" width="100%"> 
+    <img src="/guide/images/transform_select.png" width="100%"> 
     </div>
     <div id="second">
     <h3>Description:</h3>
@@ -66,15 +66,15 @@ layout: null
     <h3>Arguments</h3>
     <p>The name of the column(s) to keep -- seperated by commas.</p>
     <h3>Examples:</h3>
-    <img src="{{'/guide/images/dplyr_select_example.png'| relative_url}}" width="40%">
-    <img src="{{'/guide/images/dplyr_select_example_multiple.png'| relative_url}}" width="60%">
+    <img src="{{'/guide/images/transform_select_example.png'| relative_url}}" width="40%">
+    <img src="{{'/guide/images/transform_select_example_multiple.png'| relative_url}}" width="60%">
     </div>
 </div>
 
 <h1><a id="#sort">Sort</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="/guide/images/dplyr_sort.png" width="100%"> 
+    <img src="/guide/images/transform_sort.png" width="100%"> 
     </div>
     <div id="second">
     <h3>Description:</h3>
@@ -82,21 +82,21 @@ layout: null
     <h3>Arguments</h3>
     <p>The name of the column(s) to arrange the rows by -- seperated by commas.</p>
     <h3>Examples:</h3>
-    <img src="{{'/guide/images/dplyr_sort_example.png'| relative_url}}" width="40%">
-    <img src="{{'/guide/images/dplyr_sort_example_multiple.png'| relative_url}}" width="60%">
+    <img src="{{'/guide/images/transform_sort_example.png'| relative_url}}" width="40%">
+    <img src="{{'/guide/images/transform_sort_example_multiple.png'| relative_url}}" width="60%">
     </div>
 </div>
 
 <h1><a id="#reverse">Reverse</a></h1>
 <div id="wrapper">
     <div id="first">
-    <img src="{{'/guide/images/dplyr_reverse.png'| relative_url}}" width="100%">
+    <img src="{{'/guide/images/transform_reverse.png'| relative_url}}" width="100%">
     </div>
     <div id="second">
     <h3>Description:</h3>
     <p>Rearrange table rows in descending order using the column specified within the sort block.</p>
     <h3>Examples:</h3>
-    <img src="{{'/guide/images/dplyr_reverse_example.png'| relative_url}}" width="40%">
+    <img src="{{'/guide/images/transform_reverse_example.png'| relative_url}}" width="40%">
     </div>
 </div>
 
@@ -116,12 +116,12 @@ layout: null
 <h1><a id="#ungroup">Ungroup</a></h1>
 <div id="wrapper">
     <div id="first"> 
-    <img src="{{'/guide/images/dplyr_ungroup.png'| relative_url}}" width="100%">
+    <img src="{{'/guide/images/transform_ungroup.png'| relative_url}}" width="100%">
     </div>
     <div id="second">
     <h3>Description:</h3>
     <p>The ungroup block removes the grouping done with the group by block. This is useful if after calculating summary statistics for a group, you'd like to perform further aggregate statistics on the entire dataset.</p>
     <h3>Examples:</h3>
-    <img src="{{'/guide/images/dplyr_ungroup_example.png'| relative_url}}" width="80%">
+    <img src="{{'/guide/images/transform_ungroup_example.png'| relative_url}}" width="80%">
     </div>
 </div>

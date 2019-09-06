@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_sort',
+    type: 'transform_sort',
     message0: 'Sort %1',
     args0: [
       {
@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,
-    style: 'dplyr_blocks',
+    style: 'transform_blocks',
     tooltip: 'sort rows by values in columns',
     helpUrl: '',
     extensions: ['validate_MULTIPLE_COLUMNS']

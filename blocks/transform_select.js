@@ -3,7 +3,7 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_select',
+    type: 'transform_select',
     message0: 'Select %1',
     args0: [
       {
@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,
-    style: 'dplyr_blocks',
+    style: 'transform_blocks',
     tooltip: 'select columns by name',
     helpUrl: '',
     extensions: ['validate_MULTIPLE_COLUMNS']

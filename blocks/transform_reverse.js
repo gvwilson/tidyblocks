@@ -3,13 +3,13 @@
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'dplyr_reverse',
+    type: 'transform_reverse',
     message0: 'Reverse',
     args0: [],
     inputsInline: true,
     previousStatement: null,
     nextStatement: null,
-    style: 'dplyr_blocks',
+    style: 'transform_blocks',
     tooltip: 'reverse order of columns',
     helpUrl: ''
   }

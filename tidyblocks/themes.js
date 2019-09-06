@@ -7,7 +7,7 @@ const tidyBlockStyles = {
     hat: 'cap'
   },
 
-  dplyr_blocks: {
+  transform_blocks: {
     colourPrimary: '#76AADB',
     colourSecondary: '#3976AD',
     colourTertiary: '#BF9000'
@@ -44,7 +44,7 @@ const tidyCategoryStyles = {
   data: {
     colour: '#FEBE4C'
   },
-  dplyr: {
+  transform: {
     colour: '#76AADB'
   },
   ggplot: {
