@@ -2,5 +2,5 @@
 // Ungroup data.
 //
 Blockly.JavaScript['transform_ungroup'] = (block) => {
-  return `.ungroup()`
+  return `.ungroup(${block.tbId})`
 }

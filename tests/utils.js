@@ -49,6 +49,21 @@ const assert_includes = (actual, required, message) => {
 }
 
 /**
+ * Assert that a string matches a regular expression.
+ * @param {string} actual String being examined.
+ * @param {regexp} required Pattern to look for.
+ * @param {string} message Error message.
+ */
+const assert_match = (actual, required, message) => {
+  if (! actual.match(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
  * Assert that one string starts with another.
  * @param {string} actual String being examined.
  * @param {string} required String to look for.
@@ -80,7 +95,10 @@ const Blockly = {
     ORDER_UNARY_NEGATION: 'order=negation',
 
     quote_: (value) => {
-      return `"${value}"`
+      if (typeof value != 'string') {
+        return value
+      }
+      return `"${value.replace('"', '\\"')}"`
     },
 
     valueToCode: (block, field, order) => {
@@ -254,6 +272,7 @@ module.exports = {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,
