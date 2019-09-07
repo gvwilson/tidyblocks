@@ -886,6 +886,7 @@ class TidyBlocksManagerClass {
    * @param {function} readCSV How to read a CSV file (used in 'eval').
    */
   run (getCode, displayTable, displayPlot, displayError, readCSV) {
+    displayError('') // clear legacy errors
     try {
       let code = getCode()
       code = fixCode(code)

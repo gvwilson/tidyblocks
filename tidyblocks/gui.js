@@ -133,11 +133,11 @@ const displayTable = (table) => {
 }
 
 /**
- * Callback fro displaying an error online.
+ * Callback for displaying an error online.
  * @param {string} error The message to display.
  */
 const displayError = (error) => {
-  console.log(error) // FIXME display in the GUI
+  document.getElementById('error').innerHTML = `<p>${error}</p>`
 }
 
 /**
