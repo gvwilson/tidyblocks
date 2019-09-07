@@ -36,8 +36,7 @@ describe('raises errors at the right times', () => {
 
   it('raises an error when constructing a block with an empty column name', (done) => {
     assert.throws(() => makeBlock('value_column',
-                                  {TEXT: ''}),
-                  /Empty column name/)
+                                  {COLUMN: ''}))
     done()
   })
 
@@ -48,7 +47,7 @@ describe('raises errors at the right times', () => {
         {}),
       makeBlock(
         'transform_mutate',
-        {NEW_COLUMN: 'should_fail',
+        {COLUMN: 'should_fail',
          VALUE: makeBlock(
            'value_arithmetic',
            {OP: 'ADD',
@@ -57,7 +56,7 @@ describe('raises errors at the right times', () => {
               {COLUMN: 'nonexistent'}),
             RIGHT: makeBlock(
               'value_number',
-              {NUM: 0})})})
+              {VALUE: 0})})})
     ]
     const code = evalCode(pipeline)
     assert.notEqual(Result.error, null,

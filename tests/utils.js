@@ -67,40 +67,60 @@ const assert_startsWith = (actual, required, message) => {
  * Replacement for singleton Blockly object. This defines only the methods and
  * values used by block creation code.
  */
-const Blockly = {
-  // Manually-created blocks.
-  Blocks: {},
+class BlocklyClass {
+  constructor () {
 
-  // JavaScript generation utilities.
-  JavaScript: {
-    ORDER_ATOMIC: 'order=atomic',
-    ORDER_EQUALITY: 'order=equality',
-    ORDER_NONE: 'order=none',
-    ORDER_RELATIONAL: 'order=relational',
-    ORDER_UNARY_NEGATION: 'order=negation',
+    // Manually-created blocks.
+    this.Blocks = {}
 
-    quote_: (value) => {
-      return `"${value}"`
-    },
+    // JavaScript generation utilities.
+    this.JavaScript = {
+      ORDER_ATOMIC: 'order=atomic',
+      ORDER_EQUALITY: 'order=equality',
+      ORDER_NONE: 'order=none',
+      ORDER_RELATIONAL: 'order=relational',
+      ORDER_UNARY_NEGATION: 'order=negation',
 
-    valueToCode: (block, field, order) => {
-      return block[field]
+      quote_: (value) => {
+        return `"${value}"`
+      },
+
+      valueToCode: (block, field, order) => {
+        return block[field]
+      }
     }
-  },
 
-  // All registered themes.
-  Themes: {},
+    // All registered themes.
+    this.Themes = {}
 
-  // Create a new theme.
-  Theme: class {
-    constructor (blockStyles, categoryStyles) {
+    // Create a new theme.
+    this.Theme = class {
+      constructor (blockStyles, categoryStyles) {
+      }
     }
-  },
+
+    // All fields of known blocks.
+    this.fields = {}
+  }
 
   // Helper functon to turn JSON into blocks entry.
-  defineBlocksWithJsonArray: (allJson) => {
+  defineBlocksWithJsonArray (allJson) {
+    allJson.forEach(entry => {
+      assert(!(entry.type in this.fields),
+             `Duplicate block of type ${entry.type}`)
+      this.fields[entry.type] = new Set()
+      if ('args0' in entry) {
+        entry.args0.forEach(field => {
+          const name = field.name
+          assert(! this.fields[entry.type].has(name),
+                 `Duplicate field ${name} in ${entry.type}`)
+          this.fields[entry.type].add(name)
+        })
+      }
+    })
   }
 }
+let Blockly = null;
 
 /**
  * Placeholder for a block object.
@@ -125,6 +145,13 @@ class MockBlock {
  * @return text for block.
  */
 const makeBlock = (blockName, settings) => {
+  assert(blockName in Blockly.fields,
+         `Unknown block name "${blockName}"`)
+  Object.keys(settings).forEach(name => {
+    assert(Blockly.fields[blockName].has(name),
+           `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
+  })
+
   assert(blockName in Blockly.JavaScript,
          `Unknown block name "${blockName}"`)
   const result = Blockly.JavaScript[blockName](new MockBlock(settings))
@@ -163,6 +190,7 @@ const generateCode = (code) => {
  * Does _not_ read R files (for now).
  */
 const loadBlockFiles = () => {
+  Blockly = new BlocklyClass()
   parse(fs.readFileSync('index.html', 'utf-8'))
     .querySelector('#tidyblocks')
     .querySelectorAll('script')

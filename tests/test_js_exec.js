@@ -190,7 +190,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})})
+             {VALUE: 0})})})
     ]
     evalCode(pipeline)
     assert.equal(Result.table.length, 5,
@@ -213,7 +213,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'plumbing_notify',
         {NAME: 'left'})
@@ -243,15 +243,15 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'Petal_Length'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 5.0})})}),
+             {VALUE: 5.0})})}),
       makeBlock(
         'plot_hist',
-        {Column: makeBlock(
+        {COLUMN: makeBlock(
           'value_column',
           {COLUMN: 'Petal_Length'}),
          BINS: makeBlock(
            'value_number',
-           {NUM: 20})})
+           {VALUE: 20})})
     ]
     evalCode(pipeline)
     assert.equal(Object.keys(Result.table[0]).length, 5,
@@ -474,7 +474,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'plumbing_notify',
         {NAME: 'left'}),
@@ -493,7 +493,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'green'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'plumbing_notify',
         {NAME: 'right'}),
@@ -515,7 +515,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'left_blue'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'transform_filter',
         {TEST: makeBlock(
@@ -526,7 +526,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'right_blue'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})})
+             {VALUE: 0})})})
     ]
     evalCode(pipeline)
     assert.deepEqual(Result.table,
