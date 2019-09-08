@@ -518,6 +518,48 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('checks data types correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result_name_string',
+         VALUE: makeBlock(
+           'value_type',
+           {TYPE: 'tbIsString',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'name'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result_red_string',
+         VALUE: makeBlock(
+           'value_type',
+           {TYPE: 'tbIsString',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'red'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result_green_number',
+         VALUE: makeBlock(
+           'value_type',
+           {TYPE: 'tbIsNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'green'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert(Result.table.every(row => row.result_name_string),
+           `Expected all names to be strings`)
+    assert(Result.table.every(row => !row.result_red_string),
+           `Expected all red values to not be strings`)
+    assert(Result.table.every(row => row.result_green_number),
+           `Expected all green values to be strings`)
+    done()
+  })
 })
 
 describe('check that specific bugs have been fixed', () => {

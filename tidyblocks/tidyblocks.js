@@ -103,7 +103,7 @@ const tbAssert = (check, message) => {
  * @param value What to check.
  * @returns The input value if it passes the test.
  */
-const tbIsNumber = (value) => {
+const tbAssertNumber = (value) => {
   tbAssert(typeof value === 'number',
            `Value ${value} is not a number`)
   return value
@@ -257,6 +257,38 @@ const tbToString = (row, getValue) => {
 //--------------------------------------------------------------------------------
 
 /**
+ * Check if value is Boolean.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value Boolean?
+ */
+const tbIsBoolean = (row, getValue) => {
+  return typeof getValue(row) === 'boolean'
+}
+
+/**
+ * Check if value is number.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value numeric?
+ */
+const tbIsNumber = (row, getValue) => {
+  return typeof getValue(row) === 'number'
+}
+
+/**
+ * Check if value is string.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value string?
+ */
+const tbIsString = (row, getValue) => {
+  return typeof getValue(row) === 'string'
+}
+
+//--------------------------------------------------------------------------------
+
+/**
  * Get a column's value from a row, failing if the column doesn't exist.
  * @param {Object} row The row to look in.
  * @param {string} key The field to look up.
@@ -276,8 +308,8 @@ const tbGet = (row, key) => {
  * @returns The sum.
  */
 const tbAdd = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left + right
 }
 
@@ -289,8 +321,8 @@ const tbAdd = (row, getLeft, getRight) => {
  * @returns The quotient.
  */
 const tbDiv = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left / right
 }
 
@@ -302,8 +334,8 @@ const tbDiv = (row, getLeft, getRight) => {
  * @returns The exponentiated value.
  */
 const tbExp = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left ** right
 }
 
@@ -315,8 +347,8 @@ const tbExp = (row, getLeft, getRight) => {
  * @returns The remainder.
  */
 const tbMod = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left * right
 }
 
@@ -328,8 +360,8 @@ const tbMod = (row, getLeft, getRight) => {
  * @returns The product.
  */
 const tbMul = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left % right
 }
 
@@ -340,7 +372,7 @@ const tbMul = (row, getLeft, getRight) => {
  * @returns The numerical negation.
  */
 const tbNeg = (row, getValue) => {
-  const value = tbIsNumber(getValue(row))
+  const value = tbAssertNumber(getValue(row))
   return - value
 }
 
@@ -352,8 +384,8 @@ const tbNeg = (row, getValue) => {
  * @returns The difference.
  */
 const tbSub = (row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left - right
 }
 
