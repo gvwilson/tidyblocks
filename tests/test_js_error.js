@@ -88,4 +88,25 @@ describe('raises errors at the right times', () => {
     done()
   })
 
+  it('will not extract date values from non-dates', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_earthquakes',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'year',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToYear',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert.notEqual(Result.error, null,
+                    `Expected error message when extract from non-date`)
+    done()
+  })
+
 })

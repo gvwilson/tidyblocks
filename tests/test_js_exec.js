@@ -539,6 +539,58 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('extracts values from dates correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_earthquakes',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'Time',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'year',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToYear',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'month',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToMonth',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'day',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToDay',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert.equal(Result.table[0].year, 2016,
+                 `Expected 2016 as year`)
+    assert.equal(Result.table[0].month, 8,
+                 `Expected 8 as month`)
+    assert.equal(Result.table[0].day, 24,
+                 `Expected 24 as day of month`)
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {
