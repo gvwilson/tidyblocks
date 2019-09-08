@@ -518,6 +518,27 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('does date conversion correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_earthquakes',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'Time',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert(Result.table.every(row => (row.Time instanceof Date)),
+           `Some time values not converted to Date objects`)
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {

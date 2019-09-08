@@ -222,9 +222,15 @@ const resetDisplay = () => {
  */
 const readCSV = (url) => {
   if (url.includes('raw.githubusercontent.com')) {
-    url = url.split('/').pop()
+    url = 'data/' + url.split('/').pop()
   }
-  const path = `${process.cwd()}/data/${url}`
+  else if (url.startsWith('test://')) {
+    url = 'tests/data/' + url.split('//').pop()
+  }
+  else {
+    assert(false, `Cannot read "${url}" for testing`)
+  }
+  const path = `${process.cwd()}/${url}`
   const text = fs.readFileSync(path, 'utf-8')
   return csv2TidyBlocksDataFrame(text, Papa.parse)
 }

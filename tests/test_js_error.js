@@ -65,4 +65,27 @@ describe('raises errors at the right times', () => {
     done()
   })
 
+  it('reports invalid dates when trying to convert', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_urlCSV',
+        {URL: 'test://invalid_date.csv'}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'Time',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})})
+    ]
+    const code = evalCode(pipeline)
+    assert.notEqual(Result.error, null,
+                    `Expected error message when converting invalid date`)
+    assert_includes(Result.error.message, 'Cannot convert "invalid date" to date',
+                    `Incorrect error message when converting invalid date`)
+    done()
+  })
+
 })

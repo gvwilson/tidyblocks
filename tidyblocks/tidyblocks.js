@@ -224,6 +224,20 @@ const tbToBoolean = (row, getValue) => {
 }
 
 /**
+ * Convert row value to datetime.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Date object.
+ */
+const tbToDatetime = (row, getValue) => {
+  const value = getValue(row)
+  const result = new Date(value)
+  tbAssert(!isNaN(result),
+           `Cannot convert "${value}" to date`)
+  return result
+}
+
+/**
  * Convert row value to number.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
