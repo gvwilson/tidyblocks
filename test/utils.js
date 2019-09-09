@@ -253,7 +253,7 @@ const readCSV = (url) => {
     url = 'data/' + url.split('/').pop()
   }
   else if (url.startsWith('test://')) {
-    url = 'tests/data/' + url.split('//').pop()
+    url = 'test/data/' + url.split('//').pop()
   }
   else {
     assert(false, `Cannot read "${url}" for testing`)
