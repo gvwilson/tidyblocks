@@ -23,6 +23,70 @@ const MULTIPLE_COLUMN_FIELDS = [
   'MULTIPLE_COLUMNS'
 ]
 
+//--------------------------------------------------------------------------------
+
+/**
+ * Class to handle connections to the outside world.  (A different class with
+ * the same methods is used for testing purposes.)
+ */
+class GuiEnvironment {
+
+  constructor () {
+  }
+
+  /**
+   * Get the code to run.
+   * @returns {string} The code to run.
+   */
+  getCode () {
+    return Blockly.JavaScript.workspaceToCode(TidyBlocksWorkspace)
+  }
+
+  /**
+   * Read CSV from a URL and parse to create TidyBlocks data frame.
+   * @param {string} url URL to read from.
+   */
+  readCSV (url) {
+    const request = new XMLHttpRequest()
+    request.open('GET', url, false)
+    request.send(null)
+
+    if (request.status !== 200) {
+      console.log(`ERROR: ${request.status}`)
+      return null
+    }
+    else {
+      return csv2TidyBlocksDataFrame(request.responseText, Papa.parse)
+    }
+  }
+
+  /**
+   * Display a plot.
+   * @param {Object} spec Vega-Lite spec for plot with data filled in.
+   */
+  displayPlot (spec) {
+    vegaEmbed('#plotOutput', spec, {})
+  }
+
+  /**
+   * Display a table (as HTML).
+   * @param {Object} table JSON array of uniform objects.
+   */
+  displayTable (table) {
+    document.getElementById('dataOutput').innerHTML = json2table(table)
+  }
+
+  /**
+   * Display an error.
+   * @param {string} error The message to display.
+   */
+  displayError (error) {
+    document.getElementById('error').innerHTML = `<p>${error}</p>`
+  }
+}
+
+//--------------------------------------------------------------------------------
+
 /**
  * Set the display property of the two input toggleable panes.
  * (Has to be done manually rather than in CSS because properties are being reset.)
@@ -117,37 +181,12 @@ const createValidator = (columnName, pattern) => {
 }
 
 /**
- * Callback for displaying a plot.
- * @param {Object} spec Vega-Lite spec for plot with data filled in.
- */
-const displayPlot = (spec) => {
-  vegaEmbed('#plotOutput', spec, {})
-}
-
-/**
- * Callback for displaying a table as HTML.
- * @param {Object} table JSON array of uniform objects.
- */
-const displayTable = (table) => {
-  document.getElementById('dataOutput').innerHTML = json2table(table)
-}
-
-/**
- * Callback for displaying an error online.
- * @param {string} error The message to display.
- */
-const displayError = (error) => {
-  document.getElementById('error').innerHTML = `<p>${error}</p>`
-}
-
-/**
  * Run the code generated from the user's blocks.
  * Depends on the global TidyBlocksWorkspace variable.
  */
 const runCode = () => {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  TidyBlocksManager.run(() => Blockly.JavaScript.workspaceToCode(TidyBlocksWorkspace),
-                        displayTable, displayPlot, displayError, readCSV)
+  TidyBlocksManager.run(new GuiEnvironment())
 }
 
 /**
@@ -179,24 +218,6 @@ const loadCode = (fileList) => {
     const xml = Blockly.Xml.textToDom(text)
     Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, TidyBlocksWorkspace)
   })
-}
-
-/**
- * Read CSV from a URL and parse to create TidyBlocks data frame.
- * @param {string} url URL to read from.
- */
-const readCSV = (url) => {
-  const request = new XMLHttpRequest()
-  request.open('GET', url, false)
-  request.send(null)
-
-  if (request.status !== 200) {
-    console.log(`ERROR: ${request.status}`)
-    return null
-  }
-  else {
-    return csv2TidyBlocksDataFrame(request.responseText, Papa.parse)
-  }
 }
 
 /**

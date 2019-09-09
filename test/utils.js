@@ -78,6 +78,8 @@ const assert_startsWith = (actual, required, message) => {
   }
 }
 
+//--------------------------------------------------------------------------------
+
 /**
  * Replacement for singleton Blockly object. This defines only the methods and
  * values used by block creation code.
@@ -185,6 +187,8 @@ const deleteBlock = (block) => {
   TidyBlocksManager.deleteBlock(block)
 }
 
+//--------------------------------------------------------------------------------
+
 /**
  * Assemble the code produced by blocks into a single string.
  * @param code {string|string[]|number} - input
@@ -215,81 +219,85 @@ const loadBlockFiles = () => {
     .forEach(src => eval(src))
 }
 
-/**
- * Record results for testing purposes.
- */
-const Result = {
-  table: null,
-  plot: null,
-  error: null
-}
+//--------------------------------------------------------------------------------
 
 /**
- * "Display" a table (record for testing purposes).
- * @param data {Object} - data to record.
+ * Environment for testing. (Replaces the one in the GUI.)
  */
-const displayTable = (data) => {
-  Result.table = data
-}
-
-/**
- * "Display" a plot (record for testing purposes).
- * @param spec {Object} - Vega-Lite spec for plot.
- */
-const displayPlot = (spec) => {
-  Result.plot = spec
-}
-
-/**
- * Display an error (record for testing purposes).
- * @param error {string} - message to record.
- */
-const displayError = (error) => {
-  Result.error = error
-}
-
-/**
- * Reset the displays (clear old data between tests).
- */
-const resetDisplay = () => {
-  displayTable(null)
-  displayPlot(null)
-  displayError(null)
-}
-
-/**
- * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
- * 'eval' of generated code.
- * @param url {string} - URL of data.
- * @return dataframe containing that data.
- */
-const readCSV = (url) => {
-  if (url.includes('raw.githubusercontent.com')) {
-    url = 'data/' + url.split('/').pop()
+class TestEnvironment {
+  constructor (code) {
+    this.code = code
+    this.table = null
+    this.plot = null
+    this.error = null
   }
-  else if (url.startsWith('test://')) {
-    url = 'test/data/' + url.split('//').pop()
+
+  /**
+   * Get the code to run.
+   * @returns {string} The code to run.
+   */
+  getCode () {
+    return this.code
   }
-  else {
-    assert(false, `Cannot read "${url}" for testing`)
+
+  /**
+   * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
+   * 'eval' of generated code.
+   * @param url {string} - URL of data.
+   * @return dataframe containing that data.
+   */
+  readCSV (url) {
+    if (url.includes('raw.githubusercontent.com')) {
+      url = 'data/' + url.split('/').pop()
+    }
+    else if (url.startsWith('test://')) {
+      url = 'test/data/' + url.split('//').pop()
+    }
+    else {
+      assert(false, `Cannot read "${url}" for testing`)
+    }
+    const path = `${process.cwd()}/${url}`
+    const text = fs.readFileSync(path, 'utf-8')
+    return csv2TidyBlocksDataFrame(text, Papa.parse)
   }
-  const path = `${process.cwd()}/${url}`
-  const text = fs.readFileSync(path, 'utf-8')
-  return csv2TidyBlocksDataFrame(text, Papa.parse)
+
+  /**
+   * "Display" a table (record for testing purposes).
+   * @param data {Object} - data to record.
+   */
+  displayTable (data) {
+    this.table = data
+  }
+
+  /**
+   * "Display" a plot (record for testing purposes).
+   * @param spec {Object} - Vega-Lite spec for plot.
+   */
+  displayPlot (spec) {
+    this.plot = spec
+  }
+
+  /**
+   * Display an error (record for testing purposes).
+   * @param error {string} - message to record.
+   */
+  displayError (error) {
+    this.error = error
+  }
 }
 
 /**
  * Run code block.
  * @param code {string} - code to evaluate.
- * @return generated code (for checking).
+ * @return environment (including eval'd code).
  */
 const evalCode = (code) => {
   if (typeof code !== 'string') {
     code = generateCode(code)
   }
-  TidyBlocksManager.run(() => code,
-                        displayTable, displayPlot, displayError, readCSV)
-  return code
+  const environment = new TestEnvironment(code)
+  TidyBlocksManager.run(environment)
+  return environment
 }
 
 //
@@ -305,11 +313,8 @@ module.exports = {
   assert_includes,
   assert_match,
   assert_startsWith,
-  readCSV,
   loadBlockFiles,
   makeBlock,
   generateCode,
-  resetDisplay,
-  evalCode,
-  Result
+  evalCode
 }

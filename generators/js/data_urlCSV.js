@@ -7,5 +7,5 @@ Blockly.JavaScript['data_urlCSV'] = (block) => {
     throw new Error(`[block ${block.tbId}] empty URL in urlCSV block`)
   }
   const prefix = registerPrefix('')
-  return `${prefix} readCSV('${url}')`
+  return `${prefix} environment.readCSV('${url}')`
 }
