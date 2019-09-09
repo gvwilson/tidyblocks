@@ -216,35 +216,38 @@ const tbVariance = (values) => {
 
 /**
  * Convert row value to Boolean.
+ * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Boolean value.
  */
-const tbToBoolean = (rowId, row, getValue) => {
+const tbToBoolean = (blockId, row, getValue) => {
   return getValue(row) ? true : false
 }
 
 /**
  * Convert row value to datetime.
+ * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Date object.
  */
-const tbToDatetime = (row, getValue) => {
+const tbToDatetime = (blockId, row, getValue) => {
   const value = getValue(row)
   const result = new Date(value)
   tbAssert(!isNaN(result),
-           `Cannot convert "${value}" to date`)
+           `[block ${blockId}] cannot convert "${value}" to date`)
   return result
 }
 
 /**
  * Convert row value to number.
+ * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Numeric value.
  */
-const tbToNumber = (rowId, row, getValue) => {
+const tbToNumber = (blockId, row, getValue) => {
   const value = getValue(row)
   if (typeof value == 'boolean') {
     return value ? 1 : 0
@@ -257,11 +260,12 @@ const tbToNumber = (rowId, row, getValue) => {
 
 /**
  * Convert row value to string.
+ * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns String value.
  */
-const tbToString = (rowId, row, getValue) => {
+const tbToString = (blockId, row, getValue) => {
   const value = getValue(row)
   if (typeof value == 'string') {
     return value

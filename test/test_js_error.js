@@ -37,7 +37,7 @@ describe('raises errors at the right times', () => {
 
   it('raises an error when constructing a block with an empty column name', (done) => {
     assert.throws(() => makeBlock('value_column',
-                                  {TEXT: ''}),
+                                  {COLUMN: ''}),
                   /\[block \d+\] empty column name/)
     done()
   })
@@ -285,7 +285,7 @@ describe('raises errors at the right times', () => {
     const code = evalCode(pipeline)
     assert.notEqual(Result.error, null,
                     `Expected error message when converting invalid date`)
-    assert_includes(Result.error.message, 'Cannot convert "invalid date" to date',
+    assert_match(Result.error, /\[block \d+\] cannot convert "invalid date" to date/,
                     `Incorrect error message when converting invalid date`)
     done()
   })

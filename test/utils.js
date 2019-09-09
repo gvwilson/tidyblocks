@@ -88,12 +88,13 @@ class BlocklyClass {
     // Manually-created blocks.
     this.Blocks = {}
 
-    quote_: (value) => {
-      if (typeof value != 'string') {
-        return value
-      }
-      return `"${value.replace('"', '\\"')}"`
-    },
+    // JavaScript generation utilities.
+    this.JavaScript = {
+      ORDER_ATOMIC: 'order=atomic',
+      ORDER_EQUALITY: 'order=equality',
+      ORDER_NONE: 'order=none',
+      ORDER_RELATIONAL: 'order=relational',
+      ORDER_UNARY_NEGATION: 'order=negation',
 
       quote_: (value) => {
         return `"${value}"`
