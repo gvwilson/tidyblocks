@@ -104,7 +104,7 @@ const tbAssert = (check, message) => {
  * @param value What to check.
  * @returns The input value if it passes the test.
  */
-const tbIsNumber = (value) => {
+const tbAssertNumber = (value) => {
   tbAssert(typeof value === 'number',
            `Value ${value} is not a number`)
   return value
@@ -225,6 +225,20 @@ const tbToBoolean = (rowId, row, getValue) => {
 }
 
 /**
+ * Convert row value to datetime.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Date object.
+ */
+const tbToDatetime = (row, getValue) => {
+  const value = getValue(row)
+  const result = new Date(value)
+  tbAssert(!isNaN(result),
+           `Cannot convert "${value}" to date`)
+  return result
+}
+
+/**
  * Convert row value to number.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
@@ -258,6 +272,131 @@ const tbToString = (rowId, row, getValue) => {
 //--------------------------------------------------------------------------------
 
 /**
+ * Check if value is Boolean.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value Boolean?
+ */
+const tbIsBoolean = (row, getValue) => {
+  return typeof getValue(row) === 'boolean'
+}
+
+/**
+ * Check if value is number.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value numeric?
+ */
+const tbIsNumber = (row, getValue) => {
+  return typeof getValue(row) === 'number'
+}
+
+/**
+ * Check if value is string.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value string?
+ */
+const tbIsString = (row, getValue) => {
+  return typeof getValue(row) === 'string'
+}
+
+//--------------------------------------------------------------------------------
+
+/*
+ * Extract year from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Year as number.
+ */
+const tbToYear = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getFullYear()
+}
+
+/**
+ * Extract month from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Month as number.
+ */
+const tbToMonth = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getMonth() + 1 // normalize to 1-12 to be consistent with days of month
+}
+
+/**
+ * Extract day of month from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Day of month as number.
+ */
+const tbToDay = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getDate()
+}
+
+/**
+ * Extract day of week from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Day of month as number.
+ */
+const tbToWeekDay = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getDay()
+}
+
+/**
+ * Extract hours from date value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Hours portion of value.
+ */
+const tbToHours = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getHours()
+}
+
+/**
+ * Extract minutes from date value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Minutes portion of value.
+ */
+const tbToMinutes = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getMinutes()
+}
+
+/**
+ * Extract seconds from date value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Seconds portion of value.
+ */
+const tbToSeconds = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getSeconds()
+}
+
+//--------------------------------------------------------------------------------
+
+/**
  * Get a column's value from a row, failing if the column doesn't exist.
  * @param {Object} row The row to look in.
  * @param {string} column The field to look up.
@@ -278,8 +417,8 @@ const tbGet = (blockId, row, column) => {
  * @returns The sum.
  */
 const tbAdd = (rowId, row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left + right
 }
 
@@ -292,8 +431,8 @@ const tbAdd = (rowId, row, getLeft, getRight) => {
  * @returns The quotient.
  */
 const tbDiv = (rowId, row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left / right
 }
 
@@ -306,8 +445,8 @@ const tbDiv = (rowId, row, getLeft, getRight) => {
  * @returns The exponentiated value.
  */
 const tbExp = (rowId, row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left ** right
 }
 
@@ -320,8 +459,8 @@ const tbExp = (rowId, row, getLeft, getRight) => {
  * @returns The remainder.
  */
 const tbMod = (rowId, row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left * right
 }
 
@@ -334,8 +473,8 @@ const tbMod = (rowId, row, getLeft, getRight) => {
  * @returns The product.
  */
 const tbMul = (rowId, row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left % right
 }
 
@@ -347,7 +486,7 @@ const tbMul = (rowId, row, getLeft, getRight) => {
  * @returns The numerical negation.
  */
 const tbNeg = (rowId, row, getValue) => {
-  const value = tbIsNumber(getValue(row))
+  const value = tbAssertNumber(getValue(row))
   return - value
 }
 
@@ -360,8 +499,8 @@ const tbNeg = (rowId, row, getValue) => {
  * @returns The difference.
  */
 const tbSub = (rowId, row, getLeft, getRight) => {
-  const left = tbIsNumber(getLeft(row))
-  const right = tbIsNumber(getRight(row))
+  const left = tbAssertNumber(getLeft(row))
+  const right = tbAssertNumber(getRight(row))
   return left - right
 }
 
