@@ -7,7 +7,7 @@ Blockly.defineBlocksWithJsonArray([
     message0: '%1',
     args0: [{
       type: 'field_number',
-      name: 'NUM',
+      name: 'VALUE',
       value: 0
     }],
     output: 'Number',
