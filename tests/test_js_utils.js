@@ -9,6 +9,7 @@ const {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,
@@ -118,7 +119,7 @@ describe('blocks are given IDs and can be looked up', () => {
         {COLUMN: 'should_fail',
          VALUE: makeBlock(
            'value_arithmetic',
-           {OP: 'ADD',
+           {OP: 'tbAdd',
             LEFT: makeBlock(
               'value_column',
               {COLUMN: 'nonexistent'}),

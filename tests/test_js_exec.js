@@ -8,6 +8,7 @@ const {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,

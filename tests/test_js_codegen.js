@@ -8,6 +8,7 @@ const {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,
@@ -165,7 +166,7 @@ describe('generate code for single blocks', () => {
       'transform_groupBy',
       {COLUMN: 'existingColumn'})
     const code = generateCode(pipeline)
-    assert.equal(code, '.groupBy("existingColumn")',
+    assert_match(code, /.groupBy\(\d+, "existingColumn"\)/,
                  'pipeline does not group rows by existing column')
     done()
   })
@@ -175,7 +176,7 @@ describe('generate code for single blocks', () => {
       'transform_ungroup',
       {})
     const code = generateCode(pipeline)
-    assert.equal(code, '.ungroup()',
+    assert.equal(code, '.ungroup(0)',
                  'pipeline does not ungroup rows')
     done()
   })
@@ -216,7 +217,7 @@ describe('generate code for single blocks', () => {
       'transform_sort',
       {MULTIPLE_COLUMNS: 'red,green'})
     const code = generateCode(pipeline)
-    assert.equal(code, '.sort(["red","green"])',
+    assert.equal(code, '.sort(0, ["red","green"])',
                  'pipeline does not sort by expected columns')
     done()
   })
@@ -228,7 +229,7 @@ describe('generate code for single blocks', () => {
        COLUMN: 'someColumn'}
     )
     const code = generateCode(pipeline)
-    assert.equal(code, ".summarize(tbMean, 'someColumn')",
+    assert.equal(code, '.summarize(0, tbMean, "someColumn")',
                  'code does not call summarize correctly')
     done()
   })
@@ -342,7 +343,7 @@ describe('generate code for single blocks', () => {
       'plumbing_notify',
       {NAME: 'output_name'})
     const code = generateCode(pipeline)
-    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) // terminated",
+    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
                  'pipeine does not notify properly')
     done()
   })
@@ -400,7 +401,7 @@ describe('generate code for single blocks', () => {
       'value_column',
       {COLUMN: 'TheColumnName'})
     const code = generateCode(pipeline)
-    assert.equal(code, "(row) => tbGet(row, 'TheColumnName')",
+    assert_match(code, /\(row\) => tbGet\(\d+, row, 'TheColumnName'\)/,
                  'pipeline does not use function to get column value')
     done()
   })
@@ -488,8 +489,8 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'blue'})})
     const code = generateCode(pipeline)
-    assert.equal(code, "(row) => tbIfElse(row, (row) => tbGet(row, 'red'), (row) => tbGet(row, 'green'), (row) => tbGet(row, 'blue'))",
-                 'pipeline does not generate correct code for if-else')
+    assert_includes(code, 'tbIfElse',
+                    'pipeline does not generate call to tbIfElse')
     done()
   })
   

@@ -49,6 +49,21 @@ const assert_includes = (actual, required, message) => {
 }
 
 /**
+ * Assert that a string matches a regular expression.
+ * @param {string} actual String being examined.
+ * @param {regexp} required Pattern to look for.
+ * @param {string} message Error message.
+ */
+const assert_match = (actual, required, message) => {
+  if (! actual.match(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
  * Assert that one string starts with another.
  * @param {string} actual String being examined.
  * @param {string} required String to look for.
@@ -73,13 +88,12 @@ class BlocklyClass {
     // Manually-created blocks.
     this.Blocks = {}
 
-    // JavaScript generation utilities.
-    this.JavaScript = {
-      ORDER_ATOMIC: 'order=atomic',
-      ORDER_EQUALITY: 'order=equality',
-      ORDER_NONE: 'order=none',
-      ORDER_RELATIONAL: 'order=relational',
-      ORDER_UNARY_NEGATION: 'order=negation',
+    quote_: (value) => {
+      if (typeof value != 'string') {
+        return value
+      }
+      return `"${value.replace('"', '\\"')}"`
+    },
 
       quote_: (value) => {
         return `"${value}"`
@@ -282,6 +296,7 @@ module.exports = {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,
