@@ -1,10 +1,10 @@
 //
-// Visuals for type conversion block.
+// Visuals for datetime function block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'value_convert',
-    message0: '%1 to %2',
+    type: 'value_datetime',
+    message0: '%1 date/time %2',
     args0: [
       {
         type: 'input_value',
@@ -14,10 +14,13 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'TYPE',
         options: [
-          ['boolean', 'tbToBoolean'],
-          ['datetime', 'tbToDatetime'],
-          ['number', 'tbToNumber'],
-          ['string', 'tbToString']
+          ['year', 'tbToYear'],
+          ['month', 'tbToMonth'],
+          ['day', 'tbToDay'],
+          ['weekday', 'tbToWeekDay'],
+          ['hours', 'tbToHours'],
+          ['minutes', 'tbToMinutes'],
+          ['seconds', 'tbToSeconds']
         ]
       }
     ],

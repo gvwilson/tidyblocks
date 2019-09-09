@@ -224,6 +224,20 @@ const tbToBoolean = (row, getValue) => {
 }
 
 /**
+ * Convert row value to datetime.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Date object.
+ */
+const tbToDatetime = (row, getValue) => {
+  const value = getValue(row)
+  const result = new Date(value)
+  tbAssert(!isNaN(result),
+           `Cannot convert "${value}" to date`)
+  return result
+}
+
+/**
  * Convert row value to number.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
@@ -284,6 +298,99 @@ const tbIsNumber = (row, getValue) => {
  */
 const tbIsString = (row, getValue) => {
   return typeof getValue(row) === 'string'
+}
+
+//--------------------------------------------------------------------------------
+
+/*
+ * Extract year from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Year as number.
+ */
+const tbToYear = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getFullYear()
+}
+
+/**
+ * Extract month from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Month as number.
+ */
+const tbToMonth = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getMonth() + 1 // normalize to 1-12 to be consistent with days of month
+}
+
+/**
+ * Extract day of month from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Day of month as number.
+ */
+const tbToDay = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getDate()
+}
+
+/**
+ * Extract day of week from value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Day of month as number.
+ */
+const tbToWeekDay = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getDay()
+}
+
+/**
+ * Extract hours from date value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Hours portion of value.
+ */
+const tbToHours = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getHours()
+}
+
+/**
+ * Extract minutes from date value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Minutes portion of value.
+ */
+const tbToMinutes = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getMinutes()
+}
+
+/**
+ * Extract seconds from date value.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Seconds portion of value.
+ */
+const tbToSeconds = (row, getValue) => {
+  const value = getValue(row)
+  tbAssert(value instanceof Date,
+           `Expected date object not "${value}"`)
+  return value.getSeconds()
 }
 
 //--------------------------------------------------------------------------------

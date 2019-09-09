@@ -205,6 +205,9 @@ const readCSV = (url) => {
  * @returns The name of the type
  */
 const colTypeName = (value) => {
+  if (value instanceof Date) {
+    return 'datetime'
+  }
   return typeof value
 }
 
