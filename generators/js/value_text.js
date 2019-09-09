@@ -2,7 +2,7 @@
 // Create code for text constant block.
 //
 Blockly.JavaScript['value_text'] = (block) => {
-  const value = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
-  const code = `(row) => ${value}`
+  const text = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
+  const code = `(row) => ${text}`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
