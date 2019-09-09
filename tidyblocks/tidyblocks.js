@@ -1,7 +1,8 @@
 /**
- * Terminator for well-formed pipelines.
+ * Prefix and suffix for well-formed pipelines.
  */
-const TERMINATOR = '// terminated'
+const TIDYBLOCKS_START = '/* tidyblocks start */'
+const TIDYBLOCKS_END = '/* tidyblocks end */'
 
 /**
  * Turn block of CSV text into TidyBlocksDataFrame. The parser argument should be Papa.parse;
@@ -61,7 +62,7 @@ const csv2TidyBlocksDataFrame = (text, parser) => {
  * @returns {string} Text to insert into generated code.
  */
 const registerPrefix = (fill) => {
-  return `TidyBlocksManager.register([${fill}], () => {`
+  return `${TIDYBLOCKS_START} TidyBlocksManager.register([${fill}], () => {`
 }
 
 /**
@@ -70,7 +71,7 @@ const registerPrefix = (fill) => {
  * @returns {string} Text to insert into generated code.
  */
 const registerSuffix = (fill) => {
-  return `}, [${fill}]) ${TERMINATOR}`
+  return `}, [${fill}]) ${TIDYBLOCKS_END}`
 }
 
 /**
@@ -78,7 +79,7 @@ const registerSuffix = (fill) => {
  * @param {string} code Pipeline code to be terminated if necessary.
  */
 const fixCode = (code) => {
-  if (! code.endsWith(TERMINATOR)) {
+  if (! code.endsWith(TIDYBLOCKS_END)) {
     const suffix = registerSuffix('')
     code += `.plot(displayTable, null, '#plotOutput', {}) ${suffix}`
   }
@@ -219,7 +220,7 @@ const tbVariance = (values) => {
  * @param {function} getValue How to get desired value.
  * @returns Boolean value.
  */
-const tbToBoolean = (row, getValue) => {
+const tbToBoolean = (rowId, row, getValue) => {
   return getValue(row) ? true : false
 }
 
@@ -229,7 +230,7 @@ const tbToBoolean = (row, getValue) => {
  * @param {function} getValue How to get desired value.
  * @returns Numeric value.
  */
-const tbToNumber = (row, getValue) => {
+const tbToNumber = (rowId, row, getValue) => {
   const value = getValue(row)
   if (typeof value == 'boolean') {
     return value ? 1 : 0
@@ -246,7 +247,7 @@ const tbToNumber = (row, getValue) => {
  * @param {function} getValue How to get desired value.
  * @returns String value.
  */
-const tbToString = (row, getValue) => {
+const tbToString = (rowId, row, getValue) => {
   const value = getValue(row)
   if (typeof value == 'string') {
     return value
@@ -259,23 +260,24 @@ const tbToString = (row, getValue) => {
 /**
  * Get a column's value from a row, failing if the column doesn't exist.
  * @param {Object} row The row to look in.
- * @param {string} key The field to look up.
+ * @param {string} column The field to look up.
  * @returns The value.
  */
-const tbGet = (row, key) => {
-  tbAssert(key in row,
-           `Key ${key} not in row ${Object.keys(row).join(',')}`)
-  return row[key]
+const tbGet = (blockId, row, column) => {
+  tbAssert(column in row,
+           `[block ${blockId}] no such column "${column}" (have [${Object.keys(row).join(',')}])`)
+  return row[column]
 }
 
 /**
  * Add two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The sum.
  */
-const tbAdd = (row, getLeft, getRight) => {
+const tbAdd = (rowId, row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left + right
@@ -283,12 +285,13 @@ const tbAdd = (row, getLeft, getRight) => {
 
 /**
  * Divide two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The quotient.
  */
-const tbDiv = (row, getLeft, getRight) => {
+const tbDiv = (rowId, row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left / right
@@ -296,12 +299,13 @@ const tbDiv = (row, getLeft, getRight) => {
 
 /**
  * Calculate an exponent.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The exponentiated value.
  */
-const tbExp = (row, getLeft, getRight) => {
+const tbExp = (rowId, row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left ** right
@@ -309,12 +313,13 @@ const tbExp = (row, getLeft, getRight) => {
 
 /**
  * Find the remainder of two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The remainder.
  */
-const tbMod = (row, getLeft, getRight) => {
+const tbMod = (rowId, row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left * right
@@ -322,12 +327,13 @@ const tbMod = (row, getLeft, getRight) => {
 
 /**
  * Multiply two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The product.
  */
-const tbMul = (row, getLeft, getRight) => {
+const tbMul = (rowId, row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left % right
@@ -335,23 +341,25 @@ const tbMul = (row, getLeft, getRight) => {
 
 /**
  * Negate a value.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getValue How to get the value from the row.
  * @returns The numerical negation.
  */
-const tbNeg = (row, getValue) => {
+const tbNeg = (rowId, row, getValue) => {
   const value = tbIsNumber(getValue(row))
   return - value
 }
 
 /**
  * Subtract two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The difference.
  */
-const tbSub = (row, getLeft, getRight) => {
+const tbSub = (rowId, row, getLeft, getRight) => {
   const left = tbIsNumber(getLeft(row))
   const right = tbIsNumber(getRight(row))
   return left - right
@@ -361,12 +369,13 @@ const tbSub = (row, getLeft, getRight) => {
 
 /**
  * Logical conjunction of two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The conjunction.
  */
-const tbAnd = (row, getLeft, getRight) => {
+const tbAnd = (rowId, row, getLeft, getRight) => {
   const left = tbToBoolean(row, getLeft)
   const right = tbToBoolean(row, getRight)
   return left && right
@@ -374,23 +383,25 @@ const tbAnd = (row, getLeft, getRight) => {
 
 /**
  * Logical negation of a value.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getValue How to get the value from the row.
  * @returns The logical conjunction.
  */
-const tbNot = (row, getValue) => {
+const tbNot = (rowId, row, getValue) => {
   const value = tbToLogical(getValue(row))
   return ! value
 }
 
 /**
  * Logical disjunction of two values.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The disjunction.
  */
-const tbOr = (row, getLeft, getRight) => {
+const tbOr = (rowId, row, getLeft, getRight) => {
   const left = tbToBoolean(row, getLeft)
   const right = tbToBoolean(row, getRight)
   return left || right
@@ -398,13 +409,14 @@ const tbOr = (row, getLeft, getRight) => {
 
 /**
  * Choosing a value based on a logical condition.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getCond How to get the condition's value.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The left (right) value if the condition is true (false).
  */
-const tbIfElse = (row, getCond, getLeft, getRight) => {
+const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
   const cond = tbToBoolean(row, getCond)
   return cond ? getLeft(row) : getRight(row)
 }
@@ -413,12 +425,13 @@ const tbIfElse = (row, getCond, getLeft, getRight) => {
 
 /**
  * Strict greater than.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbGt = (row, getLeft, getRight) => {
+const tbGt = (rowId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -427,12 +440,13 @@ const tbGt = (row, getLeft, getRight) => {
 
 /**
  * Greater than or equal.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbGeq = (row, getLeft, getRight) => {
+const tbGeq = (rowId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -441,12 +455,13 @@ const tbGeq = (row, getLeft, getRight) => {
 
 /**
  * Equality.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbEq = (row, getLeft, getRight) => {
+const tbEq = (rowId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -455,12 +470,13 @@ const tbEq = (row, getLeft, getRight) => {
 
 /**
  * Inequality.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbNeq = (row, getLeft, getRight) => {
+const tbNeq = (rowId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -469,12 +485,13 @@ const tbNeq = (row, getLeft, getRight) => {
 
 /**
  * Less than or equal.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbLeq = (row, getLeft, getRight) => {
+const tbLeq = (rowId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -483,12 +500,13 @@ const tbLeq = (row, getLeft, getRight) => {
 
 /**
  * Strictly less than.
+ * @param {number} rowId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbLt = (row, getLeft, getRight) => {
+const tbLt = (rowId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -517,7 +535,8 @@ class TidyBlocksDataFrame {
    * @param {function} op How to test rows.
    * @returns A new dataframe.
    */
-  filter (op) {
+  filter (blockId, op) {
+    tbAssert(op, `[block ${blockId}] no operator for filter`)
     const newData = this.data.filter(row => {
       return op(row)
     })
@@ -529,12 +548,14 @@ class TidyBlocksDataFrame {
    * @param {string} column The column that determines groups.
    * @returns A new dataframe.
    */
-  groupBy (column) {
+  groupBy (blockId, column) {
+    tbAssert(column.length !== 0,
+             `[block ${blockId}] empty column name for grouping`)
     const seen = new Map()
     let groupId = 0
     const grouped = this.data.map(row => {
       row = {...row}
-      const value = tbGet(row, column)
+      const value = tbGet(blockId, row, column)
       if (! seen.has(value)) {
         seen.set(value, groupId)
         groupId += 1
@@ -551,7 +572,11 @@ class TidyBlocksDataFrame {
    * @param {function} op How to create new values from a row.
    * @returns A new dataframe.
    */
-  mutate (newName, op) {
+  mutate (blockId, newName, op) {
+    tbAssert(newName,
+             `[block ${blockId}] empty new column name for mutate`)
+    tbAssert(op !== null,
+             `[block ${blockId}] no operator for mutate`)
     const newData = this.data.map(row => {
       const newRow = {...row}
       newRow[newName] = op(row)
@@ -574,11 +599,15 @@ class TidyBlocksDataFrame {
    * @param {string[]} columns The names of the columns to keep.
    * @returns A new dataframe.
    */
-  select (columns) {
+  select (blockId, columns) {
+    tbAssert(columns.length !== 0,
+             `[block ${blockId}] no columns specified for select`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) [${columns}] in select`)
     const newData = this.data.map(row => {
       const result = {}
       columns.forEach(key => {
-        result[key] = tbGet(row, key)
+        result[key] = tbGet(blockId, row, key)
       })
       return result
     })
@@ -590,9 +619,11 @@ class TidyBlocksDataFrame {
    * @param {string[]} columns Names of columns to sort by.
    * @returns New data frame with sorted data.
    */
-  sort (columns) {
-    columns.forEach(col => tbAssert(this.hasColumn(col),
-                                    `No such column ${col}`))
+  sort (blockId, columns) {
+    tbAssert(columns.length !== 0,
+             `[block ${blockId}] no columns specified for sort`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) [${columns}] in sort`)
     const result = [...this.data]
     result.sort((left, right) => {
       return columns.reduce((soFar, col) => {
@@ -617,11 +648,16 @@ class TidyBlocksDataFrame {
    * @param {string} column Column to summarize.
    * @return A new dataframe.
    */
-  summarize (func, column) {
+  summarize (blockId, func, column) {
+    tbAssert(column,
+             `[block ${blockId}] no column specified for summarize`)
+    tbAssert(this.hasColumns(column),
+             `[block ${blockId}] unknown column(s) [${column}] in summarize`)
+
     const result = []
 
     // Aggregate the whole thing?
-    if (! this.hasColumn('_group_')) {
+    if (! this.hasColumns('_group_')) {
       const values = this.getColumn(column)
       const record = {}
       record[column] = func(values)
@@ -658,9 +694,9 @@ class TidyBlocksDataFrame {
    * Remove grouping if present.
    * @returns A new dataframe.
    */
-  ungroup () {
-    tbAssert(this.hasColumn('_group_'),
-             'Cannot ungroup data that is not grouped')
+  ungroup (blockId) {
+    tbAssert(this.hasColumns('_group_'),
+             `[block ${blockId}] cannot ungroup data that is not grouped`)
     const newData = this.data.map(row => {
       row = {...row}
       delete row._group_
@@ -689,10 +725,10 @@ class TidyBlocksDataFrame {
     }
 
     const leftFrame = getDataFxn(leftTableName)
-    tbAssert(leftFrame.hasColumn(leftColumn),
+    tbAssert(leftFrame.hasColumns(leftColumn),
              `left table does not have column ${leftColumn}`)
     const rightFrame = getDataFxn(rightTableName)
-    tbAssert(rightFrame.hasColumn(rightColumn),
+    tbAssert(rightFrame.hasColumns(rightColumn),
              `right table does not have column ${rightColumn}`)
 
     const result = []
@@ -750,18 +786,24 @@ class TidyBlocksDataFrame {
    * @returns {Array} Column as JavaScript array.
    */
   getColumn (name) {
-    tbAssert(this.hasColumn(name),
+    tbAssert(this.hasColumns(name),
              `Table does not have column ${name}`)
     return this.data.map(row => row[name])
   }
 
   /**
-   * Test whether the dataframe has the specified column.
-   * @param {string} name Name of column to check for.
-   * @returns {Boolean} Is column present?
+   * Test whether the dataframe has the specified columns.
+   * @param {string[]} names Names of column to check for.
+   * @returns {Boolean} Are columns present?
    */
-  hasColumn (name) {
-    return name in this.data[0]
+  hasColumns (names) {
+    if (this.data.length === 0) {
+      return false
+    }
+    if (typeof names === 'string') {
+      names = [names]
+    }
+    return names.every(n => (n in this.data[0]))
   }
 
   /**
@@ -769,10 +811,10 @@ class TidyBlocksDataFrame {
    * @param {string[]} columns The names of the columns to convert.
    * @returns This object.
    */
-  toNumber (columns) {
+  toNumber (blockId, columns) {
     this.data.forEach(row => {
       columns.forEach(col => {
-        row[col] = parseFloat(tbGet(row, col))
+        row[col] = parseFloat(tbGet(blockId, row, col))
       })
     })
     return this
@@ -899,8 +941,12 @@ class TidyBlocksManagerClass {
    * @param {function} readCSV How to read a CSV file (used in 'eval').
    */
   run (getCode, displayTable, displayPlot, displayError, readCSV) {
+    displayError('') // clear legacy errors
     try {
       let code = getCode()
+      if (! code.includes(TIDYBLOCKS_START)) {
+        throw new Error('pipeline does not have a valid start block')
+      }
       code = fixCode(code)
       eval(code)
       while (this.queue.length > 0) {
@@ -909,7 +955,7 @@ class TidyBlocksManagerClass {
       }
     }
     catch (err) {
-      displayError(err)
+      displayError(err.message)
     }
   }
 

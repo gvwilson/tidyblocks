@@ -9,6 +9,7 @@ const {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,
@@ -115,16 +116,16 @@ describe('blocks are given IDs and can be looked up', () => {
         {}),
       makeBlock(
         'transform_mutate',
-        {NEW_COLUMN: 'should_fail',
+        {COLUMN: 'should_fail',
          VALUE: makeBlock(
            'value_arithmetic',
-           {OP: 'ADD',
+           {OP: 'tbAdd',
             LEFT: makeBlock(
               'value_column',
               {COLUMN: 'nonexistent'}),
             RIGHT: makeBlock(
               'value_number',
-              {NUM: 0})})})
+              {VALUE: 0})})})
     ]
     assert.equal(TidyBlocksManager.getNumBlocks(), 5,
                  'Wrong number of blocks recorded')

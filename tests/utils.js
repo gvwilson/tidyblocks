@@ -49,6 +49,21 @@ const assert_includes = (actual, required, message) => {
 }
 
 /**
+ * Assert that a string matches a regular expression.
+ * @param {string} actual String being examined.
+ * @param {regexp} required Pattern to look for.
+ * @param {string} message Error message.
+ */
+const assert_match = (actual, required, message) => {
+  if (! actual.match(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
  * Assert that one string starts with another.
  * @param {string} actual String being examined.
  * @param {string} required String to look for.
@@ -67,40 +82,59 @@ const assert_startsWith = (actual, required, message) => {
  * Replacement for singleton Blockly object. This defines only the methods and
  * values used by block creation code.
  */
-const Blockly = {
-  // Manually-created blocks.
-  Blocks: {},
+class BlocklyClass {
+  constructor () {
 
-  // JavaScript generation utilities.
-  JavaScript: {
-    ORDER_ATOMIC: 'order=atomic',
-    ORDER_EQUALITY: 'order=equality',
-    ORDER_NONE: 'order=none',
-    ORDER_RELATIONAL: 'order=relational',
-    ORDER_UNARY_NEGATION: 'order=negation',
+    // Manually-created blocks.
+    this.Blocks = {}
 
     quote_: (value) => {
-      return `"${value}"`
+      if (typeof value != 'string') {
+        return value
+      }
+      return `"${value.replace('"', '\\"')}"`
     },
 
-    valueToCode: (block, field, order) => {
-      return block[field]
-    }
-  },
+      quote_: (value) => {
+        return `"${value}"`
+      },
 
-  // All registered themes.
-  Themes: {},
-
-  // Create a new theme.
-  Theme: class {
-    constructor (blockStyles, categoryStyles) {
+      valueToCode: (block, field, order) => {
+        return block[field]
+      }
     }
-  },
+
+    // All registered themes.
+    this.Themes = {}
+
+    // Create a new theme.
+    this.Theme = class {
+      constructor (blockStyles, categoryStyles) {
+      }
+    }
+
+    // All fields of known blocks.
+    this.fields = {}
+  }
 
   // Helper functon to turn JSON into blocks entry.
-  defineBlocksWithJsonArray: (allJson) => {
+  defineBlocksWithJsonArray (allJson) {
+    allJson.forEach(entry => {
+      assert(!(entry.type in this.fields),
+             `Duplicate block of type ${entry.type}`)
+      this.fields[entry.type] = new Set()
+      if ('args0' in entry) {
+        entry.args0.forEach(field => {
+          const name = field.name
+          assert(! this.fields[entry.type].has(name),
+                 `Duplicate field ${name} in ${entry.type}`)
+          this.fields[entry.type].add(name)
+        })
+      }
+    })
   }
 }
+let Blockly = null;
 
 /**
  * Placeholder for a block object.
@@ -125,6 +159,13 @@ class MockBlock {
  * @return text for block.
  */
 const makeBlock = (blockName, settings) => {
+  assert(blockName in Blockly.fields,
+         `Unknown block name "${blockName}"`)
+  Object.keys(settings).forEach(name => {
+    assert(Blockly.fields[blockName].has(name),
+           `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
+  })
+
   assert(blockName in Blockly.JavaScript,
          `Unknown block name "${blockName}"`)
   const result = Blockly.JavaScript[blockName](new MockBlock(settings))
@@ -163,6 +204,7 @@ const generateCode = (code) => {
  * Does _not_ read R files (for now).
  */
 const loadBlockFiles = () => {
+  Blockly = new BlocklyClass()
   parse(fs.readFileSync('index.html', 'utf-8'))
     .querySelector('#tidyblocks')
     .querySelectorAll('script')
@@ -254,6 +296,7 @@ module.exports = {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
   readCSV,
   loadBlockFiles,

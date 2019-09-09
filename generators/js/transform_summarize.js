@@ -3,6 +3,6 @@
 //
 Blockly.JavaScript['transform_summarize'] = (block) => {
   const func = block.getFieldValue('FUNC')
-  const column = block.getFieldValue('COLUMN')
-  return `.summarize(${func}, '${column}')`
+  const column = Blockly.JavaScript.quote_(block.getFieldValue('COLUMN'))
+  return `.summarize(${block.tbId}, ${func}, ${column})`
 }
