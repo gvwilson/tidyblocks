@@ -73,7 +73,7 @@ describe('raises errors at the right times', () => {
               {COLUMN: 'nonexistent'}),
             RIGHT: makeBlock(
               'value_number',
-              {NUM: 0})})})
+              {VALUE: 0})})})
     ]
     const code = evalCode(pipeline)
     assert_match(Result.error, /\[block \d+\] no such column "nonexistent"/,

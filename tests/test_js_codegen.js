@@ -302,8 +302,7 @@ describe('generate code for single blocks', () => {
          {COLUMN: 'Y_axis_column'}),
        COLOR: makeBlock(
          'value_column',
-         {COLUMN: 'COLOR_axis_column'}),
-       lm: 'FALSE'})
+         {COLUMN: 'COLOR_axis_column'})})
     const code = generateCode(pipeline)
     assert_includes(code, '.plot(displayTable, displayPlot',
                     'pipeline does not call .plot')
@@ -366,7 +365,7 @@ describe('generate code for single blocks', () => {
   it('generates code to do logical negation', (done) => {
     const pipeline = makeBlock(
       'value_not',
-      {LEFT: makeBlock(
+      {VALUE: makeBlock(
         'value_column',
         {COLUMN: 'existing'})})
     const code = generateCode(pipeline)
@@ -430,7 +429,7 @@ describe('generate code for single blocks', () => {
   it('generates the code for a number', (done) => {
     const pipeline = makeBlock(
       'value_number',
-      {NUM: 3.14})
+      {VALUE: 3.14})
     const code = generateCode(pipeline)
     assert.equal(code, '(row) => (3.14)',
                  'pipeline does not generate expected number')
