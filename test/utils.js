@@ -49,6 +49,21 @@ const assert_includes = (actual, required, message) => {
 }
 
 /**
+ * Assert that a string matches a regular expression.
+ * @param {string} actual String being examined.
+ * @param {regexp} required Pattern to look for.
+ * @param {string} message Error message.
+ */
+const assert_match = (actual, required, message) => {
+  if (! actual.match(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
  * Assert that one string starts with another.
  * @param {string} actual String being examined.
  * @param {string} required String to look for.
@@ -63,44 +78,66 @@ const assert_startsWith = (actual, required, message) => {
   }
 }
 
+//--------------------------------------------------------------------------------
+
 /**
  * Replacement for singleton Blockly object. This defines only the methods and
  * values used by block creation code.
  */
-const Blockly = {
-  // Manually-created blocks.
-  Blocks: {},
+class BlocklyClass {
+  constructor () {
 
-  // JavaScript generation utilities.
-  JavaScript: {
-    ORDER_ATOMIC: 'order=atomic',
-    ORDER_EQUALITY: 'order=equality',
-    ORDER_NONE: 'order=none',
-    ORDER_RELATIONAL: 'order=relational',
-    ORDER_UNARY_NEGATION: 'order=negation',
+    // Manually-created blocks.
+    this.Blocks = {}
 
-    quote_: (value) => {
-      return `"${value}"`
-    },
+    // JavaScript generation utilities.
+    this.JavaScript = {
+      ORDER_ATOMIC: 'order=atomic',
+      ORDER_EQUALITY: 'order=equality',
+      ORDER_NONE: 'order=none',
+      ORDER_RELATIONAL: 'order=relational',
+      ORDER_UNARY_NEGATION: 'order=negation',
 
-    valueToCode: (block, field, order) => {
-      return block[field]
+      quote_: (value) => {
+        return `"${value}"`
+      },
+
+      valueToCode: (block, field, order) => {
+        return block[field]
+      }
     }
-  },
 
-  // All registered themes.
-  Themes: {},
+    // All registered themes.
+    this.Themes = {}
 
-  // Create a new theme.
-  Theme: class {
-    constructor (blockStyles, categoryStyles) {
+    // Create a new theme.
+    this.Theme = class {
+      constructor (blockStyles, categoryStyles) {
+      }
     }
-  },
+
+    // All fields of known blocks.
+    this.fields = {}
+  }
 
   // Helper functon to turn JSON into blocks entry.
-  defineBlocksWithJsonArray: (allJson) => {
+  defineBlocksWithJsonArray (allJson) {
+    allJson.forEach(entry => {
+      assert(!(entry.type in this.fields),
+             `Duplicate block of type ${entry.type}`)
+      this.fields[entry.type] = new Set()
+      if ('args0' in entry) {
+        entry.args0.forEach(field => {
+          const name = field.name
+          assert(! this.fields[entry.type].has(name),
+                 `Duplicate field ${name} in ${entry.type}`)
+          this.fields[entry.type].add(name)
+        })
+      }
+    })
   }
 }
+let Blockly = null;
 
 /**
  * Placeholder for a block object.
@@ -125,6 +162,13 @@ class MockBlock {
  * @return text for block.
  */
 const makeBlock = (blockName, settings) => {
+  assert(blockName in Blockly.fields,
+         `Unknown block name "${blockName}"`)
+  Object.keys(settings).forEach(name => {
+    assert(Blockly.fields[blockName].has(name),
+           `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
+  })
+
   assert(blockName in Blockly.JavaScript,
          `Unknown block name "${blockName}"`)
   const result = Blockly.JavaScript[blockName](new MockBlock(settings))
@@ -142,6 +186,8 @@ const makeBlock = (blockName, settings) => {
 const deleteBlock = (block) => {
   TidyBlocksManager.deleteBlock(block)
 }
+
+//--------------------------------------------------------------------------------
 
 /**
  * Assemble the code produced by blocks into a single string.
@@ -163,6 +209,7 @@ const generateCode = (code) => {
  * Does _not_ read R files (for now).
  */
 const loadBlockFiles = () => {
+  Blockly = new BlocklyClass()
   parse(fs.readFileSync('index.html', 'utf-8'))
     .querySelector('#tidyblocks')
     .querySelectorAll('script')
@@ -172,75 +219,85 @@ const loadBlockFiles = () => {
     .forEach(src => eval(src))
 }
 
-/**
- * Record results for testing purposes.
- */
-const Result = {
-  table: null,
-  plot: null,
-  error: null
-}
+//--------------------------------------------------------------------------------
 
 /**
- * "Display" a table (record for testing purposes).
- * @param data {Object} - data to record.
+ * Environment for testing. (Replaces the one in the GUI.)
  */
-const displayTable = (data) => {
-  Result.table = data
-}
-
-/**
- * "Display" a plot (record for testing purposes).
- * @param spec {Object} - Vega-Lite spec for plot.
- */
-const displayPlot = (spec) => {
-  Result.plot = spec
-}
-
-/**
- * Display an error (record for testing purposes).
- * @param error {string} - message to record.
- */
-const displayError = (error) => {
-  Result.error = error
-}
-
-/**
- * Reset the displays (clear old data between tests).
- */
-const resetDisplay = () => {
-  displayTable(null)
-  displayPlot(null)
-  displayError(null)
-}
-
-/**
- * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
- * 'eval' of generated code.
- * @param url {string} - URL of data.
- * @return dataframe containing that data.
- */
-const readCSV = (url) => {
-  if (url.includes('raw.githubusercontent.com')) {
-    url = url.split('/').pop()
+class TestEnvironment {
+  constructor (code) {
+    this.code = code
+    this.table = null
+    this.plot = null
+    this.error = null
   }
-  const path = `${process.cwd()}/data/${url}`
-  const text = fs.readFileSync(path, 'utf-8')
-  return csv2TidyBlocksDataFrame(text, Papa.parse)
+
+  /**
+   * Get the code to run.
+   * @returns {string} The code to run.
+   */
+  getCode () {
+    return this.code
+  }
+
+  /**
+   * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
+   * 'eval' of generated code.
+   * @param url {string} - URL of data.
+   * @return dataframe containing that data.
+   */
+  readCSV (url) {
+    if (url.includes('raw.githubusercontent.com')) {
+      url = 'data/' + url.split('/').pop()
+    }
+    else if (url.startsWith('test://')) {
+      url = 'test/data/' + url.split('//').pop()
+    }
+    else {
+      assert(false, `Cannot read "${url}" for testing`)
+    }
+    const path = `${process.cwd()}/${url}`
+    const text = fs.readFileSync(path, 'utf-8')
+    return csv2TidyBlocksDataFrame(text, Papa.parse)
+  }
+
+  /**
+   * "Display" a table (record for testing purposes).
+   * @param data {Object} - data to record.
+   */
+  displayTable (data) {
+    this.table = data
+  }
+
+  /**
+   * "Display" a plot (record for testing purposes).
+   * @param spec {Object} - Vega-Lite spec for plot.
+   */
+  displayPlot (spec) {
+    this.plot = spec
+  }
+
+  /**
+   * Display an error (record for testing purposes).
+   * @param error {string} - message to record.
+   */
+  displayError (error) {
+    this.error = error
+  }
 }
 
 /**
  * Run code block.
  * @param code {string} - code to evaluate.
- * @return generated code (for checking).
+ * @return environment (including eval'd code).
  */
 const evalCode = (code) => {
   if (typeof code !== 'string') {
     code = generateCode(code)
   }
-  TidyBlocksManager.run(() => code,
-                        displayTable, displayPlot, displayError, readCSV)
-  return code
+  const environment = new TestEnvironment(code)
+  TidyBlocksManager.run(environment)
+  return environment
 }
 
 //
@@ -254,12 +311,10 @@ module.exports = {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
-  readCSV,
   loadBlockFiles,
   makeBlock,
   generateCode,
-  resetDisplay,
-  evalCode,
-  Result
+  evalCode
 }

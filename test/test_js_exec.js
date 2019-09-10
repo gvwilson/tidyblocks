@@ -8,14 +8,12 @@ const {
   TidyBlocksManager,
   assert_hasKey,
   assert_includes,
+  assert_match,
   assert_startsWith,
-  readCSV,
   loadBlockFiles,
   makeBlock,
   generateCode,
-  resetDisplay,
-  evalCode,
-  Result
+  evalCode
 } = require('./utils')
 
 //
@@ -27,11 +25,8 @@ before(() => {
 
 describe('execute blocks for entire pipelines', () => {
 
-  // Reset run queue and embedded plot and table before each test so that their
-  // after-test states can be checked.
   beforeEach(() => {
     TidyBlocksManager.reset()
-    resetDisplay()
   })
 
   it('creates a dataset by parsing a local CSV file', (done) => {
@@ -40,10 +35,10 @@ describe('execute blocks for entire pipelines', () => {
         'data_mtcars',
         {})
     ]
-    evalCode(pipeline)
-    assert.notEqual(Result.table, null,
+    const env = evalCode(pipeline)
+    assert.notEqual(env.table, null,
                     'Result table has not been set')
-    assert.equal(Result.table.length, 32,
+    assert.equal(env.table.length, 32,
                  'Result table has wrong number of rows')
     done()
   }),
@@ -57,10 +52,10 @@ describe('execute blocks for entire pipelines', () => {
         'plot_table',
         {})
     ]
-    evalCode(pipeline)
-    assert.notEqual(Result.table, null,
+    const env = evalCode(pipeline)
+    assert.notEqual(env.table, null,
                     'Result table has not been set')
-    assert(Array.isArray(Result.table),
+    assert(Array.isArray(env.table),
            'Result table is not an array')
     done()
   })
@@ -74,10 +69,10 @@ describe('execute blocks for entire pipelines', () => {
         'transform_reverse',
         {})
     ]
-    evalCode(pipeline)
-    assert(Array.isArray(Result.table),
+    const env = evalCode(pipeline)
+    assert(Array.isArray(env.table),
            'Result table is not an array')
-    assert.deepEqual(Result.table,
+    assert.deepEqual(env.table,
                      [{'first': 2, 'second': 200},
                       {'first': 1, 'second': 100}],
                      'Data has not been reversed')
@@ -94,16 +89,16 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'Petal_Length',
          BINS: '20'})
     ]
-    evalCode(pipeline)
-    assert(Array.isArray(Result.table),
+    const env = evalCode(pipeline)
+    assert(Array.isArray(env.table),
            'Result table is not an array')
-    assert.equal(Result.table.length, 150,
+    assert.equal(env.table.length, 150,
                  'Result table is the wrong length')
-    assert_hasKey(Result.table[0], 'Sepal_Length',
+    assert_hasKey(env.table[0], 'Sepal_Length',
            'Result table missing expected keys')
-    assert.equal(typeof Result.plot, 'object',
+    assert.equal(typeof env.plot, 'object',
                  'Result plot is not an object')
-    assert.equal(Result.plot.data.values.length, 150,
+    assert.equal(env.plot.data.values.length, 150,
                  'Result plot data is the wrong length')
     done()
   })
@@ -121,12 +116,12 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'Petal_Length',
          BINS: '20'})
     ]
-    evalCode(pipeline)
-    assert.equal(Object.keys(Result.table[0]).length, 1,
+    const env = evalCode(pipeline)
+    assert.equal(Object.keys(env.table[0]).length, 1,
                  'Wrong number of columns in result table')
-    assert_hasKey(Result.table[0], 'Petal_Length',
+    assert_hasKey(env.table[0], 'Petal_Length',
                   'Result table does not contain expected key')
-    assert.equal(Result.plot.data.values.length, 150,
+    assert.equal(env.plot.data.values.length, 150,
                  'Result plot data is the wrong length')
     done()
   })
@@ -140,10 +135,10 @@ describe('execute blocks for entire pipelines', () => {
         'transform_sort',
         {MULTIPLE_COLUMNS: 'red, green'})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 11,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
                  'Wrong number of rows in result')
-    const ordering = Result.table.map((row) => (1000 * row.red) + row.green)
+    const ordering = env.table.map((row) => (1000 * row.red) + row.green)
     const check = [...ordering].sort((left, right) => (left - right))
     assert.deepEqual(ordering, check,
                      'Rows not in order')
@@ -165,12 +160,12 @@ describe('execute blocks for entire pipelines', () => {
               'value_column',
               {COLUMN: 'red'})})})
     ]
-    const code = evalCode(pipeline)
-    assert.equal(Result.table.length, 11,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(Result.table[0], 'textual',
+    assert_hasKey(env.table[0], 'textual',
                   'Result lacks expected column')
-    assert.equal(typeof Result.table[0].textual, 'string',
+    assert.equal(typeof env.table[0].textual, 'string',
                  'New column has wrong type')
     done()
   })
@@ -190,10 +185,10 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})})
+             {VALUE: 0})})})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 5,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 5,
                  'Expected 5 rows with red != 0')
     done()
   })
@@ -213,12 +208,12 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'plumbing_notify',
         {NAME: 'left'})
     ]
-    evalCode(pipeline)
+    const env = evalCode(pipeline)
     assert(TidyBlocksManager.getResult('left'),
            'Expected something registered under "left"')
     assert.equal(TidyBlocksManager.getResult('left').data.length, 5,
@@ -243,20 +238,20 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'Petal_Length'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 5.0})})}),
+             {VALUE: 5.0})})}),
       makeBlock(
         'plot_hist',
-        {Column: makeBlock(
+        {COLUMN: makeBlock(
           'value_column',
           {COLUMN: 'Petal_Length'}),
          BINS: makeBlock(
            'value_number',
-           {NUM: 20})})
+           {VALUE: 20})})
     ]
-    evalCode(pipeline)
-    assert.equal(Object.keys(Result.table[0]).length, 5,
+    const env = evalCode(pipeline)
+    assert.equal(Object.keys(env.table[0]).length, 5,
                  'Wrong number of columns in result table')
-    assert.equal(Result.plot.data.values.length, 42,
+    assert.equal(env.plot.data.values.length, 42,
                  'Result plot data is the wrong length')
     done()
   })
@@ -278,10 +273,10 @@ describe('execute blocks for entire pipelines', () => {
              'value_column',
              {COLUMN: 'green'})})})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 8,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 8,
                  'Wrong number of rows in output')
-    assert(Result.table.every(row => (row.red >= row.green)),
+    assert(env.table.every(row => (row.red >= row.green)),
           'Wrong rows have survived filtering')
     done()
   })
@@ -304,12 +299,12 @@ describe('execute blocks for entire pipelines', () => {
               'value_column',
               {COLUMN: 'green'})})})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 11,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
                  'Wrong number of rows in output')
-    assert.equal(Object.keys(Result.table[0]).length, 5,
+    assert.equal(Object.keys(env.table[0]).length, 5,
                  'Wrong number of columns in output')
-    assert(Result.table.every(row => (row.red_green === (row.red + row.green))),
+    assert(env.table.every(row => (row.red_green === (row.red + row.green))),
            'Sum column does not contain correct values')
     done()
   })
@@ -324,12 +319,12 @@ describe('execute blocks for entire pipelines', () => {
         {FUNC: 'tbSum',
          COLUMN: 'red'})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 1,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
                  'Expected one row of output')
-    assert.equal(Object.keys(Result.table[0]).length, 1,
+    assert.equal(Object.keys(env.table[0]).length, 1,
                  'Expected a single column of output')
-    assert.equal(Result.table[0].red, 1148,
+    assert.equal(env.table[0].red, 1148,
                  'Incorrect sum')
     done()
   })
@@ -343,14 +338,14 @@ describe('execute blocks for entire pipelines', () => {
         'transform_groupBy',
         {COLUMN: 'blue'})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 11,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
                  'Wrong number of rows in output')
-    assert.equal(Result.table.filter(row => (row._group_ === 0)).length, 6,
+    assert.equal(env.table.filter(row => (row._group_ === 0)).length, 6,
                  'Wrong number of rows for index 0')
-    assert.equal(Result.table.filter(row => (row._group_ === 1)).length, 4,
+    assert.equal(env.table.filter(row => (row._group_ === 1)).length, 4,
                  'Wrong number of rows for index 255')
-    assert.equal(Result.table.filter(row => (row._group_ === 2)).length, 1,
+    assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
                  'Wrong number of rows for index 128')
     done()
   })
@@ -367,10 +362,10 @@ describe('execute blocks for entire pipelines', () => {
         'transform_ungroup',
         {})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 11,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
                  'Table has the wrong number of rows')
-    assert(!('_group_' in Result.table[0]),
+    assert(!('_group_' in env.table[0]),
            'Table still has group index column')
     done()
   })
@@ -388,8 +383,8 @@ describe('execute blocks for entire pipelines', () => {
         {FUNC: 'tbMean',
          COLUMN: 'green'})
     ]
-    evalCode(pipeline)
-    assert.deepEqual(Result.table,
+    const env = evalCode(pipeline)
+    assert.deepEqual(env.table,
                      [{_group_: 0, green: 106.33333333333333},
                       {_group_: 1, green: 127.5},
                       {_group_: 2, green: 0}],
@@ -423,8 +418,8 @@ describe('execute blocks for entire pipelines', () => {
          RIGHT_TABLE: 'right',
          RIGHT_COLUMN: 'first'})
     ]
-    evalCode(pipeline)
-    assert.deepEqual(Result.table,
+    const env = evalCode(pipeline)
+    assert.deepEqual(env.table,
                      [{'_join_': 1, 'right_second': 100}],
                      'Incorrect join result')
     done()
@@ -446,7 +441,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'plumbing_notify',
         {NAME: 'left'}),
@@ -465,7 +460,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'green'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'plumbing_notify',
         {NAME: 'right'}),
@@ -487,7 +482,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'left_blue'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})}),
+             {VALUE: 0})})}),
       makeBlock(
         'transform_filter',
         {TEST: makeBlock(
@@ -498,10 +493,10 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'right_blue'}),
            RIGHT: makeBlock(
              'value_number',
-             {NUM: 0})})})
+             {VALUE: 0})})})
     ]
-    evalCode(pipeline)
-    assert.deepEqual(Result.table,
+    const env = evalCode(pipeline)
+    assert.deepEqual(env.table,
                      [{'_join_': 255,
                        'left_name': 'fuchsia', 'left_green': 0, 'left_blue': 255,
                        'right_name': 'aqua', 'right_red': 0, 'right_blue': 255},
@@ -518,15 +513,128 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('checks data types correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result_name_string',
+         VALUE: makeBlock(
+           'value_type',
+           {TYPE: 'tbIsString',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'name'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result_red_string',
+         VALUE: makeBlock(
+           'value_type',
+           {TYPE: 'tbIsString',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'red'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result_green_number',
+         VALUE: makeBlock(
+           'value_type',
+           {TYPE: 'tbIsNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'green'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => row.result_name_string),
+           `Expected all names to be strings`)
+    assert(env.table.every(row => !row.result_red_string),
+           `Expected all red values to not be strings`)
+    assert(env.table.every(row => row.result_green_number),
+           `Expected all green values to be strings`)
+    done()
+  })
+
+  it('does date conversion correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_earthquakes',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'Time',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => (row.Time instanceof Date)),
+           `Some time values not converted to Date objects`)
+    done()
+  })
+
+  it('extracts values from dates correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_earthquakes',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'Time',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'year',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToYear',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'month',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToMonth',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'day',
+         VALUE: makeBlock(
+           'value_datetime',
+           {TYPE: 'tbToDay',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'Time'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table[0].year, 2016,
+                 `Expected 2016 as year`)
+    assert.equal(env.table[0].month, 8,
+                 `Expected 8 as month`)
+    assert.equal(env.table[0].day, 24,
+                 `Expected 24 as day of month`)
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {
 
-  // Reset run queue and embedded plot and table before each test so that their
-  // after-test states can be checked.
   beforeEach(() => {
     TidyBlocksManager.reset()
-    resetDisplay()
   })
 
   it('does subtraction correctly (#58)', (done) => {
@@ -547,12 +655,12 @@ describe('check that specific bugs have been fixed', () => {
               'value_column',
               {COLUMN: 'first'})})})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 2,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 2,
                  'Wrong number of rows in output')
-    assert.equal(Object.keys(Result.table[0]).length, 3,
+    assert.equal(Object.keys(env.table[0]).length, 3,
                  'Wrong number of columns in output')
-    assert(Result.table.every(row => (row.difference === (row.second - row.first))),
+    assert(env.table.every(row => (row.difference === (row.second - row.first))),
            'Difference column does not contain correct values')
     done()
   })
@@ -574,8 +682,8 @@ describe('check that specific bugs have been fixed', () => {
               'value_text',
               {VALUE: 'setosa'})})})
     ]
-    evalCode(pipeline)
-    assert.equal(Result.table.length, 50,
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 50,
                  'Wrong number of results in output')
     done()
   })
