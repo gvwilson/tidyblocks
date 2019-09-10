@@ -629,33 +629,6 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('converts strings to dates', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'epoch',
-         VALUE: makeBlock(
-           'value_text',
-           {VALUE: '1970-01-01'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'recovered',
-         VALUE: makeBlock(
-           'value_parseDate',
-           {VALUE: makeBlock(
-             'value_column',
-             {COLUMN: 'epoch'}),
-            FORMAT: 'YYYY-MM-DD'})})
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table[0].recovered instanceof Date,
-           `Expected date, not ${typeof env.table[0].recovered}`)
-    done()
-  })
-
 })
 
 describe('check that specific bugs have been fixed', () => {

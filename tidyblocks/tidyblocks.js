@@ -308,21 +308,6 @@ const tbIsString = (row, getValue) => {
 //--------------------------------------------------------------------------------
 
 /*
- * Convert string to date object using format.
- * @param {number} rowId The ID of the block.
- * @param {Object} row Row containing values.
- * @param {string} format Format to use for parsing (FIXME: IGNORED UNTIL WE CAN LOAD 'moment').
- * @param {function} getValue How to get desired value.
- * @returns Date corresponding to string.
- */
-const tbParseDate = (rowId, row, format, getValue) => {
-  const value = getValue(row)
-  tbAssert(typeof value === 'string',
-           `Expected string not ${typeof value}`)
-  return new Date(value)
-}
-
-/*
  * Extract year from value.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
