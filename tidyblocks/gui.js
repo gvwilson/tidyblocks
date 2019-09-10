@@ -8,6 +8,7 @@ const MULTIPLE_COLUMN_NAMES = /^ *([_A-Za-z][_A-Za-z0-9]*)( *, *[_A-Za-z][_A-Za-
 // Names of single-column fields in various blocks (for generating validators).
 const SINGLE_COLUMN_FIELDS = [
   'COLUMN',
+  'FORMAT',
   'LEFT_TABLE',
   'LEFT_COLUMN',
   'RIGHT_TABLE',
