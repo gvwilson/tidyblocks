@@ -10,13 +10,10 @@ const {
   assert_includes,
   assert_match,
   assert_startsWith,
-  readCSV,
   loadBlockFiles,
   makeBlock,
   generateCode,
-  resetDisplay,
-  evalCode,
-  Result
+  evalCode
 } = require('./utils')
 
 //
@@ -28,11 +25,8 @@ before(() => {
 
 describe('generate code for single blocks', () => {
 
-  // Reset run queue and embedded plot and table before each test so that their
-  // after-test states can be checked.
   beforeEach(() => {
     TidyBlocksManager.reset()
-    resetDisplay()
   })
 
   it('generates code to re-create the colors data', (done) => {
@@ -244,7 +238,7 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert_includes(code, '.plot(displayTable, displayPlot',
+    assert_includes(code, '.plot(environment',
                     'pipeline does not call .plot')
     assert_includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
@@ -265,7 +259,7 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'Y_axis_column'})})
     const code = generateCode(pipeline)
-    assert_includes(code, '.plot(displayTable, displayPlot',
+    assert_includes(code, '.plot(environment',
                     'pipeline does not call .plot')
     assert_includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
@@ -304,7 +298,7 @@ describe('generate code for single blocks', () => {
          'value_column',
          {COLUMN: 'COLOR_axis_column'})})
     const code = generateCode(pipeline)
-    assert_includes(code, '.plot(displayTable, displayPlot',
+    assert_includes(code, '.plot(environment',
                     'pipeline does not call .plot')
     assert_includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')

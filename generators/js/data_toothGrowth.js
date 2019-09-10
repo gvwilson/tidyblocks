@@ -4,5 +4,5 @@
 Blockly.JavaScript['data_toothGrowth'] = (block) => {
   const URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/toothGrowth.csv'
   const prefix = registerPrefix('')
-  return `${prefix} readCSV('${URL}')`
+  return `${prefix} environment.readCSV('${URL}')`
 }

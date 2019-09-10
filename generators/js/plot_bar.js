@@ -25,5 +25,5 @@ Blockly.JavaScript['plot_bar'] = (block) => {
     }
   }`
   const suffix = registerSuffix('')
-  return `.plot(displayTable, displayPlot, ${spec}) ${suffix}`
+  return `.plot(environment, ${spec}) ${suffix}`
 }

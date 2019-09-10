@@ -11,13 +11,10 @@ const {
   assert_includes,
   assert_match,
   assert_startsWith,
-  readCSV,
   loadBlockFiles,
   makeBlock,
   generateCode,
-  resetDisplay,
-  evalCode,
-  Result
+  evalCode
 } = require('./utils')
 
 //
@@ -29,11 +26,8 @@ before(() => {
 
 describe('CSV headers are sanitized correctly', () => {
 
-  // Reset run queue and embedded plot and table before each test so that their
-  // after-test states can be checked.
   beforeEach(() => {
     TidyBlocksManager.reset()
-    resetDisplay()
   })
 
   it('reads a single-column CSV with an unproblematic header', (done) => {
@@ -102,11 +96,8 @@ value,value,value`
 
 describe('blocks are given IDs and can be looked up', () => {
 
-  // Reset run queue and embedded plot and table before each test so that their
-  // after-test states can be checked.
   beforeEach(() => {
     TidyBlocksManager.reset()
-    resetDisplay()
   })
 
   it('gives each block a sequential ID', (done) => {

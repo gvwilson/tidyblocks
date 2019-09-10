@@ -81,7 +81,7 @@ const registerSuffix = (fill) => {
 const fixCode = (code) => {
   if (! code.endsWith(TIDYBLOCKS_END)) {
     const suffix = registerSuffix('')
-    code += `.plot(displayTable, null, '#plotOutput', {}) ${suffix}`
+    code += `.plot(environment, {}) ${suffix}`
   }
   return code
 }
@@ -905,18 +905,15 @@ class TidyBlocksDataFrame {
    * Call a plotting function. This is in this class to support method chaining
    * and to decouple this class from the real plotting functions so that tests
    * will run.
-   * @param {function} tableFxn Callback to display table as table.
-   * @param {function} plotFxn Callback to display table graphically.
+   * @param {object} environment Connection to the outside world.
    * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
    * @returns This object.
    */
-  plot (tableFxn, plotFxn, spec) {
-    if (tableFxn !== null) {
-      tableFxn(this.data)
-    }
-    if (plotFxn !== null) {
+  plot (environment, spec) {
+    environment.displayTable(this.data)
+    if (Object.keys(spec).length !== 0) {
       spec.data.values = this.data
-      plotFxn(spec)
+      environment.displayPlot(spec)
     }
     return this
   }
@@ -1077,16 +1074,12 @@ class TidyBlocksManagerClass {
   /**
    * Run all pipelines in an order that respects dependencies.
    * This depends on `notify` to add pipelines to the queue.
-   * @param {function} getCode How to get the code to run.
-   * @param {function} displayTable How to display a table (used in 'eval').
-   * @param {function} displayPlot How to display a plot (used in 'eval').
-   * @param {function} displayError How to display an error (used in 'eval' and here).
-   * @param {function} readCSV How to read a CSV file (used in 'eval').
+   * @param {object} environment How to interact with the outside world.
    */
-  run (getCode, displayTable, displayPlot, displayError, readCSV) {
-    displayError('') // clear legacy errors
+  run (environment) {
+    environment.displayError('') // clear legacy errors
     try {
-      let code = getCode()
+      let code = environment.getCode()
       if (! code.includes(TIDYBLOCKS_START)) {
         throw new Error('pipeline does not have a valid start block')
       }
@@ -1098,7 +1091,7 @@ class TidyBlocksManagerClass {
       }
     }
     catch (err) {
-      displayError(err.message)
+      environment.displayError(err.message)
     }
   }
 
