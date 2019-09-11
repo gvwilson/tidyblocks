@@ -20,8 +20,8 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: 'value_blocks',
-    tooltip: 'parse date according to YYYY-MM-DD style format',
+    tooltip: 'parse date to string',
     helpUrl: '',
-    extensions: ['validate_COLUMN']
+    extensions: ['validate_FORMAT']
   }
 ])
