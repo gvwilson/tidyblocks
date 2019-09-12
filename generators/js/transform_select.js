@@ -9,6 +9,5 @@ Blockly.JavaScript['transform_select'] = (block) => {
         .map(c => Blockly.JavaScript.quote_(c))
         .join(',')
 
-  const descending = (block.getFieldValue('DESCENDING') === 'FALSE')
-  return `.select(${block.tbId}, [${columns}], ${descending})`
+  return `.select(${block.tbId}, [${columns}])`
 }
