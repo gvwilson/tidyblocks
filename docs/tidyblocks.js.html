@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tidyblocks.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tidyblocks.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Prefix and suffix for well-formed pipelines.
  */
 const TIDYBLOCKS_START = '/* tidyblocks start */'
@@ -177,7 +205,7 @@ const tbMedian = (values) => {
 const tbMin = (values) => {
   return (values.length === 0)
     ? NaN
-    : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
+    : values.reduce((soFar, val) => (val &lt; soFar) ? val : soFar)
 }
 
 /**
@@ -536,7 +564,7 @@ const tbSub = (blockId, row, getLeft, getRight) => {
 const tbAnd = (blockId, row, getLeft, getRight) => {
   const left = tbToBoolean(row, getLeft)
   const right = tbToBoolean(row, getRight)
-  return left && right
+  return left &amp;&amp; right
 }
 
 /**
@@ -574,9 +602,9 @@ const tbOr = (blockId, row, getLeft, getRight) => {
  * @param {function} getRight How to get the right value from the row.
  * @returns The left (right) value if the condition is true (false).
  */
-
-const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
-  return getCond(row) ? getLeft(row) : getRight(row)
+const tbIfElse = (blockId, row, getCond, getLeft, getRight) => {
+  const cond = tbToBoolean(row, getCond)
+  return cond ? getLeft(row) : getRight(row)
 }
 
 //--------------------------------------------------------------------------------
@@ -653,7 +681,7 @@ const tbLeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
-  return left <= right
+  return left &lt;= right
 }
 
 /**
@@ -668,7 +696,7 @@ const tbLt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
-  return left < right
+  return left &lt; right
 }
 
 //--------------------------------------------------------------------------------
@@ -779,7 +807,7 @@ class TidyBlocksDataFrame {
         if (soFar !== 0) {
           return soFar
         }
-        if (left[col] < right[col]) {
+        if (left[col] &lt; right[col]) {
           return -1
         }
         if (left[col] > right[col]) {
@@ -1143,7 +1171,7 @@ const findLineByLeastSquares = (values_x, values_y) => {
   let y_sum = 0
   let xy_sum = 0
   let xx_sum = 0
-  for (let i = 0; i<len; i++) {
+  for (let i = 0; i&lt;len; i++) {
     const x = values_x[i]
     const y = values_y[i]
     x_sum += x
@@ -1176,3 +1204,26 @@ if (typeof module !== 'undefined') {
     TidyBlocksManager
   }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="GuiEnvironment.html">GuiEnvironment</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#createValidator">createValidator</a></li><li><a href="global.html#csv2TidyBlocksDataFrame">csv2TidyBlocksDataFrame</a></li><li><a href="global.html#displayTab">displayTab</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbAssertNumber">tbAssertNumber</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIfElse">tbIfElse</a></li><li><a href="global.html#tbIsBoolean">tbIsBoolean</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbIsString">tbIsString</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToDatetime">tbToDatetime</a></li><li><a href="global.html#tbToDay">tbToDay</a></li><li><a href="global.html#tbToHours">tbToHours</a></li><li><a href="global.html#tbToMinutes">tbToMinutes</a></li><li><a href="global.html#tbToMonth">tbToMonth</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToSeconds">tbToSeconds</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbToWeekDay">tbToWeekDay</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#tbVariance">tbVariance</a></li><li><a href="global.html#TIDYBLOCKS_START">TIDYBLOCKS_START</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Sep 12 2019 16:23:53 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
