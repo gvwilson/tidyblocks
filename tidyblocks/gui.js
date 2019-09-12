@@ -239,6 +239,9 @@ const colTypeName = (value) => {
  * @param {JSON} json JSON object to convert to table.
  */
 const json2table = (json) => {
+  if (json.length === 0) {
+    return '<p>empty</p>'
+  }
   const cols = Object.keys(json[0])
   const headerRow = '<tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr>'
   const typeRow = '<tr>' + cols.map(c => `<th>${colTypeName(json[0][c])}</th>`).join('') + '</tr>'
