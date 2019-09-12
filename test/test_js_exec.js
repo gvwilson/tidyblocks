@@ -656,6 +656,69 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('counts rows correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {FUNC: 'tbCount',
+         COLUMN: 'first'})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 1,
+           `Expect a single row of output`)
+    assert(env.table[0].first == 2,
+           `Expected a count of 2, not ${env.table[0].first}`)
+    done()
+  })
+
+  it('calculates the maximum value correct', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {FUNC: 'tbMax',
+         COLUMN: 'second'})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 1,
+           `Expect a single row of output`)
+    assert(env.table[0].second == 200,
+           `Expected a max of 200, not ${env.table[0].second}`)
+    done()
+  })
+
+  it('handles empty tables correctly when calculating maxima', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_filter',
+        {TEST: makeBlock(
+          'value_compare',
+          {OP: 'tbLt',
+           LEFT: makeBlock(
+             'value_column',
+             {COLUMN: 'red'}),
+           RIGHT: makeBlock(
+             'value_number',
+             {VALUE: 0})})}),
+      makeBlock(
+        'transform_summarize',
+        {FUNC: 'tbMax',
+         COLUMN: 'red'})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 0,
+           `Expected empty output`)
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {
