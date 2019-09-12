@@ -975,20 +975,6 @@ class TidyBlocksDataFrame {
     })
     return this
   }
-
-  /**
-   * Convert to string for printing.
-   */
-  toString () {
-    const str = (row, i) => {
-      return '{'
-        + Object.keys(row).map(key => `${key}: ${row[key]}`).join(', ')
-        + '}'
-        + (this.groups === null ? '' : ` @ ${this.groups[i]}`)
-    }
-    return `= ${this.data.length} =\n`
-      + this.data.map((r, i) => str(r, i)).join('\n')
-  }
 }
 
 //--------------------------------------------------------------------------------
@@ -1109,13 +1095,6 @@ class TidyBlocksManagerClass {
     catch (err) {
       environment.displayError(err.message)
     }
-  }
-
-  /**
-   * Show the manager as a string for debugging.
-   */
-  toString () {
-    return `queue ${this.queue.length} waiting ${this.waiting.length} blocks ${this.blocks.size}`
   }
 }
 
