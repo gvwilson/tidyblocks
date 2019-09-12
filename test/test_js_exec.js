@@ -692,6 +692,46 @@ describe('check that specific bugs have been fixed', () => {
     done()
   })
 
+  it('does multiplication and modulo correctly (#131)', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'product',
+         VALUE: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbMul',
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'red'}),
+            RIGHT: makeBlock(
+              'value_column',
+              {COLUMN: 'green'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'remainder',
+         VALUE: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbMod',
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'red'}),
+            RIGHT: makeBlock(
+              'value_column',
+              {COLUMN: 'green'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => (row.product === (row.red * row.green))),
+           `Incorrect result(s) for multiplication`)
+    assert(env.table.every(row => ((row.green === 0)
+                                   ? Number.isNaN(row.remainder)
+                                   : (row.remainder === (row.red % row.green)))),
+           `Incorrect result(s) for modulo`)
+    done()
+  })
+
   it('filters strings correctly (#143)', (done) => {
     const pipeline = [
       makeBlock(

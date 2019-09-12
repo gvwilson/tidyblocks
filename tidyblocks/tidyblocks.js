@@ -480,7 +480,7 @@ const tbExp = (rowId, row, getLeft, getRight) => {
 const tbMod = (rowId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left * right
+  return left % right
 }
 
 /**
@@ -494,7 +494,7 @@ const tbMod = (rowId, row, getLeft, getRight) => {
 const tbMul = (rowId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left % right
+  return left * right
 }
 
 /**
