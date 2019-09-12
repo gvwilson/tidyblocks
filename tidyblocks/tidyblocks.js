@@ -807,11 +807,18 @@ class TidyBlocksDataFrame {
    * @return A new dataframe.
    */
   summarize (blockId, func, column) {
+    // Handle empty case.
+    if (this.data.length === 0) {
+      return new TidyBlocksDataFrame([])
+    }
+
+    // Check column access.
     tbAssert(column,
              `[block ${blockId}] no column specified for summarize`)
     tbAssert(this.hasColumns(column),
              `[block ${blockId}] unknown column(s) [${column}] in summarize`)
 
+    // Final data.
     const result = []
 
     // Aggregate the whole thing?
