@@ -309,13 +309,13 @@ const tbIsString = (row, getValue) => {
 
 /*
  * Convert string to date object using format.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
  * @param {string} format Format to use for parsing (FIXME: IGNORED UNTIL WE CAN LOAD 'moment').
  * @param {function} getValue How to get desired value.
  * @returns Date corresponding to string.
  */
-const tbParseDate = (rowId, row, format, getValue) => {
+const tbParseDate = (blockId, row, format, getValue) => {
   const value = getValue(row)
   tbAssert(typeof value === 'string',
            `Expected string not ${typeof value}`)
@@ -429,13 +429,13 @@ const tbGet = (blockId, row, column) => {
 
 /**
  * Add two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The sum.
  */
-const tbAdd = (rowId, row, getLeft, getRight) => {
+const tbAdd = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
   return left + right
@@ -443,13 +443,13 @@ const tbAdd = (rowId, row, getLeft, getRight) => {
 
 /**
  * Divide two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The quotient.
  */
-const tbDiv = (rowId, row, getLeft, getRight) => {
+const tbDiv = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
   return left / right
@@ -457,13 +457,13 @@ const tbDiv = (rowId, row, getLeft, getRight) => {
 
 /**
  * Calculate an exponent.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The exponentiated value.
  */
-const tbExp = (rowId, row, getLeft, getRight) => {
+const tbExp = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
   return left ** right
@@ -471,13 +471,13 @@ const tbExp = (rowId, row, getLeft, getRight) => {
 
 /**
  * Find the remainder of two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The remainder.
  */
-const tbMod = (rowId, row, getLeft, getRight) => {
+const tbMod = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
   return left % right
@@ -485,13 +485,13 @@ const tbMod = (rowId, row, getLeft, getRight) => {
 
 /**
  * Multiply two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The product.
  */
-const tbMul = (rowId, row, getLeft, getRight) => {
+const tbMul = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
   return left * right
@@ -499,25 +499,25 @@ const tbMul = (rowId, row, getLeft, getRight) => {
 
 /**
  * Negate a value.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getValue How to get the value from the row.
  * @returns The numerical negation.
  */
-const tbNeg = (rowId, row, getValue) => {
+const tbNeg = (blockId, row, getValue) => {
   const value = tbAssertNumber(getValue(row))
   return - value
 }
 
 /**
  * Subtract two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The difference.
  */
-const tbSub = (rowId, row, getLeft, getRight) => {
+const tbSub = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
   return left - right
@@ -527,13 +527,13 @@ const tbSub = (rowId, row, getLeft, getRight) => {
 
 /**
  * Logical conjunction of two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The conjunction.
  */
-const tbAnd = (rowId, row, getLeft, getRight) => {
+const tbAnd = (blockId, row, getLeft, getRight) => {
   const left = tbToBoolean(row, getLeft)
   const right = tbToBoolean(row, getRight)
   return left && right
@@ -541,25 +541,25 @@ const tbAnd = (rowId, row, getLeft, getRight) => {
 
 /**
  * Logical negation of a value.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getValue How to get the value from the row.
  * @returns The logical conjunction.
  */
-const tbNot = (rowId, row, getValue) => {
+const tbNot = (blockId, row, getValue) => {
   const value = tbToLogical(getValue(row))
   return ! value
 }
 
 /**
  * Logical disjunction of two values.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The disjunction.
  */
-const tbOr = (rowId, row, getLeft, getRight) => {
+const tbOr = (blockId, row, getLeft, getRight) => {
   const left = tbToBoolean(row, getLeft)
   const right = tbToBoolean(row, getRight)
   return left || right
@@ -567,14 +567,14 @@ const tbOr = (rowId, row, getLeft, getRight) => {
 
 /**
  * Choosing a value based on a logical condition.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getCond How to get the condition's value.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The left (right) value if the condition is true (false).
  */
-const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
+const tbIfElse = (blockId, row, getCond, getLeft, getRight) => {
   const cond = tbToBoolean(row, getCond)
   return cond ? getLeft(row) : getRight(row)
 }
@@ -583,13 +583,13 @@ const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
 
 /**
  * Strict greater than.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbGt = (rowId, row, getLeft, getRight) => {
+const tbGt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -598,13 +598,13 @@ const tbGt = (rowId, row, getLeft, getRight) => {
 
 /**
  * Greater than or equal.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbGeq = (rowId, row, getLeft, getRight) => {
+const tbGeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -613,13 +613,13 @@ const tbGeq = (rowId, row, getLeft, getRight) => {
 
 /**
  * Equality.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbEq = (rowId, row, getLeft, getRight) => {
+const tbEq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -628,13 +628,13 @@ const tbEq = (rowId, row, getLeft, getRight) => {
 
 /**
  * Inequality.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbNeq = (rowId, row, getLeft, getRight) => {
+const tbNeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -643,13 +643,13 @@ const tbNeq = (rowId, row, getLeft, getRight) => {
 
 /**
  * Less than or equal.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbLeq = (rowId, row, getLeft, getRight) => {
+const tbLeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)
@@ -658,13 +658,13 @@ const tbLeq = (rowId, row, getLeft, getRight) => {
 
 /**
  * Strictly less than.
- * @param {number} rowId The ID of the block.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbLt = (rowId, row, getLeft, getRight) => {
+const tbLt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbTypeEqual(left, right)

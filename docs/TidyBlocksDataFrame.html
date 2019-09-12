@@ -146,7 +146,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line496">line 496</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line685">line 685</a>
     </li></ul></dd>
     
 
@@ -303,7 +303,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line507">line 507</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line696">line 696</a>
     </li></ul></dd>
     
 
@@ -450,7 +450,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line739">line 739</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line944">line 944</a>
     </li></ul></dd>
     
 
@@ -609,7 +609,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line519">line 519</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line709">line 709</a>
     </li></ul></dd>
     
 
@@ -655,7 +655,7 @@
     
 
     
-    <h4 class="name" id="hasColumn"><span class="type-signature"></span>hasColumn<span class="signature">(name)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id="hasColumns"><span class="type-signature"></span>hasColumns<span class="signature">(names)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
     
 
     
@@ -663,7 +663,7 @@
 
 
 <div class="description">
-    Test whether the dataframe has the specified column.
+    Test whether the dataframe has the specified columns.
 </div>
 
 
@@ -699,13 +699,13 @@
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>names</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Array.&lt;string></span>
 
 
             
@@ -715,7 +715,7 @@
 
             
 
-            <td class="description last">Name of column to check for.</td>
+            <td class="description last">Names of column to check for.</td>
         </tr>
 
     
@@ -756,7 +756,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line750">line 750</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line955">line 955</a>
     </li></ul></dd>
     
 
@@ -785,7 +785,7 @@
 
         
 <div class="param-desc">
-    Is column present?
+    Are columns present?
 </div>
 
 
@@ -1007,7 +1007,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line670">line 670</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line878">line 878</a>
     </li></ul></dd>
     
 
@@ -1177,7 +1177,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line541">line 541</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line733">line 733</a>
     </li></ul></dd>
     
 
@@ -1348,7 +1348,7 @@ Note that this function is called at the end of a pipeline, so it does not retur
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line706">line 706</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line914">line 914</a>
     </li></ul></dd>
     
 
@@ -1384,7 +1384,7 @@ Note that this function is called at the end of a pipeline, so it does not retur
     
 
     
-    <h4 class="name" id="plot"><span class="type-signature"></span>plot<span class="signature">(tableFxn, plotFxn, spec)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="plot"><span class="type-signature"></span>plot<span class="signature">(environment, spec)</span><span class="type-signature"></span></h4>
     
 
     
@@ -1430,13 +1430,13 @@ will run.
 
         <tr>
             
-                <td class="name"><code>tableFxn</code></td>
+                <td class="name"><code>environment</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">object</span>
 
 
             
@@ -1446,30 +1446,7 @@ will run.
 
             
 
-            <td class="description last">Callback to display table as table.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>plotFxn</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Callback to display table graphically.</td>
+            <td class="description last">Connection to the outside world.</td>
         </tr>
 
     
@@ -1533,7 +1510,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line721">line 721</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line928">line 928</a>
     </li></ul></dd>
     
 
@@ -1568,94 +1545,6 @@ will run.
 
 
     
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="reverse"><span class="type-signature"></span>reverse<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Reverse the order of rows.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line553">line 553</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1768,7 +1657,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line564">line 564</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line751">line 751</a>
     </li></ul></dd>
     
 
@@ -1915,7 +1804,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line580">line 580</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line771">line 771</a>
     </li></ul></dd>
     
 
@@ -2085,7 +1974,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line607">line 607</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line803">line 803</a>
     </li></ul></dd>
     
 
@@ -2232,7 +2121,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line759">line 759</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line970">line 970</a>
     </li></ul></dd>
     
 
@@ -2330,7 +2219,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line771">line 771</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line982">line 982</a>
     </li></ul></dd>
     
 
@@ -2418,7 +2307,7 @@ will run.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line648">line 648</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line856">line 856</a>
     </li></ul></dd>
     
 
@@ -2474,13 +2363,13 @@ will run.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assert_hasKey">assert_hasKey</a></li><li><a href="global.html#assert_includes">assert_includes</a></li><li><a href="global.html#assert_startsWith">assert_startsWith</a></li><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#createValidator">createValidator</a></li><li><a href="global.html#csv2TidyBlocksDataFrame">csv2TidyBlocksDataFrame</a></li><li><a href="global.html#deleteBlock">deleteBlock</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTab">displayTab</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#tbVariance">tbVariance</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BlocklyClass.html">BlocklyClass</a></li><li><a href="GuiEnvironment.html">GuiEnvironment</a></li><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TestEnvironment.html">TestEnvironment</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assert_hasKey">assert_hasKey</a></li><li><a href="global.html#assert_includes">assert_includes</a></li><li><a href="global.html#assert_match">assert_match</a></li><li><a href="global.html#assert_startsWith">assert_startsWith</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#createValidator">createValidator</a></li><li><a href="global.html#csv2TidyBlocksDataFrame">csv2TidyBlocksDataFrame</a></li><li><a href="global.html#deleteBlock">deleteBlock</a></li><li><a href="global.html#displayTab">displayTab</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbAssertNumber">tbAssertNumber</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIfElse">tbIfElse</a></li><li><a href="global.html#tbIsBoolean">tbIsBoolean</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbIsString">tbIsString</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToDatetime">tbToDatetime</a></li><li><a href="global.html#tbToDay">tbToDay</a></li><li><a href="global.html#tbToHours">tbToHours</a></li><li><a href="global.html#tbToMinutes">tbToMinutes</a></li><li><a href="global.html#tbToMonth">tbToMonth</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToSeconds">tbToSeconds</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbToWeekDay">tbToWeekDay</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#tbVariance">tbVariance</a></li><li><a href="global.html#TIDYBLOCKS_START">TIDYBLOCKS_START</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Sep 05 2019 20:42:06 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Sep 12 2019 16:24:04 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
