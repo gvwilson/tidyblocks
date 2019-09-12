@@ -264,3 +264,37 @@ const displayTab = (event, tabName) => {
   document.getElementById(tabName).style.display = 'block';
   event.currentTarget.classList.add('active')
 }
+
+/**
+ * Save as SVG.
+ */
+const saveAsSvg = () => {
+  var svg = document.querySelector('.blocklySvg')
+
+  // Get SVG source.
+  var serializer = new XMLSerializer()
+  var source = serializer.serializeToString(svg)
+
+  // Add name spaces.
+  if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+    source = source.replace(/^<svg/, '<svg xmlns="http:// www.w3.org/2000/svg"')
+  }
+
+  if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+    source = source.replace(/^<svg/, '<svg xmlns:xlink="http:// www.w3.org/1999/xlink"')
+  }
+
+  // Add XML declaration
+  source = '<?xml version="1.0" standalone="no"?>\r\n' + source
+
+  // Convert SVG source to URI data scheme.
+  var url = "data:image/svg+xmlcharset=utf-8,"+encodeURIComponent(source)
+
+  // Set URL value to a element's href attribute.
+  var downloadLink = document.createElement("a")
+  downloadLink.href = url
+  downloadLink.download = "newesttree.svg"
+  document.body.appendChild(downloadLink)
+  downloadLink.click()
+  document.body.removeChild(downloadLink)
+}
