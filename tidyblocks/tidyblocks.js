@@ -308,6 +308,21 @@ const tbIsString = (row, getValue) => {
 //--------------------------------------------------------------------------------
 
 /*
+ * Convert string to date object using format.
+ * @param {number} rowId The ID of the block.
+ * @param {Object} row Row containing values.
+ * @param {string} format Format to use for parsing (FIXME: IGNORED UNTIL WE CAN LOAD 'moment').
+ * @param {function} getValue How to get desired value.
+ * @returns Date corresponding to string.
+ */
+const tbParseDate = (rowId, row, format, getValue) => {
+  const value = getValue(row)
+  tbAssert(typeof value === 'string',
+           `Expected string not ${typeof value}`)
+  return new Date(value)
+}
+
+/*
  * Extract year from value.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
@@ -465,7 +480,7 @@ const tbExp = (rowId, row, getLeft, getRight) => {
 const tbMod = (rowId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left * right
+  return left % right
 }
 
 /**
@@ -479,7 +494,7 @@ const tbMod = (rowId, row, getLeft, getRight) => {
 const tbMul = (rowId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left % right
+  return left * right
 }
 
 /**
@@ -786,11 +801,18 @@ class TidyBlocksDataFrame {
    * @return A new dataframe.
    */
   summarize (blockId, func, column) {
+    // Handle empty case.
+    if (this.data.length === 0) {
+      return new TidyBlocksDataFrame([])
+    }
+
+    // Check column access.
     tbAssert(column,
              `[block ${blockId}] no column specified for summarize`)
     tbAssert(this.hasColumns(column),
              `[block ${blockId}] unknown column(s) [${column}] in summarize`)
 
+    // Final data.
     const result = []
 
     // Aggregate the whole thing?

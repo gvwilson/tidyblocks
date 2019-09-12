@@ -8,6 +8,7 @@ const MULTIPLE_COLUMN_NAMES = /^ *([_A-Za-z][_A-Za-z0-9]*)( *, *[_A-Za-z][_A-Za-
 // Names of single-column fields in various blocks (for generating validators).
 const SINGLE_COLUMN_FIELDS = [
   'COLUMN',
+  'FORMAT',
   'LEFT_TABLE',
   'LEFT_COLUMN',
   'RIGHT_TABLE',
@@ -238,6 +239,9 @@ const colTypeName = (value) => {
  * @param {JSON} json JSON object to convert to table.
  */
 const json2table = (json) => {
+  if (json.length === 0) {
+    return '<p>empty</p>'
+  }
   const cols = Object.keys(json[0])
   const headerRow = '<tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr>'
   const typeRow = '<tr>' + cols.map(c => `<th>${colTypeName(json[0][c])}</th>`).join('') + '</tr>'
