@@ -729,15 +729,6 @@ class TidyBlocksDataFrame {
   }
 
   /**
-   * Reverse the order of rows.
-   */
-  reverse () {
-    const result = [...this.data]
-    result.reverse()
-    return new TidyBlocksDataFrame(result)
-  }
-
-  /**
    * Select columns.
    * @param {string[]} columns The names of the columns to keep.
    * @returns A new dataframe.
@@ -762,7 +753,7 @@ class TidyBlocksDataFrame {
    * @param {string[]} columns Names of columns to sort by.
    * @returns New data frame with sorted data.
    */
-  sort (blockId, columns) {
+  sort (blockId, columns, reverse) {
     tbAssert(columns.length !== 0,
              `[block ${blockId}] no columns specified for sort`)
     tbAssert(this.hasColumns(columns),
@@ -782,7 +773,12 @@ class TidyBlocksDataFrame {
         return 0
       }, 0)
     })
-    return new TidyBlocksDataFrame(result)
+    if (reverse === false) {
+      return new TidyBlocksDataFrame(result)
+    } else {
+      result.reverse()
+      return new TidyBlocksDataFrame(result)
+    }
   }
 
   /**

@@ -10,7 +10,7 @@ Blockly.defineBlocksWithJsonArray([
     },
     {
       type: "field_checkbox",
-      name: "descending",
+      name: "DESCENDING",
       checked: false
     }
   ],

@@ -145,16 +145,6 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to reverse rows', (done) => {
-    const pipeline = makeBlock(
-      'transform_reverse',
-      {})
-    const code = generateCode(pipeline)
-    assert.equal(code, '.reverse()',
-                 'pipeline does not call reverse method')
-    done()
-  })
-
   it('generates code to group rows', (done) => {
     const pipeline = makeBlock(
       'transform_groupBy',
@@ -206,14 +196,37 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to sort by one column', (done) => {
+    const pipeline = makeBlock(
+      'transform_sort',
+      {MULTIPLE_COLUMNS: 'blue',
+      DESCENDING: 'FALSE'})
+    const code = generateCode(pipeline)
+    assert.equal(code, '.sort(0, ["blue"], false)',
+                 'pipeline does not sort by expected column')
+    done()
+  })
+
   it('generates code to sort by two columns', (done) => {
     const pipeline = makeBlock(
       'transform_sort',
-      {MULTIPLE_COLUMNS: 'red,green'})
+      {MULTIPLE_COLUMNS: 'red,green',
+       DESCENDING: 'FALSE'})
     const code = generateCode(pipeline)
-    assert.equal(code, '.sort(0, ["red","green"])',
+    assert.equal(code, '.sort(0, ["red","green"], false)',
                  'pipeline does not sort by expected columns')
     done()
+  })
+
+  it('generates code to sort descending by two columns', (done) => {
+  const pipeline = makeBlock(
+    'transform_sort',
+    {MULTIPLE_COLUMNS: 'red,green',
+    DESCENDING: 'TRUE'})
+  const code = generateCode(pipeline)
+  assert.equal(code, '.sort(0, ["red","green"], true)',
+               'pipeline does not sort by expected columns')
+  done()
   })
 
   it('generates code to summarize values', (done) => {

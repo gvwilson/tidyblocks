@@ -8,9 +8,9 @@ const columns = block.getFieldValue('MULTIPLE_COLUMNS')
         .map(c => Blockly.JavaScript.quote_(c))
         .join(',')
 
-if (block.getFieldValue('descending') == 'FALSE') {
- 	 return `.sort([${columns}])`
+if (block.getFieldValue('DESCENDING') == 'FALSE') {
+ 	 return `.sort(${block.tbId}, [${columns}], false)`
    } else {
-  	 return `.sort([${columns}]).reverse([${columns}])`
+  	 return `.sort(${block.tbId}, [${columns}], true)`
    }
 }
