@@ -60,25 +60,6 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('reverses the order of rows', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_reverse',
-        {})
-    ]
-    const env = evalCode(pipeline)
-    assert(Array.isArray(env.table),
-           'Result table is not an array')
-    assert.deepEqual(env.table,
-                     [{'first': 2, 'second': 200},
-                      {'first': 1, 'second': 100}],
-                     'Data has not been reversed')
-    done()
-  })
-
   it('makes a histogram', (done) => {
     const pipeline = [
       makeBlock(
@@ -133,7 +114,8 @@ describe('execute blocks for entire pipelines', () => {
         {}),
       makeBlock(
         'transform_sort',
-        {MULTIPLE_COLUMNS: 'red, green'})
+        {MULTIPLE_COLUMNS: 'red, green',
+         DESCENDING: 'FALSE'})
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,

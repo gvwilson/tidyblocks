@@ -191,7 +191,8 @@ describe('raises errors at the right times', () => {
         {}),
       makeBlock(
         'transform_sort',
-        {MULTIPLE_COLUMNS: ''})
+        {MULTIPLE_COLUMNS: '',
+         DESCENDING: 'false'})
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no columns specified for sort/,
