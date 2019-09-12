@@ -10,5 +10,5 @@ Blockly.JavaScript['transform_select'] = (block) => {
         .join(',')
 
   const descending = (block.getFieldValue('DESCENDING') === 'FALSE')
-  return `.sort(${block.tbId}, [${columns}], ${descending})`
+  return `.select(${block.tbId}, [${columns}], ${descending})`
 }
