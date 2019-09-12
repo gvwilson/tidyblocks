@@ -773,12 +773,10 @@ class TidyBlocksDataFrame {
         return 0
       }, 0)
     })
-    if (reverse === false) {
-      return new TidyBlocksDataFrame(result)
-    } else {
+    if (reverse) {
       result.reverse()
-      return new TidyBlocksDataFrame(result)
     }
+    return new TidyBlocksDataFrame(result)
   }
 
   /**

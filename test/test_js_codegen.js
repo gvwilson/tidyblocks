@@ -200,7 +200,7 @@ describe('generate code for single blocks', () => {
     const pipeline = makeBlock(
       'transform_sort',
       {MULTIPLE_COLUMNS: 'blue',
-      DESCENDING: 'FALSE'})
+       DESCENDING: 'FALSE'})
     const code = generateCode(pipeline)
     assert.equal(code, '.sort(0, ["blue"], false)',
                  'pipeline does not sort by expected column')
@@ -222,7 +222,7 @@ describe('generate code for single blocks', () => {
   const pipeline = makeBlock(
     'transform_sort',
     {MULTIPLE_COLUMNS: 'red,green',
-    DESCENDING: 'TRUE'})
+     DESCENDING: 'TRUE'})
   const code = generateCode(pipeline)
   assert.equal(code, '.sort(0, ["red","green"], true)',
                'pipeline does not sort descending by expected columns')

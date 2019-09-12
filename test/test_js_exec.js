@@ -115,7 +115,7 @@ describe('execute blocks for entire pipelines', () => {
       makeBlock(
         'transform_sort',
         {MULTIPLE_COLUMNS: 'red, green',
-        DESCENDING: 'FALSE'})
+         DESCENDING: 'FALSE'})
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,

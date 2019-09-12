@@ -64,7 +64,7 @@ layout: null
     <h3>Description:</h3>
     <p>Choose or rename variables from a table. The select block keeps only the variables you mention.</p>
     <h3>Arguments</h3>
-    <p>The name of the column(s) to keep -- seperated by commas.</p>
+    <p>The name of the column(s) to keep, seperated by commas.</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/transform_select_example.png'| relative_url}}" width="40%">
     <img src="{{'/guide/images/transform_select_example_multiple.png'| relative_url}}" width="60%">
@@ -78,9 +78,9 @@ layout: null
     </div>
     <div id="second">
     <h3>Description:</h3>
-    <p>Order table rows by an expression involving its variables. Use the checkbox for descending the order of rows.</p>
+    <p>Order table rows by an expression involving its variables. Use the checkbox to sort in descending order.</p>
     <h3>Arguments</h3>
-    <p><b>Text Field: </b>The name of the column(s) to arrange the rows by -- seperated by commas.</p>
+    <p><b>Text Field: </b>The name of the column(s) to arrange the rows by, seperated by commas.</p>
     <p><b>Checkbox: </b>Check to sort table in descending order</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/transform_sort_example.png'| relative_url}}" width="60%">
