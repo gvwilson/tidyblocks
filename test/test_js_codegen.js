@@ -225,7 +225,7 @@ describe('generate code for single blocks', () => {
     DESCENDING: 'TRUE'})
   const code = generateCode(pipeline)
   assert.equal(code, '.sort(0, ["red","green"], true)',
-               'pipeline does not sort by expected columns')
+               'pipeline does not sort descending by expected columns')
   done()
   })
 
