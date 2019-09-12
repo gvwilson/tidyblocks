@@ -574,9 +574,9 @@ const tbOr = (blockId, row, getLeft, getRight) => {
  * @param {function} getRight How to get the right value from the row.
  * @returns The left (right) value if the condition is true (false).
  */
-const tbIfElse = (blockId, row, getCond, getLeft, getRight) => {
-  const cond = tbToBoolean(row, getCond)
-  return cond ? getLeft(row) : getRight(row)
+
+const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
+  return getCond(row) ? getLeft(row) : getRight(row)
 }
 
 //--------------------------------------------------------------------------------
