@@ -701,6 +701,42 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('handles simple conditional correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result',
+         VALUE: makeBlock(
+           'value_ifElse',
+           {COND: makeBlock(
+             'value_compare',
+             {OP: 'tbEq',
+              LEFT: makeBlock(
+                'value_column',
+                {COLUMN: 'first'}),
+              RIGHT: makeBlock(
+                'value_number',
+                {VALUE: 1})}),
+            LEFT: makeBlock(
+              'value_text',
+              {VALUE: 'equal'}),
+            RIGHT: makeBlock(
+              'value_text',
+              {VALUE: 'unequal'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 2,
+                 `Expected two rows, not ${env.table.length}`)
+    assert.equal(env.table[0].result, 'equal',
+                 `Expected first row to be equal`)
+    assert.equal(env.table[1].result, 'unequal',
+                 `Expected first row to be unequal`)
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {

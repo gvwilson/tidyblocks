@@ -575,8 +575,7 @@ const tbOr = (rowId, row, getLeft, getRight) => {
  * @returns The left (right) value if the condition is true (false).
  */
 const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
-  const cond = tbToBoolean(row, getCond)
-  return cond ? getLeft(row) : getRight(row)
+  return getCond(row) ? getLeft(row) : getRight(row)
 }
 
 //--------------------------------------------------------------------------------
