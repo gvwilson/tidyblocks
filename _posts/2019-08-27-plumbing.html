@@ -4,29 +4,33 @@ type: 'PLUMBING'
 layout: null
 ---
 
-#### If we transform two tables and then want to combine them, we need to give the two tables names. Then, we can use those names along with the column we want to join by inside the join block to combine the two tables.
+<p>
+  If we transform two tables and then want to combine them,
+  we need to give the two tables names.
+  We can then use those names along with the column we want to join by inside the join block to combine the two tables.
+</p>
 
 <h1><a id="#plumbing_notify">Notify</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plumbing_notify.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>The notify block can be used at the end of a pipeline to store the transformed table and give it a name</p>
     <h3>Arguments</h3>
     <p><b>Name:</b> The name assigned to the table.</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/plumbing_notify_example.png'| relative_url}}" width="100%">
-    </div>
+  </div>
 </div>
 
 <h1><a id="#plumbing_join">Join</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plumbing_join.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>Turn all rows from left_table where there are matching values in right_table, and all columns from left_table and right_table. If there are multiple matches between left_table and right_table, all combination of the matches are returned.</p>
     <h3>Arguments</h3>
@@ -35,6 +39,6 @@ layout: null
     <p><b>right_table:</b> Name given within the notify block of the second table to join.</p>
     <p><b>right_column:</b> The column in the right_table to join by.</p>
     <h3>Examples:</h3>
-        <img src="{{'/guide/images/plumbing_join_example.png'| relative_url}}" width="100%">
-    </div>
+    <img src="{{'/guide/images/plumbing_join_example.png'| relative_url}}" width="100%">
+  </div>
 </div>

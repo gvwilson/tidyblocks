@@ -4,14 +4,18 @@ type: 'PLOT'
 layout: null
 ---
 
-### Plotting blocks can be applied at the end of a pipeline, you cannot attach blocks to the bottom of a plotting block. Plotting blocks can be used directly after a data block or after transformations have been performed.
+<p>
+  Plotting blocks can be applied at the end of a pipeline,
+  you cannot attach blocks to the bottom of a plotting block.
+  Plotting blocks can be used directly after a data block or after transformations have been performed.
+</p>
 
 <h1><a id="#plot_bar">Bar Chart</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plot_bar.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>The bar block makes the height of the bar proportional to the number of cases in each group. A bar chart uses height to represent a value, and so the base of the bar must always be shown to produce a valid visual comparison.</p>
     <h3>Arguments</h3>
@@ -19,15 +23,15 @@ layout: null
     <p> <b>Y:</b> List of name value pairs giving aesthetics to map to the y variable.</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/plot_bar_example.png'| relative_url}}" width="70%">
-    </div>
+  </div>
 </div>
 
 <h1><a id="#plot_boxplot">Boxplot</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plot_boxplot.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>The Tukey box plot block summarizes a distribution of quantitative values using a set of summary statistics. The median tick in the box represents the median. The lower and upper parts of the box represent the first and third quartile respectively. The whisker spans from the smallest data to the largest data within the range [Q1 - k * IQR, Q3 + k * IQR] where Q1 and Q3 are the first and third quartiles while IQR is the interquartile range (Q3-Q1). If there are outlier points beyond the whisker, they will be displayed using point marks.</p>
     <h3>Arguments</h3>
@@ -35,33 +39,33 @@ layout: null
     <p> <b>Y:</b> List of name value pairs giving aesthetics to map to the y variable.</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/plot_boxplot_example.png'| relative_url}}" width="70%">
-    </div>
+  </div>
 </div>
 
 
 <h1><a id="#plot_hist">Histogram</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plot_hist.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>Visualise the distribution of a single continuous variable by dividing the x axis into bins and counting the number of observations in each bin. Histograms display the counts with bars.</p>
     <h3>Arguments</h3>
     <p> <b>X:</b> List of name value pairs giving aesthetics to map to the x variable.</p>
     <p> <b>Bins:</b> Number of bins. Defaults to 10</p>
     <h3>Examples:</h3>
-        <img src="{{'/guide/images/plot_histogram_example.png'| relative_url}}" width="70%">
-    </div>
+    <img src="{{'/guide/images/plot_histogram_example.png'| relative_url}}" width="70%">
+  </div>
 </div>
 
 
 <h1><a id="#plot_point">Point</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plot_point.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>The point block is used to create scatterplots. The scatterplot is most useful for displaying the relationship between two continuous variables.</p>
     <h3>Arguments</h3>
@@ -70,18 +74,18 @@ layout: null
     <p> <b>Color:</b> Set the point color to a categorical variable. </p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/plot_point_example.png'| relative_url}}" width="70%">
-    </div>
+  </div>
 </div>
 
 <h1><a id="#plot_showTable">Show Table</a></h1>
 <div id="wrapper">
-    <div id="first"> 
+  <div id="first"> 
     <img src="{{'/guide/images/plot_showtable.png'| relative_url}}" width="100%">
-    </div>
-    <div id="second">
+  </div>
+  <div id="second">
     <h3>Description:</h3>
     <p>Invoke a spreadsheet-style data viewer within the bottom right Data Viewer pane.</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/plot_showtable_example.png'| relative_url}}" width="80%">
-    </div>
+  </div>
 </div>

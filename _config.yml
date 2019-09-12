@@ -5,6 +5,9 @@ repository: <USERNAME>/<PROJECT>
 kramdown:
   toc_levels: "2"
 theme_repo: "https://github.com/wiredcraft/carte/"
+exclude:
+- coverage
+- node_modules
 
 authors:
 - name: "Maya Gans"
