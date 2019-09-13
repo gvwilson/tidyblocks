@@ -140,7 +140,7 @@ const setUpBlockly = () => {
     }
   )
 
-  //TidyBlocksWorkspace.addChangeListener(Blockly.Events.disableOrphans)
+  TidyBlocksWorkspace.addChangeListener(Blockly.Events.disableOrphans)
 
   TidyBlocksWorkspace.addChangeListener((event) => {
     if (event.type === Blockly.Events.CREATE) {
