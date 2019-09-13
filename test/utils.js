@@ -11,6 +11,7 @@ const Papa = require('papaparse')
 //
 module.paths.unshift(process.cwd())
 const {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -304,6 +305,7 @@ const evalCode = (code) => {
 // Exports.
 //
 module.exports = {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,

@@ -5,6 +5,11 @@ const TIDYBLOCKS_START = '/* tidyblocks start */'
 const TIDYBLOCKS_END = '/* tidyblocks end */'
 
 /**
+ * Value to indicate missing values.
+ */
+const MISSING = undefined
+
+/**
  * Turn block of CSV text into TidyBlocksDataFrame. The parser argument should be Papa.parse;
  * it is passed in here so that this file can be loaded both in the browser and for testing.
  * @param {string} text Text to parse.
@@ -105,8 +110,8 @@ const tbAssert = (check, message) => {
  * @returns The input value if it passes the test.
  */
 const tbAssertNumber = (value) => {
-  tbAssert(typeof value === 'number',
-           `Value ${value} is not a number`)
+  tbAssert((value === MISSING) || (typeof value === 'number'),
+           `Value ${value} is not missing or a number`)
   return value
 }
 
@@ -115,8 +120,8 @@ const tbAssertNumber = (value) => {
  * @param left One of the values.
  * @param right The other value.
  */
-const tbTypeEqual = (left, right) => {
-  tbAssert(typeof left === typeof right,
+const tbAssertTypeEqual = (left, right) => {
+  tbAssert((left === MISSING) || (right === MISSING) || (typeof left === typeof right),
            `Values ${left} and ${right} have different types`)
 }
 
@@ -222,7 +227,10 @@ const tbVariance = (values) => {
  * @returns Boolean value.
  */
 const tbToBoolean = (blockId, row, getValue) => {
-  return getValue(row) ? true : false
+  const value = getValue(row)
+  return (value === MISSING)
+    ? MISSING
+    : (value ? true : false)
 }
 
 /**
@@ -234,9 +242,12 @@ const tbToBoolean = (blockId, row, getValue) => {
  */
 const tbToDatetime = (blockId, row, getValue) => {
   const value = getValue(row)
+  if (value === MISSING) {
+    return MISSING
+  }
   let result = new Date(value)
   if ((typeof result === 'object') && (result.toString() === 'Invalid Date')) {
-    result = null
+    result = MISSING
   }
   return result
 }
@@ -249,12 +260,15 @@ const tbToDatetime = (blockId, row, getValue) => {
  * @returns Numeric value.
  */
 const tbToNumber = (blockId, row, getValue) => {
-  const value = getValue(row)
-  if (typeof value == 'boolean') {
-    return value ? 1 : 0
+  let value = getValue(row)
+  if (value === MISSING) {
+    // keep as is
   }
-  if (typeof value == 'string') {
-    return parseFloat(string)
+  else if (typeof value == 'boolean') {
+    value = value ? 1 : 0
+  }
+  else if (typeof value == 'string') {
+    value = parseFloat(value)
   }
   return value
 }
@@ -267,42 +281,70 @@ const tbToNumber = (blockId, row, getValue) => {
  * @returns String value.
  */
 const tbToString = (blockId, row, getValue) => {
-  const value = getValue(row)
-  if (typeof value == 'string') {
-    return value
+  let value = getValue(row)
+  if (value === MISSING) {
+    // keep as is
   }
-  return `${value}`
+  else if (typeof value !== 'string') {
+    value = `${value}`
+  }
+  return value
 }
 
 //--------------------------------------------------------------------------------
 
 /**
  * Check if value is Boolean.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Is value Boolean?
  */
-const tbIsBoolean = (row, getValue) => {
+const tbIsBoolean = (blockId, row, getValue) => {
   return typeof getValue(row) === 'boolean'
 }
 
 /**
- * Check if value is number.
+ * Check if value is a date.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Is value numeric?
  */
-const tbIsNumber = (row, getValue) => {
+const tbIsDate = (blockId, row, getValue) => {
+  return getValue(row) instanceof Date
+}
+
+/**
+ * Check if value is missing.
+ * @param {number} blockId The ID of the block.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value missing?
+ */
+const tbIsMissing = (blockId, row, getValue) => {
+  return getValue(row) === MISSING
+}
+
+/**
+ * Check if value is number.
+ * @param {number} blockId The ID of the block.
+ * @param {Object} row Row containing values.
+ * @param {function} getValue How to get desired value.
+ * @returns Is value numeric?
+ */
+const tbIsNumber = (blockId, row, getValue) => {
   return typeof getValue(row) === 'number'
 }
 
 /**
  * Check if value is string.
+ * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Is value string?
  */
-const tbIsString = (row, getValue) => {
+const tbIsString = (blockId, row, getValue) => {
   return typeof getValue(row) === 'string'
 }
 
@@ -439,7 +481,9 @@ const tbGet = (blockId, row, column) => {
 const tbAdd = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left + right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left + right)
 }
 
 /**
@@ -453,7 +497,9 @@ const tbAdd = (blockId, row, getLeft, getRight) => {
 const tbDiv = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left / right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left / right)
 }
 
 /**
@@ -467,7 +513,9 @@ const tbDiv = (blockId, row, getLeft, getRight) => {
 const tbExp = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left ** right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left ** right)
 }
 
 /**
@@ -481,7 +529,9 @@ const tbExp = (blockId, row, getLeft, getRight) => {
 const tbMod = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left % right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left % right)
 }
 
 /**
@@ -495,7 +545,9 @@ const tbMod = (blockId, row, getLeft, getRight) => {
 const tbMul = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left * right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left * right)
 }
 
 /**
@@ -507,7 +559,7 @@ const tbMul = (blockId, row, getLeft, getRight) => {
  */
 const tbNeg = (blockId, row, getValue) => {
   const value = tbAssertNumber(getValue(row))
-  return - value
+  return (value === MISSING) ? MISSING : (- value)
 }
 
 /**
@@ -521,7 +573,9 @@ const tbNeg = (blockId, row, getValue) => {
 const tbSub = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return left - right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left - right)
 }
 
 //--------------------------------------------------------------------------------
@@ -535,9 +589,11 @@ const tbSub = (blockId, row, getLeft, getRight) => {
  * @returns The conjunction.
  */
 const tbAnd = (blockId, row, getLeft, getRight) => {
-  const left = tbToBoolean(row, getLeft)
-  const right = tbToBoolean(row, getRight)
-  return left && right
+  const left = getLeft(row)
+  const right = getRight(row)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : ((left && right) ? true : false)
 }
 
 /**
@@ -548,8 +604,8 @@ const tbAnd = (blockId, row, getLeft, getRight) => {
  * @returns The logical conjunction.
  */
 const tbNot = (blockId, row, getValue) => {
-  const value = tbToLogical(getValue(row))
-  return ! value
+  const value = getValue(row)
+  return (value === MISSING) ? MISSING : ((! value) ? true : false)
 }
 
 /**
@@ -563,7 +619,9 @@ const tbNot = (blockId, row, getValue) => {
 const tbOr = (blockId, row, getLeft, getRight) => {
   const left = tbToBoolean(row, getLeft)
   const right = tbToBoolean(row, getRight)
-  return left || right
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : ((left || right) ? true : valse)
 }
 
 /**
@@ -577,7 +635,10 @@ const tbOr = (blockId, row, getLeft, getRight) => {
  */
 
 const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
-  return getCond(row) ? getLeft(row) : getRight(row)
+  const cond = getCond(row)
+  return (cond === MISSING)
+    ? MISSING
+    : (cond ? getLeft(row) : getRight(row))
 }
 
 //--------------------------------------------------------------------------------
@@ -593,8 +654,10 @@ const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
 const tbGt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  tbTypeEqual(left, right)
-  return left > right
+  tbAssertTypeEqual(left, right)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left > right)
 }
 
 /**
@@ -608,8 +671,10 @@ const tbGt = (blockId, row, getLeft, getRight) => {
 const tbGeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  tbTypeEqual(left, right)
-  return left >= right
+  tbAssertTypeEqual(left, right)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left >= right)
 }
 
 /**
@@ -623,8 +688,10 @@ const tbGeq = (blockId, row, getLeft, getRight) => {
 const tbEq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  tbTypeEqual(left, right)
-  return left === right
+  tbAssertTypeEqual(left, right)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left === right)
 }
 
 /**
@@ -638,8 +705,10 @@ const tbEq = (blockId, row, getLeft, getRight) => {
 const tbNeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  tbTypeEqual(left, right)
-  return left !== right
+  tbAssertTypeEqual(left, right)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left !== right)
 }
 
 /**
@@ -653,8 +722,10 @@ const tbNeq = (blockId, row, getLeft, getRight) => {
 const tbLeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  tbTypeEqual(left, right)
-  return left <= right
+  tbAssertTypeEqual(left, right)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left <= right)
 }
 
 /**
@@ -668,8 +739,10 @@ const tbLeq = (blockId, row, getLeft, getRight) => {
 const tbLt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  tbTypeEqual(left, right)
-  return left < right
+  tbAssertTypeEqual(left, right)
+  return ((left === MISSING) || (right === MISSING))
+    ? MISSING
+    : (left < right)
 }
 
 //--------------------------------------------------------------------------------
@@ -1149,6 +1222,7 @@ const TidyBlocksManager = new TidyBlocksManagerClass()
 // Make this file require'able if running from the command line.
 if (typeof module !== 'undefined') {
   module.exports = {
+    MISSING,
     csv2TidyBlocksDataFrame,
     registerPrefix,
     registerSuffix,

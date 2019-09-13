@@ -2,6 +2,7 @@ const assert = require('assert')
 const Papa = require('papaparse')
 
 const {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,

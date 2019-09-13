@@ -1,6 +1,7 @@
 const assert = require('assert')
 
 const {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -720,6 +721,62 @@ describe('execute blocks for entire pipelines', () => {
                  `Expected first row to be equal`)
     assert.equal(env.table[1].result, 'unequal',
                  `Expected first row to be unequal`)
+    done()
+  })
+
+  it('filters to include missing values', (done) => {
+    for (let type of ['number', 'string', 'date']) {
+      const columnBlock = makeBlock(
+        'value_column',
+        {COLUMN: type})
+      const pipeline = [
+        makeBlock(
+          'data_missing',
+          {}),
+        makeBlock(
+          'transform_filter',
+          {TEST: makeBlock(
+            'value_type',
+            {TYPE: 'tbIsMissing',
+             VALUE: columnBlock})})
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message, got "${env.error}" for type ${type}`)
+      assert.equal(env.table.length, 1,
+                   `Expected only one row to have missing ${type}`)
+      assert.equal(env.table[0][type], MISSING,
+                   `Wrong value is missing in surviving row`)
+    }
+    done()
+  })
+
+  it('filters to exclude missing values', (done) => {
+    for (let type of ['number', 'string', 'date']) {
+      const columnBlock = makeBlock(
+        'value_column',
+        {COLUMN: type})
+      const pipeline = [
+        makeBlock(
+          'data_missing',
+          {}),
+        makeBlock(
+          'transform_filter',
+          {TEST: makeBlock(
+            'value_not',
+            {VALUE: makeBlock(
+              'value_type',
+              {TYPE: 'tbIsMissing',
+               VALUE: columnBlock})})})
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message, got "${env.error}" for type ${type}`)
+      assert.equal(env.table.length, 3,
+                   `Expected only one row to be dropped`)
+      assert(env.table.every(row => (row[type] !== MISSING)),
+             `Incorrect values have been dropped for ${type}`)
+    }
     done()
   })
 
