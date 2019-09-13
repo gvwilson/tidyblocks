@@ -1,10 +1,10 @@
-Blockly.Blocks['variable_column_container'] = {
+Blockly.Blocks['dplyr_summarize_container'] = {
     /**
      * Mutator block for list container.
      * @this Blockly.Block
      */
     init: function() {
-      this.setStyle('variable_blocks');
+      this.setStyle('dplyr_blocks');
       this.appendDummyInput()
           .appendField("Selected Columns");
       this.appendStatementInput('STACK');
