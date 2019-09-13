@@ -1,23 +1,23 @@
 Blockly.defineBlocksWithJsonArray([
  {
-    "type": "dplyr_summarize",
-    "message0": "Summarize %1 %2 %3 %4",
-    "args0": [
+    type: "dplyr_summarize",
+    message0: "Summarize %1 %2 %3 %4",
+    args0: [
       {
-        "type": "input_dummy"
+        type: "input_dummy"
       },
       {
-        "type": "field_input",
-        "name": "COLUMN",
-        "text": "column"
+        type: "field_input",
+        name: "COLUMN",
+        text: "column"
       },
       {
-        "type": "input_dummy"
+        type: "input_dummy"
       },
       {
-        "type": "field_dropdown",
-        "name": "FUNC",
-        "options": [
+        type: "field_dropdown",
+        name: "FUNC",
+        options: [
             ['count', 'tbCount'],
             ['max', 'tbMax'],
             ['mean', 'tbMean'],
@@ -29,13 +29,13 @@ Blockly.defineBlocksWithJsonArray([
         ]
       }
     ],
-    "inputsInline": true,
-    "previousStatement": null,
-    "nextStatement": null,
-    "style": 'dplyr_blocks',
-    "tooltip": "",
-    "helpUrl": "",
-    "mutator": 'my_column_extension'
+    inputsInline : true,
+    previousStatement: null,
+    nextStatement: null,
+    style: 'dplyr_blocks',
+    tooltip: "",
+    helpUrl: "",
+    mutator: 'my_column_extension'
   }
 ])
 
