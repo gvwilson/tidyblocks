@@ -229,14 +229,15 @@ const tbToBoolean = (blockId, row, getValue) => {
  * Convert row value to datetime.
  * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
- * @param {function} getValue How to get desired value.
+ * @param {function} getValue How to get desired value (must be string).
  * @returns Date object.
  */
 const tbToDatetime = (blockId, row, getValue) => {
   const value = getValue(row)
-  const result = new Date(value)
-  tbAssert(!isNaN(result),
-           `[block ${blockId}] cannot convert "${value}" to date`)
+  let result = new Date(value)
+  if ((typeof result === 'object') && (result.toString() === 'Invalid Date')) {
+    result = null
+  }
   return result
 }
 
@@ -975,20 +976,6 @@ class TidyBlocksDataFrame {
     })
     return this
   }
-
-  /**
-   * Convert to string for printing.
-   */
-  toString () {
-    const str = (row, i) => {
-      return '{'
-        + Object.keys(row).map(key => `${key}: ${row[key]}`).join(', ')
-        + '}'
-        + (this.groups === null ? '' : ` @ ${this.groups[i]}`)
-    }
-    return `= ${this.data.length} =\n`
-      + this.data.map((r, i) => str(r, i)).join('\n')
-  }
 }
 
 //--------------------------------------------------------------------------------
@@ -1109,13 +1096,6 @@ class TidyBlocksManagerClass {
     catch (err) {
       environment.displayError(err.message)
     }
-  }
-
-  /**
-   * Show the manager as a string for debugging.
-   */
-  toString () {
-    return `queue ${this.queue.length} waiting ${this.waiting.length} blocks ${this.blocks.size}`
   }
 }
 

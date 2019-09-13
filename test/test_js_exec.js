@@ -559,6 +559,37 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('handles invalid dates correctly when converting', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'time',
+         VALUE: makeBlock(
+           'value_text',
+           {VALUE: 'abc'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'time'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error`)
+    assert.equal(env.table.length, 1,
+                 `Expected one row in result`)
+    assert.equal(env.table[0].result, null,
+                 `Expected result to be null`)
+    done()
+  })
+
   it('extracts values from dates correctly', (done) => {
     const pipeline = [
       makeBlock(
@@ -608,51 +639,6 @@ describe('execute blocks for entire pipelines', () => {
                  `Expected 8 as month`)
     assert.equal(env.table[0].day, 24,
                  `Expected 24 as day of month`)
-    done()
-  })
-
-  it('converts strings to dates', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'epoch',
-         VALUE: makeBlock(
-           'value_text',
-           {VALUE: '1970-01-01'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'recovered',
-         VALUE: makeBlock(
-           'value_parseDate',
-           {VALUE: makeBlock(
-             'value_column',
-             {COLUMN: 'epoch'}),
-            FORMAT: 'YYYY-MM-DD'})})
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table[0].recovered instanceof Date,
-           `Expected date, not ${typeof env.table[0].recovered}`)
-    done()
-  })
-
-  it('counts rows correctly', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {FUNC: 'tbCount',
-         COLUMN: 'first'})
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table.length == 1,
-           `Expect a single row of output`)
-    assert(env.table[0].first == 2,
-           `Expected a count of 2, not ${env.table[0].first}`)
     done()
   })
 
