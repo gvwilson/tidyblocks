@@ -169,5 +169,31 @@ describe('blocks return proper this.columns', () => {
     done()
   })
 
+  it('sort this.columns unchanged', (done) => {
+    // original dataframe
+    const pipeline_iris = [
+      makeBlock(
+      'data_iris',
+      {})
+    ]
+    // sorted dataframe
+    const pipeline_sort = [
+      makeBlock(
+        'data_iris',
+        {}),
+      makeBlock(
+        'transform_sort',
+        {MULTIPLE_COLUMNS: 'Sepal_Length',
+         DESCENDING: 'false'})
+    ]
+    const env_iris = evalCode(pipeline_iris)
+    const env_sort = evalCode(pipeline_sort)
+    console.log(Object.keys(env_iris.table[0]))
+    console.log(Object.keys(env_sort.table[0]))
+    // compare pipeline columns
+    assert(Object.keys(env_iris.table[0]) == Object.keys(env_sort.table[0]))
+    done()
+  })
+
 })
 
