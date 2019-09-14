@@ -128,16 +128,26 @@ Blockly.defineBlocksWithJsonArray([
         index++;
       }
   
-  
       for (var i = 0; i < children.length; i++) {
         var child = children[i];
         // Baby block text input.
         var columnName = child.getFieldValue("COLUMN");
         // how do I make this a drop down menu
-        var funcName = child.getFieldValue("FUNC");
+        var funcName = child.getFieldValue("FUNC0");
         this.getInput('DUMMY_INPUT')
           .appendField(new Blockly.FieldTextInput(columnName), 'COLUMN' + i)
-          .appendField(new Blockly.FieldTextInput(funcName), 'FUNC' + i);
+          .appendField(new Blockly.FieldDropdown(
+            [
+              ['count', 'tbCount'],
+              ['max', 'tbMax'],
+              ['mean', 'tbMean'],
+              ['median', 'tbMedian'],
+              ['min', 'tbMin'],
+              ['std', 'tbStd'],
+              ['sum', 'tbSum'],
+              ['variance', 'tbVariance']
+            ]), 
+            "FUNC0")
       }
     },
   };
