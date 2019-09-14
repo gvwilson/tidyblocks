@@ -169,6 +169,7 @@ describe('blocks return proper this.columns', () => {
     done()
   })
 
+  // FIXME evaluating to falsey when true
   it('sort this.columns unchanged', (done) => {
     // original dataframe
     const pipeline_iris = [
@@ -188,12 +189,46 @@ describe('blocks return proper this.columns', () => {
     ]
     const env_iris = evalCode(pipeline_iris)
     const env_sort = evalCode(pipeline_sort)
-    console.log(Object.keys(env_iris.table[0]))
-    console.log(Object.keys(env_sort.table[0]))
+    // console.log(Object.keys(env_iris.table[0]))
+    // console.log(Object.keys(env_sort.table[0]))
     // compare pipeline columns
     assert(Object.keys(env_iris.table[0]) == Object.keys(env_sort.table[0]))
     done()
   })
+
+  // FIXME Also evaluating to falsy when true!
+  it('select returns only selected column', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_iris',
+        {}),
+      makeBlock(
+        'transform_select',
+        {MULTIPLE_COLUMNS: ['Sepal_Length']})
+    ]
+    const env = evalCode(pipeline)
+    console.log(env)
+    assert(Object.keys(env.table[0]) === [ 'Sepal_Length' ])
+    done()
+  })
+
+  // FIXME why doesn't this work
+  it('mutate adds newly named column'), (done) => {
+    const pipeline = [
+      makeBlock('data_single',
+      {}),
+      // make mutate block with child block value_number = 0
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'newColumnName',
+         VALUE: makeBlock(
+           'value_number',
+           {VALUE: 0})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table[0].hasOwnProperty('newColumnName'))
+    done()
+  }
 
 })
 
