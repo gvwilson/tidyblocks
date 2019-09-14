@@ -131,3 +131,26 @@ describe('blocks are given IDs and can be looked up', () => {
   })
 
 })
+
+describe('blocks return proper this.columns', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('groupBy returns additional _group_ column', (done) => {
+    const pipeline = [
+      makeBlock( // because the pipeline has to start with a data block
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_groupBy',
+        {COLUMN: 'first'})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table[0].hasOwnProperty('_group_'))
+    done()
+  })
+
+})
+
