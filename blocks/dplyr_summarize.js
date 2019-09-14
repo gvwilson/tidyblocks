@@ -32,7 +32,7 @@ Blockly.defineBlocksWithJsonArray([
       style: 'dplyr_blocks',
       tooltip: "",
       helpUrl: "",
-      mutator: 'my_column_extension'
+      mutator: 'summarize_extension'
     }
 ])
 
@@ -103,7 +103,7 @@ Blockly.defineBlocksWithJsonArray([
   
     // Take all of the sub-blocks, and change our real workspace block.
     compose: function (topBlock) {
-      // Get all of your column_sub_blocks here - baby blocks
+      // Get all the summarize item blocks from the pop out dialog
       var children = topBlock.getDescendants();
       var indexOfSelf = children.indexOf(topBlock);
       children.splice(indexOfSelf, 1);
@@ -130,9 +130,8 @@ Blockly.defineBlocksWithJsonArray([
   
       for (var i = 0; i < children.length; i++) {
         var child = children[i];
-        // Baby block text input.
+        // item block input
         var columnName = child.getFieldValue("COLUMN");
-        // how do I make this a drop down menu
         var funcName = child.getFieldValue("FUNC0");
         this.getInput('DUMMY_INPUT')
           .appendField(new Blockly.FieldTextInput(columnName), 'COLUMN' + i)
@@ -152,5 +151,5 @@ Blockly.defineBlocksWithJsonArray([
     },
   };
   
-  Blockly.Extensions.registerMutator('my_column_extension',
+  Blockly.Extensions.registerMutator('summarize_extension',
     Blockly.Constants.ColumnMutator, null, ['dplyr_summarize_item']);
