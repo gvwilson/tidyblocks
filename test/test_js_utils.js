@@ -148,7 +148,24 @@ describe('blocks return proper this.columns', () => {
         {COLUMN: 'first'})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('_group_'))
+    assert(env.table[0].hasOwnProperty('_group_')) // check for _group_ column
+    done()
+  })
+
+  it('ungroup removes _group_ column', (done) => {
+    const pipeline = [
+      makeBlock( // because the pipeline has to start with a data block
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_groupBy', // add the _group_ column
+        {COLUMN: 'first'}),
+      makeBlock(
+        'transform_ungroup', // remove _group_ column
+        {})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table[0].hasOwnProperty('_group_') === false) // check _group_ column removed
     done()
   })
 
