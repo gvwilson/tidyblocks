@@ -39,7 +39,7 @@ Blockly.defineBlocksWithJsonArray([
   Blockly.Constants.ColumnMutator = {
     // Serialize it (save it)
     mutationToDom: function () {
-      // Create our mutator node, that we will add info to.
+      // Create mutator node that we will add info to.
       // Create an xml node with the given tag name.
       var mutatorXml = document.createElement('mutation');
   
@@ -57,17 +57,29 @@ Blockly.defineBlocksWithJsonArray([
   
       // Save the number of fields.
       // No need to save field values, those are already saved.
-      mutatorXml.setAttribute('textamount', fields.length);
+      mutatorXml.setAttribute('summarizePairs', fields.length);
       return mutatorXml;
     },
     // Turn the Xml into fields on our block.
     domToMutation: function (mutatorNode) {
-      var fieldNum = mutatorNode.getAttribute('textamount');
+      var fieldNum = mutatorNode.getAttribute('summarizePairs');
       fieldNum = Number(fieldNum);
       // i = 1 to account for the default text input.
       for (var i = 1; i < fieldNum; i++) {
         this.getInput('DUMMY_INPUT')
-          .appendField(new Blockly.FieldTextInput(), 'COLUMN' + i);
+          .appendField(new Blockly.FieldTextInput(), 'COLUMN' + i)
+          .appendField(new Blockly.FieldDropdown(
+            [
+              ['count', 'tbCount'],
+              ['max', 'tbMax'],
+              ['mean', 'tbMean'],
+              ['median', 'tbMedian'],
+              ['min', 'tbMin'],
+              ['std', 'tbStd'],
+              ['sum', 'tbSum'],
+              ['variance', 'tbVariance']
+            ]), 
+            "FUNC0" + i)
       }
     },
   
@@ -130,9 +142,8 @@ Blockly.defineBlocksWithJsonArray([
   
       for (var i = 0; i < children.length; i++) {
         var child = children[i];
-        // item block input
+        // item block input 
         var columnName = child.getFieldValue("COLUMN");
-        var funcName = child.getFieldValue("FUNC0");
         this.getInput('DUMMY_INPUT')
           .appendField(new Blockly.FieldTextInput(columnName), 'COLUMN' + i)
           .appendField(new Blockly.FieldDropdown(
