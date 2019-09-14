@@ -1,23 +1,17 @@
 Blockly.defineBlocksWithJsonArray([
- {
-    type: "dplyr_summarize",
-    message0: "Summarize %1 %2 %3 %4",
-    args0: [
-      {
-        type: "input_dummy"
-      },
-      {
-        type: "field_input",
-        name: "COLUMN",
-        text: "column"
-      },
-      {
-        type: "input_dummy"
-      },
-      {
-        type: "field_dropdown",
-        name: "FUNC",
-        options: [
+    {
+      type: "dplyr_summarize",
+      message0: "Summarize %1 %2 %3",
+      args0: [
+        {
+          type: "field_input",
+          name: "SINGLE_COLUMN",
+          text: "column"
+        },
+        {
+          type: "field_dropdown",
+          name: "FUNC",
+          options: [
             ['count', 'tbCount'],
             ['max', 'tbMax'],
             ['mean', 'tbMean'],
@@ -26,17 +20,20 @@ Blockly.defineBlocksWithJsonArray([
             ['std', 'tbStd'],
             ['sum', 'tbSum'],
             ['variance', 'tbVariance']
-        ]
-      }
-    ],
-    inputsInline : true,
-    previousStatement: null,
-    nextStatement: null,
-    style: 'dplyr_blocks',
-    tooltip: "",
-    helpUrl: "",
-    mutator: 'my_column_extension'
-  }
+          ]
+        },
+        {
+          type: "input_dummy",
+          name: "DUMMY_INPUT"
+        },
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      style: 'dplyr_blocks',
+      tooltip: "",
+      helpUrl: "",
+      mutator: 'my_column_extension'
+    }
 ])
 
   Blockly.Constants.ColumnMutator = {
@@ -49,7 +46,7 @@ Blockly.defineBlocksWithJsonArray([
       var fields = [];
       var index = 0;
       while (true) {
-        var field = this.getField('FUNC' + index);
+        var field = this.getField('COLUMN' + index);
         if (field) {
           fields.push(field);
           index++;
@@ -70,7 +67,7 @@ Blockly.defineBlocksWithJsonArray([
       // i = 1 to account for the default text input.
       for (var i = 1; i < fieldNum; i++) {
         this.getInput('DUMMY_INPUT')
-          .appendField(new Blockly.FieldTextInput(), 'FUNC' + i);
+          .appendField(new Blockly.FieldTextInput(), 'COLUMN' + i);
       }
     },
   
@@ -81,7 +78,7 @@ Blockly.defineBlocksWithJsonArray([
       var fields = [];
       var index = 0;
       while (true) {
-        var field = this.getField('FUNC' + index);
+        var field = this.getField('COLUMN' + index);
         if (field) {
           fields.push(field);
           index++;
@@ -90,10 +87,10 @@ Blockly.defineBlocksWithJsonArray([
         }
       }
   
-      // Create a top block
+      // Create the container, summarize block
       var topBlock = workspace.newBlock('dplyr_summarize_container');
       topBlock.initSvg();
-      // Create baby blocks
+      // Create item blocks each specifying a column and function pair
       var connection = topBlock.getInput('STACK').connection;
       for (var i = 0; i < fields.length; i++) {
         var columnFieldBlock = workspace.newBlock('dplyr_summarize_item');
@@ -101,7 +98,6 @@ Blockly.defineBlocksWithJsonArray([
         connection.connect(columnFieldBlock.previousConnection);
         connection = columnFieldBlock.nextConnection;
       }
-  
       return topBlock;
     },
   
@@ -123,9 +119,9 @@ Blockly.defineBlocksWithJsonArray([
       var input = this.getInput('DUMMY_INPUT');
       var index = 0;
       while (true) {
-        var field = this.getField('FUNC' + index);
+        var field = this.getField('COLUMN' + index);
         if (field) {
-          input.removeField('FUNC' + index);
+          input.removeField('COLUMN' + index);
         } else {
           break;
         }
@@ -136,9 +132,12 @@ Blockly.defineBlocksWithJsonArray([
       for (var i = 0; i < children.length; i++) {
         var child = children[i];
         // Baby block text input.
-        var columnName = child.getFieldValue("MY_COLUMN_NAME");
+        var columnName = child.getFieldValue("COLUMN");
+        // how do I make this a drop down menu
+        var funcName = child.getFieldValue("FUNC");
         this.getInput('DUMMY_INPUT')
-          .appendField(new Blockly.FieldTextInput(columnName), 'FUNC' + i);
+          .appendField(new Blockly.FieldTextInput(columnName), 'COLUMN' + i)
+          .appendField(new Blockly.FieldTextInput(funcName), 'FUNC' + i);
       }
     },
   };
