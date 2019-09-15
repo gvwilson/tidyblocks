@@ -1089,6 +1089,7 @@ class TidyBlocksManagerClass {
       }
       code = fixCode(code)
       eval(code)
+      console.log(code)
       while (this.queue.length > 0) {
         const func = this.queue.shift()
         func()
