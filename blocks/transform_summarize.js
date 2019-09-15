@@ -11,7 +11,8 @@ Blockly.defineBlocksWithJsonArray([
         "name": "COLUMN_FUNC_PAIR"
       }
     ],
-    output: null,
+    previousStatement: null,
+    nextStatement: null,
     style: "transform_blocks",
     tooltip: "",
     helpUrl: ""
