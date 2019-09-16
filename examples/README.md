@@ -10,5 +10,5 @@ This directory is composed of folders, each containing a single [AP Statistics Q
 * A Screenshot of the workspace used
 ### XML FILE 
 * So the workspace can be uploaded by others
-* PNG Screenshot
+### PNG Screenshot
 
