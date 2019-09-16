@@ -215,6 +215,7 @@ describe('blocks return proper this.columns', () => {
            {VALUE: 0})})
     ]
     const env = evalCode(pipeline)
+    console.log(env)
     assert('newColumnName' in env.table[0])
     done()
   }
