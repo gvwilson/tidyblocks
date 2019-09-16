@@ -16,4 +16,6 @@ along with the corresponding least squares regression line and computer output.
 
 # TidyBlocks Answer 
 
+Using data in data/APSTATS_2018_Q1
+
 ![](screenshot.png)
