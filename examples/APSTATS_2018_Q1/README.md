@@ -13,3 +13,7 @@ along with the corresponding least squares regression line and computer output.
 #### (a) Identify and interpret in context the estimate of the intercept for the least sqaures regression line
 #### (b) Identify and interpret in context the coefficient of determination
 #### (c) One of the data points was determined to be an outlier. Which point is it, and explain why the point is considered an outlier.
+
+# TidyBlocks Answer 
+
+![](screenshot.png)
