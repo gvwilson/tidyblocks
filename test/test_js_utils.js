@@ -201,6 +201,33 @@ describe('blocks return proper this.columns', () => {
     done()
   })
 
+
+   // Is this testing what we want it to? 
+   // Does this cover use cases?
+   it('filter does not change columns'), (done) => {
+    const pipeline = [
+      makeBlock('data_iris',
+      {})
+    ]
+    env_iris = evalCode(pipeline)
+      // make mutate block with child block value_number = 0
+      pipeline.push(makeBlock(
+        'transform_filter',
+        {TEST: makeBlock(
+          'value_compare',
+          {OP: 'tbEq',
+           LEFT: makeBlock(
+             'value_column',
+             {COLUMN: 'Species'}),
+           RIGHT: makeBlock(
+             'value_text',
+             {COLUMN: 'Setosa'})})}))
+    const env_filter = evalCode(pipeline)
+    console.log(env)
+    assert.deepStrictEqual(Object.keys(env_iris.table[0]), Object.keys(env_filter.table[0]))
+    done()
+  }
+
   // FIXME why doesn't this work
   it('mutate adds newly named column'), (done) => {
     const pipeline = [
