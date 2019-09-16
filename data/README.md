@@ -69,3 +69,16 @@ Crampton, E. W. (1947). The growth of the odontoblast of the incisor teeth as a 
 
 #### Source
 Henderson and Velleman (1981), Building multiple regression models interactively. Biometrics, 37, 391–411.
+
+
+# APSTATS_2018_Q1
+
+Estimating the customers in line per second data within the first question of the 2018 AP Statistics exam
+
+2 columns, 11 rows
+
+* **Customers_In_Line**: Number of customers ahead of selected customer (numeric)
+* **Time_Seconds**: Time until customer finished checkout
+
+#### Source
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q1.pdf
