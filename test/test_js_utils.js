@@ -148,7 +148,7 @@ describe('blocks return proper this.columns', () => {
         {COLUMN: 'first'})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('_group_')) // check for _group_ column
+    assert('_group_' in env.table[0]) // check for _group_ column
     done()
   })
 
@@ -165,38 +165,28 @@ describe('blocks return proper this.columns', () => {
         {})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('_group_') === false) // check _group_ column removed
+    assert(!('_group_' in env.table[0])) // check _group_ column removed
     done()
-  })
+ })
 
   // FIXME evaluating to falsey when true
-  it('sort this.columns unchanged', (done) => {
+  it('sorting does not change this.columns', (done) => {
     // original dataframe
-    const pipeline_iris = [
+    const pipeline = [
       makeBlock(
       'data_iris',
       {})
     ]
-    // sorted dataframe
-    const pipeline_sort = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'transform_sort',
-        {MULTIPLE_COLUMNS: 'Sepal_Length',
-         DESCENDING: 'false'})
-    ]
-    const env_iris = evalCode(pipeline_iris)
-    const env_sort = evalCode(pipeline_sort)
-    // console.log(Object.keys(env_iris.table[0]))
-    // console.log(Object.keys(env_sort.table[0]))
-    // compare pipeline columns
-    assert(Object.keys(env_iris.table[0]) == Object.keys(env_sort.table[0]))
+    const env_iris = evalCode(pipeline)
+    pipeline.push(makeBlock(
+          'transform_sort',
+          {MULTIPLE_COLUMNS: 'Sepal_Length',
+           DESCENDING: 'false'}))
+    const env_sort = evalCode(pipeline)
+    assert.deepStrictEqual(Object.keys(env_iris.table[0]), Object.keys(env_sort.table[0]))
     done()
   })
 
-  // FIXME Also evaluating to falsy when true!
   it('select returns only selected column', (done) => {
     const pipeline = [
       makeBlock(
@@ -204,11 +194,10 @@ describe('blocks return proper this.columns', () => {
         {}),
       makeBlock(
         'transform_select',
-        {MULTIPLE_COLUMNS: ['Sepal_Length']})
+        {MULTIPLE_COLUMNS: 'Sepal_Length'})
     ]
     const env = evalCode(pipeline)
-    console.log(env)
-    assert(Object.keys(env.table[0]) === [ 'Sepal_Length' ])
+    assert.deepStrictEqual(Object.keys(env.table[0]), [ 'Sepal_Length'])
     done()
   })
 
@@ -226,7 +215,7 @@ describe('blocks return proper this.columns', () => {
            {VALUE: 0})})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('newColumnName'))
+    assert('newColumnName' in env.table[0])
     done()
   }
 
