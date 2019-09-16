@@ -123,16 +123,17 @@ const tbTypeEqual = (left, right) => {
 //--------------------------------------------------------------------------------
 
 /**
- * Count number of values.
+ * Count number of values (colname property used in summarization).
  * @param {Array} values The values to be counted.
  * @return {number} Number of values.
  */
 const tbCount = (values) => {
   return values.length
 }
+tbCount.colname = 'count'
 
 /**
- * Find maximum value.
+ * Find maximum value (colname property used in summarization).
  * @param {Array} values The values to be searched.
  * @return {number} Maximum value.
  */
@@ -141,9 +142,10 @@ const tbMax = (values) => {
     ? NaN
     : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
 }
+tbMax.colname = 'max'
 
 /**
- * Find mean value.
+ * Find mean value (colname property used in summarization).
  * @param {Array} values The values to be averaged.
  * @return {number} Mean value.
  */
@@ -152,9 +154,10 @@ const tbMean = (values) => {
     ? NaN
     : values.reduce((total, num) => total + num, 0) / values.length
 }
+tbMean.colName = 'mean'
 
 /**
- * Find median value.
+ * Find median value (colname property used in summarization).
  * @param {Array} values The values to be searched.
  * @return {number} Median value.
  */
@@ -168,9 +171,10 @@ const tbMedian = (values) => {
     return temp[Math.floor(temp.length / 2)]
   }
 }
+tbMedian.colname = 'median'
 
 /**
- * Find median value.
+ * Find minimum value (colname property used in summarization).
  * @param {Array} values The values to be searched.
  * @return {number} Minimum value.
  */
@@ -179,27 +183,30 @@ const tbMin = (values) => {
     ? NaN
     : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
 }
+tbMin.colname = 'min'
 
 /**
- * Find standard deviation.
+ * Find standard deviation (colname property used in summarization).
  * @param {Array} values The values to be summarized.
  * @return {number} Standard deviation.
  */
 const tbStd = (values) => {
   return Math.sqrt(tbVariance(values))
 }
+tbStd.colname = 'std'
 
 /**
- * Find sum.
+ * Find sum (colname property used in summarization).
  * @param {Array} values The values to be added.
  * @return {number} Total.
  */
 const tbSum = (values) => {
   return values.reduce((total, num) => total + num, 0)
 }
+tbSum.colname = 'sum'
 
 /**
- * Find variance.
+ * Find variance (colname property used in summarization).
  * @param {Array} values The values to be summarized.
  * @return {number} Variance.
  */
@@ -211,6 +218,7 @@ const tbVariance = (values) => {
   const squareDiffs = values.map(v => (v - m)**2)
   return tbMean(squareDiffs)
 }
+tbVariance.colname = 'variance'
 
 //--------------------------------------------------------------------------------
 
@@ -797,16 +805,39 @@ class TidyBlocksDataFrame {
   }
 
   /**
-   * Replace internal dataframe with a summarized dataframe.
-   * @param {function} func Summarization function.
-   * @param {string} column Column to summarize.
+   * Summarize values (possibly grouped).
+   * @param {string} operations A list of [blockId, function, columnName] pairs.
    * @return A new dataframe.
    */
-  summarize (blockId, func, column) {
+  summarize (blockId, ...operations) {
     // Handle empty case.
     if (this.data.length === 0) {
       return new TidyBlocksDataFrame([])
     }
+
+    // Handle each summarization on its own.
+    const result = []
+    operations.forEach(([subBlockId, func, column]) => {
+      const newColumnName = `${func.name}_${column}` // FIXME: check for uniqueness (?)
+      if (subBlockId === undefined) {
+        subBlockId = blockId // FIXME: the initial sub-block doesn't have an ID
+      }
+      this._summarizeOneColumn(subBlockId, result, func, column, result, newColumnName)
+    })
+
+    // Create new dataframe.
+    return new TidyBlocksDataFrame(result)
+  }
+
+  /**
+   * Summarize a single column with a single function (internal use only).
+   * @param {function} func Summarization function.
+   * @param {string} column Existing column name.
+   * @param {Object[]} result Where to accumulate results.
+   * @param {string} newColumnName New column name.
+   * @return A vector of values.
+   */
+  _summarizeOneColumn (blockId, result, func, column, newColumnName) {
 
     // Check column access.
     tbAssert(column,
@@ -814,19 +845,18 @@ class TidyBlocksDataFrame {
     tbAssert(this.hasColumns(column),
              `[block ${blockId}] unknown column(s) [${column}] in summarize`)
 
-    // Final data.
-    const result = []
-
     // Aggregate the whole thing?
     if (! this.hasColumns('_group_')) {
       const values = this.getColumn(column)
-      const record = {}
-      record[column] = func(values)
+      const record = (result.length === 0) ? {} : result[0]
+      record[newColumnName] = func(values)
       result.push(record)
     }
 
     // Aggregate by groups
     else {
+      /****
+       * FIXME: implement this
       // _group_ values in column by index.
       const grouped = new Map()
       this.data.forEach(row => {
@@ -845,10 +875,9 @@ class TidyBlocksDataFrame {
         record[column] = func(values)
         result.push(record)
       })
+      *
+      ****/
     }
-
-    // Create new dataframe.
-    return new TidyBlocksDataFrame(result)
   }
 
   /**
@@ -1088,7 +1117,6 @@ class TidyBlocksManagerClass {
         throw new Error('pipeline does not have a valid start block')
       }
       code = fixCode(code)
-      console.log(code)
       eval(code)
       while (this.queue.length > 0) {
         const func = this.queue.shift()
