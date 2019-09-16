@@ -31,7 +31,7 @@ Blockly.defineBlocksWithJsonArray([
     style: "transform_blocks",
     tooltip: "",
     helpUrl: "",
-    extensions: "check_transform_summarize"
+    extensions: ["check_transform_summarize"]
   } 
 ])
 
