@@ -14,7 +14,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: "transform_blocks",
-    tooltip: "",
+    tooltip: "Reduces multiple values down to a single value",
     helpUrl: ""
   }
 ])

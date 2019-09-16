@@ -29,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     nextStatement: null,
     style: "transform_blocks",
-    tooltip: "",
+    tooltip: "function to aggregrate columns",
     helpUrl: "",
     extensions: ["check_transform_summarize"]
   } 
