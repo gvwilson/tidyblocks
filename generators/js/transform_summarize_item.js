@@ -5,5 +5,5 @@
 Blockly.JavaScript['transform_summarize'] = (block) => {
     const column = block.getFieldValue('COLUMN')
     const func = Blockly.JavaScript.quote_(block.getFieldValue('FUNC'))
-    const code = `${block.tbId}, ${func}, ${column}`
+    const code = `${func}, ${column}`
 }
