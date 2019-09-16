@@ -1088,6 +1088,7 @@ class TidyBlocksManagerClass {
         throw new Error('pipeline does not have a valid start block')
       }
       code = fixCode(code)
+      console.log(code)
       eval(code)
       while (this.queue.length > 0) {
         const func = this.queue.shift()
