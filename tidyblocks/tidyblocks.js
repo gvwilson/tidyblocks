@@ -806,7 +806,7 @@ class TidyBlocksDataFrame {
 
   /**
    * Summarize values (possibly grouped).
-   * @param {string} operations A list of [function, columnName] pairs.
+   * @param {string} operations A list of [blockId, function, columnName] pairs.
    * @return A new dataframe.
    */
   summarize (blockId, ...operations) {
@@ -817,9 +817,12 @@ class TidyBlocksDataFrame {
 
     // Handle each summarization on its own.
     const result = []
-    operations.forEach(([func, column]) => {
+    operations.forEach(([subBlockId, func, column]) => {
       const newColumnName = `${func.name}_${column}` // FIXME: check for uniqueness (?)
-      this._summarizeOneColumn(blockId, result, func, column, result, newColumnName)
+      if (subBlockId === undefined) {
+        subBlockId = blockId // FIXME: the initial sub-block doesn't have an ID
+      }
+      this._summarizeOneColumn(subBlockId, result, func, column, result, newColumnName)
     })
 
     // Create new dataframe.
