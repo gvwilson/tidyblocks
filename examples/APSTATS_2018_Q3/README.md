@@ -1,5 +1,5 @@
 # 2018 Section II Part A 
-https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q1.pdf
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q3.pdf
 
 # Question 3
 
