@@ -48,6 +48,10 @@ class GuiEnvironment {
    * @param {string} url URL to read from.
    */
   readCSV (url) {
+
+    tbAssert((url !== "url") && (url.length > 0),
+             `Cannot fetch empty URL`)
+
     const request = new XMLHttpRequest()
     request.open('GET', url, false)
     request.send(null)
