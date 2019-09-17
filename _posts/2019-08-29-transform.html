@@ -87,20 +87,28 @@ layout: null
     <p><b>Checkbox: </b>Check to sort table in descending order</p>
     <h3>Examples:</h3>
     <img src="{{'/guide/images/transform_sort_example.png'| relative_url}}" width="40%">
-    <img src="{{'/guide/images/transform_sort_example_multiple.png'| relative_url}}" width="60%">
   </div>
 </div>
 
 <h1><a id="#summarize">Summarize</a></h1>
 <div id="wrapper">
   <div id="first">
+      <img src="{{'/guide/images/transform_summarize.png'| relative_url}}" width="100%">
   </div>
   <div id="second">
     <h3>Description:</h3>
-    <p></p>
-    <h3>Arguments</h3>
-    <p></p>
+    <p>The Summarize block reduces multiple values to a single value. 
+        The block is typically used on grouped data created by a Group By block, but can be used on the entire data table. 
+        The output will have one row for each group.</p>
+    <h3>Arguments:</h3>
+    <p>The Summarize block takes as it's argument the Summarize Item block which has two fields:</p>
+    <ul>
+        <li><b>Column:</b> The column to be aggregated</li>
+        <li><b>Function:</b> A drop down list of functions to aggregate the data by</li>
+      </ul>
     <h3>Examples:</h3>
+    <img src="{{'/guide/images/transform_summarize_all_example.png'| relative_url}}" width="40%">
+    <img src="{{'/guide/images/transform_summarize_groupBy_example.png'| relative_url}}" width="40%">
   </div>
 </div>
 
