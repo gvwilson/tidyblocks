@@ -48,6 +48,10 @@ class GuiEnvironment {
    * @param {string} url URL to read from.
    */
   readCSV (url) {
+
+    tbAssert((url !== "url") && (url.length > 0),
+             `Cannot fetch empty URL`)
+
     const request = new XMLHttpRequest()
     request.open('GET', url, false)
     request.send(null)
@@ -134,13 +138,20 @@ const setUpBlockly = () => {
     {
       media: 'media/',
       toolbox: document.getElementById('toolbox'),
+      zoom:
+         {controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 3,
+          minScale: 0.3,
+          scaleSpeed: 1.2},
       horizontalLayout: false,
       scrollbars: false, 
       theme: Blockly.Themes.Tidy
     }
   )
 
-  //TidyBlocksWorkspace.addChangeListener(Blockly.Events.disableOrphans)
+  // TidyBlocksWorkspace.addChangeListener(Blockly.Events.disableOrphans)
 
   TidyBlocksWorkspace.addChangeListener((event) => {
     if (event.type === Blockly.Events.CREATE) {

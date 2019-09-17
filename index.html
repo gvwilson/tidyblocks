@@ -42,7 +42,12 @@
             <block type="transform_mutate"></block>
             <block type="transform_select"></block>
             <block type="transform_sort"></block>
-            <block type="transform_summarize"></block>
+            <block type="transform_summarize">
+                <statement name="COLUMN_FUNC_PAIR">
+                  <block type="transform_summarize_item"></block>
+                </statement>
+            </block>
+            <block type="transform_summarize_item"></block>
             <block type="transform_ungroup"></block>
           </category>
           <category name="plot" categorystyle="plot">
@@ -68,7 +73,6 @@
             <block type="value_not"></block>
             <block type="value_number"></block>
             <block type="value_logical"></block>
-            <block type="value_parseDate"></block>
             <block type="value_text"></block>
             <block type="value_type"></block>
           </category>
@@ -160,6 +164,9 @@
       <script src="blocks/transform_summarize.js"></script>
       <script src="generators/js/transform_summarize.js"></script>
 
+      <script src="blocks/transform_summarize_item.js"></script>
+      <script src="generators/js/transform_summarize_item.js"></script>
+
       <script src="blocks/transform_ungroup.js"></script>
       <script src="generators/js/transform_ungroup.js"></script>
 
@@ -216,9 +223,6 @@
 
       <script src="blocks/value_logical.js"></script>
       <script src="generators/js/value_logical.js"></script>
-
-      <script src="blocks/value_parseDate.js"></script>
-      <script src="generators/js/value_parseDate.js"></script>
 
       <script src="blocks/value_text.js"></script>
       <script src="generators/js/value_text.js"></script>

@@ -6,7 +6,7 @@
   "scripts": {
     "build": "parcel build index.html",
     "dev": "parcel index.html",
-    "jsdoc": "jsdoc --destination docs --readme README.md tidyblocks/*.js tests/*.js",
+    "jsdoc": "jsdoc --destination docs --readme README.md tidyblocks/*.js test/*.js",
     "lint": "eslint blocks/*.js tidyblocks/*.js generators/js/*.js tests/*.js",
     "test": "mocha",
     "coverage": "nyc --reporter=html --reporter=text mocha"

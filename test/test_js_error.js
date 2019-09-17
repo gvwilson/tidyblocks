@@ -222,8 +222,11 @@ describe('raises errors at the right times', () => {
         {}),
       makeBlock(
         'transform_summarize',
-        {FUNC: 'tbSum',
-         COLUMN: ''})
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMean',
+                     COLUMN: ''})
+        ]})
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no column specified for summarize/,
@@ -238,11 +241,14 @@ describe('raises errors at the right times', () => {
         {}),
       makeBlock(
         'transform_summarize',
-        {FUNC: 'tbSum',
-         COLUMN: 'nonexistent'})
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMean',
+                     COLUMN: 'nonexistent'})
+        ]})
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in summarize/,
+    assert_match(env.error, /\[block \d+\] unknown column ".+" in summarize/,
                  `Expected an error message when summarizing with nonexistent columns`)
     done()
   })
@@ -259,50 +265,6 @@ describe('raises errors at the right times', () => {
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] cannot ungroup data that is not grouped/,
                  `Expected an error message when ungrouping data that is not grouped`)
-    done()
-  })
-
-  it('reports invalid dates when trying to convert', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_urlCSV',
-        {URL: 'test://invalid_date.csv'}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'Time',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToDatetime',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})})
-    ]
-    const env = evalCode(pipeline)
-    assert.notEqual(env.error, null,
-                    `Expected error message when converting invalid date`)
-    assert_match(env.error, /\[block \d+\] cannot convert "invalid date" to date/,
-                    `Incorrect error message when converting invalid date`)
-    done()
-  })
-
-  it('will not extract date values from non-dates', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_earthquakes',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'year',
-         VALUE: makeBlock(
-           'value_datetime',
-           {TYPE: 'tbToYear',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})})
-    ]
-    const env = evalCode(pipeline)
-    assert.notEqual(env.error, null,
-                    `Expected error message when extract from non-date`)
     done()
   })
 

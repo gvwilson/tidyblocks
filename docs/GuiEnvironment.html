@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: TidyBlocksManagerClass</title>
+    <title>JSDoc: Class: GuiEnvironment</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: TidyBlocksManagerClass</h1>
+    <h1 class="page-title">Class: GuiEnvironment</h1>
 
     
 
@@ -28,9 +28,10 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>TidyBlocksManagerClass<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>GuiEnvironment<span class="signature">()</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Manage execution of all data pipelines.</div>
+            <div class="class-description">Class to handle connections to the outside world.  (A different class with
+the same methods is used for testing purposes.)</div>
         
     
 </header>
@@ -45,16 +46,12 @@
     
 
     
-    <h4 class="name" id="TidyBlocksManagerClass"><span class="type-signature"></span>new TidyBlocksManagerClass<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="GuiEnvironment"><span class="type-signature"></span>new GuiEnvironment<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
 
 
-
-<div class="description">
-    Create manager.
-</div>
 
 
 
@@ -97,7 +94,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1004">line 1004</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line35">line 35</a>
     </li></ul></dd>
     
 
@@ -153,7 +150,7 @@
     
 
     
-    <h4 class="name" id="addNewBlock"><span class="type-signature"></span>addNewBlock<span class="signature">(block)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="displayError"><span class="type-signature"></span>displayError<span class="signature">(error)</span><span class="type-signature"></span></h4>
     
 
     
@@ -161,7 +158,7 @@
 
 
 <div class="description">
-    Record a newly-created block and add the ID to its tooltip.
+    Display an error.
 </div>
 
 
@@ -197,13 +194,13 @@
 
         <tr>
             
-                <td class="name"><code>block</code></td>
+                <td class="name"><code>error</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">block</span>
+<span class="param-type">string</span>
 
 
             
@@ -213,7 +210,7 @@
 
             
 
-            <td class="description last">Newly-created block.</td>
+            <td class="description last">The message to display.</td>
         </tr>
 
     
@@ -254,7 +251,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1012">line 1012</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line84">line 84</a>
     </li></ul></dd>
     
 
@@ -290,7 +287,7 @@
     
 
     
-    <h4 class="name" id="getBlock"><span class="type-signature"></span>getBlock<span class="signature">(blockId)</span><span class="type-signature"> &rarr; {block}</span></h4>
+    <h4 class="name" id="displayPlot"><span class="type-signature"></span>displayPlot<span class="signature">(spec)</span><span class="type-signature"></span></h4>
     
 
     
@@ -298,7 +295,7 @@
 
 
 <div class="description">
-    Get a block by serial number.
+    Display a plot.
 </div>
 
 
@@ -334,13 +331,13 @@
 
         <tr>
             
-                <td class="name"><code>blockId</code></td>
+                <td class="name"><code>spec</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">Object</span>
 
 
             
@@ -350,7 +347,7 @@
 
             
 
-            <td class="description last">Serial number of block.</td>
+            <td class="description last">Vega-Lite spec for plot with data filled in.</td>
         </tr>
 
     
@@ -391,7 +388,232 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1032">line 1032</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line68">line 68</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="displayTable"><span class="type-signature"></span>displayTable<span class="signature">(table)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Display a table (as HTML).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>table</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON array of uniform objects.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line76">line 76</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getCode"><span class="type-signature"></span>getCode<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get the code to run.
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line42">line 42</a>
     </li></ul></dd>
     
 
@@ -420,7 +642,7 @@
 
         
 <div class="param-desc">
-    The block or null.
+    The code to run.
 </div>
 
 
@@ -431,7 +653,7 @@
     </dt>
     <dd>
         
-<span class="param-type">block</span>
+<span class="param-type">string</span>
 
 
     </dd>
@@ -449,7 +671,7 @@
     
 
     
-    <h4 class="name" id="getNumBlocks"><span class="type-signature"></span>getNumBlocks<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="readCSV"><span class="type-signature"></span>readCSV<span class="signature">(url)</span><span class="type-signature"></span></h4>
     
 
     
@@ -457,96 +679,7 @@
 
 
 <div class="description">
-    Get the number of blocks that have been created (including ones that have
-now been deleted).
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1023">line 1023</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="getResult"><span class="type-signature"></span>getResult<span class="signature">(name)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get the output of a completed pipeline.
+    Read CSV from a URL and parse to create TidyBlocks data frame.
 </div>
 
 
@@ -582,7 +715,7 @@ now been deleted).
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>url</code></td>
             
 
             <td class="type">
@@ -598,7 +731,7 @@ now been deleted).
 
             
 
-            <td class="description last">Name of completed pipeline.</td>
+            <td class="description last">URL to read from.</td>
         </tr>
 
     
@@ -639,675 +772,7 @@ now been deleted).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1044">line 1044</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    TidyBlocksDataFrame.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="notify"><span class="type-signature"></span>notify<span class="signature">(name, dataFrame)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Notify the manager that a named pipeline has finished running.
-This enqueues pipeline functions to run if their dependencies are satisfied.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Name of the pipeline that just completed.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dataFrame</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The TidyBlocksDataFrame produced by the pipeline.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1054">line 1054</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">(depends, func, produces)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Register a new pipeline function with what it depends on and what it produces.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>depends</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Names of things this pipeline depends on (if it starts with a join).</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>func</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Function encapsulating pipeline to run.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>produces</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Name of this pipeline (used to trigger things waiting for it).</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1070">line 1070</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Reset internal state.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1082">line 1082</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(environment)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Run all pipelines in an order that respects dependencies.
-This depends on `notify` to add pipelines to the queue.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>environment</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">How to interact with the outside world.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1095">line 1095</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="toString"><span class="type-signature"></span>toString<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Show the manager as a string for debugging.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1117">line 1117</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line50">line 50</a>
     </li></ul></dd>
     
 

@@ -232,11 +232,14 @@ describe('generate code for single blocks', () => {
   it('generates code to summarize values', (done) => {
     const pipeline = makeBlock(
       'transform_summarize',
-      {FUNC: 'tbMean',
-       COLUMN: 'someColumn'}
+      {COLUMN_FUNC_PAIR: [
+        makeBlock('transform_summarize_item',
+                  {FUNC: 'tbMean',
+                   COLUMN: 'someColumn'})
+      ]}
     )
     const code = generateCode(pipeline)
-    assert.equal(code, '.summarize(0, tbMean, "someColumn")',
+    assert.equal(code, '.summarize(1, [0, tbMean, "someColumn"])',
                  'code does not call summarize correctly')
     done()
   })

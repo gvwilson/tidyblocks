@@ -98,138 +98,13 @@
 
         
             
-<h4 class="name" id="Blockly"><span class="type-signature">(constant) </span>Blockly<span class="type-signature"></span></h4>
+<h4 class="name" id="TIDYBLOCKS_START"><span class="type-signature">(constant) </span>TIDYBLOCKS_START<span class="type-signature"></span></h4>
 
 
 
 
 <div class="description">
-    Replacement for singleton Blockly object. This defines only the methods and
-values used by block creation code.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line70">line 70</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="Result"><span class="type-signature">(constant) </span>Result<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Record results for testing purposes.
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line178">line 178</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="TERMINATOR"><span class="type-signature">(constant) </span>TERMINATOR<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    Terminator for well-formed pipelines.
+    Prefix and suffix for well-formed pipelines.
 </div>
 
 
@@ -329,7 +204,7 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line956">line 956</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1167">line 1167</a>
     </li></ul></dd>
     
 
@@ -504,7 +379,7 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line27">line 27</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -687,7 +562,190 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line42">line 42</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line42">line 42</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="assert_match"><span class="type-signature"></span>assert_match<span class="signature">(actual, required, message)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Assert that a string matches a regular expression.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>actual</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">String being examined.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>required</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">regexp</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Pattern to look for.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>message</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Error message.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -870,7 +928,7 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line57">line 57</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line72">line 72</a>
     </li></ul></dd>
     
 
@@ -1002,7 +1060,7 @@ values used by block creation code.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line207">line 207</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line229">line 229</a>
     </li></ul></dd>
     
 
@@ -1174,7 +1232,7 @@ and https://developers.google.com/blockly/guides/create-custom-blocks/extensions
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line107">line 107</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line172">line 172</a>
     </li></ul></dd>
     
 
@@ -1345,7 +1403,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line13">line 13</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -1443,555 +1501,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line142">line 142</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayError"><span class="type-signature"></span>displayError<span class="signature">(error)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Display an error (record for testing purposes).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>error</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">message to record.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line204">line 204</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayError"><span class="type-signature"></span>displayError<span class="signature">(error)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Callback fro displaying an error online.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>error</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The message to display.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line139">line 139</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayPlot"><span class="type-signature"></span>displayPlot<span class="signature">(spec)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Callback for displaying a plot.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>spec</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Vega-Lite spec for plot with data filled in.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line123">line 123</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayPlot"><span class="type-signature"></span>displayPlot<span class="signature">(spec)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    "Display" a plot (record for testing purposes).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>spec</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Vega-Lite spec for plot.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line196">line 196</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line186">line 186</a>
     </li></ul></dd>
     
 
@@ -2079,281 +1589,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line229">line 229</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayTable"><span class="type-signature"></span>displayTable<span class="signature">(data)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    "Display" a table (record for testing purposes).
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>data</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">data to record.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line188">line 188</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="displayTable"><span class="type-signature"></span>displayTable<span class="signature">(table)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Callback for displaying a table as HTML.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>table</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">JSON array of uniform objects.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line131">line 131</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line257">line 257</a>
     </li></ul></dd>
     
 
@@ -2490,7 +1726,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line237">line 237</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line294">line 294</a>
     </li></ul></dd>
     
 
@@ -2519,7 +1755,7 @@ it is passed in here so that this file can be loaded both in the browser and for
 
         
 <div class="param-desc">
-    generated code (for checking).
+    environment (including eval'd code).
 </div>
 
 
@@ -2660,7 +1896,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line919">line 919</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line1130">line 1130</a>
     </li></ul></dd>
     
 
@@ -2819,7 +2055,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line80">line 80</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line81">line 81</a>
     </li></ul></dd>
     
 
@@ -2962,7 +2198,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line151">line 151</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -3060,7 +2296,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line42">line 42</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line107">line 107</a>
     </li></ul></dd>
     
 
@@ -3149,7 +2385,7 @@ it is passed in here so that this file can be loaded both in the browser and for
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line30">line 30</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line95">line 95</a>
     </li></ul></dd>
     
 
@@ -3287,7 +2523,7 @@ Each object must have the same properties.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line216">line 216</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line241">line 241</a>
     </li></ul></dd>
     
 
@@ -3376,7 +2612,7 @@ Does _not_ read R files (for now).
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line165">line 165</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line211">line 211</a>
     </li></ul></dd>
     
 
@@ -3514,7 +2750,7 @@ Depends on the global TidyBlocksWorkspace variable.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line176">line 176</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line216">line 216</a>
     </li></ul></dd>
     
 
@@ -3676,7 +2912,7 @@ the order, so we return the first element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line127">line 127</a>
+        <a href="test_utils.js.html">test/utils.js</a>, <a href="test_utils.js.html#line164">line 164</a>
     </li></ul></dd>
     
 
@@ -3706,291 +2942,6 @@ the order, so we return the first element.
         
 <div class="param-desc">
     text for block.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="readCSV"><span class="type-signature"></span>readCSV<span class="signature">(url)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Read CSV from a URL and parse to create TidyBlocks data frame.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">URL to read from.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line188">line 188</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="readCSV"><span class="type-signature"></span>readCSV<span class="signature">(url)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
-'eval' of generated code.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">URL of data.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line223">line 223</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    dataframe containing that data.
 </div>
 
 
@@ -4108,7 +3059,7 @@ the order, so we return the first element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line63">line 63</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -4267,7 +3218,7 @@ the order, so we return the first element.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line72">line 72</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -4314,94 +3265,6 @@ the order, so we return the first element.
 </dl>
 
     
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="resetDisplay"><span class="type-signature"></span>resetDisplay<span class="signature">()</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Reset the displays (clear old data between tests).
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tests_utils.js.html">tests/utils.js</a>, <a href="tests_utils.js.html#line211">line 211</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4466,7 +3329,7 @@ Depends on the global TidyBlocksWorkspace variable.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line147">line 147</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -4555,7 +3418,7 @@ Depends on the global TidyBlocksWorkspace variable.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line157">line 157</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -4644,7 +3507,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line66">line 66</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -4732,7 +3595,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line57">line 57</a>
+        <a href="tidyblocks_gui.js.html">tidyblocks/gui.js</a>, <a href="tidyblocks_gui.js.html#line122">line 122</a>
     </li></ul></dd>
     
 
@@ -4768,7 +3631,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbAdd"><span class="type-signature"></span>tbAdd<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbAdd"><span class="type-signature"></span>tbAdd<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -4808,6 +3671,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -4915,7 +3801,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line278">line 278</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line438">line 438</a>
     </li></ul></dd>
     
 
@@ -4961,7 +3847,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbAnd"><span class="type-signature"></span>tbAnd<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbAnd"><span class="type-signature"></span>tbAnd<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -5001,6 +3887,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -5108,7 +4017,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line369">line 369</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line536">line 536</a>
     </li></ul></dd>
     
 
@@ -5278,7 +4187,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line95">line 95</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -5303,6 +4212,148 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbAssertNumber"><span class="type-signature"></span>tbAssertNumber<span class="signature">(value)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Check that a value is numeric.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">What to check.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line107">line 107</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The input value if it passes the test.
+</div>
+
+
+
+    
 
 
 
@@ -5415,7 +4466,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line129">line 129</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -5473,7 +4524,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbDiv"><span class="type-signature"></span>tbDiv<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbDiv"><span class="type-signature"></span>tbDiv<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -5513,6 +4564,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -5620,7 +4694,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line291">line 291</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line452">line 452</a>
     </li></ul></dd>
     
 
@@ -5666,7 +4740,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbEq"><span class="type-signature"></span>tbEq<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbEq"><span class="type-signature"></span>tbEq<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -5706,6 +4780,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -5813,7 +4910,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line436">line 436</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line622">line 622</a>
     </li></ul></dd>
     
 
@@ -5859,7 +4956,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbExp"><span class="type-signature"></span>tbExp<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbExp"><span class="type-signature"></span>tbExp<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -5899,6 +4996,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -5966,6 +5086,1357 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
             
 
             <td class="description last">How to get the right value from the row.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line466">line 466</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The exponentiated value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbGeq"><span class="type-signature"></span>tbGeq<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Greater than or equal.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row to get values from.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the left value from the row.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getRight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the right value from the row.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line607">line 607</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The comparison's result.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbGet"><span class="type-signature"></span>tbGet<span class="signature">(row, column)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Get a column's value from a row, failing if the column doesn't exist.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row to look in.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>column</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The field to look up.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line424">line 424</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbGt"><span class="type-signature"></span>tbGt<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Strict greater than.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row to get values from.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the left value from the row.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getRight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the right value from the row.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line592">line 592</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The comparison's result.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbIfElse"><span class="type-signature"></span>tbIfElse<span class="signature">(blockId, row, getCond, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Choosing a value based on a logical condition.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The row to get values from.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getCond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the condition's value.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getLeft</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the left value from the row.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getRight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get the right value from the row.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line577">line 577</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    The left (right) value if the condition is true (false).
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbIsBoolean"><span class="type-signature"></span>tbIsBoolean<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Check if value is Boolean.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line284">line 284</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Is value Boolean?
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbIsNumber"><span class="type-signature"></span>tbIsNumber<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Check if value is number.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line294">line 294</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Is value numeric?
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbIsString"><span class="type-signature"></span>tbIsString<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Check if value is string.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
         </tr>
 
     
@@ -6035,7 +6506,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
 
         
 <div class="param-desc">
-    The exponentiated value.
+    Is value string?
 </div>
 
 
@@ -6052,705 +6523,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbGeq"><span class="type-signature"></span>tbGeq<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Greater than or equal.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>row</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row to get values from.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>getLeft</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">How to get the left value from the row.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>getRight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">How to get the right value from the row.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line422">line 422</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The comparison's result.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbGet"><span class="type-signature"></span>tbGet<span class="signature">(row, key)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Get a column's value from a row, failing if the column doesn't exist.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>row</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row to look in.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>key</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The field to look up.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line265">line 265</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The value.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbGt"><span class="type-signature"></span>tbGt<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Strict greater than.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>row</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row to get values from.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>getLeft</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">How to get the left value from the row.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>getRight</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">How to get the right value from the row.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line408">line 408</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The comparison's result.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbIsNumber"><span class="type-signature"></span>tbIsNumber<span class="signature">(value)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Check that a value is numeric.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">What to check.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line106">line 106</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The input value if it passes the test.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="tbLeq"><span class="type-signature"></span>tbLeq<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbLeq"><span class="type-signature"></span>tbLeq<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -6794,6 +6567,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
 
         <tr>
             
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>row</code></td>
             
 
@@ -6897,7 +6693,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line464">line 464</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line652">line 652</a>
     </li></ul></dd>
     
 
@@ -6943,7 +6739,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbLt"><span class="type-signature"></span>tbLt<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbLt"><span class="type-signature"></span>tbLt<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -6983,6 +6779,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -7090,7 +6909,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line478">line 478</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line667">line 667</a>
     </li></ul></dd>
     
 
@@ -7237,7 +7056,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line138">line 138</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -7396,7 +7215,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line149">line 149</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line150">line 150</a>
     </li></ul></dd>
     
 
@@ -7555,7 +7374,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line160">line 160</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line161">line 161</a>
     </li></ul></dd>
     
 
@@ -7714,7 +7533,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line176">line 176</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line177">line 177</a>
     </li></ul></dd>
     
 
@@ -7772,7 +7591,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbMod"><span class="type-signature"></span>tbMod<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbMod"><span class="type-signature"></span>tbMod<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -7812,6 +7631,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -7919,7 +7761,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line317">line 317</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line480">line 480</a>
     </li></ul></dd>
     
 
@@ -7965,7 +7807,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbMul"><span class="type-signature"></span>tbMul<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbMul"><span class="type-signature"></span>tbMul<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -8005,6 +7847,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -8112,7 +7977,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line330">line 330</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line494">line 494</a>
     </li></ul></dd>
     
 
@@ -8158,7 +8023,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbNeg"><span class="type-signature"></span>tbNeg<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbNeg"><span class="type-signature"></span>tbNeg<span class="signature">(blockId, row, getValue)</span><span class="type-signature"></span></h4>
     
 
     
@@ -8198,6 +8063,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -8282,7 +8170,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line342">line 342</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line507">line 507</a>
     </li></ul></dd>
     
 
@@ -8328,7 +8216,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbNeq"><span class="type-signature"></span>tbNeq<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbNeq"><span class="type-signature"></span>tbNeq<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -8368,6 +8256,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -8475,7 +8386,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line450">line 450</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line637">line 637</a>
     </li></ul></dd>
     
 
@@ -8521,7 +8432,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbNot"><span class="type-signature"></span>tbNot<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbNot"><span class="type-signature"></span>tbNot<span class="signature">(blockId, row, getValue)</span><span class="type-signature"></span></h4>
     
 
     
@@ -8561,6 +8472,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -8645,7 +8579,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line381">line 381</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line549">line 549</a>
     </li></ul></dd>
     
 
@@ -8691,7 +8625,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbOr"><span class="type-signature"></span>tbOr<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbOr"><span class="type-signature"></span>tbOr<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -8731,6 +8665,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -8838,7 +8795,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line393">line 393</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line562">line 562</a>
     </li></ul></dd>
     
 
@@ -8985,7 +8942,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line187">line 187</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line188">line 188</a>
     </li></ul></dd>
     
 
@@ -9043,7 +9000,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbSub"><span class="type-signature"></span>tbSub<span class="signature">(row, getLeft, getRight)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbSub"><span class="type-signature"></span>tbSub<span class="signature">(blockId, row, getLeft, getRight)</span><span class="type-signature"></span></h4>
     
 
     
@@ -9083,6 +9040,29 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The ID of the block.</td>
+        </tr>
+
     
 
         <tr>
@@ -9190,7 +9170,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line354">line 354</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line520">line 520</a>
     </li></ul></dd>
     
 
@@ -9337,7 +9317,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line196">line 196</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line197">line 197</a>
     </li></ul></dd>
     
 
@@ -9395,7 +9375,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbToBoolean"><span class="type-signature"></span>tbToBoolean<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbToBoolean"><span class="type-signature"></span>tbToBoolean<span class="signature">({number{, row, getValue)</span><span class="type-signature"></span></h4>
     
 
     
@@ -9435,6 +9415,24 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     </thead>
 
     <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>{number{</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">blockId which block this is.</td>
+        </tr>
+
     
 
         <tr>
@@ -9519,7 +9517,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line222">line 222</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line224">line 224</a>
     </li></ul></dd>
     
 
@@ -9565,7 +9563,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbToNumber"><span class="type-signature"></span>tbToNumber<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbToDatetime"><span class="type-signature"></span>tbToDatetime<span class="signature">({number{, row, getValue)</span><span class="type-signature"></span></h4>
     
 
     
@@ -9573,7 +9571,195 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
 
 
 <div class="description">
-    Convert row value to number.
+    Convert row value to datetime.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>{number{</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">blockId which block this is.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line235">line 235</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Date object.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToDay"><span class="type-signature"></span>tbToDay<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Extract day of month from value.
 </div>
 
 
@@ -9689,7 +9875,705 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line232">line 232</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line357">line 357</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Day of month as number.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToHours"><span class="type-signature"></span>tbToHours<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Extract hours from date value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line383">line 383</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Hours portion of value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToMinutes"><span class="type-signature"></span>tbToMinutes<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Extract minutes from date value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line396">line 396</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Minutes portion of value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToMonth"><span class="type-signature"></span>tbToMonth<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Extract month from value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line344">line 344</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Month as number.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToNumber"><span class="type-signature"></span>tbToNumber<span class="signature">({number{, row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Convert row value to number.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>{number{</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">blockId which block this is.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line250">line 250</a>
     </li></ul></dd>
     
 
@@ -9735,7 +10619,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
 
     
-    <h4 class="name" id="tbToString"><span class="type-signature"></span>tbToString<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="tbToSeconds"><span class="type-signature"></span>tbToSeconds<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
     
 
     
@@ -9743,7 +10627,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
 
 
 <div class="description">
-    Convert row value to string.
+    Extract seconds from date value.
 </div>
 
 
@@ -9859,7 +10743,195 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line249">line 249</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line409">line 409</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Seconds portion of value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToString"><span class="type-signature"></span>tbToString<span class="signature">({number{, row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Convert row value to string.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>{number{</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">blockId which block this is.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line268">line 268</a>
     </li></ul></dd>
     
 
@@ -9889,6 +10961,176 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
         
 <div class="param-desc">
     String value.
+</div>
+
+
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="tbToWeekDay"><span class="type-signature"></span>tbToWeekDay<span class="signature">(row, getValue)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Extract day of week from value.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>row</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Row containing values.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>getValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">How to get desired value.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line370">line 370</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Day of month as number.
 </div>
 
 
@@ -10019,7 +11261,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line117">line 117</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -10156,7 +11398,7 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line205">line 205</a>
+        <a href="tidyblocks_tidyblocks.js.html">tidyblocks/tidyblocks.js</a>, <a href="tidyblocks_tidyblocks.js.html#line206">line 206</a>
     </li></ul></dd>
     
 
@@ -10224,13 +11466,13 @@ As a side effect, sets the global TidyBlocksWorkspace variable for later use.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assert_hasKey">assert_hasKey</a></li><li><a href="global.html#assert_includes">assert_includes</a></li><li><a href="global.html#assert_startsWith">assert_startsWith</a></li><li><a href="global.html#Blockly">Blockly</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#createValidator">createValidator</a></li><li><a href="global.html#csv2TidyBlocksDataFrame">csv2TidyBlocksDataFrame</a></li><li><a href="global.html#deleteBlock">deleteBlock</a></li><li><a href="global.html#displayError">displayError</a></li><li><a href="global.html#displayPlot">displayPlot</a></li><li><a href="global.html#displayTab">displayTab</a></li><li><a href="global.html#displayTable">displayTable</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#readCSV">readCSV</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#resetDisplay">resetDisplay</a></li><li><a href="global.html#Result">Result</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#tbVariance">tbVariance</a></li><li><a href="global.html#TERMINATOR">TERMINATOR</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BlocklyClass.html">BlocklyClass</a></li><li><a href="GuiEnvironment.html">GuiEnvironment</a></li><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TestEnvironment.html">TestEnvironment</a></li><li><a href="TidyBlocksDataFrame.html">TidyBlocksDataFrame</a></li><li><a href="TidyBlocksManagerClass.html">TidyBlocksManagerClass</a></li></ul><h3>Global</h3><ul><li><a href="global.html#assert_hasKey">assert_hasKey</a></li><li><a href="global.html#assert_includes">assert_includes</a></li><li><a href="global.html#assert_match">assert_match</a></li><li><a href="global.html#assert_startsWith">assert_startsWith</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#createValidator">createValidator</a></li><li><a href="global.html#csv2TidyBlocksDataFrame">csv2TidyBlocksDataFrame</a></li><li><a href="global.html#deleteBlock">deleteBlock</a></li><li><a href="global.html#displayTab">displayTab</a></li><li><a href="global.html#evalCode">evalCode</a></li><li><a href="global.html#findLineByLeastSquares">findLineByLeastSquares</a></li><li><a href="global.html#fixCode">fixCode</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadBlockFiles">loadBlockFiles</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#makeBlock">makeBlock</a></li><li><a href="global.html#registerPrefix">registerPrefix</a></li><li><a href="global.html#registerSuffix">registerSuffix</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbAssertNumber">tbAssertNumber</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIfElse">tbIfElse</a></li><li><a href="global.html#tbIsBoolean">tbIsBoolean</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbIsString">tbIsString</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToDatetime">tbToDatetime</a></li><li><a href="global.html#tbToDay">tbToDay</a></li><li><a href="global.html#tbToHours">tbToHours</a></li><li><a href="global.html#tbToMinutes">tbToMinutes</a></li><li><a href="global.html#tbToMonth">tbToMonth</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToSeconds">tbToSeconds</a></li><li><a href="global.html#tbToString">tbToString</a></li><li><a href="global.html#tbToWeekDay">tbToWeekDay</a></li><li><a href="global.html#tbTypeEqual">tbTypeEqual</a></li><li><a href="global.html#tbVariance">tbVariance</a></li><li><a href="global.html#TIDYBLOCKS_START">TIDYBLOCKS_START</a></li><li><a href="global.html#TidyBlocksManager">TidyBlocksManager</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Sep 05 2019 20:42:06 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Thu Sep 12 2019 16:24:03 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
