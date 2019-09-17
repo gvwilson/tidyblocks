@@ -749,6 +749,9 @@ describe('check that grouping and summarization work', () => {
                      COLUMN: 'first'}),
           makeBlock('transform_summarize_item',
                     {FUNC: 'tbMean',
+                     COLUMN: 'second'}),
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMax',
                      COLUMN: 'second'})
         ]})
     ]
@@ -759,6 +762,8 @@ describe('check that grouping and summarization work', () => {
            `Expected a min of 1, not ${env.table[0].first}`)
     assert(env.table[0].second_mean == 150,
            `Expected a mean of 150, not ${env.table[0].second}`)
+    assert(env.table[0].second_max == 200,
+           `Expected a max of 200, not ${env.table[0].second}`)
     done()
   })
 
