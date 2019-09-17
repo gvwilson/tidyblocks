@@ -124,101 +124,119 @@ const tbTypeEqual = (left, right) => {
 
 /**
  * Count number of values (colname property used in summarization).
- * @param {Array} values The values to be counted.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Number of values.
  */
-const tbCount = (values) => {
-  return values.length
+const tbCount = (rows, col) => {
+  return rows.length
 }
-tbCount.colname = 'count'
+tbCount.colName = 'count'
 
 /**
  * Find maximum value (colname property used in summarization).
- * @param {Array} values The values to be searched.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Maximum value.
  */
-const tbMax = (values) => {
-  return (values.length === 0)
+const tbMax = (rows, col) => {
+  return (rows.length === 0)
     ? NaN
-    : values.reduce((soFar, val) => (val > soFar) ? val : soFar)
+    : rows.reduce((soFar, row) => (row[col] > soFar) ? row[col] : soFar,
+                  rows[0][col])
 }
-tbMax.colname = 'max'
+tbMax.colName = 'max'
 
 /**
  * Find mean value (colname property used in summarization).
- * @param {Array} values The values to be averaged.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Mean value.
  */
-const tbMean = (values) => {
-  return (values.length === 0)
+const tbMean = (rows, col) => {
+  return (rows.length === 0)
     ? NaN
-    : values.reduce((total, num) => total + num, 0) / values.length
+    : rows.reduce((total, row) => total + row[col], 0) / rows.length
 }
 tbMean.colName = 'mean'
 
 /**
  * Find median value (colname property used in summarization).
- * @param {Array} values The values to be searched.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Median value.
  */
-const tbMedian = (values) => {
-  if (values.length === 0) {
+const tbMedian = (rows, col) => {
+  if (rows.length === 0) {
     return NaN
   }
   else {
-    const temp = [...values]
-    temp.sort()
-    return temp[Math.floor(temp.length / 2)]
+    const temp = [...rows]
+    rows.sort((left, right) => {
+      if (left[col] < right[col]) {
+        return -1
+      }
+      else if (left[col] > right[col]) {
+        return 1
+      }
+      return 0
+    })
+    return temp[Math.floor(rows.length / 2)][col]
   }
 }
-tbMedian.colname = 'median'
+tbMedian.colName = 'median'
 
 /**
  * Find minimum value (colname property used in summarization).
- * @param {Array} values The values to be searched.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Minimum value.
  */
-const tbMin = (values) => {
-  return (values.length === 0)
+const tbMin = (rows, col) => {
+  return (rows.length === 0)
     ? NaN
-    : values.reduce((soFar, val) => (val < soFar) ? val : soFar)
+    : rows.reduce((soFar, row) => (row[col] < soFar) ? row[col] : soFar,
+                 rows[0][col])
 }
-tbMin.colname = 'min'
+tbMin.colName = 'min'
 
 /**
  * Find standard deviation (colname property used in summarization).
- * @param {Array} values The values to be summarized.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Standard deviation.
  */
-const tbStd = (values) => {
-  return Math.sqrt(tbVariance(values))
+const tbStd = (rows, col) => {
+  return Math.sqrt(tbVariance(rows, col))
 }
-tbStd.colname = 'std'
+tbStd.colName = 'std'
 
 /**
  * Find sum (colname property used in summarization).
- * @param {Array} values The values to be added.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Total.
  */
-const tbSum = (values) => {
-  return values.reduce((total, num) => total + num, 0)
+const tbSum = (rows, col) => {
+  return rows.reduce((total, row) => total + row[col], 0)
 }
-tbSum.colname = 'sum'
+tbSum.colName = 'sum'
 
 /**
  * Find variance (colname property used in summarization).
- * @param {Array} values The values to be summarized.
+ * @param {Array} rows The rows containing values.
+ * @param {string} col The column of interest.
  * @return {number} Variance.
  */
-const tbVariance = (values) => {
-  if (! values) {
+const tbVariance = (rows, col) => {
+  if (rows.length === 0) {
     return NaN
   }
-  const m = tbMean(values)
-  const squareDiffs = values.map(v => (v - m)**2)
-  return tbMean(squareDiffs)
+  const m = tbMean(rows, col)
+  const squareDiffs = rows.map(row => ({col: (row[col] - m) ** 2}))
+  return tbMean(squareDiffs, col)
 }
-tbVariance.colname = 'variance'
+tbVariance.colName = 'variance'
 
 //--------------------------------------------------------------------------------
 
@@ -693,7 +711,6 @@ class TidyBlocksDataFrame {
    */
   constructor (values) {
     this.data = values
-    this.columns = Object.keys(values[0])
   }
 
   //------------------------------------------------------------------------------
@@ -815,69 +832,79 @@ class TidyBlocksDataFrame {
       return new TidyBlocksDataFrame([])
     }
 
-    // Handle each summarization on its own.
-    const result = []
-    operations.forEach(([subBlockId, func, column]) => {
-      const newColumnName = `${func.name}_${column}` // FIXME: check for uniqueness (?)
+    // Put data into groups.
+    const [wasGrouped, groups] = this._groupify()
+
+    // Summarize by group and function.
+    const summarized = {}
+    operations.forEach(([subBlockId, func, sourceColumn]) => {
       if (subBlockId === undefined) {
-        subBlockId = blockId // FIXME: the initial sub-block doesn't have an ID
+        subBlockId = blockId
       }
-      this._summarizeOneColumn(subBlockId, result, func, column, result, newColumnName)
+      tbAssert(sourceColumn,
+               `[block ${subBlockId}] no column specified for summarize`)
+      tbAssert(this.hasColumns(sourceColumn),
+               `[block ${subBlockId}] unknown column "${sourceColumn}" in summarize`)
+      const newColumn = this._makeColumnName(summarized, func.colName, sourceColumn)
+      summarized[newColumn] = groups.map(group => func(group, sourceColumn))
+    })
+
+    // Pivot.
+    const result = []
+    groups.forEach((group, i) => {
+      const row = {}
+      if (wasGrouped) {
+        row._group_ = i
+      }
+      result.push(row)
+    })
+    Object.keys(summarized).forEach(newColumn => {
+      groups.forEach((group, i) => {
+        result[i][newColumn] = summarized[newColumn][i]
+      })
     })
 
     // Create new dataframe.
     return new TidyBlocksDataFrame(result)
   }
 
-  /**
-   * Summarize a single column with a single function (internal use only).
-   * @param {function} func Summarization function.
-   * @param {string} column Existing column name.
-   * @param {Object[]} result Where to accumulate results.
-   * @param {string} newColumnName New column name.
-   * @return A vector of values.
-   */
-  _summarizeOneColumn (blockId, result, func, column, newColumnName) {
-
-    // Check column access.
-    tbAssert(column,
-             `[block ${blockId}] no column specified for summarize`)
-    tbAssert(this.hasColumns(column),
-             `[block ${blockId}] unknown column(s) [${column}] in summarize`)
-
-    // Aggregate the whole thing?
-    if (! this.hasColumns('_group_')) {
-      const values = this.getColumn(column)
-      const record = (result.length === 0) ? {} : result[0]
-      record[newColumnName] = func(values)
-      result.push(record)
-    }
-
-    // Aggregate by groups
-    else {
-      /****
-       * FIXME: implement this
-      // _group_ values in column by index.
-      const grouped = new Map()
+  //
+  // Put the data into groups.
+  //
+  _groupify () {
+    const wasGrouped = this.hasColumns('_group_')
+    const groups = []
+    if (wasGrouped) {
       this.data.forEach(row => {
-        if (grouped.has(row._group_)) {
-          grouped.get(row._group_).push(row[column])
+        if (row._group_ < groups.length) {
+          groups[row._group_].push(row)
         }
         else {
-          grouped.set(row._group_, [row[column]])
+          groups.push([row])
         }
       })
-
-      // Operate by group.
-      grouped.forEach((values, group) => {
-        const record = {}
-        record['_group_'] = group
-        record[column] = func(values)
-        result.push(record)
-      })
-      *
-      ****/
     }
+    else {
+      groups.push(this.data)
+    }
+    return [wasGrouped, groups]
+  }
+
+  //
+  // Make a unique new column name.
+  //
+  _makeColumnName (soFar, funcName, sourceColumn) {
+    let result = `${sourceColumn}_${funcName}`
+    if (result in soFar) {
+      let i = 1
+      let temp = `${result}_${i}`
+      while (temp in soFar) {
+        i += 1
+        temp = `${result}_${i}`
+      }
+      result = temp
+    }
+    return result
   }
 
   /**

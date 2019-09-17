@@ -35,6 +35,8 @@ Blockly.defineBlocksWithJsonArray([
   } 
 ])
 
+/** NOT FOR TESTING **/
+
 Blockly.Constants.Loops.IN_SUMMARIZE_CHECK_MIXIN = {
   /**
    * List of block types allowed and thus do not need warnings.
@@ -49,31 +51,31 @@ Blockly.Constants.Loops.IN_SUMMARIZE_CHECK_MIXIN = {
    */
   onchange: function(/* e */) {
     if (!this.workspace.isDragging || this.workspace.isDragging()) {
-      return;  // Don't change state at the start of a drag.
+      return  // Don't change state at the start of a drag.
     }
-    var legal = false;
+    var legal = false
     // Is the block inside a Summarize
-    var block = this;
+    var block = this
     do {
       if (this.SUMMARIZE.indexOf(block.type) != -1) {
-        legal = true;
-        break;
+        legal = true
+        break
       }
-      block = block.getSurroundParent();
-    } while (block);
+      block = block.getSurroundParent()
+    } while (block)
     if (legal) {
-      this.setWarningText(null);
+      this.setWarningText(null)
       if (!this.isInFlyout) {
-        this.setDisabled(false);
+        this.setDisabled(false)
       }
     } else {
-      this.setWarningText('Warning: This block may only be used with the Summarize block');
+      this.setWarningText('Warning: This block may only be used with the Summarize block')
       if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setDisabled(true);
+        this.setDisabled(true)
       }
     }
   }
-};
+}
 
 Blockly.Extensions.registerMixin('check_transform_summarize',
-    Blockly.Constants.Loops.IN_SUMMARIZE_CHECK_MIXIN);
+    Blockly.Constants.Loops.IN_SUMMARIZE_CHECK_MIXIN)

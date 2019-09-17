@@ -291,89 +291,6 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('summarizes an entire column using summation', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {FUNC: 'tbSum',
-         COLUMN: 'red'})
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 'Expected one row of output')
-    assert.equal(Object.keys(env.table[0]).length, 1,
-                 'Expected a single column of output')
-    assert.equal(env.table[0].red, 1148,
-                 'Incorrect sum')
-    done()
-  })
-
-  it('groups values by a single column', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'blue'})
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
-                 'Wrong number of rows in output')
-    assert.equal(env.table.filter(row => (row._group_ === 0)).length, 6,
-                 'Wrong number of rows for index 0')
-    assert.equal(env.table.filter(row => (row._group_ === 1)).length, 4,
-                 'Wrong number of rows for index 255')
-    assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
-                 'Wrong number of rows for index 128')
-    done()
-  })
-
-  it('ungroups values', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'blue'}),
-      makeBlock(
-        'transform_ungroup',
-        {})
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
-                 'Table has the wrong number of rows')
-    assert(!('_group_' in env.table[0]),
-           'Table still has group index column')
-    done()
-  })
-
-  it('groups by one column and averages another', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'blue'}),
-      makeBlock(
-        'transform_summarize',
-        {FUNC: 'tbMean',
-         COLUMN: 'green'})
-    ]
-    const env = evalCode(pipeline)
-    assert.deepEqual(env.table,
-                     [{_group_: 0, green: 106.33333333333333},
-                      {_group_: 1, green: 127.5},
-                      {_group_: 2, green: 0}],
-                     'Incorrect averaging')
-    done()
-  })
-
   it('runs two pipelines and joins their results', (done) => {
     const pipeline = [
       // Left data stream.
@@ -642,25 +559,7 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('calculates the maximum value correct', (done) => {
-    const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {FUNC: 'tbMax',
-         COLUMN: 'second'})
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table.length == 1,
-           `Expect a single row of output`)
-    assert(env.table[0].second == 200,
-           `Expected a max of 200, not ${env.table[0].second}`)
-    done()
-  })
-
-  it('handles empty tables correctly when calculating maxima', (done) => {
+  it('handles empty tables correctly when filtering', (done) => {
     const pipeline = [
       makeBlock(
         'data_colors',
@@ -675,11 +574,7 @@ describe('execute blocks for entire pipelines', () => {
              {COLUMN: 'red'}),
            RIGHT: makeBlock(
              'value_number',
-             {VALUE: 0})})}),
-      makeBlock(
-        'transform_summarize',
-        {FUNC: 'tbMax',
-         COLUMN: 'red'})
+             {VALUE: 0})})})
     ]
     const env = evalCode(pipeline)
     assert(env.table.length == 0,
@@ -687,7 +582,7 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('handles simple conditional correctly', (done) => {
+  it('handles a simple conditional correctly', (done) => {
     const pipeline = [
       makeBlock(
         'data_double',
@@ -720,6 +615,180 @@ describe('execute blocks for entire pipelines', () => {
                  `Expected first row to be equal`)
     assert.equal(env.table[1].result, 'unequal',
                  `Expected first row to be unequal`)
+    done()
+  })
+
+})
+
+describe('check that grouping and summarization work', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('summarizes an entire column using summation', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbSum',
+                     COLUMN: 'red'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 'Expected one row of output')
+    assert.equal(Object.keys(env.table[0]).length, 1,
+                 'Expected a single column of output')
+    assert.equal(env.table[0].red_sum, 1148,
+                 'Incorrect sum')
+    done()
+  })
+
+  it('groups values by a single column', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_groupBy',
+        {COLUMN: 'blue'})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
+                 'Wrong number of rows in output')
+    assert.equal(env.table.filter(row => (row._group_ === 0)).length, 6,
+                 'Wrong number of rows for index 0')
+    assert.equal(env.table.filter(row => (row._group_ === 1)).length, 4,
+                 'Wrong number of rows for index 255')
+    assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
+                 'Wrong number of rows for index 128')
+    done()
+  })
+
+  it('ungroups values', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_groupBy',
+        {COLUMN: 'blue'}),
+      makeBlock(
+        'transform_ungroup',
+        {})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
+                 'Table has the wrong number of rows')
+    assert(!('_group_' in env.table[0]),
+           'Table still has group index column')
+    done()
+  })
+
+  it('groups by one column and averages another', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_groupBy',
+        {COLUMN: 'blue'}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMean',
+                     COLUMN: 'green'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.deepEqual(env.table,
+                     [{_group_: 0, green_mean: 106.33333333333333},
+                      {_group_: 1, green_mean: 127.5},
+                      {_group_: 2, green_mean: 0}],
+                     'Incorrect averaging')
+    done()
+  })
+
+  it('calculates the maximum value correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMax',
+                     COLUMN: 'second'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 1,
+           `Expect a single row of output`)
+    assert(env.table[0].second_max == 200,
+           `Expected a max of 200, not ${env.table[0].second}`)
+    done()
+  })
+
+  it('calculates multiple summary values correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_double',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMin',
+                     COLUMN: 'first'}),
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMean',
+                     COLUMN: 'second'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 1,
+           `Expect a single row of output`)
+    assert(env.table[0].first_min == 1,
+           `Expected a min of 1, not ${env.table[0].first}`)
+    assert(env.table[0].second_mean == 150,
+           `Expected a mean of 150, not ${env.table[0].second}`)
+    done()
+  })
+
+  it('handles empty tables correctly when calculating maxima', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_filter',
+        {TEST: makeBlock(
+          'value_compare',
+          {OP: 'tbLt',
+           LEFT: makeBlock(
+             'value_column',
+             {COLUMN: 'red'}),
+           RIGHT: makeBlock(
+             'value_number',
+             {VALUE: 0})})}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMax',
+                     COLUMN: 'red'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 0,
+           `Expected empty output`)
     done()
   })
 

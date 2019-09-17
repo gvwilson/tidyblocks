@@ -2,6 +2,7 @@ const assert = require('assert')
 const Papa = require('papaparse')
 
 const {
+  GROUP,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -132,13 +133,13 @@ describe('blocks are given IDs and can be looked up', () => {
 
 })
 
-describe('blocks return proper this.columns', () => {
+describe('blocks return proper columns', () => {
 
   beforeEach(() => {
     TidyBlocksManager.reset()
   })
 
-  it('groupBy returns additional _group_ column', (done) => {
+  it('adds additional _group_ column when doing groupBy', (done) => {
     const pipeline = [
       makeBlock( // because the pipeline has to start with a data block
         'data_single',
@@ -148,76 +149,68 @@ describe('blocks return proper this.columns', () => {
         {COLUMN: 'first'})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('_group_')) // check for _group_ column
+    assert('_group_' in env.table[0])
     done()
   })
 
-  it('ungroup removes _group_ column', (done) => {
+  it('removes _group_ columns when doing ungroup', (done) => {
     const pipeline = [
       makeBlock( // because the pipeline has to start with a data block
         'data_single',
         {}),
       makeBlock(
-        'transform_groupBy', // add the _group_ column
+        'transform_groupBy',
         {COLUMN: 'first'}),
       makeBlock(
-        'transform_ungroup', // remove _group_ column
+        'transform_ungroup',
         {})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('_group_') === false) // check _group_ column removed
+    assert(!('_group_' in env.table[0]))
     done()
   })
 
-  // FIXME evaluating to falsey when true
-  it('sort this.columns unchanged', (done) => {
-    // original dataframe
-    const pipeline_iris = [
+  it('does not change columns when sorting', (done) => {
+    const pipeline = [
       makeBlock(
       'data_iris',
       {})
     ]
-    // sorted dataframe
-    const pipeline_sort = [
-      makeBlock(
-        'data_iris',
-        {}),
+    const env_iris = evalCode(pipeline)
+
+    pipeline.push(
       makeBlock(
         'transform_sort',
         {MULTIPLE_COLUMNS: 'Sepal_Length',
          DESCENDING: 'false'})
-    ]
-    const env_iris = evalCode(pipeline_iris)
-    const env_sort = evalCode(pipeline_sort)
-    // console.log(Object.keys(env_iris.table[0]))
-    // console.log(Object.keys(env_sort.table[0]))
-    // compare pipeline columns
-    assert(Object.keys(env_iris.table[0]) == Object.keys(env_sort.table[0]))
+    )
+    const env_sort = evalCode(pipeline)
+    assert.deepEqual(Object.keys(env_iris.table[0]),
+                     Object.keys(env_sort.table[0]),
+                     `Column names are not the same after sorting`)
     done()
   })
 
-  // FIXME Also evaluating to falsy when true!
-  it('select returns only selected column', (done) => {
+  it('returns only the selected column', (done) => {
     const pipeline = [
       makeBlock(
         'data_iris',
         {}),
       makeBlock(
         'transform_select',
-        {MULTIPLE_COLUMNS: ['Sepal_Length']})
+        {MULTIPLE_COLUMNS: 'Sepal_Length'})
     ]
     const env = evalCode(pipeline)
-    console.log(env)
-    assert(Object.keys(env.table[0]) === [ 'Sepal_Length' ])
+    assert.deepEqual(Object.keys(env.table[0]),
+                     ['Sepal_Length'],
+                     `Select does not return correct columns`)
     done()
   })
 
-  // FIXME why doesn't this work
-  it('mutate adds newly named column'), (done) => {
+  it('adds new column when mutating', (done) => {
     const pipeline = [
       makeBlock('data_single',
       {}),
-      // make mutate block with child block value_number = 0
       makeBlock(
         'transform_mutate',
         {COLUMN: 'newColumnName',
@@ -226,9 +219,9 @@ describe('blocks return proper this.columns', () => {
            {VALUE: 0})})
     ]
     const env = evalCode(pipeline)
-    assert(env.table[0].hasOwnProperty('newColumnName'))
+    assert('newColumnName' in env.table[0])
     done()
-  }
+  })
 
 })
 
