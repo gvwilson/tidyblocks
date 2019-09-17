@@ -105,6 +105,10 @@ class BlocklyClass {
 
       valueToCode: (block, field, order) => {
         return block[field]
+      },
+
+      statementToCode: (block, field) => {
+        return block[field].join('')
       }
     }
 
@@ -217,6 +221,13 @@ const loadBlockFiles = () => {
     .map(node => node.attributes.src)
     .filter(path => !path.includes('/r/'))
     .map(path => fs.readFileSync(path, 'utf-8'))
+    .map(src => {
+      const start = src.indexOf('/** NOT FOR TESTING **/')
+      if (start >= 0) {
+        src = src.substring(0, start)
+      }
+      return src
+    })
     .forEach(src => eval(src))
 }
 

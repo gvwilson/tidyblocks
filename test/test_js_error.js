@@ -223,8 +223,11 @@ describe('raises errors at the right times', () => {
         {}),
       makeBlock(
         'transform_summarize',
-        {FUNC: 'tbSum',
-         COLUMN: ''})
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMean',
+                     COLUMN: ''})
+        ]})
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no column specified for summarize/,
@@ -239,11 +242,14 @@ describe('raises errors at the right times', () => {
         {}),
       makeBlock(
         'transform_summarize',
-        {FUNC: 'tbSum',
-         COLUMN: 'nonexistent'})
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMean',
+                     COLUMN: 'nonexistent'})
+        ]})
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in summarize/,
+    assert_match(env.error, /\[block \d+\] unknown column ".+" in summarize/,
                  `Expected an error message when summarizing with nonexistent columns`)
     done()
   })
