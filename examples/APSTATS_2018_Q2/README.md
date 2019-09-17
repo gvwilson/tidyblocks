@@ -33,6 +33,7 @@ would respond to the question.
 
 # TidyBlocks Answer 
 
-Using data in data/APSTATS_2018_Q1
-
-![](screenshot.png)
+### (a)
+![](APSTATS_2018_Q2_A.png)
+### (c)
+![](APSTATS_2018_Q2_C.png)
