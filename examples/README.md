@@ -17,6 +17,7 @@ When submitting a new example each folder should:
 - XML FILE 
 So the workspace can be uploaded by others
 ![](Download_XML.png)
+
 - PNG Screenshot
 ![](screenshot.png)
 
@@ -28,8 +29,8 @@ https://apstudents.collegeboard.org/courses/ap-statistics/free-response-question
 | Question  | Completed |
 | -------- | ---- |
 | [2018_Q1](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q1)  | Needs regression block to be answered|
-| 2018_Q2  | Done |
-| 2018_Q3  | C: Needs binomial block to be answered |
+| [2018_Q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q2)  | Done |
+| [2018_Q3](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q3)  | C: Needs binomial block to be answered |
 | 2018_Q4  | TODO |
 | 2018_Q5  | TODO |
 | 2018_Q6  | TODO |
