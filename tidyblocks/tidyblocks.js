@@ -495,6 +495,13 @@ const tbToSeconds = (row, getValue) => {
 //--------------------------------------------------------------------------------
 
 /**
+ * Numeric value if legal or missing value if not.
+ */
+const safeValue = (value) => {
+  return isFinite(value) ? value : MISSING
+}
+
+/**
  * Get a column's value from a row, failing if the column doesn't exist.
  * @param {Object} row The row to look in.
  * @param {string} column The field to look up.
@@ -519,7 +526,7 @@ const tbAdd = (blockId, row, getLeft, getRight) => {
   const right = tbAssertNumber(getRight(row))
   return ((left === MISSING) || (right === MISSING))
     ? MISSING
-    : (left + right)
+    : safeValue(left + right)
 }
 
 /**
@@ -535,7 +542,7 @@ const tbDiv = (blockId, row, getLeft, getRight) => {
   const right = tbAssertNumber(getRight(row))
   return ((left === MISSING) || (right === MISSING))
     ? MISSING
-    : (left / right)
+    : safeValue(left / right)
 }
 
 /**
@@ -551,7 +558,7 @@ const tbExp = (blockId, row, getLeft, getRight) => {
   const right = tbAssertNumber(getRight(row))
   return ((left === MISSING) || (right === MISSING))
     ? MISSING
-    : (left ** right)
+    : safeValue(left ** right)
 }
 
 /**
@@ -567,7 +574,7 @@ const tbMod = (blockId, row, getLeft, getRight) => {
   const right = tbAssertNumber(getRight(row))
   return ((left === MISSING) || (right === MISSING))
     ? MISSING
-    : (left % right)
+    : safeValue(left % right)
 }
 
 /**
@@ -583,7 +590,7 @@ const tbMul = (blockId, row, getLeft, getRight) => {
   const right = tbAssertNumber(getRight(row))
   return ((left === MISSING) || (right === MISSING))
     ? MISSING
-    : (left * right)
+    : safeValue(left * right)
 }
 
 /**
@@ -611,7 +618,7 @@ const tbSub = (blockId, row, getLeft, getRight) => {
   const right = tbAssertNumber(getRight(row))
   return ((left === MISSING) || (right === MISSING))
     ? MISSING
-    : (left - right)
+    : safeValue(left - right)
 }
 
 //--------------------------------------------------------------------------------
