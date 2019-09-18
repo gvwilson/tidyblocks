@@ -15,6 +15,8 @@ Blockly.defineBlocksWithJsonArray([
         name: 'TYPE',
         options: [
           ['boolean', 'tbIsBoolean'],
+          ['date', 'tbIsDate'],
+          ['missing', 'tbIsMissing'],
           ['number', 'tbIsNumber'],
           ['string', 'tbIsString']
         ]
@@ -23,7 +25,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     output: 'Boolean',
     style: 'value_blocks',
-    tooltip: 'check the datatype of a value',
+    tooltip: 'check the type of a value',
     helpUrl: ''
   }
 ])

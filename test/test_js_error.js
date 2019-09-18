@@ -1,11 +1,13 @@
 const assert = require('assert')
 
 const {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_approxEquals,
   assert_hasKey,
   assert_includes,
   assert_match,

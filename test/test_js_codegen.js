@@ -1,11 +1,13 @@
 const assert = require('assert')
 
 const {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_approxEquals,
   assert_hasKey,
   assert_includes,
   assert_match,
@@ -34,10 +36,10 @@ describe('generate code for single blocks', () => {
       'data_colors',
       {})
     const code = generateCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
-                    'pipeline is not registered')
-    assert_includes(code, 'new TidyBlocksDataFrame',
-                    'pipeline does not create dataframe')
+    assert_includes(code, 'readCSV',
+                    'pipeline does not read CSV')
+    assert_includes(code, 'colors.csv',
+                    'pipeline does not read color data')
     done()
   })
 
