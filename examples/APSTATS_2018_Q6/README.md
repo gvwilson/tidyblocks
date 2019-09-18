@@ -1,25 +1,49 @@
 # 2018 Section II Part A 
-https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q3.pdf
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q6.pdf
 
-# Question 3
+# Question 6
 
-Approximately 3.5% of all children born in a certain region are from multiple births
-(that is, twins, triplets, etc.) Of the children born in the region who are from multiple births,
-22% are left-handed. Of the children born in the region who are from single birthdays, 11% are left-handed
+Systolic blood pressure is the amount of pressure that blood exerts on blood vessels while the heart is beating.
+The mean systolic blood pressure for people in the United States is reported to be 122 millimeters of mercury
+(mmHg) with a standard deviation of 15 mmHg.
 
-#### (a) What is the probability that a randomly selected child born in the region is left-handed
+The wellness department of a large corporation is investigating whether the mean systolic blood pressure of
+its employees is greater than the reported national mean. A random sample of 100 employees will be selected,
+the systolic blood pressure of each employee in the sample will be measured, and the sample mean will be
+calculated.
 
-#### (b) What is the probability that a randomly selected child born in the region is a child from a multiple birth, 
-given that the child selected is left-handed?
+Let µ represent the mean systolic blood pressure of all employees at the corporation. Consider the following
+hypotheses: 
 
-#### (c) A random sample of 20 children born in the region will be selected. 
-What is the probability that the sample will have at least 3 children who are left-handed?
+H_0: µ = 122
+H_0: µ > 122.
+
+#### (a)  Describe a Type II error in the context of the hypothesis test
+#### (b) Assume that er, the standard deviation of the systolic blood pressure of all employees at the corporation, is
+15 mmHg. If µ = 122, the sampling distribution of x for samples of size 100 is approximately normal with
+a mean of 122 mmHg and a standard deviation of 1.5 mmHg. What values of the sample mean x_bar would
+represent sufficient evidence to reject the null hypothesis at the signifi.cance level of a = 0.05 ? 
+
+The actual mean systolic blood pressure of all employees at the corporation is 15 mmHg, not the hypothesized
+value of 122 mmHg, and the standard deviation is 15mmHg. 
+
+#### (c) Using the actual mean of 125 mmHg !illd the results from part (b), determine the probability that the null
+hypothesis will be rejected.
+
+#### (d) What is the statistical term for the probability found in part (c)?
+
+#### (e) Suppose the size of the sample of employees to be selected is greater than 100. Would the probability of rejecting
+the null hypothesis be greater than, less than, or equal to the probability calculated in part (c)?
 
 # TidyBlocks Answer 
 
 #### (a)
-![](APSTATS_2018_Q3_A.png)
+**Theoretical, cannot answer with TidyBlocks**
 #### (b)
-![](APSTATS_2018_Q3_B.png)
+![](APSTATS_2018_Q6_B.png)
 #### (c)
-*Need Binomial Block*
+![](APSTATS_2018_Q6_C.png)
+#### (d)
+**Theoretical, cannot answer with TidyBlocks**
+#### (e)
+**Can we answer this with blocks? Create a workspace to play with different values?**
