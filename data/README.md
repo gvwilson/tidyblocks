@@ -96,3 +96,16 @@ Summary statistics on ACL surgery
 
 #### Source
 https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q4.pdf
+
+# APSTATS_2018_Q5
+
+Histogram data summarizing the teaching year for the teachers at two high schools
+
+* **Teaching_Year_** (numeric) First year teachers are recorded as 1, second year as two, and so on
+* **High_School_** (categorical) 
+
+4 columns, 2 rows
+
+#### Source
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q4.pdf
+
