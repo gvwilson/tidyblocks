@@ -337,6 +337,28 @@ const evalCode = (code) => {
   return environment
 }
 
+/**
+ * Create special-purpose blocks for testing.
+ */
+const createTestingBlocks = () => {
+
+  // "Missing value" block.
+  Blockly.defineBlocksWithJsonArray([
+    {
+      type: 'value_missing',
+      message0: 'missing',
+      args0: [],
+      inputsInline: true,
+      style: 'value_blocks'
+    }
+  ])
+  Blockly.JavaScript['value_missing'] = (block) => {
+    const order = Blockly.JavaScript.ORDER_NONE
+    const code = `(row) => MISSING`
+    return [code, order]
+  }
+}
+
 //
 // Exports.
 //
@@ -355,5 +377,6 @@ module.exports = {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  evalCode
+  evalCode,
+  createTestingBlocks
 }

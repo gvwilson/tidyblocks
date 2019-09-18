@@ -145,10 +145,10 @@ tbCount.colName = 'count'
  * @return {number} Maximum value.
  */
 const tbMax = (rows, col) => {
-  return (rows.length === 0)
-    ? MISSING
-    : rows.reduce((soFar, row) => (row[col] > soFar) ? row[col] : soFar,
-                  rows[0][col])
+  tbAssert(rows.length > 0,
+           `Cannot calculate max of empty data`)
+  return rows.reduce((soFar, row) => (row[col] > soFar) ? row[col] : soFar,
+                     rows[0][col])
 }
 tbMax.colName = 'max'
 
@@ -159,9 +159,9 @@ tbMax.colName = 'max'
  * @return {number} Mean value.
  */
 const tbMean = (rows, col) => {
-  return (rows.length === 0)
-    ? MISSING
-    : rows.reduce((total, row) => total + row[col], 0) / rows.length
+  tbAssert(rows.length > 0,
+           `Cannot calculate mean of empty data`)
+  return rows.reduce((total, row) => total + row[col], 0) / rows.length
 }
 tbMean.colName = 'mean'
 
@@ -172,22 +172,19 @@ tbMean.colName = 'mean'
  * @return {number} Median value.
  */
 const tbMedian = (rows, col) => {
-  if (rows.length === 0) {
-    return MISSING
-  }
-  else {
-    const temp = [...rows]
-    rows.sort((left, right) => {
-      if (left[col] < right[col]) {
-        return -1
-      }
-      else if (left[col] > right[col]) {
-        return 1
-      }
-      return 0
-    })
-    return temp[Math.floor(rows.length / 2)][col]
-  }
+  tbAssert(rows.length > 0,
+           `Cannot calculate median of empty data`)
+  const temp = [...rows]
+  rows.sort((left, right) => {
+    if (left[col] < right[col]) {
+      return -1
+    }
+    else if (left[col] > right[col]) {
+      return 1
+    }
+    return 0
+  })
+  return temp[Math.floor(rows.length / 2)][col]
 }
 tbMedian.colName = 'median'
 
@@ -198,10 +195,10 @@ tbMedian.colName = 'median'
  * @return {number} Minimum value.
  */
 const tbMin = (rows, col) => {
-  return (rows.length === 0)
-    ? MISSING
-    : rows.reduce((soFar, row) => (row[col] < soFar) ? row[col] : soFar,
-                 rows[0][col])
+  tbAssert(rows.length > 0,
+           `Cannot calculate min of empty data`)
+  return rows.reduce((soFar, row) => (row[col] < soFar) ? row[col] : soFar,
+                     rows[0][col])
 }
 tbMin.colName = 'min'
 
@@ -212,9 +209,8 @@ tbMin.colName = 'min'
  * @return {number} Standard deviation.
  */
 const tbStd = (rows, col) => {
-  if (rows.length === 0) {
-    return MISSING
-  }
+  tbAssert(rows.length > 0,
+           `Cannot calculate standard deviation of empty data`)
   const values = rows.map(row => row[col])
   return Math.sqrt(_variance(values))
 }
@@ -227,6 +223,8 @@ tbStd.colName = 'std'
  * @return {number} Total.
  */
 const tbSum = (rows, col) => {
+  tbAssert(rows.length > 0,
+           `Cannot calculate sum of empty data`)
   return rows.reduce((total, row) => total + row[col], 0)
 }
 tbSum.colName = 'sum'
@@ -238,9 +236,8 @@ tbSum.colName = 'sum'
  * @return {number} Variance.
  */
 const tbVariance = (rows, col) => {
-  if (rows.length === 0) {
-    return MISSING
-  }
+  tbAssert(rows.length > 0,
+           `Cannot calculate variance of empty data`)
   const values = rows.map(row => row[col])
   return _variance(values)
 }

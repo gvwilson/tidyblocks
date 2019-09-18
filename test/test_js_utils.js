@@ -16,7 +16,8 @@ const {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  evalCode
+  evalCode,
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -24,6 +25,7 @@ const {
 //
 before(() => {
   loadBlockFiles()
+  createTestingBlocks()
 })
 
 describe('CSV headers are sanitized correctly', () => {
@@ -220,8 +222,9 @@ describe('blocks return proper columns', () => {
 
   it('adds new column when mutating', (done) => {
     const pipeline = [
-      makeBlock('data_single',
-      {}),
+      makeBlock(
+        'data_single',
+        {}),
       makeBlock(
         'transform_mutate',
         {COLUMN: 'newColumnName',
@@ -230,7 +233,30 @@ describe('blocks return proper columns', () => {
            {VALUE: 0})})
     ]
     const env = evalCode(pipeline)
-    assert('newColumnName' in env.table[0])
+    assert_hasKey(env.table[0], 'newColumnName',
+                  `Table does not have expected column after mutate`)
+    done()
+  })
+
+  it('creates a missing value', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'na',
+         VALUE: makeBlock(
+           'value_missing',
+           {})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error when creating missing value`)
+    assert.equal(env.table.length, 1,
+                 `Expected one row of output`)
+    assert.equal(env.table[0].na, MISSING,
+                 `Expected missing value in new column`)
     done()
   })
 
