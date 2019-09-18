@@ -15,14 +15,16 @@ const {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  evalCode
+  evalCode,
+  createTestingBlocks
 } = require('./utils')
 
 //
-// Load blocks before running tests.
+// Load blocks and define testing blocks before running tests.
 //
 before(() => {
   loadBlockFiles()
+  createTestingBlocks()
 })
 
 describe('execute blocks for entire pipelines', () => {
@@ -928,41 +930,45 @@ describe('check that grouping and summarization work', () => {
   })
 
   it('calculates multiple summary values correctly', (done) => {
+    const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/updown.csv'
     const pipeline = [
       makeBlock(
-        'data_double',
-        {}),
+        'data_urlCSV',
+        {URL: filePath}),
       makeBlock(
         'transform_summarize',
         {COLUMN_FUNC_PAIR: [
           makeBlock('transform_summarize_item',
                     {FUNC: 'tbMin',
-                     COLUMN: 'first'}),
+                     COLUMN: 'value'}),
           makeBlock('transform_summarize_item',
                     {FUNC: 'tbMean',
-                     COLUMN: 'second'}),
+                     COLUMN: 'value'}),
           makeBlock('transform_summarize_item',
                     {FUNC: 'tbMax',
-                     COLUMN: 'second'})
+                     COLUMN: 'value'})
         ]})
     ]
     const env = evalCode(pipeline)
-    assert(env.table.length == 1,
-           `Expect a single row of output`)
-    assert(env.table[0].first_min == 1,
-           `Expected a min of 1, not ${env.table[0].first}`)
-    assert(env.table[0].second_mean == 150,
-           `Expected a mean of 150, not ${env.table[0].second}`)
-    assert(env.table[0].second_max == 200,
-           `Expected a max of 200, not ${env.table[0].second}`)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.table.length, 1,
+                 `Expect a single row of output`)
+    assert.equal(env.table[0].value_min, 20,
+                 `Expected a mean of 20, not ${env.table[0].value_min}`)
+    assert.equal(env.table[0].value_mean, 32.5,
+                 `Expected a mean of 32.5, not ${env.table[0].value_mean}`)
+    assert.equal(env.table[0].value_max, 45,
+                 `Expected a max of 45, not ${env.table[0].value_max}`)
     done()
   })
 
-  it('handles empty tables correctly when calculating maxima', (done) => {
+  it('handles empty tables correctly', (done) => {
     const pipeline = [
       makeBlock(
         'data_colors',
         {}),
+      // remove all rows
       makeBlock(
         'transform_filter',
         {TEST: makeBlock(
@@ -974,9 +980,16 @@ describe('check that grouping and summarization work', () => {
            RIGHT: makeBlock(
              'value_number',
              {VALUE: 0})})}),
+      // calculate various summaries
       makeBlock(
         'transform_summarize',
         {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMin',
+                     COLUMN: 'red'}),
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMedian',
+                     COLUMN: 'red'}),
           makeBlock('transform_summarize_item',
                     {FUNC: 'tbMax',
                      COLUMN: 'red'})
@@ -1055,6 +1068,76 @@ describe('check that grouping and summarization work', () => {
                         `Expect a variance of ${expected_variance}, not ${env.table[0].red_variance}`)
     assert_approxEquals(env.table[0].green_std, expected_std,
                         `Expect a standard deviation of ${expected_std}, not ${env.table[0].green_std}`)
+    done()
+  })
+
+  it('handles missing values for unary operators correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'negated',
+         VALUE: makeBlock(
+           'value_negate',
+           {VALUE: makeBlock(
+             'value_missing',
+             {})}
+         )}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'notted',
+         VALUE: makeBlock(
+           'value_not',
+           {VALUE: makeBlock(
+             'value_missing',
+             {})}
+         )})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expectd no error message`)
+    assert.equal(env.table[0].negated, MISSING,
+                 `Expected MISSING from negation, not ${env.table[0].negated}`)
+    assert.equal(env.table[0].notted, MISSING,
+                 `Expected MISSING from logical negation, not ${env.table[0].notted}`)
+    done()
+  })
+
+  it('handles missing values in binary arithmetic correctly', (done) => {
+    const allTests = [
+      ['addition', 'tbAdd'],
+      ['division', 'tbDiv'],
+      ['exponentiation', 'tbExp'],
+      ['modulus', 'tbMod'],
+      ['multiplication', 'tbMul'],
+      ['subtraction', 'tbSub']
+    ]
+    for (let [opName, funcName] of allTests) {
+      const pipeline = [
+        makeBlock(
+          'data_single',
+          {}),
+        makeBlock(
+          'transform_mutate',
+          {COLUMN: 'result',
+           VALUE: makeBlock(
+             'value_arithmetic',
+             {OP: funcName,
+              LEFT: makeBlock(
+                'value_column',
+                {COLUMN: 'first'}),
+              RIGHT: makeBlock(
+                'value_missing',
+                {})})})
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message`)
+      assert.equal(env.table[0].result, MISSING,
+                   `Expected missing value for ${opName}`)
+    }
     done()
   })
   

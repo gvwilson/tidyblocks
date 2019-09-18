@@ -15,7 +15,8 @@ const {
   loadBlockFiles,
   makeBlock,
   generateCode,
-  evalCode
+  evalCode,
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -23,6 +24,7 @@ const {
 //
 before(() => {
   loadBlockFiles()
+  createTestingBlocks()
 })
 
 describe('generate code for single blocks', () => {
