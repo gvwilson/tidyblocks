@@ -99,13 +99,13 @@ https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q4.pdf
 
 # APSTATS_2018_Q5
 
-Histogram data summarizing the teaching year for the teachers at two high schools
+Rough estimation of the histogram data summarizing the teaching year for the teachers at two high schools
 
-* **Teaching_Year_** (numeric) First year teachers are recorded as 1, second year as two, and so on
-* **High_School_** (categorical) 
+* **Teaching_Year** (numeric) First year teachers are recorded as 1, second year as two, and so on
+* **High_School** (categorical) 
 
-4 columns, 2 rows
+2 columns, 1388 rows
 
 #### Source
-https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q4.pdf
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q5.pdf
 

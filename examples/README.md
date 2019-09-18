@@ -34,8 +34,8 @@ https://apstudents.collegeboard.org/courses/ap-statistics/free-response-question
 | [2018_Q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q2)  | Done |
 | [2018_Q3](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q3)  | C: binomial block |
 | [2018_Q4](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q4)  | C: t-test block |
-| 2018_Q5  | TODO |
-| 2018_Q6  | TODO |
+| [2018_Q5](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q5)  | Done |
+| [2018_Q6](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q6)  | E: Help to Answer |
 | 2017_Q1  | TODO |
 | 2017_Q2  | TODO |
 | 2017_Q3  | TODO |
