@@ -30,10 +30,10 @@ https://apstudents.collegeboard.org/courses/ap-statistics/free-response-question
 
 | Question  | Completed |
 | -------- | ---- |
-| [2018_Q1](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q1)  | Needs regression block to be answered|
+| [2018_Q1](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q1)  | A + B: regression blocks |
 | [2018_Q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q2)  | Done |
-| [2018_Q3](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q3)  | C: Needs binomial block to be answered |
-| 2018_Q4  | TODO |
+| [2018_Q3](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q3)  | C: binomial block |
+| [2018_Q4](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q4)  | C: t-test block |
 | 2018_Q5  | TODO |
 | 2018_Q6  | TODO |
 | 2017_Q1  | TODO |
