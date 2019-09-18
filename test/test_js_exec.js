@@ -7,6 +7,7 @@ const {
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_approxEquals,
   assert_hasKey,
   assert_includes,
   assert_match,
@@ -849,11 +850,81 @@ describe('check that grouping and summarization work', () => {
         ]})
     ]
     const env = evalCode(pipeline)
-    assert(env.table.length == 0,
+    assert.equal(env.table.length, 0,
            `Expected empty output`)
     done()
   })
 
+  it('counts rows correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbCount',
+                     COLUMN: 'red'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.table[0].red_count, 11,
+                 `Expect a count of 11 rows, not ${env.table[0].red_count}`)
+    done()
+  })
+
+  it('calculates the median correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMedian',
+                     COLUMN: 'red'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.table[0].red_median, 0,
+                 `Expect a median of 0, not ${env.table[0].red_median}`)
+    done()
+  })
+
+  it('calculates the variance and standard deviation correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbVariance',
+                     COLUMN: 'red'}),
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbStd',
+                     COLUMN: 'green'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    const expected_variance = 14243.140495867769
+    const expected_std = 119.34462910356615
+    assert_approxEquals(env.table[0].red_variance, expected_variance,
+                        `Expect a variance of ${expected_variance}, not ${env.table[0].red_variance}`)
+    assert_approxEquals(env.table[0].green_std, expected_std,
+                        `Expect a standard deviation of ${expected_std}, not ${env.table[0].green_std}`)
+    done()
+  })
+  
 })
 
 describe('check that specific bugs have been fixed', () => {

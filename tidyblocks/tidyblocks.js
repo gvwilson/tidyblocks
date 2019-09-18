@@ -212,7 +212,11 @@ tbMin.colName = 'min'
  * @return {number} Standard deviation.
  */
 const tbStd = (rows, col) => {
-  return Math.sqrt(tbVariance(rows, col))
+  if (rows.length === 0) {
+    return MISSING
+  }
+  const values = rows.map(row => row[col])
+  return Math.sqrt(_variance(values))
 }
 tbStd.colName = 'std'
 
@@ -237,11 +241,17 @@ const tbVariance = (rows, col) => {
   if (rows.length === 0) {
     return MISSING
   }
-  const m = tbMean(rows, col)
-  const squareDiffs = rows.map(row => ({col: (row[col] - m) ** 2}))
-  return tbMean(squareDiffs, col)
+  const values = rows.map(row => row[col])
+  return _variance(values)
 }
 tbVariance.colName = 'variance'
+
+const _variance = (values) => {
+  const mean = values.reduce((total, val) => total + val, 0) / values.length
+  const diffSq = values.map(val => (val - mean) ** 2)
+  const result = diffSq.reduce((total, val) => total + val, 0) / diffSq.length
+  return result
+}
 
 //--------------------------------------------------------------------------------
 

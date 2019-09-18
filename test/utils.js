@@ -20,6 +20,31 @@ const {
 } = require('tidyblocks/tidyblocks')
 
 /**
+ * Default tolerance for relative error.
+ */
+const TOLERANCE = 1.0e-10
+
+/**
+ * Assert that two values are approximately equal.
+ * @param {number} left Left side of equality.
+ * @param {number} right Right side of equality.
+ * @param {string} message Error message.
+ * @param {number} tolerance Relative difference allowed.
+ */
+const assert_approxEquals = (left, right, message, tolerance = TOLERANCE) => {
+  const denom = Math.max(Math.abs(left), Math.abs(right))
+  if (denom !== 0) {
+    const ratio = Math.abs(left - right) / denom
+    if (ratio > tolerance) {
+      throw new assert.AssertionError({
+        message: message,
+        actual: ratio,
+        expected: tolerance})
+    }
+  }
+}
+
+/**
  * Assert that an object has a key.
  * @param {string} actual Object being examined.
  * @param {string} required Key that must be present.
@@ -322,6 +347,7 @@ module.exports = {
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_approxEquals,
   assert_hasKey,
   assert_includes,
   assert_match,
