@@ -1,25 +1,28 @@
 # 2018 Section II Part A 
-https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q3.pdf
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q4.pdf
 
-# Question 3
+# Question 4
 
-Approximately 3.5% of all children born in a certain region are from multiple births
-(that is, twins, triplets, etc.) Of the children born in the region who are from multiple births,
-22% are left-handed. Of the children born in the region who are from single birthdays, 11% are left-handed
+The anterior cruciate ligament (ACL) is one of the ligaments that help stabilize the knee. Surgery is often
+recommended if the ACL is completely torn, and recovery time from the surgery can be lengthy. A medical
+center developed a new surgical procedure designed to reduce the average recovery time from the surgery. To
+test the effectiveness of the new procedure, a study was conducted in which 210 patients needing surgery to
+repair a tom ACL were randomly assigned to receive either the standard procedure or the new procedure.
 
-#### (a) What is the probability that a randomly selected child born in the region is left-handed
+#### (a) Based on the design of the study, would a statistically significant result allow the medical center to conclude
+that the new procedure causes a reduction in recovery time compared to the standard procedure, for patients
+similar to those in the study? Explain your answer. *Not answered using TidyBlocks*
 
-#### (b) What is the probability that a randomly selected child born in the region is a child from a multiple birth, 
-given that the child selected is left-handed?
-
-#### (c) A random sample of 20 children born in the region will be selected. 
-What is the probability that the sample will have at least 3 children who are left-handed?
+#### (b) Summary statistics on the recovery times from the surgery are shown in the table. Do the data provide convincing 
+statistical evidence that those who receive the new procedure will have less recovery time from the surgery on average,
+than those who receive the standard procedure, for patients similar to those in the study>
 
 # TidyBlocks Answer 
 
-#### (a)
-![](APSTATS_2018_Q3_A.png)
 #### (b)
-![](APSTATS_2018_Q3_B.png)
+
+![](APSTATS_2018_Q4_B.png)
+
 #### (c)
-*Need Binomial Block*
+
+*Need Two Sample T-Test Block*
