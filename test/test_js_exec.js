@@ -1,11 +1,13 @@
 const assert = require('assert')
 
 const {
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_approxEquals,
   assert_hasKey,
   assert_includes,
   assert_match,
@@ -149,6 +151,67 @@ describe('execute blocks for entire pipelines', () => {
                   'Result lacks expected column')
     assert.equal(typeof env.table[0].textual, 'string',
                  'New column has wrong type')
+    done()
+  })
+
+  it('converts numeric data to Boolean', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'logical',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToBoolean',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'red'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
+                 'Wrong number of rows in output')
+    assert_hasKey(env.table[0], 'logical',
+                  'Result lacks expected column')
+    assert.equal(typeof env.table[0].logical, 'boolean',
+                 'New column has wrong type')
+    done()
+  })
+
+  it('converts string data to numbers', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'textual',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToString',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'red'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'numeric',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'textual'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
+                 'Wrong number of rows in output')
+    assert_hasKey(env.table[0], 'numeric',
+                  'Result lacks expected column')
+    assert.equal(typeof env.table[0].numeric, 'number',
+                 'New column has wrong type')
+    assert(env.table.every(row => (row.red === row.numeric)),
+           `Expected values to be equal after double conversion`)
     done()
   })
 
@@ -618,6 +681,62 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('filters to include missing values', (done) => {
+    for (let type of ['number', 'string', 'date']) {
+      const columnBlock = makeBlock(
+        'value_column',
+        {COLUMN: type})
+      const pipeline = [
+        makeBlock(
+          'data_missing',
+          {}),
+        makeBlock(
+          'transform_filter',
+          {TEST: makeBlock(
+            'value_type',
+            {TYPE: 'tbIsMissing',
+             VALUE: columnBlock})})
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message, got "${env.error}" for type ${type}`)
+      assert.equal(env.table.length, 1,
+                   `Expected only one row to have missing ${type}`)
+      assert.equal(env.table[0][type], MISSING,
+                   `Wrong value is missing in surviving row`)
+    }
+    done()
+  })
+
+  it('filters to exclude missing values', (done) => {
+    for (let type of ['number', 'string', 'date']) {
+      const columnBlock = makeBlock(
+        'value_column',
+        {COLUMN: type})
+      const pipeline = [
+        makeBlock(
+          'data_missing',
+          {}),
+        makeBlock(
+          'transform_filter',
+          {TEST: makeBlock(
+            'value_not',
+            {VALUE: makeBlock(
+              'value_type',
+              {TYPE: 'tbIsMissing',
+               VALUE: columnBlock})})})
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message, got "${env.error}" for type ${type}`)
+      assert.equal(env.table.length, 3,
+                   `Expected only one row to be dropped`)
+      assert(env.table.every(row => (row[type] !== MISSING)),
+             `Incorrect values have been dropped for ${type}`)
+    }
+    done()
+  })
+
 })
 
 describe('check that grouping and summarization work', () => {
@@ -736,6 +855,78 @@ describe('check that grouping and summarization work', () => {
     done()
   })
 
+  it('does division correctly even with zeroes', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'ratio',
+         VALUE: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbDiv',
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'red'}),
+            RIGHT: makeBlock(
+              'value_column',
+              {COLUMN: 'green'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => ((row.green === 0)
+                                   ? (row.ratio === MISSING)
+                                   : (row.ratio === (row.red / row.green)))),
+           `Incorrect result(s) for division`)
+    done()
+  })
+
+  it('calculates exponents correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result',
+         VALUE: makeBlock(
+           'value_arithmetic',
+           {OP: 'tbExp',
+            LEFT: makeBlock(
+              'value_column',
+              {COLUMN: 'red'}),
+            RIGHT: makeBlock(
+              'value_column',
+              {COLUMN: 'green'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => (isFinite(row.red ** row.green)
+                                   ? (row.result === (row.red ** row.green))
+                                   : (row.result === MISSING))),
+           `Incorrect result(s) for exponentiation`)
+    done()
+  })
+
+  it('negates values correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'result',
+         VALUE: makeBlock(
+           'value_negate',
+           {VALUE: makeBlock(
+             'value_column',
+             {COLUMN: 'red'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => row.result === (- row.red)),
+           `Incorrect result(s) for negation`)
+    done()
+  })
+
   it('calculates multiple summary values correctly', (done) => {
     const pipeline = [
       makeBlock(
@@ -792,11 +983,81 @@ describe('check that grouping and summarization work', () => {
         ]})
     ]
     const env = evalCode(pipeline)
-    assert(env.table.length == 0,
+    assert.equal(env.table.length, 0,
            `Expected empty output`)
     done()
   })
 
+  it('counts rows correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbCount',
+                     COLUMN: 'red'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.table[0].red_count, 11,
+                 `Expect a count of 11 rows, not ${env.table[0].red_count}`)
+    done()
+  })
+
+  it('calculates the median correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbMedian',
+                     COLUMN: 'red'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.table[0].red_median, 0,
+                 `Expect a median of 0, not ${env.table[0].red_median}`)
+    done()
+  })
+
+  it('calculates the variance and standard deviation correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
+      makeBlock(
+        'transform_summarize',
+        {COLUMN_FUNC_PAIR: [
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbVariance',
+                     COLUMN: 'red'}),
+          makeBlock('transform_summarize_item',
+                    {FUNC: 'tbStd',
+                     COLUMN: 'green'})
+        ]})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    const expected_variance = 14243.140495867769
+    const expected_std = 119.34462910356615
+    assert_approxEquals(env.table[0].red_variance, expected_variance,
+                        `Expect a variance of ${expected_variance}, not ${env.table[0].red_variance}`)
+    assert_approxEquals(env.table[0].green_std, expected_std,
+                        `Expect a standard deviation of ${expected_std}, not ${env.table[0].green_std}`)
+    done()
+  })
+  
 })
 
 describe('check that specific bugs have been fixed', () => {
@@ -833,7 +1094,7 @@ describe('check that specific bugs have been fixed', () => {
     done()
   })
 
-  it('does multiplication and modulo correctly (#131)', (done) => {
+  it('does multiplication correctly (#131)', (done) => {
     const pipeline = [
       makeBlock(
         'data_colors',
@@ -849,7 +1110,19 @@ describe('check that specific bugs have been fixed', () => {
               {COLUMN: 'red'}),
             RIGHT: makeBlock(
               'value_column',
-              {COLUMN: 'green'})})}),
+              {COLUMN: 'green'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => (row.product === (row.red * row.green))),
+           `Incorrect result(s) for multiplication`)
+    done()
+  })
+
+  it('does modulo correctly (#131)', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_colors',
+        {}),
       makeBlock(
         'transform_mutate',
         {COLUMN: 'remainder',
@@ -864,10 +1137,8 @@ describe('check that specific bugs have been fixed', () => {
               {COLUMN: 'green'})})})
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => (row.product === (row.red * row.green))),
-           `Incorrect result(s) for multiplication`)
     assert(env.table.every(row => ((row.green === 0)
-                                   ? Number.isNaN(row.remainder)
+                                   ? (row.remainder === MISSING)
                                    : (row.remainder === (row.red % row.green)))),
            `Incorrect result(s) for modulo`)
     done()

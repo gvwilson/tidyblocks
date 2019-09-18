@@ -2,12 +2,13 @@ const assert = require('assert')
 const Papa = require('papaparse')
 
 const {
-  GROUP,
+  MISSING,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
   TidyBlocksDataFrame,
   TidyBlocksManager,
+  assert_approxEquals,
   assert_hasKey,
   assert_includes,
   assert_match,
@@ -29,6 +30,16 @@ describe('CSV headers are sanitized correctly', () => {
 
   beforeEach(() => {
     TidyBlocksManager.reset()
+  })
+
+  it('compares floating point numbers correctly with a tolerance', (done) => {
+    assert.throws(() => assert_approxEquals(1, 2, 'message', 0),
+                  /message/,
+                  `Expected approximate equality test to fail`)
+    assert.doesNotThrow(() => assert_approxEquals(1, 2, 'message', 100),
+                        /message/,
+                        `Expected approximate equality test to pass`)
+    done()
   })
 
   it('reads a single-column CSV with an unproblematic header', (done) => {
