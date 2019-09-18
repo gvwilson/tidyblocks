@@ -82,3 +82,17 @@ Estimating the customers in line per second data within the first question of th
 
 #### Source
 https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q1.pdf
+
+# APSTATS_2018_Q4
+
+Summary statistics on ACL surgery 
+
+* **Surgery Type** (categorical)
+* **Sample Size** (numeric)
+* **Mean Recovery Time** (days, numeric)
+* **SD Recovery Time** standard deviation recovery time (days, numeric)
+
+4 columns, 2 rows
+
+#### Source
+https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q4.pdf
