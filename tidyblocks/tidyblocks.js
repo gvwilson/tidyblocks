@@ -57,8 +57,8 @@ const csv2TidyBlocksDataFrame = (text, parser) => {
       skipEmptyLines: true,
       transformHeader: transformHeader,
       transform: function(value) {
-        return (value === "NA") ? undefined : value
-      }   
+        return (value === "NA" | value === null) ? undefined : value
+      },  
     }
   )
   return new TidyBlocksDataFrame(result.data)

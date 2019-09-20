@@ -28,20 +28,10 @@ before(() => {
   createTestingBlocks()
 })
 
-describe('CSV headers are sanitized correctly', () => {
+describe('CSV files are handled correctly', () => {
 
   beforeEach(() => {
     TidyBlocksManager.reset()
-  })
-
-  it('compares floating point numbers correctly with a tolerance', (done) => {
-    assert.throws(() => assert_approxEquals(1, 2, 'message', 0),
-                  /message/,
-                  `Expected approximate equality test to fail`)
-    assert.doesNotThrow(() => assert_approxEquals(1, 2, 'message', 100),
-                        /message/,
-                        `Expected approximate equality test to pass`)
-    done()
   })
 
   it('reads a single-column CSV with an unproblematic header', (done) => {
@@ -103,6 +93,29 @@ value,value,value`
     assert.deepEqual(result.data,
                      [{Header: 'value', Header_1: 'value', Header_2: 'value'}],
                      'Repeated column names not corrected')
+    done()
+  })
+
+  it('translates "NA" into missing values', (done) => {
+    const text=`
+number,string
+1,one
+NA,"two"
+3,NA
+4,
+,five
+6,""`
+    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const expected =  [
+      {number: 1, string: 'one'},
+      {number: MISSING, string: 'two'},
+      {number: 3, string: MISSING},
+      {number: 4, string: MISSING},
+      {number: MISSING, string: 'five'},
+      {number: 6, string: MISSING}
+    ]
+    assert.deepEqual(result.data, expected,
+                     `NAs not handled correctly during parsing`)
     done()
   })
 
@@ -238,6 +251,24 @@ describe('blocks return proper columns', () => {
     done()
   })
 
+})
+
+describe('testing utilities run correctly', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('compares floating point numbers correctly with a tolerance', (done) => {
+    assert.throws(() => assert_approxEquals(1, 2, 'message', 0),
+                  /message/,
+                  `Expected approximate equality test to fail`)
+    assert.doesNotThrow(() => assert_approxEquals(1, 2, 'message', 100),
+                        /message/,
+                        `Expected approximate equality test to pass`)
+    done()
+  })
+
   it('creates a missing value', (done) => {
     const pipeline = [
       makeBlock(
@@ -261,4 +292,3 @@ describe('blocks return proper columns', () => {
   })
 
 })
-
