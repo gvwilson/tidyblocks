@@ -1,10 +1,8 @@
 //
-// Implement date/time extraction.
+// Create code for constant date/time block.
 //
 Blockly.JavaScript['value_datetime'] = (block) => {
-  const type = block.getFieldValue('TYPE')
-  const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
-  const code = `(row) => ${type}(row, ${value})`
-  return [code, order]
+  const value = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
+  const code = `(row) => new Date(${value})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
