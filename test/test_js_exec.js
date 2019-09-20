@@ -650,6 +650,55 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('extracts hours, minutes, and seconds correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'when',
+         VALUE: makeBlock(
+           'value_datetime',
+           {VALUE: new Date(1984, 1, 1, 5, 10, 15)})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'hours',
+         VALUE: makeBlock(
+           'value_convert_datetime',
+           {TYPE: 'tbToHours',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'when'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'minutes',
+         VALUE: makeBlock(
+           'value_convert_datetime',
+           {TYPE: 'tbToMinutes',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'when'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'seconds',
+         VALUE: makeBlock(
+           'value_convert_datetime',
+           {TYPE: 'tbToSeconds',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'when'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table[0].hours, 5,
+                 `Expected the hours to be 5 not ${env.table[0].hours}`)
+    assert.equal(env.table[0].minutes, 10,
+                 `Expected the minutes to be 10 not ${env.table[0].minutes}`)
+    assert.equal(env.table[0].seconds, 15,
+                 `Expected the seconds to be 15 not ${env.table[0].seconds}`)
+    done()
+  })
+
   it('handles empty tables correctly when filtering', (done) => {
     const pipeline = [
       makeBlock(
