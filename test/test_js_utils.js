@@ -106,17 +106,19 @@ NA,"two"
 ,five
 6,""`
     const result = csv2TidyBlocksDataFrame(text, Papa.parse)
-    console.log('RESULT', result)
-    const expected = [
+    console.log('RESULT', result.data)
+    const expected =  [
       {number: 1, string: 'one'},
       {number: MISSING, string: 'two'},
       {number: 3, string: MISSING},
-      {number: 4, string: ''},
+      {number: 4, string: MISSING},
       {number: MISSING, string: 'five'},
-      {number: 6, string: ''}
+      {number: 6, string: MISSING}
     ]
-    assert.deepEqual(result, expected,
+    console.log(expected)
+    assert.deepEqual(result.data, expected,
                      `NAs not handled correctly during parsing`)
+    done()
   })
 
 })
