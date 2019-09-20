@@ -141,7 +141,7 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'textual',
          VALUE: makeBlock(
            'value_convert',
-           {TYPE: 'tbToString',
+           {TYPE: 'tbToText',
             VALUE: makeBlock(
               'value_column',
               {COLUMN: 'red'})})})
@@ -191,7 +191,7 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'textual',
          VALUE: makeBlock(
            'value_convert',
-           {TYPE: 'tbToString',
+           {TYPE: 'tbToText',
             VALUE: makeBlock(
               'value_column',
               {COLUMN: 'red'})})}),
@@ -487,7 +487,7 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'result_name_string',
          VALUE: makeBlock(
            'value_type',
-           {TYPE: 'tbIsString',
+           {TYPE: 'tbIsText',
             VALUE: makeBlock(
               'value_column',
               {COLUMN: 'name'})})}),
@@ -496,7 +496,7 @@ describe('execute blocks for entire pipelines', () => {
         {COLUMN: 'result_red_string',
          VALUE: makeBlock(
            'value_type',
-           {TYPE: 'tbIsString',
+           {TYPE: 'tbIsText',
             VALUE: makeBlock(
               'value_column',
               {COLUMN: 'red'})})}),
@@ -590,7 +590,7 @@ describe('execute blocks for entire pipelines', () => {
         'transform_mutate',
         {COLUMN: 'year',
          VALUE: makeBlock(
-           'value_datetime',
+           'value_convert_datetime',
            {TYPE: 'tbToYear',
             VALUE: makeBlock(
               'value_column',
@@ -599,7 +599,7 @@ describe('execute blocks for entire pipelines', () => {
         'transform_mutate',
         {COLUMN: 'month',
          VALUE: makeBlock(
-           'value_datetime',
+           'value_convert_datetime',
            {TYPE: 'tbToMonth',
             VALUE: makeBlock(
               'value_column',
@@ -608,7 +608,7 @@ describe('execute blocks for entire pipelines', () => {
         'transform_mutate',
         {COLUMN: 'day',
          VALUE: makeBlock(
-           'value_datetime',
+           'value_convert_datetime',
            {TYPE: 'tbToDay',
             VALUE: makeBlock(
               'value_column',
@@ -1140,7 +1140,235 @@ describe('check that grouping and summarization work', () => {
     }
     done()
   })
-  
+
+  it('handles missing values for type conversion correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'missing',
+         VALUE: makeBlock(
+           'value_missing',
+           {})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'as_boolean',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToBoolean',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'missing'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'as_datetime',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToDatetime',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'missing'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'as_number',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'missing'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'as_string',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToText',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'missing'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error message when converting missing values`)
+    assert.equal(env.table[0].as_boolean, MISSING,
+                 `Expected converted Boolean to be missing value, not ${env.table[0].as_boolean}`)
+    assert.equal(env.table[0].as_datetime, MISSING,
+                 `Expected converted date-time to be missing value, not ${env.table[0].as_datetime}`)
+    assert.equal(env.table[0].as_number, MISSING,
+                 `Expected converted number to be missing value, not ${env.table[0].as_number}`)
+    assert.equal(env.table[0].as_string, MISSING,
+                 `Expected converted string to be missing value, not ${env.table[0].as_string}`)
+    done()
+  })
+
+  it('handles conversion to number from Boolean and string correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_false',
+         VALUE: makeBlock(
+           'value_boolean',
+           {VALUE: 'false'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_false',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'bool_false'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_true',
+         VALUE: makeBlock(
+           'value_boolean',
+           {VALUE: 'true'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_true',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'bool_true'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'str',
+         VALUE: makeBlock(
+           'value_boolean',
+           {VALUE: '123.45'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'str',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToNumber',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'str'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error when converting to number`)
+    assert.equal(env.table[0].bool_false, 0,
+                 `Expected 0 when converting false to number, not ${env.table[0].bool_false}`)
+    assert.equal(env.table[0].bool_true, 1,
+                 `Expected 1 when converting true to number, not ${env.table[0].bool_true}`)
+    assert.equal(env.table[0].str, 123.45,
+                 `Expected 123.45 when converting false to number, not ${env.table[0].str}`)
+    done()
+  })
+
+  it('converts things to strings correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_false',
+         VALUE: makeBlock(
+           'value_boolean',
+           {VALUE: 'false'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_false',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToText',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'bool_false'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_true',
+         VALUE: makeBlock(
+           'value_boolean',
+           {VALUE: 'true'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'bool_true',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToText',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'bool_true'})})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'num',
+         VALUE: makeBlock(
+           'value_number',
+           {VALUE: '-999'})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'num',
+         VALUE: makeBlock(
+           'value_convert',
+           {TYPE: 'tbToText',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'num'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error when converting to string`)
+    assert.equal(env.table[0].bool_false, 'false',
+                 `Expected "false" when converting false to string, not ${env.table[0].bool_false}`)
+    assert.equal(env.table[0].bool_true, 'true',
+                 `Expected "true" when converting true to string, not ${env.table[0].bool_true}`)
+    assert.equal(env.table[0].num, '-999',
+                 `Expected "-999" when converting -999 to string, not ${env.table[0].num}`)
+    done()
+  })
+
+  it('checks types correctly', (done) => {
+    const allCases = [
+      ['tbIsBoolean', 'value_boolean', true],
+      ['tbIsDateTime', 'value_datetime', new Date('1980-02-03')],
+      ['tbIsNumber', 'value_number', 456.7],
+      ['tbIsText', 'value_text', 'text']
+    ]
+    for (let [actualFunc, actualName, actualValue] of allCases) {
+      for (let [checkFunc, checkName, checkValue] of allCases) {
+        const pipeline = [
+          makeBlock(
+            'data_single',
+            {}),
+          makeBlock(
+            'transform_mutate',
+            {COLUMN: 'temp',
+             VALUE: makeBlock(
+               actualName,
+               {VALUE: actualValue})}),
+          makeBlock(
+            'transform_mutate',
+            {COLUMN: 'check',
+             VALUE: makeBlock(
+               'value_type',
+               {TYPE: checkFunc,
+                VALUE: makeBlock(
+                  'value_column',
+                  {COLUMN: 'temp'})})})
+        ]
+        const env = evalCode(pipeline)
+        assert.equal(env.error, '',
+                     `Expected no error for ${checkFunc} with ${actualName}`)
+        const expected = (actualName == checkName)
+        assert.equal(env.table[0].check, expected,
+                     `Expected ${expected} comparison result for ${actualName} and ${checkName}, got ${env.table[0].check}`)
+      }
+    }
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {

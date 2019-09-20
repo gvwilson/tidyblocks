@@ -314,9 +314,9 @@ const tbToNumber = (blockId, row, getValue) => {
  * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
- * @returns String value.
+ * @returns Text value.
  */
-const tbToString = (blockId, row, getValue) => {
+const tbToText = (blockId, row, getValue) => {
   let value = getValue(row)
   if (value === MISSING) {
     // keep as is
@@ -341,13 +341,13 @@ const tbIsBoolean = (blockId, row, getValue) => {
 }
 
 /**
- * Check if value is a date.
+ * Check if value is a datetime.
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
  * @returns Is value numeric?
  */
-const tbIsDate = (blockId, row, getValue) => {
+const tbIsDateTime = (blockId, row, getValue) => {
   return getValue(row) instanceof Date
 }
 
@@ -378,9 +378,9 @@ const tbIsNumber = (blockId, row, getValue) => {
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
- * @returns Is value string?
+ * @returns Is value text?
  */
-const tbIsString = (blockId, row, getValue) => {
+const tbIsText = (blockId, row, getValue) => {
   return typeof getValue(row) === 'string'
 }
 

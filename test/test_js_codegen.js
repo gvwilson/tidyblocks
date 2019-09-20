@@ -123,14 +123,14 @@ describe('generate code for single blocks', () => {
   it('generates code to convert types', (done) => {
     const pipeline = makeBlock(
       'value_convert',
-      {TYPE: 'tbToString',
+      {TYPE: 'tbToText',
        VALUE: makeBlock(
          'value_column',
          {COLUMN: 'left'})})
     const code = generateCode(pipeline)
     assert_startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbToString',
+    assert_includes(code, 'tbToText',
                     'Generated code does not start with correct function')
     done()
   })

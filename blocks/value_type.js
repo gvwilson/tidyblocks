@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
         name: 'TYPE',
         options: [
           ['boolean', 'tbIsBoolean'],
-          ['date', 'tbIsDate'],
+          ['date', 'tbIsDateTime'],
           ['missing', 'tbIsMissing'],
           ['number', 'tbIsNumber'],
           ['string', 'tbIsString']

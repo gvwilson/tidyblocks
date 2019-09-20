@@ -1,33 +1,17 @@
 //
-// Visuals for datetime function block.
+// Visuals for datetime block.
 //
-Blockly.defineBlocksWithJsonArray([
+Blockly.defineBlocksWithJsonArray([ 
   {
     type: 'value_datetime',
-    message0: '%1 date/time %2',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'VALUE'
-      },
-      {
-        type: 'field_dropdown',
-        name: 'TYPE',
-        options: [
-          ['year', 'tbToYear'],
-          ['month', 'tbToMonth'],
-          ['day', 'tbToDay'],
-          ['weekday', 'tbToWeekDay'],
-          ['hours', 'tbToHours'],
-          ['minutes', 'tbToMinutes'],
-          ['seconds', 'tbToSeconds']
-        ]
-      }
-    ],
-    inputsInline: true,
-    output: 'Number',
+    message0: '%1',
+    args0: [{
+      type: 'field_input',
+      name: 'VALUE',
+      value: '1970-01-01'
+    }],
+    helpUrl: '',
     style: 'value_blocks',
-    tooltip: 'change the datatype of a value',
-    helpUrl: ''
+    tooltip: 'constant date/time'
   }
 ])
