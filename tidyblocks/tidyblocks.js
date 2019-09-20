@@ -634,9 +634,7 @@ const tbSub = (blockId, row, getLeft, getRight) => {
 const tbAnd = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
-    : ((left && right) ? true : false)
+  return left && right
 }
 
 /**
@@ -660,11 +658,9 @@ const tbNot = (blockId, row, getValue) => {
  * @returns The disjunction.
  */
 const tbOr = (blockId, row, getLeft, getRight) => {
-  const left = tbToBoolean(row, getLeft)
-  const right = tbToBoolean(row, getRight)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
-    : ((left || right) ? true : valse)
+  const left = getLeft(row)
+  const right = getRight(row)
+  return left || right
 }
 
 /**

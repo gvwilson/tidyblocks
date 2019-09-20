@@ -1369,6 +1369,52 @@ describe('check that grouping and summarization work', () => {
     done()
   })
 
+  it('does logical operations correctly', (done) => {
+    for (let funcName of ['tbAnd', 'tbOr']) {
+      for (let left of [true, false, MISSING]) {
+        for (let right of [true, false, MISSING]) {
+          const pipeline = [
+            makeBlock(
+              'data_double',
+              {}),
+            makeBlock(
+              'transform_mutate',
+              {COLUMN: 'left',
+               VALUE: makeBlock(
+                 'value_boolean',
+                 {VALUE: left})}),,
+            makeBlock(
+              'transform_mutate',
+              {COLUMN: 'right',
+               VALUE: makeBlock(
+                 'value_boolean',
+                 {VALUE: right})}),
+            makeBlock(
+              'transform_mutate',
+              {COLUMN: 'result',
+               VALUE: makeBlock(
+                 'value_logical',
+                 {OP: funcName,
+                  LEFT: makeBlock(
+                    'value_column',
+                    {COLUMN: 'left'}),
+                  RIGHT: makeBlock(
+                    'value_column',
+                    {COLUMN: 'right'})})})
+          ]
+          const env = evalCode(pipeline)
+          const expected = (funcName === 'tbAnd')
+                ? (left && right)
+                : (left || right)
+          assert.equal(env.error, '',
+                       `Expected no error from operation`)
+          assert.equal(env.table[0].result, expected,
+                       `Expected ${expected} from ${left} ${funcName} ${right}, got ${env.table[0].result}`)
+        }
+      }
+    }
+    done()
+  })
 })
 
 describe('check that specific bugs have been fixed', () => {
