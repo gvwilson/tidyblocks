@@ -387,21 +387,6 @@ const tbIsText = (blockId, row, getValue) => {
 //--------------------------------------------------------------------------------
 
 /*
- * Convert string to date object using format.
- * @param {number} blockId The ID of the block.
- * @param {Object} row Row containing values.
- * @param {string} format Format to use for parsing (FIXME: IGNORED UNTIL WE CAN LOAD 'moment').
- * @param {function} getValue How to get desired value.
- * @returns Date corresponding to string.
- */
-const tbParseDate = (blockId, row, format, getValue) => {
-  const value = getValue(row)
-  tbAssert(typeof value === 'string',
-           `Expected string not ${typeof value}`)
-  return new Date(value)
-}
-
-/*
  * Extract year from value.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
@@ -444,13 +429,13 @@ const tbToDay = (row, getValue) => {
  * Extract day of week from value.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
- * @returns Day of month as number.
+ * @returns Day of week as number (1=Monday, 7=Sunday)
  */
 const tbToWeekDay = (row, getValue) => {
   const value = getValue(row)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
-  return value.getDay()
+  return value.getDay() + 1
 }
 
 /**

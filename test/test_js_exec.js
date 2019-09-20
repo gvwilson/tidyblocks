@@ -624,6 +624,32 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('handles conversion to weekday correctly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'data_single',
+        {}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'when',
+         VALUE: makeBlock(
+           'value_datetime',
+           {VALUE: new Date('1984-01-01')})}),
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'weekday',
+         VALUE: makeBlock(
+           'value_convert_datetime',
+           {TYPE: 'tbToWeekDay',
+            VALUE: makeBlock(
+              'value_column',
+              {COLUMN: 'when'})})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table[0].weekday, 7, 'January 1, 1984 was a Sunday')
+    done()
+  })
+
   it('handles empty tables correctly when filtering', (done) => {
     const pipeline = [
       makeBlock(
