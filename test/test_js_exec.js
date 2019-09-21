@@ -776,11 +776,66 @@ describe('basic operations', () => {
                  LEFT: {_b: 'value_column',
                         COLUMN: 'first'},
                  RIGHT:{_b: 'value_column',
-                        COLUMN: 'second'}}}
+                        COLUMN: 'second'}}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'value_missing'}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'value_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'first'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'missing'}}}
       ]
       const env = evalCode(pipeline)
       assert(env.table.every(row => (row.result === expected)),
              `Unexpected value(s) in comparison for ${funcName}`)
+      assert(env.table.every(row => (row.missing === MISSING)),
+             `Some values are not missing as expected for ${funcName}`)
+    }
+    done()
+  })
+
+  it('compares strings correctly', (done) => {
+    const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/names.csv'
+    for (let [funcName, expected] of [['tbEq', [false, false, true]],
+                                      ['tbNeq', [true, true, false]],
+                                      ['tbLt', [false, true, false]],
+                                      ['tbLeq', [false, true, true]],
+                                      ['tbGt', [true, false, false]],
+                                      ['tbGeq', [true, false, true]]]) {
+      const pipeline = [
+        {_b: 'data_urlCSV',
+         URL: filePath},
+        {_b: 'transform_mutate',
+         COLUMN: 'result',
+         VALUE: {_b: 'value_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'personal'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'family'}}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'value_missing'}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'value_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'personal'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'missing'}}}
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Unexpected error in string comparison for ${funcName}`)
+      assert.deepEqual(env.table.map(row => row.result), expected,
+             `Unexpected value(s) in comparison for ${funcName}`)
+      assert(env.table.every(row => (row.missing === MISSING)),
+             `Some values are not missing as expected for ${funcName}`)
     }
     done()
   })
