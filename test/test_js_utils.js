@@ -15,7 +15,6 @@ const {
   assert_startsWith,
   loadBlockFiles,
   makeBlock,
-  generateCode,
   evalCode,
   createTestingBlocks
 } = require('./utils')

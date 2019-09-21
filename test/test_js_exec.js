@@ -13,8 +13,6 @@ const {
   assert_match,
   assert_startsWith,
   loadBlockFiles,
-  makeBlock,
-  generateCode,
   evalCode,
   createTestingBlocks
 } = require('./utils')
@@ -35,9 +33,7 @@ describe('execute blocks for entire pipelines', () => {
 
   it('creates a dataset by parsing a local CSV file', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_mtcars',
-        {})
+      {_b: 'data_mtcars'}
     ]
     const env = evalCode(pipeline)
     assert.notEqual(env.table, null,
@@ -49,12 +45,8 @@ describe('execute blocks for entire pipelines', () => {
 
   it('creates a table that can be checked', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'plot_table',
-        {})
+      {_b: 'data_iris'},
+      {_b: 'plot_table'}
     ]
     const env = evalCode(pipeline)
     assert.notEqual(env.table, null,
@@ -66,13 +58,10 @@ describe('execute blocks for entire pipelines', () => {
 
   it('makes a histogram', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'plot_hist',
-        {COLUMN: 'Petal_Length',
-         BINS: '20'})
+      {_b: 'data_iris'},
+      {_b: 'plot_hist',
+       COLUMN: 'Petal_Length',
+       BINS: '20'}
     ]
     const env = evalCode(pipeline)
     assert(Array.isArray(env.table),
@@ -90,16 +79,12 @@ describe('execute blocks for entire pipelines', () => {
 
   it('makes a histogram for selected columns', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'transform_select',
-        {MULTIPLE_COLUMNS: 'Petal_Length'}),
-      makeBlock(
-        'plot_hist',
-        {COLUMN: 'Petal_Length',
-         BINS: '20'})
+      {_b: 'data_iris'},
+      {_b: 'transform_select',
+       MULTIPLE_COLUMNS: 'Petal_Length'},
+      {_b: 'plot_hist',
+       COLUMN: 'Petal_Length',
+       BINS: '20'}
     ]
     const env = evalCode(pipeline)
     assert.equal(Object.keys(env.table[0]).length, 1,
@@ -113,13 +98,10 @@ describe('execute blocks for entire pipelines', () => {
 
   it('sorts data by multiple columns', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_sort',
-        {MULTIPLE_COLUMNS: 'red, green',
-         DESCENDING: 'FALSE'})
+      {_b: 'data_colors'},
+      {_b: 'transform_sort',
+       MULTIPLE_COLUMNS: 'red, green',
+       DESCENDING: 'FALSE'}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -133,18 +115,13 @@ describe('execute blocks for entire pipelines', () => {
 
   it('converts numeric data to string', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'textual',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'red'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'textual',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -158,18 +135,13 @@ describe('execute blocks for entire pipelines', () => {
 
   it('converts numeric data to Boolean', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'logical',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToBoolean',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'red'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'logical',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToBoolean',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -183,27 +155,19 @@ describe('execute blocks for entire pipelines', () => {
 
   it('converts string data to numbers', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'textual',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'red'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'numeric',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToNumber',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'textual'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'textual',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'numeric',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'textual'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -219,20 +183,14 @@ describe('execute blocks for entire pipelines', () => {
 
   it('filters data using not-equals', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbNeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'red'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 5,
@@ -242,23 +200,16 @@ describe('execute blocks for entire pipelines', () => {
 
   it('filters data using not-equals and registers the result', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbNeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'red'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})}),
-      makeBlock(
-        'plumbing_notify',
-        {NAME: 'left'})
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
+      {_b: 'plumbing_notify',
+       NAME: 'left'}
     ]
     const env = evalCode(pipeline)
     assert(TidyBlocksManager.getResult('left'),
@@ -272,28 +223,19 @@ describe('execute blocks for entire pipelines', () => {
 
   it('makes a histogram for filtered data', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbGt',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'Petal_Length'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 5.0})})}),
-      makeBlock(
-        'plot_hist',
-        {COLUMN: makeBlock(
-          'value_column',
-          {COLUMN: 'Petal_Length'}),
-         BINS: makeBlock(
-           'value_number',
-           {VALUE: 20})})
+      {_b: 'data_iris'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbGt',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'Petal_Length'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 5.0}}},
+      {_b: 'plot_hist',
+       COLUMN: {_b: 'value_column',
+                COLUMN: 'Petal_Length'},
+       BINS: {_b: 'value_number',
+              VALUE: 20}}
     ]
     const env = evalCode(pipeline)
     assert.equal(Object.keys(env.table[0]).length, 5,
@@ -305,20 +247,14 @@ describe('execute blocks for entire pipelines', () => {
 
   it('filters on a comparison', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbGeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'red'}),
-           RIGHT: makeBlock(
-             'value_column',
-             {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbGeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_column',
+                      COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 8,
@@ -330,21 +266,15 @@ describe('execute blocks for entire pipelines', () => {
 
   it('creates a new column by adding existing columns', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'red_green',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbAdd',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'red'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'red_green',
+       VALUE: {_b: 'value_arithmetic',
+               OP: 'tbAdd',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -359,28 +289,21 @@ describe('execute blocks for entire pipelines', () => {
   it('runs two pipelines and joins their results', (done) => {
     const pipeline = [
       // Left data stream.
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'plumbing_notify',
-        {NAME: 'left'}),
+      {_b: 'data_single'},
+      {_b: 'plumbing_notify',
+       NAME: 'left'},
 
       // Right data stream.
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'plumbing_notify',
-        {NAME: 'right'}),
+      {_b: 'data_double'},
+      {_b: 'plumbing_notify',
+       NAME: 'right'},
 
       // Join.
-      makeBlock(
-        'plumbing_join',
-        {LEFT_TABLE: 'left',
-         LEFT_COLUMN: 'first',
-         RIGHT_TABLE: 'right',
-         RIGHT_COLUMN: 'first'})
+      {_b: 'plumbing_join',
+       LEFT_TABLE: 'left',
+       LEFT_COLUMN: 'first',
+       RIGHT_TABLE: 'right',
+       RIGHT_COLUMN: 'first'}
     ]
     const env = evalCode(pipeline)
     assert.deepEqual(env.table,
@@ -392,72 +315,49 @@ describe('execute blocks for entire pipelines', () => {
   it('filters data in two pipelines, joins their results, and filters that', (done) => {
     const pipeline = [
       // Left data stream is colors with red != 0.
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbNeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'red'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})}),
-      makeBlock(
-        'plumbing_notify',
-        {NAME: 'left'}),
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
+      {_b: 'plumbing_notify',
+       NAME: 'left'},
 
       // Right data stream is colors with green != 0.
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbNeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'green'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})}),
-      makeBlock(
-        'plumbing_notify',
-        {NAME: 'right'}),
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'green'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
+      {_b: 'plumbing_notify',
+       NAME: 'right'},
 
       // Join, then keep entries with blue != 0.
-      makeBlock(
-        'plumbing_join',
-        {LEFT_TABLE: 'left',
-         LEFT_COLUMN: 'red',
-         RIGHT_TABLE: 'right',
-         RIGHT_COLUMN: 'green'}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbNeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'left_blue'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbNeq',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'right_blue'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})})
+      {_b: 'plumbing_join',
+       LEFT_TABLE: 'left',
+       LEFT_COLUMN: 'red',
+       RIGHT_TABLE: 'right',
+       RIGHT_COLUMN: 'green'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'left_blue'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'right_blue'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}}
     ]
     const env = evalCode(pipeline)
     assert.deepEqual(env.table,
@@ -479,36 +379,25 @@ describe('execute blocks for entire pipelines', () => {
 
   it('checks data types correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result_name_string',
-         VALUE: makeBlock(
-           'value_type',
-           {TYPE: 'tbIsText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'name'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result_red_string',
-         VALUE: makeBlock(
-           'value_type',
-           {TYPE: 'tbIsText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'red'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result_green_number',
-         VALUE: makeBlock(
-           'value_type',
-           {TYPE: 'tbIsNumber',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result_name_string',
+       VALUE: {_b: 'value_type',
+               TYPE: 'tbIsText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'name'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'result_red_string',
+       VALUE: {_b: 'value_type',
+               TYPE: 'tbIsText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'result_green_number',
+       VALUE: {_b: 'value_type',
+               TYPE: 'tbIsNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => row.result_name_string),
@@ -522,18 +411,13 @@ describe('execute blocks for entire pipelines', () => {
 
   it('does date conversion correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_earthquakes',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'Time',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToDatetime',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})})
+      {_b: 'data_earthquakes'},
+      {_b: 'transform_mutate',
+       COLUMN: 'Time',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToDatetime',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'Time'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => (row.Time instanceof Date)),
@@ -543,24 +427,17 @@ describe('execute blocks for entire pipelines', () => {
 
   it('handles invalid dates correctly when converting', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'time',
-         VALUE: makeBlock(
-           'value_text',
-           {VALUE: 'abc'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToDatetime',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'time'})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'time',
+       VALUE: {_b: 'value_text',
+               VALUE: 'abc'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToDatetime',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'time'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
@@ -574,45 +451,31 @@ describe('execute blocks for entire pipelines', () => {
 
   it('extracts values from dates correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_earthquakes',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'Time',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToDatetime',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'year',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToYear',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'month',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToMonth',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'day',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToDay',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'Time'})})})
+      {_b: 'data_earthquakes'},
+      {_b: 'transform_mutate',
+       COLUMN: 'Time',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToDatetime',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'Time'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'year',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToYear',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'Time'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'month',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToMonth',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'Time'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'day',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToDay',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'Time'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table[0].year, 2016,
@@ -626,20 +489,14 @@ describe('execute blocks for entire pipelines', () => {
 
   it('handles empty tables correctly when filtering', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbLt',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'red'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbLt',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.length == 0,
@@ -649,29 +506,20 @@ describe('execute blocks for entire pipelines', () => {
 
   it('handles a simple conditional correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result',
-         VALUE: makeBlock(
-           'value_ifElse',
-           {COND: makeBlock(
-             'value_compare',
-             {OP: 'tbEq',
-              LEFT: makeBlock(
-                'value_column',
-                {COLUMN: 'first'}),
-              RIGHT: makeBlock(
-                'value_number',
-                {VALUE: 1})}),
-            LEFT: makeBlock(
-              'value_text',
-              {VALUE: 'equal'}),
-            RIGHT: makeBlock(
-              'value_text',
-              {VALUE: 'unequal'})})})
+      {_b: 'data_double'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'value_ifElse',
+               COND: {_b: 'value_compare',
+                      OP: 'tbEq',
+                      LEFT: {_b: 'value_column',
+                             COLUMN: 'first'},
+                      RIGHT: {_b: 'value_number',
+                              VALUE: 1}},
+               LEFT: {_b: 'value_text',
+                      VALUE: 'equal'},
+               RIGHT: {_b: 'value_text',
+                       VALUE: 'unequal'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 2,
@@ -685,19 +533,14 @@ describe('execute blocks for entire pipelines', () => {
 
   it('filters to include missing values', (done) => {
     for (let type of ['number', 'string', 'date']) {
-      const columnBlock = makeBlock(
-        'value_column',
-        {COLUMN: type})
+      const columnBlock = {_b: 'value_column',
+                           COLUMN: type}
       const pipeline = [
-        makeBlock(
-          'data_missing',
-          {}),
-        makeBlock(
-          'transform_filter',
-          {TEST: makeBlock(
-            'value_type',
-            {TYPE: 'tbIsMissing',
-             VALUE: columnBlock})})
+        {_b: 'data_missing'},
+        {_b: 'transform_filter',
+         TEST: {_b: 'value_type',
+                TYPE: 'tbIsMissing',
+                VALUE: columnBlock}}
       ]
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
@@ -712,21 +555,15 @@ describe('execute blocks for entire pipelines', () => {
 
   it('filters to exclude missing values', (done) => {
     for (let type of ['number', 'string', 'date']) {
-      const columnBlock = makeBlock(
-        'value_column',
-        {COLUMN: type})
+      const columnBlock = {_b: 'value_column',
+                           COLUMN: type}
       const pipeline = [
-        makeBlock(
-          'data_missing',
-          {}),
-        makeBlock(
-          'transform_filter',
-          {TEST: makeBlock(
-            'value_not',
-            {VALUE: makeBlock(
-              'value_type',
-              {TYPE: 'tbIsMissing',
-               VALUE: columnBlock})})})
+        {_b: 'data_missing'},
+        {_b: 'transform_filter',
+         TEST: {_b: 'value_not',
+                VALUE: {_b: 'value_type',
+                        TYPE: 'tbIsMissing',
+                        VALUE: columnBlock}}}
       ]
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
@@ -749,16 +586,13 @@ describe('check that grouping and summarization work', () => {
 
   it('summarizes an entire column using summation', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbSum',
-                     COLUMN: 'red'})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbSum',
+          COLUMN: 'red'}
+        ]}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 1,
@@ -772,12 +606,9 @@ describe('check that grouping and summarization work', () => {
 
   it('groups values by a single column', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'blue'})
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'blue'}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -793,15 +624,10 @@ describe('check that grouping and summarization work', () => {
 
   it('ungroups values', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'blue'}),
-      makeBlock(
-        'transform_ungroup',
-        {})
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'blue'},
+      {_b: 'transform_ungroup'}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 11,
@@ -813,19 +639,15 @@ describe('check that grouping and summarization work', () => {
 
   it('groups by one column and averages another', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'blue'}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMean',
-                     COLUMN: 'green'})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'blue'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMean',
+          COLUMN: 'green'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert.deepEqual(env.table,
@@ -838,16 +660,13 @@ describe('check that grouping and summarization work', () => {
 
   it('calculates the maximum value correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMax',
-                     COLUMN: 'second'})
-        ]})
+      {_b: 'data_double'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMax',
+          COLUMN: 'second'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert(env.table.length == 1,
@@ -859,21 +678,15 @@ describe('check that grouping and summarization work', () => {
 
   it('does division correctly even with zeroes', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'ratio',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbDiv',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'red'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'ratio',
+       VALUE: {_b: 'value_arithmetic',
+               OP: 'tbDiv',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => ((row.green === 0)
@@ -885,21 +698,15 @@ describe('check that grouping and summarization work', () => {
 
   it('calculates exponents correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbExp',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'red'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'value_arithmetic',
+               OP: 'tbExp',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => (isFinite(row.red ** row.green)
@@ -911,17 +718,12 @@ describe('check that grouping and summarization work', () => {
 
   it('negates values correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'result',
-         VALUE: makeBlock(
-           'value_negate',
-           {VALUE: makeBlock(
-             'value_column',
-             {COLUMN: 'red'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'value_negate',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => row.result === (- row.red)),
@@ -932,22 +734,20 @@ describe('check that grouping and summarization work', () => {
   it('calculates multiple summary values correctly', (done) => {
     const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/updown.csv'
     const pipeline = [
-      makeBlock(
-        'data_urlCSV',
-        {URL: filePath}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMin',
-                     COLUMN: 'value'}),
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMean',
-                     COLUMN: 'value'}),
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMax',
-                     COLUMN: 'value'})
-        ]})
+      {_b: 'data_urlCSV',
+       URL: filePath},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMin',
+          COLUMN: 'value'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMean',
+          COLUMN: 'value'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMax',
+          COLUMN: 'value'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
@@ -965,35 +765,28 @@ describe('check that grouping and summarization work', () => {
 
   it('handles empty tables correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
+      {_b: 'data_colors'},
       // remove all rows
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-          'value_compare',
-          {OP: 'tbLt',
-           LEFT: makeBlock(
-             'value_column',
-             {COLUMN: 'red'}),
-           RIGHT: makeBlock(
-             'value_number',
-             {VALUE: 0})})}),
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbLt',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
       // calculate various summaries
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMin',
-                     COLUMN: 'red'}),
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMedian',
-                     COLUMN: 'red'}),
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMax',
-                     COLUMN: 'red'})
-        ]})
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMin',
+          COLUMN: 'red'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMedian',
+          COLUMN: 'red'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMax',
+          COLUMN: 'red'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 0,
@@ -1003,16 +796,13 @@ describe('check that grouping and summarization work', () => {
 
   it('counts rows correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbCount',
-                     COLUMN: 'red'})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbCount',
+          COLUMN: 'red'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 1,
@@ -1024,16 +814,13 @@ describe('check that grouping and summarization work', () => {
 
   it('calculates the median correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMedian',
-                     COLUMN: 'red'})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMedian',
+          COLUMN: 'red'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 1,
@@ -1045,19 +832,16 @@ describe('check that grouping and summarization work', () => {
 
   it('calculates the variance and standard deviation correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbVariance',
-                     COLUMN: 'red'}),
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbStd',
-                     COLUMN: 'green'})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbVariance',
+          COLUMN: 'red'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbStd',
+          COLUMN: 'green'}
+       ]}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 1,
@@ -1073,27 +857,15 @@ describe('check that grouping and summarization work', () => {
 
   it('handles missing values for unary operators correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'negated',
-         VALUE: makeBlock(
-           'value_negate',
-           {VALUE: makeBlock(
-             'value_missing',
-             {})}
-         )}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'notted',
-         VALUE: makeBlock(
-           'value_not',
-           {VALUE: makeBlock(
-             'value_missing',
-             {})}
-         )})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'negated',
+       VALUE: {_b: 'value_negate',
+               VALUE: {_b: 'value_missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'notted',
+       VALUE: {_b: 'value_not',
+               VALUE: {_b: 'value_missing'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
@@ -1116,21 +888,14 @@ describe('check that grouping and summarization work', () => {
     ]
     for (let [opName, funcName] of allTests) {
       const pipeline = [
-        makeBlock(
-          'data_single',
-          {}),
-        makeBlock(
-          'transform_mutate',
-          {COLUMN: 'result',
-           VALUE: makeBlock(
-             'value_arithmetic',
-             {OP: funcName,
-              LEFT: makeBlock(
-                'value_column',
-                {COLUMN: 'first'}),
-              RIGHT: makeBlock(
-                'value_missing',
-                {})})})
+        {_b: 'data_single'},
+        {_b: 'transform_mutate',
+         COLUMN: 'result',
+         VALUE: {_b: 'value_arithmetic',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'first'},
+                 RIGHT: {_b: 'value_missing'}}}
       ]
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
@@ -1143,51 +908,34 @@ describe('check that grouping and summarization work', () => {
 
   it('handles missing values for type conversion correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'missing',
-         VALUE: makeBlock(
-           'value_missing',
-           {})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'as_boolean',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToBoolean',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'missing'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'as_datetime',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToDatetime',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'missing'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'as_number',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToNumber',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'missing'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'as_string',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'missing'})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'missing',
+       VALUE: {_b: 'value_missing'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_boolean',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToBoolean',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_datetime',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToDatetime',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_number',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_string',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
@@ -1205,54 +953,37 @@ describe('check that grouping and summarization work', () => {
 
   it('handles conversion to number from Boolean and string correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_false',
-         VALUE: makeBlock(
-           'value_boolean',
-           {VALUE: 'false'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_false',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToNumber',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'bool_false'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_true',
-         VALUE: makeBlock(
-           'value_boolean',
-           {VALUE: 'true'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_true',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToNumber',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'bool_true'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'str',
-         VALUE: makeBlock(
-           'value_boolean',
-           {VALUE: '123.45'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'str',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToNumber',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'str'})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'false'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_false'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'true'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_true'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'str',
+       VALUE: {_b: 'value_boolean',
+               VALUE: '123.45'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'str',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'str'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
@@ -1268,54 +999,37 @@ describe('check that grouping and summarization work', () => {
 
   it('converts things to strings correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_false',
-         VALUE: makeBlock(
-           'value_boolean',
-           {VALUE: 'false'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_false',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'bool_false'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_true',
-         VALUE: makeBlock(
-           'value_boolean',
-           {VALUE: 'true'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'bool_true',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'bool_true'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'num',
-         VALUE: makeBlock(
-           'value_number',
-           {VALUE: '-999'})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'num',
-         VALUE: makeBlock(
-           'value_convert',
-           {TYPE: 'tbToText',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'num'})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'false'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_false'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'true'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_true'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'num',
+       VALUE: {_b: 'value_number',
+               VALUE: '-999'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'num',
+       VALUE: {_b: 'value_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'num'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
@@ -1339,24 +1053,17 @@ describe('check that grouping and summarization work', () => {
     for (let [actualFunc, actualName, actualValue] of allCases) {
       for (let [checkFunc, checkName, checkValue] of allCases) {
         const pipeline = [
-          makeBlock(
-            'data_single',
-            {}),
-          makeBlock(
-            'transform_mutate',
-            {COLUMN: 'temp',
-             VALUE: makeBlock(
-               actualName,
-               {VALUE: actualValue})}),
-          makeBlock(
-            'transform_mutate',
-            {COLUMN: 'check',
-             VALUE: makeBlock(
-               'value_type',
-               {TYPE: checkFunc,
-                VALUE: makeBlock(
-                  'value_column',
-                  {COLUMN: 'temp'})})})
+          {_b: 'data_single'},
+          {_b: 'transform_mutate',
+           COLUMN: 'temp',
+           VALUE: {_b: actualName,
+                   VALUE: actualValue}},
+          {_b: 'transform_mutate',
+           COLUMN: 'check',
+           VALUE: {_b: 'value_type',
+                   TYPE: checkFunc,
+                   VALUE: {_b: 'value_column',
+                           COLUMN: 'temp'}}}
         ]
         const env = evalCode(pipeline)
         assert.equal(env.error, '',
@@ -1379,21 +1086,15 @@ describe('check that specific bugs have been fixed', () => {
 
   it('does subtraction correctly (#58)', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_double',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'difference',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbSub',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'second'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'first'})})})
+      {_b: 'data_double'},
+      {_b: 'transform_mutate',
+       COLUMN: 'difference',
+       VALUE: {_b: 'value_arithmetic',
+               OP: 'tbSub',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'second'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'first'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 2,
@@ -1407,21 +1108,15 @@ describe('check that specific bugs have been fixed', () => {
 
   it('does multiplication correctly (#131)', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'product',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbMul',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'red'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'product',
+       VALUE: {_b: 'value_arithmetic',
+               OP: 'tbMul',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => (row.product === (row.red * row.green))),
@@ -1431,21 +1126,15 @@ describe('check that specific bugs have been fixed', () => {
 
   it('does modulo correctly (#131)', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'remainder',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbMod',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'red'}),
-            RIGHT: makeBlock(
-              'value_column',
-              {COLUMN: 'green'})})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'remainder',
+       VALUE: {_b: 'value_arithmetic',
+               OP: 'tbMod',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
     assert(env.table.every(row => ((row.green === 0)
@@ -1457,20 +1146,14 @@ describe('check that specific bugs have been fixed', () => {
 
   it('filters strings correctly (#143)', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: makeBlock(
-           'value_compare',
-           {OP: 'tbEq',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'Species'}),
-            RIGHT: makeBlock(
-              'value_text',
-              {VALUE: 'setosa'})})})
+      {_b: 'data_iris'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbEq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'Species'},
+              RIGHT: {_b: 'value_text',
+                      VALUE: 'setosa'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 50,

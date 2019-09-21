@@ -850,8 +850,8 @@ class TidyBlocksDataFrame {
   mutate (blockId, newName, op) {
     tbAssert(newName,
              `[block ${blockId}] empty new column name for mutate`)
-    tbAssert(op !== null,
-             `[block ${blockId}] no operator for mutate`)
+    tbAssert(typeof op === 'function',
+             `[block ${blockId}] new value is not a function`)
     const newData = this.data.map(row => {
       const newRow = {...row}
       newRow[newName] = op(row)

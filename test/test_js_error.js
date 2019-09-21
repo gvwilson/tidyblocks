@@ -14,7 +14,7 @@ const {
   assert_startsWith,
   loadBlockFiles,
   makeBlock,
-  generateCode,
+  makeCode,
   evalCode,
   createTestingBlocks
 } = require('./utils')
@@ -41,14 +41,10 @@ describe('raises errors at the right times', () => {
   })
 
   it('raises an error when the pipeline does not start with data', (done) => {
-    const pipeline = [
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'new_column',
-         VALUE: makeBlock(
-           'value_column',
-           {COLUMN: 'nonexistent'})})
-    ]
+    const pipeline = {_b: 'transform_mutate',
+                      COLUMN: 'new_column',
+                      VALUE: {_b: 'value_column',
+                              COLUMN: 'nonexistent'}}
     const env = evalCode(pipeline)
     assert.notEqual(env.error, null,
                     `Expected an error message when running a pipeline without a data block`)
@@ -57,21 +53,11 @@ describe('raises errors at the right times', () => {
 
   it('raises an error when accessing a non-existent column', (done) => {
     const pipeline = [
-      makeBlock( // because the pipeline has to start with a data block
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'should_fail',
-         VALUE: makeBlock(
-           'value_arithmetic',
-           {OP: 'tbAdd',
-            LEFT: makeBlock(
-              'value_column',
-              {COLUMN: 'nonexistent'}),
-            RIGHT: makeBlock(
-              'value_number',
-              {VALUE: 0})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'should_fail',
+       VALUE: {_b: 'value_column',
+               COLUMN: 'nonexistent'}}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no such column "nonexistent"/,
@@ -81,12 +67,9 @@ describe('raises errors at the right times', () => {
 
   it('raises an error for a filter with no condition', (done) => {
     const pipeline = [
-      makeBlock( // because the pipeline has to start with a data block
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_filter',
-        {TEST: null})
+      {_b: 'data_single'},
+      {_b: 'transform_filter',
+       TEST: ''}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no operator for filter/,
@@ -96,12 +79,9 @@ describe('raises errors at the right times', () => {
 
   it('raises an error for grouping with empty column', (done) => {
     const pipeline = [
-      makeBlock( // because the pipeline has to start with a data block
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: ''})
+      {_b: 'data_single'},
+      {_b: 'transform_groupBy',
+       COLUMN: ''}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] empty column name for grouping/,
@@ -111,12 +91,9 @@ describe('raises errors at the right times', () => {
 
   it('raises an error for grouping with nonexistent column', (done) => {
     const pipeline = [
-      makeBlock( // because the pipeline has to start with a data block
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_groupBy',
-        {COLUMN: 'nonexistent'})
+      {_b: 'data_single'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no such column "nonexistent"/,
@@ -126,15 +103,11 @@ describe('raises errors at the right times', () => {
 
   it('raises an error for mutating with an empty column', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: '',
-         VALUE: makeBlock(
-           'value_column',
-           {COLUMN: 'red'})})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: '',
+       VALUE: {_b: 'value_column',
+               COLUMN: 'red'}}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] empty new column name for mutate/,
@@ -144,28 +117,22 @@ describe('raises errors at the right times', () => {
 
   it('raises an error for mutating without a new value', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'new_column',
-         VALUE: null})
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'new_column',
+       VALUE: ''}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no operator for mutate/,
+    assert_match(env.error, /\[block \d+\] new value is not a function/,
                  `Expected an error message when mutating without an operator`)
     done()
   })
 
   it('checks that columns have been specified for selection', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'transform_select',
-        {MULTIPLE_COLUMNS: ''})
+      {_b: 'data_iris'},
+      {_b: 'transform_select',
+       MULTIPLE_COLUMNS: ''}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no columns specified for select/,
@@ -175,12 +142,9 @@ describe('raises errors at the right times', () => {
 
   it('checks that columns exist for selection', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_select',
-        {MULTIPLE_COLUMNS: 'nonexistent'})
+      {_b: 'data_colors'},
+      {_b: 'transform_select',
+       MULTIPLE_COLUMNS: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in select/,
@@ -190,13 +154,10 @@ describe('raises errors at the right times', () => {
 
   it('checks that columns have been specified for sorting', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_iris',
-        {}),
-      makeBlock(
-        'transform_sort',
-        {MULTIPLE_COLUMNS: '',
-         DESCENDING: 'false'})
+      {_b: 'data_iris'},
+      {_b: 'transform_sort',
+       MULTIPLE_COLUMNS: '',
+       DESCENDING: 'false'}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no columns specified for sort/,
@@ -206,12 +167,9 @@ describe('raises errors at the right times', () => {
 
   it('checks that columns exist for sorting', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_sort',
-        {MULTIPLE_COLUMNS: 'nonexistent'})
+      {_b: 'data_colors'},
+      {_b: 'transform_sort',
+       MULTIPLE_COLUMNS: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in sort/,
@@ -221,16 +179,13 @@ describe('raises errors at the right times', () => {
 
   it('check the column being summarized is not empty', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMean',
-                     COLUMN: ''})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMean',
+          COLUMN: ''}
+        ]}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no column specified for summarize/,
@@ -240,16 +195,13 @@ describe('raises errors at the right times', () => {
 
   it('check the column being summarized exists', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_summarize',
-        {COLUMN_FUNC_PAIR: [
-          makeBlock('transform_summarize_item',
-                    {FUNC: 'tbMean',
-                     COLUMN: 'nonexistent'})
-        ]})
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMean',
+          COLUMN: 'nonexistent'}
+        ]}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] unknown column ".+" in summarize/,
@@ -259,12 +211,8 @@ describe('raises errors at the right times', () => {
 
   it('will not ungroup data that is not grouped', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_colors',
-        {}),
-      makeBlock(
-        'transform_ungroup',
-        {})
+      {_b: 'data_colors'},
+      {_b: 'transform_ungroup'}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] cannot ungroup data that is not grouped/,
