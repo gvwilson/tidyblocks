@@ -195,18 +195,39 @@ const makeBlock = (blockName, settings) => {
   assert(blockName in Blockly.fields,
          `Unknown block name "${blockName}"`)
   Object.keys(settings).forEach(name => {
-    assert(Blockly.fields[blockName].has(name),
-           `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
+    if (name != '_b') {
+      assert(Blockly.fields[blockName].has(name),
+             `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
+    }
   })
-
   assert(blockName in Blockly.JavaScript,
          `Unknown block name "${blockName}"`)
+
   const result = Blockly.JavaScript[blockName](new MockBlock(settings))
-  if (typeof result === 'string') {
-    return result
+  return (typeof result === 'string') ? result : result[0]
+}
+
+/**
+ * Make code from object.
+ */
+const makeCode = (root) => {
+  if (Array.isArray(root)) {
+    return root.map(node => makeCode(node))
+  }
+  else if (root instanceof Date) {
+    return `${root}`
+  }
+  else if (typeof root === 'object') {
+    assert('_b' in root, `Require '_b' key for block type in ${root}`)
+    for (let key of Object.keys(root)) {
+      if (key != '_b') {
+        root[key] = makeCode(root[key])
+      }
+    }
+    return makeBlock(root._b, root)
   }
   else {
-    return result[0]
+    return `${root}`
   }
 }
 
@@ -218,21 +239,6 @@ const deleteBlock = (block) => {
 }
 
 //--------------------------------------------------------------------------------
-
-/**
- * Assemble the code produced by blocks into a single string.
- * @param code {string|string[]|number} - input
- * @return a single string
- */
-const generateCode = (code) => {
-  if (Array.isArray(code)){
-    code = code.join('\n') // multiple blocks
-  }
-  else if (typeof code !== 'string') {
-    code = `${code}` // numbers
-  }
-  return code
-}
 
 /**
  * Read 'index.html', find block files, and eval those.
@@ -329,8 +335,8 @@ class TestEnvironment {
  * @return environment (including eval'd code).
  */
 const evalCode = (code) => {
-  if (typeof code !== 'string') {
-    code = generateCode(code)
+  if (Array.isArray(code)) {
+    code = code.map(code => makeCode(code)).join('\n')
   }
   const environment = new TestEnvironment(code)
   TidyBlocksManager.run(environment)
@@ -376,7 +382,7 @@ module.exports = {
   assert_startsWith,
   loadBlockFiles,
   makeBlock,
-  generateCode,
+  makeCode,
   evalCode,
   createTestingBlocks
 }
