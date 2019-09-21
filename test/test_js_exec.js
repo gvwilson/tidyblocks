@@ -352,6 +352,26 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('handles a missing conditional correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_double'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'value_ifElse',
+               COND: {_b: 'value_missing'},
+               LEFT: {_b: 'value_text',
+                      VALUE: 'equal'},
+               RIGHT: {_b: 'value_text',
+                       VALUE: 'unequal'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 2,
+                 `Expected two rows, not ${env.table.length}`)
+    assert(env.table.every(row => (row.result === MISSING)),
+           `Expected every result to be missing`)
+    done()
+  })
+
   it('filters to include missing values', (done) => {
     for (let type of ['number', 'string', 'date']) {
       const columnBlock = {_b: 'value_column',
@@ -620,7 +640,8 @@ describe('check datetime handling', () => {
                        COLUMN: 'when'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table[0].weekday, 7, 'January 1, 1984 was a Sunday')
+    assert.equal(env.table[0].weekday, 7,
+                 `January 1, 1984 was a Sunday, not ${env.table[0].weekday}`)
     done()
   })
 
