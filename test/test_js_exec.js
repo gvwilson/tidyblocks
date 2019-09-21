@@ -211,29 +211,6 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('filters data using not-equals and registers the result', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_filter',
-       TEST: {_b: 'value_compare',
-              OP: 'tbNeq',
-              LEFT: {_b: 'value_column',
-                     COLUMN: 'red'},
-              RIGHT: {_b: 'value_number',
-                      VALUE: 0}}},
-      {_b: 'plumbing_notify',
-       NAME: 'left'}
-    ]
-    const env = evalCode(pipeline)
-    assert(TidyBlocksManager.getResult('left'),
-           'Expected something registered under "left"')
-    assert.equal(TidyBlocksManager.getResult('left').data.length, 5,
-                 'Expected five rows with red != 0')
-    assert(TidyBlocksManager.getResult('left').data.every(row => (row.red != 0)),
-           'Expected all rows to have red != 0')
-    done()
-  })
-
   it('makes a histogram for filtered data', (done) => {
     const pipeline = [
       {_b: 'data_iris'},
@@ -296,6 +273,158 @@ describe('execute blocks for entire pipelines', () => {
                  'Wrong number of columns in output')
     assert(env.table.every(row => (row.red_green === (row.red + row.green))),
            'Sum column does not contain correct values')
+    done()
+  })
+
+  it('checks data types correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result_name_string',
+       VALUE: {_b: 'value_type',
+               TYPE: 'tbIsText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'name'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'result_red_string',
+       VALUE: {_b: 'value_type',
+               TYPE: 'tbIsText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'result_green_number',
+       VALUE: {_b: 'value_type',
+               TYPE: 'tbIsNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'green'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.every(row => row.result_name_string),
+           `Expected all names to be strings`)
+    assert(env.table.every(row => !row.result_red_string),
+           `Expected all red values to not be strings`)
+    assert(env.table.every(row => row.result_green_number),
+           `Expected all green values to be strings`)
+    done()
+  })
+
+  it('handles empty tables correctly when filtering', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbLt',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}}
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 0,
+           `Expected empty output`)
+    done()
+  })
+
+  it('handles a simple conditional correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_double'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'value_ifElse',
+               COND: {_b: 'value_compare',
+                      OP: 'tbEq',
+                      LEFT: {_b: 'value_column',
+                             COLUMN: 'first'},
+                      RIGHT: {_b: 'value_number',
+                              VALUE: 1}},
+               LEFT: {_b: 'value_text',
+                      VALUE: 'equal'},
+               RIGHT: {_b: 'value_text',
+                       VALUE: 'unequal'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 2,
+                 `Expected two rows, not ${env.table.length}`)
+    assert.equal(env.table[0].result, 'equal',
+                 `Expected first row to be equal`)
+    assert.equal(env.table[1].result, 'unequal',
+                 `Expected first row to be unequal`)
+    done()
+  })
+
+  it('filters to include missing values', (done) => {
+    for (let type of ['number', 'string', 'date']) {
+      const columnBlock = {_b: 'value_column',
+                           COLUMN: type}
+      const pipeline = [
+        {_b: 'data_missing'},
+        {_b: 'transform_filter',
+         TEST: {_b: 'value_type',
+                TYPE: 'tbIsMissing',
+                VALUE: columnBlock}}
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message, got "${env.error}" for type ${type}`)
+      assert.equal(env.table.length, 1,
+                   `Expected only one row to have missing ${type}`)
+      assert.equal(env.table[0][type], MISSING,
+                   `Wrong value is missing in surviving row`)
+    }
+    done()
+  })
+
+  it('filters to exclude missing values', (done) => {
+    for (let type of ['number', 'string', 'date']) {
+      const columnBlock = {_b: 'value_column',
+                           COLUMN: type}
+      const pipeline = [
+        {_b: 'data_missing'},
+        {_b: 'transform_filter',
+         TEST: {_b: 'value_not',
+                VALUE: {_b: 'value_type',
+                        TYPE: 'tbIsMissing',
+                        VALUE: columnBlock}}}
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message, got "${env.error}" for type ${type}`)
+      assert.equal(env.table.length, 3,
+                   `Expected only one row to be dropped`)
+      assert(env.table.every(row => (row[type] !== MISSING)),
+             `Incorrect values have been dropped for ${type}`)
+    }
+    done()
+  })
+
+})
+
+describe('check notify/join', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('filters data using not-equals and registers the result', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbNeq',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
+      {_b: 'plumbing_notify',
+       NAME: 'left'}
+    ]
+    const env = evalCode(pipeline)
+    assert(TidyBlocksManager.getResult('left'),
+           'Expected something registered under "left"')
+    assert.equal(TidyBlocksManager.getResult('left').data.length, 5,
+                 'Expected five rows with red != 0')
+    assert(TidyBlocksManager.getResult('left').data.every(row => (row.red != 0)),
+           'Expected all rows to have red != 0')
     done()
   })
 
@@ -390,36 +519,12 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('checks data types correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_mutate',
-       COLUMN: 'result_name_string',
-       VALUE: {_b: 'value_type',
-               TYPE: 'tbIsText',
-               VALUE: {_b: 'value_column',
-                       COLUMN: 'name'}}},
-      {_b: 'transform_mutate',
-       COLUMN: 'result_red_string',
-       VALUE: {_b: 'value_type',
-               TYPE: 'tbIsText',
-               VALUE: {_b: 'value_column',
-                       COLUMN: 'red'}}},
-      {_b: 'transform_mutate',
-       COLUMN: 'result_green_number',
-       VALUE: {_b: 'value_type',
-               TYPE: 'tbIsNumber',
-               VALUE: {_b: 'value_column',
-                       COLUMN: 'green'}}}
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table.every(row => row.result_name_string),
-           `Expected all names to be strings`)
-    assert(env.table.every(row => !row.result_red_string),
-           `Expected all red values to not be strings`)
-    assert(env.table.every(row => row.result_green_number),
-           `Expected all green values to be strings`)
-    done()
+})
+
+describe('check datetime handling', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
   })
 
   it('does date conversion correctly', (done) => {
@@ -555,193 +660,12 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
-  it('handles empty tables correctly when filtering', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_filter',
-       TEST: {_b: 'value_compare',
-              OP: 'tbLt',
-              LEFT: {_b: 'value_column',
-                     COLUMN: 'red'},
-              RIGHT: {_b: 'value_number',
-                      VALUE: 0}}}
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table.length == 0,
-           `Expected empty output`)
-    done()
-  })
-
-  it('handles a simple conditional correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_double'},
-      {_b: 'transform_mutate',
-       COLUMN: 'result',
-       VALUE: {_b: 'value_ifElse',
-               COND: {_b: 'value_compare',
-                      OP: 'tbEq',
-                      LEFT: {_b: 'value_column',
-                             COLUMN: 'first'},
-                      RIGHT: {_b: 'value_number',
-                              VALUE: 1}},
-               LEFT: {_b: 'value_text',
-                      VALUE: 'equal'},
-               RIGHT: {_b: 'value_text',
-                       VALUE: 'unequal'}}}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 2,
-                 `Expected two rows, not ${env.table.length}`)
-    assert.equal(env.table[0].result, 'equal',
-                 `Expected first row to be equal`)
-    assert.equal(env.table[1].result, 'unequal',
-                 `Expected first row to be unequal`)
-    done()
-  })
-
-  it('filters to include missing values', (done) => {
-    for (let type of ['number', 'string', 'date']) {
-      const columnBlock = {_b: 'value_column',
-                           COLUMN: type}
-      const pipeline = [
-        {_b: 'data_missing'},
-        {_b: 'transform_filter',
-         TEST: {_b: 'value_type',
-                TYPE: 'tbIsMissing',
-                VALUE: columnBlock}}
-      ]
-      const env = evalCode(pipeline)
-      assert.equal(env.error, '',
-                   `Expected no error message, got "${env.error}" for type ${type}`)
-      assert.equal(env.table.length, 1,
-                   `Expected only one row to have missing ${type}`)
-      assert.equal(env.table[0][type], MISSING,
-                   `Wrong value is missing in surviving row`)
-    }
-    done()
-  })
-
-  it('filters to exclude missing values', (done) => {
-    for (let type of ['number', 'string', 'date']) {
-      const columnBlock = {_b: 'value_column',
-                           COLUMN: type}
-      const pipeline = [
-        {_b: 'data_missing'},
-        {_b: 'transform_filter',
-         TEST: {_b: 'value_not',
-                VALUE: {_b: 'value_type',
-                        TYPE: 'tbIsMissing',
-                        VALUE: columnBlock}}}
-      ]
-      const env = evalCode(pipeline)
-      assert.equal(env.error, '',
-                   `Expected no error message, got "${env.error}" for type ${type}`)
-      assert.equal(env.table.length, 3,
-                   `Expected only one row to be dropped`)
-      assert(env.table.every(row => (row[type] !== MISSING)),
-             `Incorrect values have been dropped for ${type}`)
-    }
-    done()
-  })
-
 })
 
-describe('check that grouping and summarization work', () => {
+describe('basic operations', () => {
 
   beforeEach(() => {
     TidyBlocksManager.reset()
-  })
-
-  it('summarizes an entire column using summation', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbSum',
-          COLUMN: 'red'}
-        ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 'Expected one row of output')
-    assert.equal(Object.keys(env.table[0]).length, 1,
-                 'Expected a single column of output')
-    assert.equal(env.table[0].red_sum, 1148,
-                 'Incorrect sum')
-    done()
-  })
-
-  it('groups values by a single column', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_groupBy',
-       COLUMN: 'blue'}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
-                 'Wrong number of rows in output')
-    assert.equal(env.table.filter(row => (row._group_ === 0)).length, 6,
-                 'Wrong number of rows for index 0')
-    assert.equal(env.table.filter(row => (row._group_ === 1)).length, 4,
-                 'Wrong number of rows for index 255')
-    assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
-                 'Wrong number of rows for index 128')
-    done()
-  })
-
-  it('ungroups values', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_groupBy',
-       COLUMN: 'blue'},
-      {_b: 'transform_ungroup'}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
-                 'Table has the wrong number of rows')
-    assert(!('_group_' in env.table[0]),
-           'Table still has group index column')
-    done()
-  })
-
-  it('groups by one column and averages another', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_groupBy',
-       COLUMN: 'blue'},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMean',
-          COLUMN: 'green'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.deepEqual(env.table,
-                     [{_group_: 0, green_mean: 106.33333333333333},
-                      {_group_: 1, green_mean: 127.5},
-                      {_group_: 2, green_mean: 0}],
-                     'Incorrect averaging')
-    done()
-  })
-
-  it('calculates the maximum value correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_double'},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMax',
-          COLUMN: 'second'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert(env.table.length == 1,
-           `Expect a single row of output`)
-    assert(env.table[0].second_max == 200,
-           `Expected a max of 200, not ${env.table[0].second}`)
-    done()
   })
 
   it('does division correctly even with zeroes', (done) => {
@@ -799,128 +723,49 @@ describe('check that grouping and summarization work', () => {
     done()
   })
 
-  it('calculates multiple summary values correctly', (done) => {
-    const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/updown.csv'
-    const pipeline = [
-      {_b: 'data_urlCSV',
-       URL: filePath},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMin',
-          COLUMN: 'value'},
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMean',
-          COLUMN: 'value'},
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMax',
-          COLUMN: 'value'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.error, '',
-                 `Expected no error from pipeline`)
-    assert.equal(env.table.length, 1,
-                 `Expect a single row of output`)
-    assert.equal(env.table[0].value_min, 20,
-                 `Expected a mean of 20, not ${env.table[0].value_min}`)
-    assert.equal(env.table[0].value_mean, 32.5,
-                 `Expected a mean of 32.5, not ${env.table[0].value_mean}`)
-    assert.equal(env.table[0].value_max, 45,
-                 `Expected a max of 45, not ${env.table[0].value_max}`)
+  it('does logical operations correctly', (done) => {
+    for (let funcName of ['tbAnd', 'tbOr']) {
+      for (let left of [true, false, MISSING]) {
+        for (let right of [true, false, MISSING]) {
+          const pipeline = [
+            {_b: 'data_double'},
+            {_b: 'transform_mutate',
+             COLUMN: 'left',
+             VALUE: {_b: 'value_boolean',
+                     VALUE: left}},
+            {_b: 'transform_mutate',
+             COLUMN: 'right',
+             VALUE: {_b: 'value_boolean',
+                     VALUE: right}},
+            {_b: 'transform_mutate',
+             COLUMN: 'result',
+             VALUE: {_b: 'value_logical',
+                     OP: funcName,
+                     LEFT: {_b: 'value_column',
+                            COLUMN: 'left'},
+                     RIGHT: {_b: 'value_column',
+                             COLUMN: 'right'}}}
+          ]
+          const env = evalCode(pipeline)
+          const expected = (funcName === 'tbAnd')
+                ? (left && right)
+                : (left || right)
+          assert.equal(env.error, '',
+                       `Expected no error from operation`)
+          assert.equal(env.table[0].result, expected,
+                       `Expected ${expected} from ${left} ${funcName} ${right}, got ${env.table[0].result}`)
+        }
+      }
+    }
     done()
   })
 
-  it('handles empty tables correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      // remove all rows
-      {_b: 'transform_filter',
-       TEST: {_b: 'value_compare',
-              OP: 'tbLt',
-              LEFT: {_b: 'value_column',
-                     COLUMN: 'red'},
-              RIGHT: {_b: 'value_number',
-                      VALUE: 0}}},
-      // calculate various summaries
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMin',
-          COLUMN: 'red'},
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMedian',
-          COLUMN: 'red'},
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMax',
-          COLUMN: 'red'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 0,
-           `Expected empty output`)
-    done()
-  })
+})
 
-  it('counts rows correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbCount',
-          COLUMN: 'red'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 `Expect one row of output not ${env.table.length}`)
-    assert.equal(env.table[0].red_count, 11,
-                 `Expect a count of 11 rows, not ${env.table[0].red_count}`)
-    done()
-  })
+describe('missing values are handled correctly', () => {
 
-  it('calculates the median correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbMedian',
-          COLUMN: 'red'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 `Expect one row of output not ${env.table.length}`)
-    assert.equal(env.table[0].red_median, 0,
-                 `Expect a median of 0, not ${env.table[0].red_median}`)
-    done()
-  })
-
-  it('calculates the variance and standard deviation correctly', (done) => {
-    const pipeline = [
-      {_b: 'data_colors'},
-      {_b: 'transform_summarize',
-       COLUMN_FUNC_PAIR: [
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbVariance',
-          COLUMN: 'red'},
-         {_b: 'transform_summarize_item',
-          FUNC: 'tbStd',
-          COLUMN: 'green'}
-       ]}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 `Expect one row of output not ${env.table.length}`)
-    const expected_variance = 14243.140495867769
-    const expected_std = 119.34462910356615
-    assert_approxEquals(env.table[0].red_variance, expected_variance,
-                        `Expect a variance of ${expected_variance}, not ${env.table[0].red_variance}`)
-    assert_approxEquals(env.table[0].green_std, expected_std,
-                        `Expect a standard deviation of ${expected_std}, not ${env.table[0].green_std}`)
-    done()
+  beforeEach(() => {
+    TidyBlocksManager.reset()
   })
 
   it('handles missing values for unary operators correctly', (done) => {
@@ -1017,6 +862,14 @@ describe('check that grouping and summarization work', () => {
     assert.equal(env.table[0].as_string, MISSING,
                  `Expected converted string to be missing value, not ${env.table[0].as_string}`)
     done()
+  })
+
+})
+
+describe('type conversion and type checking', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
   })
 
   it('handles conversion to number from Boolean and string correctly', (done) => {
@@ -1144,42 +997,230 @@ describe('check that grouping and summarization work', () => {
     done()
   })
 
-  it('does logical operations correctly', (done) => {
-    for (let funcName of ['tbAnd', 'tbOr']) {
-      for (let left of [true, false, MISSING]) {
-        for (let right of [true, false, MISSING]) {
-          const pipeline = [
-            {_b: 'data_double'},
-            {_b: 'transform_mutate',
-             COLUMN: 'left',
-             VALUE: {_b: 'value_boolean',
-                     VALUE: left}},
-            {_b: 'transform_mutate',
-             COLUMN: 'right',
-             VALUE: {_b: 'value_boolean',
-                     VALUE: right}},
-            {_b: 'transform_mutate',
-             COLUMN: 'result',
-             VALUE: {_b: 'value_logical',
-                     OP: funcName,
-                     LEFT: {_b: 'value_column',
-                            COLUMN: 'left'},
-                     RIGHT: {_b: 'value_column',
-                             COLUMN: 'right'}}}
-          ]
-          const env = evalCode(pipeline)
-          const expected = (funcName === 'tbAnd')
-                ? (left && right)
-                : (left || right)
-          assert.equal(env.error, '',
-                       `Expected no error from operation`)
-          assert.equal(env.table[0].result, expected,
-                       `Expected ${expected} from ${left} ${funcName} ${right}, got ${env.table[0].result}`)
-        }
-      }
-    }
+})
+
+describe('check that grouping and summarization work', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('summarizes an entire column using summation', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbSum',
+          COLUMN: 'red'}
+        ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 'Expected one row of output')
+    assert.equal(Object.keys(env.table[0]).length, 1,
+                 'Expected a single column of output')
+    assert.equal(env.table[0].red_sum, 1148,
+                 'Incorrect sum')
     done()
   })
+
+  it('groups values by a single column', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'blue'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
+                 'Wrong number of rows in output')
+    assert.equal(env.table.filter(row => (row._group_ === 0)).length, 6,
+                 'Wrong number of rows for index 0')
+    assert.equal(env.table.filter(row => (row._group_ === 1)).length, 4,
+                 'Wrong number of rows for index 255')
+    assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
+                 'Wrong number of rows for index 128')
+    done()
+  })
+
+  it('ungroups values', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'blue'},
+      {_b: 'transform_ungroup'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 11,
+                 'Table has the wrong number of rows')
+    assert(!('_group_' in env.table[0]),
+           'Table still has group index column')
+    done()
+  })
+
+  it('groups by one column and averages another', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'blue'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMean',
+          COLUMN: 'green'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.deepEqual(env.table,
+                     [{_group_: 0, green_mean: 106.33333333333333},
+                      {_group_: 1, green_mean: 127.5},
+                      {_group_: 2, green_mean: 0}],
+                     'Incorrect averaging')
+    done()
+  })
+
+  it('calculates the maximum value correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_double'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMax',
+          COLUMN: 'second'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert(env.table.length == 1,
+           `Expect a single row of output`)
+    assert(env.table[0].second_max == 200,
+           `Expected a max of 200, not ${env.table[0].second}`)
+    done()
+  })
+
+  it('calculates multiple summary values correctly', (done) => {
+    const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/updown.csv'
+    const pipeline = [
+      {_b: 'data_urlCSV',
+       URL: filePath},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMin',
+          COLUMN: 'value'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMean',
+          COLUMN: 'value'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMax',
+          COLUMN: 'value'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.table.length, 1,
+                 `Expect a single row of output`)
+    assert.equal(env.table[0].value_min, 20,
+                 `Expected a mean of 20, not ${env.table[0].value_min}`)
+    assert.equal(env.table[0].value_mean, 32.5,
+                 `Expected a mean of 32.5, not ${env.table[0].value_mean}`)
+    assert.equal(env.table[0].value_max, 45,
+                 `Expected a max of 45, not ${env.table[0].value_max}`)
+    done()
+  })
+
+  it('handles empty tables correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      // remove all rows
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbLt',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'red'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 0}}},
+      // calculate various summaries
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMin',
+          COLUMN: 'red'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMedian',
+          COLUMN: 'red'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMax',
+          COLUMN: 'red'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 0,
+           `Expected empty output`)
+    done()
+  })
+
+  it('counts rows correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbCount',
+          COLUMN: 'red'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.table[0].red_count, 11,
+                 `Expect a count of 11 rows, not ${env.table[0].red_count}`)
+    done()
+  })
+
+  it('calculates the median correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbMedian',
+          COLUMN: 'red'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.table[0].red_median, 0,
+                 `Expect a median of 0, not ${env.table[0].red_median}`)
+    done()
+  })
+
+  it('calculates the variance and standard deviation correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_summarize',
+       COLUMN_FUNC_PAIR: [
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbVariance',
+          COLUMN: 'red'},
+         {_b: 'transform_summarize_item',
+          FUNC: 'tbStd',
+          COLUMN: 'green'}
+       ]}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.table.length, 1,
+                 `Expect one row of output not ${env.table.length}`)
+    const expected_variance = 14243.140495867769
+    const expected_std = 119.34462910356615
+    assert_approxEquals(env.table[0].red_variance, expected_variance,
+                        `Expect a variance of ${expected_variance}, not ${env.table[0].red_variance}`)
+    assert_approxEquals(env.table[0].green_std, expected_std,
+                        `Expect a standard deviation of ${expected_std}, not ${env.table[0].green_std}`)
+    done()
+  })
+
 })
 
 describe('check that specific bugs have been fixed', () => {
