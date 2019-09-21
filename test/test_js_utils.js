@@ -258,6 +258,18 @@ describe('testing utilities run correctly', () => {
     TidyBlocksManager.reset()
   })
 
+  it('checks column existence correctly', (done) => {
+    assert(! (new TidyBlocksDataFrame([])).hasColumns('missing'),
+           'Did not expect empty frame to have columns')
+    assert((new TidyBlocksDataFrame([{first: 1}])).hasColumns('first'),
+           'Expected dataframe to have column')
+    assert((new TidyBlocksDataFrame([{first: 1, second: 2}])).hasColumns(['first', 'second']),
+           'Expected dataframe to have both columns')
+    assert(! (new TidyBlocksDataFrame([{first: 1}])).hasColumns(['first', 'second']),
+           'Did not expect dataframe to have both columns')
+    done()
+  })
+
   it('compares floating point numbers correctly with a tolerance', (done) => {
     assert.throws(() => assert_approxEquals(1, 2, 'message', 0),
                   /message/,
@@ -287,6 +299,22 @@ describe('testing utilities run correctly', () => {
                  `Expected one row of output`)
     assert.equal(env.table[0].na, MISSING,
                  `Expected missing value in new column`)
+    done()
+  })
+
+  it('checks that pipelines start properly', (done) => {
+    const pipeline = [
+      makeBlock(
+        'transform_mutate',
+        {COLUMN: 'na',
+         VALUE: makeBlock(
+           'value_missing',
+           {})})
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error,
+                 'pipeline does not have a valid start block',
+                 'Expected error message for pipeline without start block')
     done()
   })
 

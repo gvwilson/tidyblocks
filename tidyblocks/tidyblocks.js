@@ -1066,17 +1066,6 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   /**
-   * Get a column as a JavaScript array.
-   * @param {string} name Name of column to get.
-   * @returns {Array} Column as JavaScript array.
-   */
-  getColumn (name) {
-    tbAssert(this.hasColumns(name),
-             `Table does not have column ${name}`)
-    return this.data.map(row => row[name])
-  }
-
-  /**
    * Test whether the dataframe has the specified columns.
    * @param {string[]} names Names of column to check for.
    * @returns {Boolean} Are columns present?
@@ -1145,10 +1134,7 @@ class TidyBlocksManagerClass {
    * @returns {block} The block or null.
    */
   getBlock (blockId) {
-    if (this.blocks.has(blockId)) {
-      return this.blocks.get(blockId)
-    }
-    return null
+    return this.blocks.has(blockId) ? this.blocks.get(blockId) : null
   }
 
   /**
