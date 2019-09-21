@@ -489,24 +489,17 @@ describe('execute blocks for entire pipelines', () => {
 
   it('handles conversion to weekday correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'when',
-         VALUE: makeBlock(
-           'value_datetime',
-           {VALUE: new Date('1984-01-01')})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'weekday',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToWeekDay',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'when'})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'when',
+       VALUE: {_b: 'value_datetime',
+               VALUE: new Date('1984-01-01')}},
+      {_b: 'transform_mutate',
+       COLUMN: 'weekday',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToWeekDay',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'when'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table[0].weekday, 7, 'January 1, 1984 was a Sunday')
@@ -515,42 +508,29 @@ describe('execute blocks for entire pipelines', () => {
 
   it('extracts hours, minutes, and seconds correctly', (done) => {
     const pipeline = [
-      makeBlock(
-        'data_single',
-        {}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'when',
-         VALUE: makeBlock(
-           'value_datetime',
-           {VALUE: new Date(1984, 1, 1, 5, 10, 15)})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'hours',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToHours',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'when'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'minutes',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToMinutes',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'when'})})}),
-      makeBlock(
-        'transform_mutate',
-        {COLUMN: 'seconds',
-         VALUE: makeBlock(
-           'value_convert_datetime',
-           {TYPE: 'tbToSeconds',
-            VALUE: makeBlock(
-              'value_column',
-              {COLUMN: 'when'})})})
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'when',
+       VALUE: {_b: 'value_datetime',
+               VALUE: new Date(1984, 1, 1, 5, 10, 15)}},
+      {_b: 'transform_mutate',
+       COLUMN: 'hours',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToHours',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'when'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'minutes',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToMinutes',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'when'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'seconds',
+       VALUE: {_b: 'value_convert_datetime',
+               TYPE: 'tbToSeconds',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'when'}}}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.table[0].hours, 5,
@@ -1156,33 +1136,23 @@ describe('check that grouping and summarization work', () => {
       for (let left of [true, false, MISSING]) {
         for (let right of [true, false, MISSING]) {
           const pipeline = [
-            makeBlock(
-              'data_double',
-              {}),
-            makeBlock(
-              'transform_mutate',
-              {COLUMN: 'left',
-               VALUE: makeBlock(
-                 'value_boolean',
-                 {VALUE: left})}),,
-            makeBlock(
-              'transform_mutate',
-              {COLUMN: 'right',
-               VALUE: makeBlock(
-                 'value_boolean',
-                 {VALUE: right})}),
-            makeBlock(
-              'transform_mutate',
-              {COLUMN: 'result',
-               VALUE: makeBlock(
-                 'value_logical',
-                 {OP: funcName,
-                  LEFT: makeBlock(
-                    'value_column',
-                    {COLUMN: 'left'}),
-                  RIGHT: makeBlock(
-                    'value_column',
-                    {COLUMN: 'right'})})})
+            {_b: 'data_double'},
+            {_b: 'transform_mutate',
+             COLUMN: 'left',
+             VALUE: {_b: 'value_boolean',
+                     VALUE: left}},
+            {_b: 'transform_mutate',
+             COLUMN: 'right',
+             VALUE: {_b: 'value_boolean',
+                     VALUE: right}},
+            {_b: 'transform_mutate',
+             COLUMN: 'result',
+             VALUE: {_b: 'value_logical',
+                     OP: funcName,
+                     LEFT: {_b: 'value_column',
+                            COLUMN: 'left'},
+                     RIGHT: {_b: 'value_column',
+                             COLUMN: 'right'}}}
           ]
           const env = evalCode(pipeline)
           const expected = (funcName === 'tbAnd')
