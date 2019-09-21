@@ -96,6 +96,19 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('sorts data in reverse order', (done) => {
+    const pipeline = [
+      {_b: 'data_double'},
+      {_b: 'transform_sort',
+       MULTIPLE_COLUMNS: 'first',
+       DESCENDING: 'TRUE'}
+    ]
+    const env = evalCode(pipeline)
+    assert.deepEqual(env.table.map(row => row.first), [2, 1],
+                     `Sort results not in expected (descending) order`)
+    done()
+  })
+
   it('sorts data by multiple columns', (done) => {
     const pipeline = [
       {_b: 'data_colors'},

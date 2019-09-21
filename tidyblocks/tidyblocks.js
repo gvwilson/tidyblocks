@@ -916,7 +916,7 @@ class TidyBlocksDataFrame {
                `[block ${subBlockId}] no column specified for summarize`)
       tbAssert(this.hasColumns(sourceColumn),
                `[block ${subBlockId}] unknown column "${sourceColumn}" in summarize`)
-      const newColumn = this._makeColumnName(summarized, func.colName, sourceColumn)
+      const newColumn = `${sourceColumn}_${func.colName}`
       summarized[newColumn] = groups.map(group => func(group, sourceColumn))
     })
 
@@ -959,23 +959,6 @@ class TidyBlocksDataFrame {
       groups.push(this.data)
     }
     return [wasGrouped, groups]
-  }
-
-  //
-  // Make a unique new column name.
-  //
-  _makeColumnName (soFar, funcName, sourceColumn) {
-    let result = `${sourceColumn}_${funcName}`
-    if (result in soFar) {
-      let i = 1
-      let temp = `${result}_${i}`
-      while (temp in soFar) {
-        i += 1
-        temp = `${result}_${i}`
-      }
-      result = temp
-    }
-    return result
   }
 
   /**

@@ -207,7 +207,7 @@ describe('blocks return proper columns', () => {
       makeBlock(
         'transform_sort',
         {MULTIPLE_COLUMNS: 'Sepal_Length',
-         DESCENDING: 'false'})
+         DESCENDING: 'FALSE'})
     )
     const env_sort = evalCode(pipeline)
     assert.deepEqual(Object.keys(env_iris.table[0]),

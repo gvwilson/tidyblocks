@@ -157,7 +157,7 @@ describe('raises errors at the right times', () => {
       {_b: 'data_iris'},
       {_b: 'transform_sort',
        MULTIPLE_COLUMNS: '',
-       DESCENDING: 'false'}
+       DESCENDING: 'FALSE'}
     ]
     const env = evalCode(pipeline)
     assert_match(env.error, /\[block \d+\] no columns specified for sort/,
