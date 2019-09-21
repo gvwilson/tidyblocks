@@ -760,6 +760,31 @@ describe('basic operations', () => {
     done()
   })
 
+  it('compares numbers correctly', (done) => {
+    for (let [funcName, expected] of [['tbEq', false],
+                                      ['tbNeq', true],
+                                      ['tbLt', true],
+                                      ['tbLeq', true],
+                                      ['tbGt', false],
+                                      ['tbGeq', false]]) {
+      const pipeline = [
+        {_b: 'data_double'},
+        {_b: 'transform_mutate',
+         COLUMN: 'result',
+         VALUE: {_b: 'value_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'first'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'second'}}}
+      ]
+      const env = evalCode(pipeline)
+      assert(env.table.every(row => (row.result === expected)),
+             `Unexpected value(s) in comparison for ${funcName}`)
+    }
+    done()
+  })
+
 })
 
 describe('missing values are handled correctly', () => {
