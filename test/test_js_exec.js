@@ -43,56 +43,49 @@ describe('execute blocks for entire pipelines', () => {
     done()
   }),
 
-  it('creates a table that can be checked', (done) => {
-    const pipeline = [
-      {_b: 'data_iris'},
-      {_b: 'plot_table'}
-    ]
-    const env = evalCode(pipeline)
-    assert.notEqual(env.table, null,
-                    'Result table has not been set')
-    assert(Array.isArray(env.table),
-           'Result table is not an array')
-    done()
-  })
-
-  it('makes a histogram', (done) => {
-    const pipeline = [
-      {_b: 'data_iris'},
-      {_b: 'plot_hist',
-       COLUMN: 'Petal_Length',
-       BINS: '20'}
-    ]
-    const env = evalCode(pipeline)
-    assert(Array.isArray(env.table),
-           'Result table is not an array')
-    assert.equal(env.table.length, 150,
-                 'Result table is the wrong length')
-    assert_hasKey(env.table[0], 'Sepal_Length',
-           'Result table missing expected keys')
-    assert.equal(typeof env.plot, 'object',
-                 'Result plot is not an object')
-    assert.equal(env.plot.data.values.length, 150,
-                 'Result plot data is the wrong length')
-    done()
-  })
-
-  it('makes a histogram for selected columns', (done) => {
+  it('returns only the selected column', (done) => {
     const pipeline = [
       {_b: 'data_iris'},
       {_b: 'transform_select',
-       MULTIPLE_COLUMNS: 'Petal_Length'},
-      {_b: 'plot_hist',
-       COLUMN: 'Petal_Length',
-       BINS: '20'}
+       MULTIPLE_COLUMNS: 'Sepal_Length'}
     ]
     const env = evalCode(pipeline)
-    assert.equal(Object.keys(env.table[0]).length, 1,
-                 'Wrong number of columns in result table')
-    assert_hasKey(env.table[0], 'Petal_Length',
-                  'Result table does not contain expected key')
-    assert.equal(env.plot.data.values.length, 150,
-                 'Result plot data is the wrong length')
+    assert.deepEqual(Object.keys(env.table[0]),
+                     ['Sepal_Length'],
+                     `Select does not return correct columns`)
+    done()
+  })
+
+  it('adds new column when mutating', (done) => {
+    const pipeline = [
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'newColumnName',
+       VALUE: {_b: 'value_number',
+               VALUE: 0}}
+    ]
+    const env = evalCode(pipeline)
+    assert_hasKey(env.table[0], 'newColumnName',
+                  `Table does not have expected column after mutate`)
+    done()
+  })
+
+  it('does not change columns when sorting', (done) => {
+    const original = [
+      {_b: 'data_iris'}
+    ]
+    const env_original = evalCode(original)
+
+    const sorted = [
+      {_b: 'data_iris'},
+      {_b: 'transform_sort',
+       MULTIPLE_COLUMNS: 'Sepal_Length',
+       DESCENDING: 'FALSE'}
+    ]
+    const env_sorted = evalCode(sorted)
+    assert.deepEqual(Object.keys(env_original.table[0]),
+                     Object.keys(env_sorted.table[0]),
+                     `Column names are not the same after sorting`)
     done()
   })
 
@@ -208,30 +201,6 @@ describe('execute blocks for entire pipelines', () => {
     const env = evalCode(pipeline)
     assert.equal(env.table.length, 5,
                  'Expected 5 rows with red != 0')
-    done()
-  })
-
-  it('makes a histogram for filtered data', (done) => {
-    const pipeline = [
-      {_b: 'data_iris'},
-      {_b: 'transform_filter',
-       TEST: {_b: 'value_compare',
-              OP: 'tbGt',
-              LEFT: {_b: 'value_column',
-                     COLUMN: 'Petal_Length'},
-              RIGHT: {_b: 'value_number',
-                      VALUE: 5.0}}},
-      {_b: 'plot_hist',
-       COLUMN: {_b: 'value_column',
-                COLUMN: 'Petal_Length'},
-       BINS: {_b: 'value_number',
-              VALUE: 20}}
-    ]
-    const env = evalCode(pipeline)
-    assert.equal(Object.keys(env.table[0]).length, 5,
-                 'Wrong number of columns in result table')
-    assert.equal(env.plot.data.values.length, 42,
-                 'Result plot data is the wrong length')
     done()
   })
 
@@ -414,6 +383,91 @@ describe('execute blocks for entire pipelines', () => {
       assert(env.table.every(row => (row[type] !== MISSING)),
              `Incorrect values have been dropped for ${type}`)
     }
+    done()
+  })
+
+})
+
+describe('check plotting', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('creates a table that can be checked', (done) => {
+    const pipeline = [
+      {_b: 'data_iris'},
+      {_b: 'plot_table'}
+    ]
+    const env = evalCode(pipeline)
+    assert.notEqual(env.table, null,
+                    'Result table has not been set')
+    assert(Array.isArray(env.table),
+           'Result table is not an array')
+    done()
+  })
+
+  it('makes a histogram', (done) => {
+    const pipeline = [
+      {_b: 'data_iris'},
+      {_b: 'plot_hist',
+       COLUMN: 'Petal_Length',
+       BINS: '20'}
+    ]
+    const env = evalCode(pipeline)
+    assert(Array.isArray(env.table),
+           'Result table is not an array')
+    assert.equal(env.table.length, 150,
+                 'Result table is the wrong length')
+    assert_hasKey(env.table[0], 'Sepal_Length',
+           'Result table missing expected keys')
+    assert.equal(typeof env.plot, 'object',
+                 'Result plot is not an object')
+    assert.equal(env.plot.data.values.length, 150,
+                 'Result plot data is the wrong length')
+    done()
+  })
+
+  it('makes a histogram for selected columns', (done) => {
+    const pipeline = [
+      {_b: 'data_iris'},
+      {_b: 'transform_select',
+       MULTIPLE_COLUMNS: 'Petal_Length'},
+      {_b: 'plot_hist',
+       COLUMN: 'Petal_Length',
+       BINS: '20'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(Object.keys(env.table[0]).length, 1,
+                 'Wrong number of columns in result table')
+    assert_hasKey(env.table[0], 'Petal_Length',
+                  'Result table does not contain expected key')
+    assert.equal(env.plot.data.values.length, 150,
+                 'Result plot data is the wrong length')
+    done()
+  })
+
+  it('makes a histogram for filtered data', (done) => {
+    const pipeline = [
+      {_b: 'data_iris'},
+      {_b: 'transform_filter',
+       TEST: {_b: 'value_compare',
+              OP: 'tbGt',
+              LEFT: {_b: 'value_column',
+                     COLUMN: 'Petal_Length'},
+              RIGHT: {_b: 'value_number',
+                      VALUE: 5.0}}},
+      {_b: 'plot_hist',
+       COLUMN: {_b: 'value_column',
+                COLUMN: 'Petal_Length'},
+       BINS: {_b: 'value_number',
+              VALUE: 20}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(Object.keys(env.table[0]).length, 5,
+                 'Wrong number of columns in result table')
+    assert.equal(env.plot.data.values.length, 42,
+                 'Result plot data is the wrong length')
     done()
   })
 
@@ -1141,6 +1195,17 @@ describe('check that grouping and summarization work', () => {
                  'Wrong number of rows for index 255')
     assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
                  'Wrong number of rows for index 128')
+    done()
+  })
+
+  it('adds _group_ column when doing groupBy', (done) => {
+    const pipeline = [
+      {_b: 'data_single'},
+      {_b: 'transform_groupBy',
+       COLUMN: 'first'}
+    ]
+    const env = evalCode(pipeline)
+    assert('_group_' in env.table[0])
     done()
   })
 
