@@ -680,12 +680,13 @@ describe('check datetime handling', () => {
   })
 
   it('handles conversion to weekday correctly', (done) => {
+    const date = '1984-01-01'
     const pipeline = [
       {_b: 'data_single'},
       {_b: 'transform_mutate',
        COLUMN: 'when',
        VALUE: {_b: 'value_datetime',
-               VALUE: new Date('1984-01-01')}},
+               VALUE: new Date(date)}},
       {_b: 'transform_mutate',
        COLUMN: 'weekday',
        VALUE: {_b: 'value_convert_datetime',
@@ -694,7 +695,7 @@ describe('check datetime handling', () => {
                        COLUMN: 'when'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table[0].weekday, 7,
+    assert.equal(env.table[0].weekday, new Date('1984-01-01').getDay(),
                  `January 1, 1984 was a Sunday, not ${env.table[0].weekday}`)
     done()
   })

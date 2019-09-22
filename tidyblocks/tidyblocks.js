@@ -429,13 +429,13 @@ const tbToDay = (row, getValue) => {
  * Extract day of week from value.
  * @param {Object} row Row containing values.
  * @param {function} getValue How to get desired value.
- * @returns Day of week as number (1=Monday, 7=Sunday)
+ * @returns Day of week as number
  */
 const tbToWeekDay = (row, getValue) => {
   const value = getValue(row)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
-  return value.getDay() + 1
+  return value.getDay()
 }
 
 /**
