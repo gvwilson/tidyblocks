@@ -2,6 +2,8 @@ const assert = require('assert')
 
 const {
   MISSING,
+  GROUPCOL,
+  JOINCOL,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -11,6 +13,7 @@ const {
   assert_hasKey,
   assert_includes,
   assert_match,
+  assert_setEqual,
   assert_startsWith,
   loadBlockFiles,
   evalCode,
@@ -36,9 +39,9 @@ describe('execute blocks for entire pipelines', () => {
       {_b: 'data_mtcars'}
     ]
     const env = evalCode(pipeline)
-    assert.notEqual(env.table, null,
+    assert.notEqual(env.frame.data, null,
                     'Result table has not been set')
-    assert.equal(env.table.length, 32,
+    assert.equal(env.frame.data.length, 32,
                  'Result table has wrong number of rows')
     done()
   }),
@@ -50,8 +53,7 @@ describe('execute blocks for entire pipelines', () => {
        MULTIPLE_COLUMNS: 'Sepal_Length'}
     ]
     const env = evalCode(pipeline)
-    assert.deepEqual(Object.keys(env.table[0]),
-                     ['Sepal_Length'],
+    assert_setEqual(new Set(['Sepal_Length']), env.frame.columns,
                      `Select does not return correct columns`)
     done()
   })
@@ -65,7 +67,9 @@ describe('execute blocks for entire pipelines', () => {
                VALUE: 0}}
     ]
     const env = evalCode(pipeline)
-    assert_hasKey(env.table[0], 'newColumnName',
+    assert.equal(env.error, '',
+                 `Expected no error`)
+    assert_hasKey(env.frame.data[0], 'newColumnName',
                   `Table does not have expected column after mutate`)
     done()
   })
@@ -83,9 +87,11 @@ describe('execute blocks for entire pipelines', () => {
        DESCENDING: 'FALSE'}
     ]
     const env_sorted = evalCode(sorted)
-    assert.deepEqual(Object.keys(env_original.table[0]),
-                     Object.keys(env_sorted.table[0]),
-                     `Column names are not the same after sorting`)
+    assert.equal(env_original.error, '',
+                 `Expected no error when sorting`)
+    assert_setEqual(env_original.frame.columns,
+                    env_sorted.frame.columns,
+                    `Expected same columns in output`)
     done()
   })
 
@@ -97,7 +103,7 @@ describe('execute blocks for entire pipelines', () => {
        DESCENDING: 'TRUE'}
     ]
     const env = evalCode(pipeline)
-    assert.deepEqual(env.table.map(row => row.first), [2, 1],
+    assert.deepEqual(env.frame.data.map(row => row.first), [2, 1],
                      `Sort results not in expected (descending) order`)
     done()
   })
@@ -110,9 +116,9 @@ describe('execute blocks for entire pipelines', () => {
        DESCENDING: 'FALSE'}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in result')
-    const ordering = env.table.map((row) => (1000 * row.red) + row.green)
+    const ordering = env.frame.data.map((row) => (1000 * row.red) + row.green)
     const check = [...ordering].sort((left, right) => (left - right))
     assert.deepEqual(ordering, check,
                      'Rows not in order')
@@ -130,11 +136,11 @@ describe('execute blocks for entire pipelines', () => {
                        COLUMN: 'red'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(env.table[0], 'textual',
+    assert_hasKey(env.frame.data[0], 'textual',
                   'Result lacks expected column')
-    assert.equal(typeof env.table[0].textual, 'string',
+    assert.equal(typeof env.frame.data[0].textual, 'string',
                  'New column has wrong type')
     done()
   })
@@ -150,11 +156,11 @@ describe('execute blocks for entire pipelines', () => {
                        COLUMN: 'red'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(env.table[0], 'logical',
+    assert_hasKey(env.frame.data[0], 'logical',
                   'Result lacks expected column')
-    assert.equal(typeof env.table[0].logical, 'boolean',
+    assert.equal(typeof env.frame.data[0].logical, 'boolean',
                  'New column has wrong type')
     done()
   })
@@ -176,13 +182,13 @@ describe('execute blocks for entire pipelines', () => {
                        COLUMN: 'textual'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(env.table[0], 'numeric',
+    assert_hasKey(env.frame.data[0], 'numeric',
                   'Result lacks expected column')
-    assert.equal(typeof env.table[0].numeric, 'number',
+    assert.equal(typeof env.frame.data[0].numeric, 'number',
                  'New column has wrong type')
-    assert(env.table.every(row => (row.red === row.numeric)),
+    assert(env.frame.data.every(row => (row.red === row.numeric)),
            `Expected values to be equal after double conversion`)
     done()
   })
@@ -199,7 +205,7 @@ describe('execute blocks for entire pipelines', () => {
                       VALUE: 0}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 5,
+    assert.equal(env.frame.data.length, 5,
                  'Expected 5 rows with red != 0')
     done()
   })
@@ -216,9 +222,9 @@ describe('execute blocks for entire pipelines', () => {
                       COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 8,
+    assert.equal(env.frame.data.length, 8,
                  'Wrong number of rows in output')
-    assert(env.table.every(row => (row.red >= row.green)),
+    assert(env.frame.data.every(row => (row.red >= row.green)),
           'Wrong rows have survived filtering')
     done()
   })
@@ -236,11 +242,11 @@ describe('execute blocks for entire pipelines', () => {
                        COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert.equal(Object.keys(env.table[0]).length, 5,
+    assert.equal(Object.keys(env.frame.data[0]).length, 5,
                  'Wrong number of columns in output')
-    assert(env.table.every(row => (row.red_green === (row.red + row.green))),
+    assert(env.frame.data.every(row => (row.red_green === (row.red + row.green))),
            'Sum column does not contain correct values')
     done()
   })
@@ -268,11 +274,11 @@ describe('execute blocks for entire pipelines', () => {
                        COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => row.result_name_string),
+    assert(env.frame.data.every(row => row.result_name_string),
            `Expected all names to be strings`)
-    assert(env.table.every(row => !row.result_red_string),
+    assert(env.frame.data.every(row => !row.result_red_string),
            `Expected all red values to not be strings`)
-    assert(env.table.every(row => row.result_green_number),
+    assert(env.frame.data.every(row => row.result_green_number),
            `Expected all green values to be strings`)
     done()
   })
@@ -289,7 +295,9 @@ describe('execute blocks for entire pipelines', () => {
                       VALUE: 0}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.length == 0,
+    assert.equal(env.error, '',
+                 `Expected no error when filtering empty tables`)
+    assert(env.frame.data.length == 0,
            `Expected empty output`)
     done()
   })
@@ -312,11 +320,11 @@ describe('execute blocks for entire pipelines', () => {
                        VALUE: 'unequal'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 2,
-                 `Expected two rows, not ${env.table.length}`)
-    assert.equal(env.table[0].result, 'equal',
+    assert.equal(env.frame.data.length, 2,
+                 `Expected two rows, not ${env.frame.data.length}`)
+    assert.equal(env.frame.data[0].result, 'equal',
                  `Expected first row to be equal`)
-    assert.equal(env.table[1].result, 'unequal',
+    assert.equal(env.frame.data[1].result, 'unequal',
                  `Expected first row to be unequal`)
     done()
   })
@@ -334,9 +342,9 @@ describe('execute blocks for entire pipelines', () => {
                        VALUE: 'unequal'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 2,
-                 `Expected two rows, not ${env.table.length}`)
-    assert(env.table.every(row => (row.result === MISSING)),
+    assert.equal(env.frame.data.length, 2,
+                 `Expected two rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (row.result === MISSING)),
            `Expected every result to be missing`)
     done()
   })
@@ -355,9 +363,9 @@ describe('execute blocks for entire pipelines', () => {
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message, got "${env.error}" for type ${type}`)
-      assert.equal(env.table.length, 1,
+      assert.equal(env.frame.data.length, 1,
                    `Expected only one row to have missing ${type}`)
-      assert.equal(env.table[0][type], MISSING,
+      assert.equal(env.frame.data[0][type], MISSING,
                    `Wrong value is missing in surviving row`)
     }
     done()
@@ -378,9 +386,9 @@ describe('execute blocks for entire pipelines', () => {
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message, got "${env.error}" for type ${type}`)
-      assert.equal(env.table.length, 3,
+      assert.equal(env.frame.data.length, 3,
                    `Expected only one row to be dropped`)
-      assert(env.table.every(row => (row[type] !== MISSING)),
+      assert(env.frame.data.every(row => (row[type] !== MISSING)),
              `Incorrect values have been dropped for ${type}`)
     }
     done()
@@ -400,9 +408,9 @@ describe('check plotting', () => {
       {_b: 'plot_table'}
     ]
     const env = evalCode(pipeline)
-    assert.notEqual(env.table, null,
+    assert.notEqual(env.frame.data, null,
                     'Result table has not been set')
-    assert(Array.isArray(env.table),
+    assert(Array.isArray(env.frame.data),
            'Result table is not an array')
     done()
   })
@@ -415,11 +423,11 @@ describe('check plotting', () => {
        BINS: '20'}
     ]
     const env = evalCode(pipeline)
-    assert(Array.isArray(env.table),
+    assert(Array.isArray(env.frame.data),
            'Result table is not an array')
-    assert.equal(env.table.length, 150,
+    assert.equal(env.frame.data.length, 150,
                  'Result table is the wrong length')
-    assert_hasKey(env.table[0], 'Sepal_Length',
+    assert_hasKey(env.frame.data[0], 'Sepal_Length',
            'Result table missing expected keys')
     assert.equal(typeof env.plot, 'object',
                  'Result plot is not an object')
@@ -438,9 +446,9 @@ describe('check plotting', () => {
        BINS: '20'}
     ]
     const env = evalCode(pipeline)
-    assert.equal(Object.keys(env.table[0]).length, 1,
+    assert.equal(Object.keys(env.frame.data[0]).length, 1,
                  'Wrong number of columns in result table')
-    assert_hasKey(env.table[0], 'Petal_Length',
+    assert_hasKey(env.frame.data[0], 'Petal_Length',
                   'Result table does not contain expected key')
     assert.equal(env.plot.data.values.length, 150,
                  'Result plot data is the wrong length')
@@ -464,7 +472,7 @@ describe('check plotting', () => {
               VALUE: 20}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(Object.keys(env.table[0]).length, 5,
+    assert.equal(Object.keys(env.frame.data[0]).length, 5,
                  'Wrong number of columns in result table')
     assert.equal(env.plot.data.values.length, 42,
                  'Result plot data is the wrong length')
@@ -522,8 +530,11 @@ describe('check notify/join', () => {
        RIGHT_COLUMN: 'first'}
     ]
     const env = evalCode(pipeline)
-    assert.deepEqual(env.table,
-                     [{'_join_': 1, 'right_second': 100}],
+    assert.equal(env.error, '',
+                 `Expected no error`)
+    const expected = [{right_second: 100}]
+    expected[0][JOINCOL] = 1
+    assert.deepEqual(env.frame.data, expected,
                      'Incorrect join result')
     done()
   })
@@ -576,19 +587,22 @@ describe('check notify/join', () => {
                       VALUE: 0}}}
     ]
     const env = evalCode(pipeline)
-    assert.deepEqual(env.table,
-                     [{'_join_': 255,
-                       'left_name': 'fuchsia', 'left_green': 0, 'left_blue': 255,
-                       'right_name': 'aqua', 'right_red': 0, 'right_blue': 255},
-                      {'_join_': 255,
-                       'left_name': 'fuchsia', 'left_green': 0, 'left_blue': 255,
-                       'right_name': 'white', 'right_red': 255, 'right_blue': 255},
-                      {'_join_': 255,
-                       'left_name': 'white', 'left_green': 255, 'left_blue': 255,
-                       'right_name': 'aqua', 'right_red': 0, 'right_blue': 255},
-                      {'_join_': 255,
-                       'left_name': 'white', 'left_green': 255, 'left_blue': 255,
-                       'right_name': 'white', 'right_red': 255, 'right_blue': 255}],
+    assert.equal(env.error, '',
+                 `Expected no error`)
+    const expected = [
+      {'left_name': 'fuchsia', 'left_green': 0, 'left_blue': 255,
+       'right_name': 'aqua', 'right_red': 0, 'right_blue': 255},
+      {'left_name': 'fuchsia', 'left_green': 0, 'left_blue': 255,
+       'right_name': 'white', 'right_red': 255, 'right_blue': 255},
+      {'left_name': 'white', 'left_green': 255, 'left_blue': 255,
+       'right_name': 'aqua', 'right_red': 0, 'right_blue': 255},
+      {'left_name': 'white', 'left_green': 255, 'left_blue': 255,
+       'right_name': 'white', 'right_red': 255, 'right_blue': 255}
+    ]
+    expected.forEach(row => {
+      row[JOINCOL] = 255
+    })
+    assert.deepEqual(env.frame.data, expected,
                      'Incorrect join result')
     done()
   })
@@ -612,7 +626,7 @@ describe('check datetime handling', () => {
                        COLUMN: 'Time'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => (row.Time instanceof Date)),
+    assert(env.frame.data.every(row => (row.Time instanceof Date)),
            `Some time values not converted to Date objects`)
     done()
   })
@@ -634,9 +648,9 @@ describe('check datetime handling', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
-    assert.equal(env.table.length, 1,
+    assert.equal(env.frame.data.length, 1,
                  `Expected one row in result`)
-    assert.equal(env.table[0].result, null,
+    assert.equal(env.frame.data[0].result, null,
                  `Expected result to be null`)
     done()
   })
@@ -670,11 +684,11 @@ describe('check datetime handling', () => {
                        COLUMN: 'Time'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table[0].year, 2016,
+    assert.equal(env.frame.data[0].year, 2016,
                  `Expected 2016 as year`)
-    assert.equal(env.table[0].month, 8,
+    assert.equal(env.frame.data[0].month, 8,
                  `Expected 8 as month`)
-    assert.equal(env.table[0].day, 24,
+    assert.equal(env.frame.data[0].day, 24,
                  `Expected 24 as day of month`)
     done()
   })
@@ -695,8 +709,8 @@ describe('check datetime handling', () => {
                        COLUMN: 'when'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table[0].weekday, new Date('1984-01-01').getDay(),
-                 `January 1, 1984 was a Sunday, not ${env.table[0].weekday}`)
+    assert.equal(env.frame.data[0].weekday, new Date('1984-01-01').getDay(),
+                 `January 1, 1984 was a Sunday, not ${env.frame.data[0].weekday}`)
     done()
   })
 
@@ -727,12 +741,12 @@ describe('check datetime handling', () => {
                        COLUMN: 'when'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table[0].hours, 5,
-                 `Expected the hours to be 5 not ${env.table[0].hours}`)
-    assert.equal(env.table[0].minutes, 10,
-                 `Expected the minutes to be 10 not ${env.table[0].minutes}`)
-    assert.equal(env.table[0].seconds, 15,
-                 `Expected the seconds to be 15 not ${env.table[0].seconds}`)
+    assert.equal(env.frame.data[0].hours, 5,
+                 `Expected the hours to be 5 not ${env.frame.data[0].hours}`)
+    assert.equal(env.frame.data[0].minutes, 10,
+                 `Expected the minutes to be 10 not ${env.frame.data[0].minutes}`)
+    assert.equal(env.frame.data[0].seconds, 15,
+                 `Expected the seconds to be 15 not ${env.frame.data[0].seconds}`)
     done()
   })
 
@@ -757,7 +771,7 @@ describe('basic operations', () => {
                        COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => ((row.green === 0)
+    assert(env.frame.data.every(row => ((row.green === 0)
                                    ? (row.ratio === MISSING)
                                    : (row.ratio === (row.red / row.green)))),
            `Incorrect result(s) for division`)
@@ -777,7 +791,7 @@ describe('basic operations', () => {
                        COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => (isFinite(row.red ** row.green)
+    assert(env.frame.data.every(row => (isFinite(row.red ** row.green)
                                    ? (row.result === (row.red ** row.green))
                                    : (row.result === MISSING))),
            `Incorrect result(s) for exponentiation`)
@@ -794,7 +808,7 @@ describe('basic operations', () => {
                        COLUMN: 'red'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => row.result === (- row.red)),
+    assert(env.frame.data.every(row => row.result === (- row.red)),
            `Incorrect result(s) for negation`)
     done()
   })
@@ -828,8 +842,8 @@ describe('basic operations', () => {
                 : (left || right)
           assert.equal(env.error, '',
                        `Expected no error from operation`)
-          assert.equal(env.table[0].result, expected,
-                       `Expected ${expected} from ${left} ${funcName} ${right}, got ${env.table[0].result}`)
+          assert.equal(env.frame.data[0].result, expected,
+                       `Expected ${expected} from ${left} ${funcName} ${right}, got ${env.frame.data[0].result}`)
         }
       }
     }
@@ -866,9 +880,9 @@ describe('basic operations', () => {
                         COLUMN: 'missing'}}}
       ]
       const env = evalCode(pipeline)
-      assert(env.table.every(row => (row.result === expected)),
+      assert(env.frame.data.every(row => (row.result === expected)),
              `Unexpected value(s) in comparison for ${funcName}`)
-      assert(env.table.every(row => (row.missing === MISSING)),
+      assert(env.frame.data.every(row => (row.missing === MISSING)),
              `Some values are not missing as expected for ${funcName}`)
     }
     done()
@@ -908,9 +922,9 @@ describe('basic operations', () => {
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
                    `Unexpected error in string comparison for ${funcName}`)
-      assert.deepEqual(env.table.map(row => row.result), expected,
+      assert.deepEqual(env.frame.data.map(row => row.result), expected,
              `Unexpected value(s) in comparison for ${funcName}`)
-      assert(env.table.every(row => (row.missing === MISSING)),
+      assert(env.frame.data.every(row => (row.missing === MISSING)),
              `Some values are not missing as expected for ${funcName}`)
     }
     done()
@@ -939,10 +953,10 @@ describe('missing values are handled correctly', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expectd no error message`)
-    assert.equal(env.table[0].negated, MISSING,
-                 `Expected MISSING from negation, not ${env.table[0].negated}`)
-    assert.equal(env.table[0].notted, MISSING,
-                 `Expected MISSING from logical negation, not ${env.table[0].notted}`)
+    assert.equal(env.frame.data[0].negated, MISSING,
+                 `Expected MISSING from negation, not ${env.frame.data[0].negated}`)
+    assert.equal(env.frame.data[0].notted, MISSING,
+                 `Expected MISSING from logical negation, not ${env.frame.data[0].notted}`)
     done()
   })
 
@@ -969,7 +983,7 @@ describe('missing values are handled correctly', () => {
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message`)
-      assert.equal(env.table[0].result, MISSING,
+      assert.equal(env.frame.data[0].result, MISSING,
                    `Expected missing value for ${opName}`)
     }
     done()
@@ -1009,14 +1023,14 @@ describe('missing values are handled correctly', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error message when converting missing values`)
-    assert.equal(env.table[0].as_boolean, MISSING,
-                 `Expected converted Boolean to be missing value, not ${env.table[0].as_boolean}`)
-    assert.equal(env.table[0].as_datetime, MISSING,
-                 `Expected converted date-time to be missing value, not ${env.table[0].as_datetime}`)
-    assert.equal(env.table[0].as_number, MISSING,
-                 `Expected converted number to be missing value, not ${env.table[0].as_number}`)
-    assert.equal(env.table[0].as_string, MISSING,
-                 `Expected converted string to be missing value, not ${env.table[0].as_string}`)
+    assert.equal(env.frame.data[0].as_boolean, MISSING,
+                 `Expected converted Boolean to be missing value, not ${env.frame.data[0].as_boolean}`)
+    assert.equal(env.frame.data[0].as_datetime, MISSING,
+                 `Expected converted date-time to be missing value, not ${env.frame.data[0].as_datetime}`)
+    assert.equal(env.frame.data[0].as_number, MISSING,
+                 `Expected converted number to be missing value, not ${env.frame.data[0].as_number}`)
+    assert.equal(env.frame.data[0].as_string, MISSING,
+                 `Expected converted string to be missing value, not ${env.frame.data[0].as_string}`)
     done()
   })
 
@@ -1065,12 +1079,12 @@ describe('type conversion and type checking', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when converting to number`)
-    assert.equal(env.table[0].bool_false, 0,
-                 `Expected 0 when converting false to number, not ${env.table[0].bool_false}`)
-    assert.equal(env.table[0].bool_true, 1,
-                 `Expected 1 when converting true to number, not ${env.table[0].bool_true}`)
-    assert.equal(env.table[0].str, 123.45,
-                 `Expected 123.45 when converting false to number, not ${env.table[0].str}`)
+    assert.equal(env.frame.data[0].bool_false, 0,
+                 `Expected 0 when converting false to number, not ${env.frame.data[0].bool_false}`)
+    assert.equal(env.frame.data[0].bool_true, 1,
+                 `Expected 1 when converting true to number, not ${env.frame.data[0].bool_true}`)
+    assert.equal(env.frame.data[0].str, 123.45,
+                 `Expected 123.45 when converting false to number, not ${env.frame.data[0].str}`)
     done()
   })
 
@@ -1111,12 +1125,12 @@ describe('type conversion and type checking', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when converting to string`)
-    assert.equal(env.table[0].bool_false, 'false',
-                 `Expected "false" when converting false to string, not ${env.table[0].bool_false}`)
-    assert.equal(env.table[0].bool_true, 'true',
-                 `Expected "true" when converting true to string, not ${env.table[0].bool_true}`)
-    assert.equal(env.table[0].num, '-999',
-                 `Expected "-999" when converting -999 to string, not ${env.table[0].num}`)
+    assert.equal(env.frame.data[0].bool_false, 'false',
+                 `Expected "false" when converting false to string, not ${env.frame.data[0].bool_false}`)
+    assert.equal(env.frame.data[0].bool_true, 'true',
+                 `Expected "true" when converting true to string, not ${env.frame.data[0].bool_true}`)
+    assert.equal(env.frame.data[0].num, '-999',
+                 `Expected "-999" when converting -999 to string, not ${env.frame.data[0].num}`)
     done()
   })
 
@@ -1146,8 +1160,8 @@ describe('type conversion and type checking', () => {
         assert.equal(env.error, '',
                      `Expected no error for ${checkFunc} with ${actualName}`)
         const expected = (actualName == checkName)
-        assert.equal(env.table[0].check, expected,
-                     `Expected ${expected} comparison result for ${actualName} and ${checkName}, got ${env.table[0].check}`)
+        assert.equal(env.frame.data[0].check, expected,
+                     `Expected ${expected} comparison result for ${actualName} and ${checkName}, got ${env.frame.data[0].check}`)
       }
     }
     done()
@@ -1172,11 +1186,11 @@ describe('check that grouping and summarization work', () => {
         ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
+    assert.equal(env.frame.data.length, 1,
                  'Expected one row of output')
-    assert.equal(Object.keys(env.table[0]).length, 1,
+    assert.equal(Object.keys(env.frame.data[0]).length, 1,
                  'Expected a single column of output')
-    assert.equal(env.table[0].red_sum, 1148,
+    assert.equal(env.frame.data[0].red_sum, 1148,
                  'Incorrect sum')
     done()
   })
@@ -1188,25 +1202,25 @@ describe('check that grouping and summarization work', () => {
        COLUMN: 'blue'}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert.equal(env.table.filter(row => (row._group_ === 0)).length, 6,
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 0)).length, 6,
                  'Wrong number of rows for index 0')
-    assert.equal(env.table.filter(row => (row._group_ === 1)).length, 4,
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 1)).length, 4,
                  'Wrong number of rows for index 255')
-    assert.equal(env.table.filter(row => (row._group_ === 2)).length, 1,
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 2)).length, 1,
                  'Wrong number of rows for index 128')
     done()
   })
 
-  it('adds _group_ column when doing groupBy', (done) => {
+  it('adds grouping column when doing groupBy', (done) => {
     const pipeline = [
       {_b: 'data_single'},
       {_b: 'transform_groupBy',
        COLUMN: 'first'}
     ]
     const env = evalCode(pipeline)
-    assert('_group_' in env.table[0])
+    assert(GROUPCOL in env.frame.data[0])
     done()
   })
 
@@ -1218,9 +1232,9 @@ describe('check that grouping and summarization work', () => {
       {_b: 'transform_ungroup'}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 11,
+    assert.equal(env.frame.data.length, 11,
                  'Table has the wrong number of rows')
-    assert(!('_group_' in env.table[0]),
+    assert(!(GROUPCOL in env.frame.data[0]),
            'Table still has group index column')
     done()
   })
@@ -1238,10 +1252,12 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.deepEqual(env.table,
-                     [{_group_: 0, green_mean: 106.33333333333333},
-                      {_group_: 1, green_mean: 127.5},
-                      {_group_: 2, green_mean: 0}],
+    const expected = [106.33333333333333, 127.5, 0].map((val, i) => {
+      const result = {green_mean: val}
+      result[GROUPCOL] = i
+      return result
+    })
+    assert.deepEqual(env.frame.data, expected,
                      'Incorrect averaging')
     done()
   })
@@ -1257,10 +1273,10 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.length == 1,
+    assert(env.frame.data.length == 1,
            `Expect a single row of output`)
-    assert(env.table[0].second_max == 200,
-           `Expected a max of 200, not ${env.table[0].second}`)
+    assert(env.frame.data[0].second_max == 200,
+           `Expected a max of 200, not ${env.frame.data[0].second}`)
     done()
   })
 
@@ -1285,14 +1301,14 @@ describe('check that grouping and summarization work', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
-    assert.equal(env.table.length, 1,
+    assert.equal(env.frame.data.length, 1,
                  `Expect a single row of output`)
-    assert.equal(env.table[0].value_min, 20,
-                 `Expected a mean of 20, not ${env.table[0].value_min}`)
-    assert.equal(env.table[0].value_mean, 32.5,
-                 `Expected a mean of 32.5, not ${env.table[0].value_mean}`)
-    assert.equal(env.table[0].value_max, 45,
-                 `Expected a max of 45, not ${env.table[0].value_max}`)
+    assert.equal(env.frame.data[0].value_min, 20,
+                 `Expected a mean of 20, not ${env.frame.data[0].value_min}`)
+    assert.equal(env.frame.data[0].value_mean, 32.5,
+                 `Expected a mean of 32.5, not ${env.frame.data[0].value_mean}`)
+    assert.equal(env.frame.data[0].value_max, 45,
+                 `Expected a max of 45, not ${env.frame.data[0].value_max}`)
     done()
   })
 
@@ -1322,7 +1338,7 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 0,
+    assert.equal(env.frame.data.length, 0,
            `Expected empty output`)
     done()
   })
@@ -1338,10 +1354,10 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 `Expect one row of output not ${env.table.length}`)
-    assert.equal(env.table[0].red_count, 11,
-                 `Expect a count of 11 rows, not ${env.table[0].red_count}`)
+    assert.equal(env.frame.data.length, 1,
+                 `Expect one row of output not ${env.frame.data.length}`)
+    assert.equal(env.frame.data[0].red_count, 11,
+                 `Expect a count of 11 rows, not ${env.frame.data[0].red_count}`)
     done()
   })
 
@@ -1356,10 +1372,10 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 `Expect one row of output not ${env.table.length}`)
-    assert.equal(env.table[0].red_median, 0,
-                 `Expect a median of 0, not ${env.table[0].red_median}`)
+    assert.equal(env.frame.data.length, 1,
+                 `Expect one row of output not ${env.frame.data.length}`)
+    assert.equal(env.frame.data[0].red_median, 0,
+                 `Expect a median of 0, not ${env.frame.data[0].red_median}`)
     done()
   })
 
@@ -1377,14 +1393,14 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 1,
-                 `Expect one row of output not ${env.table.length}`)
+    assert.equal(env.frame.data.length, 1,
+                 `Expect one row of output not ${env.frame.data.length}`)
     const expected_variance = 14243.140495867769
     const expected_std = 119.34462910356615
-    assert_approxEquals(env.table[0].red_variance, expected_variance,
-                        `Expect a variance of ${expected_variance}, not ${env.table[0].red_variance}`)
-    assert_approxEquals(env.table[0].green_std, expected_std,
-                        `Expect a standard deviation of ${expected_std}, not ${env.table[0].green_std}`)
+    assert_approxEquals(env.frame.data[0].red_variance, expected_variance,
+                        `Expect a variance of ${expected_variance}, not ${env.frame.data[0].red_variance}`)
+    assert_approxEquals(env.frame.data[0].green_std, expected_std,
+                        `Expect a standard deviation of ${expected_std}, not ${env.frame.data[0].green_std}`)
     done()
   })
 
@@ -1409,11 +1425,11 @@ describe('check that specific bugs have been fixed', () => {
                        COLUMN: 'first'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 2,
+    assert.equal(env.frame.data.length, 2,
                  'Wrong number of rows in output')
-    assert.equal(Object.keys(env.table[0]).length, 3,
+    assert.equal(Object.keys(env.frame.data[0]).length, 3,
                  'Wrong number of columns in output')
-    assert(env.table.every(row => (row.difference === (row.second - row.first))),
+    assert(env.frame.data.every(row => (row.difference === (row.second - row.first))),
            'Difference column does not contain correct values')
     done()
   })
@@ -1431,7 +1447,7 @@ describe('check that specific bugs have been fixed', () => {
                        COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => (row.product === (row.red * row.green))),
+    assert(env.frame.data.every(row => (row.product === (row.red * row.green))),
            `Incorrect result(s) for multiplication`)
     done()
   })
@@ -1449,7 +1465,7 @@ describe('check that specific bugs have been fixed', () => {
                        COLUMN: 'green'}}}
     ]
     const env = evalCode(pipeline)
-    assert(env.table.every(row => ((row.green === 0)
+    assert(env.frame.data.every(row => ((row.green === 0)
                                    ? (row.remainder === MISSING)
                                    : (row.remainder === (row.red % row.green)))),
            `Incorrect result(s) for modulo`)
@@ -1468,7 +1484,7 @@ describe('check that specific bugs have been fixed', () => {
                       VALUE: 'setosa'}}}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.table.length, 50,
+    assert.equal(env.frame.data.length, 50,
                  'Wrong number of results in output')
     done()
   })

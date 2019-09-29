@@ -12,6 +12,8 @@ const Papa = require('papaparse')
 module.paths.unshift(process.cwd())
 const {
   MISSING,
+  GROUPCOL,
+  JOINCOL,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -87,6 +89,18 @@ const assert_match = (actual, required, message) => {
       actual: actual,
       expected: required})
   }
+}
+
+/**
+ * Assert that two sets are equal (used for checking columns).
+ * @param left One set.
+ * @param right The other set.
+ */
+const assert_setEqual = (left, right) => {
+  assert.equal(left.size, right.size,
+               `Expected same number of columns in sorted result`)
+  left.forEach(name => assert(right.has(name),
+                              `Expected ${name} in sorted results`))
 }
 
 /**
@@ -305,11 +319,11 @@ class TestEnvironment {
   }
 
   /**
-   * "Display" a table (record for testing purposes).
+   * "Display" a dataframe (record for testing purposes).
    * @param data {Object} - data to record.
    */
-  displayTable (data) {
-    this.table = data
+  displayFrame (frame) {
+    this.frame = frame
   }
 
   /**
@@ -370,6 +384,8 @@ const createTestingBlocks = () => {
 //
 module.exports = {
   MISSING,
+  GROUPCOL,
+  JOINCOL,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -379,6 +395,7 @@ module.exports = {
   assert_hasKey,
   assert_includes,
   assert_match,
+  assert_setEqual,
   assert_startsWith,
   loadBlockFiles,
   makeBlock,

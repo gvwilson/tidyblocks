@@ -74,11 +74,11 @@ class GuiEnvironment {
   }
 
   /**
-   * Display a table (as HTML).
+   * Display a dataframe as HTML.
    * @param {Object} table JSON array of uniform objects.
    */
-  displayTable (table) {
-    document.getElementById('dataOutput').innerHTML = json2table(table)
+  displayFrame (frame) {
+    document.getElementById('dataOutput').innerHTML = json2table(frame.data)
   }
 
   /**

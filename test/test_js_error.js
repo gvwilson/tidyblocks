@@ -2,6 +2,8 @@ const assert = require('assert')
 
 const {
   MISSING,
+  GROUPCOL,
+  JOINCOL,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -11,6 +13,7 @@ const {
   assert_hasKey,
   assert_includes,
   assert_match,
+  assert_setEqual,
   assert_startsWith,
   loadBlockFiles,
   makeBlock,
