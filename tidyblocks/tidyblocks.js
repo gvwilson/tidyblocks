@@ -10,6 +10,12 @@ const TIDYBLOCKS_END = '/* tidyblocks end */'
 const MISSING = undefined
 
 /**
+ * Names for special columns.
+ */
+const GROUPCOL = '_group_'
+const JOINCOL = '_join_'
+
+/**
  * Turn block of CSV text into TidyBlocksDataFrame. The parser argument should be Papa.parse;
  * it is passed in here so that this file can be loaded both in the browser and for testing.
  * @param {string} text Text to parse.
@@ -780,8 +786,9 @@ class TidyBlocksDataFrame {
    * Construct a new dataframe.
    * @param {Object[]} values The initial values (aliased).
    */
-  constructor (values) {
+  constructor (values, oldColumns=null) {
     this.data = values
+    this.columns = this._makeColumns(values, oldColumns)
   }
 
   //------------------------------------------------------------------------------
@@ -796,11 +803,12 @@ class TidyBlocksDataFrame {
     const newData = this.data.filter(row => {
       return op(row)
     })
-    return new TidyBlocksDataFrame(newData)
+    const newColumns = this._makeColumns(newData, this.columns)
+    return new TidyBlocksDataFrame(newData, newColumns)
   }
 
   /**
-   * Group by the values in a column, storing the result in a new _group_ column.
+   * Group by the values in a column, storing the result in a new grouping column.
    * @param {string} column The column that determines groups.
    * @returns A new dataframe.
    */
@@ -809,17 +817,18 @@ class TidyBlocksDataFrame {
              `[block ${blockId}] empty column name for grouping`)
     const seen = new Map()
     let groupId = 0
-    const grouped = this.data.map(row => {
+    const groupedData = this.data.map(row => {
       row = {...row}
       const value = tbGet(blockId, row, column)
       if (! seen.has(value)) {
         seen.set(value, groupId)
         groupId += 1
       }
-      row._group_ = seen.get(value)
+      row[GROUPCOL] = seen.get(value)
       return row
     })
-    return new TidyBlocksDataFrame(grouped)
+    const newColumns = this._makeColumns(groupedData, this.columns, {add: [GROUPCOL]})
+    return new TidyBlocksDataFrame(groupedData, newColumns)
   }
 
   /**
@@ -838,7 +847,8 @@ class TidyBlocksDataFrame {
       newRow[newName] = op(row)
       return newRow
     })
-    return new TidyBlocksDataFrame(newData)
+    const newColumns = this._makeColumns(newData, this.columns, {add: [newName]})
+    return new TidyBlocksDataFrame(newData, newColumns)
   }
 
   /**
@@ -858,7 +868,7 @@ class TidyBlocksDataFrame {
       })
       return result
     })
-    return new TidyBlocksDataFrame(newData)
+    return new TidyBlocksDataFrame(newData, columns)
   }
 
   /**
@@ -889,7 +899,7 @@ class TidyBlocksDataFrame {
     if (reverse) {
       result.reverse()
     }
-    return new TidyBlocksDataFrame(result)
+    return new TidyBlocksDataFrame(result, this.columns)
   }
 
   /**
@@ -900,7 +910,7 @@ class TidyBlocksDataFrame {
   summarize (blockId, ...operations) {
     // Handle empty case.
     if (this.data.length === 0) {
-      return new TidyBlocksDataFrame([])
+      return new TidyBlocksDataFrame([], this.columns)
     }
 
     // Put data into groups.
@@ -908,6 +918,7 @@ class TidyBlocksDataFrame {
 
     // Summarize by group and function.
     const summarized = {}
+    const newColumns = wasGrouped ? [GROUPCOL] : []
     operations.forEach(([subBlockId, func, sourceColumn]) => {
       if (subBlockId === undefined) {
         subBlockId = blockId
@@ -916,8 +927,9 @@ class TidyBlocksDataFrame {
                `[block ${subBlockId}] no column specified for summarize`)
       tbAssert(this.hasColumns(sourceColumn),
                `[block ${subBlockId}] unknown column "${sourceColumn}" in summarize`)
-      const newColumn = `${sourceColumn}_${func.colName}`
-      summarized[newColumn] = groups.map(group => func(group, sourceColumn))
+      const destColumn = `${sourceColumn}_${func.colName}`
+      summarized[destColumn] = groups.map(group => func(group, sourceColumn))
+      newColumns.push(destColumn)
     })
 
     // Pivot.
@@ -925,40 +937,18 @@ class TidyBlocksDataFrame {
     groups.forEach((group, i) => {
       const row = {}
       if (wasGrouped) {
-        row._group_ = i
+        row[GROUPCOL] = i
       }
       result.push(row)
     })
-    Object.keys(summarized).forEach(newColumn => {
+    Object.keys(summarized).forEach(col => {
       groups.forEach((group, i) => {
-        result[i][newColumn] = summarized[newColumn][i]
+        result[i][col] = summarized[col][i]
       })
     })
 
     // Create new dataframe.
-    return new TidyBlocksDataFrame(result)
-  }
-
-  //
-  // Put the data into groups.
-  //
-  _groupify () {
-    const wasGrouped = this.hasColumns('_group_')
-    const groups = []
-    if (wasGrouped) {
-      this.data.forEach(row => {
-        if (row._group_ < groups.length) {
-          groups[row._group_].push(row)
-        }
-        else {
-          groups.push([row])
-        }
-      })
-    }
-    else {
-      groups.push(this.data)
-    }
-    return [wasGrouped, groups]
+    return new TidyBlocksDataFrame(result, newColumns)
   }
 
   /**
@@ -966,14 +956,15 @@ class TidyBlocksDataFrame {
    * @returns A new dataframe.
    */
   ungroup (blockId) {
-    tbAssert(this.hasColumns('_group_'),
+    tbAssert(this.hasColumns(GROUPCOL),
              `[block ${blockId}] cannot ungroup data that is not grouped`)
     const newData = this.data.map(row => {
       row = {...row}
-      delete row._group_
+      delete row[GROUPCOL]
       return row
     })
-    return new TidyBlocksDataFrame(newData)
+    const newColumns = this._makeColumns(newData, this.columns, {remove: [GROUPCOL]})
+    return new TidyBlocksDataFrame(newData, newColumns)
   }
 
   //------------------------------------------------------------------------------
@@ -981,24 +972,18 @@ class TidyBlocksDataFrame {
   /**
    * Join two tables on equality between values in specified columns.
    * @param {function} getDataFxn How to look up data by name.
-   * @param {string} leftTable Notification name of left table to join.
+   * @param {string} leftFrame Notification name of left table to join.
    * @param {string} leftColumn Name of column from left table.
-   * @param {string} rightTable Notification name of right table to join.
+   * @param {string} rightFrame Notification name of right table to join.
    * @param {string} rightColumn Name of column from right table.
    * @returns A new dataframe.
    */
-  join (getDataFxn, leftTableName, leftColumn, rightTableName, rightColumn) {
+  join (getDataFxn, leftFrameName, leftColumn, rightFrameName, rightColumn) {
 
-    const _addFieldsExcept = (result, tableName, row, exceptName) => {
-      Object.keys(row)
-        .filter(key => (key != exceptName))
-        .forEach(key => {result[`${tableName}_${key}`] = row[key]})
-    }
-
-    const leftFrame = getDataFxn(leftTableName)
+    const leftFrame = getDataFxn(leftFrameName)
     tbAssert(leftFrame.hasColumns(leftColumn),
              `left table does not have column ${leftColumn}`)
-    const rightFrame = getDataFxn(rightTableName)
+    const rightFrame = getDataFxn(rightFrameName)
     tbAssert(rightFrame.hasColumns(rightColumn),
              `right table does not have column ${rightColumn}`)
 
@@ -1006,15 +991,20 @@ class TidyBlocksDataFrame {
     for (let leftRow of leftFrame.data) { 
       for (let rightRow of rightFrame.data) { 
         if (leftRow[leftColumn] === rightRow[rightColumn]) {
-          const row = {'_join_': leftRow[leftColumn]}
-          _addFieldsExcept(row, leftTableName, leftRow, leftColumn)
-          _addFieldsExcept(row, rightTableName, rightRow, rightColumn)
+          const row = {}
+          row[JOINCOL] = leftRow[leftColumn]
+          this._addFieldsExcept(row, leftFrameName, leftRow, leftColumn)
+          this._addFieldsExcept(row, rightFrameName, rightRow, rightColumn)
           result.push(row)
         }
       }
-    } 
+    }
 
-    return new TidyBlocksDataFrame(result)
+    const newColumns = []
+    this._addColumnsExcept(newColumns, leftFrameName, leftFrame.columns, leftColumn)
+    this._addColumnsExcept(newColumns, rightFrameName, rightFrame.columns, rightColumn)
+
+    return new TidyBlocksDataFrame(result, newColumns)
   }
 
   /**
@@ -1033,17 +1023,17 @@ class TidyBlocksDataFrame {
    * Call a plotting function. This is in this class to support method chaining
    * and to decouple this class from the real plotting functions so that tests
    * will run.
+   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
    * @param {object} environment Connection to the outside world.
    * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
    * @returns This object.
    */
   plot (environment, spec) {
-    environment.displayTable(this.data)
+    environment.displayFrame(this)
     if (Object.keys(spec).length !== 0) {
       spec.data.values = this.data
       environment.displayPlot(spec)
     }
-    return this
   }
 
   //------------------------------------------------------------------------------
@@ -1054,13 +1044,10 @@ class TidyBlocksDataFrame {
    * @returns {Boolean} Are columns present?
    */
   hasColumns (names) {
-    if (this.data.length === 0) {
-      return false
-    }
     if (typeof names === 'string') {
       names = [names]
     }
-    return names.every(n => (n in this.data[0]))
+    return names.every(n => (this.columns.has(n)))
   }
 
   /**
@@ -1075,6 +1062,78 @@ class TidyBlocksDataFrame {
       })
     })
     return this
+  }
+
+  //------------------------------------------------------------------------------
+
+  //
+  // Put the data into groups.
+  //
+  _groupify () {
+    const wasGrouped = this.hasColumns(GROUPCOL)
+    const groups = []
+    if (wasGrouped) {
+      this.data.forEach(row => {
+        if (row[GROUPCOL] < groups.length) {
+          groups[row[GROUPCOL]].push(row)
+        }
+        else {
+          groups.push([row])
+        }
+      })
+    }
+    else {
+      groups.push(this.data)
+    }
+    return [wasGrouped, groups]
+  }
+
+  //
+  // Add fields to object except the join field.
+  //
+  _addFieldsExcept (result, tableName, row, exceptName) {
+    Object.keys(row)
+      .filter(key => (key != exceptName))
+      .forEach(key => {result[`${tableName}_${key}`] = row[key]})
+  }
+
+  //
+  // Add columns to column list except the join column.
+  //
+  _addColumnsExcept (result, tableName, columns, exceptName) {
+    columns.forEach(col => {
+      if (col != exceptName) {
+        result.push(`${tableName}_${col}`)
+      }
+    })
+    return result
+  }
+
+  //
+  // Create columns for new table from data, existing columns, and explict add/remove lists.
+  //
+  _makeColumns (data, oldColumns, extras={}) {
+    const result = new Set()
+
+    // Trust the data if there is some.
+    if (data.length > 0) {
+      Object.keys(data[0]).forEach(key => result.add(key))
+    }
+
+    // Construct.
+    else {
+      if (oldColumns) {
+        oldColumns.forEach(name => result.add(name))
+      }
+      if ('add' in extras) {
+        extras.add.forEach(name => result.add(name))
+      }
+      if ('remove' in extras) {
+        extras.remove.forEach(name => result.remove(name))
+      }
+    }
+
+    return result
   }
 }
 
@@ -1207,6 +1266,8 @@ const TidyBlocksManager = new TidyBlocksManagerClass()
 if (typeof module !== 'undefined') {
   module.exports = {
     MISSING,
+    GROUPCOL,
+    JOINCOL,
     csv2TidyBlocksDataFrame,
     registerPrefix,
     registerSuffix,

@@ -3,6 +3,8 @@ const Papa = require('papaparse')
 
 const {
   MISSING,
+  GROUPCOL,
+  JOINCOL,
   csv2TidyBlocksDataFrame,
   registerPrefix,
   registerSuffix,
@@ -12,6 +14,7 @@ const {
   assert_hasKey,
   assert_includes,
   assert_match,
+  assert_setEqual,
   assert_startsWith,
   loadBlockFiles,
   makeBlock,
@@ -201,9 +204,9 @@ describe('testing utilities run correctly', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when creating missing value`)
-    assert.equal(env.table.length, 1,
+    assert.equal(env.frame.data.length, 1,
                  `Expected one row of output`)
-    assert.equal(env.table[0].na, MISSING,
+    assert.equal(env.frame.data[0].na, MISSING,
                  `Expected missing value in new column`)
     done()
   })
