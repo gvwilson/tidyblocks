@@ -322,7 +322,7 @@ const tbToNumber = (blockId, row, getValue) => {
  * @param {function} getValue How to get desired value.
  * @returns Text value.
  */
-const tbToText = (blockId, row, getValue) => {
+const tbToString = (blockId, row, getValue) => {
   let value = getValue(row)
   if (value === MISSING) {
     // keep as is
