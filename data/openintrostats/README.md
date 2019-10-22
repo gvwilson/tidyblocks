@@ -25,3 +25,25 @@ Arterial Stenosis. New England Journal of Medicine 365:993-1003. www.nejm.org/do
 
 #### Source
 https://github.com/OpenIntroStat/openintro-r-package/blob/master/data/loan50.rda
+
+
+# County
+
+3142 rows and 11 columns
+
+Data taken from openintro statistic's subset of the US Census Bureau’s American Community Survey (ACS)
+
+* name: County name
+* state: State where the county resides, or the District of Columbia.
+* pop: Population in 2017
+* pop_change: Percent change in the population from 2010 to 2017. For example, the value 1.48 in the first row means the population for this county increased by 1.48% from 2010 to 2017.
+* poverty: Percent of the population in poverty.
+* homeownership: Percent of the population that lives in their own home or lives with the owner, e.g. children living with parents who own the home.
+* multi_unit: Percent of living units that are in multi-unit structures, e.g. apartments.
+* unemp_rate: Unemployment rate as a percent.
+* metro: Whether the county contains a metropolitan area.
+* median_edu: Median education level, which can take a value among below hs, hs diploma, some college, and bachelors.
+* median_hh_income: Median household income for the county, where a household’s income equals the total income of its occupants who are 15 years or older
+
+#### Source
+https://github.com/OpenIntroStat/openintro-r-package/blob/master/data/county.rda
