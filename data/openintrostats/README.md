@@ -84,7 +84,7 @@ Ordered dataset to find the IQR
 9 rows, 2 columns
 
 * *data* ordered data to find the IQR
-* *group* group data to use for single x-axis metric
+* *group* group data to use for single x-axis metric 
 
 #### Source
-OpenIntroStats - 
+Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. 
