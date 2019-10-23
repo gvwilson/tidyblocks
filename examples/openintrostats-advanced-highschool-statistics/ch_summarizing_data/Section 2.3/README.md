@@ -14,3 +14,7 @@ The first Oscar awards for best actor and best actress were given out in 1929. T
 
 ![](Exercise_2_35b.png)
 
+# Exercise 2.37
+Create a box plot of the 20 exam scores.
+
+![](Exercise_2_37.png)

@@ -116,7 +116,7 @@ Record of past Academy Award winners and nominees
 ## Source
 Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. R Package (openintro): `data(oscar)`
 
-# Exercise 2.36
+# Exercise 2.37
 Final exam scores of twenty introductory statistics students from openintro Exersize 2.36
 
 rows 20, columns 2
