@@ -88,3 +88,12 @@ Ordered dataset to find the IQR
 
 #### Source
 Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. 
+
+# Example 2.48
+
+4 rows, 1 column
+
+* *data* ordered data to perform linear transformations
+
+#### Source
+Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. 
