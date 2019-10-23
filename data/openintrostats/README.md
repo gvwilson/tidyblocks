@@ -112,3 +112,6 @@ Record of past Academy Award winners and nominees
 * *birth_mo:* Month Oscar awardee was born
 * *birth_d* Day Oscar awardee was born
 * *birth_y* Year the oscar awardee was born
+
+## Source
+Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. R Package (openintro): `data(oscar)`
