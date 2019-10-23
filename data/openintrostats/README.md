@@ -97,3 +97,29 @@ Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Sec
 
 #### Source
 Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. 
+
+# Oscars
+
+Record of past Academy Award winners and nominees
+
+* *gender:* sex of Oscar Winner
+* *oscar_no:* the number Oscar
+* *oscar_year:* year the Oscar was given
+* "*name:* Name of the awardee
+* *movie:* Movie the awadee won the Oscar for
+* *age:* Age of Oscar awardee
+* *birth_pl:* Where the Oscar awardee was born
+* *birth_mo:* Month Oscar awardee was born
+* *birth_d* Day Oscar awardee was born
+* *birth_y* Year the oscar awardee was born
+
+## Source
+Diez, David M, et al. 2019. OpenIntroStats: Advanced High School Statistics, Second Edition, with updates based on AP® Statistics Course Framework. R Package (openintro): `data(oscar)`
+
+# Exercise 2.37
+Final exam scores of twenty introductory statistics students from openintro Exersize 2.36
+
+rows 20, columns 2
+
+* *grade:* student's exam grade
+* *group* x-axis variable for plotting
