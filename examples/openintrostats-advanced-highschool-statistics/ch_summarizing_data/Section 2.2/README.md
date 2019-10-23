@@ -43,5 +43,5 @@ Find the 5 number summary and identify how small or large a value would need to 
 # Figure 2.18
 How are the sample statistics of the num char data set affected by the observation, 64,401? What would have happened if this email wasn’t observed? What would happen to these summary statistics if the observation at 64,401 had been even larger, say 150,000?
 
-![](Figure_2_15a.png)
-![](Figure_2_15b.png)
+![](Figure_2_18a.png)
+![](Figure_2_18b.png)
