@@ -108,4 +108,3 @@ Rough estimation of the histogram data summarizing the teaching year for the tea
 
 #### Source
 https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q5.pdf
-
