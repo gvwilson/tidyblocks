@@ -17,7 +17,7 @@ Blockly.defineBlocksWithJsonArray([
           ['boolean', 'tbToBoolean'],
           ['datetime', 'tbToDatetime'],
           ['number', 'tbToNumber'],
-          ['string', 'tbToString']
+          ['string', 'tbToText']
         ]
       }
     ],
