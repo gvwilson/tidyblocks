@@ -45,3 +45,23 @@ How are the sample statistics of the num char data set affected by the observati
 
 ![](Figure_2_18a.png)
 ![](Figure_2_18b.png)
+
+# Example 2.48
+Begin with the following list: 1, 1, 5, 5. Multiply all of the numbers by 10. What happens to the mean? What happens to the standard deviation? How do these compare to the mean and the standard deviation of the original list?
+
+![](Example_2_48.png)
+
+# Example 2.49
+Start with the following list: 1, 1, 5, 5. Multiply all of the numbers by -0.5. What happens to the mean? What happens to the standard deviation? How do these compare to the mean and the standard deviation of the original list?
+
+![](Example_2_49.png)
+
+# Example 2.50
+Again, start with the following list: 1, 1, 5, 5. Add 100 to every entry. How do the new mean and standard deviation compare to the original mean and standard deviation?
+
+![](Example_2_50.png)
+
+# Figure 2.22
+Side-by-side box plot (left panel) and hollow histograms (right panel) for med hh income, where the counties are split by whether or not there was a population gain from 2010 to 2017.
+
+![](Figure_2_22.png)
