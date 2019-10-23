@@ -3,3 +3,6 @@ Two bar charts: the left panel shows the counts, and the right panel shows the p
 
 ![](Figure_2_27.png)
 
+# Figure 2.30
+Need to group by format AND spam
+
