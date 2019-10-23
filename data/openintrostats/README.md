@@ -78,3 +78,13 @@ https://github.com/OpenIntroStat/openintro-r-package/blob/master/data/county.rda
 #### Source
 https://github.com/OpenIntroStat/openintro-r-package/tree/master/data
 
+# Example 2.41
+Ordered dataset to find the IQR
+
+9 rows, 2 columns
+
+* *data* ordered data to find the IQR
+* *group* group data to use for single x-axis metric
+
+#### Source
+OpenIntroStats - 
