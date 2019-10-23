@@ -6,3 +6,11 @@ Two bar charts: the left panel shows the counts, and the right panel shows the p
 # Figure 2.30
 Need to group by format AND spam
 
+# Exercise 2.35
+The first Oscar awards for best actor and best actress were given out in 1929. The histograms below show the age distribution for all of the best actor and best actress winners from 1929 to 2018. Summary statistics for these distributions are also provided. Compare the distributions of ages of best actor and actress winners.52
+
+![](Exercise_2_35.png)
+(This can be reproduced for males by changing the filtering parameter)
+
+![](Exercise_2_35b.png)
+
