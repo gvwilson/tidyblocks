@@ -81,11 +81,21 @@ button:hover {
   font-family: Arial, Helvetica, sans-serif
 }
 
+#error {
+  background-color: #fff;
+  font-family: monospace;
+  color: red;
+}
 
 #error p {
   background-color: #fff;
   font-family: monospace;
   color: red;
+}
+
+#codeOutput {
+  background-color: #fff;
+  font-family: monospace;
 }
 
 #dataOutput tbody {

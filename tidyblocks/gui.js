@@ -206,18 +206,73 @@ const runCode = () => {
  * Depends on the global TidyBlocksWorkspace variable.
  */
 const saveCode = () => {
-  const filename = document.getElementById('filename').value
-  if (! filename) {
-    window.alert("Empty filename")
-  }
-  else {
+  const filename = "Workspace.txt"
     const xml = Blockly.Xml.workspaceToDom(TidyBlocksWorkspace)
     const text = Blockly.Xml.domToText(xml)
-    const link = document.getElementById('download')
+    const link = document.getElementById('downloadCode')
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
-    link.setAttribute('download', filename)
+    link.setAttribute('downloadCode', filename)
+}
+
+/**
+ * Save the data pane as csv 
+ * Convert JSON to array
+ * Function to export as CSV
+ * First need to clean up JSON before exporting
+ */
+
+function convertToCSV(objArray) {
+  var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+  var str = '';
+  for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+          if (line != '') line += ','
+
+          line += array[i][index];
+      }
+
+      str += line + '\r\n';
+  }
+  return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+  var csv = this.convertToCSV(jsonObject);
+  var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  if (navigator.msSaveBlob) { // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) { // feature detection
+          // Browsers that support HTML5 download attribute
+          var url = URL.createObjectURL(blob);
+          link.setAttribute("href", url);
+          link.setAttribute("download", exportedFilenmae);
+          link.style.visibility = 'hidden';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+      }
   }
 }
+
+itemsNotFormatted = []
+var itemsFormatted = [];
+// format the data
+itemsNotFormatted.forEach((item) => {
+  itemsFormatted.push({
+      model: item.model.replace(/,/g, ''), // remove commas to avoid errors,
+      chargers: item.chargers,
+      cases: item.cases,
+      earphones: item.earphones
+  });
+});
+var fileTitle = 'Data';
+
 
 /**
  * Load saved code.

@@ -26,9 +26,9 @@
                 <i class="fa fa-save fa-lg"></i>
               </button>
             <div class="dropdown-content">
-            <a class="button" href="#">Workspace</a>
-            <a class="button" href="#">Data</a>
-            <a class="button" href="#">Plot</a>
+            <a id="downloadCode" href="#" onclick="saveCode()">Workspace</a>
+            <a id="downloadData" href="#" onclick="exportCSVFile(itemsFormatted, fileTitle);">Data</a>
+            <a id="downloadPlot" href="#" onclick="saveCode()">Plot</a>
             </div>
         </div>
 
@@ -45,7 +45,6 @@
         </div>
       </div>
 
-    
 
     <div class="splitter">
     	<div id="first">
@@ -104,7 +103,7 @@
                   <block type="value_type"></block>
                 </category>
               </xml>
-               <div class="fab" id="runCode" onclick="runCode()">RUN</div>
+               <div class="fab" id="runCode" onclick="runCode(); showCode();">RUN</div>
             </div>
       </div>
     	<div id="separator" ></div>
@@ -129,8 +128,7 @@
               <input name="tabs" type="radio" id="tab-4" class="input"/>
               <label for="tab-4" class="label">Text</label>
               <div class="panel" id="codeOutputDiv">
-                <h1>Text</h1>
-                <p>A clementine (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in 1902. The exterior is a deep orange colour with a smooth, glossy appearance. Clementines can be separated into 7 to 14 segments. Similarly to tangerines, they tend to be easy to peel.</p>
+                <div id="codeOutput"></div>
               </div>
             </div>
       </div>
