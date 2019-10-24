@@ -1,5 +1,9 @@
 body {
-  padding: 0px;
+  height: 100%;
+  background-color: #F6F8FA;
+  font-family: sans-serif;
+  overflow: hidden;
+  margin: 0px;
 }
 
 h1 {

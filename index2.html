@@ -20,6 +20,13 @@
 
     <div class="topnav">
 
+        <button href="./guide/">
+          <i class="fa fa-question-circle fa-lg"></i>
+          </button>
+
+          <input type="file" id="imgupload" style="display:none" onchange="loadCode(this.files)"/> 
+          <button id="OpenImgUpload"><i class="fa fa-upload fa-lg"></i></button>
+
 
         <div class="dropdown">
             <button>
@@ -32,13 +39,6 @@
             </div>
         </div>
 
-        <input type="file" id="imgupload" style="display:none" onchange="loadCode(this.files)"/> 
-        <button id="OpenImgUpload"><i class="fa fa-upload fa-lg"></i></button>
-
-     
-       <button href="./guide/">
-       <i class="fa fa-question-circle fa-lg"></i>
-       </button>
 
         <div class="topnav-right">
           <a class="logo" style="pointer-events:none;">TidyBlocks</a>
