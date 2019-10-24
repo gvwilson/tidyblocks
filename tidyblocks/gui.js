@@ -206,7 +206,7 @@ const runCode = () => {
  * Depends on the global TidyBlocksWorkspace variable.
  */
 const saveCode = () => {
-  const filename = "Workspace.txt"
+  var filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt';
     const xml = Blockly.Xml.workspaceToDom(TidyBlocksWorkspace)
     const text = Blockly.Xml.domToText(xml)
     const link = document.getElementById('download')
@@ -239,7 +239,7 @@ function saveTable(table_id) {
   }
   var csv_string = csv.join('\n');
   // Download it
-  var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+  var filename = 'TidyBlocksDataFrame_' + new Date().toLocaleDateString() + '.csv';
   var link = document.createElement('a');
   link.style.display = 'none';
   link.setAttribute('target', '_blank');

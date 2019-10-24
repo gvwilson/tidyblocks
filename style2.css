@@ -247,6 +247,7 @@ button:hover {
 .input:checked + .label {
   background: #fff;
   color: #000;
+  border-bottom: 3px solid #CED8DC;
 }
 
 @media (min-width: 600px) {
@@ -308,6 +309,7 @@ h5 {
     
     .topnav-right {
       float: right;
+      line-height: 50px;
     }
     
     .dropdown {
