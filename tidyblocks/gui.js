@@ -86,7 +86,7 @@ class GuiEnvironment {
    * @param {string} error The message to display.
    */
   displayError (error) {
-    document.getElementById('error').innerHTML = `<p>${error}</p>`
+    document.getElementById('error').innerHTML = error
   }
 }
 
