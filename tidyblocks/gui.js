@@ -220,72 +220,34 @@ const saveCode = () => {
  * Function to export as CSV
  * First need to clean up JSON before exporting
  */
-
-function convertToCSV(objArray) {
-  var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-  var str = '';
-  for (var i = 0; i < array.length; i++) {
-      var line = '';
-      for (var index in array[i]) {
-          if (line != '') line += ','
-
-          line += array[i][index];
+function saveTable(table_id) {
+  // Select rows from table_id
+  var rows = document.querySelectorAll('table#' + table_id + ' tr');
+  // Construct csv
+  var csv = [];
+  for (var i = 0; i < rows.length; i++) {
+      var row = [], cols = rows[i].querySelectorAll('td, th');
+      for (var j = 0; j < cols.length; j++) {
+          // Clean innertext to remove multiple spaces and jumpline (break csv)
+          var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+          // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+          data = data.replace(/"/g, '""');
+          // Push escaped string
+          row.push('"' + data + '"');
       }
-
-      str += line + '\r\n';
+      csv.push(row.join(','));
   }
-  return str;
-}
-
-function exportCSVFile(headers, items, fileTitle) {
-  // Convert Object to JSON
-  var jsonObject = JSON.stringify(items);
-  var csv = this.convertToCSV(jsonObject);
-  var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
-  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  if (navigator.msSaveBlob) { // IE 10+
-      navigator.msSaveBlob(blob, exportedFilenmae);
-  } else {
-      var link = document.createElement("a");
-      if (link.download !== undefined) { // feature detection
-          // Browsers that support HTML5 download attribute
-          var url = URL.createObjectURL(blob);
-          link.setAttribute("href", url);
-          link.setAttribute("download", exportedFilenmae);
-          link.style.visibility = 'hidden';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-      }
-  }
-}
-
-itemsNotFormatted = []
-
-var itemsFormatted = [];
-// format the data
-itemsNotFormatted.forEach((item) => {
-  itemsFormatted.push({
-      model: item.model.replace(/,/g, ''), // remove commas to avoid errors,
-      chargers: item.chargers,
-      cases: item.cases,
-      earphones: item.earphones
-  });
-});
-var fileTitle = 'Data';
-
-
-/**
- * Load saved code.
- * Depends on the global TidyBlocksWorkspace variable.
- * @param {string[]} fileList List of files (only first element is valid).
- */
-const loadCode = (fileList) => {
-  const file = fileList[0]
-  const text = file.text().then((text) => {
-    const xml = Blockly.Xml.textToDom(text)
-    Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, TidyBlocksWorkspace)
-  })
+  var csv_string = csv.join('\n');
+  // Download it
+  var filename = 'export_' + table_id + '_' + new Date().toLocaleDateString() + '.csv';
+  var link = document.createElement('a');
+  link.style.display = 'none';
+  link.setAttribute('target', '_blank');
+  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 /*
@@ -321,6 +283,19 @@ $(function() {
 });
 
 /**
+ * Load saved code.
+ * Depends on the global TidyBlocksWorkspace variable.
+ * @param {string[]} fileList List of files (only first element is valid).
+ */
+const loadCode = (fileList) => {
+  const file = fileList[0]
+  const text = file.text().then((text) => {
+    const xml = Blockly.Xml.textToDom(text)
+    Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, TidyBlocksWorkspace)
+  })
+}
+
+/**
  * Produce a human-friendly name for the type of a column.
  * @param value The value whose type is checked.
  * @returns The name of the type
@@ -347,7 +322,7 @@ const json2table = (json) => {
   const bodyRows = json.map(row => {
     return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
   }).join('')
-  return `<table><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
+  return `<table id="dataFrame"><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
 }
 
 /**
