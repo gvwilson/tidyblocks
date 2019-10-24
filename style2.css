@@ -91,7 +91,7 @@ button:hover {
 
 #error {
   background-color: #fff;
-  padding:0;
+  padding: 20px;
   margin:0;
   float: left;
   font-family: monospace;
@@ -227,9 +227,10 @@ button:hover {
   cursor: pointer;
   font-weight: bold;
   font-size: 12px;
-  color: #7f7f7f;
+  color: #D7DADC;
   transition: background 0.1s, color 0.1s;
   font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+  display: block;
 }
 
 .label:hover {
