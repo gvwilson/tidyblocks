@@ -209,9 +209,9 @@ const saveCode = () => {
   const filename = "Workspace.txt"
     const xml = Blockly.Xml.workspaceToDom(TidyBlocksWorkspace)
     const text = Blockly.Xml.domToText(xml)
-    const link = document.getElementById('downloadCode')
+    const link = document.getElementById('download')
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
-    link.setAttribute('downloadCode', filename)
+    link.setAttribute('download', filename)
 }
 
 /**
