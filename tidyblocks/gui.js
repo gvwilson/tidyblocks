@@ -287,6 +287,11 @@ $(function() {
  * Depends on the global TidyBlocksWorkspace variable.
  * @param {string[]} fileList List of files (only first element is valid).
  */
+
+
+// Upload workspace
+$('#OpenImgUpload').click(function(){ $('#imgupload').trigger('click'); });
+
 const loadCode = (fileList) => {
   const file = fileList[0]
   const text = file.text().then((text) => {
