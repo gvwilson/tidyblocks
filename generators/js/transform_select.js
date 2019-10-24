@@ -8,6 +8,5 @@ Blockly.JavaScript['transform_select'] = (block) => {
         .filter(c => (c.length > 0))
         .map(c => Blockly.JavaScript.quote_(c))
         .join(',')
-
   return `.select(${block.tbId}, [${columns}])`
 }

@@ -1199,17 +1199,17 @@ describe('check that grouping and summarization work', () => {
     const pipeline = [
       {_b: 'data_colors'},
       {_b: 'transform_groupBy',
-       COLUMN: 'blue'}
+       MULTIPLE_COLUMNS: 'blue'}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 0)).length, 6,
-                 'Wrong number of rows for index 0')
+                 'Wrong number of rows for group 0')
     assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 1)).length, 4,
-                 'Wrong number of rows for index 255')
+                 'Wrong number of rows for group 1')
     assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 2)).length, 1,
-                 'Wrong number of rows for index 128')
+                 'Wrong number of rows for group 2')
     done()
   })
 
@@ -1217,7 +1217,7 @@ describe('check that grouping and summarization work', () => {
     const pipeline = [
       {_b: 'data_single'},
       {_b: 'transform_groupBy',
-       COLUMN: 'first'}
+       MULTIPLE_COLUMNS: 'first'}
     ]
     const env = evalCode(pipeline)
     assert(GROUPCOL in env.frame.data[0])
@@ -1228,7 +1228,7 @@ describe('check that grouping and summarization work', () => {
     const pipeline = [
       {_b: 'data_colors'},
       {_b: 'transform_groupBy',
-       COLUMN: 'blue'},
+       MULTIPLE_COLUMNS: 'blue'},
       {_b: 'transform_ungroup'}
     ]
     const env = evalCode(pipeline)
@@ -1243,7 +1243,7 @@ describe('check that grouping and summarization work', () => {
     const pipeline = [
       {_b: 'data_colors'},
       {_b: 'transform_groupBy',
-       COLUMN: 'blue'},
+       MULTIPLE_COLUMNS: 'blue'},
       {_b: 'transform_summarize',
        COLUMN_FUNC_PAIR: [
          {_b: 'transform_summarize_item',
@@ -1309,6 +1309,30 @@ describe('check that grouping and summarization work', () => {
                  `Expected a mean of 32.5, not ${env.frame.data[0].value_mean}`)
     assert.equal(env.frame.data[0].value_max, 45,
                  `Expected a max of 45, not ${env.frame.data[0].value_max}`)
+    done()
+  })
+
+  it('groups values by two columns', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_groupBy',
+       MULTIPLE_COLUMNS: 'blue, green'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.frame.data.length, 11,
+                 'Wrong number of rows in output')
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 0)).length, 3,
+                 'Wrong number of rows for blue==0 and green==0')
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 1)).length, 2,
+                 'Wrong number of rows for blue==0 and green==255')
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 2)).length, 1,
+                 'Wrong number of rows for blue==0 and green==128')
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 3)).length, 2,
+                 'Wrong number of rows for blue==255 and green==0')
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 4)).length, 1,
+                 'Wrong number of rows for blue==128 and green==0')
+    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 5)).length, 2,
+                 'Wrong number of rows for blue==255 and green==255')
     done()
   })
 

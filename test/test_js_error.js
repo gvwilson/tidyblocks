@@ -84,10 +84,10 @@ describe('raises errors at the right times', () => {
     const pipeline = [
       {_b: 'data_single'},
       {_b: 'transform_groupBy',
-       COLUMN: ''}
+       MULTIPLE_COLUMNS: ''}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] empty column name for grouping/,
+    assert_match(env.error, /\[block \d+\] empty column name\(s\) for grouping/,
                  `Expected an error message when filtering with empty column`)
     done()
   })
@@ -96,10 +96,10 @@ describe('raises errors at the right times', () => {
     const pipeline = [
       {_b: 'data_single'},
       {_b: 'transform_groupBy',
-       COLUMN: 'nonexistent'}
+       MULTIPLE_COLUMNS: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no such column "nonexistent"/,
+    assert_match(env.error, /\[block \d+\] unknown column\(s\) nonexistent in groupBy/,
                  `Expected an error message when filtering with nonexistent column`)
     done()
   })

@@ -809,23 +809,26 @@ class TidyBlocksDataFrame {
 
   /**
    * Group by the values in a column, storing the result in a new grouping column.
-   * @param {string} column The column that determines groups.
+   * @param {string[]} columns The columns that determine groups.
    * @returns A new dataframe.
    */
-  groupBy (blockId, column) {
-    tbAssert(column.length !== 0,
-             `[block ${blockId}] empty column name for grouping`)
+  groupBy (blockId, columns) {
+    tbAssert(columns.length > 0,
+             `[block ${blockId}] empty column name(s) for grouping`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) ${columns} in groupBy`)
+    tbAssert(columns.length === (new Set(columns)).size,
+             `[block ${blockId}] duplicate column(s) in [${columns}] in groupBy`)
     const seen = new Map()
-    let groupId = 0
+    let nextGroupId = 0
     const groupedData = this.data.map(row => {
-      row = {...row}
-      const value = tbGet(blockId, row, column)
-      if (! seen.has(value)) {
-        seen.set(value, groupId)
-        groupId += 1
+      const thisGroupId = this._makeGroupId(blockId, seen, row, columns, nextGroupId)
+      if (thisGroupId === nextGroupId) {
+        nextGroupId += 1
       }
-      row[GROUPCOL] = seen.get(value)
-      return row
+      const newRow = {...row}
+      newRow[GROUPCOL] = thisGroupId
+      return newRow
     })
     const newColumns = this._makeColumns(groupedData, this.columns, {add: [GROUPCOL]})
     return new TidyBlocksDataFrame(groupedData, newColumns)
@@ -1134,6 +1137,34 @@ class TidyBlocksDataFrame {
     }
 
     return result
+  }
+
+  //
+  // Recurse down a list of column names to find or construct a group ID.
+  //
+  _makeGroupId (blockId, seen, row, columns, nextGroupId) {
+    const thisValue = tbGet(blockId, row, columns[0])
+    const otherColumns = columns.slice(1)
+    if (seen.has(thisValue)) {
+      if (otherColumns.length === 0) {
+        return seen.get(thisValue)
+      }
+      else {
+        const subMap = seen.get(thisValue)
+        return this._makeGroupId(blockId, subMap, row, otherColumns, nextGroupId)
+      }
+    }
+    else {
+      if (otherColumns.length === 0) {
+        seen.set(thisValue, nextGroupId)
+        return nextGroupId
+      }
+      else {
+        const subMap = new Map()
+        seen.set(thisValue, subMap)
+        return this._makeGroupId(blockId, subMap, row, otherColumns, nextGroupId)
+      }
+    }
   }
 }
 

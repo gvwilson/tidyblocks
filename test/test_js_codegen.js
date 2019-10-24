@@ -136,9 +136,9 @@ describe('generate code for single blocks', () => {
 
   it('generates code to group rows', (done) => {
     const pipeline = {_b: 'transform_groupBy',
-                      COLUMN: 'existingColumn'}
+                      MULTIPLE_COLUMNS: 'existingColumn'}
     const code = makeCode(pipeline)
-    assert_match(code, /.groupBy\(\d+, "existingColumn"\)/,
+    assert_match(code, /.groupBy\(\d+, \["existingColumn"\]\)/,
                  'pipeline does not group rows by existing column')
     done()
   })
