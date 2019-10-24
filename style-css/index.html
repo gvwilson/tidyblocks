@@ -6,49 +6,79 @@
 
 <!-- language: lang-html -->
 
-<html><head><style>
+<html>
+  <head>
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    .splitter {
-        width: 100%;
-        height: 100%;
-        display: flex;
-    }
+    <div class="topnav">
 
-    #separator {
-        cursor: col-resize;
-        background-color: #aaa;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M2 0 v30 M5 0 v30 M8 0 v30' fill='none' stroke='black'/></svg>");
-        background-repeat: no-repeat;
-        background-position: center;
-        width: 10px;
-        height: 100%;
 
-    /* prevent browser's built-in drag from interfering */
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
+        <div class="dropdown">
+            <button>
+                <i class="fa fa-save fa-lg"></i>
+              </button>
+            <div class="dropdown-content">
+            <a class="button" href="#">Workspace</a>
+            <a class="button" href="#">Data</a>
+            <a class="button" href="#">Plot</a>
+            </div>
+        </div>
 
-    #first {
-        background-color: #dde;
-        width: 20%;
-        height: 100%;
-        min-width: 200px;
-    }
+        <button>
+            <i class="fa fa-upload fa-lg"></i>
+        </button>
 
-    #second {
-        background-color: #eee;
-        width: 80%;
-        height: 100%;
-        min-width: 0px;
-    }
+            <button>
+                <i class="fa fa-question-circle fa-lg"></i>
+              </button>
 
-    </style></head><body>
+        <div class="topnav-right">
+          <a class="logo" style="pointer-events:none;">TidyBlocks</a>
+        </div>
+      </div>
+
+    
 
     <div class="splitter">
     	<div id="first"></div>
     	<div id="separator" ></div>
-    	<div id="second" ></div>
+    	<div id="second" >
+          <div class="tabs">
+              <input name="tabs" type="radio" id="tab-1" checked="checked" class="input"/>
+              <label for="tab-1" class="label">Data</label>
+              <div class="panel">
+                <h1>Data</h1>
+                <p>The orange (specifically, the sweet orange) is the fruit of the citrus species Citrus × sinensis in the family Rutaceae</p>
+                <p>The fruit of the Citrus × sinensis is considered a sweet orange, whereas the fruit of the Citrus × aurantium is considered a bitter orange. The sweet orange reproduces asexually (apomixis through nucellar embryony); varieties of sweet orange arise through mutations.</p>
+              </div>
+            
+              <input name="tabs" type="radio" id="tab-2" class="input"/>
+              <label for="tab-2" class="label">Plot</label>
+              <div class="panel">
+                <h1>Plot</h1>
+                <p>The tangerine (Citrus tangerina) is an orange-colored citrus fruit that is closely related to, or possibly a type of, mandarin orange (Citrus reticulata).</p>
+                <p>The name was first used for fruit coming from Tangier, Morocco, described as a mandarin variety. Under the Tanaka classification system, Citrus tangerina is considered a separate species.</p>
+              </div>
+            
+              <input name="tabs" type="radio" id="tab-3" class="input"/>
+              <label for="tab-3" class="label">Debug</label>
+              <div class="panel">
+                <h1>Debug</h1>
+                <p>A clementine (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in 1902. The exterior is a deep orange colour with a smooth, glossy appearance. Clementines can be separated into 7 to 14 segments. Similarly to tangerines, they tend to be easy to peel.</p>
+              </div>
+
+              <input name="tabs" type="radio" id="tab-4" class="input"/>
+              <label for="tab-4" class="label">Text</label>
+              <div class="panel">
+                <h1>Text</h1>
+                <p>A clementine (Citrus ×clementina) is a hybrid between a mandarin orange and a sweet orange, so named in 1902. The exterior is a deep orange colour with a smooth, glossy appearance. Clementines can be separated into 7 to 14 segments. Similarly to tangerines, they tend to be easy to peel.</p>
+              </div>
+            </div>
+      </div>
     </div>
 
     <script>
