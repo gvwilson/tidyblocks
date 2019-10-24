@@ -261,6 +261,7 @@ function exportCSVFile(headers, items, fileTitle) {
 }
 
 itemsNotFormatted = []
+
 var itemsFormatted = [];
 // format the data
 itemsNotFormatted.forEach((item) => {
@@ -286,6 +287,38 @@ const loadCode = (fileList) => {
     Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, TidyBlocksWorkspace)
   })
 }
+
+/*
+* Save plot using html2canvas
+*/
+$(function() {
+  $("#savePlot").click(function() {
+    html2canvas($("#plotOutput"), {
+      onrendered: function(canvas) {
+        saveAs(canvas.toDataURL(), 'Plot.png');
+      }
+    });
+  });
+
+  function saveAs(uri, filename) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+      link.href = uri;
+      link.download = filename;
+
+      //Firefox requires the link to be in the body
+      document.body.appendChild(link);
+
+      //simulate click
+      link.click();
+
+      //remove the link when done
+      document.body.removeChild(link);
+    } else {
+      window.open(uri);
+    }
+  }
+});
 
 /**
  * Produce a human-friendly name for the type of a column.

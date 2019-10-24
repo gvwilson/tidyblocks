@@ -33,12 +33,11 @@
                 <i class="fa fa-save fa-lg"></i>
               </button>
             <div class="dropdown-content">
-            <a id="downloadCode" href="#" onclick="saveCode()">Workspace</a>
+            <a id="downloadPlot" href="#" onclick="saveCode()">Workspace</a>
             <a id="downloadData" href="#" onclick="exportCSVFile(itemsFormatted, fileTitle);">Data</a>
-            <a id="downloadPlot" href="#" onclick="saveCode()">Plot</a>
+            <a id="savePlot" href="#">Plot</a>
             </div>
         </div>
-
 
         <div class="topnav-right">
           <a class="logo" style="pointer-events:none;">TidyBlocks</a>
@@ -156,6 +155,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.0.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 
     <!-- Put all blocks code in a div so it's easy to find and load for testing. -->
