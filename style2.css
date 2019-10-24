@@ -73,7 +73,6 @@ button:hover {
   margin-right: 10px;
   z-index: 5000;
   margin-right: 10px;
-  grid-area: 1 / 1;
 }
 
 .fab:hover {
@@ -356,6 +355,19 @@ h5 {
     
     .select-selected {
       background-color: #fff;
+    }
+
+    .blocklySVG {
+      width: 100%;
+      z-index: 0;
+    }
+
+    .blocklyTrash {
+      width: 100%;
+    }
+
+    .blocklyZoom {
+      width: 100%;
     }
     
     /*style the arrow inside the select element:*/
