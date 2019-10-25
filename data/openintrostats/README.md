@@ -65,8 +65,8 @@ https://github.com/OpenIntroStat/openintro-r-package/blob/master/data/county.rda
 * **inherit**
 * **viagra**
 * **password**
-* **num_char* number of characters in email**
-* **line_breaks* number of line breaks in email**
+* **num_char** number of characters in email
+* **line_breaks** number of line breaks in email
 * **format**
 * **re_subj**
 * **exclaim_subj**
