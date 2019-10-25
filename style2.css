@@ -27,8 +27,7 @@ header {
 }
 
 .blockDisplay {
-  z-index: -1;
-  display: inline;
+  position: absolute; 
 }
 
 .logo {
@@ -70,8 +69,9 @@ button:hover {
   text-align: center;
   line-height: 58px;
   float: right;
-  margin: 10px;
+  margin-top: 10px;
   z-index: 5000;
+  margin-right: 4px;
   position: absolute;
   right:0;
   top:0;
@@ -201,7 +201,7 @@ button:hover {
         background-color: white;
         width: 80%;
         height: 100%;
-        min-width: 185px;
+        min-width: 180px;
         position: relative; 
     }
 
@@ -365,7 +365,6 @@ h5 {
     .blocklySVG {
       width: 100%;
       z-index: 0;
-      position: relative;
     }
 
     .blocklyTrash {
