@@ -108,3 +108,24 @@ Rough estimation of the histogram data summarizing the teaching year for the tea
 
 #### Source
 https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q5.pdf
+
+# APSTATS_2017_Q1
+
+Simulated wolf weight and length data to create the scatterplot for question 1.
+rows 11, columns 2
+
+* *weight* weights of grey wolves in kg
+* *length* length of grey wolves in meters
+
+## Source 
+Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q1.pdf
+
+# APSTATS_2017_Q2
+
+rows 80: columns 2
+
+* *customers* the customer id
+* *drink* whether the customer got water or a fountain soda at the drink station
+
+### Source
+Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q2.pdf
