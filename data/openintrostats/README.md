@@ -123,11 +123,3 @@ rows 20, columns 2
 
 * *grade:* student's exam grade
 * *group* x-axis variable for plotting
-
-# APSTATS_2017_Q1
-
-Simulated wolf weight and length data to create the scatterplot for question 1.
-rows 11, columns 2
-
-## Source 
-Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q1.pdf
