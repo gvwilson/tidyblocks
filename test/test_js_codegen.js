@@ -110,7 +110,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to convert types', (done) => {
-    const pipeline = {_b: 'value_convert',
+    const pipeline = {_b: 'operation_convert',
                       TYPE: 'tbToText',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'left'}}
@@ -321,7 +321,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to negate a column', (done) => {
-    const pipeline = {_b: 'value_negate',
+    const pipeline = {_b: 'operation_negate',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
     const code = makeCode(pipeline)
@@ -333,7 +333,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to do logical negation', (done) => {
-    const pipeline = {_b: 'value_not',
+    const pipeline = {_b: 'operation_not',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
     const code = makeCode(pipeline)
@@ -345,7 +345,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to add two columns', (done) => {
-    const pipeline = {_b: 'value_arithmetic',
+    const pipeline = {_b: 'operation_arithmetic',
                       OP: 'tbAdd',
                       LEFT: {_b: 'value_column',
                              COLUMN: 'left'},
@@ -371,7 +371,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to compare two columns', (done) => {
-    const pipeline = {_b: 'value_compare',
+    const pipeline = {_b: 'operation_compare',
                       OP: 'tbNeq',
                       LEFT: {_b: 'value_column',
                              COLUMN: 'left'},
@@ -397,7 +397,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('geneates code for a logical operation', (done) => {
-    const pipeline = {_b: 'value_logical',
+    const pipeline = {_b: 'operation_logical',
                       OP: 'tbOr',
                       LEFT: {_b: 'value_column',
                              COLUMN: 'left'},
@@ -432,7 +432,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code for if-else', (done) => {
-    const pipeline = {_b: 'value_ifElse',
+    const pipeline = {_b: 'operation_ifElse',
                       COND: {_b: 'value_column',
                              COLUMN: 'red'},
                       LEFT: {_b: 'value_column',
