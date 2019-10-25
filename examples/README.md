@@ -37,7 +37,7 @@ We are creating examples from the sample free response questions found at
 | [2018_q5](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q5)  | Done |
 | [2018_q6](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q6)  | E: Help to Answer |
 | [2017_q1](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2017_q1)  | B + C: regression blocks |
-| 2017_q2  | TODO |
+| [2017_q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2017_q2)  | Done |
 | 2017_q3  | TODO |
 | 2017_q4  | TODO |
 | 2017_q5  | TODO |
