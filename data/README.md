@@ -114,8 +114,8 @@ https://secure-media.collegeboard.org/ap/pdf/ap18-statistics-q5.pdf
 Simulated wolf weight and length data to create the scatterplot for question 1.
 rows 11, columns 2
 
-* *weight* weights of grey wolves in kg
-* *length* length of grey wolves in meters
+* **weight** weights of grey wolves in kg
+* **length** length of grey wolves in meters
 
 ## Source 
 Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q1.pdf
@@ -124,8 +124,8 @@ Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-
 
 rows 80: columns 2
 
-* *customers* the customer id
-* *drink* whether the customer got water or a fountain soda at the drink station
+* **customers** the customer id
+* **drink** whether the customer got water or a fountain soda at the drink station
 
 ### Source
 Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q2.pdf
@@ -134,8 +134,8 @@ Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-
 
 rows 207: columns 2
 
-* *age_group* ordinal age groupings for patients being treated for schizophrenia
-* *gender* sex of patient
+* **age_group** ordinal age groupings for patients being treated for schizophrenia
+* **gender** sex of patient
 
 ### Source
 Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q5.pdf
