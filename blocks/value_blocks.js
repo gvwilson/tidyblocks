@@ -52,10 +52,11 @@ Blockly.defineBlocksWithJsonArray([
     args0: [{
       type: 'field_input',
       name: 'VALUE',
-      value: '1970-01-01'
+      text: 'YYYY-MM-DD'
     }],
-    helpUrl: '',
+    output: 'DateTime',
     style: 'value_blocks',
+    helpUrl: '',
     tooltip: 'constant date/time'
   }
 ])
