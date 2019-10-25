@@ -138,7 +138,7 @@ describe('blocks are given IDs and can be looked up', () => {
         'transform_mutate',
         {COLUMN: 'should_fail',
          VALUE: makeBlock(
-           'value_arithmetic',
+           'operation_arithmetic',
            {OP: 'tbAdd',
             LEFT: makeBlock(
               'value_column',
