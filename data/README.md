@@ -126,3 +126,6 @@ rows 80: columns 2
 
 * *customers* the customer id
 * *drink* whether the customer got water or a fountain soda at the drink station
+
+### Source
+Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q2.pdf
