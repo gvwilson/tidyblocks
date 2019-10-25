@@ -40,7 +40,7 @@ We are creating examples from the sample free response questions found at
 | [2017_q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2017_q2)  | Done |
 | 2017_q3  | A: need qnorm block |
 | 2017_q4  | A: need to add the ability to facet to recreate graph |
-| 2017_q5  | TODO |
+| 2017_q5  | A: need to group by column values rather than group ID |
 | 2017_q6  | TODO |
 | 2016_q1  | TODO |
 | 2016_q2  | TODO |
