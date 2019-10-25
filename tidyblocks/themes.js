@@ -27,9 +27,9 @@ const tidyBlockStyles = {
   },
 
   operation_blocks: {
-    colourPrimary: '#3CE755',
-    colourSecondary: '#FF64C7',
-    colourTertiary: '#187609'
+    colourPrimary: '#F9B5B2',
+    colourSecondary: '#CD5C5C',
+    colourTertiary: '#CD5C5C'
   },
 
   value_blocks: {
@@ -57,7 +57,7 @@ const tidyCategoryStyles = {
     colour: '#A4C588'
   },
   operation: {
-    colour: '#3CE755'
+    colour: '#F9B5B2'
   },
   value: {
     colour: '#E7553C'
