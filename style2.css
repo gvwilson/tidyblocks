@@ -370,8 +370,11 @@ h5 {
       display: block;
       margin-left: auto;
       margin-right: auto;
+      opacity : 0;
+      width: 200px;
+      height: 15px;
     }
-    
+
     /*style the arrow inside the select element:*/
     .select-selected:after {
       position: absolute;
@@ -417,8 +420,13 @@ h5 {
     }
     
     .select-items div:hover, .same-as-selected {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgba(0, 0, 0, 0.1) !important;
     }
+
+    select:hover {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+    }
+
 
     .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
       border-top: none;
@@ -469,6 +477,7 @@ h5 {
     background: #fff;
     position: relative;
     display: inline-block;
+    outline: none;
 }
 
 .select-style:after {
@@ -499,6 +508,6 @@ h5 {
             appearance: none;
 }
 
-.select-style select:focus {
+select:focus {
     outline: none;
 }
