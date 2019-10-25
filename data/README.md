@@ -129,3 +129,13 @@ rows 80: columns 2
 
 ### Source
 Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q2.pdf
+
+# APSTATS_2017_Q5
+
+rows 207: columns 2
+
+* *age_group* ordinal age groupings for patients being treated for schizophrenia
+* *gender* sex of patient
+
+### Source
+Adapted from: https://secure-media.collegeboard.org/digitalServices/pdf/ap/ap17-statistics-q5.pdf
