@@ -371,6 +371,12 @@ h5 {
     .blocklyZoom {
       width: 100%;
     }
+
+    .custom-select {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
     
     /*style the arrow inside the select element:*/
     .select-selected:after {
@@ -408,6 +414,7 @@ h5 {
       left: 0;
       right: 0;
       z-index: 99;
+      border-color: rgba(0, 0, 0, 0.1)
     }
     
     /*hide the items when the select box is closed:*/
@@ -437,3 +444,67 @@ h5 {
       background-color: transparent;
       color: #D7DADC;
   }
+
+  .language {
+    display: flex;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .language-left {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100px;
+  }
+
+  .language-right {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .select-style {
+    padding: 0;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    width: 120px;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #fff;
+    background: #fff;
+    position: relative;
+    display: inline-block;
+}
+
+.select-style:after {
+    top: 50%;
+    left: 85%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    border-width: 5px;
+    margin-top: -2px;
+    z-index: 100;
+}
+
+.select-style select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+
+.select-style select:focus {
+    outline: none;
+}
