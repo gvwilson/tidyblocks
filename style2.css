@@ -418,3 +418,22 @@ h5 {
     .select-items div:hover, .same-as-selected {
       background-color: rgba(0, 0, 0, 0.1);
     }
+
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 3px solid #D7DADC;
+      font-weight: bold;
+  }
+  
+  /* remove the "grey" border when hovering the li elements */
+  .nav-tabs>li>a:hover{
+      border: 1px solid transparent;
+  }
+  
+  /* remove the "grey" background colour when hovering the li elements */
+  .nav>li>a:focus, .nav>li>a:hover{
+      background-color: transparent;
+      color: #D7DADC;
+  }
