@@ -36,3 +36,25 @@ Blockly.defineBlocksWithJsonArray([
     extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
   }
 ])
+
+//
+// Visuals for notification block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'plumbing_notify',
+    message0: 'Notify %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'NAME',
+        text: 'name'
+      }
+    ],
+    previousStatement: null,
+    style: 'plumbing_blocks',
+    tooltip: 'notify a join that a table is available',
+    helpUrl: '',
+    extensions: ['validate_NAME']
+  }
+])
