@@ -1,56 +1,64 @@
-This directory is composed of folders, each containing a single [AP Statistics Question](https://apstudents.collegeboard.org/courses/ap-statistics/free-response-questions-by-year) answered using [tidyblocks.tech](tidyblocks.tech).
+# Examples
 
- - [Adding an Example](#adding-an-example)
- - [APSTATS Questions](#apstats-questions)
+This directory contains solutions using [tidyblocks.tech][tidyblocks]
+to question from the [AP Statistics Exam][ap-stats]
+and the [OpenIntro *Advanced High School Statistics*][openintro-hs] textbook.
 
-# Adding an Example
+## AP Stats Examples
 
 When submitting a new example each folder should:
 
-- Be named APSTATS_YEAR_QUESTION
+- Be named apstats_YYYY_qN, e.g., apstats_2018_q1
+
 - Contain a README with:
   - A link to the question
-  - The Question
+  - The question
   - A link the dataset needed to answer the question
   - The TidyBlocks answer
-  - A Screenshot of the workspace used
-- XML FILE 
-So the workspace can be uploaded by others
-![](Download_XML.png)
+  - A screenshot of the workspace used
 
-- PNG Screenshot
+- Contain an XML file downloaded from TidyBlocks so the workspace can be uploaded by others
 
+![](download_xml.png)
+
+- Contain a PNG screenshot of the finished solution
 
 ![](screenshot.png)
 
-# APSTATS Questions
-
-Creating examples from the sample free response questions found here: 
-https://apstudents.collegeboard.org/courses/ap-statistics/free-response-questions-by-year
+We are creating examples from the sample free response questions found at
+<https://apstudents.collegeboard.org/courses/ap-statistics/free-response-questions-by-year>
 
 | Question  | Completed |
 | -------- | ---- |
-| [2018_Q1](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q1)  | A + B: regression blocks |
-| [2018_Q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q2)  | Done |
-| [2018_Q3](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q3)  | C: binomial block |
-| [2018_Q4](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q4)  | C: t-test block |
-| [2018_Q5](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q5)  | Done |
-| [2018_Q6](https://github.com/tidyblocks/tidyblocks/tree/master/examples/APSTATS_2018_Q6)  | E: Help to Answer |
-| 2017_Q1  | TODO |
-| 2017_Q2  | TODO |
-| 2017_Q3  | TODO |
-| 2017_Q4  | TODO |
-| 2017_Q5  | TODO |
-| 2017_Q6  | TODO |
-| 2016_Q1  | TODO |
-| 2016_Q2  | TODO |
-| 2016_Q3  | TODO |
-| 2016_Q4  | TODO |
-| 2016_Q5  | TODO |
-| 2016_Q6  | TODO |
-| 2015_Q1  | TODO |
-| 2015_Q2  | TODO |
-| 2015_Q3  | TODO |
-| 2015_Q4  | TODO |
-| 2015_Q5  | TODO |
-| 2015_Q6  | TODO |
+| [2018_q1](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q1)  | A + B: regression blocks |
+| [2018_q2](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q2)  | Done |
+| [2018_q3](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q3)  | C: binomial block |
+| [2018_q4](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q4)  | C: t-test block |
+| [2018_q5](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q5)  | Done |
+| [2018_q6](https://github.com/tidyblocks/tidyblocks/tree/master/examples/apstats_2018_q6)  | E: Help to Answer |
+| 2017_q1  | TODO |
+| 2017_q2  | TODO |
+| 2017_q3  | TODO |
+| 2017_q4  | TODO |
+| 2017_q5  | TODO |
+| 2017_q6  | TODO |
+| 2016_q1  | TODO |
+| 2016_q2  | TODO |
+| 2016_q3  | TODO |
+| 2016_q4  | TODO |
+| 2016_q5  | TODO |
+| 2016_q6  | TODO |
+| 2015_q1  | TODO |
+| 2015_q2  | TODO |
+| 2015_q3  | TODO |
+| 2015_q4  | TODO |
+| 2015_q5  | TODO |
+| 2015_q6  | TODO |
+
+## OpenIntro *Advanced High School Statistics*
+
+Examples are organized by chapter under open-intro-stats-hs.
+
+[apstats]: https://apstudents.collegeboard.org/courses/ap-statistics/free-response-questions-by-year
+[openintro-hs]: https://www.openintro.org/stat/textbook.php?stat_book=aps
+[tidyblocks]: http://tidyblocks.tech

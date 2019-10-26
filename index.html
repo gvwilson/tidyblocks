@@ -7,10 +7,10 @@
 <!-- language: lang-html -->
 
 <html>
-    <head>
+  <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
+  <head>
         <!-- Visual appearance -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -19,42 +19,59 @@
         <link rel="stylesheet" href="style2.css">
     
       </head>
+
       <body>
 
-          <style>
-</style>
-
-    <div class="topnav">
-
-        <button href="./guide/">
-          <i class="fa fa-question-circle fa-lg"></i>
-          </button>
-
-          <input type="file" id="imgupload" style="display:none" onchange="loadCode(this.files)"/> 
-          <button id="OpenImgUpload"><i class="fa fa-upload fa-lg"></i></button>
 
 
-        <div class="dropdown">
-            <button>
-                <i class="fa fa-save fa-lg"></i>
-              </button>
-            <div class="dropdown-content">
-            <a id="download" href="#" onclick="saveCode()">Workspace</a>
-            <a id="downloadData" href="#" onclick="saveTable('dataFrame');">Data</a>
-            <a id="savePlot" href="#">Plot</a>
-            </div>
+
+<!-- begin snippet: js hide: false console: true babel: null -->
+
+<!-- language: lang-html -->
+
+<html>
+    <head>
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+      <!-- Visual appearance -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+      <link href="static/tidyblocks.css" rel="stylesheet" type="text/css">
+  
+    </head>
+    <body>
+
+      <div class="topnav">
+  
+          <button href="./guide/">
+            <i class="fa fa-question-circle fa-lg"></i>
+            </button>
+  
+            <input type="file" id="imgupload" style="display:none" onchange="loadCode(this.files)"/> 
+            <button id="OpenImgUpload"><i class="fa fa-upload fa-lg"></i></button>
+  
+  
+          <div class="dropdown">
+              <button>
+                  <i class="fa fa-save fa-lg"></i>
+                </button>
+              <div class="dropdown-content">
+              <a id="download" href="#" onclick="saveCode()">Workspace</a>
+              <a id="downloadData" href="#" onclick="saveTable('dataFrame');">Data</a>
+              <a id="savePlot" href="#">Plot</a>
+              </div>
+          </div>
+  
+          <div class="topnav-right">
+            <a class="logo" style="pointer-events:none;">TidyBlocks</a>
+          </div>
         </div>
-
-        <div class="topnav-right">
-          <a class="logo" style="pointer-events:none;">TidyBlocks</a>
-        </div>
-      </div>
-
-
-    <div class="splitter">
-    	<div id="first">
-          <div class="fab" id="runCode" onclick="runCode(); showCode();">RUN</div>
-          <div id="blockDisplay">
+  
+  
+      <div class="splitter">
+        <div id="first">
+            <div class="fab" id="runCode" onclick="runCode(); showCode();">RUN</div>
+            <div id="blockDisplay">
               <xml id="toolbox">
                 <category name="data" categorystyle="data">
                   <block type="data_colors"></block>
@@ -88,224 +105,121 @@
                   <block type="plot_point"></block>
                   <block type="plot_table"></block>
                 </category>
+                <category name="operation" categorystyle="operation">
+                  <block type="operation_arithmetic"></block>
+                  <block type="operation_compare"></block>
+                  <block type="operation_convert"></block>
+                  <block type="operation_convert_datetime"></block>
+                  <block type="operation_ifElse"></block>
+                  <block type="operation_logical"></block>
+                  <block type="operation_negate"></block>
+                  <block type="operation_not"></block>
+                  <block type="operation_type"></block>
+                </category>
+                <category name="value" categorystyle="value">
+                  <block type="value_boolean"></block>
+                  <block type="value_column"></block>
+                  <block type="value_datetime"></block>
+                  <block type="value_number"></block>
+                  <block type="value_text"></block>
+                </category>
                 <category name="plumbing" categorystyle="plumbing">
                   <block type="plumbing_join"></block>
                   <block type="plumbing_notify"></block>
                 </category>
-                <category name="values" categorystyle="values">
-                  <block type="value_arithmetic"></block>
-                  <block type="value_boolean"></block>
-                  <block type="value_column"></block>
-                  <block type="value_compare"></block>
-                  <block type="value_convert"></block>
-                  <block type="value_convert_datetime"></block>
-                  <block type="value_datetime"></block>
-                  <block type="value_ifElse"></block>
-                  <block type="value_negate"></block>
-                  <block type="value_not"></block>
-                  <block type="value_number"></block>
-                  <block type="value_logical"></block>
-                  <block type="value_text"></block>
-                  <block type="value_type"></block>
-                </category>
               </xml>
-            </div>
-      </div>
-    	<div id="separator" ></div>
-    	<div id="second" >
-                <ul class="nav nav-tabs">
-                  <li class="active"><a data-toggle="tab" href="#data">Data</a></li>
-                  <li><a data-toggle="tab" href="#plot">Plot</a></li>
-                  <li><a data-toggle="tab" href="#debug">Debug</a></li>
-                  <li><a data-toggle="tab" href="#text">Text</a></li>
-                </ul>
-              
-                <div class="tab-content">
-                  <div id="data" class="tab-pane fade in active">
-                    <div id="dataOutput"></div>
-                  </div>
-                  <div id="plot" class="tab-pane fade">
-                      <div id="plotOutput"></div>
-                  </div>
-                  <div id="debug" class="tab-pane fade">
-                      <div id="error"></div>
-                  </div>
-                  <div id="text" class="tab-pane fade">
-
-                    <div class="language">
-                        <div class="select-style">
-                            <select>
-                              <option value="javascript">JavaScript</option>
-                              <option value="python" disabled>Python</option>
-                              <option value="r" disabled>R</option>
-                            </select>
-                          </div>
+              </div>
+        </div>
+        <div id="separator" ></div>
+        <div id="second" >
+                  <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#data">Data</a></li>
+                    <li><a data-toggle="tab" href="#plot">Plot</a></li>
+                    <li><a data-toggle="tab" href="#debug">Debug</a></li>
+                    <li><a data-toggle="tab" href="#text">Text</a></li>
+                  </ul>
+                
+                  <div class="tab-content">
+                    <div id="data" class="tab-pane fade in active">
+                      <div id="dataOutput"></div>
                     </div>
-
-                      <div id="codeOutput"></div>
+                    <div id="plot" class="tab-pane fade">
+                        <div id="plotOutput"></div>
+                    </div>
+                    <div id="debug" class="tab-pane fade">
+                        <div id="error"></div>
+                    </div>
+                    <div id="text" class="tab-pane fade">
+  
+                      <div class="language">
+                          <div class="select-style">
+                              <select>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python" disabled>Python</option>
+                                <option value="r" disabled>R</option>
+                              </select>
+                            </div>
+                      </div>
+  
+                        <div id="codeOutput"></div>
+                    </div>
                   </div>
-                </div>
+        </div>
       </div>
-    </div>
-
-    <!-- Blockly itself -->
-    <script language="javascript" type="text/javascript" src="static/blockly_compressed.js"></script>
-    <script language="javascript" type="text/javascript" src="static/blocks_compressed.js"></script>
-    <script language="javascript" type="text/javascript" src="static/javascript_compressed.js"></script>
-    <script language="javascript" type="text/javascript" src="static/msg/js/en.js"></script>
-
-    <!-- DataForge, Vega-Lite, and what-not -->
-    <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.0.2/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
-    <!-- Put all blocks code in a div so it's easy to find and load for testing. -->
-    <div id="tidyblocks">
-      <!-- TidyBlocks supports -->
-      <script src="tidyblocks/tidyblocks.js"></script>
-      <script src="tidyblocks/gui.js"></script>
-      <script src="tidyblocks/themes.js"></script>
-
-      <!-- TidyBlocks blocks -->
-
-      <script src="blocks/data_colors.js"></script>
-      <script src="generators/js/data_colors.js"></script>
-
-      <script src="blocks/data_double.js"></script>
-      <script src="generators/js/data_double.js"></script>
-
-      <script src="blocks/data_earthquakes.js"></script>
-      <script src="generators/js/data_earthquakes.js"></script>
-
-      <script src="blocks/data_iris.js"></script>
-      <script src="generators/js/data_iris.js"></script>
-
-      <script src="blocks/data_missing.js"></script>
-      <script src="generators/js/data_missing.js"></script>
-
-      <script src="blocks/data_mtcars.js"></script>
-      <script src="generators/js/data_mtcars.js"></script>
-
-      <script src="blocks/data_toothGrowth.js"></script>
-      <script src="generators/js/data_toothGrowth.js"></script>
-
-      <script src="blocks/data_single.js"></script>
-      <script src="generators/js/data_single.js"></script>
-
-      <script src="blocks/data_urlCSV.js"></script>
-      <script src="generators/js/data_urlCSV.js"></script>
-
-      <script src="blocks/transform_filter.js"></script>
-      <script src="generators/js/transform_filter.js"></script>
-
-      <script src="blocks/transform_groupby.js"></script>
-      <script src="generators/js/transform_groupby.js"></script>
-
-      <script src="blocks/transform_mutate.js"></script>
-      <script src="generators/js/transform_mutate.js"></script>
-
-      <script src="blocks/transform_select.js"></script>
-      <script src="generators/js/transform_select.js"></script>
-
-      <script src="blocks/transform_sort.js"></script>
-      <script src="generators/js/transform_sort.js"></script>
-
-      <script src="blocks/transform_summarize.js"></script>
-      <script src="generators/js/transform_summarize.js"></script>
-
-      <script src="blocks/transform_summarize_item.js"></script>
-      <script src="generators/js/transform_summarize_item.js"></script>
-
-      <script src="blocks/transform_ungroup.js"></script>
-      <script src="generators/js/transform_ungroup.js"></script>
-
-      <script src="blocks/plot_bar.js"></script>
-      <script src="generators/js/plot_bar.js"></script>
-
-      <script src="blocks/plot_boxplot.js"></script>
-      <script src="generators/js/plot_boxplot.js"></script>
-
-      <script src="blocks/plot_hist.js"></script>
-      <script src="generators/js/plot_hist.js"></script>
-
-      <script src="blocks/plot_point.js"></script>
-      <script src="generators/js/plot_point.js"></script>
-
-      <script src="blocks/plot_table.js"></script>
-      <script src="generators/js/plot_table.js"></script>
-
-      <script src="blocks/plumbing_join.js"></script>
-      <script src="generators/js/plumbing_join.js"></script>
-
-      <script src="blocks/plumbing_notify.js"></script>
-      <script src="generators/js/plumbing_notify.js"></script>
-
-      <script src="blocks/value_arithmetic.js"></script>
-      <script src="generators/js/value_arithmetic.js"></script>
-
-      <script src="blocks/value_boolean.js"></script>
-      <script src="generators/js/value_boolean.js"></script>
-
-      <script src="blocks/value_column.js"></script>
-      <script src="generators/js/value_column.js"></script>
-
-      <script src="blocks/value_compare.js"></script>
-      <script src="generators/js/value_compare.js"></script>
-
-      <script src="blocks/value_convert.js"></script>
-      <script src="generators/js/value_convert.js"></script>
-
-      <script src="blocks/value_convert_datetime.js"></script>
-      <script src="generators/js/value_convert_datetime.js"></script>
-
-      <script src="blocks/value_datetime.js"></script>
-      <script src="generators/js/value_datetime.js"></script>
-
-      <script src="blocks/value_ifelse.js"></script>
-      <script src="generators/js/value_ifelse.js"></script>
-
-      <script src="blocks/value_negate.js"></script>
-      <script src="generators/js/value_negate.js"></script>
-
-      <script src="blocks/value_not.js"></script>
-      <script src="generators/js/value_not.js"></script>
-
-      <script src="blocks/value_number.js"></script>
-      <script src="generators/js/value_number.js"></script>
-
-      <script src="blocks/value_logical.js"></script>
-      <script src="generators/js/value_logical.js"></script>
-
-      <script src="blocks/value_text.js"></script>
-      <script src="generators/js/value_text.js"></script>
-
-      <script src="blocks/value_type.js"></script>
-      <script src="generators/js/value_type.js"></script>
-    </div>
-
-    <!-- R code
-    <script language="javascript" type="text/javascript" src="languages/r.js"></script>
-    <script src="generators/r/data_colors.js"></script>
-    <script src="generators/r/data_earthquakes.js"></script>
-    <script src="generators/r/data_iris.js"></script>
-    <script src="generators/r/data_mtcars.js"></script>
-    <script src="generators/r/data_toothGrowth.js"></script>
-    <script src="generators/r/data_single.js"></script>
-    <script src="generators/r/data_urlCSV.js"></script>
-    <script src="generators/r/transform_filter.js"></script>
-    <script src="generators/r/transform_groupby.js"></script>
-    <script src="generators/r/transform_mutate.js"></script>
-    <script src="generators/r/transform_select.js"></script>
-    <script src="generators/r/transform_summarize.js"></script>
-    <script src="generators/r/value_compare.js"></script>
-    -->
-
+  
+      <!-- Blockly itself -->
+      <script language="javascript" type="text/javascript" src="static/blockly_compressed.js"></script>
+      <script language="javascript" type="text/javascript" src="static/blocks_compressed.js"></script>
+      <script language="javascript" type="text/javascript" src="static/javascript_compressed.js"></script>
+      <script language="javascript" type="text/javascript" src="static/msg/js/en.js"></script>
+  
+      <!-- DataForge, Vega-Lite, and what-not -->
+      <script src="https://cdn.jsdelivr.net/npm/vega@5.4.0"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
+      <script src="https://cdn.jsdelivr.net/npm/papaparse@5.0.2/papaparse.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  
+      <!-- Put all blocks code in a div so it's easy to find and load for testing. -->
+      <div id="tidyblocks">
+        <!-- TidyBlocks supports -->
+        <script src="tidyblocks/tidyblocks.js"></script>
+        <script src="tidyblocks/gui.js"></script>
+        <script src="tidyblocks/themes.js"></script>
+  
+        <!-- TidyBlocks blocks -->
+        <script src="blocks/data_blocks.js"></script>
+        <script src="blocks/operation_blocks.js"></script>
+        <script src="blocks/plot_blocks.js"></script>
+        <script src="blocks/plumbing_blocks.js"></script>
+        <script src="blocks/transform_blocks.js"></script>
+        <script src="blocks/transform_summarize_item.js"></script>
+        <script src="blocks/value_blocks.js"></script>
+  
+        <!-- TidyBlocks code generators -->
+        <script src="generators/js/data_blocks.js"></script>
+        <script src="generators/js/operation_blocks.js"></script>
+        <script src="generators/js/plot_blocks.js"></script>
+        <script src="generators/js/plumbing_blocks.js"></script>
+        <script src="generators/js/transform_blocks.js"></script>
+        <script src="generators/js/transform_summarize_item.js"></script>
+        <script src="generators/js/value_blocks.js"></script>
+      </div>
+      
+      <script>
+  
+  document.addEventListener('DOMContentLoaded', (event) => {
+      setUpBlockly()
+  })
+  
+      </script>
+      </body>
+      </html>
+  
+  
 
     <script>
-
 document.addEventListener('DOMContentLoaded', (event) => {
     setUpBlockly()
 })
