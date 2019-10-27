@@ -60,6 +60,34 @@ Blockly.JavaScript['plot_box'] = (block) => {
 }
 
 //
+// Create a dot plot.
+//
+Blockly.JavaScript['plot_dot'] = (block) => {
+  const x_axis = block.getFieldValue('X_AXIS')
+  const y_axis = block.getFieldValue('Y_AXIS')
+  const spec = `{
+    "height": 300,
+    "data": { "values": null }, // set to dataframe inside plotting function
+    "mark": {
+    	"type": "circle",
+    	"opacity": 1
+    },
+    "encoding": {
+      "x": {
+        "field": "${x_axis}",
+        "type": "ordinal"
+      },
+      "y": {
+        "field": "${y_axis}",
+        "type": "quantitative",
+      }
+    }
+  }`
+  const suffix = registerSuffix('')
+  return `.plot(environment, ${spec}) ${suffix}`
+}
+
+//
 // Create a histogram.
 //
 Blockly.JavaScript['plot_hist'] = (block) => {

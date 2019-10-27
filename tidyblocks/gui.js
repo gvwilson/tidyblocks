@@ -86,7 +86,7 @@ class GuiEnvironment {
    * @param {string} error The message to display.
    */
   displayError (error) {
-    document.getElementById('error').innerHTML = `<p>${error}</p>`
+    document.getElementById('error').innerHTML = error
   }
 }
 
@@ -206,24 +206,92 @@ const runCode = () => {
  * Depends on the global TidyBlocksWorkspace variable.
  */
 const saveCode = () => {
-  const filename = document.getElementById('filename').value
-  if (! filename) {
-    window.alert("Empty filename")
-  }
-  else {
+  var filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt';
     const xml = Blockly.Xml.workspaceToDom(TidyBlocksWorkspace)
     const text = Blockly.Xml.domToText(xml)
     const link = document.getElementById('download')
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
     link.setAttribute('download', filename)
-  }
 }
+
+/**
+ * Save the data pane as csv 
+ * Convert JSON to array
+ * Function to export as CSV
+ * First need to clean up JSON before exporting
+ */
+function saveTable(table_id) {
+  // Select rows from table_id
+  var rows = document.querySelectorAll('table#' + table_id + ' tr');
+  // Construct csv
+  var csv = [];
+  for (var i = 0; i < rows.length; i++) {
+      var row = [], cols = rows[i].querySelectorAll('td, th');
+      for (var j = 0; j < cols.length; j++) {
+          // Clean innertext to remove multiple spaces and jumpline (break csv)
+          var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+          // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+          data = data.replace(/"/g, '""');
+          // Push escaped string
+          row.push('"' + data + '"');
+      }
+      csv.push(row.join(','));
+  }
+  var csv_string = csv.join('\n');
+  // Download it
+  var filename = 'TidyBlocksDataFrame_' + new Date().toLocaleDateString() + '.csv';
+  var link = document.createElement('a');
+  link.style.display = 'none';
+  link.setAttribute('target', '_blank');
+  link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+  link.setAttribute('download', filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+/*
+* Save plot using html2canvas
+*/
+$(function() {
+  $("#savePlot").click(function() {
+    html2canvas($("#plotOutput"), {
+      onrendered: function(canvas) {
+        saveAs(canvas.toDataURL(), 'Plot.png');
+      }
+    });
+  });
+
+  function saveAs(uri, filename) {
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+      link.href = uri;
+      link.download = filename;
+
+      //Firefox requires the link to be in the body
+      document.body.appendChild(link);
+
+      //simulate click
+      link.click();
+
+      //remove the link when done
+      document.body.removeChild(link);
+    } else {
+      window.open(uri);
+    }
+  }
+});
 
 /**
  * Load saved code.
  * Depends on the global TidyBlocksWorkspace variable.
  * @param {string[]} fileList List of files (only first element is valid).
  */
+
+
+// Upload workspace
+$('#OpenImgUpload').click(function(){ $('#imgupload').trigger('click'); });
+
 const loadCode = (fileList) => {
   const file = fileList[0]
   const text = file.text().then((text) => {
@@ -259,7 +327,7 @@ const json2table = (json) => {
   const bodyRows = json.map(row => {
     return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
   }).join('')
-  return `<table><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
+  return `<table id="dataFrame"><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
 }
 
 /**
@@ -275,3 +343,126 @@ const displayTab = (event, tabName) => {
   document.getElementById(tabName).style.display = 'block';
   event.currentTarget.classList.add('active')
 }
+
+
+
+/**
+ * Code for slider between blockly pane and tabs
+ */
+// function is used for dragging and moving
+function dragElement( element, direction)
+{
+    var   md; // remember mouse down info
+    const first  = document.getElementById("first");
+    const second = document.getElementById("second");
+    
+    element.onmousedown = onMouseDown;
+    
+    function onMouseDown( e )
+    {
+  //console.log("mouse down: " + e.clientX);
+  md = {e,
+        offsetLeft:  element.offsetLeft,
+        offsetTop:   element.offsetTop,
+        firstWidth:  first.offsetWidth,
+        secondWidth: second.offsetWidth};
+  document.onmousemove = onMouseMove;
+  document.onmouseup = () => { 
+      //console.log("mouse up");
+      document.onmousemove = document.onmouseup = null;
+  }
+    }
+    
+    function onMouseMove( e )
+    {
+  //console.log("mouse move: " + e.clientX);
+  var delta = {x: e.clientX - md.e.x,
+         y: e.clientY - md.e.y};
+  
+  if (direction === "H" ) // Horizontal
+  {
+      // prevent negative-sized elements
+      delta.x = Math.min(Math.max(delta.x, -md.firstWidth),
+             md.secondWidth);
+      
+      element.style.left = md.offsetLeft + delta.x + "px";
+      first.style.width = (md.firstWidth + delta.x) + "px";
+      second.style.width = (md.secondWidth - delta.x) + "px";
+  }
+    }
+}
+
+dragElement( document.getElementById("separator"), "H" );
+
+var x, i, j, selElmnt, a, b, c;
+/*look for any elements with the class "custom-select":*/
+x = document.getElementsByClassName("custom-select");
+for (i = 0; i < x.length; i++) {
+selElmnt = x[i].getElementsByTagName("select")[0];
+/*for each element, create a new DIV that will act as the selected item:*/
+a = document.createElement("DIV");
+a.setAttribute("class", "select-selected");
+a.innerHTML = selElmnt.options[selElmnt.selectedIndex].innerHTML;
+x[i].appendChild(a);
+/*for each element, create a new DIV that will contain the option list:*/
+b = document.createElement("DIV");
+b.setAttribute("class", "select-items select-hide");
+for (j = 1; j < selElmnt.length; j++) {
+/*for each option in the original select element,
+create a new DIV that will act as an option item:*/
+c = document.createElement("DIV");
+c.innerHTML = selElmnt.options[j].innerHTML;
+c.addEventListener("click", function(e) {
+    /*when an item is clicked, update the original select box,
+    and the selected item:*/
+    var y, i, k, s, h;
+    s = this.parentNode.parentNode.getElementsByTagName("select")[0];
+    h = this.parentNode.previousSibling;
+    for (i = 0; i < s.length; i++) {
+      if (s.options[i].innerHTML == this.innerHTML) {
+        s.selectedIndex = i;
+        h.innerHTML = this.innerHTML;
+        y = this.parentNode.getElementsByClassName("same-as-selected");
+        for (k = 0; k < y.length; k++) {
+          y[k].removeAttribute("class");
+        }
+        this.setAttribute("class", "same-as-selected");
+        break;
+      }
+    }
+    h.click();
+});
+b.appendChild(c);
+}
+x[i].appendChild(b);
+a.addEventListener("click", function(e) {
+  /*when the select box is clicked, close any other select boxes,
+  and open/close the current select box:*/
+  e.stopPropagation();
+  closeAllSelect(this);
+  this.nextSibling.classList.toggle("select-hide");
+  this.classList.toggle("select-arrow-active");
+});
+}
+function closeAllSelect(elmnt) {
+/*a function that will close all select boxes in the document,
+except the current select box:*/
+var x, y, i, arrNo = [];
+x = document.getElementsByClassName("select-items");
+y = document.getElementsByClassName("select-selected");
+for (i = 0; i < y.length; i++) {
+if (elmnt == y[i]) {
+  arrNo.push(i)
+} else {
+  y[i].classList.remove("select-arrow-active");
+}
+}
+for (i = 0; i < x.length; i++) {
+if (arrNo.indexOf(i)) {
+  x[i].classList.add("select-hide");
+}
+}
+}
+/*if the user clicks anywhere outside the select box,
+then close all select boxes:*/
+document.addEventListener("click", closeAllSelect);

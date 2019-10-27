@@ -2,106 +2,138 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+  <head>
     <!-- Visual appearance -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="static/tidyblocks.css" rel="stylesheet" type="text/css">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style2.css">
   </head>
   <body>
-  
-    <div id="codeArea">
-      <button id="blockToText" onclick="generateCodePane(); showCode();">
-        As Text
-        <i class="fa fa-bug"></i>
+
+    <div class="topnav">
+
+      <button href="./guide/">
+        <i class="fa fa-question-circle fa-lg"></i>
       </button>
-      <button id="runCode" onclick="runCode()">
-        Run
-        <i class="fa fa-play"></i>
-      </button>
-      <br/>
-      <input type="text" id="filename" name="filename" />
-      <a id="download" href="#" onclick="saveCode()"><button>Download</button></a>
-      <input type="file" onchange="loadCode(this.files)"/>
-      <a href="./guide/"><i class="fa fa-info-circle"></i> Guide</a>
-      <div class="input" id="blockDisplay">
-        <xml id="toolbox">
-          <category name="data" categorystyle="data">
-            <block type="data_colors"></block>
-            <block type="data_double"></block>
-            <block type="data_earthquakes"></block>
-            <block type="data_iris"></block>
-            <block type="data_missing"></block>
-            <block type="data_mtcars"></block>
-            <block type="data_toothGrowth"></block>
-            <block type="data_single"></block>
-            <block type="data_urlCSV"></block>
-          </category>
-          <category name="transform" categorystyle="transform">
-            <block type="transform_filter"></block>
-            <block type="transform_groupBy"></block>
-            <block type="transform_mutate"></block>
-            <block type="transform_select"></block>
-            <block type="transform_sort"></block>
-            <block type="transform_summarize">
+
+      <input type="file" id="imgupload" style="display:none" onchange="loadCode(this.files)"/>
+      <button id="OpenImgUpload"><i class="fa fa-upload fa-lg"></i></button>
+
+      <div class="dropdown">
+        <button>
+          <i class="fa fa-save fa-lg"></i>
+        </button>
+        <div class="dropdown-content">
+          <a id="download" href="#" onclick="saveCode()">Workspace</a>
+          <a id="downloadData" href="#" onclick="saveTable('dataFrame');">Data</a>
+          <a id="savePlot" href="#">Plot</a>
+        </div>
+      </div>
+
+      <div class="topnav-right">
+        <a class="logo" style="pointer-events:none;">TidyBlocks</a>
+      </div>
+    </div>
+
+    <div class="splitter">
+      <div id="first">
+        <div class="fab" id="runCode" onclick="runCode(); showCode();">RUN</div>
+        <div id="blockDisplay">
+          <xml id="toolbox">
+            <category name="data" categorystyle="data">
+              <block type="data_colors"></block>
+              <block type="data_double"></block>
+              <block type="data_earthquakes"></block>
+              <block type="data_iris"></block>
+              <block type="data_missing"></block>
+              <block type="data_mtcars"></block>
+              <block type="data_toothGrowth"></block>
+              <block type="data_single"></block>
+              <block type="data_urlCSV"></block>
+            </category>
+            <category name="transform" categorystyle="transform">
+              <block type="transform_filter"></block>
+              <block type="transform_groupBy"></block>
+              <block type="transform_mutate"></block>
+              <block type="transform_select"></block>
+              <block type="transform_sort"></block>
+              <block type="transform_summarize">
                 <statement name="COLUMN_FUNC_PAIR">
                   <block type="transform_summarize_item"></block>
                 </statement>
-            </block>
-            <block type="transform_summarize_item"></block>
-            <block type="transform_ungroup"></block>
-          </category>
-          <category name="plot" categorystyle="plot">
-            <block type="plot_bar"></block>
-            <block type="plot_box"></block>
-            <block type="plot_hist"></block>
-            <block type="plot_point"></block>
-            <block type="plot_table"></block>
-          </category>
-          <category name="operation" categorystyle="operation">
-            <block type="operation_arithmetic"></block>
-            <block type="operation_compare"></block>
-            <block type="operation_convert"></block>
-            <block type="operation_convert_datetime"></block>
-            <block type="operation_ifElse"></block>
-            <block type="operation_logical"></block>
-            <block type="operation_negate"></block>
-            <block type="operation_not"></block>
-            <block type="operation_type"></block>
-          </category>
-          <category name="value" categorystyle="value">
-            <block type="value_boolean"></block>
-            <block type="value_column"></block>
-            <block type="value_datetime"></block>
-            <block type="value_number"></block>
-            <block type="value_text"></block>
-          </category>
-          <category name="plumbing" categorystyle="plumbing">
-            <block type="plumbing_join"></block>
-            <block type="plumbing_notify"></block>
-          </category>
-        </xml>
-      </div>
-      <div class="input" id="codeOutputDiv">
-        <pre id="codeOutput"></pre>
-      </div>
-    </div>
-    
-    <div id="displayArea">
-      <div class="output" id="plotOutput">
-        Plot Output
-      </div>
-      <div id="tabArea">
-        <div class="tab">
-          <button id="dataButton" class="tablink active" onclick="displayTab(event, 'data')">Data Output</button>
-          <button id="errorButton" class="tablink" onclick="displayTab(event, 'error')">Error Output</button>
+              </block>
+              <block type="transform_summarize_item"></block>
+              <block type="transform_ungroup"></block>
+            </category>
+            <category name="plot" categorystyle="plot">
+              <block type="plot_bar"></block>
+              <block type="plot_box"></block>
+              <block type="plot_hist"></block>
+              <block type="plot_dot"></block>
+              <block type="plot_point"></block>
+              <block type="plot_table"></block>
+            </category>
+            <category name="operation" categorystyle="operation">
+              <block type="operation_arithmetic"></block>
+              <block type="operation_compare"></block>
+              <block type="operation_convert"></block>
+              <block type="operation_convert_datetime"></block>
+              <block type="operation_ifElse"></block>
+              <block type="operation_logical"></block>
+              <block type="operation_negate"></block>
+              <block type="operation_not"></block>
+              <block type="operation_type"></block>
+            </category>
+            <category name="value" categorystyle="value">
+              <block type="value_boolean"></block>
+              <block type="value_column"></block>
+              <block type="value_datetime"></block>
+              <block type="value_number"></block>
+              <block type="value_text"></block>
+            </category>
+            <category name="plumbing" categorystyle="plumbing">
+              <block type="plumbing_join"></block>
+              <block type="plumbing_notify"></block>
+            </category>
+          </xml>
         </div>
       </div>
-      <div class="tabcontent" id="data">
-        <div id="dataOutput"></div>
-      </div>
-      <div class="tabcontent" id="error">
-        <p>Error Goes Here</p>
+      <div id="separator" ></div>
+      <div id="second" >
+        <ul class="nav nav-tabs">
+          <li class="active"><a data-toggle="tab" href="#data">Data</a></li>
+          <li><a data-toggle="tab" href="#plot">Plot</a></li>
+          <li><a data-toggle="tab" href="#debug">Debug</a></li>
+          <li><a data-toggle="tab" href="#text">Text</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div id="data" class="tab-pane fade in active">
+            <div id="dataOutput"></div>
+          </div>
+          <div id="plot" class="tab-pane fade">
+            <div id="plotOutput"></div>
+          </div>
+          <div id="debug" class="tab-pane fade">
+            <div id="error"></div>
+          </div>
+          <div id="text" class="tab-pane fade">
+
+            <div class="language">
+              <div class="select-style">
+                <select>
+                  <option value="javascript">JavaScript</option>
+                  <option value="python" disabled>Python</option>
+                  <option value="r" disabled>R</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="codeOutput"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -116,12 +148,16 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.3.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.2.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.0.2/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <!-- TidyBlocks GUI (outside the #tidyblocks div so that tests won't try to load it) -->
+    <script src="tidyblocks/gui.js"></script>
 
     <!-- Put all blocks code in a div so it's easy to find and load for testing. -->
     <div id="tidyblocks">
       <!-- TidyBlocks supports -->
       <script src="tidyblocks/tidyblocks.js"></script>
-      <script src="tidyblocks/gui.js"></script>
       <script src="tidyblocks/themes.js"></script>
 
       <!-- TidyBlocks blocks -->
@@ -144,11 +180,7 @@
     </div>
 
     <script>
-      // Initialize display and set up Blockly after DOM content is solid.
-      // This script is here instead of in the utilities file so that it
-      // *won't* be run when loading those files for testing.
       document.addEventListener('DOMContentLoaded', (event) => {
-        initializeDisplay()
         setUpBlockly()
       })
     </script>
