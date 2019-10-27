@@ -240,7 +240,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates a box plot', (done) => {
-    const pipeline = {_b: 'plot_boxplot',
+    const pipeline = {_b: 'plot_box',
                       X_AXIS: {_b: 'value_column',
                                COLUMN: 'X_axis_column'},
                       Y_AXIS: {_b: 'value_column',
@@ -253,7 +253,7 @@ describe('generate code for single blocks', () => {
     assert_includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
     assert_includes(code, '"type": "boxplot"',
-                    'pipeline is not a boxplot')
+                    'pipeline is not a box plot')
     done()
   })
 
