@@ -92,17 +92,6 @@ button:hover {
   height: 100%;
 }
 
-.tab-content {
-  overflow-y: scroll;
-}
-
-#dataFrame {
-  overflow-y: scroll;
-}
-
-
-
-
 #error {
   background-color: #fff;
   padding: 20px;
