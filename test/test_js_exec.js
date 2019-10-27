@@ -1513,4 +1513,25 @@ describe('check that specific bugs have been fixed', () => {
     done()
   })
 
+  it('filters undefined values correct (#230)', (done) => {
+    for (let columnName of ['number', 'string', 'date']) {
+      const pipeline = [
+        {_b: 'data_missing'},
+        {_b: 'transform_filter',
+         TEST: {_b: 'operation_type',
+                TYPE: 'tbIsMissing',
+                VALUE: {_b: 'value_column',
+                        COLUMN: columnName}}}
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error from pipeline`)
+      assert.equal(env.frame.data.length, 1,
+                   `Wrong number of columns in output ${env.frame.data.length}`)
+      assert.equal(env.frame.data[0][columnName], undefined,
+                   `Expected undefined value in ${columnName} not ${env.frame.data[0][columnName]}`)
+    }
+    done()
+  })
+
 })
