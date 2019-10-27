@@ -31,8 +31,8 @@ Blockly.defineBlocksWithJsonArray([
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'plot_boxplot',
-    message0: 'Boxplot %1 %2',
+    type: 'plot_box',
+    message0: 'Box plot %1 %2',
     args0: [
       {
         type: 'field_input',
@@ -48,7 +48,7 @@ Blockly.defineBlocksWithJsonArray([
     inputsInline: true,
     previousStatement: null,
     style: 'plot_blocks',
-    tooltip: 'create boxplot',
+    tooltip: 'create box plot',
     helpUrl: '',
     extensions: ['validate_X_AXIS', 'validate_Y_AXIS']
   }
