@@ -72,15 +72,16 @@ Blockly.JavaScript['plot_dot'] = (block) => {
     	"type": "circle",
     	"opacity": 1
     },
+    "transform": [{
+    "window": [{"op": "rank", "as": "id"}],
+    "groupby": ["${x_axis}"]
+  	}],
     "encoding": {
       "x": {
         "field": "${x_axis}",
         "type": "ordinal"
       },
-      "y": {
-        "field": "${y_axis}",
-        "type": "quantitative",
-      }
+      "y": {"field": "id", "type": "ordinal", "axis": null, "sort": "descending"}
     }
   }`
   const suffix = registerSuffix('')
