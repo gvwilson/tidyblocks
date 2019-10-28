@@ -35,6 +35,17 @@ A labeled box plot for the number of characters in 50 emails. The median (6,890)
 
 ![](Figure_2_15.png)
 
+# Figure 2.17
+
+How are the sample statistics of the num char data set affected by the observation, 64,401? 
+![](Figure_2_17a.png)
+
+What would have happened if this email wasn’t observed? 
+![](Figure_2_17b.png)
+
+What would happen to these summary statistics if the observation at 64,401 had been even larger, say 150,000?
+![](Figure_2_17c.png)
+
 # Example 2.41
 Find the 5 number summary and identify how small or large a value would need to be to be considered an outlier. Are there any outliers in this data set?
 
