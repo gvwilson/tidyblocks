@@ -221,6 +221,17 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to unique by one column', (done) => {
+    const pipeline = {_b: 'transform_unique',
+                      MULTIPLE_COLUMNS: 'someColumn'}
+    const code = makeCode(pipeline)
+    assert_startsWith(code, '.unique',
+                      'pipeline does not start with unique call')
+    assert_includes(code, 'someColumn',
+                    'pipeline does not include column name')
+    done()
+  })
+
   it('generates a bar plot', (done) => {
     const pipeline = {_b: 'plot_bar',
                       X_AXIS: {_b: 'value_column',

@@ -96,6 +96,9 @@ Blockly.defineBlocksWithJsonArray([
   }
 ])
 
+//
+// Visuals for sorting block.
+//
 Blockly.defineBlocksWithJsonArray([
 {
   type: "transform_sort",
@@ -160,3 +163,26 @@ Blockly.defineBlocksWithJsonArray([
   }
 ])
 
+//
+// Visuals for unique rows block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'transform_unique',
+    message0: 'Unique %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: 'column, column'
+      }
+    ],
+    inputsInline: true,
+    previousStatement: null,
+    nextStatement: null,
+    style: 'transform_blocks',
+    tooltip: 'select rows with unique values',
+    helpUrl: '',
+    extensions: ['validate_MULTIPLE_COLUMNS']
+  }
+])
