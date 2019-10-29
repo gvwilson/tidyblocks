@@ -66,21 +66,17 @@ Blockly.JavaScript['plot_dot'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
   const spec = `{
-    "height": 300,
     "data": { "values": null }, // set to dataframe inside plotting function
-    "mark": {
-    	"type": "circle",
-    	"opacity": 1
-    },
-    "transform": [{
-    "window": [{"op": "rank", "as": "id"}],
-    "groupby": ["${x_axis}"]
-  	}],
+    "transform": [
+      {"calculate": "floor(datum.data / 100)", "as": "data"},
+      {
+        "window": [{"op": "rank", "field": "data", "as": "id"}],
+        "groupby": ["data"]
+      }
+    ],
+    "mark": {"type": "circle", "opacity": 1},
     "encoding": {
-      "x": {
-        "field": "${x_axis}",
-        "type": "ordinal"
-      },
+      "x": {"field": "data", "type": "ordinal"},
       "y": {"field": "id", "type": "ordinal", "axis": null, "sort": "descending"}
     }
   }`
