@@ -1186,12 +1186,14 @@ describe('check that grouping and summarization work', () => {
         ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.frame.data.length, 1,
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 11,
                  'Expected one row of output')
-    assert.equal(Object.keys(env.frame.data[0]).length, 1,
-                 'Expected a single column of output')
-    assert.equal(env.frame.data[0].red_sum, 1148,
-                 'Incorrect sum')
+    assert(env.frame.data.every(row => (row.red_sum === 1148)),
+           'Rows do not contain correct sum')
+    assert(!env.frame.hasColumns(GROUPCOL),
+           'Should not have grouping column with ungrouped summarize')
     done()
   })
 
@@ -1252,13 +1254,9 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    const expected = [106.33333333333333, 127.5, 0].map((val, i) => {
-      const result = {green_mean: val}
-      result[GROUPCOL] = i
-      return result
-    })
-    assert.deepEqual(env.frame.data, expected,
-                     'Incorrect averaging')
+    const expected = [106.33333333333333, 127.5, 0]
+    assert(env.frame.data.every(row => (row.green_mean === expected[row[GROUPCOL]])),
+           'Incorrect mean green values')
     done()
   })
 
@@ -1273,10 +1271,10 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert(env.frame.data.length == 1,
-           `Expect a single row of output`)
-    assert(env.frame.data[0].second_max == 200,
-           `Expected a max of 200, not ${env.frame.data[0].second}`)
+    assert(env.frame.data.length == 2,
+           `Expect two rows of output`)
+    assert(env.frame.data.every(row => (row.second_max === 200)),
+           `Expected a max of 200 for all rows`)
     done()
   })
 
@@ -1301,14 +1299,14 @@ describe('check that grouping and summarization work', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
-    assert.equal(env.frame.data.length, 1,
-                 `Expect a single row of output`)
-    assert.equal(env.frame.data[0].value_min, 20,
-                 `Expected a mean of 20, not ${env.frame.data[0].value_min}`)
-    assert.equal(env.frame.data[0].value_mean, 32.5,
-                 `Expected a mean of 32.5, not ${env.frame.data[0].value_mean}`)
-    assert.equal(env.frame.data[0].value_max, 45,
-                 `Expected a max of 45, not ${env.frame.data[0].value_max}`)
+    assert.equal(env.frame.data.length, 6,
+                 `Expected 6 rows of output`)
+    assert(env.frame.data.every(row => (row.value_min === 20)),
+           `Expected a min of 20`)
+    assert(env.frame.data.every(row => (row.value_mean === 32.5)),
+           `Expected a mean of 32.5`)
+    assert(env.frame.data.every(row => (row.value_max === 45)),
+           `Expected a max of 45`)
     done()
   })
 
@@ -1378,10 +1376,10 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.frame.data.length, 1,
-                 `Expect one row of output not ${env.frame.data.length}`)
-    assert.equal(env.frame.data[0].red_count, 11,
-                 `Expect a count of 11 rows, not ${env.frame.data[0].red_count}`)
+    assert.equal(env.frame.data.length, 11,
+                 `Expect 11 rows of output not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (row.red_count === 11)),
+           `Expect a count of 11 rows`)
     done()
   })
 
@@ -1396,10 +1394,10 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.frame.data.length, 1,
-                 `Expect one row of output not ${env.frame.data.length}`)
-    assert.equal(env.frame.data[0].red_median, 0,
-                 `Expect a median of 0, not ${env.frame.data[0].red_median}`)
+    assert.equal(env.frame.data.length, 11,
+                 `Expect 11 rows of output not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (row.red_median === 0)),
+           `Expect a median of 0`)
     done()
   })
 
@@ -1417,14 +1415,16 @@ describe('check that grouping and summarization work', () => {
        ]}
     ]
     const env = evalCode(pipeline)
-    assert.equal(env.frame.data.length, 1,
+    assert.equal(env.frame.data.length, 11,
                  `Expect one row of output not ${env.frame.data.length}`)
     const expected_variance = 14243.140495867769
     const expected_std = 119.34462910356615
-    assert_approxEquals(env.frame.data[0].red_variance, expected_variance,
-                        `Expect a variance of ${expected_variance}, not ${env.frame.data[0].red_variance}`)
-    assert_approxEquals(env.frame.data[0].green_std, expected_std,
-                        `Expect a standard deviation of ${expected_std}, not ${env.frame.data[0].green_std}`)
+    env.frame.data.forEach(row => {
+      assert_approxEquals(row.red_variance, expected_variance,
+                          `Expect a variance of ${expected_variance}, not ${row.red_variance}`)
+      assert_approxEquals(row.green_std, expected_std,
+                          `Expect a standard deviation of ${expected_std}, not ${row.green_std}`)
+    })
     done()
   })
 

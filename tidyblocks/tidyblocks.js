@@ -911,47 +911,27 @@ class TidyBlocksDataFrame {
    * @return A new dataframe.
    */
   summarize (blockId, ...operations) {
-    // Handle empty case.
-    if (this.data.length === 0) {
-      return new TidyBlocksDataFrame([], this.columns)
-    }
-
-    // Put data into groups.
-    const [wasGrouped, groups] = this._groupify()
-
-    // Summarize by group and function.
-    const summarized = {}
-    const newColumns = wasGrouped ? [GROUPCOL] : []
+    // Check column names.
     operations.forEach(([subBlockId, func, sourceColumn]) => {
-      if (subBlockId === undefined) {
-        subBlockId = blockId
-      }
+      subBlockId = (subBlockId === undefined) ? blockId : subBlockId
       tbAssert(sourceColumn,
                `[block ${subBlockId}] no column specified for summarize`)
       tbAssert(this.hasColumns(sourceColumn),
                `[block ${subBlockId}] unknown column "${sourceColumn}" in summarize`)
-      const destColumn = `${sourceColumn}_${func.colName}`
-      summarized[destColumn] = groups.map(group => func(group, sourceColumn))
-      newColumns.push(destColumn)
     })
 
-    // Pivot.
-    const result = []
-    groups.forEach((group, i) => {
-      const row = {}
-      if (wasGrouped) {
-        row[GROUPCOL] = i
-      }
-      result.push(row)
-    })
-    Object.keys(summarized).forEach(col => {
-      groups.forEach((group, i) => {
-        result[i][col] = summarized[col][i]
-      })
+    // Summarize operation by operation.
+    const newData = this.data.map(row => {return {...row}})
+    const newColumnNames = []
+    operations.forEach(([subBlockId, func, sourceColumn]) => {
+      subBlockId = (subBlockId === undefined) ? blockId : subBlockId
+      const destColumn = `${sourceColumn}_${func.colName}`
+      newColumnNames.push(destColumn)
+      this._summarizeColumn(newData, subBlockId, func, sourceColumn, destColumn)
     })
 
     // Create new dataframe.
-    return new TidyBlocksDataFrame(result, newColumns)
+    return new TidyBlocksDataFrame(newData, newColumnNames)
   }
 
   /**
@@ -1070,28 +1050,6 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   //
-  // Put the data into groups.
-  //
-  _groupify () {
-    const wasGrouped = this.hasColumns(GROUPCOL)
-    const groups = []
-    if (wasGrouped) {
-      this.data.forEach(row => {
-        if (row[GROUPCOL] < groups.length) {
-          groups[row[GROUPCOL]].push(row)
-        }
-        else {
-          groups.push([row])
-        }
-      })
-    }
-    else {
-      groups.push(this.data)
-    }
-    return [wasGrouped, groups]
-  }
-
-  //
   // Add fields to object except the join field.
   //
   _addFieldsExcept (result, tableName, row, exceptName) {
@@ -1165,6 +1123,33 @@ class TidyBlocksDataFrame {
         return this._makeGroupId(blockId, subMap, row, otherColumns, nextGroupId)
       }
     }
+  }
+
+  //
+  // Summarize a single column in place.
+  //
+  _summarizeColumn (data, blockId, func, sourceColumn, destColumn) {
+    // Divide values into groups.
+    const groups = new Map()
+    data.forEach(row => {
+      const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
+      if (! groups.has(groupId)) {
+        groups.set(groupId, [])
+      }
+      groups.get(groupId).push(row)
+    })
+
+    // Summarize each group.
+    for (let groupId of groups.keys()) {
+      const result = func(groups.get(groupId), sourceColumn)
+      groups.set(groupId, result)
+    }
+
+    // Paste back in each row.
+    data.forEach(row => {
+      const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
+      row[destColumn] = groups.get(groupId)
+    })
   }
 }
 
