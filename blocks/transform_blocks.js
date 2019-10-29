@@ -1,4 +1,28 @@
 //
+// Visuals for drop block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'transform_drop',
+    message0: 'Drop %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: 'column, column'
+      }
+    ],
+    inputsInline: true,
+    previousStatement: null,
+    nextStatement: null,
+    style: 'transform_blocks',
+    tooltip: 'drop columns by name',
+    helpUrl: '',
+    extensions: ['validate_MULTIPLE_COLUMNS']
+  }
+])
+
+//
 // Visuals for filter block.
 //
 Blockly.defineBlocksWithJsonArray([
