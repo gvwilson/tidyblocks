@@ -2,6 +2,7 @@
 *~
 
 # Jekyll files
+.jekyll-cache
 .jekyll-metadata
 _site
 
