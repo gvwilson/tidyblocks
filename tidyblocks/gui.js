@@ -1,6 +1,9 @@
 // Share the workspace between functions.
 let TidyBlocksWorkspace = null
 
+// Precision for number display.
+const PRECISION = 6
+
 // Regular expressions to match valid single column names and multiple column names.
 const SINGLE_COLUMN_NAME = /^ *[_A-Za-z][_A-Za-z0-9]* *$/
 const MULTIPLE_COLUMN_NAMES = /^ *([_A-Za-z][_A-Za-z0-9]*)( *, *[_A-Za-z][_A-Za-z0-9]*)* *$/
@@ -325,9 +328,26 @@ const json2table = (json) => {
   const headerRow = '<tr>' + cols.map(c => `<th>${c}</th>`).join('') + '</tr>'
   const typeRow = '<tr>' + cols.map(c => `<th>${colTypeName(json[0][c])}</th>`).join('') + '</tr>'
   const bodyRows = json.map(row => {
-    return '<tr>' + cols.map(c => `<td>${row[c]}</td>`).join('') + '</tr>'
+    return '<tr>' + cols.map(c => value2html(row[c])).join('') + '</tr>'
   }).join('')
   return `<table id="dataFrame"><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
+}
+
+/**
+ * Convert a single value to HTML (to handle numeric precision and undefined).
+ * @param {Object} value To be converted.
+ * @returns A string.
+ */
+const value2html = (value) => {
+  if (value === undefined) {
+    return '<td class="undefined"></td>'
+  }
+  if (typeof value === 'number') {
+    if (! Number.isInteger(value)) {
+      value = value.toPrecision(PRECISION)
+    }
+  }
+  return `<td>${value}</td>`
 }
 
 /**

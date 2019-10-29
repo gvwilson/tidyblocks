@@ -163,6 +163,10 @@ button:hover {
   width: 100%;
 }
 
+#dataOutput td.undefined {
+  background-color: pink;
+}
+
 
 /*
  * Layout
