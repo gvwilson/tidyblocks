@@ -125,6 +125,60 @@ describe('execute blocks for entire pipelines', () => {
     done()
   })
 
+  it('selects unique rows when all are unique', (done) => {
+    const pipeline = [
+      {_b: 'data_double'},
+      {_b: 'transform_unique',
+       MULTIPLE_COLUMNS: 'first'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 2,
+                 `Expected 2 rows in result`)
+    done()
+  })
+
+  it('selects unique rows when there are duplicates', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_select',
+       MULTIPLE_COLUMNS: 'red'},
+      {_b: 'transform_unique',
+       MULTIPLE_COLUMNS: 'red'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 3,
+                 `Expected 3 rows in result, not ${env.frame.data.length}`)
+    const expectedValues = new Set([0, 128, 255])
+    const actualValues = new Set(env.frame.data.map(row => row.red))
+    assert_setEqual(actualValues, expectedValues,
+                    `Expected ${expectedValues} not ${actualValues}`)
+    done()
+  })
+
+  it('selects unique rows using two columns', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_select',
+       MULTIPLE_COLUMNS: 'red, green'},
+      {_b: 'transform_unique',
+       MULTIPLE_COLUMNS: 'red, green'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 6,
+                 `Expected 6 rows in result, not ${env.frame.data.length}`)
+    const expectedValues = new Set(['0:0', '0:128', '0:255', '128:0', '255:0', '255:255'])
+    const actualValues = new Set(env.frame.data.map(row => `${row.red}:${row.green}`))
+    assert_setEqual(actualValues, expectedValues,
+                    `Expected ${expectedValues} not ${actualValues}`)
+    done()
+  })
+
   it('converts numeric data to string', (done) => {
     const pipeline = [
       {_b: 'data_colors'},

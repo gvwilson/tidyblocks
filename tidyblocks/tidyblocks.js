@@ -860,7 +860,7 @@ class TidyBlocksDataFrame {
    * @returns A new dataframe.
    */
   select (blockId, columns) {
-    tbAssert(columns.length !== 0,
+    tbAssert(columns.length > 0,
              `[block ${blockId}] no columns specified for select`)
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) [${columns}] in select`)
@@ -880,7 +880,7 @@ class TidyBlocksDataFrame {
    * @returns New data frame with sorted data.
    */
   sort (blockId, columns, reverse) {
-    tbAssert(columns.length !== 0,
+    tbAssert(columns.length > 0,
              `[block ${blockId}] no columns specified for sort`)
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) [${columns}] in sort`)
@@ -948,6 +948,22 @@ class TidyBlocksDataFrame {
     })
     const newColumns = this._makeColumns(newData, this.columns, {remove: [GROUPCOL]})
     return new TidyBlocksDataFrame(newData, newColumns)
+  }
+
+  /**
+   * Select rows with unique values in columns.
+   * @param {string[]} columns The names of the columns to use for uniqueness test.
+   * @returns A new dataframe.
+   */
+  unique (blockId, columns) {
+    tbAssert(columns.length > 0,
+             `[block ${blockId}] no columns specified for select`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) [${columns}] in select`)
+    const seen = new Map()
+    const newData = []
+    this.data.forEach(row => this._findUnique(blockId, seen, newData, row, columns))
+    return new TidyBlocksDataFrame(newData, columns)
   }
 
   //------------------------------------------------------------------------------
@@ -1150,6 +1166,26 @@ class TidyBlocksDataFrame {
       const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
       row[destColumn] = groups.get(groupId)
     })
+  }
+
+  //
+  // Find unique values across multiple columns.
+  //
+  _findUnique (blockId, seen, newData, row, columns) {
+    const thisValue = tbGet(blockId, row, columns[0])
+    const otherColumns = columns.slice(1)
+    if (otherColumns.length === 0) {
+      if (! seen.has(thisValue)) {
+        seen.set(thisValue, true)
+        newData.push(row)
+      }
+    }
+    else {
+      if (! seen.has(thisValue)) {
+        seen.set(thisValue, new Map())
+      }
+      this._findUnique(blockId, seen.get(thisValue), newData, row, otherColumns)
+    }
   }
 }
 
