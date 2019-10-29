@@ -1,4 +1,17 @@
 //
+// Drop columns by name.
+//
+Blockly.JavaScript['transform_drop'] = (block) => {
+  const columns = block.getFieldValue('MULTIPLE_COLUMNS')
+        .split(',')
+        .map(c => c.trim())
+        .filter(c => (c.length > 0))
+        .map(c => Blockly.JavaScript.quote_(c))
+        .join(',')
+  return `.drop(${block.tbId}, [${columns}])`
+}
+
+//
 // Filter data.
 //
 Blockly.JavaScript['transform_filter'] = (block) => {
@@ -19,7 +32,6 @@ Blockly.JavaScript['transform_groupBy'] = (block) => {
   return `.groupBy(${block.tbId}, [${columns}])`
 }
 
-
 //
 // Mutate values.
 //
@@ -39,7 +51,6 @@ Blockly.JavaScript['transform_select'] = (block) => {
         .filter(c => (c.length > 0))
         .map(c => Blockly.JavaScript.quote_(c))
         .join(',')
-
   return `.select(${block.tbId}, [${columns}])`
 }
 

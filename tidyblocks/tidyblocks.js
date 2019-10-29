@@ -794,6 +794,20 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   /**
+   * Drop columns.
+   * @param {string[]} columns The names of the columns to discard.
+   * @returns A new dataframe.
+   */
+  drop (blockId, columns) {
+    tbAssert(columns.length !== 0,
+             `[block ${blockId}] no columns specified for drop`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) [${columns}] in drop`)
+    const keep = Array.from(this.columns).filter(c => (! columns.includes(c)))
+    return this.select(blockId, keep)
+  }
+
+  /**
    * Filter rows, keeping those that pass a test.
    * @param {function} op How to test rows.
    * @returns A new dataframe.

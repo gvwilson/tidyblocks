@@ -46,6 +46,20 @@ describe('execute blocks for entire pipelines', () => {
     done()
   }),
 
+  it('removed the dropped column', (done) => {
+    const pipeline = [
+      {_b: 'data_double'},
+      {_b: 'transform_drop',
+       MULTIPLE_COLUMNS: 'first'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert_setEqual(new Set(['second']), env.frame.columns,
+                     `Drop does not return correct columns`)
+    done()
+  })
+
   it('returns only the selected column', (done) => {
     const pipeline = [
       {_b: 'data_iris'},

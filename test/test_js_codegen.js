@@ -168,6 +168,17 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to drop a single column', (done) => {
+    const pipeline = {_b: 'transform_drop',
+                      MULTIPLE_COLUMNS: 'existingColumn'}
+    const code = makeCode(pipeline)
+    assert_startsWith(code, '.drop',
+                      'pipeline does not start with drop call')
+    assert_includes(code, 'existingColumn',
+                    'pipeline does not include existing column name')
+    done()
+  })
+
   it('generates code to select a single column', (done) => {
     const pipeline = {_b: 'transform_select',
                       MULTIPLE_COLUMNS: 'existingColumn'}
