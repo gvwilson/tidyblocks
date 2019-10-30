@@ -1,5 +1,6 @@
 ---
 permalink: /license/
+layout: page
 ---
 # License
 
