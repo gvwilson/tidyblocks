@@ -254,3 +254,8 @@ h5 {
     .dropdown:hover .dropdown-content {
       display: block;
     }
+
+    a:hover {
+      background-color: unset !important;
+      color: unset !important;
+  }

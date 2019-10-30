@@ -517,3 +517,8 @@ h5 {
 select:focus {
     outline: none;
 }
+
+a:hover {
+  background-color: unset !important;
+  color: unset !important;
+}
