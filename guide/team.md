@@ -13,3 +13,7 @@ permalink: /team/
     </div>
   </div>
 {% endfor %}
+
+<p>
+  <a href="{{ site.theme_repo }}">Carte theme</a> by <a href="https://wiredcraft.com/">Wiredcraft</a>
+</p>
