@@ -1,4 +1,17 @@
 //
+// Drop columns by name.
+//
+Blockly.JavaScript['transform_drop'] = (block) => {
+  const columns = block.getFieldValue('MULTIPLE_COLUMNS')
+        .split(',')
+        .map(c => c.trim())
+        .filter(c => (c.length > 0))
+        .map(c => Blockly.JavaScript.quote_(c))
+        .join(',')
+  return `.drop(${block.tbId}, [${columns}])`
+}
+
+//
 // Filter data.
 //
 Blockly.JavaScript['transform_filter'] = (block) => {
@@ -19,7 +32,6 @@ Blockly.JavaScript['transform_groupBy'] = (block) => {
   return `.groupBy(${block.tbId}, [${columns}])`
 }
 
-
 //
 // Mutate values.
 //
@@ -39,10 +51,12 @@ Blockly.JavaScript['transform_select'] = (block) => {
         .filter(c => (c.length > 0))
         .map(c => Blockly.JavaScript.quote_(c))
         .join(',')
-
   return `.select(${block.tbId}, [${columns}])`
 }
 
+//
+// Sort data.
+//
 Blockly.JavaScript['transform_sort'] = (block) => {
   const columns = block.getFieldValue('MULTIPLE_COLUMNS')
         .split(',')
@@ -55,7 +69,7 @@ Blockly.JavaScript['transform_sort'] = (block) => {
 }
 
 //
-// Summarize data:
+// Summarize data.
 //
 Blockly.JavaScript['transform_summarize'] = (block) => {
   const branch = Blockly.JavaScript.statementToCode(block, "COLUMN_FUNC_PAIR")
@@ -68,4 +82,18 @@ Blockly.JavaScript['transform_summarize'] = (block) => {
 //
 Blockly.JavaScript['transform_ungroup'] = (block) => {
   return `.ungroup(${block.tbId})`
+}
+
+//
+// Select rows with unique values.
+//
+Blockly.JavaScript['transform_unique'] = (block) => {
+  const columns = block.getFieldValue('MULTIPLE_COLUMNS')
+        .split(',')
+        .map(c => c.trim())
+        .filter(c => (c.length > 0))
+        .map(c => Blockly.JavaScript.quote_(c))
+        .join(',')
+
+  return `.unique(${block.tbId}, [${columns}])`
 }

@@ -6,7 +6,6 @@
   <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1'/>
   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'/>
   <link href="{{'/static/assets.css'|relative_url}}" rel='stylesheet' type='text/css'>
-  <link href="{{'/static/custom.css'|relative_url}}" rel='stylesheet' type='text/css'>
 </head>
 <body>  
   {{ content }}
@@ -17,18 +16,11 @@
       <a href="{{ site.repo }}"><img class="logo" src="{{ '/static/github.svg' | relative_url }}" alt="Repository" /></a>
       <br/>
       © {{ site.year }} <a href="{{ '/team/' | relative_url }}">The Team</a>
-      <br/>
-      <em><a href="{{ site.theme_repo }}">Carte theme</a> by <a href="https://wiredcraft.com/">Wiredcraft</a></em>
-      <br/>
-      <em>
-        Build: {% if site.github.build_revision %}{{site.github.build_revision | slice: 0, 8}}{% else %}unknown{% endif %}
-        at {{site.time}}
-      </em>
     </p>
   </footer>
   
   <!--[if lt IE 9]><script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script><![endif]-->
   <script src="{{'/static/assets.js'|relative_url}}" type='text/javascript'></script>
-  <script>require('boot');</script>
+  <script>require('boot')</script>
 </body>
 </html>

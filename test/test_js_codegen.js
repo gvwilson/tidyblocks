@@ -168,6 +168,17 @@ describe('generate code for single blocks', () => {
     done()
   })
 
+  it('generates code to drop a single column', (done) => {
+    const pipeline = {_b: 'transform_drop',
+                      MULTIPLE_COLUMNS: 'existingColumn'}
+    const code = makeCode(pipeline)
+    assert_startsWith(code, '.drop',
+                      'pipeline does not start with drop call')
+    assert_includes(code, 'existingColumn',
+                    'pipeline does not include existing column name')
+    done()
+  })
+
   it('generates code to select a single column', (done) => {
     const pipeline = {_b: 'transform_select',
                       MULTIPLE_COLUMNS: 'existingColumn'}
@@ -218,6 +229,17 @@ describe('generate code for single blocks', () => {
     const code = makeCode(pipeline)
     assert.equal(code, '.summarize(1, [0, tbMean, "someColumn"])',
                  'code does not call summarize correctly')
+    done()
+  })
+
+  it('generates code to unique by one column', (done) => {
+    const pipeline = {_b: 'transform_unique',
+                      MULTIPLE_COLUMNS: 'someColumn'}
+    const code = makeCode(pipeline)
+    assert_startsWith(code, '.unique',
+                      'pipeline does not start with unique call')
+    assert_includes(code, 'someColumn',
+                    'pipeline does not include column name')
     done()
   })
 

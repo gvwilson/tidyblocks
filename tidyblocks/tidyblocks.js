@@ -794,6 +794,20 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   /**
+   * Drop columns.
+   * @param {string[]} columns The names of the columns to discard.
+   * @returns A new dataframe.
+   */
+  drop (blockId, columns) {
+    tbAssert(columns.length !== 0,
+             `[block ${blockId}] no columns specified for drop`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) [${columns}] in drop`)
+    const keep = Array.from(this.columns).filter(c => (! columns.includes(c)))
+    return this.select(blockId, keep)
+  }
+
+  /**
    * Filter rows, keeping those that pass a test.
    * @param {function} op How to test rows.
    * @returns A new dataframe.
@@ -860,7 +874,7 @@ class TidyBlocksDataFrame {
    * @returns A new dataframe.
    */
   select (blockId, columns) {
-    tbAssert(columns.length !== 0,
+    tbAssert(columns.length > 0,
              `[block ${blockId}] no columns specified for select`)
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) [${columns}] in select`)
@@ -880,7 +894,7 @@ class TidyBlocksDataFrame {
    * @returns New data frame with sorted data.
    */
   sort (blockId, columns, reverse) {
-    tbAssert(columns.length !== 0,
+    tbAssert(columns.length > 0,
              `[block ${blockId}] no columns specified for sort`)
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) [${columns}] in sort`)
@@ -911,47 +925,27 @@ class TidyBlocksDataFrame {
    * @return A new dataframe.
    */
   summarize (blockId, ...operations) {
-    // Handle empty case.
-    if (this.data.length === 0) {
-      return new TidyBlocksDataFrame([], this.columns)
-    }
-
-    // Put data into groups.
-    const [wasGrouped, groups] = this._groupify()
-
-    // Summarize by group and function.
-    const summarized = {}
-    const newColumns = wasGrouped ? [GROUPCOL] : []
+    // Check column names.
     operations.forEach(([subBlockId, func, sourceColumn]) => {
-      if (subBlockId === undefined) {
-        subBlockId = blockId
-      }
+      subBlockId = (subBlockId === undefined) ? blockId : subBlockId
       tbAssert(sourceColumn,
                `[block ${subBlockId}] no column specified for summarize`)
       tbAssert(this.hasColumns(sourceColumn),
                `[block ${subBlockId}] unknown column "${sourceColumn}" in summarize`)
-      const destColumn = `${sourceColumn}_${func.colName}`
-      summarized[destColumn] = groups.map(group => func(group, sourceColumn))
-      newColumns.push(destColumn)
     })
 
-    // Pivot.
-    const result = []
-    groups.forEach((group, i) => {
-      const row = {}
-      if (wasGrouped) {
-        row[GROUPCOL] = i
-      }
-      result.push(row)
-    })
-    Object.keys(summarized).forEach(col => {
-      groups.forEach((group, i) => {
-        result[i][col] = summarized[col][i]
-      })
+    // Summarize operation by operation.
+    const newData = this.data.map(row => {return {...row}})
+    const newColumnNames = []
+    operations.forEach(([subBlockId, func, sourceColumn]) => {
+      subBlockId = (subBlockId === undefined) ? blockId : subBlockId
+      const destColumn = `${sourceColumn}_${func.colName}`
+      newColumnNames.push(destColumn)
+      this._summarizeColumn(newData, subBlockId, func, sourceColumn, destColumn)
     })
 
     // Create new dataframe.
-    return new TidyBlocksDataFrame(result, newColumns)
+    return new TidyBlocksDataFrame(newData, newColumnNames)
   }
 
   /**
@@ -968,6 +962,22 @@ class TidyBlocksDataFrame {
     })
     const newColumns = this._makeColumns(newData, this.columns, {remove: [GROUPCOL]})
     return new TidyBlocksDataFrame(newData, newColumns)
+  }
+
+  /**
+   * Select rows with unique values in columns.
+   * @param {string[]} columns The names of the columns to use for uniqueness test.
+   * @returns A new dataframe.
+   */
+  unique (blockId, columns) {
+    tbAssert(columns.length > 0,
+             `[block ${blockId}] no columns specified for select`)
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) [${columns}] in select`)
+    const seen = new Map()
+    const newData = []
+    this.data.forEach(row => this._findUnique(blockId, seen, newData, row, columns))
+    return new TidyBlocksDataFrame(newData, columns)
   }
 
   //------------------------------------------------------------------------------
@@ -1070,28 +1080,6 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   //
-  // Put the data into groups.
-  //
-  _groupify () {
-    const wasGrouped = this.hasColumns(GROUPCOL)
-    const groups = []
-    if (wasGrouped) {
-      this.data.forEach(row => {
-        if (row[GROUPCOL] < groups.length) {
-          groups[row[GROUPCOL]].push(row)
-        }
-        else {
-          groups.push([row])
-        }
-      })
-    }
-    else {
-      groups.push(this.data)
-    }
-    return [wasGrouped, groups]
-  }
-
-  //
   // Add fields to object except the join field.
   //
   _addFieldsExcept (result, tableName, row, exceptName) {
@@ -1164,6 +1152,53 @@ class TidyBlocksDataFrame {
         seen.set(thisValue, subMap)
         return this._makeGroupId(blockId, subMap, row, otherColumns, nextGroupId)
       }
+    }
+  }
+
+  //
+  // Summarize a single column in place.
+  //
+  _summarizeColumn (data, blockId, func, sourceColumn, destColumn) {
+    // Divide values into groups.
+    const groups = new Map()
+    data.forEach(row => {
+      const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
+      if (! groups.has(groupId)) {
+        groups.set(groupId, [])
+      }
+      groups.get(groupId).push(row)
+    })
+
+    // Summarize each group.
+    for (let groupId of groups.keys()) {
+      const result = func(groups.get(groupId), sourceColumn)
+      groups.set(groupId, result)
+    }
+
+    // Paste back in each row.
+    data.forEach(row => {
+      const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
+      row[destColumn] = groups.get(groupId)
+    })
+  }
+
+  //
+  // Find unique values across multiple columns.
+  //
+  _findUnique (blockId, seen, newData, row, columns) {
+    const thisValue = tbGet(blockId, row, columns[0])
+    const otherColumns = columns.slice(1)
+    if (otherColumns.length === 0) {
+      if (! seen.has(thisValue)) {
+        seen.set(thisValue, true)
+        newData.push(row)
+      }
+    }
+    else {
+      if (! seen.has(thisValue)) {
+        seen.set(thisValue, new Map())
+      }
+      this._findUnique(blockId, seen.get(thisValue), newData, row, otherColumns)
     }
   }
 }

@@ -1,5 +1,6 @@
 ---
 permalink: /contributing/
+layout: page
 ---
 # Contributing
 
@@ -24,34 +25,19 @@ and that your work may be made available under the terms of [our license](LICENS
 
 ## Who Can Help and How
 
-<table cellpadding="5">
-  <tr>
-    <td><img src="static/asha.svg" width="100px" /></td>
-    <td>
-      <strong>Asha</strong> is a high school mathematics teacher
-      whose students are using TidyBlocks to do their homework.
-      She can help by filing bug reports and feature suggestions,
-      and by providing questions and solutions for us to add to our gallery of examples.
-    </td>
-  </tr>
-  <tr>
-    <td><img src="static/raniere.svg" width="100px" /></td>
-    <td>
-      <strong>Raniere</strong> is a data scientist
-      who uses R and Python in his work.
-      He can help by creating code generators for those languages
-      and by extending our visualization toolkit.
-    </td>
-  </tr>
-  <tr>
-    <td><img src="static/yatindra.svg" width="100px" /></td>
-    <td>
-      <strong>Yatindra</strong> is a web programmer who is fluent in JavaScript.
-      They can help by bringing our code and tooling into line with modern standards
-      and by adding features to make TidyBlocks easier to use.
-    </td>
-  </tr>
-</table>
+**Asha** is a high school mathematics teacher
+whose students are using TidyBlocks to do their homework.
+She can help by filing bug reports and feature suggestions,
+and by providing questions and solutions for us to add to our gallery of examples.
+
+**Raniere** is a data scientist
+who uses R and Python in his work.
+He can help by creating code generators for those languages
+and by extending our visualization toolkit.
+
+**Yatindra** is a web programmer who is fluent in JavaScript.
+They can help by bringing our code and tooling into line with modern standards
+and by adding features to make TidyBlocks easier to use.
 
 ## Getting Started
 

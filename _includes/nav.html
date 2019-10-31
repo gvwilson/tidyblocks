@@ -1,4 +1,4 @@
-<h1>{{ site.title }}</h1>
+<h1><a href="{{'/' | relative_url}}">{{ site.title }}</a></h1>
 <ul id='links'>
   {% for post in site.posts %}
     {% if post.category == null %}
@@ -16,4 +16,8 @@
     </ul>
   </li>
 {% endfor %}
+  <hr/>
+  <li><a href="{{ '/license/' | relative_url }}">License</a></li>
+  <li><a href="{{ '/contributing/' | relative_url }}">Contributing</a></li>
+  <li><a href="{{ '/team/' | relative_url }}">Team</a></li>
 </ul>
