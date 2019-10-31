@@ -81,3 +81,15 @@ Blockly.JavaScript['value_normal'] = (block) => {
   const code = `(row) => tbNormal(${block.tbId}, ${mean}, ${variance})`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
+
+//
+// Create code for exponential random value block.
+//
+Blockly.JavaScript['value_exponential'] = (block) => {
+  const rate = parseFloat(block.getFieldValue('VALUE_1'))
+  if (Number.isNaN(rate)) {
+    throw new Error(`[block ${block.tbId}] rate is not a number`)
+  }
+  const code = `(row) => tbExponential(${block.tbId}, ${rate})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}

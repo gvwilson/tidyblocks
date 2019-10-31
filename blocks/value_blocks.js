@@ -156,3 +156,24 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'normal random value'
   }
 ])
+
+//
+// Visuals for exponential random value block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'value_exponential',
+    message0: 'Exponential rate %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'VALUE_1',
+        text: '0'
+      }
+    ],
+    output: 'Number',
+    style: 'value_blocks',
+    helpUrl: '',
+    tooltip: 'exponential random value'
+  }
+])

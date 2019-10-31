@@ -466,5 +466,34 @@ describe('generate code for single blocks', () => {
                     'pipeline does not generate call to tbIfElse')
     done()
   })
+
+  it('generates code for uniform random variable', (done) => {
+    const pipeline = {_b: 'value_uniform',
+                      VALUE_1: 0,
+                      VALUE_2: 1}
+    const code = makeCode(pipeline)
+    assert_includes(code, 'tbUniform',
+                    `pipeline does not generate call to tbUniform: ${code}`)
+    done()
+  })
+
+  it('generates code for normal random variable', (done) => {
+    const pipeline = {_b: 'value_normal',
+                      VALUE_1: 0,
+                      VALUE_2: 1}
+    const code = makeCode(pipeline)
+    assert_includes(code, 'tbNormal',
+                    `pipeline does not generate call to tbNormal: ${code}`)
+    done()
+  })
+
+  it('generates code for exponential random variable', (done) => {
+    const pipeline = {_b: 'value_exponential',
+                      VALUE_1: 0}
+    const code = makeCode(pipeline)
+    assert_includes(code, 'tbExponential',
+                    `pipeline does not generate call to tbExponential: ${code}`)
+    done()
+  })
   
 })

@@ -1664,5 +1664,24 @@ describe('random number generation', () => {
            `Highly implausible random values`)
     done()
   })
+
+  it('generates exponential random numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5},
+      {_b: 'transform_mutate',
+       COLUMN: 'expo',
+       VALUE: {_b: 'value_exponential',
+               VALUE_1: 2}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (0 < row.expo)),
+           `Values should be greater than zero`)
+    done()
+  })
 })
 

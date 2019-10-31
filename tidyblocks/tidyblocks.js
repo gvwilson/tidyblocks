@@ -807,6 +807,20 @@ const tbNormal = (blockId, mean, variance) => {
   return mean + (r * variance)
 }
 
+/**
+ * Generate an exponential random value.
+ * @param {number} blockId The ID of the block.
+ * @param {number} rate The rate of the distribution.
+ * @returns An exponential random value.
+ */
+const tbExponential = (blockId, rate) => {
+  let u = 0
+  while (u === 0) {
+    u = Math.random()
+  }
+  return (-1/rate) * Math.log(u)
+}
+
 //--------------------------------------------------------------------------------
 
 /**
