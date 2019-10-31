@@ -68,7 +68,7 @@ Blockly.JavaScript['plot_dot'] = (block) => {
   const spec = `{
     "data": { "values": null }, // set to dataframe inside plotting function
     "transform": [
-      {"calculate": "floor(datum.data / 100)", "as": "data"},
+      {"calculate": "floor(datum.data / 10)", "as": "data"},
       {
         "window": [{"op": "rank", "field": "data", "as": "id"}],
         "groupby": ["data"]
