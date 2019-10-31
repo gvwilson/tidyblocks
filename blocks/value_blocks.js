@@ -104,3 +104,29 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'constant text'
   }
 ])
+
+//
+// Visuals for uniform random value block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'value_uniform',
+    message0: 'Uniform low %1 high %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'VALUE_1',
+        text: '0'
+      },
+      {
+        type: 'field_input',
+        name: 'VALUE_2',
+        text: '1'
+      }
+    ],
+    output: 'Number',
+    style: 'value_blocks',
+    helpUrl: '',
+    tooltip: 'uniform random value'
+  }
+])

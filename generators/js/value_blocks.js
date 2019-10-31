@@ -49,3 +49,19 @@ Blockly.JavaScript['value_text'] = (block) => {
   const code = `(row) => ${value}`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
+
+//
+// Create code for uniform random value block.
+//
+Blockly.JavaScript['value_uniform'] = (block) => {
+  const low = parseFloat(block.getFieldValue('VALUE_1'))
+  if (Number.isNaN(low)) {
+    throw new Error(`[block ${block.tbId}] low value is not a number`)
+  }
+  const high = parseFloat(block.getFieldValue('VALUE_2'))
+  if (Number.isNaN(high)) {
+    throw new Error(`[block ${block.tbId}] high value is not a number`)
+  }
+  const code = `(row) => tbUniform(${block.tbId}, ${low}, ${high})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}

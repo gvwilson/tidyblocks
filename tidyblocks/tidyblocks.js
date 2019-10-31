@@ -778,6 +778,19 @@ const tbLt = (blockId, row, getLeft, getRight) => {
 //--------------------------------------------------------------------------------
 
 /**
+ * Generate a uniform random value.
+ * @param {number} blockId The ID of the block.
+ * @param {number} low The low end of the range.
+ * @param {number} high The high end of the range.
+ * @returns A uniform random value.
+ */
+const tbUniform = (blockId, low, high) => {
+  return low + (Math.random() * (high - low))
+}
+
+//--------------------------------------------------------------------------------
+
+/**
  * Store a dataframe.
  */
 class TidyBlocksDataFrame {
