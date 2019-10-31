@@ -84,3 +84,16 @@ Blockly.JavaScript['data_urlCSV'] = (block) => {
   const prefix = registerPrefix('')
   return `${prefix} environment.readCSV('${url}')`
 }
+
+//
+// Generate code to create a dataframe with a single-column sequence.
+//
+Blockly.JavaScript['data_sequence'] = (block) => {
+  const length = parseFloat(block.getFieldValue('VALUE'))
+  if ((length < 1) || (! Number.isInteger(length))) {
+    throw new Error(`[block ${block.tbId}] sequence length must be positive integer`)
+  }
+  const sequence = Array(length).fill().map((x,i)=>{return {'index': i+1}})
+  const prefix = registerPrefix('')
+  return `${prefix} new TidyBlocksDataFrame(${JSON.stringify(sequence)})`
+}

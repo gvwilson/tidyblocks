@@ -131,3 +131,25 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: ''
   }
 ])
+
+//
+// Visuals for block that creates a sequence 1..N.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'data_sequence',
+    message0: 'Sequence %1',
+    args0: [
+      {
+        type: 'field_number',
+        name: 'VALUE',
+        value: 1
+      }
+    ],
+    nextStatement: null,
+    style: 'data_blocks',
+    hat: 'cap',
+    tooltip: 'Generate a sequence 1..N',
+    helpUrl: ''
+  }
+])
