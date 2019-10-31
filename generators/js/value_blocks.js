@@ -65,3 +65,19 @@ Blockly.JavaScript['value_uniform'] = (block) => {
   const code = `(row) => tbUniform(${block.tbId}, ${low}, ${high})`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
+
+//
+// Create code for normal random value block.
+//
+Blockly.JavaScript['value_normal'] = (block) => {
+  const mean = parseFloat(block.getFieldValue('VALUE_1'))
+  if (Number.isNaN(mean)) {
+    throw new Error(`[block ${block.tbId}] mean is not a number`)
+  }
+  const variance = parseFloat(block.getFieldValue('VALUE_2'))
+  if (Number.isNaN(variance) || (variance < 0)) {
+    throw new Error(`[block ${block.tbId}] variance is not a non-negative number`)
+  }
+  const code = `(row) => tbNormal(${block.tbId}, ${mean}, ${variance})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}

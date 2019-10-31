@@ -130,3 +130,29 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'uniform random value'
   }
 ])
+
+//
+// Visuals for normal random value block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'value_normal',
+    message0: 'Normal mean %1 variance %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'VALUE_1',
+        text: '0'
+      },
+      {
+        type: 'field_input',
+        name: 'VALUE_2',
+        text: '1'
+      }
+    ],
+    output: 'Number',
+    style: 'value_blocks',
+    helpUrl: '',
+    tooltip: 'normal random value'
+  }
+])

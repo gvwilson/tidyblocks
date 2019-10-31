@@ -788,6 +788,25 @@ const tbUniform = (blockId, low, high) => {
   return low + (Math.random() * (high - low))
 }
 
+/**
+ * Generate a normal random value.
+ * @param {number} blockId The ID of the block.
+ * @param {number} mean The mean of the distribution.
+ * @param {number} variance The variance of the distribution.
+ * @returns A normal random value using the Box-Muller transform.
+ */
+const tbNormal = (blockId, mean, variance) => {
+  let u = 0, v = 0
+  while (u === 0) {
+    u = Math.random()
+  }
+  while (v === 0) {
+    v = Math.random()
+  }
+  const r = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v )
+  return mean + (r * variance)
+}
+
 //--------------------------------------------------------------------------------
 
 /**

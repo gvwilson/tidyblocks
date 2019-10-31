@@ -1644,5 +1644,25 @@ describe('random number generation', () => {
            `Incorrect random values`)
     done()
   })
+
+  it('generates normal random numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5},
+      {_b: 'transform_mutate',
+       COLUMN: 'normal',
+       VALUE: {_b: 'value_normal',
+               VALUE_1: 10,
+               VALUE_2: 0.2}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (0 < row.normal)),
+           `Highly implausible random values`)
+    done()
+  })
 })
 
