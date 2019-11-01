@@ -65,10 +65,16 @@ Blockly.JavaScript['plot_box'] = (block) => {
 Blockly.JavaScript['plot_dot'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
+  const round = (block.getFieldValue('ROUND') == 'FALSE')
+
+  round ? 
+  calc = `{"calculate": "floor(datum.data / 10)", "as": "data"},` : 
+  calc = ""
+
   const spec = `{
     "data": { "values": null }, // set to dataframe inside plotting function
     "transform": [
-      {"calculate": "floor(datum.data / 10)", "as": "data"},
+      ${calc}
       {
         "window": [{"op": "rank", "field": "data", "as": "id"}],
         "groupby": ["data"]

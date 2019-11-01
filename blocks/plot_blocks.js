@@ -60,12 +60,17 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
 {
   type: 'plot_dot',
-  message0: 'Dot plot %1',
+  message0: 'Dot plot %1 Round %2',
   args0: [
     {
       type: "field_input",
       name: "X_AXIS",
       text: "X_axis"
+    },
+    {
+      type: "field_checkbox",
+      name: "ROUND",
+      checked: true
     }
   ],
     inputsInline: true,
