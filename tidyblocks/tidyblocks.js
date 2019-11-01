@@ -1040,9 +1040,12 @@ class TidyBlocksDataFrame {
    * @param {object} environment Connection to the outside world.
    * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
    * @returns This object.
+   * 
+   * If the suffix does not contain a plot, it clears the plotArea
    */
   plot (environment, spec) {
     environment.displayFrame(this)
+    clearBox("plotOutput")
     if (Object.keys(spec).length !== 0) {
       spec.data.values = this.data
       environment.displayPlot(spec)
@@ -1309,6 +1312,7 @@ class TidyBlocksManagerClass {
         throw new Error('pipeline does not have a valid start block')
       }
       code = fixCode(code)
+      console.log(code)
       eval(code)
       while (this.queue.length > 0) {
         const func = this.queue.shift()

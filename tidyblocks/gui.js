@@ -196,6 +196,14 @@ const createValidator = (columnName, pattern) => {
 }
 
 /**
+ * @param {div} elementID of div to clear
+ */
+function clearBox(elementID)
+{
+    document.getElementById(elementID).innerHTML = "";
+}
+
+/**
  * Run the code generated from the user's blocks.
  * Depends on the global TidyBlocksWorkspace variable.
  */
