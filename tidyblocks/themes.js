@@ -38,7 +38,7 @@ const tidyBlockStyles = {
     colourTertiary: '#760918'
   },
 
-  plumbing_blocks: {
+  combine_blocks: {
     colourPrimary: '#404040',
     colourSecondary: '#404040',
     colourTertiary: '#A0A0A0',
@@ -62,7 +62,7 @@ const tidyCategoryStyles = {
   value: {
     colour: '#E7553C'
   },
-  plumbing: {
+  combine: {
     colour: '#808080'
   }
 }

@@ -565,7 +565,7 @@ describe('check notify/join', () => {
                      COLUMN: 'red'},
               RIGHT: {_b: 'value_number',
                       VALUE: 0}}},
-      {_b: 'plumbing_notify',
+      {_b: 'combine_notify',
        NAME: 'left'}
     ]
     const env = evalCode(pipeline)
@@ -582,16 +582,16 @@ describe('check notify/join', () => {
     const pipeline = [
       // Left data stream.
       {_b: 'data_single'},
-      {_b: 'plumbing_notify',
+      {_b: 'combine_notify',
        NAME: 'left'},
 
       // Right data stream.
       {_b: 'data_double'},
-      {_b: 'plumbing_notify',
+      {_b: 'combine_notify',
        NAME: 'right'},
 
       // Join.
-      {_b: 'plumbing_join',
+      {_b: 'combine_join',
        LEFT_TABLE: 'left',
        LEFT_COLUMN: 'first',
        RIGHT_TABLE: 'right',
@@ -618,7 +618,7 @@ describe('check notify/join', () => {
                      COLUMN: 'red'},
               RIGHT: {_b: 'value_number',
                       VALUE: 0}}},
-      {_b: 'plumbing_notify',
+      {_b: 'combine_notify',
        NAME: 'left'},
 
       // Right data stream is colors with green != 0.
@@ -630,11 +630,11 @@ describe('check notify/join', () => {
                      COLUMN: 'green'},
               RIGHT: {_b: 'value_number',
                       VALUE: 0}}},
-      {_b: 'plumbing_notify',
+      {_b: 'combine_notify',
        NAME: 'right'},
 
       // Join, then keep entries with blue != 0.
-      {_b: 'plumbing_join',
+      {_b: 'combine_join',
        LEFT_TABLE: 'left',
        LEFT_COLUMN: 'red',
        RIGHT_TABLE: 'right',
