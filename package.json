@@ -40,7 +40,7 @@
     "node-html-parser": "^1.1.16",
     "nyc": "^14.1.1",
     "papaparse": "^5.0.2",
-    "parcel": "^1.12.3",
+    "parcel": "^1.12.4",
     "parcel-plugin-jsdoc": "0.0.1",
     "vega-lite": "^3.3.0"
   }

@@ -16,8 +16,11 @@ const {
   assert_setEqual,
   assert_startsWith,
   loadBlockFiles,
+  makeBlock,
+  makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  stdlib
 } = require('./utils')
 
 //

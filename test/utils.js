@@ -20,6 +20,7 @@ const {
   TidyBlocksDataFrame,
   TidyBlocksManager
 } = require('tidyblocks/tidyblocks')
+const stdlib = require('external/stdlib-tree.min')
 
 /**
  * Default tolerance for relative error.
@@ -401,5 +402,6 @@ module.exports = {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  stdlib
 }

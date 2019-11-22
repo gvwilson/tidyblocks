@@ -18,8 +18,10 @@ const {
   assert_startsWith,
   loadBlockFiles,
   makeBlock,
+  makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  stdlib
 } = require('./utils')
 
 //
@@ -227,4 +229,18 @@ describe('testing utilities run correctly', () => {
     done()
   })
 
+})
+
+
+describe('external libraries are loaded correctly', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('loads stdlib', (done) => {
+    assert.equal(stdlib.math.base.special.gcd(18, 8), 2,
+                 'Incorrect result from stdlib GCD')
+    done()
+  })
 })
