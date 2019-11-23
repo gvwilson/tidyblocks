@@ -58,3 +58,32 @@ Blockly.defineBlocksWithJsonArray([
     extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
   }
 ])
+
+//
+// Visuals for beside block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'combine_beside',
+    message0: 'Beside %1 %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'LEFT_TABLE',
+        text: 'left_table'
+      },
+      {
+        type: 'field_input',
+        name: 'RIGHT_TABLE',
+        text: 'right_table'
+      }
+    ],
+    inputsInline: true,
+    nextStatement: null,
+    style: 'combine_blocks',
+    hat: 'cap',
+    tooltip: 'put two tables beside each other',
+    helpUrl: '',
+    extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE']
+  }
+])

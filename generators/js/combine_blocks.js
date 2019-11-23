@@ -1,5 +1,5 @@
 //
-// Create a notification block.
+// Generate code to notify pipeline completion.
 //
 Blockly.JavaScript['combine_notify'] = (block) => {
   const name = block.getFieldValue('NAME')
@@ -18,4 +18,15 @@ Blockly.JavaScript['combine_join'] = (block) => {
   const rightColumn = block.getFieldValue('RIGHT_COLUMN')
   const prefix = registerPrefix(`'${leftTable}', '${rightTable}'`)
   return `${prefix} new TidyBlocksDataFrame([]).join((name) => TidyBlocksManager.getResult(name), '${leftTable}', '${leftColumn}', '${rightTable}', '${rightColumn}')`
+}
+
+//
+// Generate code to put two datasets beside each other
+//
+Blockly.JavaScript['combine_beside'] = (block) => {
+  const order = Blockly.JavaScript.ORDER_NONE
+  const leftTable = block.getFieldValue('LEFT_TABLE')
+  const rightTable = block.getFieldValue('RIGHT_TABLE')
+  const prefix = registerPrefix(`'${leftTable}', '${rightTable}'`)
+  return `${prefix} new TidyBlocksDataFrame([]).beside((name) => TidyBlocksManager.getResult(name), '${leftTable}', '${rightTable}')`
 }

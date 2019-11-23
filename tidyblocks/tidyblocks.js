@@ -983,6 +983,16 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   /**
+   * Notify the pipeline manager that this pipeline has completed so that downstream joins can run.
+   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
+   * @param {function} notifyFxn Callback functon to do notification (to decouple this class from the manager).
+   * @param {string} name Name of this pipeline.
+   */
+  notify (notifyFxn, name) {
+    notifyFxn(name, this)
+  }
+
+  /**
    * Join two tables on equality between values in specified columns.
    * @param {function} getDataFxn How to look up data by name.
    * @param {string} leftFrame Notification name of left table to join.
@@ -1006,8 +1016,8 @@ class TidyBlocksDataFrame {
         if (leftRow[leftColumn] === rightRow[rightColumn]) {
           const row = {}
           row[JOINCOL] = leftRow[leftColumn]
-          this._addFieldsExcept(row, leftFrameName, leftRow, leftColumn)
-          this._addFieldsExcept(row, rightFrameName, rightRow, rightColumn)
+          this._addFields(row, leftFrameName, leftRow, leftColumn)
+          this._addFields(row, rightFrameName, rightRow, rightColumn)
           result.push(row)
         }
       }
@@ -1021,13 +1031,45 @@ class TidyBlocksDataFrame {
   }
 
   /**
-   * Notify the pipeline manager that this pipeline has completed so that downstream joins can run.
-   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
-   * @param {function} notifyFxn Callback functon to do notification (to decouple this class from the manager).
-   * @param {string} name Name of this pipeline.
+   * Put two tables beside each other, extending as needed with missing values.
+   * @param {function} getDataFxn How to look up data by name.
+   * @param {string} leftFrame Notification name of left table to join.
+   * @param {string} rightFrame Notification name of right table to join.
+   * @returns A new dataframe.
    */
-  notify (notifyFxn, name) {
-    notifyFxn(name, this)
+  beside (getDataFxn, leftFrameName, rightFrameName) {
+
+    const leftFrame = getDataFxn(leftFrameName)
+    const rightFrame = getDataFxn(rightFrameName)
+
+    const numRows = Math.max(leftFrame.data.length, rightFrame.data.length)
+    const filler = {}
+    if (leftFrame.data.length < numRows) {
+      for (let column of leftFrame.columns) {
+        filler[column] = undefined
+      }
+    }
+    else if (rightFrame.data.length < numRows) {
+      for (let column of rightFrame.columns) {
+        filler[column] = undefined
+      }
+    }
+
+    const newRows = []
+    for (let i=0; i<numRows; i+=1) {
+      const row = {}
+      this._addFields(row, leftFrameName,
+                      (i < leftFrame.data.length) ? leftFrame.data[i] : filler)
+      this._addFields(row, rightFrameName,
+                      (i < rightFrame.data.length) ? rightFrame.data[i] : filler)
+      newRows.push(row)
+    }
+
+    const newColumns = []
+    this._addColumnsExcept(newColumns, leftFrameName, leftFrame.columns)
+    this._addColumnsExcept(newColumns, rightFrameName, rightFrame.columns)
+
+    return new TidyBlocksDataFrame(newRows, newColumns)
   }
 
   //------------------------------------------------------------------------------
@@ -1082,7 +1124,7 @@ class TidyBlocksDataFrame {
   //
   // Add fields to object except the join field.
   //
-  _addFieldsExcept (result, tableName, row, exceptName) {
+  _addFields (result, tableName, row, exceptName=undefined) {
     Object.keys(row)
       .filter(key => (key != exceptName))
       .forEach(key => {result[`${tableName}_${key}`] = row[key]})
@@ -1091,7 +1133,7 @@ class TidyBlocksDataFrame {
   //
   // Add columns to column list except the join column.
   //
-  _addColumnsExcept (result, tableName, columns, exceptName) {
+  _addColumnsExcept (result, tableName, columns, exceptName=undefined) {
     columns.forEach(col => {
       if (col != exceptName) {
         result.push(`${tableName}_${col}`)

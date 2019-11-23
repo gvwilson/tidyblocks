@@ -549,7 +549,7 @@ describe('check plotting', () => {
 
 })
 
-describe('check notify/join', () => {
+describe('check table combining', () => {
 
   beforeEach(() => {
     TidyBlocksManager.reset()
@@ -672,6 +672,64 @@ describe('check notify/join', () => {
     })
     assert.deepEqual(env.frame.data, expected,
                      'Incorrect join result')
+    done()
+  })
+
+  it('runs two pipelines and puts their results beside each other when the left is shorter', (done) => {
+    const pipeline = [
+      // Left data stream.
+      {_b: 'data_single'},
+      {_b: 'combine_notify',
+       NAME: 'left'},
+
+      // Right data stream.
+      {_b: 'data_double'},
+      {_b: 'combine_notify',
+       NAME: 'right'},
+
+      // Join.
+      {_b: 'combine_beside',
+       LEFT_TABLE: 'left',
+       RIGHT_TABLE: 'right'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error`)
+    const expected = [
+      {left_first: 1, right_first: 1, right_second: 100},
+      {left_first: undefined, right_first: 2, right_second: 200}
+    ]
+    assert.deepEqual(env.frame.data, expected,
+                     'Incorrect result of beside')
+    done()
+  })
+
+  it('runs two pipelines and puts their results beside each other when the right is shorter', (done) => {
+    const pipeline = [
+      // Left data stream.
+      {_b: 'data_double'},
+      {_b: 'combine_notify',
+       NAME: 'left'},
+
+      // Right data stream.
+      {_b: 'data_single'},
+      {_b: 'combine_notify',
+       NAME: 'right'},
+
+      // Join.
+      {_b: 'combine_beside',
+       LEFT_TABLE: 'left',
+       RIGHT_TABLE: 'right'}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error`)
+    const expected = [
+      {left_first: 1, left_second: 100, right_first: 1},
+      {left_first: 2, left_second: 200, right_first: undefined}
+    ]
+    assert.deepEqual(env.frame.data, expected,
+                     'Incorrect result of beside')
     done()
   })
 
