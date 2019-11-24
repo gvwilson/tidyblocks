@@ -7,8 +7,9 @@ Blockly.defineBlocksWithJsonArray([
     message0: 'One-sample Z-test column %1 μ %2 σ %3 α %4',
     args0: [
       {
-        type: 'input_value',
-        name: 'VALUE'
+        type: 'field_input',
+        name: 'COLUMN',
+        text: 'column'
       },
       {
         type: 'field_number',
