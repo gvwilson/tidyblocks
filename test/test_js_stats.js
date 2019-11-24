@@ -43,12 +43,9 @@ describe('statistics tests', () => {
       {_b: 'statistics_z_test_one_sample',
        VALUE: {_b: 'value_column',
                COLUMN: 'blue'},
-       MEAN: {_b: 'value_number',
-              VALUE: 0.0},
-       STD_DEV: {_b: 'value_number',
-                 VALUE: 1.0},
-       SIGNIFICANCE: {_b: 'value_number',
-                      VALUE: 0.05}}
+       MEAN: 0.0,
+       STD_DEV: 1.0,
+       SIGNIFICANCE: 0.05}
     ]
     const env = evalCode(pipeline)
     assert_includes(env.error, 'One-sample z-test',

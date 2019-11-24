@@ -1075,20 +1075,8 @@ class TidyBlocksDataFrame {
    * @returns This object.
    */
   test (environment, blockId, testFunc, parameters, ...columns) {
-
-    // Parameters are passed as functions of a single row argument because
-    // that's how code generation works, so unpack them now.
-    Object.keys(parameters).forEach(key => {
-      if (typeof parameters[key] === 'function') {
-        parameters[key] = parameters[key]({})
-      }
-    })
-
-    // Call and display.
     const result = testFunc(environment.stdlib, this, blockId, parameters, columns)
     environment.displayError(result.print())
-
-    // Allow further operations on this dataframe.
     return this
   }
 

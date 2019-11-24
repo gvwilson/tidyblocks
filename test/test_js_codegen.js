@@ -473,20 +473,17 @@ describe('generate code for single blocks', () => {
     const pipeline = {_b: 'statistics_z_test_one_sample',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'blue'},
-                      MEAN: {_b: 'value_number',
-                             VALUE: 2.0},
-                      STD_DEV: {_b: 'value_number',
-                                VALUE: 0.75},
-                      SIGNIFICANCE: {_b: 'value_number',
-                                     VALUE: 0.01}}
+                      MEAN: 2.0,
+                      STD_DEV: 0.75,
+                      SIGNIFICANCE: 0.01}
     const code = makeCode(pipeline)
     assert_includes(code, '.test',
                     'Code does not include call to .test method')
-    assert_includes(code, "mean: (row) => (2)",
+    assert_includes(code, "mean: 2",
                     'Code does not include mean')
-    assert_includes(code, "std_dev: (row) => (0.75)",
+    assert_includes(code, "std_dev: 0.75",
                     'Code does not include standard deviation')
-    assert_includes(code, "significance: (row) => (0.01)",
+    assert_includes(code, "significance: 0.01",
                     'Code does not include significance')
     done()
   })
