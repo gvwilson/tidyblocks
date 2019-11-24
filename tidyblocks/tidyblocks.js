@@ -787,7 +787,14 @@ const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
   const samples = dataframe.data.map(row => col(row))
   const result = stdlib.stats.ztest(samples, sigma=std_dev,
                                     {mu: mean, alpha: significance})
-  return result
+  const legend = {
+    title: 'one-sample Z-test',
+    rejected: 'is null hypothesis rejected?',
+    pValue: 'p-value',
+    statistic: 'measure value',
+    ci: 'confidence interval'
+  }
+  return {result, legend}
 }
 
 //--------------------------------------------------------------------------------
@@ -1050,8 +1057,8 @@ class TidyBlocksDataFrame {
   /**
    * Call a plotting function. This is in this class to support method chaining
    * and to decouple this class from the real plotting functions so that tests
-   * will run.
-   * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
+   * will run. Note that this function is called at the end of a pipeline, so it
+   * does not return 'this' to support further chaining.
    * @param {object} environment Connection to the outside world.
    * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
    */
@@ -1066,7 +1073,9 @@ class TidyBlocksDataFrame {
   //------------------------------------------------------------------------------
 
   /**
-   * Run a statistical test and return this dataframe unmodified.
+   * Run a statistical test and return this dataframe unmodified.  This is in this class
+   * to support method chaining; it is called at the end of a pipeline, so it does
+   * not return 'this' to support further chaining.
    * @param {object} environment The execution environment.
    * @param {number} blockId The ID of the block.
    * @param {function} testFunc What statistical test function to call.
@@ -1075,8 +1084,8 @@ class TidyBlocksDataFrame {
    * @returns This object.
    */
   test (environment, blockId, testFunc, parameters, ...columns) {
-    const result = testFunc(environment.stdlib, this, blockId, parameters, columns)
-    environment.displayError(result.print())
+    const {result, legend} = testFunc(environment.stdlib, this, blockId, parameters, columns)
+    environment.displayStats(result, legend)
     return this
   }
 
