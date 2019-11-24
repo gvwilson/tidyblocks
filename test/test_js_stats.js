@@ -41,8 +41,7 @@ describe('statistics tests', () => {
     const pipeline = [
       {_b: 'data_colors'},
       {_b: 'statistics_z_test_one_sample',
-       VALUE: {_b: 'value_column',
-               COLUMN: 'blue'},
+       COLUMN: 'blue',
        MEAN: 0.0,
        STD_DEV: 1.0,
        SIGNIFICANCE: 0.05}

@@ -784,7 +784,7 @@ const tbLt = (blockId, row, getLeft, getRight) => {
 const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
   const {mean, std_dev, significance} = parameters
   const col = columns[0]
-  const samples = dataframe.data.map(row => col(row))
+  const samples = dataframe.data.map(row => row[col])
   const result = stdlib.stats.ztest(samples, sigma=std_dev,
                                     {mu: mean, alpha: significance})
   const legend = {
@@ -1084,6 +1084,8 @@ class TidyBlocksDataFrame {
    * @returns This object.
    */
   test (environment, blockId, testFunc, parameters, ...columns) {
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) ${columns} in tbbZTestOneSample`)
     const {result, legend} = testFunc(environment.stdlib, this, blockId, parameters, columns)
     environment.displayStats(result, legend)
     return this
