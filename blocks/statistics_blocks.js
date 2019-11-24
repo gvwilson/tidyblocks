@@ -34,3 +34,30 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: ''
   }
 ])
+
+//
+// Visuals for Kruskal-Wallis test.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'statistics_kruskal_wallis_test',
+    message0: 'Kruskal-Wallis test columns %1 α %2',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: 'column, column'
+      },
+      {
+        type: 'field_number',
+        name: 'SIGNIFICANCE',
+        value: 0.05
+      }
+    ],
+    inputsInline: true,
+    previousStatement: null,
+    style: 'statistics_blocks',
+    tooltip: 'perform Kruskal-Wallis test',
+    helpUrl: ''
+  }
+])

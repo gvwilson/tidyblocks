@@ -489,4 +489,21 @@ describe('generate code for single blocks', () => {
     done()
   })
   
+
+  it('generates code for Kruskal-Wallis test on two columns', (done) => {
+    const pipeline = {_b: 'statistics_kruskal_wallis_test',
+                      MULTIPLE_COLUMNS: 'green, blue',
+                      SIGNIFICANCE: 0.01}
+    const code = makeCode(pipeline)
+    assert_includes(code, '.test',
+                    'Code does not include call to .test method')
+    assert_includes(code, 'green',
+                    'Code does not mention first column')
+    assert_includes(code, 'blue',
+                    'Code does not mention second column')
+    assert_includes(code, 'significance: 0.01',
+                    'Code does not include significance')
+    done()
+  })
+  
 })

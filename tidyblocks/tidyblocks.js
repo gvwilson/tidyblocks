@@ -792,7 +792,30 @@ const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
     rejected: 'is null hypothesis rejected?',
     pValue: 'p-value',
     statistic: 'measure value',
-    ci: 'confidence interval'
+    ci: 'confidence interval',
+    alpha: 'significance'
+  }
+  return {result, legend}
+}
+
+/**
+ * Kruskal-Wallis test.
+ */
+
+const tbKruskalWallisTest = (stdlib, dataframe, blockId, parameters, columns) => {
+  const {significance} = parameters
+  const samples = columns.map(col => {
+    const values = dataframe.data.map(row => row[col]).filter(v => (v !== undefined))
+    return values
+  })
+  const result = stdlib.stats.kruskalTest(...samples, {alpha: significance})
+  const legend = {
+    title: 'Kruskal-Wallis test',
+    rejected: 'is null hypothesis rejected?',
+    pValue: 'p-value',
+    statistic: 'measure value',
+    alpha: 'significance',
+    df: 'degrees of freedom'
   }
   return {result, legend}
 }
