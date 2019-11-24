@@ -778,6 +778,21 @@ const tbLt = (blockId, row, getLeft, getRight) => {
 //--------------------------------------------------------------------------------
 
 /**
+ * One-sample Z-test.
+ */
+
+const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
+  const {mean, std_dev, significance} = parameters
+  const col = columns[0]
+  const samples = dataframe.data.map(row => col(row))
+  const result = stdlib.stats.ztest(samples, sigma=std_dev,
+                                    {mu: mean, alpha: significance})
+  return result
+}
+
+//--------------------------------------------------------------------------------
+
+/**
  * Store a dataframe.
  */
 class TidyBlocksDataFrame {
@@ -1039,7 +1054,6 @@ class TidyBlocksDataFrame {
    * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
    * @param {object} environment Connection to the outside world.
    * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
-   * @returns This object.
    */
   plot (environment, spec) {
     environment.displayFrame(this)
@@ -1047,6 +1061,35 @@ class TidyBlocksDataFrame {
       spec.data.values = this.data
       environment.displayPlot(spec)
     }
+  }
+
+  //------------------------------------------------------------------------------
+
+  /**
+   * Run a statistical test and return this dataframe unmodified.
+   * @param {object} environment The execution environment.
+   * @param {number} blockId The ID of the block.
+   * @param {function} testFunc What statistical test function to call.
+   * @param {object} parameters Lookup table of single-arg functions for getting parameters.
+   * @param {object[]} columns Lookup functions for columns.
+   * @returns This object.
+   */
+  test (environment, blockId, testFunc, parameters, ...columns) {
+
+    // Parameters are passed as functions of a single row argument because
+    // that's how code generation works, so unpack them now.
+    Object.keys(parameters).forEach(key => {
+      if (typeof parameters[key] === 'function') {
+        parameters[key] = parameters[key]({})
+      }
+    })
+
+    // Call and display.
+    const result = testFunc(environment.stdlib, this, blockId, parameters, columns)
+    environment.displayError(result.print())
+
+    // Allow further operations on this dataframe.
+    return this
   }
 
   //------------------------------------------------------------------------------
