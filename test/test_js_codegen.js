@@ -317,7 +317,16 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to joins two pipelines', (done) => {
+  it('generates code to notify that a pipeline has completed', (done) => {
+    const pipeline = {_b: 'combine_notify',
+                      NAME: 'output_name'}
+    const code = makeCode(pipeline)
+    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
+                 'pipeine does not notify properly')
+    done()
+  })
+
+  it('generates code to join two pipelines', (done) => {
     const pipeline = {_b: 'combine_join',
                       LEFT_TABLE: 'left_table',
                       LEFT_COLUMN: {_b: 'value_column',
@@ -335,12 +344,17 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to notify that a pipeline has completed', (done) => {
-    const pipeline = {_b: 'combine_notify',
-                      NAME: 'output_name'}
+  it('generates code to put two tables beside one another', (done) => {
+    const pipeline = {_b: 'combine_beside',
+                      LEFT_TABLE: 'left_table',
+                      RIGHT_TABLE: 'right_table'}
     const code = makeCode(pipeline)
-    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
-                 'pipeine does not notify properly')
+    assert_includes(code, 'TidyBlocksManager.register',
+                    'pipeline is not registered')
+    assert_includes(code, "['left_table', 'right_table']",
+                    'pipeline does not register dependencies')
+    assert_includes(code, 'new TidyBlocksDataFrame',
+                    'pipeline does not create a new dataframe')
     done()
   })
 
