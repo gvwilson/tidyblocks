@@ -19,7 +19,8 @@ const {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  stdlib
 } = require('./utils')
 
 //
