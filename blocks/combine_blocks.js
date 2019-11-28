@@ -1,9 +1,31 @@
 //
+// Visuals for notification block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'combine_notify',
+    message0: 'Notify %1',
+    args0: [
+      {
+        type: 'field_input',
+        name: 'NAME',
+        text: 'name'
+      }
+    ],
+    previousStatement: null,
+    style: 'combine_blocks',
+    tooltip: 'notify a join that a table is available',
+    helpUrl: '',
+    extensions: ['validate_NAME']
+  }
+])
+
+//
 // Visuals for join block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'plumbing_join',
+    type: 'combine_join',
     message0: 'Join %1 %2 %3 %4',
     args0: [
       {
@@ -29,32 +51,10 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     nextStatement: null,
-    style: 'plumbing_blocks',
+    style: 'combine_blocks',
     hat: 'cap',
-    tooltip: 'join two tables',
+    tooltip: 'join two tables by matching values',
     helpUrl: '',
     extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
-  }
-])
-
-//
-// Visuals for notification block.
-//
-Blockly.defineBlocksWithJsonArray([
-  {
-    type: 'plumbing_notify',
-    message0: 'Notify %1',
-    args0: [
-      {
-        type: 'field_input',
-        name: 'NAME',
-        text: 'name'
-      }
-    ],
-    previousStatement: null,
-    style: 'plumbing_blocks',
-    tooltip: 'notify a join that a table is available',
-    helpUrl: '',
-    extensions: ['validate_NAME']
   }
 ])

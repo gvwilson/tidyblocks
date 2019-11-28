@@ -316,7 +316,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to joins two pipelines', (done) => {
-    const pipeline = {_b: 'plumbing_join',
+    const pipeline = {_b: 'combine_join',
                       LEFT_TABLE: 'left_table',
                       LEFT_COLUMN: {_b: 'value_column',
                                     COLUMN: 'left_column'},
@@ -334,7 +334,7 @@ describe('generate code for single blocks', () => {
   })
 
   it('generates code to notify that a pipeline has completed', (done) => {
-    const pipeline = {_b: 'plumbing_notify',
+    const pipeline = {_b: 'combine_notify',
                       NAME: 'output_name'}
     const code = makeCode(pipeline)
     assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
