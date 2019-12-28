@@ -785,26 +785,20 @@ const tbLt = (blockId, row, getLeft, getRight) => {
  * @returns A uniform random value.
  */
 const tbUniform = (blockId, low, high) => {
-  return low + (Math.random() * (high - low))
+  tbAssert(low <= high, `[block ${blockId}] low value ${low} must be less than high value ${high}`)
+  return stdlib.random.base.uniform(low, high)
 }
 
 /**
  * Generate a normal random value.
  * @param {number} blockId The ID of the block.
  * @param {number} mean The mean of the distribution.
- * @param {number} variance The variance of the distribution.
- * @returns A normal random value using the Box-Muller transform.
+ * @param {number} stdDev The standard deviation of the distribution.
+ * @returns A normal random value.
  */
-const tbNormal = (blockId, mean, variance) => {
-  let u = 0, v = 0
-  while (u === 0) {
-    u = Math.random()
-  }
-  while (v === 0) {
-    v = Math.random()
-  }
-  const r = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v )
-  return mean + (r * variance)
+const tbNormal = (blockId, mean, stdDev) => {
+  tbAssert(stdDev >= 0, `[block ${blockId}] standard deviation ${stdDev} must be non-negative`)
+  return stdlib.random.base.normal(mean, stdDev)
 }
 
 /**
@@ -814,11 +808,8 @@ const tbNormal = (blockId, mean, variance) => {
  * @returns An exponential random value.
  */
 const tbExponential = (blockId, rate) => {
-  let u = 0
-  while (u === 0) {
-    u = Math.random()
-  }
-  return (-1/rate) * Math.log(u)
+  tbAssert(rate > 0, `[block ${blockId}] rate ${rate} must be positive`)
+  return stdlib.random.base.exponential(rate)
 }
 
 //--------------------------------------------------------------------------------

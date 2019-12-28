@@ -20,7 +20,7 @@ const {
   TidyBlocksDataFrame,
   TidyBlocksManager
 } = require('tidyblocks/tidyblocks')
-const stdlib = require('external/stdlib-tree.min')
+const stdlib = require('static/stdlib-tree.min')
 
 /**
  * Default tolerance for relative error.

@@ -1721,7 +1721,7 @@ describe('random number generation', () => {
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 5,
                  `Expected 5 rows, not ${env.frame.data.length}`)
-    assert(env.frame.data.every(row => (0 < row.normal)),
+    assert(env.frame.data.every(row => ((5 < row.normal) && (row.normal < 15))),
            `Highly implausible random values`)
     done()
   })
