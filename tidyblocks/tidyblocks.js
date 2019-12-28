@@ -812,6 +812,24 @@ const tbExponential = (blockId, rate) => {
   return stdlib.random.base.exponential(rate)
 }
 
+/*
+ * One-sample Z-test.
+ * @param stdlib Standard math library.
+ * @param dataframe Dataframe being operated on.
+ * @param {number} blockId The ID of the block.
+ * @param {object} parameters The parameters for the test.
+ * @param columns A list of column names (must be of length 1).
+ * @returns Result object from test.
+ */
+const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
+  const {mean, std_dev, significance} = parameters
+  const col = columns[0]
+  const samples = dataframe.data.map(row => row[col])
+  const result = stdlib.stats.ztest(samples, sigma=std_dev,
+                                    {mu: mean, alpha: significance})
+  return result
+}
+
 //--------------------------------------------------------------------------------
 
 /**
@@ -1152,7 +1170,6 @@ class TidyBlocksDataFrame {
    * Note that this function is called at the end of a pipeline, so it does not return 'this' to support method chaining.
    * @param {object} environment Connection to the outside world.
    * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
-   * @returns This object.
    */
   plot (environment, spec) {
     environment.displayFrame(this)
@@ -1160,6 +1177,25 @@ class TidyBlocksDataFrame {
       spec.data.values = this.data
       environment.displayPlot(spec)
     }
+  }
+
+  //------------------------------------------------------------------------------
+
+  /**
+   * Run a statistical test and return this dataframe unmodified.
+   * @param {object} environment The execution environment.
+   * @param {number} blockId The ID of the block.
+   * @param {function} testFunc What statistical test function to call.
+   * @param {object} parameters Lookup table of single-arg functions for getting parameters.
+   * @param {object[]} columns Lookup functions for columns.
+   * @returns This object.
+   */
+  test (environment, blockId, testFunc, parameters, ...columns) {
+    tbAssert(this.hasColumns(columns),
+             `[block ${blockId}] unknown column(s) ${columns} in tbbZTestOneSample`)
+    const result = testFunc(environment.stdlib, this, blockId, parameters, columns)
+    environment.displayError(result.print())
+    return this
   }
 
   //------------------------------------------------------------------------------

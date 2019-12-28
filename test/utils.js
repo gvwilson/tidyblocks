@@ -266,15 +266,23 @@ const loadBlockFiles = () => {
     .querySelectorAll('script')
     .map(node => node.attributes.src)
     .filter(path => !path.includes('/r/'))
-    .map(path => fs.readFileSync(path, 'utf-8'))
-    .map(src => {
+    .map(path => ({path: path, src: fs.readFileSync(path, 'utf-8')}))
+    .map(({path, src}) => {
       const start = src.indexOf('/** NOT FOR TESTING **/')
       if (start >= 0) {
         src = src.substring(0, start)
       }
-      return src
+      return {path, src}
     })
-    .forEach(src => eval(src))
+    .forEach(({path, src}) => {
+      try {
+        eval(src)
+      }
+      catch (err) {
+        console.log(`ERROR in ${path}: ${err}`)
+        process.exit(1)
+      }
+    })
 }
 
 //--------------------------------------------------------------------------------
@@ -288,6 +296,7 @@ class TestEnvironment {
     this.table = null
     this.plot = null
     this.error = null
+    this.stdlib = stdlib
   }
 
   /**

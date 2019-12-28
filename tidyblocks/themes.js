@@ -43,6 +43,12 @@ const tidyBlockStyles = {
     colourSecondary: '#404040',
     colourTertiary: '#A0A0A0',
     hat: 'cap'
+  },
+
+  statistics_blocks: {
+    colourPrimary: '#70A0C0',
+    colourSecondary: '#70A0C0',
+    colourTertiary: '#C070A0'
   }
 }
 
@@ -64,6 +70,9 @@ const tidyCategoryStyles = {
   },
   combine: {
     colour: '#808080'
+  },
+  statistics: {
+    colour: '#70A0C0'
   }
 }
 
