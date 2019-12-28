@@ -10,14 +10,16 @@ const MULTIPLE_COLUMN_NAMES = /^ *([_A-Za-z][_A-Za-z0-9]*)( *, *[_A-Za-z][_A-Za-
 
 // Names of single-column fields in various blocks (for generating validators).
 const SINGLE_COLUMN_FIELDS = [
+  'COLOR',
   'COLUMN',
   'FORMAT',
-  'LEFT_TABLE',
+  'GROUPS',
   'LEFT_COLUMN',
-  'RIGHT_TABLE',
-  'RIGHT_COLUMN',
+  'LEFT_TABLE',
   'NAME',
-  'COLOR',
+  'RIGHT_COLUMN',
+  'RIGHT_TABLE',
+  'VALUES',
   'X_AXIS',
   'Y_AXIS'
 ]
@@ -26,6 +28,9 @@ const SINGLE_COLUMN_FIELDS = [
 const MULTIPLE_COLUMN_FIELDS = [
   'MULTIPLE_COLUMNS'
 ]
+
+// Location of standard datasets.
+STANDARD_DATASET_BASE_URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/'
 
 //--------------------------------------------------------------------------------
 
@@ -36,7 +41,6 @@ const MULTIPLE_COLUMN_FIELDS = [
 class GuiEnvironment {
 
   constructor () {
-    this.stdlib = stdlib // Make sure stats functions are available to dataframe.
   }
 
   /**
@@ -50,10 +54,17 @@ class GuiEnvironment {
   /**
    * Read CSV from a URL and parse to create TidyBlocks data frame.
    * @param {string} url URL to read from.
+   * @param {boolean} standard Add prefix for standard dataset location.
+   * @return dataframe containing that data.
    */
-  readCSV (url) {
-    tbAssert((url !== "url") && (url.length > 0),
-             `Cannot fetch empty URL`)
+  readCSV (url, standard=false) {
+    if ((url === "url") || (url.length === 0)) {
+      throw new Error('Cannot fetch empty URL')
+    }
+
+    if (standard) {
+      url = `${STANDARD_DATASET_BASE_URL}/${url}`
+    }
 
     const request = new XMLHttpRequest()
     request.open('GET', url, false)
@@ -64,7 +75,7 @@ class GuiEnvironment {
       return null
     }
     else {
-      return csv2TidyBlocksDataFrame(request.responseText, Papa.parse)
+      return TbManager.csv2tbDataFrame(request.responseText)
     }
   }
 
@@ -133,11 +144,12 @@ const generateCodePane = () => {
 }
 
 /**
- * Show the text based code corresponding to selected blocks.
+ * Show the code corresponding to current blocks.
  */
 const showCode = () => {
-  const code = Blockly.JavaScript.workspaceToCode(TidyBlocksWorkspace)
-  document.getElementById('codeOutput').innerHTML = code
+  const rawCode = Blockly.JavaScript.workspaceToCode(TidyBlocksWorkspace)
+  const fixedCode = TbManager.fixCode(rawCode)
+  document.getElementById('codeOutput').innerHTML = fixedCode
 }
 
 /**
@@ -168,7 +180,7 @@ const setUpBlockly = () => {
   TidyBlocksWorkspace.addChangeListener((event) => {
     if (event.type === Blockly.Events.CREATE) {
       const block = TidyBlocksWorkspace.getBlockById(event.blockId)
-      TidyBlocksManager.addNewBlock(block)
+      TbManager.addNewBlock(block)
     }
     else if (event.type === Blockly.Events.DELETE) {
       // FIXME: handle deletion
@@ -210,7 +222,7 @@ const createValidator = (columnName, pattern) => {
  */
 const runCode = () => {
   Blockly.JavaScript.INFINITE_LOOP_TRAP = null
-  TidyBlocksManager.run(new GuiEnvironment())
+  TbManager.run(new GuiEnvironment())
 }
 
 /**
@@ -218,12 +230,12 @@ const runCode = () => {
  * Depends on the global TidyBlocksWorkspace variable.
  */
 const saveCode = () => {
-  var filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt';
-    const xml = Blockly.Xml.workspaceToDom(TidyBlocksWorkspace)
-    const text = Blockly.Xml.domToText(xml)
-    const link = document.getElementById('download')
-    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
-    link.setAttribute('download', filename)
+  const filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt'
+  const xml = Blockly.Xml.workspaceToDom(TidyBlocksWorkspace)
+  const text = Blockly.Xml.domToText(xml)
+  const link = document.getElementById('download')
+  link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+  link.setAttribute('download', filename)
 }
 
 /**
@@ -252,7 +264,7 @@ function saveTable(table_id) {
   }
   var csv_string = csv.join('\n');
   // Download it
-  var filename = 'TidyBlocksDataFrame_' + new Date().toLocaleDateString() + '.csv';
+  var filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv';
   var link = document.createElement('a');
   link.style.display = 'none';
   link.setAttribute('target', '_blank');
@@ -349,6 +361,8 @@ const json2table = (json) => {
  * @param {Object} legend Text values describing results.
  */
 const stats2table = (values, legend) => {
+  const title = legend._title
+  delete legend._title
   const headerRow = '<tr><th>Result</th><th>Value</th><th>Explanation</th></tr>'
   const bodyRows = Object.keys(legend).map(key => {
     let value = values[key]
@@ -363,7 +377,7 @@ const stats2table = (values, legend) => {
     }
     return `<tr><td>${key}</td><td>${value}</td><td>${legend[key]}</td></tr>`
   }).join('')
-  return `<table id="statsResult"><thead>${headerRow}</thead><tbody>${bodyRows}</tbody></table>`
+  return `<p>${title}</p><table id="statsResult"><thead>${headerRow}</thead><tbody>${bodyRows}</tbody></table>`
 }
 
 /**

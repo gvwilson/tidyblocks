@@ -1,108 +1,4 @@
 /**
- * Prefix and suffix for well-formed pipelines.
- */
-const TIDYBLOCKS_START = '/* tidyblocks start */'
-const TIDYBLOCKS_END = '/* tidyblocks end */'
-
-/**
- * Value to indicate missing values.
- */
-const MISSING = undefined
-
-/**
- * Names for special columns.
- */
-const GROUPCOL = '_group_'
-const JOINCOL = '_join_'
-
-/**
- * Turn block of CSV text into TidyBlocksDataFrame. The parser argument should be Papa.parse;
- * it is passed in here so that this file can be loaded both in the browser and for testing.
- * @param {string} text Text to parse.
- * @param {function} parser Function to turn CSV text into array of objects.
- * @returns New dataframe with sanitized column headers.
- */
-const csv2TidyBlocksDataFrame = (text, parser) => {
-
-  const seen = new Map() // global to transformHeader
-  const transformHeader = (name) => {
-    // Simple character fixes.
-    name = name
-      .trim()
-      .replace(/ /g, '_')
-      .replace(/[^A-Za-z0-9_]/g, '')
-
-    // Ensure header is not empty after character fixes.
-    if (name.length === 0) {
-      name = 'EMPTY'
-    }
-
-    // Name must start with underscore or letter.
-    if (! name.match(/^[_A-Za-z]/)) {
-      name = `_${name}`
-    }
-
-    // Name must be unique.
-    if (seen.has(name)) {
-      const serial = seen.get(name) + 1
-      seen.set(name, serial)
-      name = `${name}_${serial}`
-    }
-    else {
-      seen.set(name, 0)
-    }
-
-    return name
-  }
-
-  const result = parser(
-    text.trim(),
-    {
-      dynamicTyping: true,
-      header: true,
-      skipEmptyLines: true,
-      transformHeader: transformHeader,
-      transform: function(value) {
-        return (value === "NA" | value === null) ? undefined : value
-      },  
-    }
-  )
-  return new TidyBlocksDataFrame(result.data)
-}
-
-/**
- * Get the prefix for registering blocks.
- * @param {string} fill Comma-separated list of quoted strings identifying pipelines to wait for.
- * @returns {string} Text to insert into generated code.
- */
-const registerPrefix = (fill) => {
-  return `${TIDYBLOCKS_START} TidyBlocksManager.register([${fill}], () => {`
-}
-
-/**
- * Get the suffix for registering blocks.
- * @param {string} fill Single quoted string identifying pipeline produced.
- * @returns {string} Text to insert into generated code.
- */
-const registerSuffix = (fill) => {
-  return `}, [${fill}]) ${TIDYBLOCKS_END}`
-}
-
-/**
- * Fix up runnable code if it isn't properly terminated yet.
- * @param {string} code Pipeline code to be terminated if necessary.
- */
-const fixCode = (code) => {
-  if (! code.endsWith(TIDYBLOCKS_END)) {
-    const suffix = registerSuffix('')
-    code += `.plot(environment, {}) ${suffix}`
-  }
-  return code
-}
-
-//--------------------------------------------------------------------------------
-
-/**
  * Raise exception if a condition doesn't hold.
  * @param {Boolean} check Condition that must be true.
  * @param {string} message What to say if it isn't.
@@ -119,7 +15,7 @@ const tbAssert = (check, message) => {
  * @returns The input value if it passes the test.
  */
 const tbAssertNumber = (value) => {
-  tbAssert((value === MISSING) || (typeof value === 'number'),
+  tbAssert((value === TbDataFrame.MISSING) || (typeof value === 'number'),
            `Value ${value} is not missing or a number`)
   return value
 }
@@ -130,7 +26,7 @@ const tbAssertNumber = (value) => {
  * @param right The other value.
  */
 const tbAssertTypeEqual = (left, right) => {
-  tbAssert((left === MISSING) || (right === MISSING) || (typeof left === typeof right),
+  tbAssert((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING) || (typeof left === typeof right),
            `Values ${left} and ${right} have different types`)
 }
 
@@ -270,8 +166,8 @@ const _variance = (values) => {
  */
 const tbToBoolean = (blockId, row, getValue) => {
   const value = getValue(row)
-  return (value === MISSING)
-    ? MISSING
+  return (value === TbDataFrame.MISSING)
+    ? TbDataFrame.MISSING
     : (value ? true : false)
 }
 
@@ -284,12 +180,12 @@ const tbToBoolean = (blockId, row, getValue) => {
  */
 const tbToDatetime = (blockId, row, getValue) => {
   const value = getValue(row)
-  if (value === MISSING) {
-    return MISSING
+  if (value === TbDataFrame.MISSING) {
+    return TbDataFrame.MISSING
   }
   let result = new Date(value)
   if ((typeof result === 'object') && (result.toString() === 'Invalid Date')) {
-    result = MISSING
+    result = TbDataFrame.MISSING
   }
   return result
 }
@@ -303,7 +199,7 @@ const tbToDatetime = (blockId, row, getValue) => {
  */
 const tbToNumber = (blockId, row, getValue) => {
   let value = getValue(row)
-  if (value === MISSING) {
+  if (value === TbDataFrame.MISSING) {
     // keep as is
   }
   else if (typeof value == 'boolean') {
@@ -324,7 +220,7 @@ const tbToNumber = (blockId, row, getValue) => {
  */
 const tbToText = (blockId, row, getValue) => {
   let value = getValue(row)
-  if (value === MISSING) {
+  if (value === TbDataFrame.MISSING) {
     // keep as is
   }
   else if (typeof value !== 'string') {
@@ -365,7 +261,7 @@ const tbIsDateTime = (blockId, row, getValue) => {
  * @returns Is value missing?
  */
 const tbIsMissing = (blockId, row, getValue) => {
-  return getValue(row) === MISSING
+  return getValue(row) === TbDataFrame.MISSING
 }
 
 /**
@@ -489,7 +385,7 @@ const tbToSeconds = (row, getValue) => {
  * Numeric value if legal or missing value if not.
  */
 const safeValue = (value) => {
-  return isFinite(value) ? value : MISSING
+  return isFinite(value) ? value : TbDataFrame.MISSING
 }
 
 /**
@@ -515,8 +411,8 @@ const tbGet = (blockId, row, column) => {
 const tbAdd = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : safeValue(left + right)
 }
 
@@ -531,8 +427,8 @@ const tbAdd = (blockId, row, getLeft, getRight) => {
 const tbDiv = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : safeValue(left / right)
 }
 
@@ -547,8 +443,8 @@ const tbDiv = (blockId, row, getLeft, getRight) => {
 const tbExp = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : safeValue(left ** right)
 }
 
@@ -563,8 +459,8 @@ const tbExp = (blockId, row, getLeft, getRight) => {
 const tbMod = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : safeValue(left % right)
 }
 
@@ -579,8 +475,8 @@ const tbMod = (blockId, row, getLeft, getRight) => {
 const tbMul = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : safeValue(left * right)
 }
 
@@ -593,7 +489,7 @@ const tbMul = (blockId, row, getLeft, getRight) => {
  */
 const tbNeg = (blockId, row, getValue) => {
   const value = tbAssertNumber(getValue(row))
-  return (value === MISSING) ? MISSING : (- value)
+  return (value === TbDataFrame.MISSING) ? TbDataFrame.MISSING : (- value)
 }
 
 /**
@@ -607,8 +503,8 @@ const tbNeg = (blockId, row, getValue) => {
 const tbSub = (blockId, row, getLeft, getRight) => {
   const left = tbAssertNumber(getLeft(row))
   const right = tbAssertNumber(getRight(row))
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : safeValue(left - right)
 }
 
@@ -637,7 +533,7 @@ const tbAnd = (blockId, row, getLeft, getRight) => {
  */
 const tbNot = (blockId, row, getValue) => {
   const value = getValue(row)
-  return (value === MISSING) ? MISSING : ((! value) ? true : false)
+  return (value === TbDataFrame.MISSING) ? TbDataFrame.MISSING : ((! value) ? true : false)
 }
 
 /**
@@ -666,8 +562,8 @@ const tbOr = (blockId, row, getLeft, getRight) => {
 
 const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
   const cond = getCond(row)
-  return (cond === MISSING)
-    ? MISSING
+  return (cond === TbDataFrame.MISSING)
+    ? TbDataFrame.MISSING
     : (cond ? getLeft(row) : getRight(row))
 }
 
@@ -685,8 +581,8 @@ const tbGt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbAssertTypeEqual(left, right)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : (left > right)
 }
 
@@ -702,8 +598,8 @@ const tbGeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbAssertTypeEqual(left, right)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : (left >= right)
 }
 
@@ -719,8 +615,8 @@ const tbEq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbAssertTypeEqual(left, right)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : (left === right)
 }
 
@@ -736,8 +632,8 @@ const tbNeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbAssertTypeEqual(left, right)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : (left !== right)
 }
 
@@ -753,8 +649,8 @@ const tbLeq = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbAssertTypeEqual(left, right)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : (left <= right)
 }
 
@@ -770,8 +666,8 @@ const tbLt = (blockId, row, getLeft, getRight) => {
   const left = getLeft(row)
   const right = getRight(row)
   tbAssertTypeEqual(left, right)
-  return ((left === MISSING) || (right === MISSING))
-    ? MISSING
+  return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
+    ? TbDataFrame.MISSING
     : (left < right)
 }
 
@@ -786,7 +682,7 @@ const tbLt = (blockId, row, getLeft, getRight) => {
  */
 const tbUniform = (blockId, low, high) => {
   tbAssert(low <= high, `[block ${blockId}] low value ${low} must be less than high value ${high}`)
-  return stdlib.random.base.uniform(low, high)
+  return TbManager.stdlib.random.base.uniform(low, high)
 }
 
 /**
@@ -798,7 +694,7 @@ const tbUniform = (blockId, low, high) => {
  */
 const tbNormal = (blockId, mean, stdDev) => {
   tbAssert(stdDev >= 0, `[block ${blockId}] standard deviation ${stdDev} must be non-negative`)
-  return stdlib.random.base.normal(mean, stdDev)
+  return TbManager.stdlib.random.base.normal(mean, stdDev)
 }
 
 /**
@@ -809,26 +705,25 @@ const tbNormal = (blockId, mean, stdDev) => {
  */
 const tbExponential = (blockId, rate) => {
   tbAssert(rate > 0, `[block ${blockId}] rate ${rate} must be positive`)
-  return stdlib.random.base.exponential(rate)
+  return TbManager.stdlib.random.base.exponential(rate)
 }
 
 /*
  * One-sample Z-test.
- * @param stdlib Standard math library.
  * @param dataframe Dataframe being operated on.
  * @param {number} blockId The ID of the block.
  * @param {object} parameters The parameters for the test.
  * @param columns A list of column names (must be of length 1).
  * @returns Result object from test.
  */
-const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
+const tbZTestOneSample = (dataframe, blockId, parameters, columns) => {
   const {mean, std_dev, significance} = parameters
   const col = columns[0]
   const samples = dataframe.data.map(row => row[col])
-  const result = stdlib.stats.ztest(samples, sigma=std_dev,
-                                    {mu: mean, alpha: significance})
+  const result = TbManager.stdlib.stats.ztest(samples, sigma=std_dev,
+                                              {mu: mean, alpha: significance})
   const legend = {
-    title: 'one-sample Z-test',
+    _title: 'one-sample Z-test',
     rejected: 'is null hypothesis rejected?',
     pValue: 'p-value',
     statistic: 'measure value',
@@ -840,17 +735,29 @@ const tbZTestOneSample = (stdlib, dataframe, blockId, parameters, columns) => {
 
 /**
  * Kruskal-Wallis test.
+ * @param dataframe Dataframe being operated on.
+ * @param {number} blockId The ID of the block.
+ * @param {object} parameters The parameters for the test.
+ * @param {string} groups Name of column containing group IDs.
+ * @param {string} values Name of column containing values.
+ * @returns Result object from test.
  */
 
-const tbKruskalWallisTest = (stdlib, dataframe, blockId, parameters, columns) => {
+const tbKruskalWallisTest = (dataframe, blockId, parameters, columns) => {
   const {significance} = parameters
-  const samples = columns.map(col => {
-    const values = dataframe.data.map(row => row[col]).filter(v => (v !== undefined))
-    return values
+  const [groups, values] = columns
+  split = {}
+  dataframe.data.map(row => {
+    if (! (row[groups] in split)) {
+      split[row[groups]] = []
+    }
+    split[row[groups]].push(row[values])
   })
-  const result = stdlib.stats.kruskalTest(...samples, {alpha: significance})
+  samples = Object.keys(split).map(key => split[key])
+  const result = TbManager.stdlib.stats.kruskalTest(...samples,
+                                                    {alpha: significance})
   const legend = {
-    title: 'Kruskal-Wallis test',
+    _title: 'Kruskal-Wallis test',
     rejected: 'is null hypothesis rejected?',
     pValue: 'p-value',
     statistic: 'measure value',
@@ -865,7 +772,7 @@ const tbKruskalWallisTest = (stdlib, dataframe, blockId, parameters, columns) =>
 /**
  * Store a dataframe.
  */
-class TidyBlocksDataFrame {
+class TbDataFrame {
 
   /**
    * Construct a new dataframe.
@@ -903,7 +810,7 @@ class TidyBlocksDataFrame {
       return op(row)
     })
     const newColumns = this._makeColumns(newData, this.columns)
-    return new TidyBlocksDataFrame(newData, newColumns)
+    return new TbDataFrame(newData, newColumns)
   }
 
   /**
@@ -926,11 +833,11 @@ class TidyBlocksDataFrame {
         nextGroupId += 1
       }
       const newRow = {...row}
-      newRow[GROUPCOL] = thisGroupId
+      newRow[TbDataFrame.GROUPCOL] = thisGroupId
       return newRow
     })
-    const newColumns = this._makeColumns(groupedData, this.columns, {add: [GROUPCOL]})
-    return new TidyBlocksDataFrame(groupedData, newColumns)
+    const newColumns = this._makeColumns(groupedData, this.columns, {add: [TbDataFrame.GROUPCOL]})
+    return new TbDataFrame(groupedData, newColumns)
   }
 
   /**
@@ -950,7 +857,7 @@ class TidyBlocksDataFrame {
       return newRow
     })
     const newColumns = this._makeColumns(newData, this.columns, {add: [newName]})
-    return new TidyBlocksDataFrame(newData, newColumns)
+    return new TbDataFrame(newData, newColumns)
   }
 
   /**
@@ -970,7 +877,7 @@ class TidyBlocksDataFrame {
       })
       return result
     })
-    return new TidyBlocksDataFrame(newData, columns)
+    return new TbDataFrame(newData, columns)
   }
 
   /**
@@ -1001,7 +908,7 @@ class TidyBlocksDataFrame {
     if (reverse) {
       result.reverse()
     }
-    return new TidyBlocksDataFrame(result, this.columns)
+    return new TbDataFrame(result, this.columns)
   }
 
   /**
@@ -1030,7 +937,7 @@ class TidyBlocksDataFrame {
     })
 
     // Create new dataframe.
-    return new TidyBlocksDataFrame(newData, newColumnNames)
+    return new TbDataFrame(newData, newColumnNames)
   }
 
   /**
@@ -1038,15 +945,15 @@ class TidyBlocksDataFrame {
    * @returns A new dataframe.
    */
   ungroup (blockId) {
-    tbAssert(this.hasColumns(GROUPCOL),
+    tbAssert(this.hasColumns(TbDataFrame.GROUPCOL),
              `[block ${blockId}] cannot ungroup data that is not grouped`)
     const newData = this.data.map(row => {
       row = {...row}
-      delete row[GROUPCOL]
+      delete row[TbDataFrame.GROUPCOL]
       return row
     })
-    const newColumns = this._makeColumns(newData, this.columns, {remove: [GROUPCOL]})
-    return new TidyBlocksDataFrame(newData, newColumns)
+    const newColumns = this._makeColumns(newData, this.columns, {remove: [TbDataFrame.GROUPCOL]})
+    return new TbDataFrame(newData, newColumns)
   }
 
   /**
@@ -1062,7 +969,7 @@ class TidyBlocksDataFrame {
     const seen = new Map()
     const newData = []
     this.data.forEach(row => this._findUnique(blockId, seen, newData, row, columns))
-    return new TidyBlocksDataFrame(newData, columns)
+    return new TbDataFrame(newData, columns)
   }
 
   //------------------------------------------------------------------------------
@@ -1100,7 +1007,7 @@ class TidyBlocksDataFrame {
       for (let rightRow of rightFrame.data) { 
         if (leftRow[leftColumn] === rightRow[rightColumn]) {
           const row = {}
-          row[JOINCOL] = leftRow[leftColumn]
+          row[TbDataFrame.JOINCOL] = leftRow[leftColumn]
           this._addFields(row, leftFrameName, leftRow, leftColumn)
           this._addFields(row, rightFrameName, rightRow, rightColumn)
           result.push(row)
@@ -1112,7 +1019,7 @@ class TidyBlocksDataFrame {
     this._addColumnsExcept(newColumns, leftFrameName, leftFrame.columns, leftColumn)
     this._addColumnsExcept(newColumns, rightFrameName, rightFrame.columns, rightColumn)
 
-    return new TidyBlocksDataFrame(result, newColumns)
+    return new TbDataFrame(result, newColumns)
   }
 
   /**
@@ -1146,7 +1053,7 @@ class TidyBlocksDataFrame {
       result.push({table: rightFrameName, value: row[rightColumn]})
     }
     
-    return new TidyBlocksDataFrame(result)
+    return new TbDataFrame(result)
   }
 
   /**
@@ -1188,7 +1095,7 @@ class TidyBlocksDataFrame {
     this._addColumnsExcept(newColumns, leftFrameName, leftFrame.columns)
     this._addColumnsExcept(newColumns, rightFrameName, rightFrame.columns)
 
-    return new TidyBlocksDataFrame(newRows, newColumns)
+    return new TbDataFrame(newRows, newColumns)
   }
 
   //------------------------------------------------------------------------------
@@ -1225,7 +1132,7 @@ class TidyBlocksDataFrame {
   test (environment, blockId, testFunc, parameters, ...columns) {
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) ${columns} in tbbZTestOneSample`)
-    const {result, legend} = testFunc(environment.stdlib, this, blockId, parameters, columns)
+    const {result, legend} = testFunc(this, blockId, parameters, columns)
     environment.displayStats(result, legend)
     return this
   }
@@ -1343,7 +1250,7 @@ class TidyBlocksDataFrame {
     // Divide values into groups.
     const groups = new Map()
     data.forEach(row => {
-      const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
+      const groupId = (TbDataFrame.GROUPCOL in row) ? row[TbDataFrame.GROUPCOL] : null
       if (! groups.has(groupId)) {
         groups.set(groupId, [])
       }
@@ -1358,7 +1265,7 @@ class TidyBlocksDataFrame {
 
     // Paste back in each row.
     data.forEach(row => {
-      const groupId = (GROUPCOL in row) ? row[GROUPCOL] : null
+      const groupId = (TbDataFrame.GROUPCOL in row) ? row[TbDataFrame.GROUPCOL] : null
       row[destColumn] = groups.get(groupId)
     })
   }
@@ -1384,18 +1291,24 @@ class TidyBlocksDataFrame {
   }
 }
 
+TbDataFrame.MISSING = undefined    // Value to indicate missing values.
+TbDataFrame.GROUPCOL = '_group_'   // Column containing group.
+TbDataFrame.JOINCOL = '_join_'     // Column containing join key.
+
 //--------------------------------------------------------------------------------
 
 /**
  * Manage execution of all data pipelines.
  */
-class TidyBlocksManagerClass {
+class TidyBlocksManager {
 
   /**
    * Create manager.
    */
   constructor () {
     this.reset()
+    this.start = '/* tidyblocks start */'
+    this.end = '/* tidyblocks end */'
   }
 
   /**
@@ -1429,7 +1342,7 @@ class TidyBlocksManagerClass {
   /**
    * Get the output of a completed pipeline.
    * @param {string} name Name of completed pipeline.
-   * @return TidyBlocksDataFrame.
+   * @return TbDataFrame.
    */
   getResult (name) {
     return this.results.get(name)
@@ -1439,7 +1352,7 @@ class TidyBlocksManagerClass {
    * Notify the manager that a named pipeline has finished running.
    * This enqueues pipeline functions to run if their dependencies are satisfied.
    * @param {string} name Name of the pipeline that just completed.
-   * @param {Object} dataFrame The TidyBlocksDataFrame produced by the pipeline.
+   * @param {Object} dataFrame The TbDataFrame produced by the pipeline.
    */
   notify (name, dataFrame) {
     this.results.set(name, dataFrame)
@@ -1486,10 +1399,10 @@ class TidyBlocksManagerClass {
     environment.displayError('') // clear legacy errors
     try {
       let code = environment.getCode()
-      if (! code.includes(TIDYBLOCKS_START)) {
+      if (! code.includes(this.start)) {
         throw new Error('pipeline does not have a valid start block')
       }
-      code = fixCode(code)
+      code = this.fixCode(code)
       eval(code)
       while (this.queue.length > 0) {
         const func = this.queue.shift()
@@ -1500,25 +1413,100 @@ class TidyBlocksManagerClass {
       environment.displayError(err.message)
     }
   }
+
+  /**
+   * Get the prefix for registering blocks.
+   * @param {string} fill Comma-separated list of quoted strings identifying pipelines to wait for.
+   * @returns {string} Text to insert into generated code.
+   */
+  registerPrefix (fill) {
+    return `${this.start} TbManager.register([${fill}], () => {`
+  }
+
+  /**
+   * Get the suffix for registering blocks.
+   * @param {string} fill Single quoted string identifying pipeline produced.
+   * @returns {string} Text to insert into generated code.
+   */
+  registerSuffix (fill) {
+    return `}, [${fill}]) ${this.end}`
+  }
+
+  /**
+   * Fix up runnable code if it isn't properly terminated yet.
+   * @param {string} code Pipeline code to be terminated if necessary.
+   */
+  fixCode (code) {
+    if (! code.endsWith(this.end)) {
+      const suffix = this.registerSuffix('')
+      code += `.plot(environment, {}) ${suffix}`
+    }
+    return code
+  }
+
+  /**
+   * Turn block of CSV text into TbDataFrame.
+   * @param {string} text Text to parse.
+   * @returns New dataframe with sanitized column headers.
+   */
+  csv2tbDataFrame (text) {
+    const seen = new Map() // used across all calls to transformHeader
+    const transformHeader = (name) => {
+      // Simple character fixes.
+      name = name
+        .trim()
+        .replace(/ /g, '_')
+        .replace(/[^A-Za-z0-9_]/g, '')
+
+      // Ensure header is not empty after character fixes.
+      if (name.length === 0) {
+        name = 'EMPTY'
+      }
+
+      // Name must start with underscore or letter.
+      if (! name.match(/^[_A-Za-z]/)) {
+        name = `_${name}`
+      }
+
+      // Name must be unique.
+      if (seen.has(name)) {
+        const serial = seen.get(name) + 1
+        seen.set(name, serial)
+        name = `${name}_${serial}`
+      }
+      else {
+        seen.set(name, 0)
+      }
+
+      return name
+    }
+
+    const result = TbManager.papa.parse(text.trim(), {
+      dynamicTyping: true,
+      header: true,
+      skipEmptyLines: true,
+      transformHeader: transformHeader,
+      transform: function(value) {
+        return (value === "NA" | value === null) ? undefined : value
+      },  
+    })
+    return new TbDataFrame(result.data)
+  }
 }
 
 /**
  * Singleton instance of manager.
+ * External library references are attached in 'index.html' or after import
+ * for testing in order to simplify namespace management.
  */
-const TidyBlocksManager = new TidyBlocksManagerClass()
+const TbManager = new TidyBlocksManager()
 
 //--------------------------------------------------------------------------------
 
 // Make this file require'able if running from the command line.
 if (typeof module !== 'undefined') {
   module.exports = {
-    MISSING,
-    GROUPCOL,
-    JOINCOL,
-    csv2TidyBlocksDataFrame,
-    registerPrefix,
-    registerSuffix,
-    TidyBlocksDataFrame,
-    TidyBlocksManager
+    TbDataFrame,
+    TbManager
   }
 }

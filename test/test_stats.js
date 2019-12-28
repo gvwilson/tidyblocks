@@ -1,14 +1,8 @@
 const assert = require('assert')
 
 const {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  TbDataFrame,
+  TbManager,
   assert_approxEquals,
   assert_hasKey,
   assert_includes,
@@ -19,8 +13,7 @@ const {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks,
-  stdlib
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -34,7 +27,7 @@ before(() => {
 describe('statistics tests', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('runs a one-sample Z-test', (done) => {
@@ -50,7 +43,7 @@ describe('statistics tests', () => {
     assert.equal(env.error, '',
                  'Expected no error from statistical test')
     const {values, legend} = env.stats
-    assert.equal(legend.title, 'one-sample Z-test',
+    assert.equal(legend._title, 'one-sample Z-test',
                  'Wrong title')
     assert.equal(values.rejected, true,
                  'Wrong result')
@@ -64,19 +57,20 @@ describe('statistics tests', () => {
     const pipeline = [
       {_b: 'data_colors'},
       {_b: 'statistics_kruskal_wallis_test',
-       MULTIPLE_COLUMNS: 'green, blue',
+       GROUPS: 'green',
+       VALUES: 'blue',
        SIGNIFICANCE: 0.05}
     ]
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  'Expected no error from statistical test')
     const {values, legend} = env.stats
-    assert.equal(legend.title, 'Kruskal-Wallis test',
+    assert.equal(legend._title, 'Kruskal-Wallis test',
                  'Wrong title')
     assert.equal(values.rejected, false,
                  'Wrong result')
-    assert_approxEquals(values.pValue, 1.0,
-                        'Wrong p-value')
+    assert((0.6 <= values.pValue) && (values.pValue <= 0.7),
+           'Wrong p-value')
     done()
   })
 

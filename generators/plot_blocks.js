@@ -27,7 +27,7 @@ Blockly.JavaScript['plot_bar'] = (block) => {
       }
     }
   }`
-  const suffix = registerSuffix('')
+  const suffix = TbManager.registerSuffix('')
   return `.plot(environment, ${spec}) ${suffix}`
 }
 
@@ -55,7 +55,7 @@ Blockly.JavaScript['plot_box'] = (block) => {
       }
     }
   }`
-  const suffix = registerSuffix('')
+  const suffix = TbManager.registerSuffix('')
   return `.plot(environment, ${spec}) ${suffix}`
 }
 
@@ -84,7 +84,7 @@ Blockly.JavaScript['plot_dot'] = (block) => {
       "y": {"field": "id", "type": "ordinal", "axis": null, "sort": "descending"}
     }
   }`
-  const suffix = registerSuffix('')
+  const suffix = TbManager.registerSuffix('')
   return `.plot(environment, ${spec}) ${suffix}`
 }
 
@@ -114,7 +114,7 @@ Blockly.JavaScript['plot_hist'] = (block) => {
       "tooltip": null
     }
   }`
-  const suffix = registerSuffix('')
+  const suffix = TbManager.registerSuffix('')
   return `.plot(environment, ${spec}) ${suffix}`
 }
 
@@ -144,7 +144,7 @@ Blockly.JavaScript['plot_point'] = (block) => {
       }
     }
   }`
-  const suffix = registerSuffix('')
+  const suffix = TbManager.registerSuffix('')
   return `.plot(environment, ${spec}) ${suffix}`
 }
 
@@ -152,6 +152,6 @@ Blockly.JavaScript['plot_point'] = (block) => {
 // Create a "plot" that just shows the table.
 //
 Blockly.JavaScript['plot_table'] = (block) => {
-  const suffix = registerSuffix('')
+  const suffix = TbManager.registerSuffix('')
   return `.plot(environment, {}) ${suffix}`
 }

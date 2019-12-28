@@ -111,7 +111,7 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'value_uniform',
-    message0: 'Uniform low %1 high %2',
+    message0: 'Uniform low α %1 high β %2',
     args0: [
       {
         type: 'field_input',
@@ -137,7 +137,7 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'value_normal',
-    message0: 'Normal mean %1 variance %2',
+    message0: 'Normal mean μ %1 std dev σ %2',
     args0: [
       {
         type: 'field_input',
@@ -163,7 +163,7 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'value_exponential',
-    message0: 'Exponential rate %1',
+    message0: 'Exponential rate λ %1',
     args0: [
       {
         type: 'field_input',

@@ -117,7 +117,7 @@
           <li><a data-toggle="tab" href="#plot">Plot</a></li>
           <li><a data-toggle="tab" href="#stats">Stats</a></li>
           <li><a data-toggle="tab" href="#debug">Debug</a></li>
-          <li><a data-toggle="tab" href="#text">Text</a></li>
+          <li><a data-toggle="tab" href="#code">Code</a></li>
         </ul>
 
         <div class="tab-content">
@@ -133,18 +133,7 @@
           <div id="debug" class="tab-pane fade">
             <div id="error"></div>
           </div>
-          <div id="text" class="tab-pane fade">
-
-            <div class="language">
-              <div class="select-style">
-                <select>
-                  <option value="javascript">JavaScript</option>
-                  <option value="python" disabled>Python</option>
-                  <option value="r" disabled>R</option>
-                </select>
-              </div>
-            </div>
-
+          <div id="code" class="tab-pane fade">
             <div id="codeOutput"></div>
           </div>
         </div>
@@ -168,9 +157,6 @@
     <!-- Call with fully-qualified names, e.g. stdlib.math.base.special.gcd(18, 8) -->
     <script src="static/stdlib-tree.min.js"></script>
 
-    <!-- TidyBlocks GUI (outside the #tidyblocks div so that tests won't try to load it) -->
-    <script src="tidyblocks/gui.js"></script>
-
     <!-- Put all blocks code in a div so it's easy to find and load for testing. -->
     <div id="tidyblocks">
       <!-- TidyBlocks supports -->
@@ -188,19 +174,23 @@
       <script src="blocks/value_blocks.js"></script>
 
       <!-- TidyBlocks code generators -->
-      <script src="generators/js/data_blocks.js"></script>
-      <script src="generators/js/operation_blocks.js"></script>
-      <script src="generators/js/plot_blocks.js"></script>
-      <script src="generators/js/combine_blocks.js"></script>
-      <script src="generators/js/statistics_blocks.js"></script>
-      <script src="generators/js/transform_blocks.js"></script>
-      <script src="generators/js/transform_summarize_item.js"></script>
-      <script src="generators/js/value_blocks.js"></script>
+      <script src="generators/data_blocks.js"></script>
+      <script src="generators/operation_blocks.js"></script>
+      <script src="generators/plot_blocks.js"></script>
+      <script src="generators/combine_blocks.js"></script>
+      <script src="generators/statistics_blocks.js"></script>
+      <script src="generators/transform_blocks.js"></script>
+      <script src="generators/transform_summarize_item.js"></script>
+      <script src="generators/value_blocks.js"></script>
     </div>
 
+    <!-- TidyBlocks GUI (outside the #tidyblocks div so that tests won't try to load it) -->
+    <script src="tidyblocks/gui.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', (event) => {
         setUpBlockly()
+        TBManager.papa = Papa // make CSV parser available inside blocks
+        TBManager.stdlib = stdlib // make math libraries available inside blocks
       })
     </script>
   </body>

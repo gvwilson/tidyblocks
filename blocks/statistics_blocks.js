@@ -4,8 +4,10 @@
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'statistics_z_test_one_sample',
-    message0: 'One-sample Z-test column %1 μ %2 σ %3 α %4',
-    args0: [
+    message0: 'One-sample Z-test',
+    args0: [],
+    message1: 'column %1 mean μ %2 std dev σ %3 critical α %4',
+    args1: [
       {
         type: 'field_input',
         name: 'COLUMN',
@@ -27,7 +29,7 @@ Blockly.defineBlocksWithJsonArray([
         value: 0.05
       }
     ],
-    inputsInline: true,
+    inputsInline: false,
     previousStatement: null,
     style: 'statistics_blocks',
     tooltip: 'perform one-sample Z-test',
@@ -41,12 +43,19 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'statistics_kruskal_wallis_test',
-    message0: 'Kruskal-Wallis test columns %1 α %2',
-    args0: [
+    message0: 'Kruskal-Wallis test',
+    args0: [],
+    message1: 'groups %1 values %2 critical α %3',
+    args1: [
       {
         type: 'field_input',
-        name: 'MULTIPLE_COLUMNS',
-        text: 'column, column'
+        name: 'GROUPS',
+        text: 'column'
+      },
+      {
+        type: 'field_input',
+        name: 'VALUES',
+        text: 'column'
       },
       {
         type: 'field_number',
@@ -54,7 +63,7 @@ Blockly.defineBlocksWithJsonArray([
         value: 0.05
       }
     ],
-    inputsInline: true,
+    inputsInline: false,
     previousStatement: null,
     style: 'statistics_blocks',
     tooltip: 'perform Kruskal-Wallis test',

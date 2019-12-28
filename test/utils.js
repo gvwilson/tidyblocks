@@ -1,31 +1,32 @@
 const assert = require('assert')
 const fs = require('fs')
 const {parse} = require('node-html-parser')
-const Papa = require('papaparse')
 
 //
 // Loading our own utilities using 'require' instead of relying on them to be
 // loaded by the browser takes a bit of hacking. We put the current directory on
 // the module search path, then 'require' the files. Inside those files, we
 // check if 'module' is defined before trying to define the exports.
+// We then attach 'papa' and 'stdlib' to 'TbManager' so that it will be
+// accessible inside the rest of our code. It's a disgusting hack.
 //
 module.paths.unshift(process.cwd())
 const {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager
+  TbDataFrame,
+  TbManager
 } = require('tidyblocks/tidyblocks')
-const stdlib = require('static/stdlib-tree.min')
+TbManager.papa = require('papaparse')
+TbManager.stdlib = require('static/stdlib-tree.min')
 
 /**
  * Default tolerance for relative error.
  */
 const TOLERANCE = 1.0e-10
+
+/**
+ * Argument arrays to look for in blocks.
+ */
+const ARGS_N = ['args0', 'args1', 'args2']
 
 /**
  * Assert that two values are approximately equal.
@@ -171,14 +172,16 @@ class BlocklyClass {
       assert(!(entry.type in this.fields),
              `Duplicate block of type ${entry.type}`)
       this.fields[entry.type] = new Set()
-      if ('args0' in entry) {
-        entry.args0.forEach(field => {
-          const name = field.name
-          assert(! this.fields[entry.type].has(name),
-                 `Duplicate field ${name} in ${entry.type}`)
-          this.fields[entry.type].add(name)
+      ARGS_N
+        .filter(argsN => (argsN in entry))
+        .forEach(argsN => {
+          entry[argsN].forEach(field => {
+            const name = field.name
+            assert(! this.fields[entry.type].has(name),
+                   `Duplicate field ${name} in ${entry.type}`)
+            this.fields[entry.type].add(name)
+          })
         })
-      }
     })
   }
 }
@@ -190,7 +193,7 @@ let Blockly = null;
 class MockBlock {
   constructor (settings) {
     Object.assign(this, settings)
-    TidyBlocksManager.addNewBlock(this)
+    TbManager.addNewBlock(this)
   }
 
   getFieldValue (key) {
@@ -209,12 +212,12 @@ class MockBlock {
 const makeBlock = (blockName, settings) => {
   assert(blockName in Blockly.fields,
          `Unknown block name "${blockName}"`)
-  Object.keys(settings).forEach(name => {
-    if (name != '_b') {
+  Object.keys(settings)
+    .filter(name => (! name.startsWith('_')))
+    .forEach(name => {
       assert(Blockly.fields[blockName].has(name),
              `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
-    }
-  })
+    })
   assert(blockName in Blockly.JavaScript,
          `Unknown block name "${blockName}"`)
 
@@ -250,7 +253,7 @@ const makeCode = (root) => {
  * Delete an existing block. (Emulates the drag-and-drop delete in the GUI.)
  */
 const deleteBlock = (block) => {
-  TidyBlocksManager.deleteBlock(block)
+  TbManager.deleteBlock(block)
 }
 
 //--------------------------------------------------------------------------------
@@ -297,7 +300,6 @@ class TestEnvironment {
     this.plot = null
     this.stats = null
     this.error = null
-    this.stdlib = stdlib
   }
 
   /**
@@ -312,21 +314,14 @@ class TestEnvironment {
    * Read a CSV file.  Defined here to (a) load local CSV and (b) be in scope for
    * 'eval' of generated code.
    * @param url {string} - URL of data.
+   * @param {boolean} standard Add prefix for standard dataset location.
    * @return dataframe containing that data.
    */
-  readCSV (url) {
-    if (url.includes('raw.githubusercontent.com')) {
-      url = 'data/' + url.split('/').pop()
-    }
-    else if (url.startsWith('test://')) {
-      url = 'test/data/' + url.split('//').pop()
-    }
-    else {
-      assert(false, `Cannot read "${url}" for testing`)
-    }
-    const path = `${process.cwd()}/${url}`
+  readCSV (url, standard=false) {
+    assert(standard, `Cannot read arbitrary URL "${url}" for testing`)
+    const path = `${process.cwd()}/data/${url}`
     const text = fs.readFileSync(path, 'utf-8')
-    return csv2TidyBlocksDataFrame(text, Papa.parse)
+    return TbManager.csv2tbDataFrame(text)
   }
 
   /**
@@ -373,7 +368,7 @@ const evalCode = (code) => {
     code = code.map(code => makeCode(code)).join('\n')
   }
   const environment = new TestEnvironment(code)
-  TidyBlocksManager.run(environment)
+  TbManager.run(environment)
   return environment
 }
 
@@ -394,7 +389,7 @@ const createTestingBlocks = () => {
   ])
   Blockly.JavaScript['value_missing'] = (block) => {
     const order = Blockly.JavaScript.ORDER_NONE
-    const code = `(row) => MISSING`
+    const code = `(row) => TbDataFrame.MISSING`
     return [code, order]
   }
 }
@@ -403,14 +398,8 @@ const createTestingBlocks = () => {
 // Exports.
 //
 module.exports = {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  TbDataFrame,
+  TbManager,
   assert_approxEquals,
   assert_hasKey,
   assert_includes,
@@ -421,6 +410,5 @@ module.exports = {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks,
-  stdlib
+  createTestingBlocks
 }

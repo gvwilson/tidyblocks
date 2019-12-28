@@ -1,15 +1,8 @@
 const assert = require('assert')
-const Papa = require('papaparse')
 
 const {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  TbDataFrame,
+  TbManager,
   assert_approxEquals,
   assert_hasKey,
   assert_includes,
@@ -20,8 +13,7 @@ const {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks,
-  stdlib
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -35,14 +27,14 @@ before(() => {
 describe('CSV files are handled correctly', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('reads a single-column CSV with an unproblematic header', (done) => {
     const text = `
 First
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     assert.deepEqual(result.data, [{First: 'value'}],
                      'CSV not parsed correctly')
     done()
@@ -52,7 +44,7 @@ value`
     const text = `
  First 
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     assert.deepEqual(result.data, [{First: 'value'}],
                      'CSV header not corrected')
     done()
@@ -62,7 +54,7 @@ value`
     const text = `
  First Header 
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     assert.deepEqual(result.data, [{First_Header: 'value'}],
                      'CSV header not corrected')
     done()
@@ -72,7 +64,7 @@ value`
     const text = `
  "First (Header)" 
 value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     assert.deepEqual(result.data, [{First_Header: 'value'}],
                      'CSV header not corrected')
     done()
@@ -82,7 +74,7 @@ value`
     const text = `
  "First (Header)" , 123Second, =+~$%^#@
 value, 123, something`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     assert.deepEqual(result.data,
                      [{First_Header: 'value', _123Second: 123, EMPTY: ' something'}],
                      'CSV header not corrected')
@@ -93,7 +85,7 @@ value, 123, something`
     const text = `
 Header,Header,Header
 value,value,value`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     assert.deepEqual(result.data,
                      [{Header: 'value', Header_1: 'value', Header_2: 'value'}],
                      'Repeated column names not corrected')
@@ -109,14 +101,14 @@ NA,"two"
 4,
 ,five
 6,""`
-    const result = csv2TidyBlocksDataFrame(text, Papa.parse)
+    const result = TbManager.csv2tbDataFrame(text)
     const expected =  [
       {number: 1, string: 'one'},
-      {number: MISSING, string: 'two'},
-      {number: 3, string: MISSING},
-      {number: 4, string: MISSING},
-      {number: MISSING, string: 'five'},
-      {number: 6, string: MISSING}
+      {number: TbDataFrame.MISSING, string: 'two'},
+      {number: 3, string: TbDataFrame.MISSING},
+      {number: 4, string: TbDataFrame.MISSING},
+      {number: TbDataFrame.MISSING, string: 'five'},
+      {number: 6, string: TbDataFrame.MISSING}
     ]
     assert.deepEqual(result.data, expected,
                      `NAs not handled correctly during parsing`)
@@ -128,7 +120,7 @@ NA,"two"
 describe('blocks are given IDs and can be looked up', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('gives each block a sequential ID', (done) => {
@@ -149,10 +141,10 @@ describe('blocks are given IDs and can be looked up', () => {
               'value_number',
               {VALUE: 0})})})
     ]
-    assert.equal(TidyBlocksManager.getNumBlocks(), 5,
+    assert.equal(TbManager.getNumBlocks(), 5,
                  'Wrong number of blocks recorded')
     for (let i=0; i<5; i++) {
-      const block = TidyBlocksManager.getBlock(i)
+      const block = TbManager.getBlock(i)
       assert(block,
              'Block does not exist')
       assert.equal(block.tbId, i,
@@ -166,17 +158,17 @@ describe('blocks are given IDs and can be looked up', () => {
 describe('testing utilities run correctly', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('checks column existence correctly', (done) => {
-    assert(! (new TidyBlocksDataFrame([])).hasColumns('missing'),
+    assert(! (new TbDataFrame([])).hasColumns('missing'),
            'Did not expect empty frame to have columns')
-    assert((new TidyBlocksDataFrame([{first: 1}])).hasColumns('first'),
+    assert((new TbDataFrame([{first: 1}])).hasColumns('first'),
            'Expected dataframe to have column')
-    assert((new TidyBlocksDataFrame([{first: 1, second: 2}])).hasColumns(['first', 'second']),
+    assert((new TbDataFrame([{first: 1, second: 2}])).hasColumns(['first', 'second']),
            'Expected dataframe to have both columns')
-    assert(! (new TidyBlocksDataFrame([{first: 1}])).hasColumns(['first', 'second']),
+    assert(! (new TbDataFrame([{first: 1}])).hasColumns(['first', 'second']),
            'Did not expect dataframe to have both columns')
     done()
   })
@@ -208,7 +200,7 @@ describe('testing utilities run correctly', () => {
                  `Expected no error when creating missing value`)
     assert.equal(env.frame.data.length, 1,
                  `Expected one row of output`)
-    assert.equal(env.frame.data[0].na, MISSING,
+    assert.equal(env.frame.data[0].na, TbDataFrame.MISSING,
                  `Expected missing value in new column`)
     done()
   })
@@ -235,11 +227,11 @@ describe('testing utilities run correctly', () => {
 describe('external libraries are loaded correctly', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
-  it('loads stdlib', (done) => {
-    assert.equal(stdlib.math.base.special.gcd(18, 8), 2,
+  it('loads stdlib and attaches it to TbManager', (done) => {
+    assert.equal(TbManager.stdlib.math.base.special.gcd(18, 8), 2,
                  'Incorrect result from stdlib GCD')
     done()
   })

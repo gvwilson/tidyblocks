@@ -1,14 +1,8 @@
 const assert = require('assert')
 
 const {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  TbDataFrame,
+  TbManager,
   assert_approxEquals,
   assert_hasKey,
   assert_includes,
@@ -19,8 +13,7 @@ const {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks,
-  stdlib
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -34,7 +27,7 @@ before(() => {
 describe('raises errors at the right times', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('raises an error when constructing a block with an empty column name', (done) => {

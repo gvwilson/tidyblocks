@@ -1,14 +1,8 @@
 const assert = require('assert')
 
 const {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  TbDataFrame,
+  TbManager,
   assert_approxEquals,
   assert_hasKey,
   assert_includes,
@@ -19,8 +13,7 @@ const {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks,
-  stdlib
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -34,7 +27,7 @@ before(() => {
 describe('generate code for single blocks', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('generates code to re-create the colors data', (done) => {
@@ -92,9 +85,9 @@ describe('generate code for single blocks', () => {
   it('generates a 1x1 dataframe', (done) => {
     const pipeline = {_b: 'data_single'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
+    assert_includes(code, 'TbManager.register',
                     'pipeline is not registered')
-    assert_includes(code, 'new TidyBlocksDataFrame',
+    assert_includes(code, 'new TbDataFrame',
                     'pipeline does not create dataframe')
     done()
   })
@@ -129,8 +122,8 @@ describe('generate code for single blocks', () => {
                       TEST: {_b: 'value_column',
                              COLUMN: 'existingColumn'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '.filter',
-                      'pipeline does not start with filter call')
+    assert_includes(code, '.filter',
+                    'pipeline does not start with filter call')
     assert_includes(code, '=>',
                     'pipeline does not include arrow function')
     done()
@@ -148,7 +141,7 @@ describe('generate code for single blocks', () => {
   it('generates code to ungroup', (done) => {
     const pipeline = {_b: 'transform_ungroup'}
     const code = makeCode(pipeline)
-    assert.equal(code, '.ungroup(0)',
+    assert.equal(code.trim(), '.ungroup(0)',
                  'pipeline does not ungroup rows')
     done()
   })
@@ -159,8 +152,8 @@ describe('generate code for single blocks', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existingColumn'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '.mutate',
-                      'pipeline does not start with mutate call')
+    assert_includes(code, '.mutate',
+                    'pipeline does not start with mutate call')
     assert_includes(code, '=>',
                     'pipeline does not include arrow function')
     assert_includes(code, 'newColumnName',
@@ -174,8 +167,8 @@ describe('generate code for single blocks', () => {
     const pipeline = {_b: 'transform_drop',
                       MULTIPLE_COLUMNS: 'existingColumn'}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '.drop',
-                      'pipeline does not start with drop call')
+    assert_includes(code, '.drop',
+                    'pipeline does not start with drop call')
     assert_includes(code, 'existingColumn',
                     'pipeline does not include existing column name')
     done()
@@ -185,8 +178,8 @@ describe('generate code for single blocks', () => {
     const pipeline = {_b: 'transform_select',
                       MULTIPLE_COLUMNS: 'existingColumn'}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '.select',
-                      'pipeline does not start with select call')
+    assert_includes(code, '.select',
+                    'pipeline does not start with select call')
     assert_includes(code, 'existingColumn',
                     'pipeline does not include existing column name')
     done()
@@ -197,7 +190,7 @@ describe('generate code for single blocks', () => {
                       MULTIPLE_COLUMNS: 'blue',
                       DESCENDING: 'FALSE'}
     const code = makeCode(pipeline)
-    assert.equal(code, '.sort(0, ["blue"], false)',
+    assert.equal(code.trim(), '.sort(0, ["blue"], false)',
                  'pipeline does not sort by expected column')
     done()
   })
@@ -207,7 +200,7 @@ describe('generate code for single blocks', () => {
                       MULTIPLE_COLUMNS: 'red,green',
                       DESCENDING: 'FALSE'}
     const code = makeCode(pipeline)
-    assert.equal(code, '.sort(0, ["red","green"], false)',
+    assert.equal(code.trim(), '.sort(0, ["red","green"], false)',
                  'pipeline does not sort by expected columns')
     done()
   })
@@ -217,7 +210,7 @@ describe('generate code for single blocks', () => {
                       MULTIPLE_COLUMNS: 'red,green',
                       DESCENDING: 'TRUE'}
   const code = makeCode(pipeline)
-  assert.equal(code, '.sort(0, ["red","green"], true)',
+    assert.equal(code.trim(), '.sort(0, ["red","green"], true)',
                'pipeline does not sort descending by expected columns')
   done()
   })
@@ -229,7 +222,7 @@ describe('generate code for single blocks', () => {
                          FUNC: 'tbMean',
                          COLUMN: 'someColumn'}]}
     const code = makeCode(pipeline)
-    assert.equal(code, '.summarize(1, [0, tbMean, "someColumn"])',
+    assert.equal(code.trim(), '.summarize(1, [0, tbMean, "someColumn"])',
                  'code does not call summarize correctly')
     done()
   })
@@ -238,8 +231,8 @@ describe('generate code for single blocks', () => {
     const pipeline = {_b: 'transform_unique',
                       MULTIPLE_COLUMNS: 'someColumn'}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '.unique',
-                      'pipeline does not start with unique call')
+    assert_includes(code, '.unique',
+                    'pipeline does not start with unique call')
     assert_includes(code, 'someColumn',
                     'pipeline does not include column name')
     done()
@@ -321,7 +314,8 @@ describe('generate code for single blocks', () => {
     const pipeline = {_b: 'combine_notify',
                       NAME: 'output_name'}
     const code = makeCode(pipeline)
-    assert.equal(code, ".notify((name, frame) => TidyBlocksManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
+    assert.equal(code.trim(),
+                 ".notify((name, frame) => TbManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
                  'pipeine does not notify properly')
     done()
   })
@@ -335,11 +329,11 @@ describe('generate code for single blocks', () => {
                       RIGHT_COLUMN: {_b: 'value_column',
                                      COLUMN: 'right_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
+    assert_includes(code, 'TbManager.register',
                     'pipeline is not registered')
     assert_includes(code, "['left_table', 'right_table']",
                     'pipeline does not register dependencies')
-    assert_includes(code, 'new TidyBlocksDataFrame',
+    assert_includes(code, 'new TbDataFrame',
                     'pipeline does not create a new dataframe')
     done()
   })
@@ -353,11 +347,11 @@ describe('generate code for single blocks', () => {
                       RIGHT_COLUMN: {_b: 'value_column',
                                      COLUMN: 'right_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, 'TidyBlocksManager.register',
+    assert_includes(code, 'TbManager.register',
                     'pipeline is not registered')
     assert_includes(code, "['left_table', 'right_table']",
                     'pipeline does not register dependencies')
-    assert_includes(code, 'new TidyBlocksDataFrame',
+    assert_includes(code, 'new TbDataFrame',
                     'pipeline does not create a new dataframe')
     done()
   })
@@ -537,9 +531,10 @@ describe('generate code for single blocks', () => {
   })
   
 
-  it('generates code for Kruskal-Wallis test on two columns', (done) => {
+  it('generates code for Kruskal-Wallis test using grouped values', (done) => {
     const pipeline = {_b: 'statistics_kruskal_wallis_test',
-                      MULTIPLE_COLUMNS: 'green, blue',
+                      GROUPS: 'green',
+                      VALUES: 'blue',
                       SIGNIFICANCE: 0.01}
     const code = makeCode(pipeline)
     assert_includes(code, '.test',

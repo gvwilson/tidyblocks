@@ -1,14 +1,8 @@
 const assert = require('assert')
 
 const {
-  MISSING,
-  GROUPCOL,
-  JOINCOL,
-  csv2TidyBlocksDataFrame,
-  registerPrefix,
-  registerSuffix,
-  TidyBlocksDataFrame,
-  TidyBlocksManager,
+  TbDataFrame,
+  TbManager,
   assert_approxEquals,
   assert_hasKey,
   assert_includes,
@@ -19,8 +13,7 @@ const {
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks,
-  stdlib
+  createTestingBlocks
 } = require('./utils')
 
 //
@@ -34,7 +27,7 @@ before(() => {
 describe('execute blocks for entire pipelines', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('creates a dataset by parsing a local CSV file', (done) => {
@@ -133,6 +126,8 @@ describe('execute blocks for entire pipelines', () => {
        DESCENDING: 'FALSE'}
     ]
     const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error')
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in result')
     const ordering = env.frame.data.map((row) => (1000 * row.red) + row.green)
@@ -415,7 +410,7 @@ describe('execute blocks for entire pipelines', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 2,
                  `Expected two rows, not ${env.frame.data.length}`)
-    assert(env.frame.data.every(row => (row.result === MISSING)),
+    assert(env.frame.data.every(row => (row.result === TbDataFrame.MISSING)),
            `Expected every result to be missing`)
     done()
   })
@@ -436,7 +431,7 @@ describe('execute blocks for entire pipelines', () => {
                    `Expected no error message, got "${env.error}" for type ${type}`)
       assert.equal(env.frame.data.length, 1,
                    `Expected only one row to have missing ${type}`)
-      assert.equal(env.frame.data[0][type], MISSING,
+      assert.equal(env.frame.data[0][type], TbDataFrame.MISSING,
                    `Wrong value is missing in surviving row`)
     }
     done()
@@ -459,7 +454,7 @@ describe('execute blocks for entire pipelines', () => {
                    `Expected no error message, got "${env.error}" for type ${type}`)
       assert.equal(env.frame.data.length, 3,
                    `Expected only one row to be dropped`)
-      assert(env.frame.data.every(row => (row[type] !== MISSING)),
+      assert(env.frame.data.every(row => (row[type] !== TbDataFrame.MISSING)),
              `Incorrect values have been dropped for ${type}`)
     }
     done()
@@ -470,7 +465,7 @@ describe('execute blocks for entire pipelines', () => {
 describe('check plotting', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('creates a table that can be checked', (done) => {
@@ -555,7 +550,7 @@ describe('check plotting', () => {
 describe('check table combining', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('filters data using not-equals and registers the result', (done) => {
@@ -572,11 +567,11 @@ describe('check table combining', () => {
        NAME: 'left'}
     ]
     const env = evalCode(pipeline)
-    assert(TidyBlocksManager.getResult('left'),
+    assert(TbManager.getResult('left'),
            'Expected something registered under "left"')
-    assert.equal(TidyBlocksManager.getResult('left').data.length, 5,
+    assert.equal(TbManager.getResult('left').data.length, 5,
                  'Expected five rows with red != 0')
-    assert(TidyBlocksManager.getResult('left').data.every(row => (row.red != 0)),
+    assert(TbManager.getResult('left').data.every(row => (row.red != 0)),
            'Expected all rows to have red != 0')
     done()
   })
@@ -604,7 +599,7 @@ describe('check table combining', () => {
     assert.equal(env.error, '',
                  `Expected no error`)
     const expected = [{right_second: 100}]
-    expected[0][JOINCOL] = 1
+    expected[0][TbDataFrame.JOINCOL] = 1
     assert.deepEqual(env.frame.data, expected,
                      'Incorrect join result')
     done()
@@ -671,7 +666,7 @@ describe('check table combining', () => {
        'right_name': 'white', 'right_red': 255, 'right_blue': 255}
     ]
     expected.forEach(row => {
-      row[JOINCOL] = 255
+      row[TbDataFrame.JOINCOL] = 255
     })
     assert.deepEqual(env.frame.data, expected,
                      'Incorrect join result')
@@ -713,7 +708,7 @@ describe('check table combining', () => {
 describe('check datetime handling', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('does date conversion correctly', (done) => {
@@ -856,7 +851,7 @@ describe('check datetime handling', () => {
 describe('basic operations', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('does division correctly even with zeroes', (done) => {
@@ -873,7 +868,7 @@ describe('basic operations', () => {
     ]
     const env = evalCode(pipeline)
     assert(env.frame.data.every(row => ((row.green === 0)
-                                   ? (row.ratio === MISSING)
+                                   ? (row.ratio === TbDataFrame.MISSING)
                                    : (row.ratio === (row.red / row.green)))),
            `Incorrect result(s) for division`)
     done()
@@ -894,7 +889,7 @@ describe('basic operations', () => {
     const env = evalCode(pipeline)
     assert(env.frame.data.every(row => (isFinite(row.red ** row.green)
                                    ? (row.result === (row.red ** row.green))
-                                   : (row.result === MISSING))),
+                                   : (row.result === TbDataFrame.MISSING))),
            `Incorrect result(s) for exponentiation`)
     done()
   })
@@ -916,8 +911,8 @@ describe('basic operations', () => {
 
   it('does logical operations correctly', (done) => {
     for (let funcName of ['tbAnd', 'tbOr']) {
-      for (let left of [true, false, MISSING]) {
-        for (let right of [true, false, MISSING]) {
+      for (let left of [true, false, TbDataFrame.MISSING]) {
+        for (let right of [true, false, TbDataFrame.MISSING]) {
           const pipeline = [
             {_b: 'data_double'},
             {_b: 'transform_mutate',
@@ -983,14 +978,13 @@ describe('basic operations', () => {
       const env = evalCode(pipeline)
       assert(env.frame.data.every(row => (row.result === expected)),
              `Unexpected value(s) in comparison for ${funcName}`)
-      assert(env.frame.data.every(row => (row.missing === MISSING)),
+      assert(env.frame.data.every(row => (row.missing === TbDataFrame.MISSING)),
              `Some values are not missing as expected for ${funcName}`)
     }
     done()
   })
 
   it('compares strings correctly', (done) => {
-    const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/names.csv'
     for (let [funcName, expected] of [['tbEq', [false, false, true]],
                                       ['tbNeq', [true, true, false]],
                                       ['tbLt', [false, true, false]],
@@ -999,7 +993,8 @@ describe('basic operations', () => {
                                       ['tbGeq', [true, false, true]]]) {
       const pipeline = [
         {_b: 'data_urlCSV',
-         URL: filePath},
+         _standard: true,
+         URL: 'names.csv'},
         {_b: 'transform_mutate',
          COLUMN: 'result',
          VALUE: {_b: 'operation_compare',
@@ -1025,7 +1020,7 @@ describe('basic operations', () => {
                    `Unexpected error in string comparison for ${funcName}`)
       assert.deepEqual(env.frame.data.map(row => row.result), expected,
              `Unexpected value(s) in comparison for ${funcName}`)
-      assert(env.frame.data.every(row => (row.missing === MISSING)),
+      assert(env.frame.data.every(row => (row.missing === TbDataFrame.MISSING)),
              `Some values are not missing as expected for ${funcName}`)
     }
     done()
@@ -1036,7 +1031,7 @@ describe('basic operations', () => {
 describe('missing values are handled correctly', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('handles missing values for unary operators correctly', (done) => {
@@ -1054,10 +1049,10 @@ describe('missing values are handled correctly', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expectd no error message`)
-    assert.equal(env.frame.data[0].negated, MISSING,
-                 `Expected MISSING from negation, not ${env.frame.data[0].negated}`)
-    assert.equal(env.frame.data[0].notted, MISSING,
-                 `Expected MISSING from logical negation, not ${env.frame.data[0].notted}`)
+    assert.equal(env.frame.data[0].negated, TbDataFrame.MISSING,
+                 `Expected TbDataFrame.MISSING from negation, not ${env.frame.data[0].negated}`)
+    assert.equal(env.frame.data[0].notted, TbDataFrame.MISSING,
+                 `Expected TbDataFrame.MISSING from logical negation, not ${env.frame.data[0].notted}`)
     done()
   })
 
@@ -1084,7 +1079,7 @@ describe('missing values are handled correctly', () => {
       const env = evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message`)
-      assert.equal(env.frame.data[0].result, MISSING,
+      assert.equal(env.frame.data[0].result, TbDataFrame.MISSING,
                    `Expected missing value for ${opName}`)
     }
     done()
@@ -1124,13 +1119,13 @@ describe('missing values are handled correctly', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error message when converting missing values`)
-    assert.equal(env.frame.data[0].as_boolean, MISSING,
+    assert.equal(env.frame.data[0].as_boolean, TbDataFrame.MISSING,
                  `Expected converted Boolean to be missing value, not ${env.frame.data[0].as_boolean}`)
-    assert.equal(env.frame.data[0].as_datetime, MISSING,
+    assert.equal(env.frame.data[0].as_datetime, TbDataFrame.MISSING,
                  `Expected converted date-time to be missing value, not ${env.frame.data[0].as_datetime}`)
-    assert.equal(env.frame.data[0].as_number, MISSING,
+    assert.equal(env.frame.data[0].as_number, TbDataFrame.MISSING,
                  `Expected converted number to be missing value, not ${env.frame.data[0].as_number}`)
-    assert.equal(env.frame.data[0].as_string, MISSING,
+    assert.equal(env.frame.data[0].as_string, TbDataFrame.MISSING,
                  `Expected converted string to be missing value, not ${env.frame.data[0].as_string}`)
     done()
   })
@@ -1140,7 +1135,7 @@ describe('missing values are handled correctly', () => {
 describe('type conversion and type checking', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('handles conversion to number from Boolean and string correctly', (done) => {
@@ -1273,7 +1268,7 @@ describe('type conversion and type checking', () => {
 describe('check that grouping and summarization work', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('summarizes an entire column using summation', (done) => {
@@ -1293,7 +1288,7 @@ describe('check that grouping and summarization work', () => {
                  'Expected one row of output')
     assert(env.frame.data.every(row => (row.red_sum === 1148)),
            'Rows do not contain correct sum')
-    assert(!env.frame.hasColumns(GROUPCOL),
+    assert(!env.frame.hasColumns(TbDataFrame.GROUPCOL),
            'Should not have grouping column with ungrouped summarize')
     done()
   })
@@ -1307,11 +1302,11 @@ describe('check that grouping and summarization work', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 0)).length, 6,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 0)).length, 6,
                  'Wrong number of rows for group 0')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 1)).length, 4,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 1)).length, 4,
                  'Wrong number of rows for group 1')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 2)).length, 1,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 2)).length, 1,
                  'Wrong number of rows for group 2')
     done()
   })
@@ -1323,7 +1318,7 @@ describe('check that grouping and summarization work', () => {
        MULTIPLE_COLUMNS: 'first'}
     ]
     const env = evalCode(pipeline)
-    assert(GROUPCOL in env.frame.data[0])
+    assert(TbDataFrame.GROUPCOL in env.frame.data[0])
     done()
   })
 
@@ -1337,7 +1332,7 @@ describe('check that grouping and summarization work', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Table has the wrong number of rows')
-    assert(!(GROUPCOL in env.frame.data[0]),
+    assert(!(TbDataFrame.GROUPCOL in env.frame.data[0]),
            'Table still has group index column')
     done()
   })
@@ -1356,7 +1351,7 @@ describe('check that grouping and summarization work', () => {
     ]
     const env = evalCode(pipeline)
     const expected = [106.33333333333333, 127.5, 0]
-    assert(env.frame.data.every(row => (row.green_mean === expected[row[GROUPCOL]])),
+    assert(env.frame.data.every(row => (row.green_mean === expected[row[TbDataFrame.GROUPCOL]])),
            'Incorrect mean green values')
     done()
   })
@@ -1380,10 +1375,10 @@ describe('check that grouping and summarization work', () => {
   })
 
   it('calculates multiple summary values correctly', (done) => {
-    const filePath = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/updown.csv'
     const pipeline = [
       {_b: 'data_urlCSV',
-       URL: filePath},
+       _standard: true,
+       URL: 'updown.csv'},
       {_b: 'transform_summarize',
        COLUMN_FUNC_PAIR: [
          {_b: 'transform_summarize_item',
@@ -1420,17 +1415,17 @@ describe('check that grouping and summarization work', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 0)).length, 3,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 0)).length, 3,
                  'Wrong number of rows for blue==0 and green==0')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 1)).length, 2,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 1)).length, 2,
                  'Wrong number of rows for blue==0 and green==255')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 2)).length, 1,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 2)).length, 1,
                  'Wrong number of rows for blue==0 and green==128')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 3)).length, 2,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 3)).length, 2,
                  'Wrong number of rows for blue==255 and green==0')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 4)).length, 1,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 4)).length, 1,
                  'Wrong number of rows for blue==128 and green==0')
-    assert.equal(env.frame.data.filter(row => (row[GROUPCOL] === 5)).length, 2,
+    assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 5)).length, 2,
                  'Wrong number of rows for blue==255 and green==255')
     done()
   })
@@ -1534,7 +1529,7 @@ describe('check that grouping and summarization work', () => {
 describe('check that specific bugs have been fixed', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('does subtraction correctly (#58)', (done) => {
@@ -1591,7 +1586,7 @@ describe('check that specific bugs have been fixed', () => {
     ]
     const env = evalCode(pipeline)
     assert(env.frame.data.every(row => ((row.green === 0)
-                                   ? (row.remainder === MISSING)
+                                   ? (row.remainder === TbDataFrame.MISSING)
                                    : (row.remainder === (row.red % row.green)))),
            `Incorrect result(s) for modulo`)
     done()
@@ -1640,7 +1635,7 @@ describe('check that specific bugs have been fixed', () => {
 describe('random number generation', () => {
 
   beforeEach(() => {
-    TidyBlocksManager.reset()
+    TbManager.reset()
   })
 
   it('generates a sequence of numbers', (done) => {
