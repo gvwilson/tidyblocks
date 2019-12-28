@@ -344,10 +344,14 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to put two tables beside one another', (done) => {
-    const pipeline = {_b: 'combine_beside',
+  it('generates code to concatenate two columns', (done) => {
+    const pipeline = {_b: 'combine_concatenate',
                       LEFT_TABLE: 'left_table',
-                      RIGHT_TABLE: 'right_table'}
+                      LEFT_COLUMN: {_b: 'value_column',
+                                    COLUMN: 'left_column'},
+                      RIGHT_TABLE: 'right_table',
+                      RIGHT_COLUMN: {_b: 'value_column',
+                                     COLUMN: 'right_column'}}
     const code = makeCode(pipeline)
     assert_includes(code, 'TidyBlocksManager.register',
                     'pipeline is not registered')

@@ -1068,6 +1068,40 @@ class TidyBlocksDataFrame {
   }
 
   /**
+   * Concatenate selected columns from two tables.
+   * @param {function} getDataFxn How to look up data by name.
+   * @param {string} leftFrame Notification name of left table to join.
+   * @param {string} leftColumn Name of column from left table.
+   * @param {string} rightFrame Notification name of right table to join.
+   * @param {string} rightColumn Name of column from right table.
+   * @returns A new dataframe.
+   */
+  concatenate (getDataFxn, leftFrameName, leftColumn, rightFrameName, rightColumn) {
+
+    const leftFrame = getDataFxn(leftFrameName)
+    tbAssert(leftFrame.hasColumns(leftColumn),
+             `left table does not have column ${leftColumn}`)
+    const rightFrame = getDataFxn(rightFrameName)
+    tbAssert(rightFrame.hasColumns(rightColumn),
+             `right table does not have column ${rightColumn}`)
+    if ((leftFrame.data.length > 0) && (rightFrame.data.length > 0)) {
+      const leftValue = leftFrame.data[0][leftColumn]
+      const rightValue = rightFrame.data[0][rightColumn]
+      tbAssertTypeEqual(leftValue, rightValue)
+    }
+
+    const result = []
+    for (let row of leftFrame.data) {
+      result.push({table: leftFrameName, value: row[leftColumn]})
+    }
+    for (let row of rightFrame.data) {
+      result.push({table: rightFrameName, value: row[rightColumn]})
+    }
+    
+    return new TidyBlocksDataFrame(result)
+  }
+
+  /**
    * Put two tables beside each other, extending as needed with missing values.
    * @param {function} getDataFxn How to look up data by name.
    * @param {string} leftFrame Notification name of left table to join.

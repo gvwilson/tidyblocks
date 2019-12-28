@@ -60,12 +60,12 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 //
-// Visuals for beside block.
+// Visuals for concatenate block.
 //
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'combine_beside',
-    message0: 'Beside %1 %2',
+    type: 'combine_concatenate',
+    message0: 'Concatenate %1 %2 %3 %4',
     args0: [
       {
         type: 'field_input',
@@ -74,16 +74,26 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         type: 'field_input',
+        name: 'LEFT_COLUMN',
+        text: 'left_column'
+      },
+      {
+        type: 'field_input',
         name: 'RIGHT_TABLE',
         text: 'right_table'
+      },
+      {
+        type: 'field_input',
+        name: 'RIGHT_COLUMN',
+        text: 'right_column'
       }
     ],
     inputsInline: true,
     nextStatement: null,
     style: 'combine_blocks',
     hat: 'cap',
-    tooltip: 'put two tables beside each other',
+    tooltip: 'concatenate columns from two tables',
     helpUrl: '',
-    extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE']
+    extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
   }
 ])
