@@ -52,7 +52,6 @@ class GuiEnvironment {
    * @param {string} url URL to read from.
    */
   readCSV (url) {
-
     tbAssert((url !== "url") && (url.length > 0),
              `Cannot fetch empty URL`)
 
@@ -75,6 +74,15 @@ class GuiEnvironment {
    */
   displayPlot (spec) {
     vegaEmbed('#plotOutput', spec, {})
+  }
+
+  /**
+   * Display statistical test results.
+   * @param {Object} values stdlib results for statistical test.
+   * @param {Object} legend Text values describing results.
+   */
+  displayStats (values, legend) {
+    document.getElementById('statsOutput').innerHTML = stats2table(values, legend)
   }
 
   /**
@@ -333,6 +341,29 @@ const json2table = (json) => {
     return '<tr>' + cols.map(c => value2html(row[c])).join('') + '</tr>'
   }).join('')
   return `<table id="dataFrame"><thead>${headerRow}</thead><tbody>${typeRow}${bodyRows}</tbody></table>`
+}
+
+/**
+ * Create a tabular display of statistical results.
+ * @param {Object} values stdlib results for statistical test.
+ * @param {Object} legend Text values describing results.
+ */
+const stats2table = (values, legend) => {
+  const headerRow = '<tr><th>Result</th><th>Value</th><th>Explanation</th></tr>'
+  const bodyRows = Object.keys(legend).map(key => {
+    let value = values[key]
+    if (value === undefined) {
+      value = ''
+    }
+    else if (Array.isArray(value)) {
+      value = value.map(x => x.toPrecision(PRECISION)).join(',<br/>')
+    }
+    else if (typeof value === 'number') {
+      value = value.toPrecision(PRECISION)
+    }
+    return `<tr><td>${key}</td><td>${value}</td><td>${legend[key]}</td></tr>`
+  }).join('')
+  return `<table id="statsResult"><thead>${headerRow}</thead><tbody>${bodyRows}</tbody></table>`
 }
 
 /**

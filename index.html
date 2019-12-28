@@ -105,6 +105,7 @@
             </category>
             <category name="statistics" categorystyle="statistics">
               <block type="statistics_z_test_one_sample"></block>
+              <block type="statistics_kruskal_wallis_test"></block>
             </category>
           </xml>
         </div>
@@ -114,6 +115,7 @@
         <ul class="nav nav-tabs">
           <li class="active"><a data-toggle="tab" href="#data">Data</a></li>
           <li><a data-toggle="tab" href="#plot">Plot</a></li>
+          <li><a data-toggle="tab" href="#stats">Stats</a></li>
           <li><a data-toggle="tab" href="#debug">Debug</a></li>
           <li><a data-toggle="tab" href="#text">Text</a></li>
         </ul>
@@ -124,6 +126,9 @@
           </div>
           <div id="plot" class="tab-pane fade">
             <div id="plotOutput"></div>
+          </div>
+          <div id="stats" class="tab-pane fade">
+            <div id="statsOutput"></div>
           </div>
           <div id="debug" class="tab-pane fade">
             <div id="error"></div>

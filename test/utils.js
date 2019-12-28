@@ -295,6 +295,7 @@ class TestEnvironment {
     this.code = code
     this.table = null
     this.plot = null
+    this.stats = null
     this.error = null
     this.stdlib = stdlib
   }
@@ -342,6 +343,15 @@ class TestEnvironment {
    */
   displayPlot (spec) {
     this.plot = spec
+  }
+
+  /**
+   * Display statistical test results.
+   * @param {Object} values stdlib results for statistical test.
+   * @param {Object} legend Text values describing results.
+   */
+  displayStats (values, legend) {
+    this.stats = {values, legend}
   }
 
   /**

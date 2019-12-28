@@ -83,8 +83,19 @@ button:hover {
 
 #dataOutput {
   background-color: #fff;
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
+  float: left;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+}
+
+#statsOutput {
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
   float: left;
   font-family: Arial, Helvetica, sans-serif;
   overflow-y: scroll;
@@ -113,8 +124,22 @@ button:hover {
   padding: 20px;
 }
 
+#dataOutput table  {
+  border-collapse: collapse;
+}
+
 #dataOutput tbody {
   display: block;
+}
+
+#dataOutput tr {
+  display: table;
+  table-layout: fixed;
+  border: 1px solid #D7DADC;
+  white-space: wrap;
+  word-wrap: break-word;
+  padding: .425em;
+  width: 100%;
 }
 
 #dataOutput thead tr {
@@ -122,10 +147,6 @@ button:hover {
   top: 0;
   font-size: 0.8em;
   position: sticky;
-}
-
-#dataOutput table  {
-  border-collapse: collapse;
 }
 
 #dataOutput tr, td {
@@ -153,7 +174,20 @@ button:hover {
   font-size: 0.8em;
 }
 
-#dataOutput tr {
+#dataOutput td.undefined {
+  background-color: pink;
+}
+
+
+#statsOutput table  {
+  border-collapse: collapse;
+}
+
+#statsOutput tbody {
+  display: block;
+}
+
+#statsOutput tr {
   display: table;
   table-layout: fixed;
   border: 1px solid #D7DADC;
@@ -163,10 +197,40 @@ button:hover {
   width: 100%;
 }
 
-#dataOutput td.undefined {
-  background-color: pink;
+#statsOutput thead tr {
+  height: 20px;
+  top: 0;
+  font-size: 0.8em;
+  position: sticky;
 }
 
+#statsOutput tr, td {
+  background-color: white;
+  border: 1px solid #D7DADC;
+  padding: .425em;
+  text-align: left;
+  word-wrap: break-word;
+  font-size: 0.8em;
+  border: 1px solid #D7DADC;
+}
+
+#statsOutput th {
+  background-color: #F7F9FA;
+  color: black;
+  padding: .425em;
+  text-align: center;
+  word-wrap: break-word;
+  border: 1px solid #D7DADC;
+  font-size: 1em;
+  letter-spacing: .1em;
+  text-align: left;
+  border: 1px solid #D7DADC;
+  font-size: 0.8em;
+}
+
+#statsOutput td.undefined {
+  background-color: pink;
+}
 
 /*
  * Layout
