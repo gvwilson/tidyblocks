@@ -49,3 +49,47 @@ Blockly.JavaScript['value_text'] = (block) => {
   const code = `(row) => ${value}`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
+
+//
+// Create code for uniform random value block.
+//
+Blockly.JavaScript['value_uniform'] = (block) => {
+  const low = parseFloat(block.getFieldValue('VALUE_1'))
+  if (Number.isNaN(low)) {
+    throw new Error(`[block ${block.tbId}] low value is not a number`)
+  }
+  const high = parseFloat(block.getFieldValue('VALUE_2'))
+  if (Number.isNaN(high)) {
+    throw new Error(`[block ${block.tbId}] high value is not a number`)
+  }
+  const code = `(row) => tbUniform(${block.tbId}, ${low}, ${high})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}
+
+//
+// Create code for normal random value block.
+//
+Blockly.JavaScript['value_normal'] = (block) => {
+  const mean = parseFloat(block.getFieldValue('VALUE_1'))
+  if (Number.isNaN(mean)) {
+    throw new Error(`[block ${block.tbId}] mean is not a number`)
+  }
+  const variance = parseFloat(block.getFieldValue('VALUE_2'))
+  if (Number.isNaN(variance) || (variance < 0)) {
+    throw new Error(`[block ${block.tbId}] variance is not a non-negative number`)
+  }
+  const code = `(row) => tbNormal(${block.tbId}, ${mean}, ${variance})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}
+
+//
+// Create code for exponential random value block.
+//
+Blockly.JavaScript['value_exponential'] = (block) => {
+  const rate = parseFloat(block.getFieldValue('VALUE_1'))
+  if (Number.isNaN(rate)) {
+    throw new Error(`[block ${block.tbId}] rate is not a number`)
+  }
+  const code = `(row) => tbExponential(${block.tbId}, ${rate})`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}

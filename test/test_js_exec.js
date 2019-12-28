@@ -1664,3 +1664,85 @@ describe('check that specific bugs have been fixed', () => {
   })
 
 })
+
+describe('random number generation', () => {
+
+  beforeEach(() => {
+    TidyBlocksManager.reset()
+  })
+
+  it('generates a sequence of numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every((row, i) => (row.index === i+1)),
+           `Incorrect values in sequence`)
+    done()
+  })
+
+  it('generates uniform random numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5},
+      {_b: 'transform_mutate',
+       COLUMN: 'random',
+       VALUE: {_b: 'value_uniform',
+               VALUE_1: -3,
+               VALUE_2: -1}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => ((-3 <= row.random) && (row.random <= -1))),
+           `Incorrect random values`)
+    done()
+  })
+
+  it('generates normal random numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5},
+      {_b: 'transform_mutate',
+       COLUMN: 'normal',
+       VALUE: {_b: 'value_normal',
+               VALUE_1: 10,
+               VALUE_2: 0.2}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (0 < row.normal)),
+           `Highly implausible random values`)
+    done()
+  })
+
+  it('generates exponential random numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5},
+      {_b: 'transform_mutate',
+       COLUMN: 'expo',
+       VALUE: {_b: 'value_exponential',
+               VALUE_1: 2}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every(row => (0 < row.expo)),
+           `Values should be greater than zero`)
+    done()
+  })
+})
+

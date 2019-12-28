@@ -778,6 +778,52 @@ const tbLt = (blockId, row, getLeft, getRight) => {
 //--------------------------------------------------------------------------------
 
 /**
+ * Generate a uniform random value.
+ * @param {number} blockId The ID of the block.
+ * @param {number} low The low end of the range.
+ * @param {number} high The high end of the range.
+ * @returns A uniform random value.
+ */
+const tbUniform = (blockId, low, high) => {
+  return low + (Math.random() * (high - low))
+}
+
+/**
+ * Generate a normal random value.
+ * @param {number} blockId The ID of the block.
+ * @param {number} mean The mean of the distribution.
+ * @param {number} variance The variance of the distribution.
+ * @returns A normal random value using the Box-Muller transform.
+ */
+const tbNormal = (blockId, mean, variance) => {
+  let u = 0, v = 0
+  while (u === 0) {
+    u = Math.random()
+  }
+  while (v === 0) {
+    v = Math.random()
+  }
+  const r = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v )
+  return mean + (r * variance)
+}
+
+/**
+ * Generate an exponential random value.
+ * @param {number} blockId The ID of the block.
+ * @param {number} rate The rate of the distribution.
+ * @returns An exponential random value.
+ */
+const tbExponential = (blockId, rate) => {
+  let u = 0
+  while (u === 0) {
+    u = Math.random()
+  }
+  return (-1/rate) * Math.log(u)
+}
+
+//--------------------------------------------------------------------------------
+
+/**
  * Store a dataframe.
  */
 class TidyBlocksDataFrame {
