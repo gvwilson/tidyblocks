@@ -26,8 +26,10 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'combine_join',
-    message0: 'Join %1 %2 %3 %4',
-    args0: [
+    message0: 'Join',
+    args0: [],
+    message1: '%1 %2',
+    args1: [
       {
         type: 'field_input',
         name: 'LEFT_TABLE',
@@ -37,7 +39,10 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_input',
         name: 'LEFT_COLUMN',
         text: 'left_column'
-      },
+      }
+    ],
+    message2: '%1 %2',
+    args2: [
       {
         type: 'field_input',
         name: 'RIGHT_TABLE',
@@ -49,7 +54,7 @@ Blockly.defineBlocksWithJsonArray([
         text: 'right_column'
       }
     ],
-    inputsInline: true,
+    inputsInline: false,
     nextStatement: null,
     style: 'combine_blocks',
     hat: 'cap',
@@ -65,8 +70,10 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.defineBlocksWithJsonArray([
   {
     type: 'combine_concatenate',
-    message0: 'Concatenate %1 %2 %3 %4',
-    args0: [
+    message0: 'Concatenate',
+    args0: [],
+    message1: '%1 %2',
+    args1: [
       {
         type: 'field_input',
         name: 'LEFT_TABLE',
@@ -76,7 +83,10 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_input',
         name: 'LEFT_COLUMN',
         text: 'left_column'
-      },
+      }
+    ],
+    message2: '%1 %2',
+    args2: [
       {
         type: 'field_input',
         name: 'RIGHT_TABLE',
@@ -88,7 +98,7 @@ Blockly.defineBlocksWithJsonArray([
         text: 'right_column'
       }
     ],
-    inputsInline: true,
+    inputsInline: false,
     nextStatement: null,
     style: 'combine_blocks',
     hat: 'cap',
