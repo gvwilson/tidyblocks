@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('CSV files are handled correctly', () => {
@@ -118,19 +114,19 @@ describe('blocks are given IDs and can be looked up', () => {
 
   it('gives each block a sequential ID', (done) => {
     const pipeline = [
-      makeBlock( // because the pipeline has to start with a data block
+      TbTestUtils.makeBlock( // because the pipeline has to start with a data block
         'data_single',
         {}),
-      makeBlock(
+      TbTestUtils.makeBlock(
         'transform_mutate',
         {COLUMN: 'should_fail',
-         VALUE: makeBlock(
+         VALUE: TbTestUtils.makeBlock(
            'operation_arithmetic',
            {OP: 'tbAdd',
-            LEFT: makeBlock(
+            LEFT: TbTestUtils.makeBlock(
               'value_column',
               {COLUMN: 'nonexistent'}),
-            RIGHT: makeBlock(
+            RIGHT: TbTestUtils.makeBlock(
               'value_number',
               {VALUE: 0})})})
     ]
@@ -178,17 +174,17 @@ describe('testing utilities run correctly', () => {
 
   it('creates a missing value', (done) => {
     const pipeline = [
-      makeBlock(
+      TbTestUtils.makeBlock(
         'data_single',
         {}),
-      makeBlock(
+      TbTestUtils.makeBlock(
         'transform_mutate',
         {COLUMN: 'na',
-         VALUE: makeBlock(
+         VALUE: TbTestUtils.makeBlock(
            'value_missing',
            {})})
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when creating missing value`)
     assert.equal(env.frame.data.length, 1,
@@ -200,14 +196,14 @@ describe('testing utilities run correctly', () => {
 
   it('checks that pipelines start properly', (done) => {
     const pipeline = [
-      makeBlock(
+      TbTestUtils.makeBlock(
         'transform_mutate',
         {COLUMN: 'na',
-         VALUE: makeBlock(
+         VALUE: TbTestUtils.makeBlock(
            'value_missing',
            {})})
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error,
                  'pipeline does not have a valid start block',
                  'Expected error message for pipeline without start block')

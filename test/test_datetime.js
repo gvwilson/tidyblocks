@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('check datetime handling', () => {
@@ -33,7 +29,7 @@ describe('check datetime handling', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'Time'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => (row.Time instanceof Date)),
            `Some time values not converted to Date objects`)
     done()
@@ -53,7 +49,7 @@ describe('check datetime handling', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'time'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
     assert.equal(env.frame.data.length, 1,
@@ -91,7 +87,7 @@ describe('check datetime handling', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'Time'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data[0].year, 2016,
                  `Expected 2016 as year`)
     assert.equal(env.frame.data[0].month, 8,
@@ -116,7 +112,7 @@ describe('check datetime handling', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'when'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data[0].weekday, new Date('1984-01-01').getDay(),
                  `January 1, 1984 was a Sunday, not ${env.frame.data[0].weekday}`)
     done()
@@ -148,7 +144,7 @@ describe('check datetime handling', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'when'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data[0].hours, 5,
                  `Expected the hours to be 5 not ${env.frame.data[0].hours}`)
     assert.equal(env.frame.data[0].minutes, 10,

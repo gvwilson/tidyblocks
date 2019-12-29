@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generates code for plotting blocks', () => {
@@ -29,7 +25,7 @@ describe('generates code for plotting blocks', () => {
                                COLUMN: 'X_axis_column'},
                       Y_AXIS: {_b: 'value_column',
                                COLUMN: 'Y_axis_column'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.plot(environment',
                     'pipeline does not call .plot')
     assert.includes(code, 'X_axis_column',
@@ -47,7 +43,7 @@ describe('generates code for plotting blocks', () => {
                                COLUMN: 'X_axis_column'},
                       Y_AXIS: {_b: 'value_column',
                                COLUMN: 'Y_axis_column'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.plot(environment',
                     'pipeline does not call .plot')
     assert.includes(code, 'X_axis_column',
@@ -63,7 +59,7 @@ describe('generates code for plotting blocks', () => {
     const pipeline = {_b: 'plot_hist',
                       COLUMN: 'existingColumn',
                       BINS: '20'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '"maxbins":',
                     'pipeline does not include maxbins')
     assert.includes(code, '"field": "existingColumn"',
@@ -81,7 +77,7 @@ describe('generates code for plotting blocks', () => {
                                COLUMN: 'Y_axis_column'},
                       COLOR: {_b: 'value_column',
                               COLUMN: 'COLOR_axis_column'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.plot(environment',
                     'pipeline does not call .plot')
     assert.includes(code, 'X_axis_column',
@@ -107,7 +103,7 @@ describe('executes plotting blocks', () => {
       {_b: 'data_iris'},
       {_b: 'plot_table'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.notEqual(env.frame.data, null,
                     'Result table has not been set')
     assert(Array.isArray(env.frame.data),
@@ -122,7 +118,7 @@ describe('executes plotting blocks', () => {
        COLUMN: 'Petal_Length',
        BINS: '20'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(Array.isArray(env.frame.data),
            'Result table is not an array')
     assert.equal(env.frame.data.length, 150,
@@ -145,7 +141,7 @@ describe('executes plotting blocks', () => {
        COLUMN: 'Petal_Length',
        BINS: '20'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(Object.keys(env.frame.data[0]).length, 1,
                  'Wrong number of columns in result table')
     assert.hasKey(env.frame.data[0], 'Petal_Length',
@@ -171,7 +167,7 @@ describe('executes plotting blocks', () => {
        BINS: {_b: 'value_number',
               VALUE: 20}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(Object.keys(env.frame.data[0]).length, 5,
                  'Wrong number of columns in result table')
     assert.equal(env.plot.data.values.length, 42,

@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generates code for operations', () => {
@@ -28,7 +24,7 @@ describe('generates code for operations', () => {
                       TYPE: 'tbToText',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'left'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbToText',
@@ -40,7 +36,7 @@ describe('generates code for operations', () => {
     const pipeline = {_b: 'operation_negate',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbNeg',
@@ -52,7 +48,7 @@ describe('generates code for operations', () => {
     const pipeline = {_b: 'operation_not',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbNot',
@@ -67,7 +63,7 @@ describe('generates code for operations', () => {
                              COLUMN: 'left'},
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbAdd',
@@ -84,7 +80,7 @@ describe('generates code for operations', () => {
                              COLUMN: 'left'},
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbNeq',
@@ -101,7 +97,7 @@ describe('generates code for operations', () => {
                              COLUMN: 'left'},
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbOr',
@@ -119,7 +115,7 @@ describe('generates code for operations', () => {
                              COLUMN: 'green'},
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'blue'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'tbIfElse',
                     'pipeline does not generate call to tbIfElse')
     done()
@@ -142,7 +138,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'red'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.hasKey(env.frame.data[0], 'textual',
@@ -162,7 +158,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'red'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.hasKey(env.frame.data[0], 'logical',
@@ -188,7 +184,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'textual'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.hasKey(env.frame.data[0], 'numeric',
@@ -212,7 +208,7 @@ describe('executes operations', () => {
                RIGHT: {_b: 'value_column',
                        COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.equal(Object.keys(env.frame.data[0]).length, 5,
@@ -244,7 +240,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => row.result_name_string),
            `Expected all names to be strings`)
     assert(env.frame.data.every(row => !row.result_red_string),
@@ -271,7 +267,7 @@ describe('executes operations', () => {
                RIGHT: {_b: 'value_text',
                        VALUE: 'unequal'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 2,
                  `Expected two rows, not ${env.frame.data.length}`)
     assert.equal(env.frame.data[0].result, 'equal',
@@ -293,7 +289,7 @@ describe('executes operations', () => {
                RIGHT: {_b: 'value_text',
                        VALUE: 'unequal'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 2,
                  `Expected two rows, not ${env.frame.data.length}`)
     assert(env.frame.data.every(row => (row.result === TbDataFrame.MISSING)),
@@ -313,7 +309,7 @@ describe('executes operations', () => {
                RIGHT: {_b: 'value_column',
                        COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => ((row.green === 0)
                                    ? (row.ratio === TbDataFrame.MISSING)
                                    : (row.ratio === (row.red / row.green)))),
@@ -333,7 +329,7 @@ describe('executes operations', () => {
                RIGHT: {_b: 'value_column',
                        COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => (isFinite(row.red ** row.green)
                                    ? (row.result === (row.red ** row.green))
                                    : (row.result === TbDataFrame.MISSING))),
@@ -350,7 +346,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'red'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => row.result === (- row.red)),
            `Incorrect result(s) for negation`)
     done()
@@ -379,7 +375,7 @@ describe('executes operations', () => {
                      RIGHT: {_b: 'value_column',
                              COLUMN: 'right'}}}
           ]
-          const env = evalCode(pipeline)
+          const env = TbTestUtils.evalCode(pipeline)
           const expected = (funcName === 'tbAnd')
                 ? (left && right)
                 : (left || right)
@@ -422,7 +418,7 @@ describe('executes operations', () => {
                  RIGHT:{_b: 'value_column',
                         COLUMN: 'missing'}}}
       ]
-      const env = evalCode(pipeline)
+      const env = TbTestUtils.evalCode(pipeline)
       assert(env.frame.data.every(row => (row.result === expected)),
              `Unexpected value(s) in comparison for ${funcName}`)
       assert(env.frame.data.every(row => (row.missing === TbDataFrame.MISSING)),
@@ -462,7 +458,7 @@ describe('executes operations', () => {
                  RIGHT:{_b: 'value_column',
                         COLUMN: 'missing'}}}
       ]
-      const env = evalCode(pipeline)
+      const env = TbTestUtils.evalCode(pipeline)
       assert.equal(env.error, '',
                    `Unexpected error in string comparison for ${funcName}`)
       assert.deepEqual(env.frame.data.map(row => row.result), expected,
@@ -507,7 +503,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'str'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when converting to number`)
     assert.equal(env.frame.data[0].bool_false, 0,
@@ -553,7 +549,7 @@ describe('executes operations', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'num'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when converting to string`)
     assert.equal(env.frame.data[0].bool_false, 'false',
@@ -587,7 +583,7 @@ describe('executes operations', () => {
                    VALUE: {_b: 'value_column',
                            COLUMN: 'temp'}}}
         ]
-        const env = evalCode(pipeline)
+        const env = TbTestUtils.evalCode(pipeline)
         assert.equal(env.error, '',
                      `Expected no error for ${checkFunc} with ${actualName}`)
         const expected = (actualName == checkName)

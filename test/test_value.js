@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generate code for values', () => {
@@ -26,7 +22,7 @@ describe('generate code for values', () => {
   it('generates code for a column name', (done) => {
     const pipeline = {_b: 'value_column',
                       COLUMN: 'TheColumnName'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.match(code, /\(row\) => tbGet\(\d+, row, 'TheColumnName'\)/,
                  'pipeline does not use function to get column value')
     done()
@@ -35,7 +31,7 @@ describe('generate code for values', () => {
   it('generates the code for a number', (done) => {
     const pipeline = {_b: 'value_number',
                       VALUE: 3.14}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code, '(row) => (3.14)',
                  'pipeline does not generate expected number')
     done()
@@ -44,7 +40,7 @@ describe('generate code for values', () => {
   it('generates code for a constant string', (done) => {
     const pipeline = {_b: 'value_text',
                       VALUE: 'Look on my blocks, ye coders, and despair!'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code, '(row) => "Look on my blocks, ye coders, and despair!"',
                  'pipeline does not generate constant string')
     done()
@@ -53,7 +49,7 @@ describe('generate code for values', () => {
   it('generates code for a constant boolean', (done) => {
     const pipeline = {_b: 'value_boolean',
                       VALUE: 'false'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code, '(row) => (false)',
                  'pipeline does not generate constant Boolean')
     done()
@@ -63,7 +59,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_uniform',
                       VALUE_1: 0,
                       VALUE_2: 1}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'tbUniform',
                     `pipeline does not generate call to tbUniform: ${code}`)
     done()
@@ -73,7 +69,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_normal',
                       VALUE_1: 0,
                       VALUE_2: 1}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'tbNormal',
                     `pipeline does not generate call to tbNormal: ${code}`)
     done()
@@ -82,7 +78,7 @@ describe('generate code for values', () => {
   it('generates code for exponential random variable', (done) => {
     const pipeline = {_b: 'value_exponential',
                       VALUE_1: 0}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'tbExponential',
                     `pipeline does not generate call to tbExponential: ${code}`)
     done()
@@ -107,7 +103,7 @@ describe('missing values are handled correctly', () => {
        VALUE: {_b: 'operation_not',
                VALUE: {_b: 'value_missing'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expectd no error message`)
     assert.equal(env.frame.data[0].negated, TbDataFrame.MISSING,
@@ -137,7 +133,7 @@ describe('missing values are handled correctly', () => {
                         COLUMN: 'first'},
                  RIGHT: {_b: 'value_missing'}}}
       ]
-      const env = evalCode(pipeline)
+      const env = TbTestUtils.evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message`)
       assert.equal(env.frame.data[0].result, TbDataFrame.MISSING,
@@ -177,7 +173,7 @@ describe('missing values are handled correctly', () => {
                VALUE: {_b: 'value_column',
                        COLUMN: 'missing'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error message when converting missing values`)
     assert.equal(env.frame.data[0].as_boolean, TbDataFrame.MISSING,
@@ -203,7 +199,7 @@ describe('random number generation', () => {
       {_b: 'data_sequence',
        VALUE: 5}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 5,
@@ -223,7 +219,7 @@ describe('random number generation', () => {
                VALUE_1: -3,
                VALUE_2: -1}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 5,
@@ -243,7 +239,7 @@ describe('random number generation', () => {
                VALUE_1: 10,
                VALUE_2: 0.2}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 5,
@@ -262,7 +258,7 @@ describe('random number generation', () => {
        VALUE: {_b: 'value_exponential',
                VALUE_1: 2}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 5,

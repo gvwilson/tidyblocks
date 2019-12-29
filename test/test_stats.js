@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generates code for statistics blocks', () => {
@@ -29,7 +25,7 @@ describe('generates code for statistics blocks', () => {
                       MEAN: 2.0,
                       STD_DEV: 0.75,
                       SIGNIFICANCE: 0.01}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.test',
                     'Code does not include call to .test method')
     assert.includes(code, 'tbZTestOneSample',
@@ -50,7 +46,7 @@ describe('generates code for statistics blocks', () => {
                       GROUPS: 'green',
                       VALUES: 'blue',
                       SIGNIFICANCE: 0.01}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.test',
                     'Code does not include call to .test method')
     assert.includes(code, 'tbKruskalWallis',
@@ -70,7 +66,7 @@ describe('generates code for statistics blocks', () => {
                       MEAN: 2.0,
                       STD_DEV: 0.75,
                       SIGNIFICANCE: 0.01}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.test',
                     'Code does not include call to .test method')
     assert.includes(code, 'tbKolmogorovSmirnov',
@@ -91,7 +87,7 @@ describe('generates code for statistics blocks', () => {
                       COLUMN: 'blue',
                       MEAN: 2.0,
                       SIGNIFICANCE: 0.01}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.test',
                     'Code does not include call to .test method')
     assert.includes(code, 'tbTTestOneSample',
@@ -121,7 +117,7 @@ describe('executes statistics blocks', () => {
        STD_DEV: 1.0,
        SIGNIFICANCE: 0.05}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  'Expected no error from statistical test')
     const {values, legend} = env.stats
@@ -142,7 +138,7 @@ describe('executes statistics blocks', () => {
        VALUES: 'blue',
        SIGNIFICANCE: 0.05}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  'Expected no error from statistical test')
     const {values, legend} = env.stats
@@ -164,7 +160,7 @@ describe('executes statistics blocks', () => {
        STD_DEV: 1.0,
        SIGNIFICANCE: 0.05}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  'Expected no error from statistical test')
     const {values, legend} = env.stats
@@ -185,7 +181,7 @@ describe('executes statistics blocks', () => {
        MEAN: 0.0,
        SIGNIFICANCE: 0.05}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  'Expected no error from statistical test')
     const {values, legend} = env.stats

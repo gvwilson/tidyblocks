@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generate code for combining blocks', () => {
@@ -26,7 +22,7 @@ describe('generate code for combining blocks', () => {
   it('generates code to notify that a pipeline has completed', (done) => {
     const pipeline = {_b: 'combine_notify',
                       NAME: 'output_name'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(),
                  ".notify((name, frame) => TbManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
                  'pipeine does not notify properly')
@@ -41,7 +37,7 @@ describe('generate code for combining blocks', () => {
                       RIGHT_TABLE: 'right_table',
                       RIGHT_COLUMN: {_b: 'value_column',
                                      COLUMN: 'right_column'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'TbManager.register',
                     'pipeline is not registered')
     assert.includes(code, "['left_table', 'right_table']",
@@ -59,7 +55,7 @@ describe('generate code for combining blocks', () => {
                       RIGHT_TABLE: 'right_table',
                       RIGHT_COLUMN: {_b: 'value_column',
                                      COLUMN: 'right_column'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'TbManager.register',
                     'pipeline is not registered')
     assert.includes(code, "['left_table', 'right_table']",
@@ -95,7 +91,7 @@ describe('detects errors for combining blocks', () => {
        RIGHT_TABLE: 'right',
        RIGHT_COLUMN: 'name'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, 'left table does not have column nonexistent',
                  `Did not get expected error report "${env.error}"`)
     done()
@@ -120,7 +116,7 @@ describe('detects errors for combining blocks', () => {
        RIGHT_TABLE: 'right',
        RIGHT_COLUMN: 'nonexistent'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, 'right table does not have column nonexistent',
                  `Did not get expected error report "${env.error}"`)
     done()
@@ -145,7 +141,7 @@ describe('detects errors for combining blocks', () => {
        RIGHT_TABLE: 'right',
        RIGHT_COLUMN: 'name'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, 'Values 1 and black have different types',
                  `Did not get expected error report "${env.error}"`)
     done()
@@ -171,7 +167,7 @@ describe('executes combining blocks', () => {
       {_b: 'combine_notify',
        NAME: 'left'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(TbManager.getResult('left'),
            'Expected something registered under "left"')
     assert.equal(TbManager.getResult('left').data.length, 5,
@@ -200,7 +196,7 @@ describe('executes combining blocks', () => {
        RIGHT_TABLE: 'right',
        RIGHT_COLUMN: 'first'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
     const expected = [{right_second: 100}]
@@ -257,7 +253,7 @@ describe('executes combining blocks', () => {
               RIGHT: {_b: 'value_number',
                       VALUE: 0}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
     const expected = [
@@ -297,7 +293,7 @@ describe('executes combining blocks', () => {
        RIGHT_TABLE: 'right',
        RIGHT_COLUMN: 'first'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
     const expected = [{'table': 'left', 'value': 1},

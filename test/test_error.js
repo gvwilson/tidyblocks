@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('raises errors at the right times', () => {
@@ -24,8 +20,8 @@ describe('raises errors at the right times', () => {
   })
 
   it('raises an error when constructing a block with an empty column name', (done) => {
-    assert.throws(() => makeBlock('value_column',
-                                  {COLUMN: ''}),
+    assert.throws(() => TbTestUtils.makeBlock('value_column',
+                                              {COLUMN: ''}),
                   /\[block \d+\] empty column name/)
     done()
   })
@@ -35,7 +31,7 @@ describe('raises errors at the right times', () => {
                       COLUMN: 'new_column',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'nonexistent'}}
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.notEqual(env.error, null,
                     `Expected an error message when running a pipeline without a data block`)
     done()
@@ -49,7 +45,7 @@ describe('raises errors at the right times', () => {
        VALUE: {_b: 'value_column',
                COLUMN: 'nonexistent'}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] no such column "nonexistent"/,
                  `Expected an error message when accessing a nonexistent column`)
     done()
@@ -61,7 +57,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_filter',
        TEST: ''}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] no operator for filter/,
                  `Expected an error message when filtering without condition`)
     done()
@@ -73,7 +69,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_groupBy',
        MULTIPLE_COLUMNS: ''}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] empty column name\(s\) for grouping/,
                  `Expected an error message when filtering with empty column`)
     done()
@@ -85,7 +81,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_groupBy',
        MULTIPLE_COLUMNS: 'nonexistent'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] unknown column\(s\) nonexistent in groupBy/,
                  `Expected an error message when filtering with nonexistent column`)
     done()
@@ -99,7 +95,7 @@ describe('raises errors at the right times', () => {
        VALUE: {_b: 'value_column',
                COLUMN: 'red'}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] empty new column name for mutate/,
                  `Expected an error message when mutating to empty column`)
     done()
@@ -112,7 +108,7 @@ describe('raises errors at the right times', () => {
        COLUMN: 'new_column',
        VALUE: ''}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] new value is not a function/,
                  `Expected an error message when mutating without an operator`)
     done()
@@ -124,7 +120,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_select',
        MULTIPLE_COLUMNS: ''}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] no columns specified for select/,
                  `Expected an error message when selecting with empty columns`)
     done()
@@ -136,7 +132,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_select',
        MULTIPLE_COLUMNS: 'nonexistent'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in select/,
                  `Expected an error message when selecting with nonexistent columns`)
     done()
@@ -149,7 +145,7 @@ describe('raises errors at the right times', () => {
        MULTIPLE_COLUMNS: '',
        DESCENDING: 'FALSE'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] no columns specified for sort/,
                  `Expected an error message when sorting with empty columns`)
     done()
@@ -161,7 +157,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_sort',
        MULTIPLE_COLUMNS: 'nonexistent'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in sort/,
                  `Expected an error message when sorting with nonexistent columns`)
     done()
@@ -177,7 +173,7 @@ describe('raises errors at the right times', () => {
           COLUMN: ''}
         ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] no column specified for summarize/,
                  `Expected an error message when summarizing with empty column`)
     done()
@@ -193,7 +189,7 @@ describe('raises errors at the right times', () => {
           COLUMN: 'nonexistent'}
         ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] unknown column ".+" in summarize/,
                  `Expected an error message when summarizing with nonexistent columns`)
     done()
@@ -204,7 +200,7 @@ describe('raises errors at the right times', () => {
       {_b: 'data_colors'},
       {_b: 'transform_ungroup'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.match(env.error, /\[block \d+\] cannot ungroup data that is not grouped/,
                  `Expected an error message when ungrouping data that is not grouped`)
     done()

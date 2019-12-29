@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generates code for transformation blocks', () => {
@@ -27,7 +23,7 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_filter',
                       TEST: {_b: 'value_column',
                              COLUMN: 'existingColumn'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.filter',
                     'pipeline does not start with filter call')
     assert.includes(code, '=>',
@@ -38,7 +34,7 @@ describe('generates code for transformation blocks', () => {
   it('generates code to group rows', (done) => {
     const pipeline = {_b: 'transform_groupBy',
                       MULTIPLE_COLUMNS: 'existingColumn'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.match(code, /.groupBy\(\d+, \["existingColumn"\]\)/,
                  'pipeline does not group rows by existing column')
     done()
@@ -46,7 +42,7 @@ describe('generates code for transformation blocks', () => {
 
   it('generates code to ungroup', (done) => {
     const pipeline = {_b: 'transform_ungroup'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(), '.ungroup(0)',
                  'pipeline does not ungroup rows')
     done()
@@ -57,7 +53,7 @@ describe('generates code for transformation blocks', () => {
                       COLUMN: 'newColumnName',
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existingColumn'}}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.mutate',
                     'pipeline does not start with mutate call')
     assert.includes(code, '=>',
@@ -72,7 +68,7 @@ describe('generates code for transformation blocks', () => {
   it('generates code to drop a single column', (done) => {
     const pipeline = {_b: 'transform_drop',
                       MULTIPLE_COLUMNS: 'existingColumn'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.drop',
                     'pipeline does not start with drop call')
     assert.includes(code, 'existingColumn',
@@ -83,7 +79,7 @@ describe('generates code for transformation blocks', () => {
   it('generates code to select a single column', (done) => {
     const pipeline = {_b: 'transform_select',
                       MULTIPLE_COLUMNS: 'existingColumn'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.select',
                     'pipeline does not start with select call')
     assert.includes(code, 'existingColumn',
@@ -95,7 +91,7 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_sort',
                       MULTIPLE_COLUMNS: 'blue',
                       DESCENDING: 'FALSE'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(), '.sort(0, ["blue"], false)',
                  'pipeline does not sort by expected column')
     done()
@@ -105,7 +101,7 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_sort',
                       MULTIPLE_COLUMNS: 'red,green',
                       DESCENDING: 'FALSE'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(), '.sort(0, ["red","green"], false)',
                  'pipeline does not sort by expected columns')
     done()
@@ -115,7 +111,7 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_sort',
                       MULTIPLE_COLUMNS: 'red,green',
                       DESCENDING: 'TRUE'}
-  const code = makeCode(pipeline)
+  const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(), '.sort(0, ["red","green"], true)',
                'pipeline does not sort descending by expected columns')
   done()
@@ -127,7 +123,7 @@ describe('generates code for transformation blocks', () => {
                         {_b: 'transform_summarize_item',
                          FUNC: 'tbMean',
                          COLUMN: 'someColumn'}]}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(), '.summarize(1, [0, tbMean, "someColumn"])',
                  'code does not call summarize correctly')
     done()
@@ -136,7 +132,7 @@ describe('generates code for transformation blocks', () => {
   it('generates code to unique by one column', (done) => {
     const pipeline = {_b: 'transform_unique',
                       MULTIPLE_COLUMNS: 'someColumn'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.unique',
                     'pipeline does not start with unique call')
     assert.includes(code, 'someColumn',
@@ -157,7 +153,7 @@ describe('executes transformation blocks', () => {
       {_b: 'transform_drop',
        MULTIPLE_COLUMNS: 'first'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.setEqual(new Set(['second']), env.frame.columns,
@@ -171,7 +167,7 @@ describe('executes transformation blocks', () => {
       {_b: 'transform_select',
        MULTIPLE_COLUMNS: 'Sepal_Length'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.setEqual(new Set(['Sepal_Length']), env.frame.columns,
                      `Select does not return correct columns`)
     done()
@@ -185,7 +181,7 @@ describe('executes transformation blocks', () => {
        VALUE: {_b: 'value_number',
                VALUE: 0}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
     assert.hasKey(env.frame.data[0], 'newColumnName',
@@ -197,7 +193,7 @@ describe('executes transformation blocks', () => {
     const original = [
       {_b: 'data_iris'}
     ]
-    const env_original = evalCode(original)
+    const env_original = TbTestUtils.evalCode(original)
 
     const sorted = [
       {_b: 'data_iris'},
@@ -205,7 +201,7 @@ describe('executes transformation blocks', () => {
        MULTIPLE_COLUMNS: 'Sepal_Length',
        DESCENDING: 'FALSE'}
     ]
-    const env_sorted = evalCode(sorted)
+    const env_sorted = TbTestUtils.evalCode(sorted)
     assert.equal(env_original.error, '',
                  `Expected no error when sorting`)
     assert.setEqual(env_original.frame.columns,
@@ -221,7 +217,7 @@ describe('executes transformation blocks', () => {
        MULTIPLE_COLUMNS: 'first',
        DESCENDING: 'TRUE'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.deepEqual(env.frame.data.map(row => row.first), [2, 1],
                      `Sort results not in expected (descending) order`)
     done()
@@ -234,7 +230,7 @@ describe('executes transformation blocks', () => {
        MULTIPLE_COLUMNS: 'red, green',
        DESCENDING: 'FALSE'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  'Expected no error')
     assert.equal(env.frame.data.length, 11,
@@ -252,7 +248,7 @@ describe('executes transformation blocks', () => {
       {_b: 'transform_unique',
        MULTIPLE_COLUMNS: 'first'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 2,
@@ -268,7 +264,7 @@ describe('executes transformation blocks', () => {
       {_b: 'transform_unique',
        MULTIPLE_COLUMNS: 'red'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 3,
@@ -288,7 +284,7 @@ describe('executes transformation blocks', () => {
       {_b: 'transform_unique',
        MULTIPLE_COLUMNS: 'red, green'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 6,
@@ -311,7 +307,7 @@ describe('executes transformation blocks', () => {
               RIGHT: {_b: 'value_number',
                       VALUE: 0}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 5,
                  'Expected 5 rows with red != 0')
     done()
@@ -328,7 +324,7 @@ describe('executes transformation blocks', () => {
               RIGHT: {_b: 'value_column',
                       COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 8,
                  'Wrong number of rows in output')
     assert(env.frame.data.every(row => (row.red >= row.green)),
@@ -347,7 +343,7 @@ describe('executes transformation blocks', () => {
               RIGHT: {_b: 'value_number',
                       VALUE: 0}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error when filtering empty tables`)
     assert(env.frame.data.length == 0,
@@ -366,7 +362,7 @@ describe('executes transformation blocks', () => {
                 TYPE: 'tbIsMissing',
                 VALUE: columnBlock}}
       ]
-      const env = evalCode(pipeline)
+      const env = TbTestUtils.evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message, got "${env.error}" for type ${type}`)
       assert.equal(env.frame.data.length, 1,
@@ -389,7 +385,7 @@ describe('executes transformation blocks', () => {
                         TYPE: 'tbIsMissing',
                         VALUE: columnBlock}}}
       ]
-      const env = evalCode(pipeline)
+      const env = TbTestUtils.evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error message, got "${env.error}" for type ${type}`)
       assert.equal(env.frame.data.length, 3,
@@ -417,7 +413,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'red'}
         ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 11,
@@ -435,7 +431,7 @@ describe('check that grouping and summarization work', () => {
       {_b: 'transform_groupBy',
        MULTIPLE_COLUMNS: 'blue'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 0)).length, 6,
@@ -453,7 +449,7 @@ describe('check that grouping and summarization work', () => {
       {_b: 'transform_groupBy',
        MULTIPLE_COLUMNS: 'first'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(TbDataFrame.GROUPCOL in env.frame.data[0])
     done()
   })
@@ -465,7 +461,7 @@ describe('check that grouping and summarization work', () => {
        MULTIPLE_COLUMNS: 'blue'},
       {_b: 'transform_ungroup'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Table has the wrong number of rows')
     assert(!(TbDataFrame.GROUPCOL in env.frame.data[0]),
@@ -485,7 +481,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'green'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     const expected = [106.33333333333333, 127.5, 0]
     assert(env.frame.data.every(row => (row.green_mean === expected[row[TbDataFrame.GROUPCOL]])),
            'Incorrect mean green values')
@@ -502,7 +498,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'second'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.length == 2,
            `Expect two rows of output`)
     assert(env.frame.data.every(row => (row.second_max === 200)),
@@ -528,7 +524,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'value'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
     assert.equal(env.frame.data.length, 6,
@@ -548,7 +544,7 @@ describe('check that grouping and summarization work', () => {
       {_b: 'transform_groupBy',
        MULTIPLE_COLUMNS: 'blue, green'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
     assert.equal(env.frame.data.filter(row => (row[TbDataFrame.GROUPCOL] === 0)).length, 3,
@@ -591,7 +587,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'red'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 0,
            `Expected empty output`)
     done()
@@ -607,7 +603,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'red'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  `Expect 11 rows of output not ${env.frame.data.length}`)
     assert(env.frame.data.every(row => (row.red_count === 11)),
@@ -625,7 +621,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'red'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  `Expect 11 rows of output not ${env.frame.data.length}`)
     assert(env.frame.data.every(row => (row.red_median === 0)),
@@ -646,7 +642,7 @@ describe('check that grouping and summarization work', () => {
           COLUMN: 'green'}
        ]}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  `Expect one row of output not ${env.frame.data.length}`)
     const expected_variance = 14243.140495867769

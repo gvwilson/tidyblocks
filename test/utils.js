@@ -28,100 +28,6 @@ const TOLERANCE = 1.0e-10
  */
 const ARGS_N = ['args0', 'args1', 'args2']
 
-/**
- * Assert that two values are approximately equal.
- * @param {number} left Left side of equality.
- * @param {number} right Right side of equality.
- * @param {string} message Error message.
- * @param {number} tolerance Relative difference allowed.
- */
-assert.approxEquals = (left, right, message, tolerance = TOLERANCE) => {
-  const denom = Math.max(Math.abs(left), Math.abs(right))
-  if (denom !== 0) {
-    const ratio = Math.abs(left - right) / denom
-    if (ratio > tolerance) {
-      throw new assert.AssertionError({
-        message: message,
-        actual: ratio,
-        expected: tolerance})
-    }
-  }
-}
-
-//--------------------------------------------------------------------------------
-
-/**
- * Assert that an object has a key.
- * @param {string} actual Object being examined.
- * @param {string} required Key that must be present.
- * @param {string} message Error message.
- */
-assert.hasKey = (actual, required, message) => {
-  if (! (required in actual)) {
-    throw new assert.AssertionError({
-      message: message,
-      actual: Object.keys(actual),
-      expected: required})
-  }
-}
-
-/**
- * Assert that one string contains another.
- * @param {string} actual String being examined.
- * @param {string} required String to look for.
- * @param {string} message Error message.
- */
-assert.includes = (actual, required, message) => {
-  if (! actual.includes(required)) {
-    throw new assert.AssertionError({
-      message: message,
-      actual: actual,
-      expected: required})
-  }
-}
-
-/**
- * Assert that a string matches a regular expression.
- * @param {string} actual String being examined.
- * @param {regexp} required Pattern to look for.
- * @param {string} message Error message.
- */
-assert.match = (actual, required, message) => {
-  if (! actual.match(required)) {
-    throw new assert.AssertionError({
-      message: message,
-      actual: actual,
-      expected: required})
-  }
-}
-
-/**
- * Assert that two sets are equal (used for checking columns).
- * @param left One set.
- * @param right The other set.
- */
-assert.setEqual = (left, right) => {
-  assert.equal(left.size, right.size,
-               `Expected same number of columns in sorted result`)
-  left.forEach(name => assert(right.has(name),
-                              `Expected ${name} in sorted results`))
-}
-
-/**
- * Assert that one string starts with another.
- * @param {string} actual String being examined.
- * @param {string} required String to look for.
- * @param {string} message Error message.
- */
-assert.startsWith = (actual, required, message) => {
-  if (! actual.startsWith(required)) {
-    throw new assert.AssertionError({
-      message: message,
-      actual: actual,
-      expected: required})
-  }
-}
-
 //--------------------------------------------------------------------------------
 
 /**
@@ -203,91 +109,130 @@ class MockBlock {
   }
 }
 
-/**
- * Make a block by name.  If the construction function returns a string, that's
- * what we want; otherwise, it's a two-element list with the desired text and
- * the order, so we return the first element.
- * @param {string} blockName - must match string name of block.
- * @param {Object} settings - settings passed to block construction.
- * @return text for block.
- */
-const makeBlock = (blockName, settings) => {
-  assert(blockName in Blockly.fields,
-         `Unknown block name "${blockName}"`)
-  Object.keys(settings)
-    .filter(name => (! name.startsWith('_')))
-    .forEach(name => {
-      assert(Blockly.fields[blockName].has(name),
-             `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
-    })
-  assert(blockName in Blockly.JavaScript,
-         `Unknown block name "${blockName}"`)
-
-  const result = Blockly.JavaScript[blockName](new MockBlock(settings))
-  return (typeof result === 'string') ? result : result[0]
-}
-
-/**
- * Make code from object.
- */
-const makeCode = (root) => {
-  if (Array.isArray(root)) {
-    return root.map(node => makeCode(node))
-  }
-  else if (root instanceof Date) {
-    return `${root}`
-  }
-  else if (typeof root === 'object') {
-    assert('_b' in root, `Require '_b' key for block type in ${root}`)
-    for (let key of Object.keys(root)) {
-      if (key != '_b') {
-        root[key] = makeCode(root[key])
-      }
-    }
-    return makeBlock(root._b, root)
-  }
-  else {
-    return `${root}`
-  }
-}
-
-/**
- * Delete an existing block. (Emulates the drag-and-drop delete in the GUI.)
- */
-const deleteBlock = (block) => {
-  TbManager.deleteBlock(block)
-}
-
 //--------------------------------------------------------------------------------
 
-/**
- * Read 'index.html', find block files, and eval those.
- * Does _not_ read R files (for now).
- */
-const loadBlockFiles = () => {
-  Blockly = new BlocklyClass()
-  parse(fs.readFileSync('index.html', 'utf-8'))
-    .querySelector('#tidyblocks')
-    .querySelectorAll('script')
-    .map(node => node.attributes.src)
-    .filter(path => !path.includes('/r/'))
-    .map(path => ({path: path, src: fs.readFileSync(path, 'utf-8')}))
-    .map(({path, src}) => {
-      const start = src.indexOf('/** NOT FOR TESTING **/')
-      if (start >= 0) {
-        src = src.substring(0, start)
+class TbTestUtils {
+
+  /**
+   * Make a block by name.  If the construction function returns a string, that's
+   * what we want; otherwise, it's a two-element list with the desired text and
+   * the order, so we return the first element.
+   * @param {string} blockName - must match string name of block.
+   * @param {Object} settings - settings passed to block construction.
+   * @return text for block.
+   */
+  static makeBlock (blockName, settings) {
+    assert(blockName in Blockly.fields,
+           `Unknown block name "${blockName}"`)
+    Object.keys(settings)
+      .filter(name => (! name.startsWith('_')))
+      .forEach(name => {
+        assert(Blockly.fields[blockName].has(name),
+               `Unknown field ${name} in ${blockName}, known fields are ${Array.from(Blockly.fields[blockName]).join(', ')}`)
+      })
+    assert(blockName in Blockly.JavaScript,
+           `Unknown block name "${blockName}"`)
+  
+    const result = Blockly.JavaScript[blockName](new MockBlock(settings))
+    return (typeof result === 'string') ? result : result[0]
+  }
+
+  /**
+   * Make code from object.
+   */
+  static makeCode (root) {
+    if (Array.isArray(root)) {
+      return root.map(node => TbTestUtils.makeCode(node))
+    }
+    else if (root instanceof Date) {
+      return `${root}`
+    }
+    else if (typeof root === 'object') {
+      assert('_b' in root, `Require '_b' key for block type in ${root}`)
+      for (let key of Object.keys(root)) {
+        if (key != '_b') {
+          root[key] = TbTestUtils.makeCode(root[key])
+        }
       }
-      return {path, src}
-    })
-    .forEach(({path, src}) => {
-      try {
-        eval(src)
+      return TbTestUtils.makeBlock(root._b, root)
+    }
+    else {
+      return `${root}`
+    }
+  }
+
+  /**
+   * Delete an existing block. (Emulates the drag-and-drop delete in the GUI.)
+   */
+  static deleteBlock (block) {
+    TbManager.deleteBlock(block)
+  }
+
+  /**
+   * Read 'index.html', find block files, and eval those.
+   * Does _not_ read R files (for now).
+   */
+  static loadBlockFiles () {
+    Blockly = new BlocklyClass()
+    parse(fs.readFileSync('index.html', 'utf-8'))
+      .querySelector('#tidyblocks')
+      .querySelectorAll('script')
+      .map(node => node.attributes.src)
+      .filter(path => !path.includes('/r/'))
+      .map(path => ({path: path, src: fs.readFileSync(path, 'utf-8')}))
+      .map(({path, src}) => {
+        const start = src.indexOf('/** NOT FOR TESTING **/')
+        if (start >= 0) {
+          src = src.substring(0, start)
+        }
+        return {path, src}
+      })
+      .forEach(({path, src}) => {
+        try {
+          eval(src)
+        }
+        catch (err) {
+          console.log(`ERROR in ${path}: ${err}`)
+          process.exit(1)
+        }
+      })
+  }
+
+  /**
+   * Evaluate code from blocks.
+   * @param code {string} - code to evaluate.
+   * @return environment (including eval'd code).
+   */
+  static evalCode (code) {
+    if (Array.isArray(code)) {
+      code = code.map(code => TbTestUtils.makeCode(code)).join('\n')
+    }
+    const environment = new TestEnvironment(code)
+    TbManager.run(environment)
+    return environment
+  }
+
+  /**
+   * Create special-purpose blocks for testing.
+   */
+  static createTestingBlocks () {
+
+    // "Missing value" block.
+    Blockly.defineBlocksWithJsonArray([
+      {
+        type: 'value_missing',
+        message0: 'missing',
+        args0: [],
+        inputsInline: true,
+        style: 'value_blocks'
       }
-      catch (err) {
-        console.log(`ERROR in ${path}: ${err}`)
-        process.exit(1)
-      }
-    })
+    ])
+    Blockly.JavaScript['value_missing'] = (block) => {
+      const order = Blockly.JavaScript.ORDER_NONE
+      const code = `(row) => TbDataFrame.MISSING`
+      return [code, order]
+    }
+  }
 }
 
 //--------------------------------------------------------------------------------
@@ -360,41 +305,101 @@ class TestEnvironment {
   }
 }
 
-/**
- * Run code block.
- * @param code {string} - code to evaluate.
- * @return environment (including eval'd code).
- */
-const evalCode = (code) => {
-  if (Array.isArray(code)) {
-    code = code.map(code => makeCode(code)).join('\n')
-  }
-  const environment = new TestEnvironment(code)
-  TbManager.run(environment)
-  return environment
-}
+//--------------------------------------------------------------------------------
 
 /**
- * Create special-purpose blocks for testing.
+ * Assert that two values are approximately equal.
+ * @param {number} left Left side of equality.
+ * @param {number} right Right side of equality.
+ * @param {string} message Error message.
+ * @param {number} tolerance Relative difference allowed.
  */
-const createTestingBlocks = () => {
-
-  // "Missing value" block.
-  Blockly.defineBlocksWithJsonArray([
-    {
-      type: 'value_missing',
-      message0: 'missing',
-      args0: [],
-      inputsInline: true,
-      style: 'value_blocks'
+assert.approxEquals = (left, right, message, tolerance = TOLERANCE) => {
+  const denom = Math.max(Math.abs(left), Math.abs(right))
+  if (denom !== 0) {
+    const ratio = Math.abs(left - right) / denom
+    if (ratio > tolerance) {
+      throw new assert.AssertionError({
+        message: message,
+        actual: ratio,
+        expected: tolerance})
     }
-  ])
-  Blockly.JavaScript['value_missing'] = (block) => {
-    const order = Blockly.JavaScript.ORDER_NONE
-    const code = `(row) => TbDataFrame.MISSING`
-    return [code, order]
   }
 }
+
+/**
+ * Assert that an object has a key.
+ * @param {string} actual Object being examined.
+ * @param {string} required Key that must be present.
+ * @param {string} message Error message.
+ */
+assert.hasKey = (actual, required, message) => {
+  if (! (required in actual)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: Object.keys(actual),
+      expected: required})
+  }
+}
+
+/**
+ * Assert that one string contains another.
+ * @param {string} actual String being examined.
+ * @param {string} required String to look for.
+ * @param {string} message Error message.
+ */
+assert.includes = (actual, required, message) => {
+  if (! actual.includes(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
+ * Assert that a string matches a regular expression.
+ * @param {string} actual String being examined.
+ * @param {regexp} required Pattern to look for.
+ * @param {string} message Error message.
+ */
+assert.match = (actual, required, message) => {
+  if (! actual.match(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+/**
+ * Assert that two sets are equal (used for checking columns).
+ * @param left One set.
+ * @param right The other set.
+ */
+assert.setEqual = (left, right) => {
+  assert.equal(left.size, right.size,
+               `Expected same number of columns in sorted result`)
+  left.forEach(name => assert(right.has(name),
+                              `Expected ${name} in sorted results`))
+}
+
+/**
+ * Assert that one string starts with another.
+ * @param {string} actual String being examined.
+ * @param {string} required String to look for.
+ * @param {string} message Error message.
+ */
+assert.startsWith = (actual, required, message) => {
+  if (! actual.startsWith(required)) {
+    throw new assert.AssertionError({
+      message: message,
+      actual: actual,
+      expected: required})
+  }
+}
+
+//--------------------------------------------------------------------------------
 
 //
 // Exports.
@@ -402,10 +407,6 @@ const createTestingBlocks = () => {
 module.exports = {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 }

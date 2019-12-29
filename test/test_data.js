@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('generates code for loading data', () => {
@@ -25,7 +21,7 @@ describe('generates code for loading data', () => {
 
   it('generates code to re-create the colors data', (done) => {
     const pipeline = {_b: 'data_colors'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
     assert.includes(code, 'colors.csv',
@@ -35,7 +31,7 @@ describe('generates code for loading data', () => {
 
   it('generates code for the earthquake data', (done) => {
     const pipeline = {_b: 'data_earthquakes'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
     assert.includes(code, 'earthquakes.csv',
@@ -45,7 +41,7 @@ describe('generates code for loading data', () => {
 
   it('generates code for the iris data', (done) => {
     const pipeline = {_b: 'data_iris'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
     assert.includes(code, 'iris.csv',
@@ -57,7 +53,7 @@ describe('generates code for loading data', () => {
 
   it('generates code for the mtcars data', (done) => {
     const pipeline = {_b: 'data_mtcars'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
     assert.includes(code, 'mtcars.csv',
@@ -67,7 +63,7 @@ describe('generates code for loading data', () => {
 
   it('generates code for the tooth growth data', (done) => {
     const pipeline = {_b: 'data_toothGrowth'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
     assert.includes(code, 'toothGrowth.csv',
@@ -77,7 +73,7 @@ describe('generates code for loading data', () => {
 
   it('generates a 1x1 dataframe', (done) => {
     const pipeline = {_b: 'data_single'}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'TbManager.register',
                     'pipeline is not registered')
     assert.includes(code, 'new TbDataFrame',
@@ -89,7 +85,7 @@ describe('generates code for loading data', () => {
     const filePath = 'http://rstudio.com/tidyblocks.csv'
     const pipeline = {_b: 'data_urlCSV',
                       URL: filePath}
-    const code = makeCode(pipeline)
+    const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
     assert.includes(code, filePath,
@@ -108,7 +104,7 @@ describe('executes data loading blocks', () => {
     const pipeline = [
       {_b: 'data_mtcars'}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.notEqual(env.frame.data, null,
                     'Result table has not been set')
     assert.equal(env.frame.data.length, 32,

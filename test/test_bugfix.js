@@ -1,11 +1,7 @@
 const {
   TbDataFrame,
   TbManager,
-  loadBlockFiles,
-  makeBlock,
-  makeCode,
-  evalCode,
-  createTestingBlocks,
+  TbTestUtils,
   assert
 } = require('./utils')
 
@@ -13,8 +9,8 @@ const {
 // Load blocks and define testing blocks before running tests.
 //
 before(() => {
-  loadBlockFiles()
-  createTestingBlocks()
+  TbTestUtils.loadBlockFiles()
+  TbTestUtils.createTestingBlocks()
 })
 
 describe('check that specific bugs have been fixed', () => {
@@ -35,7 +31,7 @@ describe('check that specific bugs have been fixed', () => {
                RIGHT: {_b: 'value_column',
                        COLUMN: 'first'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 2,
                  'Wrong number of rows in output')
     assert.equal(Object.keys(env.frame.data[0]).length, 3,
@@ -57,7 +53,7 @@ describe('check that specific bugs have been fixed', () => {
                RIGHT: {_b: 'value_column',
                        COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => (row.product === (row.red * row.green))),
            `Incorrect result(s) for multiplication`)
     done()
@@ -75,7 +71,7 @@ describe('check that specific bugs have been fixed', () => {
                RIGHT: {_b: 'value_column',
                        COLUMN: 'green'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert(env.frame.data.every(row => ((row.green === 0)
                                    ? (row.remainder === TbDataFrame.MISSING)
                                    : (row.remainder === (row.red % row.green)))),
@@ -94,7 +90,7 @@ describe('check that specific bugs have been fixed', () => {
               RIGHT: {_b: 'value_text',
                       VALUE: 'setosa'}}}
     ]
-    const env = evalCode(pipeline)
+    const env = TbTestUtils.evalCode(pipeline)
     assert.equal(env.frame.data.length, 50,
                  'Wrong number of results in output')
     done()
@@ -110,7 +106,7 @@ describe('check that specific bugs have been fixed', () => {
                 VALUE: {_b: 'value_column',
                         COLUMN: columnName}}}
       ]
-      const env = evalCode(pipeline)
+      const env = TbTestUtils.evalCode(pipeline)
       assert.equal(env.error, '',
                    `Expected no error from pipeline`)
       assert.equal(env.frame.data.length, 1,
