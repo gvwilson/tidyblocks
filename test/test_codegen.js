@@ -572,5 +572,24 @@ describe('generate code for single blocks', () => {
                     'Code does not include significance')
     done()
   })
+
+  it('generates code for one-sample two-sided t-test', (done) => {
+    const pipeline = {_b: 'stats_t_test_one_sample',
+                      COLUMN: 'blue',
+                      MEAN: 2.0,
+                      SIGNIFICANCE: 0.01}
+    const code = makeCode(pipeline)
+    assert_includes(code, '.test',
+                    'Code does not include call to .test method')
+    assert_includes(code, 'tbTTestOneSample',
+                    'Code does not include test function name')
+    assert_includes(code, 'blue',
+                    'Code does not mention column')
+    assert_includes(code, 'mu: 2',
+                    'Code does not include mean mu')
+    assert_includes(code, 'alpha: 0.01',
+                    'Code does not include significance')
+    done()
+  })
   
 })

@@ -105,8 +105,9 @@
             </category>
             <category name="statistics" categorystyle="statistics">
               <block type="stats_z_test_one_sample"></block>
-              <block type="stats_kruskal_wallis_test"></block>
-              <block type="stats_kolmogorov_smirnov_test"></block>
+              <block type="stats_kruskal_wallis"></block>
+              <block type="stats_kolmogorov_smirnov"></block>
+              <block type="stats_t_test_one_sample"></block>
             </category>
           </xml>
         </div>
@@ -190,8 +191,8 @@
     <script>
       document.addEventListener('DOMContentLoaded', (event) => {
         setUpBlockly()
-        TBManager.papa = Papa // make CSV parser available inside blocks
-        TBManager.stdlib = stdlib // make math libraries available inside blocks
+        TbManager.papa = Papa // make CSV parser available inside blocks
+        TbManager.stdlib = stdlib // make math libraries available inside blocks
       })
     </script>
   </body>

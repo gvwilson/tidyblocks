@@ -95,4 +95,25 @@ describe('statistics tests', () => {
     done()
   })
 
+  it('runs a one-sample two-sided t-test', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'stats_t_test_one_sample',
+       COLUMN: 'blue',
+       MEAN: 0.0,
+       SIGNIFICANCE: 0.05}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error from statistical test')
+    const {values, legend} = env.stats
+    assert.equal(legend._title, 'one-sample two-sided t-test',
+                 'Wrong title')
+    assert.equal(values.rejected, true,
+                 'Wrong result')
+    assert_approxEquals((0.0 <= values.pValue) && (values.pValue <= 0.1),
+                        'Wrong p-value')
+    done()
+  })
+
 })

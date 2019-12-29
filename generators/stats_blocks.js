@@ -35,3 +35,15 @@ Blockly.JavaScript['stats_kolmogorov_smirnov'] = (block) => {
   const params = `{mean: ${mean}, std_dev: ${std_dev}, significance: ${significance}}`
   return `.test(environment, ${block.tbId}, tbKolmogorovSmirnov, ${params}, "${column}")`
 }
+
+//
+// Create a one-sample two-sided t-test.
+//
+Blockly.JavaScript['stats_t_test_one_sample'] = (block) => {
+  const order = Blockly.JavaScript.ORDER_NONE
+  const column = block.getFieldValue('COLUMN')
+  const mean = block.getFieldValue('MEAN')
+  const significance = block.getFieldValue('SIGNIFICANCE')
+  const params = `{mu: ${mean}, alpha: ${significance}}`
+  return `.test(environment, ${block.tbId}, tbTTestOneSample, ${params}, "${column}")`
+}

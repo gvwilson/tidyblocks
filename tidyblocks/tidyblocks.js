@@ -791,6 +791,31 @@ const tbKolmogorovSmirnov = (dataframe, blockId, parameters, columns) => {
   return {result, legend}
 }
 
+/**
+ * One-sample two-sided t-test.
+ * @param dataframe Dataframe being operated on.
+ * @param {number} blockId The ID of the block.
+ * @param {object} parameters The parameters for the test.
+ * @param columns A list of column names (must be of length 1).
+ * @returns Result object from test.
+ */
+const tbTTestOneSample = (dataframe, blockId, parameters, columns) => {
+  const {mu, alpha} = parameters
+  const col = columns[0]
+  const samples = dataframe.data.map(row => row[col])
+  const result = TbManager.stdlib.stats.ttest(samples,
+                                              {mu: mu, alpha: alpha})
+  const legend = {
+    _title: 'one-sample two-sided t-test',
+    rejected: 'is null hypothesis rejected?',
+    pValue: 'p-value',
+    statistic: 'measure value',
+    ci: 'confidence interval',
+    alpha: 'significance'
+  }
+  return {result, legend}
+}
+
 //--------------------------------------------------------------------------------
 
 /**
