@@ -30,19 +30,6 @@ describe('generate code for single blocks', () => {
     TbManager.reset()
   })
 
-  it('generates code to convert types', (done) => {
-    const pipeline = {_b: 'operation_convert',
-                      TYPE: 'tbToText',
-                      VALUE: {_b: 'value_column',
-                              COLUMN: 'left'}}
-    const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
-                      'generated code does not appear to be a function')
-    assert_includes(code, 'tbToText',
-                    'Generated code does not start with correct function')
-    done()
-  })
-
   it('generates code to filter rows', (done) => {
     const pipeline = {_b: 'transform_filter',
                       TEST: {_b: 'value_column',
@@ -164,47 +151,6 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to negate a column', (done) => {
-    const pipeline = {_b: 'operation_negate',
-                      VALUE: {_b: 'value_column',
-                              COLUMN: 'existing'}}
-    const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
-                      'generated code does not appear to be a function')
-    assert_includes(code, 'tbNeg',
-                    'generated code does not appear to negate')
-    done()
-  })
-
-  it('generates code to do logical negation', (done) => {
-    const pipeline = {_b: 'operation_not',
-                      VALUE: {_b: 'value_column',
-                              COLUMN: 'existing'}}
-    const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
-                      'generated code does not appear to be a function')
-    assert_includes(code, 'tbNot',
-                    'generated code does not appear to do logical negation')
-    done()
-  })
-
-  it('generates code to add two columns', (done) => {
-    const pipeline = {_b: 'operation_arithmetic',
-                      OP: 'tbAdd',
-                      LEFT: {_b: 'value_column',
-                             COLUMN: 'left'},
-                      RIGHT: {_b: 'value_column',
-                              COLUMN: 'right'}}
-    const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
-                      'generated code does not appear to be a function')
-    assert_includes(code, 'tbAdd',
-                    'generated code does not include tbAdd call')
-    assert_includes(code, 'tbGet',
-                    'generated code does not include tbGet calls')
-    done()
-  })
-
   it('generates code for a column name', (done) => {
     const pipeline = {_b: 'value_column',
                       COLUMN: 'TheColumnName'}
@@ -214,46 +160,12 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to compare two columns', (done) => {
-    const pipeline = {_b: 'operation_compare',
-                      OP: 'tbNeq',
-                      LEFT: {_b: 'value_column',
-                             COLUMN: 'left'},
-                      RIGHT: {_b: 'value_column',
-                              COLUMN: 'right'}}
-    const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
-                      'generated code does not appear to be a function')
-    assert_includes(code, 'tbNeq',
-                    'generated code does not include tbNeq call')
-    assert_includes(code, 'tbGet',
-                    'generated code does not include tbGet calls')
-    done()
-  })
-
   it('generates the code for a number', (done) => {
     const pipeline = {_b: 'value_number',
                       VALUE: 3.14}
     const code = makeCode(pipeline)
     assert.equal(code, '(row) => (3.14)',
                  'pipeline does not generate expected number')
-    done()
-  })
-
-  it('geneates code for a logical operation', (done) => {
-    const pipeline = {_b: 'operation_logical',
-                      OP: 'tbOr',
-                      LEFT: {_b: 'value_column',
-                             COLUMN: 'left'},
-                      RIGHT: {_b: 'value_column',
-                              COLUMN: 'right'}}
-    const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
-                      'generated code does not appear to be a function')
-    assert_includes(code, 'tbOr',
-                    'generated code does not include tbOr call')
-    assert_includes(code, 'tbGet',
-                    'generated code does not include tbGet calls')
     done()
   })
 
@@ -272,20 +184,6 @@ describe('generate code for single blocks', () => {
     const code = makeCode(pipeline)
     assert.equal(code, '(row) => (false)',
                  'pipeline does not generate constant Boolean')
-    done()
-  })
-
-  it('generates code for if-else', (done) => {
-    const pipeline = {_b: 'operation_ifElse',
-                      COND: {_b: 'value_column',
-                             COLUMN: 'red'},
-                      LEFT: {_b: 'value_column',
-                             COLUMN: 'green'},
-                      RIGHT: {_b: 'value_column',
-                              COLUMN: 'blue'}}
-    const code = makeCode(pipeline)
-    assert_includes(code, 'tbIfElse',
-                    'pipeline does not generate call to tbIfElse')
     done()
   })
 

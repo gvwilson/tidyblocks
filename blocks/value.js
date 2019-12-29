@@ -45,9 +45,6 @@ Blockly.defineBlocksWithJsonArray([
 //
 // Visuals for datetime block.
 //
-//
-// Visuals for datetime block.
-//
 Blockly.defineBlocksWithJsonArray([ 
   {
     type: 'value_datetime',
@@ -63,7 +60,6 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'constant date/time'
   }
 ])
-
 
 //
 // Visuals for number block.
