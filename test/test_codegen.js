@@ -310,52 +310,6 @@ describe('generate code for single blocks', () => {
     done()
   })
 
-  it('generates code to notify that a pipeline has completed', (done) => {
-    const pipeline = {_b: 'combine_notify',
-                      NAME: 'output_name'}
-    const code = makeCode(pipeline)
-    assert.equal(code.trim(),
-                 ".notify((name, frame) => TbManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
-                 'pipeine does not notify properly')
-    done()
-  })
-
-  it('generates code to join two pipelines', (done) => {
-    const pipeline = {_b: 'combine_join',
-                      LEFT_TABLE: 'left_table',
-                      LEFT_COLUMN: {_b: 'value_column',
-                                    COLUMN: 'left_column'},
-                      RIGHT_TABLE: 'right_table',
-                      RIGHT_COLUMN: {_b: 'value_column',
-                                     COLUMN: 'right_column'}}
-    const code = makeCode(pipeline)
-    assert_includes(code, 'TbManager.register',
-                    'pipeline is not registered')
-    assert_includes(code, "['left_table', 'right_table']",
-                    'pipeline does not register dependencies')
-    assert_includes(code, 'new TbDataFrame',
-                    'pipeline does not create a new dataframe')
-    done()
-  })
-
-  it('generates code to concatenate two columns', (done) => {
-    const pipeline = {_b: 'combine_concatenate',
-                      LEFT_TABLE: 'left_table',
-                      LEFT_COLUMN: {_b: 'value_column',
-                                    COLUMN: 'left_column'},
-                      RIGHT_TABLE: 'right_table',
-                      RIGHT_COLUMN: {_b: 'value_column',
-                                     COLUMN: 'right_column'}}
-    const code = makeCode(pipeline)
-    assert_includes(code, 'TbManager.register',
-                    'pipeline is not registered')
-    assert_includes(code, "['left_table', 'right_table']",
-                    'pipeline does not register dependencies')
-    assert_includes(code, 'new TbDataFrame',
-                    'pipeline does not create a new dataframe')
-    done()
-  })
-
   it('generates code to negate a column', (done) => {
     const pipeline = {_b: 'operation_negate',
                       VALUE: {_b: 'value_column',
