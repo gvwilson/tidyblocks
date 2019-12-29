@@ -307,4 +307,301 @@ describe('executes operations', () => {
            `Expected every result to be missing`)
     done()
   })
+
+  it('does division correctly even with zeroes', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'ratio',
+       VALUE: {_b: 'operation_arithmetic',
+               OP: 'tbDiv',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert(env.frame.data.every(row => ((row.green === 0)
+                                   ? (row.ratio === TbDataFrame.MISSING)
+                                   : (row.ratio === (row.red / row.green)))),
+           `Incorrect result(s) for division`)
+    done()
+  })
+
+  it('calculates exponents correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'operation_arithmetic',
+               OP: 'tbExp',
+               LEFT: {_b: 'value_column',
+                      COLUMN: 'red'},
+               RIGHT: {_b: 'value_column',
+                       COLUMN: 'green'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert(env.frame.data.every(row => (isFinite(row.red ** row.green)
+                                   ? (row.result === (row.red ** row.green))
+                                   : (row.result === TbDataFrame.MISSING))),
+           `Incorrect result(s) for exponentiation`)
+    done()
+  })
+
+  it('negates values correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'transform_mutate',
+       COLUMN: 'result',
+       VALUE: {_b: 'operation_negate',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'red'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert(env.frame.data.every(row => row.result === (- row.red)),
+           `Incorrect result(s) for negation`)
+    done()
+  })
+
+  it('does logical operations correctly', (done) => {
+    for (let funcName of ['tbAnd', 'tbOr']) {
+      for (let left of [true, false, TbDataFrame.MISSING]) {
+        for (let right of [true, false, TbDataFrame.MISSING]) {
+          const pipeline = [
+            {_b: 'data_double'},
+            {_b: 'transform_mutate',
+             COLUMN: 'left',
+             VALUE: {_b: 'value_boolean',
+                     VALUE: left}},
+            {_b: 'transform_mutate',
+             COLUMN: 'right',
+             VALUE: {_b: 'value_boolean',
+                     VALUE: right}},
+            {_b: 'transform_mutate',
+             COLUMN: 'result',
+             VALUE: {_b: 'operation_logical',
+                     OP: funcName,
+                     LEFT: {_b: 'value_column',
+                            COLUMN: 'left'},
+                     RIGHT: {_b: 'value_column',
+                             COLUMN: 'right'}}}
+          ]
+          const env = evalCode(pipeline)
+          const expected = (funcName === 'tbAnd')
+                ? (left && right)
+                : (left || right)
+          assert.equal(env.error, '',
+                       `Expected no error from operation`)
+          assert.equal(env.frame.data[0].result, expected,
+                       `Expected ${expected} from ${left} ${funcName} ${right}, got ${env.frame.data[0].result}`)
+        }
+      }
+    }
+    done()
+  })
+
+  it('compares numbers correctly', (done) => {
+    for (let [funcName, expected] of [['tbEq', false],
+                                      ['tbNeq', true],
+                                      ['tbLt', true],
+                                      ['tbLeq', true],
+                                      ['tbGt', false],
+                                      ['tbGeq', false]]) {
+      const pipeline = [
+        {_b: 'data_double'},
+        {_b: 'transform_mutate',
+         COLUMN: 'result',
+         VALUE: {_b: 'operation_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'first'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'second'}}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'value_missing'}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'operation_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'first'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'missing'}}}
+      ]
+      const env = evalCode(pipeline)
+      assert(env.frame.data.every(row => (row.result === expected)),
+             `Unexpected value(s) in comparison for ${funcName}`)
+      assert(env.frame.data.every(row => (row.missing === TbDataFrame.MISSING)),
+             `Some values are not missing as expected for ${funcName}`)
+    }
+    done()
+  })
+
+  it('compares strings correctly', (done) => {
+    for (let [funcName, expected] of [['tbEq', [false, false, true]],
+                                      ['tbNeq', [true, true, false]],
+                                      ['tbLt', [false, true, false]],
+                                      ['tbLeq', [false, true, true]],
+                                      ['tbGt', [true, false, false]],
+                                      ['tbGeq', [true, false, true]]]) {
+      const pipeline = [
+        {_b: 'data_urlCSV',
+         _standard: true,
+         URL: 'names.csv'},
+        {_b: 'transform_mutate',
+         COLUMN: 'result',
+         VALUE: {_b: 'operation_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'personal'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'family'}}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'value_missing'}},
+        {_b: 'transform_mutate',
+         COLUMN: 'missing',
+         VALUE: {_b: 'operation_compare',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'personal'},
+                 RIGHT:{_b: 'value_column',
+                        COLUMN: 'missing'}}}
+      ]
+      const env = evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Unexpected error in string comparison for ${funcName}`)
+      assert.deepEqual(env.frame.data.map(row => row.result), expected,
+             `Unexpected value(s) in comparison for ${funcName}`)
+      assert(env.frame.data.every(row => (row.missing === TbDataFrame.MISSING)),
+             `Some values are not missing as expected for ${funcName}`)
+    }
+    done()
+  })
+
+  it('handles conversion to number from Boolean and string correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'false'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_false'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'true'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_true'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'str',
+       VALUE: {_b: 'value_boolean',
+               VALUE: '123.45'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'str',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'str'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error when converting to number`)
+    assert.equal(env.frame.data[0].bool_false, 0,
+                 `Expected 0 when converting false to number, not ${env.frame.data[0].bool_false}`)
+    assert.equal(env.frame.data[0].bool_true, 1,
+                 `Expected 1 when converting true to number, not ${env.frame.data[0].bool_true}`)
+    assert.equal(env.frame.data[0].str, 123.45,
+                 `Expected 123.45 when converting false to number, not ${env.frame.data[0].str}`)
+    done()
+  })
+
+  it('converts things to strings correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'false'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_false',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_false'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'value_boolean',
+               VALUE: 'true'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'bool_true',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'bool_true'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'num',
+       VALUE: {_b: 'value_number',
+               VALUE: '-999'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'num',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'num'}}}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error when converting to string`)
+    assert.equal(env.frame.data[0].bool_false, 'false',
+                 `Expected "false" when converting false to string, not ${env.frame.data[0].bool_false}`)
+    assert.equal(env.frame.data[0].bool_true, 'true',
+                 `Expected "true" when converting true to string, not ${env.frame.data[0].bool_true}`)
+    assert.equal(env.frame.data[0].num, '-999',
+                 `Expected "-999" when converting -999 to string, not ${env.frame.data[0].num}`)
+    done()
+  })
+
+  it('checks types correctly', (done) => {
+    const allCases = [
+      ['tbIsBoolean', 'value_boolean', true],
+      ['tbIsDateTime', 'value_datetime', new Date('1980-02-03')],
+      ['tbIsNumber', 'value_number', 456.7],
+      ['tbIsText', 'value_text', 'text']
+    ]
+    for (let [actualFunc, actualName, actualValue] of allCases) {
+      for (let [checkFunc, checkName, checkValue] of allCases) {
+        const pipeline = [
+          {_b: 'data_single'},
+          {_b: 'transform_mutate',
+           COLUMN: 'temp',
+           VALUE: {_b: actualName,
+                   VALUE: actualValue}},
+          {_b: 'transform_mutate',
+           COLUMN: 'check',
+           VALUE: {_b: 'operation_type',
+                   TYPE: checkFunc,
+                   VALUE: {_b: 'value_column',
+                           COLUMN: 'temp'}}}
+        ]
+        const env = evalCode(pipeline)
+        assert.equal(env.error, '',
+                     `Expected no error for ${checkFunc} with ${actualName}`)
+        const expected = (actualName == checkName)
+        assert.equal(env.frame.data[0].check, expected,
+                     `Expected ${expected} comparison result for ${actualName} and ${checkName}, got ${env.frame.data[0].check}`)
+      }
+    }
+    done()
+  })
 })
