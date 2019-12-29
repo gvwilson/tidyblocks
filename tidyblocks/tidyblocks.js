@@ -842,6 +842,33 @@ const tbTTestPaired = (dataframe, blockId, parameters, columns) => {
   return {result, legend}
 }
 
+/**
+ * ANOVA test.
+ * @param dataframe Dataframe being operated on.
+ * @param {number} blockId The ID of the block.
+ * @param {object} parameters The parameters for the test.
+ * @param columns A list of column names (must be of length 2: groups and values).
+ * @returns Result object from test.
+ */
+
+const tbAnova = (dataframe, blockId, parameters, columns) => {
+  const {significance} = parameters
+  const [groupCol, valueCol] = columns
+  const groups = dataframe.data.map(row => row[groupCol])
+  const values = dataframe.data.map(row => row[valueCol])
+  const result = TbManager.stdlib.stats.anova1(values, groups,
+                                               {alpha: significance})
+  console.log('RESULT', result)
+  const legend = {
+    _title: 'ANOVA',
+    rejected: 'is null hypothesis rejected?',
+    pValue: 'p-value',
+    statistic: 'measure value',
+    alpha: 'significance'
+  }
+  return {result, legend}
+}
+
 //--------------------------------------------------------------------------------
 
 /**

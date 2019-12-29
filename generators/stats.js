@@ -59,3 +59,15 @@ Blockly.JavaScript['stats_t_test_paired'] = (block) => {
   const params = `{alpha: ${significance}}`
   return `.test(environment, ${block.tbId}, tbTTestPaired, ${params}, "${left}", "${right}")`
 }
+
+//
+// Create ANOVA test.
+//
+Blockly.JavaScript['stats_anova'] = (block) => {
+  const order = Blockly.JavaScript.ORDER_NONE
+  const groups = block.getFieldValue('GROUPS')
+  const values = block.getFieldValue('VALUES')
+  const significance = block.getFieldValue('SIGNIFICANCE')
+  const params = `{significance: ${significance}}`
+  return `.test(environment, ${block.tbId}, tbAnova, ${params}, "${groups}", "${values}")`
+}

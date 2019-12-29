@@ -177,3 +177,37 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: ''
   }
 ])
+
+//
+// Visuals for ANOVA test.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'stats_anova',
+    message0: 'ANOVA',
+    args0: [],
+    message1: 'groups %1 values %2 significance α %3',
+    args1: [
+      {
+        type: 'field_input',
+        name: 'GROUPS',
+        text: 'column'
+      },
+      {
+        type: 'field_input',
+        name: 'VALUES',
+        text: 'column'
+      },
+      {
+        type: 'field_number',
+        name: 'SIGNIFICANCE',
+        value: 0.05
+      }
+    ],
+    inputsInline: false,
+    previousStatement: null,
+    style: 'stats_blocks',
+    tooltip: 'perform ANOVA',
+    helpUrl: ''
+  }
+])

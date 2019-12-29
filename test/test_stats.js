@@ -119,6 +119,25 @@ describe('generates code for statistics blocks', () => {
                     'Code does not include significance')
     done()
   })
+
+  it('generates code for ANOVA using grouped values', (done) => {
+    const pipeline = {_b: 'stats_anova',
+                      GROUPS: 'green',
+                      VALUES: 'blue',
+                      SIGNIFICANCE: 0.01}
+    const code = TbTestUtils.makeCode(pipeline)
+    assert.includes(code, '.test',
+                    'Code does not include call to .test method')
+    assert.includes(code, 'tbAnova',
+                    'Code does not include test function name')
+    assert.includes(code, 'green',
+                    'Code does not mention first column')
+    assert.includes(code, 'blue',
+                    'Code does not mention second column')
+    assert.includes(code, 'significance: 0.01',
+                    'Code does not include significance')
+    done()
+  })
 })
 
 describe('executes statistics blocks', () => {
@@ -252,6 +271,27 @@ describe('executes statistics blocks', () => {
                  'Wrong result')
     assert.approxEquals((0.0 <= values.pValue) && (values.pValue <= 0.1),
                         'Wrong p-value')
+    done()
+  })
+
+  it('runs an ANOVA', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'stats_anova',
+       GROUPS: 'green',
+       VALUES: 'blue',
+       SIGNIFICANCE: 0.05}
+    ]
+    const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error from statistical test')
+    const {values, legend} = env.stats
+    assert.equal(legend._title, 'ANOVA',
+                 'Wrong title')
+    assert.equal(values.rejected, false,
+                 'Wrong result')
+    assert((0.6 <= values.pValue) && (values.pValue <= 0.8),
+           'Wrong p-value')
     done()
   })
 })
