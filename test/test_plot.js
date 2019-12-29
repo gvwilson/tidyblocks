@@ -185,5 +185,4 @@ describe('executes plotting blocks', () => {
                  'Result plot data is the wrong length')
     done()
   })
-
 })

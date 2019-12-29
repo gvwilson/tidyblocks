@@ -30,18 +30,6 @@ describe('execute blocks for entire pipelines', () => {
     TbManager.reset()
   })
 
-  it('creates a dataset by parsing a local CSV file', (done) => {
-    const pipeline = [
-      {_b: 'data_mtcars'}
-    ]
-    const env = evalCode(pipeline)
-    assert.notEqual(env.frame.data, null,
-                    'Result table has not been set')
-    assert.equal(env.frame.data.length, 32,
-                 'Result table has wrong number of rows')
-    done()
-  }),
-
   it('removed the dropped column', (done) => {
     const pipeline = [
       {_b: 'data_double'},
