@@ -708,7 +708,7 @@ const tbExponential = (blockId, rate) => {
   return TbManager.stdlib.random.base.exponential(rate)
 }
 
-/*
+/**
  * One-sample Z-test.
  * @param dataframe Dataframe being operated on.
  * @param {number} blockId The ID of the block.
@@ -738,12 +738,11 @@ const tbZTestOneSample = (dataframe, blockId, parameters, columns) => {
  * @param dataframe Dataframe being operated on.
  * @param {number} blockId The ID of the block.
  * @param {object} parameters The parameters for the test.
- * @param {string} groups Name of column containing group IDs.
- * @param {string} values Name of column containing values.
+ * @param columns A list of column names (must be of length 2: groups and values).
  * @returns Result object from test.
  */
 
-const tbKruskalWallisTest = (dataframe, blockId, parameters, columns) => {
+const tbKruskalWallis = (dataframe, blockId, parameters, columns) => {
   const {significance} = parameters
   const [groups, values] = columns
   split = {}
@@ -763,6 +762,31 @@ const tbKruskalWallisTest = (dataframe, blockId, parameters, columns) => {
     statistic: 'measure value',
     alpha: 'significance',
     df: 'degrees of freedom'
+  }
+  return {result, legend}
+}
+
+/**
+ * Kolmogorov-Smirnov test for normality.
+ * @param dataframe Dataframe being operated on.
+ * @param {number} blockId The ID of the block.
+ * @param {object} parameters The parameters for the test.
+ * @param {string} columns A list of column names (must be length 1).
+ * @returns Result object from test.
+ */
+
+const tbKolmogorovSmirnov = (dataframe, blockId, parameters, columns) => {
+  const {mean, std_dev, significance} = parameters
+  const col = columns[0]
+  const samples = dataframe.data.map(row => row[col])
+  const result = TbManager.stdlib.stats.kstest(samples, 'uniform', mean, std_dev,
+                                               {alpha: significance})
+  const legend = {
+    _title: 'Kolmogorov-Smirnov test for normality',
+    rejected: 'is null hypothesis rejected?',
+    pValue: 'p-value',
+    statistic: 'measure value',
+    alpha: 'significance'
   }
   return {result, legend}
 }

@@ -33,7 +33,7 @@ describe('statistics tests', () => {
   it('runs a one-sample Z-test', (done) => {
     const pipeline = [
       {_b: 'data_colors'},
-      {_b: 'statistics_z_test_one_sample',
+      {_b: 'stats_z_test_one_sample',
        COLUMN: 'blue',
        MEAN: 0.0,
        STD_DEV: 1.0,
@@ -52,11 +52,10 @@ describe('statistics tests', () => {
     done()
   })
 
-
   it('runs a Kruskal-Wallis test', (done) => {
     const pipeline = [
       {_b: 'data_colors'},
-      {_b: 'statistics_kruskal_wallis_test',
+      {_b: 'stats_kruskal_wallis',
        GROUPS: 'green',
        VALUES: 'blue',
        SIGNIFICANCE: 0.05}
@@ -70,6 +69,28 @@ describe('statistics tests', () => {
     assert.equal(values.rejected, false,
                  'Wrong result')
     assert((0.6 <= values.pValue) && (values.pValue <= 0.7),
+           'Wrong p-value')
+    done()
+  })
+
+  it('runs a Kolmogorov-Smirnov test for normality', (done) => {
+    const pipeline = [
+      {_b: 'data_colors'},
+      {_b: 'stats_kolmogorov_smirnov',
+       COLUMN: 'blue',
+       MEAN: 0.0,
+       STD_DEV: 1.0,
+       SIGNIFICANCE: 0.05}
+    ]
+    const env = evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error from statistical test')
+    const {values, legend} = env.stats
+    assert.equal(legend._title, 'Kolmogorov-Smirnov test for normality',
+                 'Wrong title')
+    assert.equal(values.rejected, true,
+                 'Wrong result')
+    assert(values.pValue < 0.05,
            'Wrong p-value')
     done()
   })

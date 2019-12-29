@@ -45,7 +45,7 @@ const tidyBlockStyles = {
     hat: 'cap'
   },
 
-  statistics_blocks: {
+  stats_blocks: {
     colourPrimary: '#70A0C0',
     colourSecondary: '#70A0C0',
     colourTertiary: '#C070A0'
