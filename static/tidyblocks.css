@@ -103,17 +103,11 @@ button:hover {
   height: 100%;
 }
 
-#error {
+#errorOutput {
   background-color: #fff;
   padding: 20px;
   margin:0;
   float: left;
-  font-family: monospace;
-  color: red;
-}
-
-#error {
-  background-color: #fff;
   font-family: monospace;
   color: red;
 }
