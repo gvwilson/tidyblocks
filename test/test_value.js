@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -34,7 +27,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_column',
                       COLUMN: 'TheColumnName'}
     const code = makeCode(pipeline)
-    assert_match(code, /\(row\) => tbGet\(\d+, row, 'TheColumnName'\)/,
+    assert.match(code, /\(row\) => tbGet\(\d+, row, 'TheColumnName'\)/,
                  'pipeline does not use function to get column value')
     done()
   })
@@ -71,7 +64,7 @@ describe('generate code for values', () => {
                       VALUE_1: 0,
                       VALUE_2: 1}
     const code = makeCode(pipeline)
-    assert_includes(code, 'tbUniform',
+    assert.includes(code, 'tbUniform',
                     `pipeline does not generate call to tbUniform: ${code}`)
     done()
   })
@@ -81,7 +74,7 @@ describe('generate code for values', () => {
                       VALUE_1: 0,
                       VALUE_2: 1}
     const code = makeCode(pipeline)
-    assert_includes(code, 'tbNormal',
+    assert.includes(code, 'tbNormal',
                     `pipeline does not generate call to tbNormal: ${code}`)
     done()
   })
@@ -90,7 +83,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_exponential',
                       VALUE_1: 0}
     const code = makeCode(pipeline)
-    assert_includes(code, 'tbExponential',
+    assert.includes(code, 'tbExponential',
                     `pipeline does not generate call to tbExponential: ${code}`)
     done()
   })

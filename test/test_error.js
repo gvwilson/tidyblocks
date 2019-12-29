@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -57,7 +50,7 @@ describe('raises errors at the right times', () => {
                COLUMN: 'nonexistent'}}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no such column "nonexistent"/,
+    assert.match(env.error, /\[block \d+\] no such column "nonexistent"/,
                  `Expected an error message when accessing a nonexistent column`)
     done()
   })
@@ -69,7 +62,7 @@ describe('raises errors at the right times', () => {
        TEST: ''}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no operator for filter/,
+    assert.match(env.error, /\[block \d+\] no operator for filter/,
                  `Expected an error message when filtering without condition`)
     done()
   })
@@ -81,7 +74,7 @@ describe('raises errors at the right times', () => {
        MULTIPLE_COLUMNS: ''}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] empty column name\(s\) for grouping/,
+    assert.match(env.error, /\[block \d+\] empty column name\(s\) for grouping/,
                  `Expected an error message when filtering with empty column`)
     done()
   })
@@ -93,7 +86,7 @@ describe('raises errors at the right times', () => {
        MULTIPLE_COLUMNS: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] unknown column\(s\) nonexistent in groupBy/,
+    assert.match(env.error, /\[block \d+\] unknown column\(s\) nonexistent in groupBy/,
                  `Expected an error message when filtering with nonexistent column`)
     done()
   })
@@ -107,7 +100,7 @@ describe('raises errors at the right times', () => {
                COLUMN: 'red'}}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] empty new column name for mutate/,
+    assert.match(env.error, /\[block \d+\] empty new column name for mutate/,
                  `Expected an error message when mutating to empty column`)
     done()
   })
@@ -120,7 +113,7 @@ describe('raises errors at the right times', () => {
        VALUE: ''}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] new value is not a function/,
+    assert.match(env.error, /\[block \d+\] new value is not a function/,
                  `Expected an error message when mutating without an operator`)
     done()
   })
@@ -132,7 +125,7 @@ describe('raises errors at the right times', () => {
        MULTIPLE_COLUMNS: ''}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no columns specified for select/,
+    assert.match(env.error, /\[block \d+\] no columns specified for select/,
                  `Expected an error message when selecting with empty columns`)
     done()
   })
@@ -144,7 +137,7 @@ describe('raises errors at the right times', () => {
        MULTIPLE_COLUMNS: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in select/,
+    assert.match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in select/,
                  `Expected an error message when selecting with nonexistent columns`)
     done()
   })
@@ -157,7 +150,7 @@ describe('raises errors at the right times', () => {
        DESCENDING: 'FALSE'}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no columns specified for sort/,
+    assert.match(env.error, /\[block \d+\] no columns specified for sort/,
                  `Expected an error message when sorting with empty columns`)
     done()
   })
@@ -169,7 +162,7 @@ describe('raises errors at the right times', () => {
        MULTIPLE_COLUMNS: 'nonexistent'}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in sort/,
+    assert.match(env.error, /\[block \d+\] unknown column\(s\) \[.+\] in sort/,
                  `Expected an error message when sorting with nonexistent columns`)
     done()
   })
@@ -185,7 +178,7 @@ describe('raises errors at the right times', () => {
         ]}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] no column specified for summarize/,
+    assert.match(env.error, /\[block \d+\] no column specified for summarize/,
                  `Expected an error message when summarizing with empty column`)
     done()
   })
@@ -201,7 +194,7 @@ describe('raises errors at the right times', () => {
         ]}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] unknown column ".+" in summarize/,
+    assert.match(env.error, /\[block \d+\] unknown column ".+" in summarize/,
                  `Expected an error message when summarizing with nonexistent columns`)
     done()
   })
@@ -212,7 +205,7 @@ describe('raises errors at the right times', () => {
       {_b: 'transform_ungroup'}
     ]
     const env = evalCode(pipeline)
-    assert_match(env.error, /\[block \d+\] cannot ungroup data that is not grouped/,
+    assert.match(env.error, /\[block \d+\] cannot ungroup data that is not grouped/,
                  `Expected an error message when ungrouping data that is not grouped`)
     done()
   })

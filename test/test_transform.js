@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -35,9 +28,9 @@ describe('generates code for transformation blocks', () => {
                       TEST: {_b: 'value_column',
                              COLUMN: 'existingColumn'}}
     const code = makeCode(pipeline)
-    assert_includes(code, '.filter',
+    assert.includes(code, '.filter',
                     'pipeline does not start with filter call')
-    assert_includes(code, '=>',
+    assert.includes(code, '=>',
                     'pipeline does not include arrow function')
     done()
   })
@@ -46,7 +39,7 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_groupBy',
                       MULTIPLE_COLUMNS: 'existingColumn'}
     const code = makeCode(pipeline)
-    assert_match(code, /.groupBy\(\d+, \["existingColumn"\]\)/,
+    assert.match(code, /.groupBy\(\d+, \["existingColumn"\]\)/,
                  'pipeline does not group rows by existing column')
     done()
   })
@@ -65,13 +58,13 @@ describe('generates code for transformation blocks', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existingColumn'}}
     const code = makeCode(pipeline)
-    assert_includes(code, '.mutate',
+    assert.includes(code, '.mutate',
                     'pipeline does not start with mutate call')
-    assert_includes(code, '=>',
+    assert.includes(code, '=>',
                     'pipeline does not include arrow function')
-    assert_includes(code, 'newColumnName',
+    assert.includes(code, 'newColumnName',
                     'pipeline does not include new column name')
-    assert_includes(code, 'existingColumn',
+    assert.includes(code, 'existingColumn',
                     'pipeline does not include existing column name')
     done()
   })
@@ -80,9 +73,9 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_drop',
                       MULTIPLE_COLUMNS: 'existingColumn'}
     const code = makeCode(pipeline)
-    assert_includes(code, '.drop',
+    assert.includes(code, '.drop',
                     'pipeline does not start with drop call')
-    assert_includes(code, 'existingColumn',
+    assert.includes(code, 'existingColumn',
                     'pipeline does not include existing column name')
     done()
   })
@@ -91,9 +84,9 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_select',
                       MULTIPLE_COLUMNS: 'existingColumn'}
     const code = makeCode(pipeline)
-    assert_includes(code, '.select',
+    assert.includes(code, '.select',
                     'pipeline does not start with select call')
-    assert_includes(code, 'existingColumn',
+    assert.includes(code, 'existingColumn',
                     'pipeline does not include existing column name')
     done()
   })
@@ -144,9 +137,9 @@ describe('generates code for transformation blocks', () => {
     const pipeline = {_b: 'transform_unique',
                       MULTIPLE_COLUMNS: 'someColumn'}
     const code = makeCode(pipeline)
-    assert_includes(code, '.unique',
+    assert.includes(code, '.unique',
                     'pipeline does not start with unique call')
-    assert_includes(code, 'someColumn',
+    assert.includes(code, 'someColumn',
                     'pipeline does not include column name')
     done()
   })
@@ -167,7 +160,7 @@ describe('executes transformation blocks', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error from pipeline`)
-    assert_setEqual(new Set(['second']), env.frame.columns,
+    assert.setEqual(new Set(['second']), env.frame.columns,
                      `Drop does not return correct columns`)
     done()
   })
@@ -179,7 +172,7 @@ describe('executes transformation blocks', () => {
        MULTIPLE_COLUMNS: 'Sepal_Length'}
     ]
     const env = evalCode(pipeline)
-    assert_setEqual(new Set(['Sepal_Length']), env.frame.columns,
+    assert.setEqual(new Set(['Sepal_Length']), env.frame.columns,
                      `Select does not return correct columns`)
     done()
   })
@@ -195,7 +188,7 @@ describe('executes transformation blocks', () => {
     const env = evalCode(pipeline)
     assert.equal(env.error, '',
                  `Expected no error`)
-    assert_hasKey(env.frame.data[0], 'newColumnName',
+    assert.hasKey(env.frame.data[0], 'newColumnName',
                   `Table does not have expected column after mutate`)
     done()
   })
@@ -215,7 +208,7 @@ describe('executes transformation blocks', () => {
     const env_sorted = evalCode(sorted)
     assert.equal(env_original.error, '',
                  `Expected no error when sorting`)
-    assert_setEqual(env_original.frame.columns,
+    assert.setEqual(env_original.frame.columns,
                     env_sorted.frame.columns,
                     `Expected same columns in output`)
     done()
@@ -282,7 +275,7 @@ describe('executes transformation blocks', () => {
                  `Expected 3 rows in result, not ${env.frame.data.length}`)
     const expectedValues = new Set([0, 128, 255])
     const actualValues = new Set(env.frame.data.map(row => row.red))
-    assert_setEqual(actualValues, expectedValues,
+    assert.setEqual(actualValues, expectedValues,
                     `Expected ${expectedValues} not ${actualValues}`)
     done()
   })
@@ -302,7 +295,7 @@ describe('executes transformation blocks', () => {
                  `Expected 6 rows in result, not ${env.frame.data.length}`)
     const expectedValues = new Set(['0:0', '0:128', '0:255', '128:0', '255:0', '255:255'])
     const actualValues = new Set(env.frame.data.map(row => `${row.red}:${row.green}`))
-    assert_setEqual(actualValues, expectedValues,
+    assert.setEqual(actualValues, expectedValues,
                     `Expected ${expectedValues} not ${actualValues}`)
     done()
   })
@@ -659,9 +652,9 @@ describe('check that grouping and summarization work', () => {
     const expected_variance = 14243.140495867769
     const expected_std = 119.34462910356615
     env.frame.data.forEach(row => {
-      assert_approxEquals(row.red_variance, expected_variance,
+      assert.approxEquals(row.red_variance, expected_variance,
                           `Expect a variance of ${expected_variance}, not ${row.red_variance}`)
-      assert_approxEquals(row.green_std, expected_std,
+      assert.approxEquals(row.green_std, expected_std,
                           `Expect a standard deviation of ${expected_std}, not ${row.green_std}`)
     })
     done()

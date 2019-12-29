@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -37,13 +30,13 @@ describe('generates code for plotting blocks', () => {
                       Y_AXIS: {_b: 'value_column',
                                COLUMN: 'Y_axis_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, '.plot(environment',
+    assert.includes(code, '.plot(environment',
                     'pipeline does not call .plot')
-    assert_includes(code, 'X_axis_column',
+    assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
-    assert_includes(code, 'Y_axis_column',
+    assert.includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
-    assert_includes(code, '"mark": "bar"',
+    assert.includes(code, '"mark": "bar"',
                     'pipeline does not use a bar')
     done()
   })
@@ -55,13 +48,13 @@ describe('generates code for plotting blocks', () => {
                       Y_AXIS: {_b: 'value_column',
                                COLUMN: 'Y_axis_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, '.plot(environment',
+    assert.includes(code, '.plot(environment',
                     'pipeline does not call .plot')
-    assert_includes(code, 'X_axis_column',
+    assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
-    assert_includes(code, 'Y_axis_column',
+    assert.includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
-    assert_includes(code, '"type": "boxplot"',
+    assert.includes(code, '"type": "boxplot"',
                     'pipeline is not a box plot')
     done()
   })
@@ -71,11 +64,11 @@ describe('generates code for plotting blocks', () => {
                       COLUMN: 'existingColumn',
                       BINS: '20'}
     const code = makeCode(pipeline)
-    assert_includes(code, '"maxbins":',
+    assert.includes(code, '"maxbins":',
                     'pipeline does not include maxbins')
-    assert_includes(code, '"field": "existingColumn"',
+    assert.includes(code, '"field": "existingColumn"',
                     'pipeline does not reference existing column')
-    assert_includes(code, '"mark": "bar"',
+    assert.includes(code, '"mark": "bar"',
                     'pipeline does not use a bar')
     done()
   })
@@ -89,15 +82,15 @@ describe('generates code for plotting blocks', () => {
                       COLOR: {_b: 'value_column',
                               COLUMN: 'COLOR_axis_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, '.plot(environment',
+    assert.includes(code, '.plot(environment',
                     'pipeline does not call .plot')
-    assert_includes(code, 'X_axis_column',
+    assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
-    assert_includes(code, 'Y_axis_column',
+    assert.includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
-    assert_includes(code, 'COLOR_axis_column',
+    assert.includes(code, 'COLOR_axis_column',
                     'pipeline does not reference color axis column')
-    assert_includes(code, '"mark": "point"',
+    assert.includes(code, '"mark": "point"',
                     'pipeline does not set the mark to point')
     done()
   })
@@ -134,7 +127,7 @@ describe('executes plotting blocks', () => {
            'Result table is not an array')
     assert.equal(env.frame.data.length, 150,
                  'Result table is the wrong length')
-    assert_hasKey(env.frame.data[0], 'Sepal_Length',
+    assert.hasKey(env.frame.data[0], 'Sepal_Length',
            'Result table missing expected keys')
     assert.equal(typeof env.plot, 'object',
                  'Result plot is not an object')
@@ -155,7 +148,7 @@ describe('executes plotting blocks', () => {
     const env = evalCode(pipeline)
     assert.equal(Object.keys(env.frame.data[0]).length, 1,
                  'Wrong number of columns in result table')
-    assert_hasKey(env.frame.data[0], 'Petal_Length',
+    assert.hasKey(env.frame.data[0], 'Petal_Length',
                   'Result table does not contain expected key')
     assert.equal(env.plot.data.values.length, 150,
                  'Result plot data is the wrong length')

@@ -35,7 +35,7 @@ const ARGS_N = ['args0', 'args1', 'args2']
  * @param {string} message Error message.
  * @param {number} tolerance Relative difference allowed.
  */
-const assert_approxEquals = (left, right, message, tolerance = TOLERANCE) => {
+assert.approxEquals = (left, right, message, tolerance = TOLERANCE) => {
   const denom = Math.max(Math.abs(left), Math.abs(right))
   if (denom !== 0) {
     const ratio = Math.abs(left - right) / denom
@@ -48,13 +48,15 @@ const assert_approxEquals = (left, right, message, tolerance = TOLERANCE) => {
   }
 }
 
+//--------------------------------------------------------------------------------
+
 /**
  * Assert that an object has a key.
  * @param {string} actual Object being examined.
  * @param {string} required Key that must be present.
  * @param {string} message Error message.
  */
-const assert_hasKey = (actual, required, message) => {
+assert.hasKey = (actual, required, message) => {
   if (! (required in actual)) {
     throw new assert.AssertionError({
       message: message,
@@ -69,7 +71,7 @@ const assert_hasKey = (actual, required, message) => {
  * @param {string} required String to look for.
  * @param {string} message Error message.
  */
-const assert_includes = (actual, required, message) => {
+assert.includes = (actual, required, message) => {
   if (! actual.includes(required)) {
     throw new assert.AssertionError({
       message: message,
@@ -84,7 +86,7 @@ const assert_includes = (actual, required, message) => {
  * @param {regexp} required Pattern to look for.
  * @param {string} message Error message.
  */
-const assert_match = (actual, required, message) => {
+assert.match = (actual, required, message) => {
   if (! actual.match(required)) {
     throw new assert.AssertionError({
       message: message,
@@ -98,7 +100,7 @@ const assert_match = (actual, required, message) => {
  * @param left One set.
  * @param right The other set.
  */
-const assert_setEqual = (left, right) => {
+assert.setEqual = (left, right) => {
   assert.equal(left.size, right.size,
                `Expected same number of columns in sorted result`)
   left.forEach(name => assert(right.has(name),
@@ -111,7 +113,7 @@ const assert_setEqual = (left, right) => {
  * @param {string} required String to look for.
  * @param {string} message Error message.
  */
-const assert_startsWith = (actual, required, message) => {
+assert.startsWith = (actual, required, message) => {
   if (! actual.startsWith(required)) {
     throw new assert.AssertionError({
       message: message,
@@ -400,15 +402,10 @@ const createTestingBlocks = () => {
 module.exports = {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 }

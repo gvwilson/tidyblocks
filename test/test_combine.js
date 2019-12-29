@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -49,11 +42,11 @@ describe('generate code for combining blocks', () => {
                       RIGHT_COLUMN: {_b: 'value_column',
                                      COLUMN: 'right_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, 'TbManager.register',
+    assert.includes(code, 'TbManager.register',
                     'pipeline is not registered')
-    assert_includes(code, "['left_table', 'right_table']",
+    assert.includes(code, "['left_table', 'right_table']",
                     'pipeline does not register dependencies')
-    assert_includes(code, 'new TbDataFrame',
+    assert.includes(code, 'new TbDataFrame',
                     'pipeline does not create a new dataframe')
     done()
   })
@@ -67,11 +60,11 @@ describe('generate code for combining blocks', () => {
                       RIGHT_COLUMN: {_b: 'value_column',
                                      COLUMN: 'right_column'}}
     const code = makeCode(pipeline)
-    assert_includes(code, 'TbManager.register',
+    assert.includes(code, 'TbManager.register',
                     'pipeline is not registered')
-    assert_includes(code, "['left_table', 'right_table']",
+    assert.includes(code, "['left_table', 'right_table']",
                     'pipeline does not register dependencies')
-    assert_includes(code, 'new TbDataFrame',
+    assert.includes(code, 'new TbDataFrame',
                     'pipeline does not create a new dataframe')
     done()
   })

@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -33,9 +26,9 @@ describe('generates code for loading data', () => {
   it('generates code to re-create the colors data', (done) => {
     const pipeline = {_b: 'data_colors'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'readCSV',
+    assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
-    assert_includes(code, 'colors.csv',
+    assert.includes(code, 'colors.csv',
                     'pipeline does not read color data')
     done()
   })
@@ -43,9 +36,9 @@ describe('generates code for loading data', () => {
   it('generates code for the earthquake data', (done) => {
     const pipeline = {_b: 'data_earthquakes'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'readCSV',
+    assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
-    assert_includes(code, 'earthquakes.csv',
+    assert.includes(code, 'earthquakes.csv',
                     'pipeline does not read earthquake data')
     done()
   })
@@ -53,11 +46,11 @@ describe('generates code for loading data', () => {
   it('generates code for the iris data', (done) => {
     const pipeline = {_b: 'data_iris'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'readCSV',
+    assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
-    assert_includes(code, 'iris.csv',
+    assert.includes(code, 'iris.csv',
                     'pipeline does not read earthquake data')
-    assert_includes(code, 'toNumber',
+    assert.includes(code, 'toNumber',
                     'pipeline does not convert data to numeric')
     done()
   })
@@ -65,9 +58,9 @@ describe('generates code for loading data', () => {
   it('generates code for the mtcars data', (done) => {
     const pipeline = {_b: 'data_mtcars'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'readCSV',
+    assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
-    assert_includes(code, 'mtcars.csv',
+    assert.includes(code, 'mtcars.csv',
                     'pipeline does not read mtcars data')
     done()
   })
@@ -75,9 +68,9 @@ describe('generates code for loading data', () => {
   it('generates code for the tooth growth data', (done) => {
     const pipeline = {_b: 'data_toothGrowth'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'readCSV',
+    assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
-    assert_includes(code, 'toothGrowth.csv',
+    assert.includes(code, 'toothGrowth.csv',
                     'pipeline does not read tooth growth data')
     done()
   })
@@ -85,9 +78,9 @@ describe('generates code for loading data', () => {
   it('generates a 1x1 dataframe', (done) => {
     const pipeline = {_b: 'data_single'}
     const code = makeCode(pipeline)
-    assert_includes(code, 'TbManager.register',
+    assert.includes(code, 'TbManager.register',
                     'pipeline is not registered')
-    assert_includes(code, 'new TbDataFrame',
+    assert.includes(code, 'new TbDataFrame',
                     'pipeline does not create dataframe')
     done()
   })
@@ -97,9 +90,9 @@ describe('generates code for loading data', () => {
     const pipeline = {_b: 'data_urlCSV',
                       URL: filePath}
     const code = makeCode(pipeline)
-    assert_includes(code, 'readCSV',
+    assert.includes(code, 'readCSV',
                     'pipeline does not read CSV')
-    assert_includes(code, filePath,
+    assert.includes(code, filePath,
                     `pipeline does not include "${filePath}"`)
     done()
   })

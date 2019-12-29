@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -174,10 +167,10 @@ describe('testing utilities run correctly', () => {
   })
 
   it('compares floating point numbers correctly with a tolerance', (done) => {
-    assert.throws(() => assert_approxEquals(1, 2, 'message', 0),
+    assert.throws(() => assert.approxEquals(1, 2, 'message', 0),
                   /message/,
                   `Expected approximate equality test to fail`)
-    assert.doesNotThrow(() => assert_approxEquals(1, 2, 'message', 100),
+    assert.doesNotThrow(() => assert.approxEquals(1, 2, 'message', 100),
                         /message/,
                         `Expected approximate equality test to pass`)
     done()

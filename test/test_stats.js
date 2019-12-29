@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -37,17 +30,17 @@ describe('generates code for statistics blocks', () => {
                       STD_DEV: 0.75,
                       SIGNIFICANCE: 0.01}
     const code = makeCode(pipeline)
-    assert_includes(code, '.test',
+    assert.includes(code, '.test',
                     'Code does not include call to .test method')
-    assert_includes(code, 'tbZTestOneSample',
+    assert.includes(code, 'tbZTestOneSample',
                     'Code does not include test function name')
-    assert_includes(code, 'blue',
+    assert.includes(code, 'blue',
                     'Code does not mention column')
-    assert_includes(code, 'mean: 2',
+    assert.includes(code, 'mean: 2',
                     'Code does not include mean')
-    assert_includes(code, 'std_dev: 0.75',
+    assert.includes(code, 'std_dev: 0.75',
                     'Code does not include standard deviation')
-    assert_includes(code, 'significance: 0.01',
+    assert.includes(code, 'significance: 0.01',
                     'Code does not include significance')
     done()
   })
@@ -58,15 +51,15 @@ describe('generates code for statistics blocks', () => {
                       VALUES: 'blue',
                       SIGNIFICANCE: 0.01}
     const code = makeCode(pipeline)
-    assert_includes(code, '.test',
+    assert.includes(code, '.test',
                     'Code does not include call to .test method')
-    assert_includes(code, 'tbKruskalWallis',
+    assert.includes(code, 'tbKruskalWallis',
                     'Code does not include test function name')
-    assert_includes(code, 'green',
+    assert.includes(code, 'green',
                     'Code does not mention first column')
-    assert_includes(code, 'blue',
+    assert.includes(code, 'blue',
                     'Code does not mention second column')
-    assert_includes(code, 'significance: 0.01',
+    assert.includes(code, 'significance: 0.01',
                     'Code does not include significance')
     done()
   })
@@ -78,17 +71,17 @@ describe('generates code for statistics blocks', () => {
                       STD_DEV: 0.75,
                       SIGNIFICANCE: 0.01}
     const code = makeCode(pipeline)
-    assert_includes(code, '.test',
+    assert.includes(code, '.test',
                     'Code does not include call to .test method')
-    assert_includes(code, 'tbKolmogorovSmirnov',
+    assert.includes(code, 'tbKolmogorovSmirnov',
                     'Code does not include test function name')
-    assert_includes(code, 'blue',
+    assert.includes(code, 'blue',
                     'Code does not mention column')
-    assert_includes(code, 'mean: 2',
+    assert.includes(code, 'mean: 2',
                     'Code does not include mean')
-    assert_includes(code, 'std_dev: 0.75',
+    assert.includes(code, 'std_dev: 0.75',
                     'Code does not include standard deviation')
-    assert_includes(code, 'significance: 0.01',
+    assert.includes(code, 'significance: 0.01',
                     'Code does not include significance')
     done()
   })
@@ -99,15 +92,15 @@ describe('generates code for statistics blocks', () => {
                       MEAN: 2.0,
                       SIGNIFICANCE: 0.01}
     const code = makeCode(pipeline)
-    assert_includes(code, '.test',
+    assert.includes(code, '.test',
                     'Code does not include call to .test method')
-    assert_includes(code, 'tbTTestOneSample',
+    assert.includes(code, 'tbTTestOneSample',
                     'Code does not include test function name')
-    assert_includes(code, 'blue',
+    assert.includes(code, 'blue',
                     'Code does not mention column')
-    assert_includes(code, 'mu: 2',
+    assert.includes(code, 'mu: 2',
                     'Code does not include mean mu')
-    assert_includes(code, 'alpha: 0.01',
+    assert.includes(code, 'alpha: 0.01',
                     'Code does not include significance')
     done()
   })
@@ -136,7 +129,7 @@ describe('executes statistics blocks', () => {
                  'Wrong title')
     assert.equal(values.rejected, true,
                  'Wrong result')
-    assert_approxEquals(values.pValue, 0.0,
+    assert.approxEquals(values.pValue, 0.0,
                         'Wrong p-value')
     done()
   })
@@ -200,7 +193,7 @@ describe('executes statistics blocks', () => {
                  'Wrong title')
     assert.equal(values.rejected, true,
                  'Wrong result')
-    assert_approxEquals((0.0 <= values.pValue) && (values.pValue <= 0.1),
+    assert.approxEquals((0.0 <= values.pValue) && (values.pValue <= 0.1),
                         'Wrong p-value')
     done()
   })

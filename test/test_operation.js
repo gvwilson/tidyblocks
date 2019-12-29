@@ -1,19 +1,12 @@
-const assert = require('assert')
-
 const {
   TbDataFrame,
   TbManager,
-  assert_approxEquals,
-  assert_hasKey,
-  assert_includes,
-  assert_match,
-  assert_setEqual,
-  assert_startsWith,
   loadBlockFiles,
   makeBlock,
   makeCode,
   evalCode,
-  createTestingBlocks
+  createTestingBlocks,
+  assert
 } = require('./utils')
 
 //
@@ -36,9 +29,9 @@ describe('generates code for operations', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'left'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbToText',
+    assert.includes(code, 'tbToText',
                     'Generated code does not start with correct function')
     done()
   })
@@ -48,9 +41,9 @@ describe('generates code for operations', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbNeg',
+    assert.includes(code, 'tbNeg',
                     'generated code does not appear to negate')
     done()
   })
@@ -60,9 +53,9 @@ describe('generates code for operations', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbNot',
+    assert.includes(code, 'tbNot',
                     'generated code does not appear to do logical negation')
     done()
   })
@@ -75,11 +68,11 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbAdd',
+    assert.includes(code, 'tbAdd',
                     'generated code does not include tbAdd call')
-    assert_includes(code, 'tbGet',
+    assert.includes(code, 'tbGet',
                     'generated code does not include tbGet calls')
     done()
   })
@@ -92,11 +85,11 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbNeq',
+    assert.includes(code, 'tbNeq',
                     'generated code does not include tbNeq call')
-    assert_includes(code, 'tbGet',
+    assert.includes(code, 'tbGet',
                     'generated code does not include tbGet calls')
     done()
   })
@@ -109,11 +102,11 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
     const code = makeCode(pipeline)
-    assert_startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row) =>',
                       'generated code does not appear to be a function')
-    assert_includes(code, 'tbOr',
+    assert.includes(code, 'tbOr',
                     'generated code does not include tbOr call')
-    assert_includes(code, 'tbGet',
+    assert.includes(code, 'tbGet',
                     'generated code does not include tbGet calls')
     done()
   })
@@ -127,7 +120,7 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'blue'}}
     const code = makeCode(pipeline)
-    assert_includes(code, 'tbIfElse',
+    assert.includes(code, 'tbIfElse',
                     'pipeline does not generate call to tbIfElse')
     done()
   })
@@ -152,7 +145,7 @@ describe('executes operations', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(env.frame.data[0], 'textual',
+    assert.hasKey(env.frame.data[0], 'textual',
                   'Result lacks expected column')
     assert.equal(typeof env.frame.data[0].textual, 'string',
                  'New column has wrong type')
@@ -172,7 +165,7 @@ describe('executes operations', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(env.frame.data[0], 'logical',
+    assert.hasKey(env.frame.data[0], 'logical',
                   'Result lacks expected column')
     assert.equal(typeof env.frame.data[0].logical, 'boolean',
                  'New column has wrong type')
@@ -198,7 +191,7 @@ describe('executes operations', () => {
     const env = evalCode(pipeline)
     assert.equal(env.frame.data.length, 11,
                  'Wrong number of rows in output')
-    assert_hasKey(env.frame.data[0], 'numeric',
+    assert.hasKey(env.frame.data[0], 'numeric',
                   'Result lacks expected column')
     assert.equal(typeof env.frame.data[0].numeric, 'number',
                  'New column has wrong type')
