@@ -816,6 +816,32 @@ const tbTTestOneSample = (dataframe, blockId, parameters, columns) => {
   return {result, legend}
 }
 
+/**
+ * Paired two-sided t-test.
+ * @param dataframe Dataframe being operated on.
+ * @param {number} blockId The ID of the block.
+ * @param {object} parameters The parameters for the test.
+ * @param columns A list of column names (must be of length 2).
+ * @returns Result object from test.
+ */
+const tbTTestPaired = (dataframe, blockId, parameters, columns) => {
+  const {alpha} = parameters
+  const [leftCol, rightCol] = columns
+  const left = dataframe.data.map(row => row[leftCol])
+  const right = dataframe.data.map(row => row[rightCol])
+  const result = TbManager.stdlib.stats.ttest(left, right,
+                                              {alpha: alpha})
+  const legend = {
+    _title: 'paired two-sided t-test',
+    rejected: 'is null hypothesis rejected?',
+    pValue: 'p-value',
+    statistic: 'measure value',
+    ci: 'confidence interval',
+    alpha: 'significance'
+  }
+  return {result, legend}
+}
+
 //--------------------------------------------------------------------------------
 
 /**
@@ -1180,7 +1206,7 @@ class TbDataFrame {
    */
   test (environment, blockId, testFunc, parameters, ...columns) {
     tbAssert(this.hasColumns(columns),
-             `[block ${blockId}] unknown column(s) ${columns} in tbbZTestOneSample`)
+             `[block ${blockId}] unknown column(s) ${columns} in ${testFunc}`)
     const {result, legend} = testFunc(this, blockId, parameters, columns)
     environment.displayStats(result, legend)
     return this

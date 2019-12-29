@@ -111,7 +111,7 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 //
-// Visuals for one-sample t-test.
+// Visuals for one-sample two-sided t-test.
 //
 Blockly.defineBlocksWithJsonArray([
   {
@@ -140,6 +140,40 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: null,
     style: 'stats_blocks',
     tooltip: 'perform one-sample two-sided t-test',
+    helpUrl: ''
+  }
+])
+
+//
+// Visuals for paired two-sided t-test.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'stats_t_test_paired',
+    message0: 'Paired t-test',
+    args0: [],
+    message1: 'column %1 column %2 significance α %3',
+    args1: [
+      {
+        type: 'field_input',
+        name: 'LEFT_COLUMN',
+        text: 'column'
+      },
+      {
+        type: 'field_input',
+        name: 'RIGHT_COLUMN',
+        text: 'column'
+      },
+      {
+        type: 'field_number',
+        name: 'SIGNIFICANCE',
+        value: 0.05
+      }
+    ],
+    inputsInline: false,
+    previousStatement: null,
+    style: 'stats_blocks',
+    tooltip: 'perform paired two-sided t-test',
     helpUrl: ''
   }
 ])

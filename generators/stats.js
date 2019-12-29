@@ -47,3 +47,15 @@ Blockly.JavaScript['stats_t_test_one_sample'] = (block) => {
   const params = `{mu: ${mean}, alpha: ${significance}}`
   return `.test(environment, ${block.tbId}, tbTTestOneSample, ${params}, "${column}")`
 }
+
+//
+// Create a paired two-sided t-test.
+//
+Blockly.JavaScript['stats_t_test_paired'] = (block) => {
+  const order = Blockly.JavaScript.ORDER_NONE
+  const left = block.getFieldValue('LEFT_COLUMN')
+  const right = block.getFieldValue('RIGHT_COLUMN')
+  const significance = block.getFieldValue('SIGNIFICANCE')
+  const params = `{alpha: ${significance}}`
+  return `.test(environment, ${block.tbId}, tbTTestPaired, ${params}, "${left}", "${right}")`
+}
