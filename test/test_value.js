@@ -23,7 +23,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_column',
                       COLUMN: 'TheColumnName'}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.match(code, /\(row\) => tbGet\(\d+, row, 'TheColumnName'\)/,
+    assert.match(code, /\(row, i\) => tbGet\(\d+, row, i, 'TheColumnName'\)/,
                  'pipeline does not use function to get column value')
     done()
   })
@@ -32,7 +32,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_number',
                       VALUE: 3.14}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.equal(code, '(row) => (3.14)',
+    assert.equal(code, '(row, i) => (3.14)',
                  'pipeline does not generate expected number')
     done()
   })
@@ -41,7 +41,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_text',
                       VALUE: 'Look on my blocks, ye coders, and despair!'}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.equal(code, '(row) => "Look on my blocks, ye coders, and despair!"',
+    assert.equal(code, '(row, i) => "Look on my blocks, ye coders, and despair!"',
                  'pipeline does not generate constant string')
     done()
   })
@@ -50,7 +50,7 @@ describe('generate code for values', () => {
     const pipeline = {_b: 'value_boolean',
                       VALUE: 'false'}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.equal(code, '(row) => (false)',
+    assert.equal(code, '(row, i) => (false)',
                  'pipeline does not generate constant Boolean')
     done()
   })

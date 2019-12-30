@@ -91,6 +91,8 @@ describe('check that specific bugs have been fixed', () => {
                       VALUE: 'setosa'}}}
     ]
     const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error')
     assert.equal(env.frame.data.length, 50,
                  'Wrong number of results in output')
     done()

@@ -4,7 +4,7 @@
 Blockly.JavaScript['value_boolean'] = (block) => {
   const value = block.getFieldValue('VALUE')
   const order = Blockly.JavaScript.ORDER_NONE
-  const code = `(row) => (${value})`
+  const code = `(row, i) => (${value})`
   return [code, order]
 }
 
@@ -16,7 +16,7 @@ Blockly.JavaScript['value_column'] = (block) => {
   if (! column) {
     throw new Error(`[block ${block.tbId}] empty column name`)
   }
-  const code = `(row) => tbGet(${block.tbId}, row, '${column}')`
+  const code = `(row, i) => tbGet(${block.tbId}, row, i, '${column}')`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 
@@ -25,7 +25,7 @@ Blockly.JavaScript['value_column'] = (block) => {
 //
 Blockly.JavaScript['value_datetime'] = (block) => {
   const value = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
-  const code = `(row) => new Date(${value})`
+  const code = `(row, i) => new Date(${value})`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 
@@ -37,7 +37,7 @@ Blockly.JavaScript['value_number'] = (block) => {
   const order = (value >= 0)
         ? Blockly.JavaScript.ORDER_ATOMIC
         : Blockly.JavaScript.ORDER_UNARY_NEGATION
-  const code = `(row) => (${value})`
+  const code = `(row, i) => (${value})`
   return [code, order]
 }
 
@@ -46,7 +46,15 @@ Blockly.JavaScript['value_number'] = (block) => {
 //
 Blockly.JavaScript['value_text'] = (block) => {
   const value = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
-  const code = `(row) => ${value}`
+  const code = `(row, i) => ${value}`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}
+
+//
+// Create code for row number block.
+//
+Blockly.JavaScript['value_rownum'] = (block) => {
+  const code = `(row, i) => (i+1)`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 
@@ -62,7 +70,7 @@ Blockly.JavaScript['value_uniform'] = (block) => {
   if (Number.isNaN(high)) {
     throw new Error(`[block ${block.tbId}] high value is not a number`)
   }
-  const code = `(row) => tbUniform(${block.tbId}, ${low}, ${high})`
+  const code = `(row, i) => tbUniform(${block.tbId}, ${low}, ${high})`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 
@@ -78,7 +86,7 @@ Blockly.JavaScript['value_normal'] = (block) => {
   if (Number.isNaN(variance) || (variance < 0)) {
     throw new Error(`[block ${block.tbId}] variance is not a non-negative number`)
   }
-  const code = `(row) => tbNormal(${block.tbId}, ${mean}, ${variance})`
+  const code = `(row, i) => tbNormal(${block.tbId}, ${mean}, ${variance})`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 
@@ -90,6 +98,6 @@ Blockly.JavaScript['value_exponential'] = (block) => {
   if (Number.isNaN(rate)) {
     throw new Error(`[block ${block.tbId}] rate is not a number`)
   }
-  const code = `(row) => tbExponential(${block.tbId}, ${rate})`
+  const code = `(row, i) => tbExponential(${block.tbId}, ${rate})`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }

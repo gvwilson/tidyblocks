@@ -308,6 +308,8 @@ describe('executes transformation blocks', () => {
                       VALUE: 0}}}
     ]
     const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error')
     assert.equal(env.frame.data.length, 5,
                  'Expected 5 rows with red != 0')
     done()

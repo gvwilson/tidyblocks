@@ -25,7 +25,7 @@ describe('generates code for operations', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'left'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row, i) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbToText',
                     'Generated code does not start with correct function')
@@ -37,7 +37,7 @@ describe('generates code for operations', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row, i) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbNeg',
                     'generated code does not appear to negate')
@@ -49,7 +49,7 @@ describe('generates code for operations', () => {
                       VALUE: {_b: 'value_column',
                               COLUMN: 'existing'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row, i) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbNot',
                     'generated code does not appear to do logical negation')
@@ -64,7 +64,7 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row, i) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbAdd',
                     'generated code does not include tbAdd call')
@@ -81,7 +81,7 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row, i) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbNeq',
                     'generated code does not include tbNeq call')
@@ -98,7 +98,7 @@ describe('generates code for operations', () => {
                       RIGHT: {_b: 'value_column',
                               COLUMN: 'right'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.startsWith(code, '(row) =>',
+    assert.startsWith(code, '(row, i) =>',
                       'generated code does not appear to be a function')
     assert.includes(code, 'tbOr',
                     'generated code does not include tbOr call')

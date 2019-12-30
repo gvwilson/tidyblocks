@@ -102,6 +102,21 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 //
+// Visuals for row number field block.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'value_rownum',
+    message0: 'Row number',
+    args0: [],
+    output: 'String',
+    style: 'value_blocks',
+    helpUrl: '',
+    tooltip: 'row number'
+  }
+])
+
+//
 // Visuals for uniform random value block.
 //
 Blockly.defineBlocksWithJsonArray([

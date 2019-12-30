@@ -159,13 +159,14 @@ const _variance = (values) => {
 
 /**
  * Convert row value to Boolean.
- * @param {number{ blockId which block this is.
+ * @param {number} blockId which block this is.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Boolean value.
  */
-const tbToBoolean = (blockId, row, getValue) => {
-  const value = getValue(row)
+const tbToBoolean = (blockId, row, i, getValue) => {
+  const value = getValue(row, i)
   return (value === TbDataFrame.MISSING)
     ? TbDataFrame.MISSING
     : (value ? true : false)
@@ -175,11 +176,12 @@ const tbToBoolean = (blockId, row, getValue) => {
  * Convert row value to datetime.
  * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value (must be string).
  * @returns Date object.
  */
-const tbToDatetime = (blockId, row, getValue) => {
-  const value = getValue(row)
+const tbToDatetime = (blockId, row, i, getValue) => {
+  const value = getValue(row, i)
   if (value === TbDataFrame.MISSING) {
     return TbDataFrame.MISSING
   }
@@ -194,11 +196,12 @@ const tbToDatetime = (blockId, row, getValue) => {
  * Convert row value to number.
  * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Numeric value.
  */
-const tbToNumber = (blockId, row, getValue) => {
-  let value = getValue(row)
+const tbToNumber = (blockId, row, i, getValue) => {
+  let value = getValue(row, i)
   if (value === TbDataFrame.MISSING) {
     // keep as is
   }
@@ -215,11 +218,12 @@ const tbToNumber = (blockId, row, getValue) => {
  * Convert row value to string.
  * @param {number{ blockId which block this is.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Text value.
  */
-const tbToText = (blockId, row, getValue) => {
-  let value = getValue(row)
+const tbToText = (blockId, row, i, getValue) => {
+  let value = getValue(row, i)
   if (value === TbDataFrame.MISSING) {
     // keep as is
   }
@@ -235,55 +239,60 @@ const tbToText = (blockId, row, getValue) => {
  * Check if value is Boolean.
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Is value Boolean?
  */
-const tbIsBoolean = (blockId, row, getValue) => {
-  return typeof getValue(row) === 'boolean'
+const tbIsBoolean = (blockId, row, i, getValue) => {
+  return typeof getValue(row, i) === 'boolean'
 }
 
 /**
  * Check if value is a datetime.
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Is value numeric?
  */
-const tbIsDateTime = (blockId, row, getValue) => {
-  return getValue(row) instanceof Date
+const tbIsDateTime = (blockId, row, i, getValue) => {
+  return getValue(row, i) instanceof Date
 }
 
 /**
  * Check if value is missing.
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Is value missing?
  */
-const tbIsMissing = (blockId, row, getValue) => {
-  return getValue(row) === TbDataFrame.MISSING
+const tbIsMissing = (blockId, row, i, getValue) => {
+  return getValue(row, i) === TbDataFrame.MISSING
 }
 
 /**
  * Check if value is number.
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Is value numeric?
  */
-const tbIsNumber = (blockId, row, getValue) => {
-  return typeof getValue(row) === 'number'
+const tbIsNumber = (blockId, row, i, getValue) => {
+  return typeof getValue(row, i) === 'number'
 }
 
 /**
  * Check if value is string.
  * @param {number} blockId The ID of the block.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Is value text?
  */
-const tbIsText = (blockId, row, getValue) => {
-  return typeof getValue(row) === 'string'
+const tbIsText = (blockId, row, i, getValue) => {
+  return typeof getValue(row, i) === 'string'
 }
 
 //--------------------------------------------------------------------------------
@@ -291,11 +300,12 @@ const tbIsText = (blockId, row, getValue) => {
 /*
  * Extract year from value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Year as number.
  */
-const tbToYear = (row, getValue) => {
-  const value = getValue(row)
+const tbToYear = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getFullYear()
@@ -304,11 +314,12 @@ const tbToYear = (row, getValue) => {
 /**
  * Extract month from value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Month as number.
  */
-const tbToMonth = (row, getValue) => {
-  const value = getValue(row)
+const tbToMonth = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getMonth() + 1 // normalize to 1-12 to be consistent with days of month
@@ -317,11 +328,12 @@ const tbToMonth = (row, getValue) => {
 /**
  * Extract day of month from value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Day of month as number.
  */
-const tbToDay = (row, getValue) => {
-  const value = getValue(row)
+const tbToDay = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getDate()
@@ -330,11 +342,12 @@ const tbToDay = (row, getValue) => {
 /**
  * Extract day of week from value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Day of week as number
  */
-const tbToWeekDay = (row, getValue) => {
-  const value = getValue(row)
+const tbToWeekDay = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getDay()
@@ -343,11 +356,12 @@ const tbToWeekDay = (row, getValue) => {
 /**
  * Extract hours from date value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Hours portion of value.
  */
-const tbToHours = (row, getValue) => {
-  const value = getValue(row)
+const tbToHours = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getHours()
@@ -356,11 +370,12 @@ const tbToHours = (row, getValue) => {
 /**
  * Extract minutes from date value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Minutes portion of value.
  */
-const tbToMinutes = (row, getValue) => {
-  const value = getValue(row)
+const tbToMinutes = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getMinutes()
@@ -369,11 +384,12 @@ const tbToMinutes = (row, getValue) => {
 /**
  * Extract seconds from date value.
  * @param {Object} row Row containing values.
+ * @param {number} i Row number.
  * @param {function} getValue How to get desired value.
  * @returns Seconds portion of value.
  */
-const tbToSeconds = (row, getValue) => {
-  const value = getValue(row)
+const tbToSeconds = (row, i, getValue) => {
+  const value = getValue(row, i)
   tbAssert(value instanceof Date,
            `Expected date object not "${value}"`)
   return value.getSeconds()
@@ -394,7 +410,7 @@ const safeValue = (value) => {
  * @param {string} column The field to look up.
  * @returns The value.
  */
-const tbGet = (blockId, row, column) => {
+const tbGet = (blockId, row, i, column) => {
   tbAssert(column in row,
            `[block ${blockId}] no such column "${column}" (have [${Object.keys(row).join(',')}])`)
   return row[column]
@@ -404,13 +420,14 @@ const tbGet = (blockId, row, column) => {
  * Add two values.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The sum.
  */
-const tbAdd = (blockId, row, getLeft, getRight) => {
-  const left = tbAssertNumber(getLeft(row))
-  const right = tbAssertNumber(getRight(row))
+const tbAdd = (blockId, row, i, getLeft, getRight) => {
+  const left = tbAssertNumber(getLeft(row, i))
+  const right = tbAssertNumber(getRight(row, i))
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
     : safeValue(left + right)
@@ -420,13 +437,14 @@ const tbAdd = (blockId, row, getLeft, getRight) => {
  * Divide two values.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The quotient.
  */
-const tbDiv = (blockId, row, getLeft, getRight) => {
-  const left = tbAssertNumber(getLeft(row))
-  const right = tbAssertNumber(getRight(row))
+const tbDiv = (blockId, row, i, getLeft, getRight) => {
+  const left = tbAssertNumber(getLeft(row, i))
+  const right = tbAssertNumber(getRight(row, i))
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
     : safeValue(left / right)
@@ -436,13 +454,14 @@ const tbDiv = (blockId, row, getLeft, getRight) => {
  * Calculate an exponent.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The exponentiated value.
  */
-const tbExp = (blockId, row, getLeft, getRight) => {
-  const left = tbAssertNumber(getLeft(row))
-  const right = tbAssertNumber(getRight(row))
+const tbExp = (blockId, row, i, getLeft, getRight) => {
+  const left = tbAssertNumber(getLeft(row, i))
+  const right = tbAssertNumber(getRight(row, i))
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
     : safeValue(left ** right)
@@ -452,13 +471,14 @@ const tbExp = (blockId, row, getLeft, getRight) => {
  * Find the remainder of two values.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The remainder.
  */
-const tbMod = (blockId, row, getLeft, getRight) => {
-  const left = tbAssertNumber(getLeft(row))
-  const right = tbAssertNumber(getRight(row))
+const tbMod = (blockId, row, i, getLeft, getRight) => {
+  const left = tbAssertNumber(getLeft(row, i))
+  const right = tbAssertNumber(getRight(row, i))
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
     : safeValue(left % right)
@@ -468,13 +488,14 @@ const tbMod = (blockId, row, getLeft, getRight) => {
  * Multiply two values.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The product.
  */
-const tbMul = (blockId, row, getLeft, getRight) => {
-  const left = tbAssertNumber(getLeft(row))
-  const right = tbAssertNumber(getRight(row))
+const tbMul = (blockId, row, i, getLeft, getRight) => {
+  const left = tbAssertNumber(getLeft(row, i))
+  const right = tbAssertNumber(getRight(row, i))
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
     : safeValue(left * right)
@@ -484,11 +505,12 @@ const tbMul = (blockId, row, getLeft, getRight) => {
  * Negate a value.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getValue How to get the value from the row.
  * @returns The numerical negation.
  */
-const tbNeg = (blockId, row, getValue) => {
-  const value = tbAssertNumber(getValue(row))
+const tbNeg = (blockId, row, i, getValue) => {
+  const value = tbAssertNumber(getValue(row, i))
   return (value === TbDataFrame.MISSING) ? TbDataFrame.MISSING : (- value)
 }
 
@@ -496,13 +518,14 @@ const tbNeg = (blockId, row, getValue) => {
  * Subtract two values.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The difference.
  */
-const tbSub = (blockId, row, getLeft, getRight) => {
-  const left = tbAssertNumber(getLeft(row))
-  const right = tbAssertNumber(getRight(row))
+const tbSub = (blockId, row, i, getLeft, getRight) => {
+  const left = tbAssertNumber(getLeft(row, i))
+  const right = tbAssertNumber(getRight(row, i))
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
     : safeValue(left - right)
@@ -514,39 +537,42 @@ const tbSub = (blockId, row, getLeft, getRight) => {
  * Logical conjunction of two values.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The conjunction.
  */
-const tbAnd = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbAnd = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   return left && right
 }
 
 /**
  * Logical negation of a value.
  * @param {number} blockId The ID of the block.
+ * @param {number} i Row number.
  * @param {Object} row The row to get values from.
  * @param {function} getValue How to get the value from the row.
  * @returns The logical conjunction.
  */
-const tbNot = (blockId, row, getValue) => {
-  const value = getValue(row)
+const tbNot = (blockId, row, i, getValue) => {
+  const value = getValue(row, i)
   return (value === TbDataFrame.MISSING) ? TbDataFrame.MISSING : ((! value) ? true : false)
 }
 
 /**
  * Logical disjunction of two values.
  * @param {number} blockId The ID of the block.
+ * @param {number} i Row number.
  * @param {Object} row The row to get values from.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The disjunction.
  */
-const tbOr = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbOr = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   return left || right
 }
 
@@ -554,17 +580,18 @@ const tbOr = (blockId, row, getLeft, getRight) => {
  * Choosing a value based on a logical condition.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getCond How to get the condition's value.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The left (right) value if the condition is true (false).
  */
 
-const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
-  const cond = getCond(row)
+const tbIfElse = (rowId, row, i, getCond, getLeft, getRight) => {
+  const cond = getCond(row, i)
   return (cond === TbDataFrame.MISSING)
     ? TbDataFrame.MISSING
-    : (cond ? getLeft(row) : getRight(row))
+    : (cond ? getLeft(row, i) : getRight(row, i))
 }
 
 //--------------------------------------------------------------------------------
@@ -573,13 +600,14 @@ const tbIfElse = (rowId, row, getCond, getLeft, getRight) => {
  * Strict greater than.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbGt = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbGt = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
@@ -590,13 +618,14 @@ const tbGt = (blockId, row, getLeft, getRight) => {
  * Greater than or equal.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbGeq = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbGeq = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
@@ -607,13 +636,14 @@ const tbGeq = (blockId, row, getLeft, getRight) => {
  * Equality.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbEq = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbEq = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
@@ -624,13 +654,14 @@ const tbEq = (blockId, row, getLeft, getRight) => {
  * Inequality.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbNeq = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbNeq = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
@@ -641,13 +672,14 @@ const tbNeq = (blockId, row, getLeft, getRight) => {
  * Less than or equal.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbLeq = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbLeq = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
@@ -658,13 +690,14 @@ const tbLeq = (blockId, row, getLeft, getRight) => {
  * Strictly less than.
  * @param {number} blockId The ID of the block.
  * @param {Object} row The row to get values from.
+ * @param {number} i Row number.
  * @param {function} getLeft How to get the left value from the row.
  * @param {function} getRight How to get the right value from the row.
  * @returns The comparison's result.
  */
-const tbLt = (blockId, row, getLeft, getRight) => {
-  const left = getLeft(row)
-  const right = getRight(row)
+const tbLt = (blockId, row, i, getLeft, getRight) => {
+  const left = getLeft(row, i)
+  const right = getRight(row, i)
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
@@ -707,6 +740,8 @@ const tbExponential = (blockId, rate) => {
   tbAssert(rate > 0, `[block ${blockId}] rate ${rate} must be positive`)
   return TbManager.stdlib.random.base.exponential(rate)
 }
+
+//--------------------------------------------------------------------------------
 
 /**
  * One-sample Z-test.
@@ -858,7 +893,6 @@ const tbAnova = (dataframe, blockId, parameters, columns) => {
   const values = dataframe.data.map(row => row[valueCol])
   const result = TbManager.stdlib.stats.anova1(values, groups,
                                                {alpha: significance})
-  console.log('RESULT', result)
   const legend = {
     _title: 'ANOVA',
     rejected: 'is null hypothesis rejected?',
@@ -908,8 +942,8 @@ class TbDataFrame {
    */
   filter (blockId, op) {
     tbAssert(op, `[block ${blockId}] no operator for filter`)
-    const newData = this.data.filter(row => {
-      return op(row)
+    const newData = this.data.filter((row, i) => {
+      return op(row, i)
     })
     const newColumns = this._makeColumns(newData, this.columns)
     return new TbDataFrame(newData, newColumns)
@@ -929,8 +963,8 @@ class TbDataFrame {
              `[block ${blockId}] duplicate column(s) in [${columns}] in groupBy`)
     const seen = new Map()
     let nextGroupId = 0
-    const groupedData = this.data.map(row => {
-      const thisGroupId = this._makeGroupId(blockId, seen, row, columns, nextGroupId)
+    const groupedData = this.data.map((row, i) => {
+      const thisGroupId = this._makeGroupId(blockId, seen, row, i, columns, nextGroupId)
       if (thisGroupId === nextGroupId) {
         nextGroupId += 1
       }
@@ -953,9 +987,9 @@ class TbDataFrame {
              `[block ${blockId}] empty new column name for mutate`)
     tbAssert(typeof op === 'function',
              `[block ${blockId}] new value is not a function`)
-    const newData = this.data.map(row => {
+    const newData = this.data.map((row, i) => {
       const newRow = {...row}
-      newRow[newName] = op(row)
+      newRow[newName] = op(row, i)
       return newRow
     })
     const newColumns = this._makeColumns(newData, this.columns, {add: [newName]})
@@ -972,10 +1006,10 @@ class TbDataFrame {
              `[block ${blockId}] no columns specified for select`)
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) [${columns}] in select`)
-    const newData = this.data.map(row => {
+    const newData = this.data.map((row, i) => {
       const result = {}
       columns.forEach(key => {
-        result[key] = tbGet(blockId, row, key)
+        result[key] = tbGet(blockId, row, i, key)
       })
       return result
     })
@@ -1070,7 +1104,7 @@ class TbDataFrame {
              `[block ${blockId}] unknown column(s) [${columns}] in select`)
     const seen = new Map()
     const newData = []
-    this.data.forEach(row => this._findUnique(blockId, seen, newData, row, columns))
+    this.data.forEach((row, i) => this._findUnique(blockId, seen, newData, row, i, columns))
     return new TbDataFrame(newData, columns)
   }
 
@@ -1158,48 +1192,6 @@ class TbDataFrame {
     return new TbDataFrame(result)
   }
 
-  /**
-   * Put two tables beside each other, extending as needed with missing values.
-   * @param {function} getDataFxn How to look up data by name.
-   * @param {string} leftFrame Notification name of left table to join.
-   * @param {string} rightFrame Notification name of right table to join.
-   * @returns A new dataframe.
-   */
-  beside (getDataFxn, leftFrameName, rightFrameName) {
-
-    const leftFrame = getDataFxn(leftFrameName)
-    const rightFrame = getDataFxn(rightFrameName)
-
-    const numRows = Math.max(leftFrame.data.length, rightFrame.data.length)
-    const filler = {}
-    if (leftFrame.data.length < numRows) {
-      for (let column of leftFrame.columns) {
-        filler[column] = undefined
-      }
-    }
-    else if (rightFrame.data.length < numRows) {
-      for (let column of rightFrame.columns) {
-        filler[column] = undefined
-      }
-    }
-
-    const newRows = []
-    for (let i=0; i<numRows; i+=1) {
-      const row = {}
-      this._addFields(row, leftFrameName,
-                      (i < leftFrame.data.length) ? leftFrame.data[i] : filler)
-      this._addFields(row, rightFrameName,
-                      (i < rightFrame.data.length) ? rightFrame.data[i] : filler)
-      newRows.push(row)
-    }
-
-    const newColumns = []
-    this._addColumnsExcept(newColumns, leftFrameName, leftFrame.columns)
-    this._addColumnsExcept(newColumns, rightFrameName, rightFrame.columns)
-
-    return new TbDataFrame(newRows, newColumns)
-  }
-
   //------------------------------------------------------------------------------
 
   /**
@@ -1259,9 +1251,9 @@ class TbDataFrame {
    * @returns This object.
    */
   toNumber (blockId, columns) {
-    this.data.forEach(row => {
+    this.data.forEach((row, i) => {
       columns.forEach(col => {
-        row[col] = parseFloat(tbGet(blockId, row, col))
+        row[col] = parseFloat(tbGet(blockId, row, i, col))
       })
     })
     return this
@@ -1320,8 +1312,8 @@ class TbDataFrame {
   //
   // Recurse down a list of column names to find or construct a group ID.
   //
-  _makeGroupId (blockId, seen, row, columns, nextGroupId) {
-    const thisValue = tbGet(blockId, row, columns[0])
+  _makeGroupId (blockId, seen, row, i, columns, nextGroupId) {
+    const thisValue = tbGet(blockId, row, i, columns[0])
     const otherColumns = columns.slice(1)
     if (seen.has(thisValue)) {
       if (otherColumns.length === 0) {
@@ -1329,7 +1321,7 @@ class TbDataFrame {
       }
       else {
         const subMap = seen.get(thisValue)
-        return this._makeGroupId(blockId, subMap, row, otherColumns, nextGroupId)
+        return this._makeGroupId(blockId, subMap, row, i, otherColumns, nextGroupId)
       }
     }
     else {
@@ -1340,7 +1332,7 @@ class TbDataFrame {
       else {
         const subMap = new Map()
         seen.set(thisValue, subMap)
-        return this._makeGroupId(blockId, subMap, row, otherColumns, nextGroupId)
+        return this._makeGroupId(blockId, subMap, row, i, otherColumns, nextGroupId)
       }
     }
   }
@@ -1375,8 +1367,8 @@ class TbDataFrame {
   //
   // Find unique values across multiple columns.
   //
-  _findUnique (blockId, seen, newData, row, columns) {
-    const thisValue = tbGet(blockId, row, columns[0])
+  _findUnique (blockId, seen, newData, row, i, columns) {
+    const thisValue = tbGet(blockId, row, i, columns[0])
     const otherColumns = columns.slice(1)
     if (otherColumns.length === 0) {
       if (! seen.has(thisValue)) {
@@ -1388,7 +1380,7 @@ class TbDataFrame {
       if (! seen.has(thisValue)) {
         seen.set(thisValue, new Map())
       }
-      this._findUnique(blockId, seen.get(thisValue), newData, row, otherColumns)
+      this._findUnique(blockId, seen.get(thisValue), newData, row, i, otherColumns)
     }
   }
 }
