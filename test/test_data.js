@@ -100,6 +100,21 @@ describe('executes data loading blocks', () => {
     TbManager.reset()
   })
 
+  it('generates a sequence of numbers', (done) => {
+    const pipeline = [
+      {_b: 'data_sequence',
+       VALUE: 5}
+    ]
+    const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error from pipeline`)
+    assert.equal(env.frame.data.length, 5,
+                 `Expected 5 rows, not ${env.frame.data.length}`)
+    assert(env.frame.data.every((row, i) => (row.index === i+1)),
+           `Incorrect values in sequence`)
+    done()
+  })
+
   it('creates a dataset by parsing a local CSV file', (done) => {
     const pipeline = [
       {_b: 'data_mtcars'}

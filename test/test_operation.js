@@ -594,3 +594,106 @@ describe('executes operations', () => {
     done()
   })
 })
+
+describe('missing values are handled correctly', () => {
+
+  beforeEach(() => {
+    TbManager.reset()
+  })
+
+  it('handles missing values for unary operators correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'negated',
+       VALUE: {_b: 'operation_negate',
+               VALUE: {_b: 'value_missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'notted',
+       VALUE: {_b: 'operation_not',
+               VALUE: {_b: 'value_missing'}}}
+    ]
+    const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expectd no error message`)
+    assert.equal(env.frame.data[0].negated, TbDataFrame.MISSING,
+                 `Expected TbDataFrame.MISSING from negation, not ${env.frame.data[0].negated}`)
+    assert.equal(env.frame.data[0].notted, TbDataFrame.MISSING,
+                 `Expected TbDataFrame.MISSING from logical negation, not ${env.frame.data[0].notted}`)
+    done()
+  })
+
+  it('handles missing values in binary arithmetic correctly', (done) => {
+    const allTests = [
+      ['addition', 'tbAdd'],
+      ['division', 'tbDiv'],
+      ['exponentiation', 'tbExp'],
+      ['modulus', 'tbMod'],
+      ['multiplication', 'tbMul'],
+      ['subtraction', 'tbSub']
+    ]
+    for (let [opName, funcName] of allTests) {
+      const pipeline = [
+        {_b: 'data_single'},
+        {_b: 'transform_mutate',
+         COLUMN: 'result',
+         VALUE: {_b: 'operation_arithmetic',
+                 OP: funcName,
+                 LEFT: {_b: 'value_column',
+                        COLUMN: 'first'},
+                 RIGHT: {_b: 'value_missing'}}}
+      ]
+      const env = TbTestUtils.evalCode(pipeline)
+      assert.equal(env.error, '',
+                   `Expected no error message`)
+      assert.equal(env.frame.data[0].result, TbDataFrame.MISSING,
+                   `Expected missing value for ${opName}`)
+    }
+    done()
+  })
+
+  it('handles missing values for type conversion correctly', (done) => {
+    const pipeline = [
+      {_b: 'data_single'},
+      {_b: 'transform_mutate',
+       COLUMN: 'missing',
+       VALUE: {_b: 'value_missing'}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_boolean',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToBoolean',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_datetime',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToDatetime',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_number',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToNumber',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}},
+      {_b: 'transform_mutate',
+       COLUMN: 'as_string',
+       VALUE: {_b: 'operation_convert',
+               TYPE: 'tbToText',
+               VALUE: {_b: 'value_column',
+                       COLUMN: 'missing'}}}
+    ]
+    const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 `Expected no error message when converting missing values`)
+    assert.equal(env.frame.data[0].as_boolean, TbDataFrame.MISSING,
+                 `Expected converted Boolean to be missing value, not ${env.frame.data[0].as_boolean}`)
+    assert.equal(env.frame.data[0].as_datetime, TbDataFrame.MISSING,
+                 `Expected converted date-time to be missing value, not ${env.frame.data[0].as_datetime}`)
+    assert.equal(env.frame.data[0].as_number, TbDataFrame.MISSING,
+                 `Expected converted number to be missing value, not ${env.frame.data[0].as_number}`)
+    assert.equal(env.frame.data[0].as_string, TbDataFrame.MISSING,
+                 `Expected converted string to be missing value, not ${env.frame.data[0].as_string}`)
+    done()
+  })
+})
