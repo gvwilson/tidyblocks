@@ -305,18 +305,13 @@ $(function() {
       window.open(uri);
     }
   }
-});
+})
 
 /**
  * Load saved code.
  * Depends on the global TidyBlocksWorkspace variable.
  * @param {string[]} fileList List of files (only first element is valid).
  */
-
-
-// Upload workspace
-$('#OpenImgUpload').click(function(){ $('#imgupload').trigger('click'); });
-
 const loadCode = (fileList) => {
   const file = fileList[0]
   const text = file.text().then((text) => {
@@ -324,6 +319,32 @@ const loadCode = (fileList) => {
     Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, TidyBlocksWorkspace)
   })
 }
+
+/*
+ * Upload workspace when button clicked.
+ */
+$('#OpenImgUpload').click(function() {
+  $('#imgupload').trigger('click')
+})
+
+/**
+ * Load local data file for later use.
+ * Depends on the global TidyBlocksWorkspace variable.
+ * @param {string[]} fileList List of files (only first element is valid).
+ */
+const loadData = (fileList) => {
+  const file = fileList[0]
+  const text = file.text().then(text => {
+    console.log('TEXT IS', text)
+  })
+}
+
+/*
+ * Upload data file when button clicked.
+ */
+$('#OpenDataUpload').click(function() {
+  $('#dataupload').trigger('click')
+})
 
 /**
  * Produce a human-friendly name for the type of a column.
