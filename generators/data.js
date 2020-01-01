@@ -82,6 +82,15 @@ Blockly.JavaScript['data_urlCSV'] = (block) => {
 }
 
 //
+// Generate code to use a previously-loaded local CSV file.
+//
+Blockly.JavaScript['data_local'] = (block) => {
+  const filename = block.getFieldValue('FILENAME')
+  const prefix = TbManager.registerPrefix('')
+  return `${prefix} environment.useLocal('${filename}')`
+}
+
+//
 // Generate code to create a dataframe with a single-column sequence.
 //
 Blockly.JavaScript['data_sequence'] = (block) => {

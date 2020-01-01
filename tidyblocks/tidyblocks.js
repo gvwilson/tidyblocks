@@ -1403,6 +1403,7 @@ class TidyBlocksManager {
     this.reset()
     this.start = '/* tidyblocks start */'
     this.end = '/* tidyblocks end */'
+    this.files = new Map()
   }
 
   /**

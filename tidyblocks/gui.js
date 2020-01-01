@@ -80,6 +80,15 @@ class GuiEnvironment {
   }
 
   /**
+   * Use a previously-loaded local CSV file.
+   * @param {string} name Name of file to use.
+   * @return dataframe containing that data.
+   */
+  useLocal (name) {
+    return TbManager.files.get(name)
+  }
+
+  /**
    * Display a plot.
    * @param {Object} spec Vega-Lite spec for plot with data filled in.
    */
@@ -194,6 +203,16 @@ const setUpBlockly = () => {
   MULTIPLE_COLUMN_FIELDS.forEach(col => {
     Blockly.Extensions.register(`validate_${col}`, createValidator(col, MULTIPLE_COLUMN_NAMES))
   })
+
+  Blockly.Extensions.register('local_file_extension',
+  function() {
+    this.getInput('INPUT')
+      .appendField(new Blockly.FieldDropdown(
+        function() {
+          const options = Array.from(TbManager.files.keys()).map(name => [name, name])
+          return options;
+        }), 'FILENAME');
+  });
 }
 
 /**
@@ -334,8 +353,10 @@ $('#OpenImgUpload').click(function() {
  */
 const loadData = (fileList) => {
   const file = fileList[0]
+  const name = file.name
   const text = file.text().then(text => {
-    console.log('TEXT IS', text)
+    const df = TbManager.csv2tbDataFrame(text)
+    TbManager.files.set(name, df)
   })
 }
 

@@ -133,6 +133,28 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 //
+// Visuals for block that uses a previously-loaded local CSV file.
+//
+Blockly.defineBlocksWithJsonArray([
+  {
+    type: 'data_local',
+    message0: 'Use local %1',
+    args0: [
+      {
+        type: 'input_dummy',
+        name: 'INPUT'
+      }
+    ],
+    nextStatement: null,
+    style: 'data_blocks',
+    hat: 'cap',
+    tooltip: 'use a locally-loaded file',
+    helpUrl: '',
+    extensions: ['local_file_extension']
+  }
+])
+
+//
 // Visuals for block that creates a sequence 1..N.
 //
 Blockly.defineBlocksWithJsonArray([
