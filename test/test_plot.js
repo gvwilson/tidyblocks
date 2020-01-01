@@ -98,19 +98,6 @@ describe('executes plotting blocks', () => {
     TbManager.reset()
   })
 
-  it('creates a table that can be checked', (done) => {
-    const pipeline = [
-      {_b: 'data_iris'},
-      {_b: 'plot_table'}
-    ]
-    const env = TbTestUtils.evalCode(pipeline)
-    assert.notEqual(env.frame.data, null,
-                    'Result table has not been set')
-    assert(Array.isArray(env.frame.data),
-           'Result table is not an array')
-    done()
-  })
-
   it('makes a histogram', (done) => {
     const pipeline = [
       {_b: 'data_iris'},

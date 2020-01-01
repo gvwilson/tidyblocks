@@ -147,11 +147,3 @@ Blockly.JavaScript['plot_point'] = (block) => {
   const suffix = TbManager.registerSuffix('')
   return `.plot(environment, ${spec}) ${suffix}`
 }
-
-//
-// Create a "plot" that just shows the table.
-//
-Blockly.JavaScript['plot_table'] = (block) => {
-  const suffix = TbManager.registerSuffix('')
-  return `.plot(environment, {}) ${suffix}`
-}
