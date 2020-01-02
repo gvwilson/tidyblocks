@@ -578,3 +578,37 @@ if (arrNo.indexOf(i)) {
 /*if the user clicks anywhere outside the select box,
 then close all select boxes:*/
 document.addEventListener("click", closeAllSelect);
+
+
+
+/* Highlight tabs with changes 
+this code can probably be refactored */
+
+// store a reference to our tabs as we're going to re-use them
+const data = document.getElementById("dataOutput");
+const error = document.getElementById("errorOutput");
+const plot = document.getElementById("plotOutput");
+const stats = document.getElementById("statsOutput");
+
+// remove the 'changed' class from clicked tabs
+const tabs = document.querySelector('.nav-tabs');
+tabs.onclick = ({ target }) => target.classList.remove('changed');
+
+// we're going to watch for mutations of our output-elements
+new MutationObserver(observe).observe(data, { childList: true });
+new MutationObserver(observe).observe(error, { childList: true })
+new MutationObserver(observe).observe(plot, { childList: true });
+new MutationObserver(observe).observe(stats, { childList: true })
+
+function observe(mutations) {
+  const target = mutations[0].target;
+  // get the name of the changed tab by slicing of 'Output' from the target's id
+  const tabName = target.id.slice(0, target.id.indexOf('O'));
+  const tab = document.querySelector(`a[href="#${tabName}"]`);
+ 
+  // give the 'changed' class to the tab related to the changed dom-node,
+  // if it's not currently active
+  if (!target.parentNode.classList.contains('active')) {
+    tab.classList.add('changed');
+  }
+}
