@@ -1,0 +1,104 @@
+body {
+    font-family: "Helvetica Neue", Helvetica;
+    font-size: 12pt;
+    width: 70rem;
+}
+
+/* ------------------------------------------------------------ */
+
+nav {
+    height: 100%;
+    width: 8rem;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border-right: 1px solid black;
+    overflow-x: hidden;
+}
+
+nav p + ul {
+    margin-top: -2ex;
+}
+
+nav ul {
+    padding-left: 1rem;
+}
+
+/* ------------------------------------------------------------ */
+
+main {
+    margin-left: 10rem; /* Same as the width +padding of sidenav */
+    padding-left: 1rem; /* A little extra space around the border */
+}
+
+code {
+    background-color: lavender;
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    margin-left: 1rem;
+    padding-left: 0;
+    padding-bottom: 0.5ex;
+}
+
+dd:last-child {
+    padding-bottom: 0;
+}
+
+/* ------------------------------------------------------------ */
+
+footer {
+    border-top: 1px solid black;
+    margin-top: 1ex;
+    padding-top: 1ex;
+    text-align: center;
+}
+
+img.footer {
+    height: 2ex;
+}
+
+/* ------------------------------------------------------------ */
+
+table {
+    border: 1px solid silver;
+}
+
+th, td {
+    padding: 3px;
+}
+
+table thead {
+    background-color: silver;
+}
+
+table thead th {
+    text-align: left;
+    border-bottom: 2px solid black;
+}
+
+tbody tr:nth-child(even) {
+    background-color: silver;
+}
+
+/* ------------------------------------------------------------ */
+
+div.author::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+div.author img {
+    float: left;
+    width: 6rem;
+    padding: 0.5rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}

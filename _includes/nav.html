@@ -1,23 +1,27 @@
-<h1><a href="{{'/' | relative_url}}">{{ site.title }}</a></h1>
-<ul id='links'>
-  {% for post in site.posts %}
-    {% if post.category == null %}
-    <li><a href='#{{ post.url }}'>{{ post.title }}</a></li>
+<nav>
+  <p><a href="{{'/' | relative_url}}">TidyBlocks</a></p>
+  <p><a href="{{'/docs/' | relative_url}}">Guide</a></p>
+  {% for group in site.data.blocks %}
+    <p><span style="background-color: {{group.color}};">&nbsp;&nbsp;&nbsp;</span> <a href="{{'/' | append: group.slug | append: '/' | relative_url}}">{{group.title}}</a></p>
+    {% if group.slug == this_slug %}
+      <ul>
+        {% for block in group.blocks %}
+        <li><a href="{{'/' | append: group.slug | append: '/#' | append: block.slug | relative_url}}">{{block.name}}</a></li>
+        {% endfor %}
+      </ul>
     {% endif %}
   {% endfor %}
-  {% for category in site.categories %}
-  <li><h2>{{ category | first }}</h2>
-    <ul>
-    {% for posts in category %}
-      {% for post in posts %}        
-        <li class='{{ post.type }}'><a href='#{{ post.url }}'>{{ post.title }}</a></li>
-      {% endfor %}
-    {% endfor %}
-    </ul>
-  </li>
-{% endfor %}
   <hr/>
-  <li><a href="{{ '/license/' | relative_url }}">License</a></li>
-  <li><a href="{{ '/contributing/' | relative_url }}">Contributing</a></li>
-  <li><a href="{{ '/team/' | relative_url }}">Team</a></li>
-</ul>
+  <p>
+    <a href="{{ '/license/' | relative_url }}">License</a>
+    <br/>
+    <a href="{{ '/conduct/' | relative_url }}">Code of Conduct</a>
+    <br/>
+    <a href="{{ '/contributing/' | relative_url }}">Contributing</a>
+    <br/>
+    <a href="{{ '/glossary/' | relative_url }}">Glossary</a>
+    <br/>
+    <a href="{{ '/authors/' | relative_url }}">Authors</a>
+    <br/>
+    <a href="{{ {{site.repo }}">Source ➡</a></p>
+</nav>

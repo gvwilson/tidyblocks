@@ -1,7 +1,7 @@
 ---
 permalink: /conduct/
+title: "Code of Conduct"
 ---
-# Code of Conduct
 
 In the interest of fostering an open and welcoming environment, we as
 contributors and maintainers pledge to making participation in our project and
@@ -69,5 +69,5 @@ members of the project's leadership.
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor
-Covenant](https://www.contributor-covenant.org) version 1.4.
+This Code of Conduct is adapted from
+the [Contributor Covenant](https://www.contributor-covenant.org) version 1.4.

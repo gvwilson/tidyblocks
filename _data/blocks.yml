@@ -1,0 +1,126 @@
+- slug: data
+  title: "Data"
+  color: "#FEBE4C"
+  blocks:
+  - slug: colors
+    name: Colors
+  - slug: earthquakes
+    name: Earthquakes
+  - slug: iris
+    name: Iris
+  - slug: mtcars
+    name: Cars
+  - slug: toothgrowth
+    name: "Tooth Growth"
+  - slug: urlcsv
+    name: "Import"
+  - slug: sequence
+    name: "Sequence"
+- slug: transform
+  title: "Transform"
+  color: "#76AADB"
+  blocks:
+  - slug: drop
+    name: "Drop columns"
+  - slug: filter
+    name: "Filter values"
+  - slug: groupby
+    name: "Group values"
+  - slug: mutate
+    name: "Calculate new values"
+  - slug: select
+    name: "Choose columns"
+  - slug: sort
+    name: "Sort rows"
+  - slug: summarize
+    name: "Summarize many columns"
+  - slug: aggregate
+    name: "Summarize a column"
+  - slug: ungroup
+    name: "Remove grouping"
+  - slug: unique
+    name: "Remove duplicates"
+- slug: plot
+  title: "Visualize"
+  color: "#A4C588"
+  blocks:
+  - slug: bar
+    name: "Bar plot"
+  - slug: box
+    name: "Box plot"
+  - slug: histogram
+    name: "Histogram"
+  - slug: dot
+    name: "Dot plot"
+  - slug: point
+    name: "Scatter plot"
+- slug: operation
+  title: "Operation"
+  color: "#F9B5B2"
+  blocks:
+  - slug: arithmetic
+    name: "Arithmetic"
+  - slug: compare
+    name: "Comparison"
+  - slug: convert
+    name: "Type conversion"
+  - slug: convert_datetime
+    name: "Date/time conversion"
+  - slug: ifelse
+    name: "If/else"
+  - slug: logical
+    name: "Logical AND/OR"
+  - slug: negate
+    name: "Negation"
+  - slug: not
+    name: "Logical NOT"
+  - slug: type
+    name: "Type check"
+- slug: value
+  title: "Value"
+  color: "#E7553C"
+  blocks:
+  - slug: boolean
+    name: "Boolean"
+  - slug: column
+    name: "Column name"
+  - slug: date
+    name: "Date"
+  - slug: number
+    name: "Number"
+  - slug: text
+    name: "Text"
+  - slug: rownum
+    name: "Row number"
+  - slug: uniform
+    name: "Uniform random number"
+  - slug: normal
+    name: "Normal random number"
+  - slug: exponential
+    name: "Exponential random number"
+- slug: combine
+  title: "Combine"
+  color: "#808080"
+  blocks:
+  - slug: notify
+    name: "Notify pipeline completion"
+  - slug: join
+    name: "Join two pipelines"
+  - slug: concatenate
+    name: "Concatenate two columns"
+- slug: stats
+  title: "Statistics"
+  color: "#70A0C0"
+  blocks:
+  - slug: z_test_one_sample
+    name: "Z-test (one sample)"
+  - slug: kruskal_wallis
+    name: "Kruskal-Wallis test"
+  - slug: kolmogorov_smirnov
+    name: "Kolmogorov-Smirnov test"
+  - slug: t_test_one_sample
+    name: "T-test (one sample)"
+  - slug: t_test_paired
+    name: "T-test (paired)"
+  - slug: anova
+    name: "ANOVA"

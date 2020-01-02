@@ -1,0 +1,13 @@
+{% if page.root %}
+  {% assign this_slug = nil %}
+  {% assign this_group = nil %}
+  {% assign this_title = site.title %}
+{% elsif page.title %}
+  {% assign this_slug = nil %}
+  {% assign this_group = nil %}
+  {% assign this_title = page.title %}
+{% else %}
+  {% assign this_slug = page.permalink | replace: "/", "" %}
+  {% assign this_group = site.data.blocks | where: "slug", this_slug | first %}
+  {% assign this_title = this_group.title %}
+{% endif %}

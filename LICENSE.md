@@ -1,16 +1,43 @@
 ---
-permalink: /license/
-layout: page
+permalink: "/license/"
+title: "License"
 ---
 
-Copyright 2019 Maya Gans and Greg Wilson
+*This is a human-readable summary of (and not a substitute for) the license.
+Please see <https://creativecommons.org/licenses/by/4.0/legalcode> for the full legal text.*
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+This work is licensed under the Creative Commons Attribution 4.0
+International license (CC-BY-4.0).
 
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+**You are free to:**
 
-* The Software may not be used by individuals, corporations, governments, or other groups for systems or activities that actively and knowingly endanger, harm, or otherwise threaten the physical, mental, economic, or general well-being of  individuals or groups in violation of the United Nations Universal Declaration of Human Rights (https://www.un.org/en/universal-declaration-human-rights/).
+- **Share**---copy and redistribute the material in any medium or
+  format
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- **Remix**---remix, transform, and build upon the material for any
+  purpose, even commercially.
 
-This license is derived from the MIT License, as amended to limit the impact of the unethical use of open source software. Please see https://firstdonoharm.dev/ for the source of and motivation for this license.
+The licensor cannot revoke these freedoms as long as you follow the
+license terms.
+
+**Under the following terms:**
+
+- **Attribution**---You must give appropriate credit, provide a link
+  to the license, and indicate if changes were made. You may do so in
+  any reasonable manner, but not in any way that suggests the licensor
+  endorses you or your use.
+
+- **No additional restrictions**---You may not apply legal terms or
+  technological measures that legally restrict others from doing
+  anything the license permits.
+
+**Notices:**
+
+You do not have to comply with the license for elements of the
+material in the public domain or where your use is permitted by an
+applicable exception or limitation.
+
+No warranties are given. The license may not give you all of the
+permissions necessary for your intended use. For example, other rights
+such as publicity, privacy, or moral rights may limit how you use the
+material.
