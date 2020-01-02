@@ -120,27 +120,27 @@
       <div id="separator" ></div>
       <div id="second" >
         <ul class="nav nav-tabs">
-          <li class="active"><a data-toggle="tab" href="#data">Data</a></li>
-          <li><a data-toggle="tab" href="#plot">Plot</a></li>
-          <li><a data-toggle="tab" href="#stats">Stats</a></li>
-          <li><a data-toggle="tab" href="#error">Errors</a></li>
-          <li><a data-toggle="tab" href="#code">Code</a></li>
+          <li class="active"><a data-toggle="tab" href="#dataTab">Data</a></li>
+          <li><a data-toggle="tab" href="#plotTab">Plot</a></li>
+          <li><a data-toggle="tab" href="#statsTab">Stats</a></li>
+          <li><a data-toggle="tab" href="#errorTab">Errors</a></li>
+          <li><a data-toggle="tab" href="#codeTab">Code</a></li>
         </ul>
 
         <div class="tab-content">
-          <div id="data" class="tab-pane fade in active">
+          <div id="dataTab" class="tab-pane fade in active">
             <div id="dataOutput"></div>
           </div>
-          <div id="plot" class="tab-pane fade">
+          <div id="plotTab" class="tab-pane fade">
             <div id="plotOutput"></div>
           </div>
-          <div id="stats" class="tab-pane fade">
+          <div id="statsTab" class="tab-pane fade">
             <div id="statsOutput"></div>
           </div>
-          <div id="error" class="tab-pane fade">
+          <div id="errorTab" class="tab-pane fade">
             <div id="errorOutput"></div>
           </div>
-          <div id="code" class="tab-pane fade">
+          <div id="codeTab" class="tab-pane fade">
             <div id="codeOutput"></div>
           </div>
         </div>
@@ -196,6 +196,7 @@
     <script>
       document.addEventListener('DOMContentLoaded', (event) => {
         setUpBlockly()
+        showChangesInTabs()
         TbManager.papa = Papa // make CSV parser available inside blocks
         TbManager.stdlib = stdlib // make math libraries available inside blocks
       })
