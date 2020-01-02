@@ -69,14 +69,11 @@ class GuiEnvironment {
     const request = new XMLHttpRequest()
     request.open('GET', url, false)
     request.send(null)
-
     if (request.status !== 200) {
-      console.log(`ERROR: ${request.status}`)
-      return null
+      throw new Error(`ERROR: ${request.status}`)
     }
-    else {
-      return TbManager.csv2tbDataFrame(request.responseText)
-    }
+
+    return TbManager.csv2tbDataFrame(request.responseText)
   }
 
   /**
@@ -85,6 +82,9 @@ class GuiEnvironment {
    * @return dataframe containing that data.
    */
   useLocal (name) {
+    if (name.length === 0) {
+      throw new Error('No local file specified: have you loaded any?')
+    }
     return TbManager.files.get(name)
   }
 
@@ -210,7 +210,10 @@ const setUpBlockly = () => {
       .appendField(new Blockly.FieldDropdown(
         function() {
           const options = Array.from(TbManager.files.keys()).map(name => [name, name])
-          return options;
+          if (options.length === 0) {
+            options.push(['-none-', ''])
+          }
+          return options
         }), 'FILENAME');
   });
 }
