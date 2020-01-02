@@ -456,7 +456,38 @@ const displayTab = (event, tabName) => {
   event.currentTarget.classList.add('active')
 }
 
+/**
+ * Highlight tabs with changes.
+ * This is in a function to avoid namespace pollution;
+ * the function must be called at page load time in index.html.
+ */
+const showChangesInTabs = () => {
 
+  // Changer handler.
+  const observe = (mutationList) => {
+    const target = mutationList[0].target
+
+    // Get the ID of the containing tab's div by replacing 'Output' with 'Tab'.
+    const tabName = target.id.replace('Output', 'Tab')
+    const tab = document.querySelector(`a[href="#${tabName}"]`)
+ 
+    // give the 'changed' class to the tab related to the changed dom-node,
+    // if it's not currently active
+    if (! target.parentNode.classList.contains('active')) {
+      tab.classList.add('changed')
+    }
+  }
+
+  // remove the 'changed' class from clicked tabs
+  const tabs = document.querySelector('.nav-tabs')
+  tabs.onclick = ({ target }) => target.classList.remove('changed')
+
+  // store a reference to our tabs as we're going to re-use them
+  const names = ['dataOutput', 'errorOutput', 'plotOutput', 'statsOutput', 'codeOutput']
+  names
+    .map(id => document.getElementById(id))
+    .forEach(node => new MutationObserver(observe).observe(node, {childList: true}))
+}
 
 /**
  * Code for slider between blockly pane and tabs

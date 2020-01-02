@@ -580,3 +580,7 @@ a:hover {
   background-color: unset !important;
   color: unset !important;
 }
+
+a.changed {
+  color: red
+}
