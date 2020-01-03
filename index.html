@@ -13,17 +13,17 @@
   <body>
 
     <div class="topnav">
-      <button>
+      <button title="View documentation">
         <a href="./docs/" >
           <i class="fa fa-question-circle fa-lg"></i>
         </a>
       </button>
 
       <input type="file" id="imgupload" style="display:none" onchange="loadCode(this.files)"/>
-      <button id="OpenImgUpload"><i class="fa fa-upload fa-lg"></i></button>
+      <button id="OpenImgUpload" title="Load saved workspace"><i class="fa fa-upload fa-lg"></i></button>
 
       <input type="file" id="dataupload" style="display:none" accept=".csv" onchange="loadData(this.files)"/>
-      <button id="OpenDataUpload"><i class="fa fa-database fa-lg"></i></button>
+      <button id="OpenDataUpload" title="Load local CSV file"><i class="fa fa-table fa-lg"></i></button>
 
       <div class="dropdown">
         <button>
@@ -31,7 +31,7 @@
         </button>
         <div class="dropdown-content">
           <a id="download" href="#" onclick="saveCode()">Workspace</a>
-          <a id="downloadData" href="#" onclick="saveTable('dataFrame');">Data</a>
+          <a id="downloadData" href="#" onclick="saveTable('dataFrame')">Data</a>
           <a id="savePlot" href="#">Plot</a>
         </div>
       </div>
