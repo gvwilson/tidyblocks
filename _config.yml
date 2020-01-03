@@ -1,8 +1,8 @@
 # General.
 title: "TidyBlocks"
 year: 2020
-domain: http://tidyblocks.tech
-repo: https://github.com/tidyblocks/docs-template/
+domain: "http://tidyblocks.tech"
+repo: "https://github.com/tidyblocks/tidyblocks"
 
 # Jekyll settings.
 repository: <USERNAME>/<PROJECT>
