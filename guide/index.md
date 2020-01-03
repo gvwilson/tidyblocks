@@ -8,7 +8,7 @@ Please see <https://tidyblocks.tech> for a free online version
 or visit [our GitHub repository]({{site.repo}}).
 
 <div align="center">
-  <img width="50%" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
+  <img width="90%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
 </div>
 
 This work is made freely available under the [MIT License]({{ '/license/' | relative_url }}).

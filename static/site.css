@@ -51,6 +51,14 @@ dd:last-child {
     padding-bottom: 0;
 }
 
+img.screenshot {
+    border: 1px solid gray;
+}
+
+span.menu {
+    border: 1px solid gray;
+}
+
 /* ------------------------------------------------------------ */
 
 footer {

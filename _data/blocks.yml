@@ -1,3 +1,23 @@
+- slug: ui
+  title: "UI"
+  color: ""
+  blocks:
+  - slug: toolbar
+    name: "Toolbar"
+  - slug: palette
+    name: "Palette"
+  - slug: workspace
+    name: "workspace"
+  - slug: datapane
+    name: "Data Pane"
+  - slug: plotpane
+    name: "Plot Pane"
+  - slug: statspane
+    name: "Stats Pane"
+  - slug: errorpane
+    name: "Error Pane"
+  - slug: codepane
+    name: "Code Pane"
 - slug: data
   title: "Data"
   color: "#FEBE4C"
@@ -12,6 +32,8 @@
     name: Cars
   - slug: toothgrowth
     name: "Tooth Growth"
+  - slug: local
+    name: "Local"
   - slug: urlcsv
     name: "Import"
   - slug: sequence
