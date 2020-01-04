@@ -24,7 +24,7 @@ describe('generate code for combining blocks', () => {
                       NAME: 'output_name'}
     const code = TbTestUtils.makeCode(pipeline)
     assert.equal(code.trim(),
-                 ".notify((name, frame) => TbManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
+                 ".notify(0, (name, frame) => TbManager.notify(name, frame), 'output_name') }, ['output_name']) /* tidyblocks end */",
                  'pipeine does not notify properly')
     done()
   })
@@ -92,8 +92,8 @@ describe('detects errors for combining blocks', () => {
        RIGHT_COLUMN: 'name'}
     ]
     const env = TbTestUtils.evalCode(pipeline)
-    assert.equal(env.error, 'left table does not have column nonexistent',
-                 `Did not get expected error report "${env.error}"`)
+    assert.includes(env.error, 'left table does not have column nonexistent',
+                    `Did not get expected error report "${env.error}"`)
     done()
   })
 
@@ -117,8 +117,8 @@ describe('detects errors for combining blocks', () => {
        RIGHT_COLUMN: 'nonexistent'}
     ]
     const env = TbTestUtils.evalCode(pipeline)
-    assert.equal(env.error, 'right table does not have column nonexistent',
-                 `Did not get expected error report "${env.error}"`)
+    assert.includes(env.error, 'right table does not have column nonexistent',
+                    `Did not get expected error report "${env.error}"`)
     done()
   })
 

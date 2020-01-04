@@ -28,7 +28,7 @@ Blockly.JavaScript['plot_bar'] = (block) => {
     }
   }`
   const suffix = TbManager.registerSuffix('')
-  return `.plot(environment, ${spec}) ${suffix}`
+  return `.plot(${block.tbId}, environment, ${spec}) ${suffix}`
 }
 
 //
@@ -56,7 +56,7 @@ Blockly.JavaScript['plot_box'] = (block) => {
     }
   }`
   const suffix = TbManager.registerSuffix('')
-  return `.plot(environment, ${spec}) ${suffix}`
+  return `.plot(${block.tbId}, environment, ${spec}) ${suffix}`
 }
 
 //
@@ -85,7 +85,7 @@ Blockly.JavaScript['plot_dot'] = (block) => {
     }
   }`
   const suffix = TbManager.registerSuffix('')
-  return `.plot(environment, ${spec}) ${suffix}`
+  return `.plot(${block.tbId}, environment, ${spec}) ${suffix}`
 }
 
 //
@@ -115,7 +115,7 @@ Blockly.JavaScript['plot_hist'] = (block) => {
     }
   }`
   const suffix = TbManager.registerSuffix('')
-  return `.plot(environment, ${spec}) ${suffix}`
+  return `.plot(${block.tbId}, environment, ${spec}) ${suffix}`
 }
 
 //
@@ -145,5 +145,5 @@ Blockly.JavaScript['plot_point'] = (block) => {
     }
   }`
   const suffix = TbManager.registerSuffix('')
-  return `.plot(environment, ${spec}) ${suffix}`
+  return `.plot(${block.tbId}, environment, ${spec}) ${suffix}`
 }

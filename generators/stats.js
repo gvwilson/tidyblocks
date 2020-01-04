@@ -8,7 +8,7 @@ Blockly.JavaScript['stats_z_test_one_sample'] = (block) => {
   const std_dev = block.getFieldValue('STD_DEV')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{mean: ${mean}, std_dev: ${std_dev}, significance: ${significance}}`
-  return `.test(environment, ${block.tbId}, tbZTestOneSample, ${params}, "${column}")`
+  return `.test(${block.tbId}, environment, tbZTestOneSample, ${params}, "${column}")`
 }
 
 //
@@ -20,7 +20,7 @@ Blockly.JavaScript['stats_kruskal_wallis'] = (block) => {
   const values = block.getFieldValue('VALUES')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{significance: ${significance}}`
-  return `.test(environment, ${block.tbId}, tbKruskalWallis, ${params}, "${groups}", "${values}")`
+  return `.test(${block.tbId}, environment, tbKruskalWallis, ${params}, "${groups}", "${values}")`
 }
 
 //
@@ -33,7 +33,7 @@ Blockly.JavaScript['stats_kolmogorov_smirnov'] = (block) => {
   const std_dev = block.getFieldValue('STD_DEV')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{mean: ${mean}, std_dev: ${std_dev}, significance: ${significance}}`
-  return `.test(environment, ${block.tbId}, tbKolmogorovSmirnov, ${params}, "${column}")`
+  return `.test(${block.tbId}, environment, tbKolmogorovSmirnov, ${params}, "${column}")`
 }
 
 //
@@ -45,7 +45,7 @@ Blockly.JavaScript['stats_t_test_one_sample'] = (block) => {
   const mean = block.getFieldValue('MEAN')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{mu: ${mean}, alpha: ${significance}}`
-  return `.test(environment, ${block.tbId}, tbTTestOneSample, ${params}, "${column}")`
+  return `.test(${block.tbId}, environment, tbTTestOneSample, ${params}, "${column}")`
 }
 
 //
@@ -57,7 +57,7 @@ Blockly.JavaScript['stats_t_test_paired'] = (block) => {
   const right = block.getFieldValue('RIGHT_COLUMN')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{alpha: ${significance}}`
-  return `.test(environment, ${block.tbId}, tbTTestPaired, ${params}, "${left}", "${right}")`
+  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}")`
 }
 
 //
@@ -69,5 +69,5 @@ Blockly.JavaScript['stats_anova'] = (block) => {
   const values = block.getFieldValue('VALUES')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{significance: ${significance}}`
-  return `.test(environment, ${block.tbId}, tbAnova, ${params}, "${groups}", "${values}")`
+  return `.test(${block.tbId}, environment, tbAnova, ${params}, "${groups}", "${values}")`
 }

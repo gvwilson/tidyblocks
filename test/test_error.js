@@ -58,7 +58,7 @@ describe('raises errors at the right times', () => {
        TEST: ''}
     ]
     const env = TbTestUtils.evalCode(pipeline)
-    assert.match(env.error, /\[block \d+\] no operator for filter/,
+    assert.match(env.error, /\[block \d+\] filter expression is not a function/,
                  `Expected an error message when filtering without condition`)
     done()
   })

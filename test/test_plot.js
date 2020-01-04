@@ -26,7 +26,7 @@ describe('generates code for plotting blocks', () => {
                       Y_AXIS: {_b: 'value_column',
                                COLUMN: 'Y_axis_column'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.includes(code, '.plot(environment',
+    assert.includes(code, '.plot(',
                     'pipeline does not call .plot')
     assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
@@ -44,7 +44,7 @@ describe('generates code for plotting blocks', () => {
                       Y_AXIS: {_b: 'value_column',
                                COLUMN: 'Y_axis_column'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.includes(code, '.plot(environment',
+    assert.includes(code, '.plot(',
                     'pipeline does not call .plot')
     assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
@@ -78,7 +78,7 @@ describe('generates code for plotting blocks', () => {
                       COLOR: {_b: 'value_column',
                               COLUMN: 'COLOR_axis_column'}}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.includes(code, '.plot(environment',
+    assert.includes(code, '.plot(',
                     'pipeline does not call .plot')
     assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')

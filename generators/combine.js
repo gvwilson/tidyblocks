@@ -4,7 +4,7 @@
 Blockly.JavaScript['combine_notify'] = (block) => {
   const name = block.getFieldValue('NAME')
   const suffix = TbManager.registerSuffix(`'${name}'`)
-  return `.notify((name, frame) => TbManager.notify(name, frame), '${name}') ${suffix}`
+  return `.notify(${block.tbId}, (name, frame) => TbManager.notify(name, frame), '${name}') ${suffix}`
 }
 
 //
@@ -17,7 +17,7 @@ Blockly.JavaScript['combine_join'] = (block) => {
   const rightTable = block.getFieldValue('RIGHT_TABLE')
   const rightColumn = block.getFieldValue('RIGHT_COLUMN')
   const prefix = TbManager.registerPrefix(`'${leftTable}', '${rightTable}'`)
-  return `${prefix} new TbDataFrame([]).join((name) => TbManager.getResult(name), '${leftTable}', '${leftColumn}', '${rightTable}', '${rightColumn}')`
+  return `${prefix} new TbDataFrame([]).join(${block.tbId}, (name) => TbManager.getResult(name), '${leftTable}', '${leftColumn}', '${rightTable}', '${rightColumn}')`
 }
 
 //
@@ -30,5 +30,5 @@ Blockly.JavaScript['combine_concatenate'] = (block) => {
   const rightTable = block.getFieldValue('RIGHT_TABLE')
   const rightColumn = block.getFieldValue('RIGHT_COLUMN')
   const prefix = TbManager.registerPrefix(`'${leftTable}', '${rightTable}'`)
-  return `${prefix} new TbDataFrame([]).concatenate((name) => TbManager.getResult(name), '${leftTable}', '${leftColumn}', '${rightTable}', '${rightColumn}')`
+  return `${prefix} new TbDataFrame([]).concatenate(${block.tbId}, (name) => TbManager.getResult(name), '${leftTable}', '${leftColumn}', '${rightTable}', '${rightColumn}')`
 }
