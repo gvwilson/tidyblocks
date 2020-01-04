@@ -1,4 +1,32 @@
-/**
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: tidyblocks/tidyblocks.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: tidyblocks/tidyblocks.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
  * Store a dataframe.
  */
 class TbDataFrame {
@@ -140,7 +168,7 @@ class TbDataFrame {
         if (soFar !== 0) {
           return soFar
         }
-        if (left[col] < right[col]) {
+        if (left[col] &lt; right[col]) {
           return -1
         }
         if (left[col] > right[col]) {
@@ -292,7 +320,7 @@ class TbDataFrame {
     const rightFrame = getDataFxn(rightFrameName)
     tbAssert(rightFrame.hasColumns(rightColumn),
              `[block ${blockId}] right table does not have column ${rightColumn}`)
-    if ((leftFrame.data.length > 0) && (rightFrame.data.length > 0)) {
+    if ((leftFrame.data.length > 0) &amp;&amp; (rightFrame.data.length > 0)) {
       const leftValue = leftFrame.data[0][leftColumn]
       const rightValue = rightFrame.data[0][rightColumn]
       tbAssertTypeEqual(leftValue, rightValue)
@@ -799,7 +827,7 @@ const tbMedian = (rows, col) => {
            `Cannot calculate median of empty data`)
   const temp = [...rows]
   rows.sort((left, right) => {
-    if (left[col] < right[col]) {
+    if (left[col] &lt; right[col]) {
       return -1
     }
     else if (left[col] > right[col]) {
@@ -820,7 +848,7 @@ tbMedian.colName = 'median'
 const tbMin = (rows, col) => {
   tbAssert(rows.length > 0,
            `Cannot calculate min of empty data`)
-  return rows.reduce((soFar, row) => (row[col] < soFar) ? row[col] : soFar,
+  return rows.reduce((soFar, row) => (row[col] &lt; soFar) ? row[col] : soFar,
                      rows[0][col])
 }
 tbMin.colName = 'min'
@@ -909,7 +937,7 @@ const tbToDatetime = (blockId, row, i, getValue) => {
     return TbDataFrame.MISSING
   }
   let result = new Date(value)
-  if ((typeof result === 'object') && (result.toString() === 'Invalid Date')) {
+  if ((typeof result === 'object') &amp;&amp; (result.toString() === 'Invalid Date')) {
     result = TbDataFrame.MISSING
   }
   return result
@@ -1274,7 +1302,7 @@ const _safeValue = (value) => {
 const tbAnd = (blockId, row, i, getLeft, getRight) => {
   const left = getLeft(row, i)
   const right = getRight(row, i)
-  return left && right
+  return left &amp;&amp; right
 }
 
 /**
@@ -1414,7 +1442,7 @@ const tbLeq = (blockId, row, i, getLeft, getRight) => {
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
-    : (left <= right)
+    : (left &lt;= right)
 }
 
 /**
@@ -1432,7 +1460,7 @@ const tbLt = (blockId, row, i, getLeft, getRight) => {
   tbAssertTypeEqual(left, right)
   return ((left === TbDataFrame.MISSING) || (right === TbDataFrame.MISSING))
     ? TbDataFrame.MISSING
-    : (left < right)
+    : (left &lt; right)
 }
 
 //--------------------------------------------------------------------------------
@@ -1447,7 +1475,7 @@ const tbLt = (blockId, row, i, getLeft, getRight) => {
  * @returns A uniform random value.
  */
 const tbUniform = (blockId, low, high) => {
-  tbAssert(low <= high, `[block ${blockId}] low value ${low} must be less than high value ${high}`)
+  tbAssert(low &lt;= high, `[block ${blockId}] low value ${low} must be less than high value ${high}`)
   return TbManager.stdlib.random.base.uniform(low, high)
 }
 
@@ -1648,3 +1676,26 @@ if (typeof module !== 'undefined') {
     TbManager
   }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BlocklyClass.html">BlocklyClass</a></li><li><a href="GuiEnvironment.html">GuiEnvironment</a></li><li><a href="MockBlock.html">MockBlock</a></li><li><a href="TbDataFrame.html">TbDataFrame</a></li><li><a href="TestEnvironment.html">TestEnvironment</a></li><li><a href="TidyBlocksManager.html">TidyBlocksManager</a></li></ul><h3>Global</h3><ul><li><a href="global.html#ARGS_N">ARGS_N</a></li><li><a href="global.html#colTypeName">colTypeName</a></li><li><a href="global.html#createValidator">createValidator</a></li><li><a href="global.html#displayTab">displayTab</a></li><li><a href="global.html#dragElement">dragElement</a></li><li><a href="global.html#generateCodePane">generateCodePane</a></li><li><a href="global.html#initializeDisplay">initializeDisplay</a></li><li><a href="global.html#json2table">json2table</a></li><li><a href="global.html#loadCode">loadCode</a></li><li><a href="global.html#loadData">loadData</a></li><li><a href="global.html#runCode">runCode</a></li><li><a href="global.html#saveCode">saveCode</a></li><li><a href="global.html#saveTable">saveTable</a></li><li><a href="global.html#setUpBlockly">setUpBlockly</a></li><li><a href="global.html#showChangesInTabs">showChangesInTabs</a></li><li><a href="global.html#showCode">showCode</a></li><li><a href="global.html#stats2table">stats2table</a></li><li><a href="global.html#tbAdd">tbAdd</a></li><li><a href="global.html#tbAnd">tbAnd</a></li><li><a href="global.html#tbAnova">tbAnova</a></li><li><a href="global.html#tbAssert">tbAssert</a></li><li><a href="global.html#tbAssertNumber">tbAssertNumber</a></li><li><a href="global.html#tbAssertTypeEqual">tbAssertTypeEqual</a></li><li><a href="global.html#tbCount">tbCount</a></li><li><a href="global.html#tbDiv">tbDiv</a></li><li><a href="global.html#tbEq">tbEq</a></li><li><a href="global.html#tbExp">tbExp</a></li><li><a href="global.html#tbExponential">tbExponential</a></li><li><a href="global.html#tbGeq">tbGeq</a></li><li><a href="global.html#tbGet">tbGet</a></li><li><a href="global.html#tbGt">tbGt</a></li><li><a href="global.html#tbIfElse">tbIfElse</a></li><li><a href="global.html#tbIsBoolean">tbIsBoolean</a></li><li><a href="global.html#tbIsDateTime">tbIsDateTime</a></li><li><a href="global.html#tbIsMissing">tbIsMissing</a></li><li><a href="global.html#tbIsNumber">tbIsNumber</a></li><li><a href="global.html#tbIsText">tbIsText</a></li><li><a href="global.html#tbKolmogorovSmirnov">tbKolmogorovSmirnov</a></li><li><a href="global.html#tbKruskalWallis">tbKruskalWallis</a></li><li><a href="global.html#tbLeq">tbLeq</a></li><li><a href="global.html#tbLt">tbLt</a></li><li><a href="global.html#TbManager">TbManager</a></li><li><a href="global.html#tbMax">tbMax</a></li><li><a href="global.html#tbMean">tbMean</a></li><li><a href="global.html#tbMedian">tbMedian</a></li><li><a href="global.html#tbMin">tbMin</a></li><li><a href="global.html#tbMod">tbMod</a></li><li><a href="global.html#tbMul">tbMul</a></li><li><a href="global.html#tbNeg">tbNeg</a></li><li><a href="global.html#tbNeq">tbNeq</a></li><li><a href="global.html#tbNormal">tbNormal</a></li><li><a href="global.html#tbNot">tbNot</a></li><li><a href="global.html#tbOr">tbOr</a></li><li><a href="global.html#tbStd">tbStd</a></li><li><a href="global.html#tbSub">tbSub</a></li><li><a href="global.html#tbSum">tbSum</a></li><li><a href="global.html#tbToBoolean">tbToBoolean</a></li><li><a href="global.html#tbToDatetime">tbToDatetime</a></li><li><a href="global.html#tbToDay">tbToDay</a></li><li><a href="global.html#tbToHours">tbToHours</a></li><li><a href="global.html#tbToMinutes">tbToMinutes</a></li><li><a href="global.html#tbToMonth">tbToMonth</a></li><li><a href="global.html#tbToNumber">tbToNumber</a></li><li><a href="global.html#tbToSeconds">tbToSeconds</a></li><li><a href="global.html#tbToText">tbToText</a></li><li><a href="global.html#tbToWeekDay">tbToWeekDay</a></li><li><a href="global.html#tbToYear">tbToYear</a></li><li><a href="global.html#tbTTestOneSample">tbTTestOneSample</a></li><li><a href="global.html#tbTTestPaired">tbTTestPaired</a></li><li><a href="global.html#tbUniform">tbUniform</a></li><li><a href="global.html#tbVariance">tbVariance</a></li><li><a href="global.html#tbZTestOneSample">tbZTestOneSample</a></li><li><a href="global.html#TOLERANCE">TOLERANCE</a></li><li><a href="global.html#value2html">value2html</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Jan 04 2020 08:45:58 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
