@@ -366,20 +366,6 @@ class TbDataFrame {
     return names.every(n => (this.columns.has(n)))
   }
 
-  /**
-   * Convert columns to numeric values in place.
-   * @param {string[]} columns The names of the columns to convert.
-   * @returns This object.
-   */
-  toNumber (blockId, columns) {
-    this.data.forEach((row, i) => {
-      columns.forEach(col => {
-        row[col] = parseFloat(tbGet(blockId, row, i, col))
-      })
-    })
-    return this
-  }
-
   //------------------------------------------------------------------------------
 
   //

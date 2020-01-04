@@ -46,8 +46,6 @@ describe('generates code for loading data', () => {
                     'pipeline does not read CSV')
     assert.includes(code, 'iris.csv',
                     'pipeline does not read earthquake data')
-    assert.includes(code, 'toNumber',
-                    'pipeline does not convert data to numeric')
     done()
   })
 

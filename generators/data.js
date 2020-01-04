@@ -27,8 +27,7 @@ Blockly.JavaScript['data_earthquakes'] = (block) => {
 //
 Blockly.JavaScript['data_iris'] = (block) => {
   const prefix = TbManager.registerPrefix('')
-  return `${prefix} environment.readCSV('iris.csv', true)
-  .toNumber(${block.tbId}, ['Sepal_Length', 'Sepal_Width', 'Petal_Length', 'Petal_Width'])`
+  return `${prefix} environment.readCSV('iris.csv', true)`
 }
 
 //
