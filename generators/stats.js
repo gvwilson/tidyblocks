@@ -52,12 +52,32 @@ Blockly.JavaScript['stats_t_test_one_sample'] = (block) => {
 // Create a paired two-sided t-test.
 //
 Blockly.JavaScript['stats_t_test_paired'] = (block) => {
+
   const order = Blockly.JavaScript.ORDER_NONE
   const left = block.getFieldValue('LEFT_COLUMN')
   const right = block.getFieldValue('RIGHT_COLUMN')
   const significance = block.getFieldValue('SIGNIFICANCE')
   const params = `{alpha: ${significance}}`
-  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}")`
+  const suffix = TbManager.registerSuffix('')
+  
+  spec = `{
+    "title": "Sampling Distribution of xbar_1 - xbar_2",
+    "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
+    "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
+    "encoding": {
+      "x": {"field": "x", "type": "quantitative"},
+      "y": {"field": "y", "type": "quantitative"}
+    },
+    "layer": [
+      {"mark": "line"},
+      {"transform": [{"filter": "datum.x <= -${significance} "}],"mark": "area"},
+      {"transform": [{"filter": "datum.x >= ${significance} "}], "mark": "area"}
+    ],
+    "width": 300,
+    "height": 150
+  }`
+
+  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}").testPlot(${block.tbId}, environment, ${spec}) ${suffix}`
 }
 
 //

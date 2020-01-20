@@ -349,6 +349,10 @@ class TbDataFrame {
     return this
   }
 
+  testPlot (blockId, environment, spec) {
+      environment.displayStatsPlot(spec)
+  }
+
   //------------------------------------------------------------------------------
   // Utility functions that are called from the outside (e.g., for testing or
   // to convert datatypes).

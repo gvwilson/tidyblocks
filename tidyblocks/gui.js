@@ -105,6 +105,10 @@ class GuiEnvironment {
     document.getElementById('statsOutput').innerHTML = stats2table(values, legend)
   }
 
+  displayStatsPlot (spec) {
+    vegaEmbed('#statsPlot', spec, {})
+  }
+
   /**
    * Display a dataframe as HTML.
    * @param {Object} table JSON array of uniform objects.
