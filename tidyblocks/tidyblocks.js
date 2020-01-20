@@ -349,8 +349,27 @@ class TbDataFrame {
     return this
   }
 
-  testPlot (blockId, environment, spec) {
-      environment.displayStatsPlot(spec)
+  ttestPlot (blockId, environment, testFunc, parameters, ...columns) {
+    const {result, legend} = testFunc(blockId, this, parameters, columns)
+
+    const spec = `{
+      "title": "Sampling Distribution of xbar_1 - xbar_2",
+      "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
+      "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"}
+      },
+      "layer": [
+        {"mark": "line"},
+        {"transform": [{"filter": "datum.x <= -${result.statistic} "}],"mark": "area"},
+        {"transform": [{"filter": "datum.x >= ${result.statistic} "}], "mark": "area"}
+      ],
+      "width": 300,
+      "height": 150
+    }`
+    console.log(spec)
+    environment.displayStatsPlot(spec)
   }
 
   //------------------------------------------------------------------------------
