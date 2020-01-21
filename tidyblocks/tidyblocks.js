@@ -352,8 +352,7 @@ class TbDataFrame {
   ttestPlot (blockId, environment, testFunc, parameters, ...columns) {
     const {result, legend} = testFunc(blockId, this, parameters, columns)
 
-    const L1 = -1*Math.abs(result.statistic)
-    const R1 = Math.abs(result.statistic)
+    const statistic = Math.abs(result.statistic)
 
     const spec1 = {
       "title": "T-Distribution",
@@ -365,8 +364,8 @@ class TbDataFrame {
       },
       "layer": [
         {"mark": "line"},
-        {"transform": [{"filter": `datum.x <= ${L1} `}],"mark": "area"},
-        {"transform": [{"filter": `datum.x >= ${R1} `}], "mark": "area"}
+        {"transform": [{"filter": `datum.x <= ${-1*statistic} `}],"mark": "area"},
+        {"transform": [{"filter": `datum.x >= ${statistic} `}], "mark": "area"}
       ],
       "width": 300,
       "height": 150
@@ -374,8 +373,6 @@ class TbDataFrame {
     console.log(spec1)
 
     const estimate = Math.abs(result.xmean - result.ymean)
-    const L2 = -1*estimate
-    const R2 =  estimate
 
     const spec2 = {
       "title": "Sampling Distribution of x̄₁ - x̄₂",
@@ -387,8 +384,8 @@ class TbDataFrame {
       },
       "layer": [
         {"mark": "line"},
-        {"transform": [{"filter": `datum.x <= ${L2} `}],"mark": "area"},
-        {"transform": [{"filter": `datum.x >= ${R2} `}], "mark": "area"}
+        {"transform": [{"filter": `datum.x <= ${-1*estimate} `}],"mark": "area"},
+        {"transform": [{"filter": `datum.x >= ${estimate} `}], "mark": "area"}
       ],
       "width": 300,
       "height": 150
