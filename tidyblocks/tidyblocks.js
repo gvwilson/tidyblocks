@@ -355,7 +355,7 @@ class TbDataFrame {
     const L1 = -1*Math.abs(result.statistic)
     const R1 = Math.abs(result.statistic)
 
-    const spec1 = `{
+    const spec1 = {
       "title": "T-Distribution",
       "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
       "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
@@ -365,19 +365,19 @@ class TbDataFrame {
       },
       "layer": [
         {"mark": "line"},
-        {"transform": [{"filter": "datum.x <= ${L1} "}],"mark": "area"},
-        {"transform": [{"filter": "datum.x >= ${R1} "}], "mark": "area"}
+        {"transform": [{"filter": `datum.x <= ${L1} `}],"mark": "area"},
+        {"transform": [{"filter": `datum.x >= ${R1} `}], "mark": "area"}
       ],
       "width": 300,
       "height": 150
-    }`
+    }
     console.log(spec1)
 
     const estimate = Math.abs(result.xmean - result.ymean)
     const L2 = -1*estimate
     const R2 =  estimate
 
-    const spec2 = `{
+    const spec2 = {
       "title": "Sampling Distribution of x̄₁ - x̄₂",
       "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
       "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
@@ -387,12 +387,12 @@ class TbDataFrame {
       },
       "layer": [
         {"mark": "line"},
-        {"transform": [{"filter": "datum.x <= ${L2} "}],"mark": "area"},
-        {"transform": [{"filter": "datum.x >= ${R2} "}], "mark": "area"}
+        {"transform": [{"filter": `datum.x <= ${L2} `}],"mark": "area"},
+        {"transform": [{"filter": `datum.x >= ${R2} `}], "mark": "area"}
       ],
       "width": 300,
       "height": 150
-    }`
+    }
     console.log(spec2)
 
 

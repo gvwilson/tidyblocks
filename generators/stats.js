@@ -60,7 +60,25 @@ Blockly.JavaScript['stats_t_test_paired'] = (block) => {
   const params = `{alpha: ${significance}}`
   const suffix = TbManager.registerSuffix('')
 
-  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}").ttestPlot(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}") ${suffix}`
+  const spec = `{
+    "title": "Sampling Distribution of x̄₁ - x̄₂",
+    "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
+    "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
+    "encoding": {
+      "x": {"field": "x", "type": "quantitative"},
+      "y": {"field": "y", "type": "quantitative"}
+    },
+    "layer": [
+      {"mark": "line"},
+      {"transform": [{"filter": "datum.x <= -0.58 "}],"mark": "area"},
+      {"transform": [{"filter": "datum.x >= 0.58 "}], "mark": "area"}
+    ],
+    "width": 300,
+    "height": 150
+  }`
+
+  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}")
+  .ttestPlot(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}") ${suffix}`
 }
 
 //
