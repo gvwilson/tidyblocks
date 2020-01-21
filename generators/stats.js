@@ -60,7 +60,7 @@ Blockly.JavaScript['stats_t_test_paired'] = (block) => {
   const params = `{alpha: ${significance}}`
   const suffix = TbManager.registerSuffix('')
 
-  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}").ttestPlot(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}")`
+  return `.test(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}").ttestPlot(${block.tbId}, environment, tbTTestPaired, ${params}, "${left}", "${right}") ${suffix}`
 }
 
 //

@@ -352,8 +352,11 @@ class TbDataFrame {
   ttestPlot (blockId, environment, testFunc, parameters, ...columns) {
     const {result, legend} = testFunc(blockId, this, parameters, columns)
 
-    const spec = `{
-      "title": "Sampling Distribution of xbar_1 - xbar_2",
+    const L1 = -1*Math.abs(result.statistic)
+    const R1 = Math.abs(result.statistic)
+
+    const spec1 = `{
+      "title": "T-Distribution",
       "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
       "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
       "encoding": {
@@ -362,14 +365,38 @@ class TbDataFrame {
       },
       "layer": [
         {"mark": "line"},
-        {"transform": [{"filter": "datum.x <= -${result.statistic} "}],"mark": "area"},
-        {"transform": [{"filter": "datum.x >= ${result.statistic} "}], "mark": "area"}
+        {"transform": [{"filter": "datum.x <= ${L1} "}],"mark": "area"},
+        {"transform": [{"filter": "datum.x >= ${R1} "}], "mark": "area"}
       ],
       "width": 300,
       "height": 150
     }`
-    console.log(spec)
-    environment.displayStatsPlot(spec)
+    console.log(spec1)
+
+    const estimate = Math.abs(result.xmean - result.ymean)
+    const L2 = -1*estimate
+    const R2 =  estimate
+
+    const spec2 = `{
+      "title": "Sampling Distribution of x̄₁ - x̄₂",
+      "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
+      "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
+      "encoding": {
+        "x": {"field": "x", "type": "quantitative"},
+        "y": {"field": "y", "type": "quantitative"}
+      },
+      "layer": [
+        {"mark": "line"},
+        {"transform": [{"filter": "datum.x <= ${L2} "}],"mark": "area"},
+        {"transform": [{"filter": "datum.x >= ${R2} "}], "mark": "area"}
+      ],
+      "width": 300,
+      "height": 150
+    }`
+    console.log(spec2)
+
+
+    environment.displayStatsPlot(spec1, spec2)
   }
 
   //------------------------------------------------------------------------------
@@ -1622,15 +1649,18 @@ const tbTTestPaired = (blockId, dataframe, parameters, columns) => {
   const [leftCol, rightCol] = columns
   const left = dataframe.data.map(row => row[leftCol])
   const right = dataframe.data.map(row => row[rightCol])
-  const result = TbManager.stdlib.stats.ttest(left, right,
+  const result = TbManager.stdlib.stats.ttest2(left, right,
                                               {alpha: alpha})
+                                              console.log(result)
   const legend = {
     _title: 'paired two-sided t-test',
     rejected: 'is null hypothesis rejected?',
     pValue: 'p-value',
     statistic: 'measure value',
     ci: 'confidence interval',
-    alpha: 'significance'
+    alpha: 'significance',
+    xmean: 'x sample mean',
+    ymean: 'y sample mean'
   }
   return {result, legend}
 }
