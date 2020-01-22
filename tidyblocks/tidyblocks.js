@@ -370,7 +370,6 @@ class TbDataFrame {
       "width": 300,
       "height": 150
     }
-    console.log(spec1)
 
     const estimate = Math.abs(result.xmean - result.ymean)
 
@@ -390,8 +389,6 @@ class TbDataFrame {
       "width": 300,
       "height": 150
     }
-    console.log(spec2)
-
 
     environment.displayStatsPlot(spec1, spec2)
   }
@@ -1646,9 +1643,7 @@ const tbTTestPaired = (blockId, dataframe, parameters, columns) => {
   const [leftCol, rightCol] = columns
   const left = dataframe.data.map(row => row[leftCol])
   const right = dataframe.data.map(row => row[rightCol])
-  const result = TbManager.stdlib.stats.ttest2(left, right,
-                                              {alpha: alpha})
-                                              console.log(result)
+  const result = TbManager.stdlib.stats.ttest2(left, right, {alpha: alpha})
   const legend = {
     _title: 'paired two-sided t-test',
     rejected: 'is null hypothesis rejected?',
