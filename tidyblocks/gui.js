@@ -105,6 +105,11 @@ class GuiEnvironment {
     document.getElementById('statsOutput').innerHTML = stats2table(values, legend)
   }
 
+  /**
+   * Display statistical outputs as plots.
+   * @param {Object} spec1 VegaLite spec for first plot.
+   * @param {Object} spec2 VegaLite spec for second plot.
+   */
   displayStatsPlot (spec1, spec2) {
     vegaEmbed('#statsPlot1', spec1, {})
     vegaEmbed('#statsPlot2', spec2, {})

@@ -246,6 +246,8 @@ class TestEnvironment {
     this.table = null
     this.plot = null
     this.stats = null
+    this.statsPlot1 = null
+    this.statsPlot2 = null
     this.error = null
   }
 
@@ -294,6 +296,16 @@ class TestEnvironment {
    */
   displayStats (values, legend) {
     this.stats = {values, legend}
+  }
+
+  /**
+   * Display statistical outputs as plots.
+   * @param {Object} spec1 VegaLite spec for first plot.
+   * @param {Object} spec2 VegaLite spec for second plot.
+   */
+  displayStatsPlot (spec1, spec2) {
+    this.statsPlot1 = spec1
+    this.statsPlot2 = spec2
   }
 
   /**
