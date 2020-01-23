@@ -32,6 +32,10 @@ const MULTIPLE_COLUMN_FIELDS = [
 // Location of standard datasets.
 STANDARD_DATASET_BASE_URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/'
 
+// Size of standard plotting area.
+const PLOT_WIDTH = 500
+const PLOT_HEIGHT = 300
+
 //--------------------------------------------------------------------------------
 
 /**
@@ -93,6 +97,8 @@ class GuiEnvironment {
    * @param {Object} spec Vega-Lite spec for plot with data filled in.
    */
   displayPlot (spec) {
+    spec.width = PLOT_WIDTH
+    spec.height = PLOT_HEIGHT
     vegaEmbed('#plotOutput', spec, {})
   }
 

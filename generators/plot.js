@@ -1,6 +1,3 @@
-const PLOT_WIDTH = 500
-const PLOT_HEIGHT = 300
-
 //
 // Create a bar plot.
 //
@@ -8,8 +5,6 @@ Blockly.JavaScript['plot_bar'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
   const spec = `{
-    "width": ${PLOT_WIDTH},
-    "height": ${PLOT_HEIGHT},
     "data": { "values": null }, // set to dataframe inside plotting function
     "mark": "bar",
     "encoding": {
@@ -38,7 +33,6 @@ Blockly.JavaScript['plot_box'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
   const spec = `{
-    "width": ${PLOT_WIDTH},
     "data": { "values": null }, // set to dataframe inside plotting function
     "mark": {
       "type": "boxplot",
@@ -66,7 +60,6 @@ Blockly.JavaScript['plot_dot'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
   const spec = `{
-    "height": 300,
     "data": { "values": null }, // set to dataframe inside plotting function
     "mark": {
     	"type": "circle",
@@ -95,8 +88,6 @@ Blockly.JavaScript['plot_hist'] = (block) => {
   const column = block.getFieldValue('COLUMN')
   const bins = block.getFieldValue('BINS')
   const spec = `{
-    "width": ${PLOT_WIDTH},
-    "height": ${PLOT_HEIGHT},
     "data": { "values": null }, // set to dataframe inside plotting function
     "mark": "bar",
     "encoding": {
@@ -126,7 +117,6 @@ Blockly.JavaScript['plot_point'] = (block) => {
   const y_axis = block.getFieldValue('Y_AXIS')
   const color = block.getFieldValue('COLOR')
   const spec = `{
-    "width": ${PLOT_WIDTH},
     "data": { "values": null }, // set to dataframe inside plotting function
     "mark": "point",
     "encoding": {
