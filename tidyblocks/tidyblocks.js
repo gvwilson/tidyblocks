@@ -318,7 +318,7 @@ class TbDataFrame {
    * does not return 'this' to support further chaining.
    * @param {number} blockId Serial number of the block that triggered the call (used for debugging).
    * @param {object} environment Connection to the outside world that has a `displayPlot` method.
-   * @param {object} spec Vega-Lite specification with empty 'values' (filled in here with actual data before plotting).
+   * @param {object} spec Vega-Lite specification with data empty (filled in here).
    */
   plot (blockId, environment, spec) {
     environment.displayFrame(this)
@@ -1516,6 +1516,144 @@ const tbNormal = (blockId, mean, stdDev) => {
 const tbExponential = (blockId, rate) => {
   tbAssert(rate > 0, `[block ${blockId}] rate ${rate} must be positive`)
   return TbManager.stdlib.random.base.exponential(rate)
+}
+
+//--------------------------------------------------------------------------------
+// Fill in plotting specs.
+//--------------------------------------------------------------------------------
+
+/**
+ * Generate full Vega-Lite spec for bar plot.
+ * @param {object} spec Plot-specific values.
+ * @returns Full Vega-Lite spec.
+ */
+const tbPlotBar = (spec) => {
+  return {
+    'data': { 'values': null },
+    'mark': 'bar',
+    'encoding': {
+      'x': {
+        'field': spec.x_axis,
+        'type': 'ordinal'
+      },
+      'y': {
+        'field': spec.y_axis,
+        'type': 'quantitative'
+      },
+      'tooltip': {
+        'field': spec.y_axis,
+        'type': 'quantitative'
+      }
+    }
+  }
+}
+
+/**
+ * Generate full Vega-Lite spec for box plot.
+ * @param {object} spec Plot-specific values.
+ * @returns Full Vega-Lite spec.
+ */
+const tbPlotBox = (spec) => {
+  return {
+    'data': { 'values': null },
+    'mark': {
+      'type': 'boxplot',
+      'extent': 1.5
+    },
+    'encoding': {
+      'x': {
+        'field': spec.x_axis,
+        'type': 'ordinal'
+      },
+      'y': {
+        'field': spec.y_axis,
+        'type': 'quantitative',
+      }
+    }
+  }
+}
+
+/**
+ * Generate full Vega-Lite spec for dot plot.
+ * @param {object} spec Plot-specific values.
+ * @returns Full Vega-Lite spec.
+ */
+const tbPlotDot = (spec) => {
+  return {
+    'data': { 'values': null },
+    'mark': {
+    	'type': 'circle',
+    	'opacity': 1
+    },
+    'transform': [{
+        'window': [{'op': 'rank', 'as': 'id'}],
+        'groupby': [spec.x_axis]
+    }],
+    'encoding': {
+      'x': {
+        'field': spec.x_axis,
+        'type': 'ordinal'
+      },
+      'y': {
+        'field': 'id',
+        'type': 'ordinal',
+        'axis': null,
+        'sort': 'descending'
+      }
+    }
+  }
+}
+
+/**
+ * Generate full Vega-Lite spec for histogram.
+ * @param {object} spec Plot-specific values.
+ * @returns Full Vega-Lite spec.
+ */
+const tbPlotHist = (spec) => {
+  return {
+    'data': { 'values': null },
+    'mark': 'bar',
+    'encoding': {
+      'x': {
+        'bin': {
+          'maxbins': spec.bins
+        },
+        'field': spec.column,
+        'type': 'quantitative'
+      },
+      'y': {
+        'aggregate': 'count',
+        'type': 'quantitative'
+      },
+      'tooltip': null
+    }
+  }
+}
+
+/**
+ * Generate full Vega-Lite spec for point plot.
+ * @param {object} spec Plot-specific values.
+ * @returns Full Vega-Lite spec.
+ */
+const tbPlotPoint = (spec) => {
+  return {
+    'data': { 'values': null },
+    'mark': 'point',
+    'encoding': {
+      'x': {
+        'field': spec.x_axis,
+        'type': 'quantitative'
+      },
+      'y': {
+        'field': spec.y_axis,
+        'type': 'quantitative'
+      },
+      'color': {
+        'field': spec.color,
+        'type': 'nominal'
+      }
+    }
+  }
 }
 
 //--------------------------------------------------------------------------------

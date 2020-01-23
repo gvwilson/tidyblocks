@@ -28,12 +28,12 @@ describe('generates code for plotting blocks', () => {
     const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.plot(',
                     'pipeline does not call .plot')
+    assert.includes(code, 'tbPlotBar',
+                    'pipeline does not use right plot converter')
     assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
     assert.includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
-    assert.includes(code, '"mark": "bar"',
-                    'pipeline does not use a bar')
     done()
   })
 
@@ -46,12 +46,12 @@ describe('generates code for plotting blocks', () => {
     const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.plot(',
                     'pipeline does not call .plot')
+    assert.includes(code, 'tbPlotBox',
+                    'pipeline does not use right plot converter')
     assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
     assert.includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
-    assert.includes(code, '"type": "boxplot"',
-                    'pipeline is not a box plot')
     done()
   })
 
@@ -60,12 +60,14 @@ describe('generates code for plotting blocks', () => {
                       COLUMN: 'existingColumn',
                       BINS: 20}
     const code = TbTestUtils.makeCode(pipeline)
-    assert.includes(code, '"maxbins":',
-                    'pipeline does not include maxbins')
-    assert.includes(code, '"field": "existingColumn"',
+    assert.includes(code, '.plot(',
+                    'pipeline does not call .plot')
+    assert.includes(code, 'tbPlotHist',
+                    'pipeline does not use right plot converter')
+    assert.includes(code, 'bins',
+                    'pipeline does not include bins')
+    assert.includes(code, 'existingColumn',
                     'pipeline does not reference existing column')
-    assert.includes(code, '"mark": "bar"',
-                    'pipeline does not use a bar')
     done()
   })
 
@@ -80,14 +82,14 @@ describe('generates code for plotting blocks', () => {
     const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '.plot(',
                     'pipeline does not call .plot')
+    assert.includes(code, 'tbPlotPoint',
+                    'pipeline does not use right plot converter')
     assert.includes(code, 'X_axis_column',
                     'pipeline does not reference X axis column')
     assert.includes(code, 'Y_axis_column',
                     'pipeline does not reference Y axis column')
     assert.includes(code, 'COLOR_axis_column',
                     'pipeline does not reference color axis column')
-    assert.includes(code, '"mark": "point"',
-                    'pipeline does not set the mark to point')
     done()
   })
 })
@@ -106,6 +108,8 @@ describe('executes plotting blocks', () => {
        BINS: 20}
     ]
     const env = TbTestUtils.evalCode(pipeline)
+    assert.equal(env.error, '',
+                 'Expected no error')
     assert(Array.isArray(env.frame.data),
            'Result table is not an array')
     assert.equal(env.frame.data.length, 150,
@@ -149,10 +153,8 @@ describe('executes plotting blocks', () => {
               RIGHT: {_b: 'value_number',
                       VALUE: 5.0}}},
       {_b: 'plot_hist',
-       COLUMN: {_b: 'value_column',
-                COLUMN: 'Petal_Length'},
-       BINS: {_b: 'value_number',
-              VALUE: 20}}
+       COLUMN: 'Petal_Length',
+       BINS: 20}
     ]
     const env = TbTestUtils.evalCode(pipeline)
     assert.equal(Object.keys(env.frame.data[0]).length, 5,

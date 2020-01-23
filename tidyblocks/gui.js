@@ -99,6 +99,7 @@ class GuiEnvironment {
   displayPlot (spec) {
     spec.width = PLOT_WIDTH
     spec.height = PLOT_HEIGHT
+    console.log('IN DISPLAYPLOT SPEC IS', spec)
     vegaEmbed('#plotOutput', spec, {})
   }
 
