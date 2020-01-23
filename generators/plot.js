@@ -86,7 +86,7 @@ Blockly.JavaScript['plot_dot'] = (block) => {
 //
 Blockly.JavaScript['plot_hist'] = (block) => {
   const column = block.getFieldValue('COLUMN')
-  const bins = block.getFieldValue('BINS')
+  const bins = parseFloat(block.getFieldValue('BINS'))
   const spec = `{
     "data": { "values": null }, // set to dataframe inside plotting function
     "mark": "bar",

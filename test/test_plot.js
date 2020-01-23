@@ -58,7 +58,7 @@ describe('generates code for plotting blocks', () => {
   it('generates a histogram', (done) => {
     const pipeline = {_b: 'plot_hist',
                       COLUMN: 'existingColumn',
-                      BINS: '20'}
+                      BINS: 20}
     const code = TbTestUtils.makeCode(pipeline)
     assert.includes(code, '"maxbins":',
                     'pipeline does not include maxbins')
@@ -103,7 +103,7 @@ describe('executes plotting blocks', () => {
       {_b: 'data_iris'},
       {_b: 'plot_hist',
        COLUMN: 'Petal_Length',
-       BINS: '20'}
+       BINS: 20}
     ]
     const env = TbTestUtils.evalCode(pipeline)
     assert(Array.isArray(env.frame.data),
@@ -126,7 +126,7 @@ describe('executes plotting blocks', () => {
        MULTIPLE_COLUMNS: 'Petal_Length'},
       {_b: 'plot_hist',
        COLUMN: 'Petal_Length',
-       BINS: '20'}
+       BINS: 20}
     ]
     const env = TbTestUtils.evalCode(pipeline)
     assert.equal(Object.keys(env.frame.data[0]).length, 1,
