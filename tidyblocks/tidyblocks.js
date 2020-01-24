@@ -344,53 +344,12 @@ class TbDataFrame {
   test (blockId, environment, testFunc, parameters, ...columns) {
     tbAssert(this.hasColumns(columns),
              `[block ${blockId}] unknown column(s) ${columns} in ${testFunc}`)
-    const {result, legend} = testFunc(blockId, this, parameters, columns)
+    const {result, legend, spec1, spec2} = testFunc(blockId, this, parameters, columns)
     environment.displayStats(result, legend)
+    if ((typeof spec1 !== 'undefined') || (typeof spec2 !== 'undefined')) {
+      environment.displayStatsPlot(spec1, spec2)
+    }
     return this
-  }
-
-  ttestPlot (blockId, environment, testFunc, parameters, ...columns) {
-    const {result, legend} = testFunc(blockId, this, parameters, columns)
-
-    const statistic = Math.abs(result.statistic)
-
-    const spec1 = {
-      "title": "T-Distribution",
-      "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
-      "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
-      "encoding": {
-        "x": {"field": "x", "type": "quantitative"},
-        "y": {"field": "y", "type": "quantitative"}
-      },
-      "layer": [
-        {"mark": "line"},
-        {"transform": [{"filter": `datum.x <= ${-1*statistic} `}],"mark": "area"},
-        {"transform": [{"filter": `datum.x >= ${statistic} `}], "mark": "area"}
-      ],
-      "width": 300,
-      "height": 150
-    }
-
-    const estimate = Math.abs(result.xmean - result.ymean)
-
-    const spec2 = {
-      "title": "Sampling Distribution of x̄₁ - x̄₂",
-      "data": {"sequence": {"start": -5, "stop": 5, "step": 0.1, "as": "x"}},
-      "transform": [{"calculate": "densityNormal(datum.x, 0, 1)", "as": "y"}],
-      "encoding": {
-        "x": {"field": "x", "type": "quantitative"},
-        "y": {"field": "y", "type": "quantitative"}
-      },
-      "layer": [
-        {"mark": "line"},
-        {"transform": [{"filter": `datum.x <= ${-1*estimate} `}],"mark": "area"},
-        {"transform": [{"filter": `datum.x >= ${estimate} `}], "mark": "area"}
-      ],
-      "width": 300,
-      "height": 150
-    }
-
-    environment.displayStatsPlot(spec1, spec2)
   }
 
   //------------------------------------------------------------------------------
@@ -1666,7 +1625,7 @@ const tbPlotPoint = (spec) => {
  * @param dataframe Dataframe being operated on.
  * @param {object} parameters The parameters for the test.
  * @param columns A list of column names (must be of length 1).
- * @returns Result object from test.
+ * @returns Result object from test with result and legend.
  */
 const tbZTestOneSample = (blockId, dataframe, parameters, columns) => {
   const {mean, std_dev, significance} = parameters
@@ -1691,9 +1650,8 @@ const tbZTestOneSample = (blockId, dataframe, parameters, columns) => {
  * @param dataframe Dataframe being operated on.
  * @param {object} parameters The parameters for the test.
  * @param columns A list of column names (must be of length 2: groups and values).
- * @returns Result object from test.
+ * @returns Result object from test with result and legend.
  */
-
 const tbKruskalWallis = (blockId, dataframe, parameters, columns) => {
   const {significance} = parameters
   const [groups, values] = columns
@@ -1724,9 +1682,8 @@ const tbKruskalWallis = (blockId, dataframe, parameters, columns) => {
  * @param dataframe Dataframe being operated on.
  * @param {object} parameters The parameters for the test.
  * @param {string} columns A list of column names (must be length 1).
- * @returns Result object from test.
+ * @returns Result object from test with result and legend.
  */
-
 const tbKolmogorovSmirnov = (blockId, dataframe, parameters, columns) => {
   const {mean, std_dev, significance} = parameters
   const col = columns[0]
@@ -1749,7 +1706,7 @@ const tbKolmogorovSmirnov = (blockId, dataframe, parameters, columns) => {
  * @param dataframe Dataframe being operated on.
  * @param {object} parameters The parameters for the test.
  * @param columns A list of column names (must be of length 1).
- * @returns Result object from test.
+ * @returns Result object from test with result and legend.
  */
 const tbTTestOneSample = (blockId, dataframe, parameters, columns) => {
   const {mu, alpha} = parameters
@@ -1774,7 +1731,7 @@ const tbTTestOneSample = (blockId, dataframe, parameters, columns) => {
  * @param dataframe Dataframe being operated on.
  * @param {object} parameters The parameters for the test.
  * @param columns A list of column names (must be of length 2).
- * @returns Result object from test.
+ * @returns Result object from test with result, legend, and two plot specs.
  */
 const tbTTestPaired = (blockId, dataframe, parameters, columns) => {
   const {alpha} = parameters
@@ -1792,7 +1749,40 @@ const tbTTestPaired = (blockId, dataframe, parameters, columns) => {
     xmean: 'x sample mean',
     ymean: 'y sample mean'
   }
-  return {result, legend}
+
+  const statistic = Math.abs(result.statistic)
+  const spec1 = {
+    title: 'T-Distribution',
+    data: {sequence: {start: -5, stop: 5, step: 0.1, as: 'x'}},
+    transform: [{calculate: 'densityNormal(datum.x, 0, 1)', as: 'y'}],
+    encoding: {
+      x: {field: 'x', type: 'quantitative'},
+      y: {field: 'y', type: 'quantitative'}
+    },
+    layer: [
+      {mark: 'line'},
+      {transform: [{filter: `datum.x <= ${-1*statistic}`}],mark: 'area'},
+      {transform: [{filter: `datum.x >= ${statistic}`}], mark: 'area'}
+    ]
+  }
+
+  const estimate = Math.abs(result.xmean - result.ymean)
+  const spec2 = {
+    title: 'Sampling Distribution of x̄₁ - x̄₂',
+    data: {sequence: {start: -5, stop: 5, step: 0.1, as: 'x'}},
+    transform: [{calculate: 'densityNormal(datum.x, 0, 1)', as: 'y'}],
+    encoding: {
+      x: {field: 'x', type: 'quantitative'},
+      y: {field: 'y', type: 'quantitative'}
+    },
+    layer: [
+      {mark: 'line'},
+      {transform: [{filter: `datum.x <= ${-1*estimate}`}], mark: 'area'},
+      {transform: [{filter: `datum.x >= ${estimate}`}], mark: 'area'}
+    ]
+  }
+
+  return {result, legend, spec1, spec2}
 }
 
 /**
@@ -1801,9 +1791,8 @@ const tbTTestPaired = (blockId, dataframe, parameters, columns) => {
  * @param dataframe Dataframe being operated on.
  * @param {object} parameters The parameters for the test.
  * @param columns A list of column names (must be of length 2: groups and values).
- * @returns Result object from test.
+ * @returns Result object from test with result and legend.
  */
-
 const tbAnova = (blockId, dataframe, parameters, columns) => {
   const {significance} = parameters
   const [groupCol, valueCol] = columns

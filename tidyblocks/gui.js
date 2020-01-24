@@ -32,9 +32,9 @@ const MULTIPLE_COLUMN_FIELDS = [
 // Location of standard datasets.
 STANDARD_DATASET_BASE_URL = 'https://raw.githubusercontent.com/tidyblocks/tidyblocks/master/data/'
 
-// Size of standard plotting area.
-const PLOT_WIDTH = 500
-const PLOT_HEIGHT = 300
+// Size of standard plotting areas.
+const FULL_PLOT_SIZE = {width: 500, height: 300}
+const STATS_PLOT_SIZE = {width: 300, height: 150}
 
 //--------------------------------------------------------------------------------
 
@@ -97,9 +97,8 @@ class GuiEnvironment {
    * @param {Object} spec Vega-Lite spec for plot with data filled in.
    */
   displayPlot (spec) {
-    spec.width = PLOT_WIDTH
-    spec.height = PLOT_HEIGHT
-    console.log('IN DISPLAYPLOT SPEC IS', spec)
+    spec.width = FULL_PLOT_SIZE.width
+    spec.height = FULL_PLOT_SIZE.height
     vegaEmbed('#plotOutput', spec, {})
   }
 
@@ -118,8 +117,12 @@ class GuiEnvironment {
    * @param {Object} spec2 VegaLite spec for second plot.
    */
   displayStatsPlot (spec1, spec2) {
-    vegaEmbed('#statsPlot1', spec1, {})
-    vegaEmbed('#statsPlot2', spec2, {})
+    for (let [spec, label] of [[spec1, '#statsPlot1'],
+                               [spec2, '#statsPlot2']]) {
+      spec.width = STATS_PLOT_SIZE.width
+      spec.height = STATS_PLOT_SIZE.height
+      vegaEmbed(label, spec, {})
+    }
   }
 
   /**
