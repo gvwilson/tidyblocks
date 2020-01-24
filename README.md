@@ -21,4 +21,4 @@ and please note that all contributors are required to abide by our [Code of Cond
 We are also very grateful for help from:
 
 -   [Philipp Burckhardt](https://philipp-burckhardt.com/)
--   [Evan Schultz](https://www.linkedin.com/in/evanschultz1/)
+-   [Evan Schultz](https://evanjustevan.com/)
