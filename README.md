@@ -17,3 +17,8 @@ and please note that all contributors are required to abide by our [Code of Cond
 
 -   [Maya Gans](https://maya.rbind.io/)
 -   [Greg Wilson](http://third-bit.com)
+
+We are also very grateful for help from:
+
+-   [Philipp Burckhardt](https://philipp-burckhardt.com/)
+-   [Evan Schultz](https://evanjustevan.com/)
