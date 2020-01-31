@@ -91,9 +91,9 @@ Blockly.defineBlocksWithJsonArray([
         text: 'column'
       },
       {
-        type: 'field_input',
+        type: 'field_number',
         name: 'BINS',
-        text: '10'
+        value: 10
       }
     ],
     inputsInline: true,
