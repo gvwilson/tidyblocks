@@ -51,6 +51,12 @@ and by adding features to make TidyBlocks easier to use.
     These check that our blocks generate the expected code,
     and that the code does the right things.
 
+1.  Serve the repository over HTTP.
+    For development,
+    you can do it by running `python -m http.server`.
+    Open <http://localhost:8000/> in your web browser
+    to access TidyBlocks.
+
 ## The Interface
 
 -   `index.html` is the interface for TidyBlocks.  It contains
