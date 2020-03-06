@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% include settings.html %}
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{this_title}}</title>
+    <link href="{{ '/static/trac.css' | relative_url }}" rel="stylesheet" type="text/css">
+    <link href="{{ '/static/site.css' | relative_url }}" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    {% include nav.html %}
+    <main>
+    <h1>{{this_title}}</h1>
+{{content}}
+      {% if this_group %}{% include blocks.md %}{% endif %}
+      {% include footer.html %}
+    </main>
+  </body>
+</html>

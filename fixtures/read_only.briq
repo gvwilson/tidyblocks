@@ -1,0 +1,12 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "read_only",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ]
+  ]
+]

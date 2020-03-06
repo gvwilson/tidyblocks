@@ -1,0 +1,16 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "stats_test",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@stats",
+      "ZTestOneSample"
+    ]
+  ]
+]

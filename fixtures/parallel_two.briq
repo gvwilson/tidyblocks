@@ -1,0 +1,31 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "parallel_two_alpha",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@transform",
+      "notify",
+      "alpha"
+    ]
+  ],
+  [
+    "@pipeline",
+    "parallel_two_beta",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@transform",
+      "notify",
+      "beta"
+    ]
+  ]
+]

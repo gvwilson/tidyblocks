@@ -1,0 +1,16 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "read_plot",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@plot",
+      "scatter"
+    ]
+  ]
+]

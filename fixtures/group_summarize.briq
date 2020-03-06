@@ -1,0 +1,35 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "group_summarize",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@transform",
+      "groupBy",
+      [
+        "red"
+      ]
+    ],
+    [
+      "@transform",
+      "summarize",
+      [
+        [
+          "@summarize",
+          "maximum",
+          "green"
+        ],
+        [
+          "@summarize",
+          "minimum",
+          "blue"
+        ]
+      ]
+    ]
+  ]
+]

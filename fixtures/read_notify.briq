@@ -1,0 +1,17 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "read_notify",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@transform",
+      "notify",
+      "answer"
+    ]
+  ]
+]

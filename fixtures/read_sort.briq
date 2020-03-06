@@ -1,0 +1,20 @@
+[
+  "@program",
+  [
+    "@pipeline",
+    "read_sort",
+    [
+      "@transform",
+      "read",
+      "colors.csv"
+    ],
+    [
+      "@transform",
+      "sort",
+      [
+        "red"
+      ],
+      true
+    ]
+  ]
+]
