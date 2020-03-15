@@ -109,8 +109,7 @@ class HTMLFactory {
   /**
    * Build a table cell that cannot be filled in.
    */
-  frozen (content = null) {
-    content = (content === null) ? '' : content
+  frozen (content) {
     return `<td class="redips-mark">${content}</td>`
   }
 

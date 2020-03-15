@@ -592,3 +592,45 @@ describe('converts entire programs to HTML', () => {
     done()
   })
 })
+
+describe('creates toolboxes', () => {
+  it('creates toolbox entries for expressions', (done) => {
+    const classes = Expr.CLASSES.slice(0, 2) // nullary and negate
+    const factory = new HTMLFactory()
+    const toolbox = makeNode(factory.makeToolbox(classes))
+    assert.equal(toolbox.tagName, 'TABLE',
+                 `Expected table`)
+    assert.equal(toolbox.getAttribute('class'), 'briq-toolbox',
+                 `Expected briq-toolbox as table class`)
+    assert.equal(toolbox.firstChild.tagName, 'TBODY',
+                 `Toolbox should contain table body`)
+    const rows = Array.from(toolbox.firstChild.children)
+    assert.equal(rows[0].querySelector('option[selected=selected]').getAttribute('value'), 'constant',
+                 `First entry should be nullary expression`)
+    assert.equal(rows[1].querySelector('option[selected=selected]').getAttribute('value'), 'negate',
+                 `Second entry should be negater`)
+    done()
+  })
+
+  it('creates toolbox entries for stages', (done) => {
+    const classes = Stage.CLASSES.slice(0, 2) // drop and filter
+    const factory = new HTMLFactory()
+    const toolbox = makeNode(factory.makeToolbox(classes))
+    assert.equal(toolbox.tagName, 'TABLE',
+                 `Expected table`)
+    assert.equal(toolbox.getAttribute('class'), 'briq-toolbox',
+                 `Expected briq-toolbox as table class`)
+    assert.equal(toolbox.firstChild.tagName, 'TBODY',
+                 `Toolbox should contain table body`)
+    const rows = Array.from(toolbox.firstChild.children)
+    assert.equal(rows[0].querySelector('span').innerHTML, 'drop',
+                 `Expected first row to be drop`)
+    assert.equal(rows[0].querySelectorAll('input.briq-textbox').length, 1,
+                 `Should have one input textbox for drop`)
+    assert.equal(rows[1].querySelector('span').innerHTML, 'filter',
+                 `Expected second row to be drop`)
+    assert.equal(rows[1].querySelectorAll('td.briq-placeholder').length, 1,
+                 `Should have one placeholder for filter`)
+    done()
+  })
+})
