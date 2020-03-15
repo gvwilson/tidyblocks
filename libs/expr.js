@@ -1,7 +1,5 @@
 'use strict'
 
-const assert = require('assert')
-
 const util = require('./util')
 const MISSING = util.MISSING
 

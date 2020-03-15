@@ -5,14 +5,10 @@ const {Expr} = require('./libs/expr')
 const {Summarize} = require('./libs/summarize')
 const {DataFrame} = require('./libs/dataframe')
 const {Stage} = require('./libs/stage')
-const {
-  Pipeline,
-  Program,
-  Environment
-} = require('./libs/runtime')
-const {
-  HTMLFactory
-} = require('./libs/html')
+const {Environment} = require('./libs/environment')
+const {Pipeline} = require('./libs/pipeline')
+const {Program} = require('./libs/program')
+const {HTMLFactory} = require('./libs/html')
 
 module.exports = {
   util,
@@ -20,8 +16,8 @@ module.exports = {
   Summarize,
   DataFrame,
   Stage,
+  Environment,
   Pipeline,
   Program,
-  Environment,
   HTMLFactory
 }

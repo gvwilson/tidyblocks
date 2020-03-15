@@ -1,7 +1,5 @@
 'use strict'
 
-const assert = require('assert')
-
 const util = require('./util')
 const MISSING = util.MISSING
 const {Expr} = require('./expr')
@@ -26,11 +24,12 @@ class StageBase {
    * @param {boolean} output Does this stage produce input?
    */
   constructor (prefix, name, requires, produces, input, output) {
-    assert(prefix && (typeof prefix === 'string'))
-    assert(name && (typeof name === 'string'))
-    assert(Array.isArray(requires) &&
-           requires.every(x => (typeof x === 'string')))
-    assert((produces === null) || (typeof produces === 'string'))
+    util.check(prefix && (typeof prefix === 'string') &&
+               name && (typeof name === 'string') &&
+               Array.isArray(requires) &&
+               requires.every(x => (typeof x === 'string')) &&
+               ((produces === null) || (typeof produces === 'string')),
+               `Bad parameters to constructor`)
 
     this.prefix = prefix
     this.name = name
@@ -109,12 +108,41 @@ const Stage = {
    * @returns Stage
    */
   fromJSON: (json) => {
-    assert(Array.isArray(json) && (json.length > 1))
-    util.check(json[1] in Stage,
+    util.check(Array.isArray(json) &&
+               (json.length > 1) &&
+               (json[1] in Stage),
                `Unknown stage kind "${json[1]}"`)
     const kind = json[1]
     const args = json.slice(2).map(p => util.fromJSON(p))
     return new Stage[kind](...args)
+  },
+
+  /**
+   * Build stage from HTML representation.
+   * @param {HTML} dom DOM node.
+   * @returns Stage.
+   */
+  fromHTML: (dom) => {
+    ['DIV', 'TABLE', 'TBODY'].forEach(tag => {
+      util.check((dom.tagName.toUpperCase() === tag) &&
+                 (dom.children.length === 1),
+                 `Expected ${tag} with one child`)
+      dom = dom.firstChild
+    })
+    util.check(dom.tagName.toUpperCase() === 'TR',
+               `Expected table row`)
+    const children = Array.from(dom.children)
+    util.check(children.every(child => child.tagName.toLowerCase() === 'TD'),
+               `All children should be table cells`)
+    util.check(children[0].tagName.toUpperCase() === 'SPAN',
+               `Expected span as first cell`)
+    const name = children[0].textContent
+    util.check(name in Stage,
+               `Unknown stage name ${name}`)
+    const values = Stage[name]
+          .fromHTML(children.slice(1))
+          .filter(x => (x !== null))
+    return new Stage['ungroup'] // FIXME
   },
 
   /**

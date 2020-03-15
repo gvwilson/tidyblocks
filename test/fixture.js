@@ -1,5 +1,18 @@
 const util = require('../libs/util')
 const MISSING = util.MISSING
+const {DataFrame} = require('../libs/dataframe')
+
+const {MockStage} = require('./mock')
+
+const Table = new DataFrame([{left: 1, right: 10},
+                             {left: 2, right: 20}])
+
+const Pass = (runner, df) => df
+const Head = new MockStage('head', (runner, df) => Table,
+                           [], null, false, true)
+const Middle = new MockStage('middle', Pass, [], null, true, true)
+const Tail = new MockStage('tail', Pass, [], null, true, false)
+const TailNotify = new MockStage('tailNotify', Pass, [], 'keyword', true, false)
 
 /**
  * Some fixtures for testing.
@@ -55,5 +68,11 @@ module.exports = {
   ],
   GroupRedCountRed: new Map([[0, 6], [128, 1], [255, 4]]),
   GroupRedMaxGreen: new Map([[0, 255], [128, 0], [255, 255]]),
-  GroupRedMaxRed: new Map([[0, 0], [128, 128], [255, 255]])
+  GroupRedMaxRed: new Map([[0, 0], [128, 128], [255, 255]]),
+  Table,
+  Pass,
+  Head,
+  Middle,
+  Tail,
+  TailNotify
 }

@@ -1,7 +1,5 @@
 'use strict'
 
-const assert = require('assert')
-
 const util = require('./util')
 const MISSING = util.MISSING
 
@@ -10,9 +8,9 @@ const MISSING = util.MISSING
  */
 class SummarizeBase {
   constructor (name, column) {
-    assert(name && (typeof name === 'string'))
-    util.check(column && (typeof column === 'string'),
-               `Require non-empty string as column name`)
+    util.check(name && (typeof name === 'string') &&
+               column && (typeof column === 'string'),
+               `Require non-empty strings as name and column`)
     this.options = ['count', 'maximum', 'mean', 'median',
                     'minimum', 'stdDev', 'sum', 'variance']
     this.name = name

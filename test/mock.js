@@ -4,7 +4,7 @@ const fs = require('fs')
 
 const util = require('../libs/util')
 const {StageBase} = require('../libs/stage')
-const {Environment} = require('../libs/runtime')
+const {Environment} = require('../libs/environment')
 
 const LOCAL_DATA_DIR = 'data'
 

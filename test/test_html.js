@@ -9,10 +9,8 @@ const {HTMLFactory} = require('../libs/html')
 const {Expr} = require('../libs/expr')
 const {Summarize} = require('../libs/summarize')
 const {Stage} = require('../libs/stage')
-const {
-  Pipeline,
-  Program
-} = require('../libs/runtime')
+const {Pipeline} = require('../libs/pipeline')
+const {Program} = require('../libs/program')
 
 const DOM = new JSDOM(`<body></body>`)
 const BODY = DOM.window.document.querySelector('body')
@@ -578,7 +576,6 @@ describe('converts entire programs to HTML', () => {
   it('creates an empty program', (done) => {
     const factory = new HTMLFactory()
     const empty = makeNode(Program.EmptyHTML(factory))
-    console.log('empty program is', empty.outerHTML)
     done()
   })
 
@@ -660,12 +657,22 @@ describe('creates toolboxes', () => {
 
 describe('converts HTML back to programs', () => {
   it('converts empty programs and pipelines', (done) => {
-    const program = new Program(new Pipeline('name'))
     const factory = new HTMLFactory()
-    const original = makeNode(program.toHTML(factory))
-    console.log('original is', original.outerHTML)
-    const roundtrip = Program.fromHTML(original)
-    console.log('roundtrip is', roundtrip)
+    const original = new Program(new Pipeline('name'))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single ungroup stage', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.ungroup()))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
     done()
   })
 })
