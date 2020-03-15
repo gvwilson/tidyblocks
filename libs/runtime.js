@@ -246,11 +246,11 @@ class Program {
         return `<td>${s.toHTML(factory)}</td>`
       })
     })
-    const longest = Math.max([...pipelines.map(p => p.length)])
+    const longest = Math.max(...pipelines.map(p => p.length))
     const justified = pipelines.map(p => {
       const temp = [...p]
       while (temp.length < longest) {
-        temp.push(`<td></td>`)
+        temp.push(factory.placeholder())
       }
       return temp
     })
@@ -264,9 +264,10 @@ class Program {
   /**
    * Convert HTML to program.
    */
-  static fromHTML (body) {
-    util.check(body && (body.tagName.toUpperCase() === 'TBODY'),
-               `Expected table body`)
+  static fromHTML (table) {
+    util.check(table && (table.tagName.toUpperCase() === 'TABLE'),
+               `Expected table`)
+    const body = table.firstChild
     const pipelines = Array.from(body.children).map(row => Pipeline.fromHTML(row))
     return new Program(...pipelines)
   }

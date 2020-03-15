@@ -284,8 +284,6 @@ class UI {
    * Run the current program.
    */
   runProgram () {
-    const body = this.getProgramBody()
-    const temp = this.briq.Program.fromHTML(body)
     if (this.program === null) {
       this.displayError([`No program available`])
       return

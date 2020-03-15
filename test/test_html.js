@@ -575,8 +575,15 @@ describe('converts transforms to HTML', () => {
 })
 
 describe('converts entire programs to HTML', () => {
-  const factory = new HTMLFactory()
-  it('turns a multi-pipeline program into JSON', (done) => {
+  it('creates an empty program', (done) => {
+    const factory = new HTMLFactory()
+    const empty = makeNode(Program.EmptyHTML(factory))
+    console.log('empty program is', empty.outerHTML)
+    done()
+  })
+
+  it('turns a multi-pipeline program into HTML', (done) => {
+    const factory = new HTMLFactory()
     const program = new Program(
       new Pipeline('first', new Stage.read('/path/to/first')),
       new Pipeline('second', new Stage.read('/path/to/second'), new Stage.unique(['left'])),
@@ -647,6 +654,18 @@ describe('creates toolboxes', () => {
       assert.equal(toolbox.getAttribute('class'), 'briq-toolbox',
                    `Expected briq-toolbox as table class`)
     }
+    done()
+  })
+})
+
+describe('converts HTML back to programs', () => {
+  it('converts empty programs and pipelines', (done) => {
+    const program = new Program(new Pipeline('name'))
+    const factory = new HTMLFactory()
+    const original = makeNode(program.toHTML(factory))
+    console.log('original is', original.outerHTML)
+    const roundtrip = Program.fromHTML(original)
+    console.log('roundtrip is', roundtrip)
     done()
   })
 })
