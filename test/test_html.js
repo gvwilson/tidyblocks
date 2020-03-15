@@ -633,4 +633,20 @@ describe('creates toolboxes', () => {
                  `Should have one placeholder for filter`)
     done()
   })
+
+  it('creates all toolboxes', (done) => {
+    const allClasses = [
+      Expr.CLASSES,
+      Stage.CLASSES
+    ]
+    const factory = new HTMLFactory()
+    for (const classes of allClasses) {
+      const toolbox = makeNode(factory.makeToolbox(classes))
+      assert.equal(toolbox.tagName, 'TABLE',
+                   `Expected table`)
+      assert.equal(toolbox.getAttribute('class'), 'briq-toolbox',
+                   `Expected briq-toolbox as table class`)
+    }
+    done()
+  })
 })
