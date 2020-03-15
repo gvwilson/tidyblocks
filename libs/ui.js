@@ -61,8 +61,9 @@ class UI {
    * Show the specified tab.
    * @param {event} evt Browser event.
    * @param {string} tabName Name of the tab (must match an id in the page).
+   * @param {string} selector Select dataset to display (or null).
    */
-  showTab (evt, tabName, tabButtonClass) {
+  showTab (evt, tabName, selector = null) {
     const chosenButton = evt.target
     const buttonGroup = chosenButton.getAttribute('data-briq-buttongroup')
     if (buttonGroup) {
@@ -77,6 +78,10 @@ class UI {
     Array.from(tabParent.getElementsByClassName('tabContent'))
       .forEach(tab => {tab.style.display = 'none'})
     chosenTab.style.display = 'block'
+
+    if (selector) {
+      this.displayTable(selector)
+    }
   }
 
   /**
