@@ -31,8 +31,6 @@ and that your work may be made available under the terms of [our license](LICENS
 -   `libs/pipeline.js`: pipelines made up of stages.
 -   `libs/program.js`: programs made up of pipelines.
 -   `libs/environment.js`: the runtime environment for a program.
-    This should probably be combined with the `program` class,
-    since only one component needs to change for testing.
 -   `libs/html.js`: turning programs to HTML and HTML back into programs.
 -   `libs/ui.js`: the user interface.
     This is the only module *not* tested by `test/test_*.js`.
