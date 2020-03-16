@@ -1,5 +1,7 @@
 'use strict'
 
+const cl = console.log
+
 const util = require('./util')
 const MISSING = util.MISSING
 const {Expr} = require('./expr')
@@ -122,7 +124,7 @@ const Stage = {
    * @param {HTML} dom DOM node.
    * @returns Stage.
    */
-  fromHTML: (dom) => {
+  fromHTML: (factory, dom) => {
     ['DIV', 'TABLE', 'TBODY'].forEach(tag => {
       util.check((dom.tagName.toUpperCase() === tag) &&
                  (dom.children.length === 1),
@@ -132,17 +134,21 @@ const Stage = {
     util.check(dom.tagName.toUpperCase() === 'TR',
                `Expected table row`)
     const children = Array.from(dom.children)
-    util.check(children.every(child => child.tagName.toLowerCase() === 'TD'),
-               `All children should be table cells`)
-    util.check(children[0].tagName.toUpperCase() === 'SPAN',
+    util.check(children.length,
+               `widget must have children`)
+    util.check(children.every(child => (child.tagName.toUpperCase() === 'TD')
+                                    && (child.children.length === 1)),
+               `All children should be table cells with a single child`)
+    const first = children[0]
+    util.check(first.firstChild.tagName.toUpperCase() === 'SPAN',
                `Expected span as first cell`)
-    const name = children[0].textContent
+    const name = first.textContent
     util.check(name in Stage,
                `Unknown stage name ${name}`)
-    const values = Stage[name]
-          .fromHTML(children.slice(1))
-          .filter(x => (x !== null))
-    return new Stage['ungroup'] // FIXME
+    const rest = children.slice(1)
+          .map(child => child.firstChild)
+          .filter(child => child.tagName.toUpperCase() != 'SPAN')
+    return Stage[name].fromHTML(factory, ...rest)
   },
 
   /**
@@ -357,6 +363,9 @@ const Stage = {
         factory.input(this.path)
       )
     }
+    static fromHTML (factory, pathNode) {
+      return new Stage.read(factory.fromInput(pathNode))
+    }
     static MakeBlank () {
       return new Stage.read('')
     }
@@ -473,6 +482,9 @@ const Stage = {
       return factory.widget(
         factory.label(this.name)
       )
+    }
+    static fromHTML (factory) {
+      return new Stage.ungroup()
     }
     static MakeBlank () {
       return new Stage.ungroup()

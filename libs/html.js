@@ -1,5 +1,7 @@
 'use strict'
 
+const cl = console.log
+
 const util = require('./util')
 
 /**
@@ -79,6 +81,15 @@ class HTMLFactory {
   input (value) {
     value = value ? `value="${value}"` : ''
     return `<input class="briq-textbox" type="text" ${value}/>`
+  }
+
+  /**
+   * Restore an input field.
+   */
+  fromInput (cell) {
+    util.check(cell && (cell.tagName.toUpperCase() === 'INPUT'),
+               `Expected input cell`)
+    return cell.getAttribute('value')
   }
 
   /**

@@ -1,5 +1,7 @@
 'use strict'
 
+const cl = console.log
+
 const util = require('./util')
 const {DataFrame} = require('./dataframe')
 const {Environment} = require('./environment')
@@ -77,11 +79,11 @@ class Program {
   /**
    * Convert HTML to program.
    */
-  static fromHTML (table) {
+  static fromHTML (factory, table) {
     util.check(table && (table.tagName.toUpperCase() === 'TABLE'),
                `Expected table`)
     const body = table.firstChild
-    const pipelines = Array.from(body.children).map(row => Pipeline.fromHTML(row))
+    const pipelines = Array.from(body.children).map(row => Pipeline.fromHTML(factory, row))
     return new Program(...pipelines)
   }
 

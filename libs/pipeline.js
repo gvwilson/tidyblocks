@@ -1,5 +1,7 @@
 'use strict'
 
+const cl = console.log
+
 const util = require('./util')
 const {StageBase, Stage} = require('./stage')
 
@@ -41,7 +43,7 @@ class Pipeline {
   /**
    * Turn HTML row into a pipeline.
    */
-  static fromHTML (row) {
+  static fromHTML (factory, row) {
     util.check(row && (row.tagName.toUpperCase() === 'TR'),
                `Expected table row`)
     util.check(row.children.length >= 1,
@@ -50,12 +52,13 @@ class Pipeline {
     util.check(first.tagName.toUpperCase() === 'TH',
                `First cell must be <th> not ${first.tagName}`)
     const name = first.textContent
-    const stages = Array.from(row).slice(1).map(cell => {
+    const cells = Array.from(row.children).slice(1)
+    const stages = cells.map(cell => {
       util.check((cell.tagName.toUpperCase() === 'TD') &&
                  (cell.children.length === 1) &&
                  (cell.firstChild.tagName.toUpperCase() === 'DIV'),
                  `Expected table cell with one div child in pipeline`)
-      Stage.fromHTML(cell.firstChild)
+      return Stage.fromHTML(factory, cell.firstChild)
     })
     return new Pipeline(name, ...stages)
   }

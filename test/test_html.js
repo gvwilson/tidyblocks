@@ -1,5 +1,7 @@
 'use strict'
 
+const cl = console.log
+
 const assert = require('assert')
 const {JSDOM} = require('jsdom')
 
@@ -660,7 +662,7 @@ describe('converts HTML back to programs', () => {
     const factory = new HTMLFactory()
     const original = new Program(new Pipeline('name'))
     const dom = makeNode(original.toHTML(factory))
-    const roundtrip = Program.fromHTML(dom)
+    const roundtrip = Program.fromHTML(factory, dom)
     assert(roundtrip.equal(original),
            `Roundtrip does not match original`)
     done()
@@ -670,7 +672,17 @@ describe('converts HTML back to programs', () => {
     const factory = new HTMLFactory()
     const original = new Program(new Pipeline('name', new Stage.ungroup()))
     const dom = makeNode(original.toHTML(factory))
-    const roundtrip = Program.fromHTML(dom)
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single read stage', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.read('/path.csv')))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
     assert(roundtrip.equal(original),
            `Roundtrip does not match original`)
     done()
