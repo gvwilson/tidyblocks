@@ -4,25 +4,37 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="static/ui.css">
-    <script src="./redips-drag-source.js"></script>
-    <script src="./briq.min.js"></script>
-    <script src="./libs/ui.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+    <script src="./redips-drag-source.js"></script>
+    <script src="./briq.min.js"></script>
+    <script>
+      let UI = null
+      const setup = () => {
+        briq.Setup()
+        UI = briq.instance
+
+        REDIPS.drag.init('redips-drag')
+        REDIPS.drag.dropMode = 'single' // one item per cell
+        REDIPS.drag.trash.question = null // don't confirm deletion
+
+        Array.from(document.getElementsByClassName('buttonDefault')).forEach(b => b.click())
+      }
+    </script>
   </head>
-  <body onload="UI.Setup(briq)">
+  <body onload="setup()">
 
     <nav class="two-columns">
       <!-- main navigation left (program and toolbox) -->
       <div class="column width50">
-        <button class="menuButton" onclick="UI.instance.runProgram(event)">
+        <button class="menuButton" onclick="UI.runProgram(event)">
           Run
         </button>
-        <button class="menuButton" onclick="UI.instance.triggerInput('loadProgram')">
+        <button class="menuButton" onclick="UI.triggerInput('loadProgram')">
           Load Program
         </button>
-        <button class="menuButton" onclick="UI.instance.triggerInput('loadData')">
+        <button class="menuButton" onclick="UI.triggerInput('loadData')">
           Load Data
         </button>
       </div>
@@ -31,40 +43,40 @@
       <div class="column width50">
         <button class="menuButton tabButton buttonDefault"
                 data-briq-buttongroup="display"
-                onclick="UI.instance.showTab(event, 'dataTab', 'data')">
+                onclick="UI.showTab(event, 'dataTab', 'data')">
           Data
         </button>
         <button class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.instance.showTab(event, 'resultsTab', 'results')">
+                onclick="UI.showTab(event, 'resultsTab', 'results')">
           Results
         </button>
         <button class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.instance.showTab(event, 'plotTab')">
+                onclick="UI.showTab(event, 'plotTab')">
           Plot
         </button>
         <button class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.instance.showTab(event, 'statisticsTab')">
+                onclick="UI.showTab(event, 'statisticsTab')">
           Statistics
         </button>
         <button class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.instance.showTab(event, 'logTab')">
+                onclick="UI.showTab(event, 'logTab')">
           Log
         </button>
         <button class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.instance.showTab(event, 'errorTab')">
+                onclick="UI.showTab(event, 'errorTab')">
           Error
         </button>
       </div>
     </nav>
 
     <!-- invisible controls to be "clicked" by button actions -->
-    <input type="file" id="loadProgram" style="display:none" onchange="UI.instance.loadProgram(this.files)"/>
-    <input type="file" id="loadData" style="display:none" onchange="UI.instance.loadData(this.files)"/>
+    <input type="file" id="loadProgram" style="display:none" onchange="UI.loadProgram(this.files)"/>
+    <input type="file" id="loadData" style="display:none" onchange="UI.loadData(this.files)"/>
 
     <main class="two-columns">
       <!-- main workbench area (program and tools) -->
@@ -80,13 +92,13 @@
               </th>
               <th>
                 <button class="menuButton briq-control"
-                        onclick="UI.instance.addProgramRow()">
+                        onclick="UI.addProgramRow()">
                   [+row]
                 </button>
               </th>
               <th>
                 <button class="menuButton briq-control"
-                        onclick="UI.instance.addProgramCol()">
+                        onclick="UI.addProgramCol()">
                   [+col]
                 </button>
               </th>
@@ -104,7 +116,7 @@
                 <td>
                   <button class="menuButton tabButton width100 buttonDefault"
                           data-briq-buttongroup="toolbox"
-                          onclick="UI.instance.showTab(event, 'transformTab')">
+                          onclick="UI.showTab(event, 'transformTab')">
                     Transforms
                   </button>
                 </td>
@@ -113,7 +125,7 @@
                 <td>
                   <button class="menuButton tabButton width100"
                           data-briq-buttongroup="toolbox"
-                          onclick="UI.instance.showTab(event, 'exprTab')">
+                          onclick="UI.showTab(event, 'exprTab')">
                     Expressions
                   </button>
                 </td>
@@ -136,15 +148,15 @@
         <div id="dataTab" class="tabContent">
           <h2>
             Data
-            <select class="tableSelector" id="dataSelect" onchange="UI.instance.displayTable('data')"></select>
+            <select class="tableSelector" id="dataSelect" onchange="UI.displayTable('data')"></select>
           </h2>
           <div id="dataArea"></div>
         </div>
         <div id="resultsTab" class="tabContent">
           <h2>
             Results
-            <select class="tableSelector" id="resultsSelect" onchange="UI.instance.displayTable('results')"></select>
-            <button class="displayButton" onclick="UI.instance.saveResults(event)">Save</button>
+            <select class="tableSelector" id="resultsSelect" onchange="UI.displayTable('results')"></select>
+            <button class="displayButton" onclick="UI.saveResults(event)">Save</button>
           </h2>
           <div id="resultsArea"></div>
         </div>

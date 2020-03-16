@@ -1,21 +1,22 @@
-// Not bundled during development.
+'use strict'
+
+const util = require('./util')
+const {DataFrame} = require('./dataframe')
+const {Expr} = require('./expr')
+const {Stage} = require('./stage')
+const {Environment} = require('./environment')
+const {Program} = require('./program')
+const {HTMLFactory} = require('./html')
 
 /**
  * Browser-based interface.
  */
-class UI {
+class UserInterface {
   /**
    * Set up after DOM is loaded: create singleton and show default tab.
-   * @param {object} briq Other code.
    */
-  static Setup (briq) {
-    UI.instance = new UI(briq)
-
-    REDIPS.drag.init('redips-drag')
-    REDIPS.drag.dropMode = 'single' // one item per cell
-    REDIPS.drag.trash.question = null // don't confirm deletion
-
-    Array.from(document.getElementsByClassName('buttonDefault')).forEach(b => b.click())
+  static Setup () {
+    UserInterface.instance = new UserInterface()
   }
 
   /**
@@ -24,14 +25,13 @@ class UI {
    * @returns Tabular data to be converted to dataframe.
    */
   static GetData (name) {
-    if (UI.instance === undefined) {
-      throw new Error('UI instance not defined')
-    }
-    UI.instance.briq.util.check(name && (typeof name === 'string'),
-                                `Require non-empty string as dataset name`)
-    UI.instance.briq.util.check(UI.instance.data.has(name),
-                                `Cannot get unknown dataset ${name}`)
-    return UI.instance.data.get(name).data
+    util.check(UserInterface.instance,
+               `UserInterface instance not defined`)
+    util.check(name && (typeof name === 'string'),
+               `Require non-empty string as dataset name`)
+    util.check(UserInterface.instance.data.has(name),
+               `Cannot get unknown dataset ${name}`)
+    return UserInterface.instance.data.get(name).data
   }
 
   // ----------------------------------------------------------------------
@@ -41,17 +41,12 @@ class UI {
   /**
    * @param {object} util Utilities.
    */
-  constructor (briq) {
-    if (!briq) {
-      throw new Error('require code during instance construction')
-    }
-    this.briq = briq
-    this.briq.Environment.HowToGetData = UI.GetData
-    this.env = new this.briq.Environment()
-
+  constructor () {
+    Environment.HowToGetData = UserInterface.GetData
+    this.env = new Environment()
     this.data = new Map()
     this.program = null
-    this.factory = new this.briq.HTMLFactory()
+    this.factory = new HTMLFactory()
     this.redisplay()
   }
 
@@ -122,8 +117,8 @@ class UI {
       data: ['dataSelect', 'dataArea', this.data],
       results: ['resultsSelect', 'resultsArea', this.env.results]
     }[which]
-    this.briq.util.check(selectorId && areaId,
-                         `Unknown name ${name}`)
+    util.check(selectorId && areaId,
+               `Unknown name ${name}`)
 
     // Elements.
     const selector = document.getElementById(selectorId)
@@ -158,7 +153,7 @@ class UI {
       this.displayInArea('plotArea', null)
     }
     else {
-      spec = Object.assign({}, spec, this.FULL_PLOT_SIZE)
+      spec = Object.assign({}, spec, UserInterface.FULL_PLOT_SIZE)
       vegaEmbed('#plotArea', spec, {})
     }
   }
@@ -201,8 +196,8 @@ class UI {
    */
   displayToolbox () {
     const allTabs = [
-      ['exprTab', this.briq.Expr.CLASSES],
-      ['transformTab', this.briq.Stage.CLASSES]
+      ['exprTab', Expr.CLASSES],
+      ['transformTab', Stage.CLASSES]
     ]
     for (const [id, classes] of allTabs) {
       const toolbox = this.factory.makeToolbox(classes)
@@ -216,13 +211,14 @@ class UI {
    * @param {Object} program Program to display.
    */
   displayProgram (program) {
+    console.log('ABOUT TO DISPLAY PROGRAM', program)
     if (program) {
       this.displayLog([`<pre>${JSON.stringify(program.toJSON(), null, 1)}</pre>`])
       program = program.toHTML(this.factory)
     }
     else {
       this.displayLog(['clear program'])
-      program = this.briq.Program.EmptyHTML(this.factory)
+      program = this.factory.emptyProgram()
     }
     this.displayInArea('programArea', program)
   }
@@ -239,8 +235,8 @@ class UI {
     const file = fileList[0]
     const name = file.name
     file.text().then(text => {
-      const data = this.briq.util.csvToTable(text)
-      const df = new this.briq.DataFrame(data)
+      const data = util.csvToTable(text)
+      const df = new DataFrame(data)
       this.data.set(name, df)
       this.displayTable('data', name)
     })
@@ -272,7 +268,7 @@ class UI {
     const name = file.name
     file.text().then(text => {
       const json = JSON.parse(text)
-      this.program = this.briq.util.fromJSON(json)
+      this.program = util.fromJSON(json)
       this.displayProgram(this.program)
     })
   }
@@ -295,7 +291,7 @@ class UI {
       this.displayError([`No program available`])
       return
     }
-    this.env = new this.briq.Environment(UI.GetData)
+    this.env = new Environment(UserInterface.GetData)
     this.program.run(this.env)
     this.displayLog(this.env.log)
     this.displayError(this.env.errors)
@@ -308,8 +304,8 @@ class UI {
     const body = this.getProgramBody()
     const height = body.children.length
     const width = body.firstChild.children.length
-    this.briq.util.check(width > 1,
-                         `Must have some columns in order to add a row`)
+    util.check(width > 1,
+               `Must have some columns in order to add a row`)
     const content = [
       this.factory.pipelineIDCell(height),
       ...Array(width-1).fill(this.factory.placeholder()).join('')
@@ -357,6 +353,7 @@ class UI {
    * @param {string} html What to display.
    */
   displayInArea (id, html) {
+    console.log('ABOUT TO DISPLAY IN AREA', id, html)
     const div = document.getElementById(id)
     div.innerHTML = html ? html : ''
   }
@@ -431,7 +428,7 @@ class UI {
 /**
  * Size of standard plotting area.
  */
-this.FULL_PLOT_SIZE = {
+UserInterface.FULL_PLOT_SIZE = {
   width: 500,
   height: 300
 }
@@ -439,4 +436,8 @@ this.FULL_PLOT_SIZE = {
 /**
  * Precision for displaying floating-point values.
  */
-this.PRECISION = 6
+UserInterface.PRECISION = 6
+
+module.exports = {
+  UserInterface
+}

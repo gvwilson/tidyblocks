@@ -9,15 +9,6 @@ const {Environment} = require('./libs/environment')
 const {Pipeline} = require('./libs/pipeline')
 const {Program} = require('./libs/program')
 const {HTMLFactory} = require('./libs/html')
+const {UserInterface} = require('./libs/ui')
 
-module.exports = {
-  util,
-  Expr,
-  Summarize,
-  DataFrame,
-  Stage,
-  Environment,
-  Pipeline,
-  Program,
-  HTMLFactory
-}
+module.exports = UserInterface

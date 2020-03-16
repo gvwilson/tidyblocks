@@ -577,7 +577,11 @@ describe('converts transforms to HTML', () => {
 describe('converts entire programs to HTML', () => {
   it('creates an empty program', (done) => {
     const factory = new HTMLFactory()
-    const empty = makeNode(Program.EmptyHTML(factory))
+    const empty = makeNode(factory.emptyProgram())
+    assert.equal(empty.tagName, 'TABLE',
+                 `Expected table`)
+    assert.equal(empty.getAttribute('id'), 'briq-program',
+                 `Expected program ID`)
     done()
   })
 

@@ -1,7 +1,5 @@
 'use strict'
 
-const cl = console.log
-
 const util = require('./util')
 const {DataFrame} = require('./dataframe')
 const {Environment} = require('./environment')
@@ -41,13 +39,6 @@ class Program {
    */
   toJSON () {
     return [Program.KIND, ...this.pipelines.map(pipeline => pipeline.toJSON())]
-  }
-
-  /**
-   * Create an empty program as HTML.
-   */
-  static EmptyHTML (factory) {
-    return (new Program()).toHTML(factory)
   }
 
   /**

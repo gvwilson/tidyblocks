@@ -1,7 +1,5 @@
 'use strict'
 
-const cl = console.log
-
 const util = require('./util')
 const MISSING = util.MISSING
 const {Expr} = require('./expr')

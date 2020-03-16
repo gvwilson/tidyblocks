@@ -1,7 +1,5 @@
 'use strict'
 
-const cl = console.log
-
 const util = require('./util')
 
 /**
@@ -32,6 +30,15 @@ class HTMLFactory {
       .map((p, i) => `<tr>${this.pipelineIDCell(i)}${p.join('')}</tr>`)
       .join('')
     const table = `<table id="briq-program"><tbody>${body}</tbody></table>`
+    return table
+  }
+
+  /**
+   * Create an empty program as a placeholder.
+   */
+  emptyProgram () {
+    const content = `${this.pipelineIDCell(0)}${this.placeholder()}`
+    const table = `<table id="briq-program"><tbody><tr>${content}</tr></tbody></table>`
     return table
   }
 
