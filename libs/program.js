@@ -125,7 +125,6 @@ class Program {
    * @param {Pipeline} pipeline What to register.
    */
   register (pipeline) {
-    console.log('TRYING TO REGISTER', pipeline)
     util.check(pipeline instanceof Pipeline,
                `Pipelines must be instances of the Pipeline class`)
     this.pipelines.push(pipeline)
