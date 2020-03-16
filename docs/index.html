@@ -43,7 +43,7 @@
 
 
     <section>
-        <article><h1>yem</h1>
+        <article><h1>briq</h1>
 <p>TidyBlocks revisited.</p>
 <p>Contributions of all kinds are welcome.
 By offering a contribution, you agree to abide by our <a href="CONDUCT.md">Code of Conduct</a>
@@ -51,17 +51,44 @@ and that your work may be made available under the terms of <a href="LICENSE.md"
 <ol>
 <li>
 <p>To report a bug or request a new feature,
-please check the <a href="https://github.com/gvwilson/yem/issues">list of open issues</a>
+please check the <a href="https://github.com/gvwilson/briq/issues">list of open issues</a>
 to see if it's already there,
 and if not,
 file as complete a description as you can.</p>
 </li>
 <li>
 <p>If you have made a fix or improvement,
-please create a <a href="https://github.com/gvwilson/yem/pulls">pull request</a>.
+please create a <a href="https://github.com/gvwilson/briq/pulls">pull request</a>.
 We will review these as quickly as we can (typically within 2-3 days).</p>
 </li>
-</ol></article>
+</ol>
+<h2>Overview</h2>
+<h3>Source</h3>
+<ul>
+<li><code>libs/util.js</code>: low-level utilities and the dispatch machinery for converting JSON back to programs.</li>
+<li><code>libs/dataframe.js</code>: operations on data tables.</li>
+<li><code>libs/expr.js</code>: operations on table rows.
+These may be nested (i.e., <code>add(multiply(2, column('red')), column('blue'))</code></li>
+<li><code>libs/summarize.js</code>: summarization operations (such as <code>sum</code> and <code>max</code>).</li>
+<li><code>libs/statistics.js</code>: statistical tests.</li>
+<li><code>libs/stage.js</code>: operations on entire tables.
+These use expressions, summarizers, and statistical tests.</li>
+<li><code>libs/pipeline.js</code>: pipelines made up of stages.</li>
+<li><code>libs/program.js</code>: programs made up of pipelines.</li>
+<li><code>libs/environment.js</code>: the runtime environment for a program.
+This should probably be combined with the <code>program</code> class,
+since only one component needs to change for testing.</li>
+<li><code>libs/html.js</code>: turning programs to HTML and HTML back into programs.</li>
+<li><code>libs/ui.js</code>: the user interface.
+This is the only module <em>not</em> tested by <code>test/test_*.js</code>.</li>
+</ul>
+<h3>Other Files</h3>
+<ul>
+<li><code>test/test_*.js</code>: unit tests.</li>
+<li><code>static/ui.css</code>: CSS for the user interface.</li>
+<li><code>index.html</code>: user interface page.</li>
+<li><code>index.js</code>: gathers contents of <code>libs/*.js</code> (except <code>libs/ui.js</code>) for bundling.</li>
+</ul></article>
     </section>
 
 
@@ -72,7 +99,7 @@ We will review these as quickly as we can (typically within 2-3 days).</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Convert.html">Convert</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Datetime.html">Datetime</a></li><li><a href="Op.html">Op</a></li><li><a href="Summarize.html">Summarize</a></li><li><a href="Typecheck.html">Typecheck</a></li><li><a href="util.html">util</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Environment.html">Environment</a></li><li><a href="Expr.add.html">add</a></li><li><a href="Expr.and.html">and</a></li><li><a href="Expr.column.html">column</a></li><li><a href="Expr.constant.html">constant</a></li><li><a href="Expr.divide.html">divide</a></li><li><a href="Expr.equal.html">equal</a></li><li><a href="Expr.greater.html">greater</a></li><li><a href="Expr.greaterEqual.html">greaterEqual</a></li><li><a href="Expr.ifElse.html">ifElse</a></li><li><a href="Expr.isBool.html">isBool</a></li><li><a href="Expr.isDatetime.html">isDatetime</a></li><li><a href="Expr.isMissing.html">isMissing</a></li><li><a href="Expr.isNumber.html">isNumber</a></li><li><a href="Expr.isString.html">isString</a></li><li><a href="Expr.less.html">less</a></li><li><a href="Expr.lessEqual.html">lessEqual</a></li><li><a href="Expr.multiply.html">multiply</a></li><li><a href="Expr.negate.html">negate</a></li><li><a href="Expr.not.html">not</a></li><li><a href="Expr.notEqual.html">notEqual</a></li><li><a href="Expr.or.html">or</a></li><li><a href="Expr.power.html">power</a></li><li><a href="Expr.remainder.html">remainder</a></li><li><a href="Expr.subtract.html">subtract</a></li><li><a href="Expr.toBool.html">toBool</a></li><li><a href="Expr.toDatetime.html">toDatetime</a></li><li><a href="Expr.toDay.html">toDay</a></li><li><a href="Expr.toHours.html">toHours</a></li><li><a href="Expr.toMinutes.html">toMinutes</a></li><li><a href="Expr.toMonth.html">toMonth</a></li><li><a href="Expr.toNumber.html">toNumber</a></li><li><a href="Expr.toSeconds.html">toSeconds</a></li><li><a href="Expr.toString.html">toString</a></li><li><a href="Expr.toWeekday.html">toWeekday</a></li><li><a href="Expr.toYear.html">toYear</a></li><li><a href="ExprArithmetic.html">ExprArithmetic</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprCompare.html">ExprCompare</a></li><li><a href="ExprConvert.html">ExprConvert</a></li><li><a href="ExprDatetime.html">ExprDatetime</a></li><li><a href="ExprLogical.html">ExprLogical</a></li><li><a href="ExprNegate.html">ExprNegate</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprTypecheck.html">ExprTypecheck</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="HTMLFactory.html">HTMLFactory</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="Stage.ANOVA.html">ANOVA</a></li><li><a href="Stage.bar.html">bar</a></li><li><a href="Stage.box.html">box</a></li><li><a href="Stage.dot.html">dot</a></li><li><a href="Stage.drop.html">drop</a></li><li><a href="Stage.filter.html">filter</a></li><li><a href="Stage.groupBy.html">groupBy</a></li><li><a href="Stage.histogram.html">histogram</a></li><li><a href="Stage.join.html">join</a></li><li><a href="Stage.KolmogorovSmirnov.html">KolmogorovSmirnov</a></li><li><a href="Stage.KruskalWallis.html">KruskalWallis</a></li><li><a href="Stage.mutate.html">mutate</a></li><li><a href="Stage.notify.html">notify</a></li><li><a href="Stage.read.html">read</a></li><li><a href="Stage.scatter.html">scatter</a></li><li><a href="Stage.select.html">select</a></li><li><a href="Stage.sort.html">sort</a></li><li><a href="Stage.summarize.html">summarize</a></li><li><a href="Stage.TTestOneSample.html">TTestOneSample</a></li><li><a href="Stage.TTestPaired.html">TTestPaired</a></li><li><a href="Stage.ungroup.html">ungroup</a></li><li><a href="Stage.unique.html">unique</a></li><li><a href="Stage.ZTestOneSample.html">ZTestOneSample</a></li><li><a href="StageBase.html">StageBase</a></li><li><a href="StagePlot.html">StagePlot</a></li><li><a href="StageStats.html">StageStats</a></li><li><a href="StageTransform.html">StageTransform</a></li><li><a href="Statistics.html">Statistics</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="UI.html">UI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#DispatchJSON">DispatchJSON</a></li><li><a href="global.html#Expr">Expr</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#fromJSON">fromJSON</a></li><li><a href="global.html#FULL_PLOT_SIZE">FULL_PLOT_SIZE</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#PRECISION">PRECISION</a></li><li><a href="global.html#registerFromJSON">registerFromJSON</a></li><li><a href="global.html#Stage">Stage</a></li><li><a href="global.html#Summarize">Summarize</a></li></ul>
 </nav>
 
 <br class="clear">

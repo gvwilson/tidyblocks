@@ -29,141 +29,190 @@
             <pre class="prettyprint source linenums"><code>'use strict'
 
 const util = require('./util')
+const MISSING = util.MISSING
+
+/**
+ * Represent summarization as object.
+ */
+class SummarizeBase {
+  constructor (name, column) {
+    util.check(name &amp;&amp; (typeof name === 'string') &amp;&amp;
+               column &amp;&amp; (typeof column === 'string'),
+               `Require non-empty strings as name and column`)
+    this.options = ['count', 'maximum', 'mean', 'median',
+                    'minimum', 'stdDev', 'sum', 'variance']
+    this.name = name
+    this.column = column
+  }
+
+  toJSON () {
+    return [Summarize.KIND, this.name, this.column]
+  }
+
+  toHTML (factory) {
+    return factory.widget(
+      factory.choose(this.options, this.name),
+      factory.input(this.column)
+    )
+  }
+
+  variance (values) {
+    const mean = values.reduce((total, val) => total + val, 0) / values.length
+    const diffSq = values.map(val => (val - mean) ** 2)
+    const result = diffSq.reduce((total, val) => total + val, 0) / diffSq.length
+    return result
+  }
+}
 
 /**
  * Summarization functions.
  */
-class Summarize {
+const Summarize = {
   /**
-   * Count number of values.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Number of values.
+   * Indicator.
    */
-  static count (rows, col) {
-    return rows.length
-  }
+  KIND: '@summarize',
 
   /**
-   * Find maximum value.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Maximum value.
+   * Build summarizer from JSON representation.
+   * @param {JSON} json Persisted data.
+   * @returns Summarizer.
    */
-  static maximum (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    return rows.reduce((soFar, row) => (row[col] > soFar) ? row[col] : soFar,
-                       rows[0][col])
-  }
+  fromJSON: (json) => {
+    util.check(Array.isArray(json) &amp;&amp;
+               (json.length === 3) &amp;&amp;
+               (json[0] === Summarize.KIND),
+               `Require non-empty array beginning with correct kind`)
+    util.check(json[1] in Summarize,
+               `Unknown summarizer kind "${json[1]}"`)
+    const kind = json[1]
+    const column = json[2]
+    return new Summarize[kind](column)
+  },
 
-  /**
-   * Find mean value.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Mean value.
-   */
-  static mean (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    return rows.reduce((total, row) => total + row[col], 0) / rows.length
-  }
+  count: class extends SummarizeBase {
+    constructor (column) {
+      super('count', column)
+    }
+    run (rows) {
+      return rows.length
+    }
+  },
 
-  /**
-   * Find median value.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Median value.
-   */
-  static median (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    const temp = [...rows]
-    temp.sort((left, right) => {
-      if (left[col] &lt; right[col]) {
-        return -1
+  maximum: class extends SummarizeBase {
+    constructor (column) {
+      super('maximum', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
       }
-      else if (left[col] > right[col]) {
-        return 1
+      return rows.reduce((soFar, row) => {
+        return (row[this.column] > soFar) ? row[this.column] : soFar
+      }, rows[0][this.column])
+    }
+  },
+
+  mean: class extends SummarizeBase {
+    constructor (column) {
+      super('mean', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
       }
-      return 0
-    })
-    return temp[Math.floor(rows.length / 2)][col]
-  }
+      return rows.reduce((total, row) => {
+        return total + row[this.column]
+      }, 0) / rows.length
+    }
+  },
 
-  /**
-   * Find minimum value.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Minimum value.
-   */
-  static minimum (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    return rows.reduce((soFar, row) => (row[col] &lt; soFar) ? row[col] : soFar,
-                       rows[0][col])
-  }
+  median: class extends SummarizeBase {
+    constructor (column) {
+      super('median', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
+      }
+      const temp = [...rows]
+      temp.sort((left, right) => {
+        if (left[this.column] &lt; right[this.column]) {
+          return -1
+        }
+        else if (left[this.column] > right[this.column]) {
+          return 1
+        }
+        return 0
+      })
+      return temp[Math.floor(rows.length / 2)][this.column]
+    }
+  },
 
-  /**
-   * Find standard deviation.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Standard deviation.
-   */
-  static stdDev (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    const values = rows.map(row => row[col])
-    return Math.sqrt(_variance(values))
-  }
+  minimum: class extends SummarizeBase {
+    constructor (column) {
+      super('minimum', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
+      }
+      return rows.reduce((soFar, row) => {
+        return (row[this.column] &lt; soFar) ? row[this.column] : soFar
+      }, rows[0][this.column])
+    }
+  },
 
-  /**
-   * Find sum.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Total.
-   */
-  static sum (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    return rows.reduce((total, row) => total + row[col], 0)
-  }
+  stdDev: class extends SummarizeBase {
+    constructor (column) {
+      super('stdDev', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
+      }
+      const values = rows.map(row => row[this.column])
+      return Math.sqrt(this.variance(values))
+    }
+  },
 
-  /**
-   * Find variance.
-   * @param {Array} rows The rows containing values.
-   * @param {string} col The column of interest.
-   * @return {number} Variance.
-   */
-  static variance (rows, col) {
-    if (rows.length === 0) return util.MISSING
-    const values = rows.map(row => row[col])
-    return _variance(values)
+  sum: class extends SummarizeBase {
+    constructor (column) {
+      super('sum', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
+      }
+      return rows.reduce((total, row) => {
+        return total + row[this.column]
+      }, 0)
+    }
+  },
+
+  variance: class extends SummarizeBase {
+    constructor (column) {
+      super('variance', column)
+    }
+    run (rows) {
+      if (rows.length === 0) {
+        return MISSING
+      }
+      const values = rows.map(row => row[this.column])
+      return this.variance(values)
+    }
   }
 }
 
-/**
- * Attribute that records column name suffix.
- */
-Summarize.SUFFIX = 'summarize'
+util.registerFromJSON(
+  Summarize.fromJSON,
+  Summarize.KIND
+)
 
-//
-// Provide column naming suffixes for all functions.
-//
-Summarize.count[Summarize.SUFFIX] = 'count'
-Summarize.maximum[Summarize.SUFFIX] = 'maximum'
-Summarize.mean[Summarize.SUFFIX] = 'mean'
-Summarize.median[Summarize.SUFFIX] = 'median'
-Summarize.minimum[Summarize.SUFFIX] = 'minimum'
-Summarize.stdDev[Summarize.SUFFIX] = 'stdDev'
-Summarize.sum[Summarize.SUFFIX] = 'sum'
-Summarize.variance[Summarize.SUFFIX] = 'variance'
-
-//
-// Calculate variance using the simple formula.
-//
-const _variance = (values) => {
-  const mean = values.reduce((total, val) => total + val, 0) / values.length
-  const diffSq = values.map(val => (val - mean) ** 2)
-  const result = diffSq.reduce((total, val) => total + val, 0) / diffSq.length
-  return result
+module.exports = {
+  SummarizeBase,
+  Summarize
 }
-
-module.exports = Summarize
 </code></pre>
         </article>
     </section>
@@ -174,7 +223,7 @@ module.exports = Summarize
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Convert.html">Convert</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Datetime.html">Datetime</a></li><li><a href="Op.html">Op</a></li><li><a href="Summarize.html">Summarize</a></li><li><a href="Typecheck.html">Typecheck</a></li><li><a href="util.html">util</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Environment.html">Environment</a></li><li><a href="Expr.add.html">add</a></li><li><a href="Expr.and.html">and</a></li><li><a href="Expr.column.html">column</a></li><li><a href="Expr.constant.html">constant</a></li><li><a href="Expr.divide.html">divide</a></li><li><a href="Expr.equal.html">equal</a></li><li><a href="Expr.greater.html">greater</a></li><li><a href="Expr.greaterEqual.html">greaterEqual</a></li><li><a href="Expr.ifElse.html">ifElse</a></li><li><a href="Expr.isBool.html">isBool</a></li><li><a href="Expr.isDatetime.html">isDatetime</a></li><li><a href="Expr.isMissing.html">isMissing</a></li><li><a href="Expr.isNumber.html">isNumber</a></li><li><a href="Expr.isString.html">isString</a></li><li><a href="Expr.less.html">less</a></li><li><a href="Expr.lessEqual.html">lessEqual</a></li><li><a href="Expr.multiply.html">multiply</a></li><li><a href="Expr.negate.html">negate</a></li><li><a href="Expr.not.html">not</a></li><li><a href="Expr.notEqual.html">notEqual</a></li><li><a href="Expr.or.html">or</a></li><li><a href="Expr.power.html">power</a></li><li><a href="Expr.remainder.html">remainder</a></li><li><a href="Expr.subtract.html">subtract</a></li><li><a href="Expr.toBool.html">toBool</a></li><li><a href="Expr.toDatetime.html">toDatetime</a></li><li><a href="Expr.toDay.html">toDay</a></li><li><a href="Expr.toHours.html">toHours</a></li><li><a href="Expr.toMinutes.html">toMinutes</a></li><li><a href="Expr.toMonth.html">toMonth</a></li><li><a href="Expr.toNumber.html">toNumber</a></li><li><a href="Expr.toSeconds.html">toSeconds</a></li><li><a href="Expr.toString.html">toString</a></li><li><a href="Expr.toWeekday.html">toWeekday</a></li><li><a href="Expr.toYear.html">toYear</a></li><li><a href="ExprArithmetic.html">ExprArithmetic</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprCompare.html">ExprCompare</a></li><li><a href="ExprConvert.html">ExprConvert</a></li><li><a href="ExprDatetime.html">ExprDatetime</a></li><li><a href="ExprLogical.html">ExprLogical</a></li><li><a href="ExprNegate.html">ExprNegate</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprTypecheck.html">ExprTypecheck</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="HTMLFactory.html">HTMLFactory</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="Stage.ANOVA.html">ANOVA</a></li><li><a href="Stage.bar.html">bar</a></li><li><a href="Stage.box.html">box</a></li><li><a href="Stage.dot.html">dot</a></li><li><a href="Stage.drop.html">drop</a></li><li><a href="Stage.filter.html">filter</a></li><li><a href="Stage.groupBy.html">groupBy</a></li><li><a href="Stage.histogram.html">histogram</a></li><li><a href="Stage.join.html">join</a></li><li><a href="Stage.KolmogorovSmirnov.html">KolmogorovSmirnov</a></li><li><a href="Stage.KruskalWallis.html">KruskalWallis</a></li><li><a href="Stage.mutate.html">mutate</a></li><li><a href="Stage.notify.html">notify</a></li><li><a href="Stage.read.html">read</a></li><li><a href="Stage.scatter.html">scatter</a></li><li><a href="Stage.select.html">select</a></li><li><a href="Stage.sort.html">sort</a></li><li><a href="Stage.summarize.html">summarize</a></li><li><a href="Stage.TTestOneSample.html">TTestOneSample</a></li><li><a href="Stage.TTestPaired.html">TTestPaired</a></li><li><a href="Stage.ungroup.html">ungroup</a></li><li><a href="Stage.unique.html">unique</a></li><li><a href="Stage.ZTestOneSample.html">ZTestOneSample</a></li><li><a href="StageBase.html">StageBase</a></li><li><a href="StagePlot.html">StagePlot</a></li><li><a href="StageStats.html">StageStats</a></li><li><a href="StageTransform.html">StageTransform</a></li><li><a href="Statistics.html">Statistics</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="UI.html">UI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#DispatchJSON">DispatchJSON</a></li><li><a href="global.html#Expr">Expr</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#fromJSON">fromJSON</a></li><li><a href="global.html#FULL_PLOT_SIZE">FULL_PLOT_SIZE</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#PRECISION">PRECISION</a></li><li><a href="global.html#registerFromJSON">registerFromJSON</a></li><li><a href="global.html#Stage">Stage</a></li><li><a href="global.html#Summarize">Summarize</a></li></ul>
 </nav>
 
 <br class="clear">

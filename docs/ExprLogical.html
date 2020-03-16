@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: util.js</title>
+    <title>JSDoc: Class: ExprLogical</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,178 +17,137 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: util.js</h1>
+    <h1 class="page-title">Class: ExprLogical</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
+        <h2><span class="attribs"><span class="type-signature"></span></span>ExprLogical<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Binary logical expressions.</div>
+        
+    
+</header>
 
-const papaparse = require('papaparse')
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * Unilaterally fail (used to mark unimplemented functions).
- * @param {string} message What to report.
- */
-const fail = (message) => {
-  throw new Error(message)
-}
+    
+    <h2>Constructor</h2>
+    
 
-/**
- * Raise exception if a condition doesn't hold.
- * @param {Boolean} condition Condition that must be true.
- * @param {string} message What to say if it isn't.
- */
-const check = (condition, message) => {
-  if (!condition) {
-    fail(message)
-  }
-}
+    
+    <h4 class="name" id="ExprLogical"><span class="type-signature"></span>new ExprLogical<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-/**
- * Check that a value is numeric.
- * @param {whatever} value What to check.
- */
-const checkNumber = (value) => {
-  check((value === MISSING) ||
-        (typeof value === 'number'),
-        `Value ${value} is not missing or a number`)
-  return value
-}
+    
 
-/**
- * Check that the types of two values are the same.
- * @param {whatever} left One of the values.
- * @param {whatever} right The other value.
- */
-const checkTypeEqual = (left, right) => {
-  check((left === MISSING) ||
-        (right === MISSING) ||
-        (typeof left === typeof right),
-        `Values ${left} and ${right} have different types`)
-}
 
-/**
- * Convert CSV-formatted text to array of objects with uniform keys.
- * @param {string} text Text to parse.
- * @returns Array of objects.
- */
-const csvToTable = (text) => {
-  const seen = new Map() // used across all calls to transformHeader
-  const transformHeader = (name) => {
-    // Simple character fixes.
-    name = name
-      .trim()
-      .replace(/ /g, '_')
-      .replace(/[^A-Za-z0-9_]/g, '')
 
-    // Ensure header is not empty after character fixes.
-    if (name.length === 0) {
-      name = 'EMPTY'
-    }
 
-    // Name must start with underscore or letter.
-    if (!name.match(/^[_A-Za-z]/)) {
-      name = `_${name}`
-    }
 
-    // Name must be unique.
-    if (seen.has(name)) {
-      const serial = seen.get(name) + 1
-      seen.set(name, serial)
-      name = `${name}_${serial}`
-    }
-    else {
-      seen.set(name, 0)
-    }
 
-    return name
-  }
 
-  const result = papaparse.parse(text.trim(), {
-    dynamicTyping: true,
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: transformHeader,
-    transform: function (value) {
-      return (value === 'NA' | value === null) ? MISSING : value
-    }
-  })
 
-  return result.data
-}
 
-/**
- * Value to indicate missing data.
- */
-const MISSING = null
 
-/**
- * Central dispatch for JSON persistence, placed here to avoid circular dependencies.
- */
-const DispatchJSON = new Map()
 
-/**
- * Register persistence lookup function.
- * @param {function} func JSON-to-object function.
- * @param {string[]} allKinds Identifiers to be handled by that function.
- */
-const registerFromJSON = (func, ...allKinds) => {
-  allKinds.forEach(kind => {
-    check(kind &amp;&amp;
-          (typeof kind === 'string') &amp;&amp;
-          (kind[0] === '@'),
-          `Require @name as kind not "${kind}"`)
-    check(typeof func === 'function',
-          `Require runnable function for dispatch`)
-    DispatchJSON.set(kind, func)
-  })
-}
 
-/**
- * Turn JSON into objects.
- * @param {JSON} json What to interpret.
- * @returns Object.
- */
-const fromJSON = (json) => {
-  if (!Array.isArray(json)) {
-    return json
-  }
-  if (json.length === 0) {
-    return json
-  }
 
-  const first = json[0]
-  if ((!first) ||
-      (typeof first != 'string') ||
-      (!first.startsWith('@'))) {
-    return json.map(x => fromJSON(x))
-  }
 
-  if (DispatchJSON.has(first)) {
-    return DispatchJSON.get(first)(json)
-  }
 
-  fail(`Unknown kind "${kind}"`)
-}
+<dl class="details">
 
-module.exports = {
-  fail,
-  check,
-  checkNumber,
-  checkTypeEqual,
-  csvToTable,
-  MISSING,
-  registerFromJSON,
-  fromJSON
-}
-</code></pre>
-        </article>
-    </section>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="expr.js.html">expr.js</a>, <a href="expr.js.html#line253">line 253</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

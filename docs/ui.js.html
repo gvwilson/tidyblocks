@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ui.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ui.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Not bundled during development.
+
+/**
+ * Browser-based interface.
+ */
+class UI {
+  /**
+   * Set up after DOM is loaded: create singleton and show default tab.
+   * @param {object} briq Other code.
+   */
+  static Setup (briq) {
+    UI.instance = new UI(briq)
+
+    REDIPS.drag.init('redips-drag')
+    REDIPS.drag.dropMode = 'single' // one item per cell
+    REDIPS.drag.trash.question = null // don't confirm deletion
+
+    Array.from(document.getElementsByClassName('buttonDefault')).forEach(b => b.click())
+  }
+
+  /**
+   * Get a named dataset (provided as callback to runtime environment objects).
+   * @param {string} name Name of previously-loaded data set.
+   * @returns Tabular data to be converted to dataframe.
+   */
+  static GetData (name) {
+    if (UI.instance === undefined) {
+      throw new Error('UI instance not defined')
+    }
+    UI.instance.briq.util.check(name &amp;&amp; (typeof name === 'string'),
+                                `Require non-empty string as dataset name`)
+    UI.instance.briq.util.check(UI.instance.data.has(name),
+                                `Cannot get unknown dataset ${name}`)
+    return UI.instance.data.get(name).data
+  }
+
+  // ----------------------------------------------------------------------
+  // Build singleton instance.
+  // ----------------------------------------------------------------------
+
+  /**
+   * @param {object} util Utilities.
+   */
+  constructor (briq) {
+    if (!briq) {
+      throw new Error('require code during instance construction')
+    }
+    this.briq = briq
+    this.data = new Map()
+    this.env = new this.briq.Environment(UI.GetData)
+    this.program = null
+    this.factory = new this.briq.HTMLFactory()
+    this.redisplay()
+  }
+
+  // ----------------------------------------------------------------------
+  // Buttons and tabs.
+  // ----------------------------------------------------------------------
+
+  /**
+   * Show the specified tab.
+   * @param {event} evt Browser event.
+   * @param {string} tabName Name of the tab (must match an id in the page).
+   * @param {string} selector Select dataset to display (or null).
+   */
+  showTab (evt, tabName, selector = null) {
+    const chosenButton = evt.target
+    const buttonGroup = chosenButton.getAttribute('data-briq-buttongroup')
+    if (buttonGroup) {
+      const buttons = document.querySelectorAll(`[data-briq-buttongroup=${buttonGroup}]`)
+      Array.from(buttons)
+        .forEach(button => {button.classList.remove('active')})
+    }
+    chosenButton.classList.add('active')
+
+    const chosenTab = document.getElementById(tabName)
+    const tabParent = chosenTab.parentNode
+    Array.from(tabParent.getElementsByClassName('tabContent'))
+      .forEach(tab => {tab.style.display = 'none'})
+    chosenTab.style.display = 'block'
+
+    if (selector) {
+      this.displayTable(selector)
+    }
+  }
+
+  /**
+   * Trigger an input element when a button is clicked.
+   * @param {string} id ID of element to trigger.
+   */
+  triggerInput (id) {
+    document.getElementById(id).click()
+  }
+
+  // ----------------------------------------------------------------------
+  // Displays.
+  // ----------------------------------------------------------------------
+
+  /**
+   * Reset stored data and displays before running program.
+   */
+  redisplay () {
+    this.displayToolbox()
+    this.displayProgram(null)
+    this.displayTable('data')
+    this.displayTable('results')
+    this.displayPlot(null)
+    this.displayStatistics(null, null)
+    this.displayLog(null)
+    this.displayError(null)
+  }
+
+  /**
+   * Display a named data table as an HTML table.
+   * @param {string} which Which table to display.
+   * @param {string} name Name of dataset to select.
+   */
+  displayTable (which, name = null) {
+    const [selectorId, areaId, available] = {
+      data: ['dataSelect', 'dataArea', this.data],
+      results: ['resultsSelect', 'resultsArea', this.env.results]
+    }[which]
+    this.briq.util.check(selectorId &amp;&amp; areaId,
+                         `Unknown name ${name}`)
+
+    // Elements.
+    const selector = document.getElementById(selectorId)
+    const area = document.getElementById(areaId)
+
+    // Nothing to select.
+    if (available.size === 0) {
+      selector.innerHTML = '&lt;option value="">-none-&lt;/option>'
+      area.innerHTML = ''
+      return
+    }
+
+    // Show all available datasets, potentially selecting one.
+    const desired = name || selector.value || available.keys().next().value
+    const makeSelected = (key) => ((key === desired) ? 'selected="selected"' : '')
+    selector.innerHTML =
+      Array.from(available.keys())
+      .map(key => `&lt;option value="${key}"${makeSelected(key)}>${key}&lt;/option>`)
+      .join('')
+
+    // Display the selected dataset.
+    const table = this.dataFrameToHTML(available.get(desired))
+    area.innerHTML = table
+  }
+
+  /**
+   * Display a plot.
+   * @param {Object} spec Vega-Lite plot spec (or null to clear)..
+   */
+  displayPlot (spec) {
+    if (spec === null) {
+      this.displayInArea('plotArea', null)
+    }
+    else {
+      spec = Object.assign({}, spec, this.FULL_PLOT_SIZE)
+      vegaEmbed('#plotArea', spec, {})
+    }
+  }
+
+  /**
+   * Display statistics.
+   * @param {Object} results Results of statistical test.
+   * @param {Object} legend Explanatory legend.
+   */
+  displayStatistics (results, legend) {
+    const html = (results &amp;&amp; legend) ? this.statisticsToHTML(results, legend) : ''
+    this.displayInArea('statisticsArea', html)
+  }
+
+  /**
+   * Display log messages.
+   * @param {string[]} message To display.
+   */
+  displayLog (messages) {
+    if (messages) {
+      messages = this.listToHTML(messages)
+    }
+    this.displayInArea('logArea', messages)
+  }
+
+  /**
+   * Display error messages.
+   * @param {string[]} message To display.
+   */
+  displayError (messages) {
+    if (messages) {
+      messages.forEach(m => console.log(m))
+      messages = this.listToHTML(messages)
+    }
+    this.displayInArea('errorArea', messages)
+  }
+
+  /**
+   * Make and display the toolbox.
+   */
+  displayToolbox () {
+    const allTabs = [
+      ['exprTab', this.briq.Expr.CLASSES],
+      ['transformTab', this.briq.Stage.CLASSES]
+    ]
+    for (const [id, classes] of allTabs) {
+      const toolbox = this.factory.makeToolbox(classes)
+      const div = document.getElementById(id)
+      div.innerHTML = toolbox
+    }
+  }
+
+  /**
+   * Display a program's structure.
+   * @param {Object} program Program to display.
+   */
+  displayProgram (program) {
+    if (program) {
+      this.displayLog([`&lt;pre>${JSON.stringify(program.toJSON(), null, 1)}&lt;/pre>`])
+      program = program.toHTML(this.factory)
+    }
+    else {
+      this.displayLog(['clear program'])
+      program = this.briq.Program.EmptyHTML(this.factory)
+    }
+    this.displayInArea('programArea', program)
+  }
+
+  // ----------------------------------------------------------------------
+  // Data management.
+  // ----------------------------------------------------------------------
+
+  /**
+   * Load a CSV data file.
+   * @param {FileList} fileList List of files provided by browser file selection dialog.
+   */
+  loadData (fileList) {
+    const file = fileList[0]
+    const name = file.name
+    file.text().then(text => {
+      const data = this.briq.util.csvToTable(text)
+      const df = new this.briq.DataFrame(data)
+      this.data.set(name, df)
+      this.displayTable('data', name)
+    })
+  }
+
+  /**
+   * Save the current results to disk.
+   * @param {event} evt Browser event (ignored).
+   */
+  saveResults (evt) {
+    const filename = 'result.csv' // FIXME how to trigger dialog to ask for filename?
+    const text = 'a,b,c' // FIXME get the current result
+    this.saveFile(filename, text)
+  }
+
+  // ----------------------------------------------------------------------
+  // Program management.
+  // ----------------------------------------------------------------------
+
+  /**
+   * Load a program from disk.
+   * @param {FileList} fileList List of files provided by browser file selection dialog.
+   */
+  loadProgram (fileList) {
+    if (fileList.length === 0) {
+      return
+    }
+    const file = fileList[0]
+    const name = file.name
+    file.text().then(text => {
+      const json = JSON.parse(text)
+      this.program = this.briq.util.fromJSON(json)
+      this.displayProgram(this.program)
+    })
+  }
+
+  /**
+   * Save a program to disk.
+   * @param {event} evt Browser event (ignored).
+   */
+  saveProgram (evt) {
+    const filename = 'program.briq' // FIXME how to trigger dialog to ask for filename?
+    const text = 'saved program' // FIXME get the actual JSON
+    this.saveFile(filename, text)
+  }
+
+  /**
+   * Run the current program.
+   */
+  runProgram () {
+    if (this.program === null) {
+      this.displayError([`No program available`])
+      return
+    }
+    this.env = new this.briq.Environment(UI.GetData)
+    this.program.run(this.env)
+    this.displayLog(this.env.log)
+    this.displayError(this.env.errors)
+  }
+
+  /**
+   * Add a row to the program area.
+   */
+  addProgramRow () {
+    const body = this.getProgramBody()
+    const height = body.children.length
+    const width = body.firstChild.children.length
+    this.briq.util.check(width > 1,
+                         `Must have some columns in order to add a row`)
+    const content = [
+      this.factory.pipelineIDCell(height),
+      ...Array(width-1).fill(this.factory.placeholder()).join('')
+    ].join('')
+    const newRow = document.createElement('tr')
+    newRow.innerHTML = content
+    body.appendChild(newRow)
+  }
+
+  /**
+   * Add a column to the program area.
+   */
+  addProgramCol () {
+    const body = this.getProgramBody()
+    const temp = document.createElement('tr')
+    const children = Array.from(body.children)
+    children.forEach(row => {
+      temp.innerHTML = this.factory.placeholder()
+      row.appendChild(temp.firstChild)
+    })
+  }
+
+  /**
+   * Get body of program table.
+   */
+  getProgramBody () {
+    const table = document.getElementById('briq-program')
+    if ((table === null) || (table.tagName.toUpperCase() != 'TABLE')) {
+      throw new Error('cannot find valid program')
+    }
+    const body = table.firstChild
+    if ((body === null) || (body.tagName.toUpperCase() != 'TBODY')) {
+      throw new Error('program table does not have valid body')
+    }
+    return body
+  }
+
+  // ----------------------------------------------------------------------
+  // Utilities.
+  // ----------------------------------------------------------------------
+
+  /**
+   * Display some HTML in a browser element.
+   * @param {string} id ID of element to display in.
+   * @param {string} html What to display.
+   */
+  displayInArea (id, html) {
+    const div = document.getElementById(id)
+    div.innerHTML = html ? html : ''
+  }
+
+  /**
+   * Convert dataframe to HTML.
+   * @param {DataFrame} df Dataframe to display.
+   */
+  dataFrameToHTML (df) {
+    if (!df) {
+      return '-empty-'
+    }
+    const data = df.data
+    const keys = Array.from(Object.keys(data[0]))
+    const header = '&lt;tr>' + keys.map(k => `&lt;th>${k}&lt;/th>`).join('') + '&lt;/tr>'
+    const body = data.map(row => '&lt;tr>' + keys.map(k => `&lt;td>${row[k]}&lt;/td>`).join('') + '&lt;/tr>').join('')
+    const html = `&lt;table class="data">${header}${body}&lt;/table>`
+    return html
+  }
+
+  /**
+   * Convert results of statistical test to HTML.
+   */
+  statisticsToHTML (results, legend) {
+    const title = legend._title
+    const header = '&lt;tr>&lt;th>Result&lt;/th>&lt;th>Value&lt;/th>&lt;th>Explanation&lt;/th>&lt;/tr>'
+    const body = Object.keys(legend).map(key => {
+      if (key === '_title') {
+        return ''
+      }
+      let value = results[key]
+      if (value === undefined) {
+        value = ''
+      }
+      else if (Array.isArray(value)) {
+        value = value.map(x => x.toPrecision(this.PRECISION)).join(',&lt;br/>')
+      }
+      else if (typeof value === 'number') {
+        value = value.toPrecision(this.PRECISION)
+      }
+      return `&lt;tr>&lt;td>${key}&lt;/td>&lt;td>${value}&lt;/td>&lt;td>${legend[key]}&lt;/td>&lt;/tr>`
+    }).join('')
+    const html = `&lt;p>${title}&lt;/p>&lt;table class="statistics">${header}${body}&lt;/table>`
+    return html
+  }
+
+  /**
+   * Convert array of messages to HTML list.
+   * @param {string[]} messages To convert.
+   * @returns HTML
+   */
+  listToHTML (messages) {
+    return '&lt;ol>' + messages.map(m => `&lt;li>${m}&lt;/li>`).join('') + '&lt;/ol>'
+  }
+
+  /**
+   * Save a file locally.
+   * @param {string} filename Name of file to save to.
+   * @param {whatever} content Data to save.
+   */
+  saveFile (filename, content) {
+    const element = document.createElement('a')
+    element.setAttribute('href', 'data:text/plaincharset=utf-8,' + encodeURIComponent(content))
+    element.setAttribute('download', filename)
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+}
+
+/**
+ * Size of standard plotting area.
+ */
+this.FULL_PLOT_SIZE = {
+  width: 500,
+  height: 300
+}
+
+/**
+ * Precision for displaying floating-point values.
+ */
+this.PRECISION = 6
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Environment.html">Environment</a></li><li><a href="Expr.add.html">add</a></li><li><a href="Expr.and.html">and</a></li><li><a href="Expr.column.html">column</a></li><li><a href="Expr.constant.html">constant</a></li><li><a href="Expr.divide.html">divide</a></li><li><a href="Expr.equal.html">equal</a></li><li><a href="Expr.greater.html">greater</a></li><li><a href="Expr.greaterEqual.html">greaterEqual</a></li><li><a href="Expr.ifElse.html">ifElse</a></li><li><a href="Expr.isBool.html">isBool</a></li><li><a href="Expr.isDatetime.html">isDatetime</a></li><li><a href="Expr.isMissing.html">isMissing</a></li><li><a href="Expr.isNumber.html">isNumber</a></li><li><a href="Expr.isString.html">isString</a></li><li><a href="Expr.less.html">less</a></li><li><a href="Expr.lessEqual.html">lessEqual</a></li><li><a href="Expr.multiply.html">multiply</a></li><li><a href="Expr.negate.html">negate</a></li><li><a href="Expr.not.html">not</a></li><li><a href="Expr.notEqual.html">notEqual</a></li><li><a href="Expr.or.html">or</a></li><li><a href="Expr.power.html">power</a></li><li><a href="Expr.remainder.html">remainder</a></li><li><a href="Expr.subtract.html">subtract</a></li><li><a href="Expr.toBool.html">toBool</a></li><li><a href="Expr.toDatetime.html">toDatetime</a></li><li><a href="Expr.toDay.html">toDay</a></li><li><a href="Expr.toHours.html">toHours</a></li><li><a href="Expr.toMinutes.html">toMinutes</a></li><li><a href="Expr.toMonth.html">toMonth</a></li><li><a href="Expr.toNumber.html">toNumber</a></li><li><a href="Expr.toSeconds.html">toSeconds</a></li><li><a href="Expr.toString.html">toString</a></li><li><a href="Expr.toWeekday.html">toWeekday</a></li><li><a href="Expr.toYear.html">toYear</a></li><li><a href="ExprArithmetic.html">ExprArithmetic</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprCompare.html">ExprCompare</a></li><li><a href="ExprConvert.html">ExprConvert</a></li><li><a href="ExprDatetime.html">ExprDatetime</a></li><li><a href="ExprLogical.html">ExprLogical</a></li><li><a href="ExprNegate.html">ExprNegate</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprTypecheck.html">ExprTypecheck</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="HTMLFactory.html">HTMLFactory</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="Stage.ANOVA.html">ANOVA</a></li><li><a href="Stage.bar.html">bar</a></li><li><a href="Stage.box.html">box</a></li><li><a href="Stage.dot.html">dot</a></li><li><a href="Stage.drop.html">drop</a></li><li><a href="Stage.filter.html">filter</a></li><li><a href="Stage.groupBy.html">groupBy</a></li><li><a href="Stage.histogram.html">histogram</a></li><li><a href="Stage.join.html">join</a></li><li><a href="Stage.KolmogorovSmirnov.html">KolmogorovSmirnov</a></li><li><a href="Stage.KruskalWallis.html">KruskalWallis</a></li><li><a href="Stage.mutate.html">mutate</a></li><li><a href="Stage.notify.html">notify</a></li><li><a href="Stage.read.html">read</a></li><li><a href="Stage.scatter.html">scatter</a></li><li><a href="Stage.select.html">select</a></li><li><a href="Stage.sort.html">sort</a></li><li><a href="Stage.summarize.html">summarize</a></li><li><a href="Stage.TTestOneSample.html">TTestOneSample</a></li><li><a href="Stage.TTestPaired.html">TTestPaired</a></li><li><a href="Stage.ungroup.html">ungroup</a></li><li><a href="Stage.unique.html">unique</a></li><li><a href="Stage.ZTestOneSample.html">ZTestOneSample</a></li><li><a href="StageBase.html">StageBase</a></li><li><a href="StagePlot.html">StagePlot</a></li><li><a href="StageStats.html">StageStats</a></li><li><a href="StageTransform.html">StageTransform</a></li><li><a href="Statistics.html">Statistics</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="UI.html">UI</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#DispatchJSON">DispatchJSON</a></li><li><a href="global.html#Expr">Expr</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#fromJSON">fromJSON</a></li><li><a href="global.html#FULL_PLOT_SIZE">FULL_PLOT_SIZE</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#PRECISION">PRECISION</a></li><li><a href="global.html#registerFromJSON">registerFromJSON</a></li><li><a href="global.html#Stage">Stage</a></li><li><a href="global.html#Summarize">Summarize</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

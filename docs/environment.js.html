@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: util.js</title>
+    <title>JSDoc: Source: environment.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: util.js</h1>
+    <h1 class="page-title">Source: environment.js</h1>
 
     
 
@@ -28,163 +28,92 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
 
-const papaparse = require('papaparse')
+const util = require('./util')
 
 /**
- * Unilaterally fail (used to mark unimplemented functions).
- * @param {string} message What to report.
+ * Runtime environment.
  */
-const fail = (message) => {
-  throw new Error(message)
-}
-
-/**
- * Raise exception if a condition doesn't hold.
- * @param {Boolean} condition Condition that must be true.
- * @param {string} message What to say if it isn't.
- */
-const check = (condition, message) => {
-  if (!condition) {
-    fail(message)
-  }
-}
-
-/**
- * Check that a value is numeric.
- * @param {whatever} value What to check.
- */
-const checkNumber = (value) => {
-  check((value === MISSING) ||
-        (typeof value === 'number'),
-        `Value ${value} is not missing or a number`)
-  return value
-}
-
-/**
- * Check that the types of two values are the same.
- * @param {whatever} left One of the values.
- * @param {whatever} right The other value.
- */
-const checkTypeEqual = (left, right) => {
-  check((left === MISSING) ||
-        (right === MISSING) ||
-        (typeof left === typeof right),
-        `Values ${left} and ${right} have different types`)
-}
-
-/**
- * Convert CSV-formatted text to array of objects with uniform keys.
- * @param {string} text Text to parse.
- * @returns Array of objects.
- */
-const csvToTable = (text) => {
-  const seen = new Map() // used across all calls to transformHeader
-  const transformHeader = (name) => {
-    // Simple character fixes.
-    name = name
-      .trim()
-      .replace(/ /g, '_')
-      .replace(/[^A-Za-z0-9_]/g, '')
-
-    // Ensure header is not empty after character fixes.
-    if (name.length === 0) {
-      name = 'EMPTY'
-    }
-
-    // Name must start with underscore or letter.
-    if (!name.match(/^[_A-Za-z]/)) {
-      name = `_${name}`
-    }
-
-    // Name must be unique.
-    if (seen.has(name)) {
-      const serial = seen.get(name) + 1
-      seen.set(name, serial)
-      name = `${name}_${serial}`
-    }
-    else {
-      seen.set(name, 0)
-    }
-
-    return name
+class Environment {
+  /**
+   * Construct a new runtime environment.
+   * @param {function} howToGetData Function to get data given a path.
+   */
+  constructor (howToGetData) {
+    this.howToGetData = howToGetData
+    this.log = []
+    this.errors = []
+    this.results = new Map()
+    this.plot = null
+    this.stats = null
   }
 
-  const result = papaparse.parse(text.trim(), {
-    dynamicTyping: true,
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: transformHeader,
-    transform: function (value) {
-      return (value === 'NA' | value === null) ? MISSING : value
-    }
-  })
-
-  return result.data
-}
-
-/**
- * Value to indicate missing data.
- */
-const MISSING = null
-
-/**
- * Central dispatch for JSON persistence, placed here to avoid circular dependencies.
- */
-const DispatchJSON = new Map()
-
-/**
- * Register persistence lookup function.
- * @param {function} func JSON-to-object function.
- * @param {string[]} allKinds Identifiers to be handled by that function.
- */
-const registerFromJSON = (func, ...allKinds) => {
-  allKinds.forEach(kind => {
-    check(kind &amp;&amp;
-          (typeof kind === 'string') &amp;&amp;
-          (kind[0] === '@'),
-          `Require @name as kind not "${kind}"`)
-    check(typeof func === 'function',
-          `Require runnable function for dispatch`)
-    DispatchJSON.set(kind, func)
-  })
-}
-
-/**
- * Turn JSON into objects.
- * @param {JSON} json What to interpret.
- * @returns Object.
- */
-const fromJSON = (json) => {
-  if (!Array.isArray(json)) {
-    return json
-  }
-  if (json.length === 0) {
-    return json
+  /**
+   * Get data given a path.
+   * @param {string} path Identifier for data.
+   * @returns Data table.
+   */
+  getData (path) {
+    return this.howToGetData(path)
   }
 
-  const first = json[0]
-  if ((!first) ||
-      (typeof first != 'string') ||
-      (!first.startsWith('@'))) {
-    return json.map(x => fromJSON(x))
+  /**
+   * Get stored result from program execution.
+   * @param {string} name Result name.
+   * @returns Saved dataframe.
+   */
+  getResult (name) {
+    util.check(name &amp;&amp; (typeof name === 'string'),
+               `Require non-empty string for results name`)
+    util.check(this.results.has(name),
+               `Cannot find ${name} in results`)
+    return this.results.get(name)
   }
 
-  if (DispatchJSON.has(first)) {
-    return DispatchJSON.get(first)(json)
+  /**
+   * Store a result for later examination.
+   * @param {string} name Result name.
+   * @param {DataFrame} df DataFrame to save.
+   */
+  setResult (name, df) {
+    this.results.set(name, df)
   }
 
-  fail(`Unknown kind "${kind}"`)
+  /**
+   * Store a Vega-Lite plot spec.
+   * @param {Object} spec Vega-Lite plot spec.
+   */
+  setPlot (spec) {
+    this.plot = spec
+  }
+
+  /**
+   * Store results of a statistical test.
+   * @param {Object} result Result of test.
+   * @param {Object} legend Explanation of result.
+   */
+  setStatistics (result, legend) {
+    this.stats = {result, legend}
+  }
+
+  /**
+   * Append a message to the runtime log.
+   * @param {string} message To save.
+   */
+  appendLog (message) {
+    this.log.push(message)
+  }
+
+  /**
+   * Append a message to the error log.
+   * @param {string} message To save.
+   */
+  appendError (message) {
+    this.errors.push(message)
+  }
 }
 
 module.exports = {
-  fail,
-  check,
-  checkNumber,
-  checkTypeEqual,
-  csvToTable,
-  MISSING,
-  registerFromJSON,
-  fromJSON
+  Environment
 }
 </code></pre>
         </article>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: util.js</title>
+    <title>JSDoc: Source: pipeline.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: util.js</h1>
+    <h1 class="page-title">Source: pipeline.js</h1>
 
     
 
@@ -28,163 +28,122 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
 
-const papaparse = require('papaparse')
+const util = require('./util')
+const {StageBase, Stage} = require('./stage')
 
 /**
- * Unilaterally fail (used to mark unimplemented functions).
- * @param {string} message What to report.
+ * Manage a single pipeline.
  */
-const fail = (message) => {
-  throw new Error(message)
-}
-
-/**
- * Raise exception if a condition doesn't hold.
- * @param {Boolean} condition Condition that must be true.
- * @param {string} message What to say if it isn't.
- */
-const check = (condition, message) => {
-  if (!condition) {
-    fail(message)
+class Pipeline {
+  constructor (name, ...stages) {
+    util.check(name &amp;&amp; (typeof name === 'string'),
+               `Require non-empty name for pipeline`)
+    this.name = name
+    this.stages = stages
   }
-}
 
-/**
- * Check that a value is numeric.
- * @param {whatever} value What to check.
- */
-const checkNumber = (value) => {
-  check((value === MISSING) ||
-        (typeof value === 'number'),
-        `Value ${value} is not missing or a number`)
-  return value
-}
+  /**
+   * Restore from JSON.
+   * @param {JSON} json To convert.
+   * @returns Pipeline.
+   */
+  static fromJSON (json) {
+    util.check(Array.isArray(json) &amp;&amp;
+               (json.length > 1) &amp;&amp;
+               (json[0] === Pipeline.KIND),
+              `Expected array with pipeline element`)
+    const name = json[1]
+    const stages = json.slice(2).map(blob => util.fromJSON(blob))
+    return new Pipeline(name, ...stages)
+  }
 
-/**
- * Check that the types of two values are the same.
- * @param {whatever} left One of the values.
- * @param {whatever} right The other value.
- */
-const checkTypeEqual = (left, right) => {
-  check((left === MISSING) ||
-        (right === MISSING) ||
-        (typeof left === typeof right),
-        `Values ${left} and ${right} have different types`)
-}
+  /**
+   * Convert to JSON.
+   */
+  toJSON () {
+    return [Pipeline.KIND,
+            this.name,
+            ...this.stages.map(stage => stage.toJSON())]
+  }
 
-/**
- * Convert CSV-formatted text to array of objects with uniform keys.
- * @param {string} text Text to parse.
- * @returns Array of objects.
- */
-const csvToTable = (text) => {
-  const seen = new Map() // used across all calls to transformHeader
-  const transformHeader = (name) => {
-    // Simple character fixes.
-    name = name
-      .trim()
-      .replace(/ /g, '_')
-      .replace(/[^A-Za-z0-9_]/g, '')
+  /**
+   * Turn HTML row into a pipeline.
+   */
+  static fromHTML (row) {
+    util.check(row &amp;&amp; (row.tagName.toUpperCase() === 'TR'),
+               `Expected table row`)
+    util.check(row.children.length >= 1,
+               `Pipeline must have at least one cell (its name)`)
+    const first = row.children[0]
+    util.check(first.tagName.toUpperCase() === 'TH',
+               `First cell must be &lt;th> not ${first.tagName}`)
+    const name = first.textContent
+    const stages = Array.from(row).slice(1).map(cell => {
+      util.check((cell.tagName.toUpperCase() === 'TD') &amp;&amp;
+                 (cell.children.length === 1) &amp;&amp;
+                 (cell.firstChild.tagName.toUpperCase() === 'DIV'),
+                 `Expected table cell with one div child in pipeline`)
+      Stage.fromHTML(cell.firstChild)
+    })
+    return new Pipeline(name, ...stages)
+  }
 
-    // Ensure header is not empty after character fixes.
-    if (name.length === 0) {
-      name = 'EMPTY'
+  /**
+   * Equality check (primarily for testing).
+   * @param {Pipeline} other Other pipeline to compare to.
+   * @returns Boolean.
+   */
+  equal (other) {
+    util.check(other instanceof Pipeline,
+               `Can only compare pipelines to pipelines`)
+    return (this.stages.length === other.stages.length) &amp;&amp;
+      this.stages.every((stage, i) => stage.equal(other.stages[i]))
+  }
+
+  /**
+   * What does this pipeline require?
+   * @returns Array of strings.
+   */
+  requires () {
+    return (this.stages.length > 0) ? this.stages[0].requires : []
+  }
+
+  /**
+   * Run this pipeline.
+   * @param {Environment} env The runtime environment.
+   * @returns The result of the final stage.
+   */
+  run (env) {
+    util.check(Array.isArray(this.stages) &amp;&amp;
+               (this.stages.length > 0) &amp;&amp;
+               this.stages.every(stage => stage instanceof StageBase),
+               `Require non-empty array of stages`)
+    util.check(!this.stages[0].input,
+               `First stage of pipeline cannot require input`)
+    util.check(this.stages.slice(1).every(stage => stage.input),
+               `All stages of pipeline after the first must take input`)
+    util.check(this.stages.slice(0, -1).every(stage => stage.output),
+               `All stages of pipeline except the last must produce output`)
+
+    let data = null
+    for (const stage of this.stages) {
+      data = stage.run(env, data)
     }
 
-    // Name must start with underscore or letter.
-    if (!name.match(/^[_A-Za-z]/)) {
-      name = `_${name}`
-    }
-
-    // Name must be unique.
-    if (seen.has(name)) {
-      const serial = seen.get(name) + 1
-      seen.set(name, serial)
-      name = `${name}_${serial}`
-    }
-    else {
-      seen.set(name, 0)
-    }
-
-    return name
+    const last = this.stages.slice(-1)[0]
+    return {name: last.produces, data: data}
   }
-
-  const result = papaparse.parse(text.trim(), {
-    dynamicTyping: true,
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: transformHeader,
-    transform: function (value) {
-      return (value === 'NA' | value === null) ? MISSING : value
-    }
-  })
-
-  return result.data
 }
 
 /**
- * Value to indicate missing data.
+ * Indicate that persisted JSON is pipeline.
  */
-const MISSING = null
+Pipeline.KIND = '@pipeline'
 
-/**
- * Central dispatch for JSON persistence, placed here to avoid circular dependencies.
- */
-const DispatchJSON = new Map()
-
-/**
- * Register persistence lookup function.
- * @param {function} func JSON-to-object function.
- * @param {string[]} allKinds Identifiers to be handled by that function.
- */
-const registerFromJSON = (func, ...allKinds) => {
-  allKinds.forEach(kind => {
-    check(kind &amp;&amp;
-          (typeof kind === 'string') &amp;&amp;
-          (kind[0] === '@'),
-          `Require @name as kind not "${kind}"`)
-    check(typeof func === 'function',
-          `Require runnable function for dispatch`)
-    DispatchJSON.set(kind, func)
-  })
-}
-
-/**
- * Turn JSON into objects.
- * @param {JSON} json What to interpret.
- * @returns Object.
- */
-const fromJSON = (json) => {
-  if (!Array.isArray(json)) {
-    return json
-  }
-  if (json.length === 0) {
-    return json
-  }
-
-  const first = json[0]
-  if ((!first) ||
-      (typeof first != 'string') ||
-      (!first.startsWith('@'))) {
-    return json.map(x => fromJSON(x))
-  }
-
-  if (DispatchJSON.has(first)) {
-    return DispatchJSON.get(first)(json)
-  }
-
-  fail(`Unknown kind "${kind}"`)
-}
+util.registerFromJSON(Pipeline.fromJSON, Pipeline.KIND)
 
 module.exports = {
-  fail,
-  check,
-  checkNumber,
-  checkTypeEqual,
-  csvToTable,
-  MISSING,
-  registerFromJSON,
-  fromJSON
+  Pipeline
 }
 </code></pre>
         </article>

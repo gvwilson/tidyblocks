@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: util.js</title>
+    <title>JSDoc: Source: program.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: util.js</h1>
+    <h1 class="page-title">Source: program.js</h1>
 
     
 
@@ -28,163 +28,174 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict'
 
-const papaparse = require('papaparse')
+const util = require('./util')
+const {DataFrame} = require('./dataframe')
+const {Environment} = require('./environment')
+const {Pipeline} = require('./pipeline')
 
 /**
- * Unilaterally fail (used to mark unimplemented functions).
- * @param {string} message What to report.
+ * Manage an entire program.
  */
-const fail = (message) => {
-  throw new Error(message)
-}
+class Program {
+  /**
+   * Create a runnable program with some pipelines.
+   * The environment is filled in when the program runs.
+   */
+  constructor (...pipelines) {
+    this.env = null
+    this.pipelines = []
+    this.queue = []
+    this.waiting = new Map()
 
-/**
- * Raise exception if a condition doesn't hold.
- * @param {Boolean} condition Condition that must be true.
- * @param {string} message What to say if it isn't.
- */
-const check = (condition, message) => {
-  if (!condition) {
-    fail(message)
+    pipelines.forEach(pipeline => this.register(pipeline))
   }
-}
 
-/**
- * Check that a value is numeric.
- * @param {whatever} value What to check.
- */
-const checkNumber = (value) => {
-  check((value === MISSING) ||
-        (typeof value === 'number'),
-        `Value ${value} is not missing or a number`)
-  return value
-}
+  /**
+   * Restore from JSON.
+   */
+  static fromJSON (json) {
+    util.check(Array.isArray(json) &amp;&amp;
+               (json.length > 0) &amp;&amp;
+               (json[0] === Program.KIND),
+              `Expected array with program kind`)
+    const pipelines = json.slice(1).map(blob => Pipeline.fromJSON(blob))
+    return new Program(...pipelines)
+  }
 
-/**
- * Check that the types of two values are the same.
- * @param {whatever} left One of the values.
- * @param {whatever} right The other value.
- */
-const checkTypeEqual = (left, right) => {
-  check((left === MISSING) ||
-        (right === MISSING) ||
-        (typeof left === typeof right),
-        `Values ${left} and ${right} have different types`)
-}
+  /**
+   * Convert program to JSON.
+   */
+  toJSON () {
+    return [Program.KIND, ...this.pipelines.map(pipeline => pipeline.toJSON())]
+  }
 
-/**
- * Convert CSV-formatted text to array of objects with uniform keys.
- * @param {string} text Text to parse.
- * @returns Array of objects.
- */
-const csvToTable = (text) => {
-  const seen = new Map() // used across all calls to transformHeader
-  const transformHeader = (name) => {
-    // Simple character fixes.
-    name = name
-      .trim()
-      .replace(/ /g, '_')
-      .replace(/[^A-Za-z0-9_]/g, '')
+  /**
+   * Create an empty program as HTML.
+   */
+  static EmptyHTML (factory) {
+    const idCell = factory.pipelineIDCell(0)
+    const firstCell = factory.placeholder()
+    return `&lt;table id="briq-program">&lt;tbody>&lt;tr>${idCell}${firstCell}&lt;/tr>&lt;/tbody>&lt;/table>`
+  }
 
-    // Ensure header is not empty after character fixes.
-    if (name.length === 0) {
-      name = 'EMPTY'
-    }
+  /**
+   * Convert program to HTML.
+   */
+  toHTML (factory) {
+    const pipelines = this.pipelines.map(p => {
+      return p.stages.map(s => {
+        return `&lt;td>${s.toHTML(factory)}&lt;/td>`
+      })
+    })
+    const longest = Math.max(...pipelines.map(p => p.length))
+    const justified = pipelines.map(p => {
+      const temp = [...p]
+      while (temp.length &lt; longest) {
+        temp.push(factory.placeholder())
+      }
+      return temp
+    })
+    const body = justified
+      .map((p, i) => `&lt;tr>${factory.pipelineIDCell(i)}${p.join('')}&lt;/tr>`)
+      .join('')
+    const table = `&lt;table id="briq-program">&lt;tbody>${body}&lt;/tbody>&lt;/table>`
+    return table
+  }
 
-    // Name must start with underscore or letter.
-    if (!name.match(/^[_A-Za-z]/)) {
-      name = `_${name}`
-    }
+  /**
+   * Convert HTML to program.
+   */
+  static fromHTML (table) {
+    util.check(table &amp;&amp; (table.tagName.toUpperCase() === 'TABLE'),
+               `Expected table`)
+    const body = table.firstChild
+    const pipelines = Array.from(body.children).map(row => Pipeline.fromHTML(row))
+    return new Program(...pipelines)
+  }
 
-    // Name must be unique.
-    if (seen.has(name)) {
-      const serial = seen.get(name) + 1
-      seen.set(name, serial)
-      name = `${name}_${serial}`
+  /**
+   * Check equality with another program (primarily for testing).
+   */
+  equal (other) {
+    util.check(other instanceof Program,
+               `Can only compare programs to programs`)
+    return (this.pipelines.length === other.pipelines.length) &amp;&amp;
+      this.pipelines.every((pipeline, i) => pipeline.equal(other.pipelines[i]))
+  }
+
+  /**
+   * Signal the manager that a named pipeline has finished running.
+   * This enqueues pipeline functions to run if their dependencies are satisfied.
+   * @param {string} name Name of the pipeline that just completed.
+   * @param {Object} data The DataFrame produced by the pipeline.
+   */
+  signal (name, data) {
+    util.check(name &amp;&amp; (typeof name === 'string'),
+               `Cannot signal with empty name`)
+    util.check(data instanceof DataFrame,
+               `Data must be a dataframe`)
+    util.check(this.env instanceof Environment,
+               `Program must have non-null environment when signalling`)
+    this.env.setResult(name, data)
+    const toRemove = []
+    this.waiting.forEach((dependencies, pipeline) => {
+      dependencies.delete(name)
+      if (dependencies.size === 0) {
+        this.queue.push(pipeline)
+        toRemove.push(pipeline)
+      }
+    })
+    toRemove.forEach(pipeline => this.waiting.delete(pipeline))
+  }
+
+  /**
+   * Register a new pipeline function with what it depends on and what it produces.
+   * @param {Pipeline} pipeline What to register.
+   */
+  register (pipeline) {
+    console.log('TRYING TO REGISTER', pipeline)
+    util.check(pipeline instanceof Pipeline,
+               `Pipelines must be instances of the Pipeline class`)
+    this.pipelines.push(pipeline)
+    const requires = pipeline.requires()
+    if (requires.length === 0) {
+      this.queue.push(pipeline)
     }
     else {
-      seen.set(name, 0)
+      this.waiting.set(pipeline, new Set(requires))
     }
-
-    return name
   }
 
-  const result = papaparse.parse(text.trim(), {
-    dynamicTyping: true,
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: transformHeader,
-    transform: function (value) {
-      return (value === 'NA' | value === null) ? MISSING : value
+  /**
+   * Run all pipelines in an order that respects dependencies within an environment.
+   * This depends on `signal` to add pipelines to the queue.
+   */
+  run (env) {
+    this.env = env
+    try {
+      while (this.queue.length > 0) {
+        const pipeline = this.queue.shift()
+        const {name, data} = pipeline.run(this.env)
+        if (name) {
+          this.signal(name, data)
+        }
+      }
     }
-  })
-
-  return result.data
+    catch (err) {
+      this.env.appendError(`${err.message}: ${err.stack}`)
+    }
+  }
 }
 
 /**
- * Value to indicate missing data.
+ * Indicate that persisted JSON is program.
  */
-const MISSING = null
+Program.KIND = '@program'
 
-/**
- * Central dispatch for JSON persistence, placed here to avoid circular dependencies.
- */
-const DispatchJSON = new Map()
-
-/**
- * Register persistence lookup function.
- * @param {function} func JSON-to-object function.
- * @param {string[]} allKinds Identifiers to be handled by that function.
- */
-const registerFromJSON = (func, ...allKinds) => {
-  allKinds.forEach(kind => {
-    check(kind &amp;&amp;
-          (typeof kind === 'string') &amp;&amp;
-          (kind[0] === '@'),
-          `Require @name as kind not "${kind}"`)
-    check(typeof func === 'function',
-          `Require runnable function for dispatch`)
-    DispatchJSON.set(kind, func)
-  })
-}
-
-/**
- * Turn JSON into objects.
- * @param {JSON} json What to interpret.
- * @returns Object.
- */
-const fromJSON = (json) => {
-  if (!Array.isArray(json)) {
-    return json
-  }
-  if (json.length === 0) {
-    return json
-  }
-
-  const first = json[0]
-  if ((!first) ||
-      (typeof first != 'string') ||
-      (!first.startsWith('@'))) {
-    return json.map(x => fromJSON(x))
-  }
-
-  if (DispatchJSON.has(first)) {
-    return DispatchJSON.get(first)(json)
-  }
-
-  fail(`Unknown kind "${kind}"`)
-}
+util.registerFromJSON(Program.fromJSON, Program.KIND)
 
 module.exports = {
-  fail,
-  check,
-  checkNumber,
-  checkTypeEqual,
-  csvToTable,
-  MISSING,
-  registerFromJSON,
-  fromJSON
+  Program
 }
 </code></pre>
         </article>
