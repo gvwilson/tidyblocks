@@ -86,10 +86,13 @@ class HTMLFactory {
   /**
    * Restore an input field.
    */
-  fromInput (cell) {
+  fromInput (cell, splitOnCommas) {
     util.check(cell && (cell.tagName.toUpperCase() === 'INPUT'),
                `Expected input cell`)
-    return cell.getAttribute('value')
+    const raw = cell.getAttribute('value')
+    return splitOnCommas
+      ? raw.split(',').map(f => f.trim())
+      : raw
   }
 
   /**

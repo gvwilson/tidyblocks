@@ -668,9 +668,61 @@ describe('converts HTML back to programs', () => {
     done()
   })
 
-  it('converts a program containing a single ungroup stage', (done) => {
+  it('converts a program containing a single drop stage with multiple columns', (done) => {
     const factory = new HTMLFactory()
-    const original = new Program(new Pipeline('name', new Stage.ungroup()))
+    const original = new Program(new Pipeline('name', new Stage.drop(['yellow', 'orange'])))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single filter stage', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.filter(new Expr.constant(true))))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single groupBy stage with multiple columns', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.groupBy(['yellow', 'orange'])))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single join stage', (done) => {
+    const factory = new HTMLFactory()
+    const stage = new Stage.join('at', 'ac', 'zt', 'zc')
+    const original = new Program(new Pipeline('name', stage))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single mutate stage', (done) => {
+    const factory = new HTMLFactory()
+    const stage = new Stage.mutate('dazzle', new Expr.constant(1234))
+    const original = new Program(new Pipeline('name', stage))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single notify stage', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.notify('signal')))
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Program.fromHTML(factory, dom)
     assert(roundtrip.equal(original),
@@ -681,6 +733,59 @@ describe('converts HTML back to programs', () => {
   it('converts a program containing a single read stage', (done) => {
     const factory = new HTMLFactory()
     const original = new Program(new Pipeline('name', new Stage.read('/path.csv')))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single select stage with multiple columns', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.select(['yellow', 'orange'])))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single sort stage with multiple columns', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.sort(['yellow', 'orange'])))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single summarize stage with multiple summarizers', (done) => {
+    const factory = new HTMLFactory()
+    const maxLeft = new Summarize.maximum('left')
+    const minRight = new Summarize.minimum('right')
+    const stage = new Stage.summarize(maxLeft, minRight)
+    const original = new Program(new Pipeline('name', stage))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single ungroup stage', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.ungroup()))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts a program containing a single unique stage with multiple columns', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name', new Stage.unique(['yellow', 'orange'])))
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Program.fromHTML(factory, dom)
     assert(roundtrip.equal(original),

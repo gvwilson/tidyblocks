@@ -173,6 +173,9 @@ const Stage = {
         factory.input(this.columns.join(', '))
       )
     }
+    static fromHTML (factory, columnsNode) {
+      return new Stage.drop(factory.fromInput(columnsNode, true))
+    }
     static MakeBlank () {
       return new Stage.drop([])
     }
@@ -230,6 +233,9 @@ const Stage = {
         factory.input(this.columns.join(', '))
       )
     }
+    static fromHTML (factory, columnsNode) {
+      return new Stage.groupBy(factory.fromInput(columnsNode, true))
+    }
     static MakeBlank () {
       return new Stage.groupBy([])
     }
@@ -274,6 +280,10 @@ const Stage = {
         factory.input(this.rightCol)
       )
     }
+    static fromHTML (factory, leftNameNode, leftColNode, rightNameNode, rightColNode) {
+      const args = [leftNameNode, leftColNode, rightNameNode, rightColNode].map(n => factory.fromInput(n, false))
+      return new Stage.join(...args)
+    }
     static MakeBlank () {
       return new Stage.join('', '', '', '')
     }
@@ -314,25 +324,28 @@ const Stage = {
 
   /**
    * Notify that a result is available.
-   * @param {string} label Name to use for notification.
+   * @param {string} signal Name to use for notification.
    */
   notify: class extends StageTransform {
-    constructor (label) {
-      super('notify', [], label, true, false)
-      this.label = label
+    constructor (signal) {
+      super('notify', [], signal, true, false)
+      this.signal = signal
     }
     run (runner, df) {
       runner.appendLog(this.name)
       return df
     }
     toJSON () {
-      return super.toJSON(this.label)
+      return super.toJSON(this.signal)
     }
     toHTML (factory) {
       return factory.widget(
         factory.label(this.name),
-        factory.input(this.label)
+        factory.input(this.signal)
       )
+    }
+    static fromHTML (factory, signalNode) {
+      return new Stage.notify(factory.fromInput(signalNode, false))
     }
     static MakeBlank () {
       return new Stage.notify('')
@@ -364,7 +377,7 @@ const Stage = {
       )
     }
     static fromHTML (factory, pathNode) {
-      return new Stage.read(factory.fromInput(pathNode))
+      return new Stage.read(factory.fromInput(pathNode, false))
     }
     static MakeBlank () {
       return new Stage.read('')
@@ -392,6 +405,9 @@ const Stage = {
         factory.label(this.name),
         factory.input(this.columns.join(', '))
       )
+    }
+    static fromHTML (factory, columnsNode) {
+      return new Stage.select(factory.fromInput(columnsNode, true))
     }
     static MakeBlank () {
       return new Stage.select([])
@@ -423,6 +439,9 @@ const Stage = {
         factory.label('reverse'),
         factory.check()
       )
+    }
+    static fromHTML (factory, columnsNode) {
+      return new Stage.sort(factory.fromInput(columnsNode, true))
     }
     static MakeBlank () {
       return new Stage.sort([])
@@ -512,6 +531,9 @@ const Stage = {
         factory.label(this.name),
         factory.input(this.columns.join(', '))
       )
+    }
+    static fromHTML (factory, columnsNode) {
+      return new Stage.unique(factory.fromInput(columnsNode, true))
     }
     static MakeBlank () {
       return new Stage.unique([])
