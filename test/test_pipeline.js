@@ -5,12 +5,8 @@ const assert = require('assert')
 const util = require('../libs/util')
 const {DataFrame} = require('../libs/dataframe')
 const {Stage} = require('../libs/stage')
+const {Environment} = require('../libs/environment')
 const {Pipeline} = require('../libs/pipeline')
-
-const {
-  MockStage,
-  MockEnv
-} = require('./mock')
 
 const {
   Table,
@@ -38,7 +34,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute an empty pipeline', (done) => {
     const pipeline = new Pipeline('test')
-    assert.throws(() => pipeline.run(new MockEnv()),
+    assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute empty pipeline`)
     done()
@@ -46,7 +42,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute a pipeline whose first stage requires input', (done) => {
     const pipeline = new Pipeline('test', Middle)
-    assert.throws(() => pipeline.run(new MockEnv()),
+    assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute pipeline requiring input`)
     done()
@@ -54,7 +50,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute a pipeline whose later stages require input', (done) => {
     const pipeline = new Pipeline('test', Head, Middle, Head, Middle)
-    assert.throws(() => pipeline.run(new MockEnv()),
+    assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute pipeline whose middle stages require input`)
     done()
@@ -62,7 +58,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute a pipeline whose early stages do not produce output', (done) => {
     const pipeline = new Pipeline('test', Head, Tail, Tail)
-    assert.throws(() => pipeline.run(new MockEnv()),
+    assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute pipeline whose middle stage does not produce output`)
     done()
@@ -70,7 +66,7 @@ describe('executes pipelines', () => {
 
   it('executes a single-stage pipeline without a tail', (done) => {
     const pipeline = new Pipeline('test', Head)
-    const result = pipeline.run(new MockEnv())
+    const result = pipeline.run(new Environment())
     assert.equal(result.name, null,
                  `Result should not be named`)
     assert(result.data.equal(Table),
@@ -80,7 +76,7 @@ describe('executes pipelines', () => {
 
   it('executes a two-stage pipeline without a tail', (done) => {
     const pipeline = new Pipeline('test', Head, Middle)
-    const result = pipeline.run(new MockEnv())
+    const result = pipeline.run(new Environment())
     assert.equal(result.name, null,
                  `Result should not be named`)
     assert(result.data.equal(Table),
@@ -90,7 +86,7 @@ describe('executes pipelines', () => {
 
   it('executes a three-stage pipeline with a tail', (done) => {
     const pipeline = new Pipeline('test', Head, Middle, Tail)
-    const result = pipeline.run(new MockEnv())
+    const result = pipeline.run(new Environment())
     assert.equal(result.name, null,
                  `Result should not be named`)
     assert(result.data.equal(Table),
@@ -100,7 +96,7 @@ describe('executes pipelines', () => {
 
   it('executes a pipeline with notification', (done) => {
     const pipeline = new Pipeline('test', Head, TailNotify)
-    const result = pipeline.run(new MockEnv())
+    const result = pipeline.run(new Environment())
     assert.equal(result.name, 'keyword',
                  `Result should include name`)
     assert(result.data.equal(Table),
@@ -109,7 +105,7 @@ describe('executes pipelines', () => {
   })
 
   it('logs execution', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const pipeline = new Pipeline('test', Head, Middle, Tail)
     const result = pipeline.run(runner)
     assert.deepEqual(runner.log, ['head', 'middle', 'tail'],

@@ -8,10 +8,10 @@ const util = require('./util')
 class Environment {
   /**
    * Construct a new runtime environment.
-   * @param {function} howToGetData Function to get data given a path.
    */
-  constructor (howToGetData) {
-    this.howToGetData = howToGetData
+  constructor () {
+    util.check(typeof Environment.HowToGetData === 'function',
+               `Cannot construct environment before setting data data`)
     this.log = []
     this.errors = []
     this.results = new Map()
@@ -25,7 +25,7 @@ class Environment {
    * @returns Data table.
    */
   getData (path) {
-    return this.howToGetData(path)
+    return Environment.HowToGetData(path)
   }
 
   /**
@@ -83,6 +83,11 @@ class Environment {
     this.errors.push(message)
   }
 }
+
+/**
+ * Function for getting data must be set before class is instantiated.
+ */
+Environment.HowToGetData = null
 
 module.exports = {
   Environment

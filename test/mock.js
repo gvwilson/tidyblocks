@@ -27,7 +27,7 @@ class MockStage extends StageBase {
  * @param {string} path Local path to dataset.
  * @returns Table to turn into dataframe.
  */
-const getLocalData = (path) => {
+Environment.HowToGetData = (path) => {
   util.check(path && (typeof path === 'string'),
              `Path must be non-empty string`)
   path = `${process.cwd()}/${LOCAL_DATA_DIR}/${path}`
@@ -35,23 +35,6 @@ const getLocalData = (path) => {
   return util.csvToTable(text)
 }
 
-/**
- * Testing replacement for pipeline runner.
- */
-class MockEnv extends Environment {
-  /**
-   * Construct with fabricated "results".
-   * @param {[string, DataFrame]} results Pairs of names and dataframes.
-   */
-  constructor (results = null) {
-    super(getLocalData)
-    if (results) {
-      results.forEach(([name, table]) => this.results.set(name, table))
-    }
-  }
-}
-
 module.exports = {
-  MockStage,
-  MockEnv
+  MockStage
 }

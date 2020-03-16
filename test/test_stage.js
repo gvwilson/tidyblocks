@@ -7,13 +7,13 @@ const {DataFrame} = require('../libs/dataframe')
 const {Expr} = require('../libs/expr')
 const {Summarize} = require('../libs/summarize')
 const {Stage} = require('../libs/stage')
+const {Environment} = require('../libs/environment')
 
 const fixture = require('./fixture')
-const {MockEnv} = require('./mock.js')
 
 describe('build dataframe operations', () => {
   it('drops columns', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.drop(['personal'])
     const result = stage.run(runner, new DataFrame(fixture.names))
     const expected = fixture.names.map(row => ({family: row.family}))
@@ -23,7 +23,7 @@ describe('build dataframe operations', () => {
   })
 
   it('filters rows', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const expr = new Expr.column('right')
     const stage = new Stage.filter(expr)
     const result = stage.run(runner, new DataFrame(fixture.bool))
@@ -35,7 +35,7 @@ describe('build dataframe operations', () => {
   })
 
   it('groups data', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.groupBy(['left'])
     const result = stage.run(runner, new DataFrame(fixture.number))
     const groups = new Set(result.data.map(row => row[DataFrame.GROUPCOL]))
@@ -47,8 +47,9 @@ describe('build dataframe operations', () => {
   it('joins', (done) => {
     const leftData = new DataFrame([{leftName: 7, value: 'leftVal'}])
     const rightData = new DataFrame([{rightName: 7, value: 'rightVal'}])
-    const runner = new MockEnv([['leftTable', leftData],
-                                   ['rightTable', rightData]])
+    const runner = new Environment()
+    runner.setResult('leftTable', leftData)
+    runner.setResult('rightTable', rightData)
     const stage = new Stage.join('leftTable', 'leftName', 'rightTable', 'rightName')
     const result = stage.run(runner, null)
     const row = {leftTable_value: 'leftVal', rightTable_value: 'rightVal'}
@@ -59,7 +60,7 @@ describe('build dataframe operations', () => {
   })
 
   it('mutates', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const mutater = new Expr.constant('stuff')
     const stage = new Stage.mutate('value', mutater)
     const result = stage.run(runner, new DataFrame(fixture.names))
@@ -71,7 +72,7 @@ describe('build dataframe operations', () => {
   })
 
   it('notifies', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.notify('answer')
     const input = new DataFrame(fixture.names)
     const result = stage.run(runner, input)
@@ -83,7 +84,7 @@ describe('build dataframe operations', () => {
   })
 
   it('reads data', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.read('names.csv')
     const result = stage.run(runner, null)
     assert(result instanceof DataFrame,
@@ -94,7 +95,7 @@ describe('build dataframe operations', () => {
   })
 
   it('selects', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.select(['personal'])
     const result = stage.run(runner, new DataFrame(fixture.names))
     const expected = fixture.names.map(row => ({personal: row.personal}))
@@ -104,7 +105,7 @@ describe('build dataframe operations', () => {
   })
 
   it('sorts', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.sort(['left'], true)
     const result = stage.run(runner, new DataFrame(fixture.string))
     const actual = result.data.map(row => row.left)
@@ -116,7 +117,7 @@ describe('build dataframe operations', () => {
 
   it('summarizes', (done) => {
     const df = new DataFrame([{left: 3}])
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.summarize(new Summarize.maximum('left'),
                                       new Summarize.minimum('left'))
     const result = stage.run(runner, df)
@@ -127,7 +128,7 @@ describe('build dataframe operations', () => {
   })
 
   it('ungroups', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.ungroup()
     const input = [{a: 1}, {a: 2}]
     input.forEach(row => {row[DataFrame.GROUPCOL] = 1})
@@ -138,7 +139,7 @@ describe('build dataframe operations', () => {
   })
 
   it('finds unique values', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.unique(['a'])
     const input = [{a: 1}, {a: 1}, {a: 2}, {a: 1}]
     const result = stage.run(runner, new DataFrame(input))
@@ -150,7 +151,7 @@ describe('build dataframe operations', () => {
 
 describe('build plots', () => {
   it('creates a bar plot', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.bar('left', 'right')
     const result = stage.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'bar',
@@ -165,7 +166,7 @@ describe('build plots', () => {
   })
 
   it('creates a box plot', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.box('left', 'right')
     const result = stage.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark.type, 'boxplot',
@@ -180,7 +181,7 @@ describe('build plots', () => {
   })
 
   it('creates a dot plot', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.dot('left')
     const result = stage.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark.type, 'circle',
@@ -195,7 +196,7 @@ describe('build plots', () => {
   })
 
   it('creates a histogram', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.histogram('left', 7)
     const result = stage.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'bar',
@@ -210,7 +211,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot without a color', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.scatter('left', 'right', null)
     const result = stage.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'point',
@@ -227,7 +228,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot with a color', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.scatter('left', 'right', 'right')
     const result = stage.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'point',
@@ -282,49 +283,49 @@ describe('build plots', () => {
 
 describe('build statistics', () => {
   it('runs an ANOVA', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.ANOVA(0.05, 'green', 'blue')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs Kolmogorov-Smirnov', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.KolmogorovSmirnov(0.01, 2.0, 0.75, 'blue')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs Kruskal-Wallis', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.KruskalWallis(0.05, 'green', 'blue')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs one-sided two-sample t-test', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.TTestOneSample(0.0, 0.05, 'blue')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs a paired two-sided t-test with different values', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.TTestPaired(0.05, 'blue', 'green')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs a paired two-sided t-test with matching values', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.TTestPaired(0.05, 'blue', 'blue')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs a one-sample z-test', (done) => {
-    const runner = new MockEnv()
+    const runner = new Environment()
     const stage = new Stage.ZTestOneSample(1.0, 0.5, 0.05, 'blue')
     const result = stage.run(runner, new DataFrame(fixture.Colors))
     done()

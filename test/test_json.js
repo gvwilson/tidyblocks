@@ -9,8 +9,6 @@ const {Stage} = require('../libs/stage')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 
-const {MockEnv} = require('./mock')
-
 const checkObject = (fixture, expected, message) => {
   const actual = util.fromJSON(fixture)
   assert.deepEqual(actual, expected, message)

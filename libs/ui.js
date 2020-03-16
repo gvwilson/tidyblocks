@@ -46,8 +46,10 @@ class UI {
       throw new Error('require code during instance construction')
     }
     this.briq = briq
+    this.briq.Environment.HowToGetData = UI.GetData
+    this.env = new this.briq.Environment()
+
     this.data = new Map()
-    this.env = new this.briq.Environment(UI.GetData)
     this.program = null
     this.factory = new this.briq.HTMLFactory()
     this.redisplay()

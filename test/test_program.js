@@ -5,13 +5,11 @@ const assert = require('assert')
 const util = require('../libs/util')
 const {DataFrame} = require('../libs/dataframe')
 const {Stage} = require('../libs/stage')
+const {Environment} = require('../libs/environment')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 
-const {
-  MockStage,
-  MockEnv
-} = require('./mock')
+const {MockStage} = require('./mock')
 
 const {
   Table,
@@ -28,7 +26,7 @@ describe('executes program', () => {
     assert.throws(() => program.notify('name', new DataFrame([])),
                   Error,
                   `Should require environment when doing notification`)
-    program.env = new MockEnv()
+    program.env = new Environment()
     assert.throws(() => program.notify('', new DataFrame([])),
                   Error,
                   `Should require notification name`)
@@ -41,7 +39,7 @@ describe('executes program', () => {
   it('can notify when nothing is waiting', (done) => {
     const program = new Program()
     const df = new DataFrame([])
-    const env = new MockEnv()
+    const env = new Environment()
     program.env = env
     program.signal('name', df)
     assert(df.equal(env.getResult('name')),
@@ -103,7 +101,7 @@ describe('executes program', () => {
     assert.equal(program.waiting.size, 1,
                  `Should have one non-runnable pipeline`)
 
-    program.env = new MockEnv()
+    program.env = new Environment()
     program.signal('first', df)
     assert.equal(program.waiting.size, 0,
                  `Waiting set should be empty`)
@@ -116,7 +114,7 @@ describe('executes program', () => {
 
   it('makes something runnable when its last dependency resolves', (done) => {
     const program = new Program()
-    program.env = new MockEnv()
+    program.env = new Environment()
     const requires = ['first', 'second', 'third']
     const last = new MockStage('last', Pass, requires, null, true, true)
     const lastPipe = new Pipeline('lastPipe', last)
@@ -146,7 +144,7 @@ describe('executes program', () => {
 
   it('only makes some things runnable', (done) => {
     const program = new Program()
-    program.env = new MockEnv()
+    program.env = new Environment()
     const leftStage = new MockStage('left', Pass, ['something'], null, true, true)
     const leftPipe = new Pipeline('leftPipe', leftStage)
     const df = new DataFrame([])
@@ -176,7 +174,7 @@ describe('executes program', () => {
     const failure = new Pipeline('failure', stage)
     program.register(failure)
 
-    const env = new MockEnv()
+    const env = new Environment()
     program.run(env)
     assert.equal(env.errors.length, 1,
                  `No saved error message`)
@@ -190,7 +188,7 @@ describe('executes program', () => {
     const pipeline = new Pipeline('test', Head, Tail)
     program.register(pipeline)
 
-    const env = new MockEnv()
+    const env = new Environment()
     program.run(env)
     assert.equal(env.results.size, 0,
                  `Nothing should be registered`)
@@ -202,7 +200,7 @@ describe('executes program', () => {
     const pipeline = new Pipeline('test', Head, TailNotify)
     program.register(pipeline)
 
-    const env = new MockEnv()
+    const env = new Environment()
     program.run(env)
     assert(env.getResult('keyword').equal(Table),
            `Missing or incorrect table`)
@@ -217,7 +215,7 @@ describe('executes program', () => {
     const pipeNotify = new Pipeline('pipeNotify', Head, TailNotify)
     program.register(pipeNotify)
 
-    const env = new MockEnv()
+    const env = new Environment()
     program.run(env)
     assert(env.getResult('keyword').equal(Table),
            `Missing or incorrect table`)
@@ -238,7 +236,7 @@ describe('executes program', () => {
     program.register(pipeNotify)
     program.register(pipeRequireLocal)
 
-    const env = new MockEnv()
+    const env = new Environment()
     program.run(env)
     assert(env.getResult('keyword').equal(Table),
            `Missing or incorrect table`)
@@ -257,7 +255,7 @@ describe('executes program', () => {
     program.register(new Pipeline('makeBeta', Head, tailBeta))
     program.register(new Pipeline('doJoin', join, TailNotify))
 
-    const env = new MockEnv()
+    const env = new Environment()
     program.run(env)
     assert.deepEqual(env.errors, [],
                      `Should not have an error message`)
