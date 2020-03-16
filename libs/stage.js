@@ -775,33 +775,6 @@ util.registerFromJSON(
   Stage.STATS
 )
 
-// Define field types - must be done here to ensure Stage.TRANSFORM etc.
-// have been defined.
-Stage.FIELDS = [
-  [Stage.TRANSFORM, 'drop', '!textMulti'],
-  [Stage.TRANSFORM, 'filter', '!expr'],
-  [Stage.TRANSFORM, 'groupBy', '!expr'],
-  [Stage.TRANSFORM, 'join', '!text', '!text', '!text', '!text'],
-  [Stage.TRANSFORM, 'mutate', '!text', '!expr'],
-  [Stage.TRANSFORM, 'notify', '!text'],
-  [Stage.TRANSFORM, 'read', '!text'],
-  [Stage.TRANSFORM, 'select', '!textMulti'],
-  [Stage.TRANSFORM, 'sort', '!textMulti', 'reverse', '!bool'],
-  [Stage.TRANSFORM, 'ungroup'],
-  [Stage.TRANSFORM, 'unique', '!textMulti'],
-  [Stage.PLOT, 'bar', 'x', '!text', 'y', '!text'],
-  [Stage.PLOT, 'box', 'x', '!text', 'y', '!text'],
-  [Stage.PLOT, 'dot', 'x', '!text'],
-  [Stage.PLOT, 'histogram', 'column', '!text', 'bins', '!text'],
-  [Stage.PLOT, 'scatter', 'x', '!text', 'y', '!text', 'color', '!text'],
-  [Stage.STATS, 'ANOVA', 'sig', '!text', 'group', '!text', 'value', '!text'],
-  [Stage.STATS, 'KolmogorovSmirnov', 'mean', '!text', 'SD', '!text', 'sig', '!text', 'col', '!text'],
-  [Stage.STATS, 'KruskalWallis', 'sig', '!text', 'group', '!text', 'value', '!text'],
-  [Stage.STATS, 'TTestOneSample', 'mean', '!text', 'sig', '!text', 'col', '!text'],
-  [Stage.STATS, 'TTestPaired', 'sig', '!text', 'left', '!text', 'right', '!text'],
-  [Stage.STATS, 'ZTestOneSample', 'mean', '!text', 'SD', '!text', 'sig', '!text', 'col', '!text']
-]
-
 /**
  * Classes - must be done here to ensure Stage.TRANSFORM etc. have been
  * defined.
