@@ -47,33 +47,15 @@ class Program {
    * Create an empty program as HTML.
    */
   static EmptyHTML (factory) {
-    const idCell = factory.pipelineIDCell(0)
-    const firstCell = factory.placeholder()
-    return `<table id="briq-program"><tbody><tr>${idCell}${firstCell}</tr></tbody></table>`
+    return (new Program()).toHTML(factory)
   }
 
   /**
    * Convert program to HTML.
    */
   toHTML (factory) {
-    const pipelines = this.pipelines.map(p => {
-      return p.stages.map(s => {
-        return `<td>${s.toHTML(factory)}</td>`
-      })
-    })
-    const longest = Math.max(...pipelines.map(p => p.length))
-    const justified = pipelines.map(p => {
-      const temp = [...p]
-      while (temp.length < longest) {
-        temp.push(factory.placeholder())
-      }
-      return temp
-    })
-    const body = justified
-      .map((p, i) => `<tr>${factory.pipelineIDCell(i)}${p.join('')}</tr>`)
-      .join('')
-    const table = `<table id="briq-program"><tbody>${body}</tbody></table>`
-    return table
+    const pipelines = this.pipelines.map(p => p.stages.map(s => `<td>${s.toHTML(factory)}</td>`))
+    return factory.program(pipelines)
   }
 
   /**

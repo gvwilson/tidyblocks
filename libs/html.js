@@ -15,6 +15,27 @@ class HTMLFactory {
   }
 
   /**
+   * Create a table containing an entire program.
+   */
+  program (pipelines) {
+    // Fill in short pipelines.
+    const longest = Math.max(...pipelines.map(p => p.length))
+    const justified = pipelines.map(p => {
+      const temp = [...p]
+      while (temp.length < longest) {
+        temp.push(this.placeholder())
+      }
+      return temp
+    })
+    // Create table.
+    const body = justified
+      .map((p, i) => `<tr>${this.pipelineIDCell(i)}${p.join('')}</tr>`)
+      .join('')
+    const table = `<table id="briq-program"><tbody>${body}</tbody></table>`
+    return table
+  }
+
+  /**
    * Build a widget with several parts.
    */
   widget (...parts) {
