@@ -41,7 +41,6 @@ class StageBase {
   equal (other) {
     return (other instanceof StageBase) &&
       (this.name === other.name)
-    return result
   }
 
   equalColumns (other) {
@@ -281,7 +280,7 @@ const Stage = {
       return super.equal(other) &&
         (this.leftName === other.leftName) &&
         (this.leftCol === other.leftCol) &&
-        (this.leftName === other.rightName) &&
+        (this.rightName === other.rightName) &&
         (this.rightCol === other.rightCol)
     }
     run (runner, df) {

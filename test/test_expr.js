@@ -481,7 +481,7 @@ describe('extract values from datetimes', () => {
   })
 })
 
-describe('equality tests', () => {
+describe('expression equality tests', () => {
   it('compares constants', (done) => {
     const const_one = new Expr.constant('one')
     assert(const_one.equal(const_one),

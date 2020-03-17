@@ -17,6 +17,12 @@ class SummarizeBase {
     this.column = column
   }
 
+  equal (other) {
+    return (other instanceof SummarizeBase) &&
+      (this.name === other.name) &&
+      (this.column === other.column)
+  }
+
   toJSON () {
     return [Summarize.KIND, this.name, this.column]
   }

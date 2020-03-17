@@ -331,3 +331,161 @@ describe('build statistics', () => {
     done()
   })
 })
+
+describe('stage equality tests', () => {
+  it('compares drop stages', (done) => {
+    const drop_left = new Stage.drop(['left'])
+    const drop_right = new Stage.drop(['right'])
+    assert(drop_left.equal(drop_left),
+           `Same should equal`)
+    assert(!drop_left.equal(drop_right),
+           `Different should not equal`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!drop_left.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares filters', (done) => {
+    const filter_true = new Stage.filter(new Expr.constant(true))
+    const filter_false = new Stage.filter(new Expr.constant(false))
+    assert(filter_true.equal(filter_true),
+           `Same should equal`)
+    assert(!filter_false.equal(filter_true),
+           `Different should not equal`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!filter_true.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares groupBy', (done) => {
+    const groupBy_left_right = new Stage.groupBy(['left', 'right'])
+    const groupBy_right = new Stage.groupBy(['right'])
+    assert(groupBy_left_right.equal(groupBy_left_right),
+           `Same should equal`)
+    assert(!groupBy_left_right.equal(groupBy_right),
+           `Different should not equal`)
+    const groupBy_right_left = new Stage.groupBy(['left', 'right'])
+    assert(groupBy_right_left.equal(groupBy_left_right),
+           `Order should not matter`)
+    done()
+  })
+
+  it('compares join', (done) => {
+    const join_a_b = new Stage.join('a', 'ac', 'b', 'bc')
+    const join_a_c = new Stage.join('a', 'ac', 'c', 'cc')
+    assert(join_a_b.equal(join_a_b),
+           `Same should equal`)
+    assert(!join_a_b.equal(join_a_c),
+           `Different should not equal`)
+    const join_b_a = new Stage.join('b', 'bc', 'a', 'ac')
+    assert(!join_a_b.equal(join_b_a),
+           `Order should matter`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!join_a_b.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares mutates', (done) => {
+    const mutate_true = new Stage.mutate('name', new Expr.constant(true))
+    const mutate_false = new Stage.mutate('name', new Expr.constant(false))
+    assert(mutate_true.equal(mutate_true),
+           `Same should equal`)
+    assert(!mutate_false.equal(mutate_true),
+           `Different should not equal`)
+    const mutate_true_other = new Stage.mutate('other', new Expr.constant(true))
+    assert(!mutate_true.equal(mutate_true_other),
+           `Names should matter`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!mutate_true.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares notify', (done) => {
+    const notify_a = new Stage.notify('a')
+    const notify_b = new Stage.notify('b')
+    assert(notify_a.equal(notify_a),
+           `Same should match`)
+    assert(!notify_a.equal(notify_b),
+           `Names should matter`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!notify_a.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares read', (done) => {
+    const read_a = new Stage.read('/A')
+    const read_b = new Stage.read('/B')
+    assert(read_a.equal(read_a),
+           `Same should match`)
+    assert(!read_a.equal(read_b),
+           `Names should matter`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!read_a.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares select stages', (done) => {
+    const select_left = new Stage.select(['left'])
+    const select_right = new Stage.select(['right'])
+    assert(select_left.equal(select_left),
+           `Same should equal`)
+    assert(!select_left.equal(select_right),
+           `Different should not equal`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!select_left.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares sort stages', (done) => {
+    const sort_left = new Stage.sort(['left'])
+    const sort_right = new Stage.sort(['right'])
+    assert(sort_left.equal(sort_left),
+           `Same should equal`)
+    assert(!sort_left.equal(sort_right),
+           `Different should not equal`)
+    const select = new Stage.select(['left'])
+    assert(!sort_left.equal(select),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares summarize stages', (done) => {
+    const max_left = new Summarize.maximum('left')
+    const min_left = new Summarize.minimum('left')
+    const max_min_left = new Stage.summarize(max_left, min_left)
+    assert(max_min_left.equal(max_min_left),
+           `Same should equal`)
+    done()
+  })
+
+  it('compares ungrouping stages', (done) => {
+    const u1 = new Stage.ungroup()
+    const u2 = new Stage.ungroup()
+    assert(u1.equal(u2),
+           `All ungroup stages should be equal`)
+    const notify = new Stage.notify('name')
+    assert(!notify.equal(u1),
+           `Different stages should not equal`)
+    done()
+  })
+
+  it('compares unique stages', (done) => {
+    const unique_left = new Stage.unique(['left'])
+    const unique_right = new Stage.unique(['right'])
+    assert(unique_left.equal(unique_left),
+           `Same should equal`)
+    assert(!unique_left.equal(unique_right),
+           `Different should not equal`)
+    const groupBy = new Stage.groupBy(['left'])
+    assert(!unique_left.equal(groupBy),
+           `Different stages should not equal`)
+    done()
+  })
+})
