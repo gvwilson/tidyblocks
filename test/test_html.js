@@ -819,13 +819,15 @@ describe('converts HTML back to programs', () => {
     done()
   })
 
-  it('converts a program containing a single sort stage with multiple columns', (done) => {
+  it('converts a program containing a single sort stage with multiple columns in both orders', (done) => {
     const factory = new HTMLFactory()
-    const original = new Program(new Pipeline('name', new Stage.sort(['yellow', 'orange'])))
-    const dom = makeNode(original.toHTML(factory))
-    const roundtrip = Program.fromHTML(factory, dom)
-    assert(roundtrip.equal(original),
-           `Roundtrip does not match original`)
+    for (const sorting of [true, false]) {
+      const original = new Program(new Pipeline('name', new Stage.sort(['yellow', 'orange'], sorting)))
+      const dom = makeNode(original.toHTML(factory))
+      const roundtrip = Program.fromHTML(factory, dom)
+      assert(roundtrip.equal(original),
+             `Roundtrip does not match original`)
+    }
     done()
   })
 

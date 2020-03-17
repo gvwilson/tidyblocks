@@ -50,15 +50,10 @@ class HTMLFactory {
                `Require something to working with`)
     const tagName = dom.tagName.toUpperCase()
     if (tagName === 'INPUT') {
-      const type = dom.getAttribute('type').toUpperCase()
-      if (type === 'TEXT') {
-        const text = dom.getAttribute('value')
-        return this.toValue(text)
-      }
-      else if (type === 'CHECKBOX') {
-        return this.fromCheck(dom)
-      }
-      util.fail(`Unknown input type "${type}"`)
+      util.check(dom.getAttribute('type').toUpperCase() == 'TEXT',
+                 `Expected only text nodes in expressions`)
+      const text = dom.getAttribute('value')
+      return this.toValue(text)
     }
     else if (tagName === 'SELECT') {
       const selected = dom.querySelector('[selected=selected]')
@@ -160,8 +155,18 @@ class HTMLFactory {
   /**
    * Build a checkbox.
    */
-  check () {
-    return `<input class="briq-checkbox" type="checkbox"/>`
+  check (isChecked) {
+    const checked = isChecked ? 'checked="checked"' : ''
+    return `<input class="briq-checkbox" type="checkbox" ${checked}/>`
+  }
+
+  /**
+   * Recover a Boolean value from a checkbox.
+   */
+  fromCheck (dom) {
+    util.check(dom && (dom.tagName.toUpperCase() == 'INPUT'),
+               `Expected input cell`)
+    return dom.hasAttribute('checked')
   }
 
   /**
@@ -194,17 +199,17 @@ class HTMLFactory {
    * @param {string} value What to display or null.
    */
   input (value) {
-    const attribute = (value !== null) ? `value="${value}"` : ''
+    const attribute = (value === null) ? '' : `value="${value}"`
     return `<input class="briq-textbox" type="text" ${attribute}/>`
   }
 
   /**
    * Restore an input field.
    */
-  fromInput (cell, splitOnCommas) {
-    util.check(cell && (cell.tagName.toUpperCase() === 'INPUT'),
+  fromInput (dom, splitOnCommas) {
+    util.check(dom && (dom.tagName.toUpperCase() === 'INPUT'),
                `Expected input cell`)
-    const raw = cell.getAttribute('value')
+    const raw = dom.getAttribute('value')
     return splitOnCommas
       ? raw.split(',').map(f => f.trim())
       : raw

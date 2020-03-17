@@ -482,11 +482,12 @@ const Stage = {
         factory.label(this.name),
         factory.input(this.columns.join(', ')),
         factory.label('reverse'),
-        factory.check()
+        factory.check(this.reverse)
       )
     }
-    static fromHTML (factory, columnsNode) {
-      return new Stage.sort(factory.fromInput(columnsNode, true))
+    static fromHTML (factory, columnsNode, reverseNode) {
+      return new Stage.sort(factory.fromInput(columnsNode, true),
+                            factory.fromCheck(reverseNode))
     }
     static MakeBlank () {
       return new Stage.sort([])
