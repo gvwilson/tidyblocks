@@ -1,6 +1,7 @@
 'use strict'
 
 const util = require('./util')
+const {Expr} = require('./expr')
 
 /**
  * Create HTML nodes for blocks.
@@ -10,6 +11,96 @@ class HTMLFactory {
    * Build an HTML factory.
    */
   constructor () {
+  }
+
+  /**
+   * Drill down.
+   */
+  drillDown (dom) {
+    ['DIV', 'TABLE', 'TBODY'].forEach(tag => {
+      util.check((dom.tagName.toUpperCase() === tag) &&
+                 (dom.children.length === 1),
+                 `Expected ${tag} with one child`)
+      dom = dom.firstChild
+    })
+    util.check(dom.tagName.toUpperCase() === 'TR',
+               `Expected table row`)
+    return dom
+  }
+
+  /**
+   * Get the children of a draggable div.
+   */
+  getChildren (dom) {
+    dom = this.drillDown(dom)
+    const children = Array.from(dom.children)
+    util.check(children.length,
+               `widget must have children`)
+    util.check(children.every(child => (child.tagName.toUpperCase() === 'TD')
+                                    && (child.children.length === 1)),
+               `All children should be table cells with a single child`)
+    return children
+  }
+
+  /**
+   * Top-level dispatch for things that might be in expression HTML.
+   */
+  exprFromHTML (dom) {
+    util.check(dom,
+               `Require something to working with`)
+    const tagName = dom.tagName.toUpperCase()
+    if (tagName === 'INPUT') {
+      const type = dom.getAttribute('type').toUpperCase()
+      if (type === 'TEXT') {
+        const text = dom.getAttribute('value')
+        return this.toValue(text)
+      }
+      else if (type === 'CHECKBOX') {
+        return this.fromCheck(dom)
+      }
+      util.fail(`Unknown input type "${type}"`)
+    }
+    else if (tagName === 'SELECT') {
+      const selected = dom.querySelector('[selected=selected]')
+      return selected.getAttribute('value')
+    }
+    else if (tagName === 'TABLE') {
+      return Expr.fromHTML(dom)
+    }
+    util.fail(`Unknown node type "${tagName}"`)
+  }
+
+  /**
+   * Convert text to value.
+   */
+  toValue (text) {
+    // String.
+    if (text.startsWith("'") || text.startsWith('"')) {
+      if (text.slice(-1) === text[0]) {
+        return text.slice(1, -1)
+      }
+      return text
+    }
+
+    if (text.toUpperCase() === 'TRUE') {
+      return true
+    }
+    if (text.toUpperCase() === 'FALSE') {
+      return false
+    }
+
+    const asDate = new Date(text)
+    if ((typeof asDate === 'object') &&
+        (asDate.toString() !== 'Invalid Date')) {
+      return asDate
+    }
+
+    const asNumber = parseFloat(value)
+    if (!Number.isNaN(value)) {
+        return asNumber
+    }
+
+    util.fail(`No idea what "${text}" is`)
   }
 
   /**

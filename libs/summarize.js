@@ -68,6 +68,15 @@ const Summarize = {
     return new Summarize[kind](column)
   },
 
+  /**
+   * Convert from HTML back to summarizer.
+   */
+  fromHTML: (factory, dom) => {
+    const op = dom.querySelector('[selected=selected]').getAttribute('value')
+    const column = factory.fromInput(dom.querySelector('input'), false)
+    return new Summarize[op](column)
+  },
+
   count: class extends SummarizeBase {
     constructor (column) {
       super('count', column)

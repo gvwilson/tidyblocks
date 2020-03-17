@@ -140,20 +140,7 @@ const Stage = {
    * @returns Stage.
    */
   fromHTML: (factory, dom) => {
-    ['DIV', 'TABLE', 'TBODY'].forEach(tag => {
-      util.check((dom.tagName.toUpperCase() === tag) &&
-                 (dom.children.length === 1),
-                 `Expected ${tag} with one child`)
-      dom = dom.firstChild
-    })
-    util.check(dom.tagName.toUpperCase() === 'TR',
-               `Expected table row`)
-    const children = Array.from(dom.children)
-    util.check(children.length,
-               `widget must have children`)
-    util.check(children.every(child => (child.tagName.toUpperCase() === 'TD')
-                                    && (child.children.length === 1)),
-               `All children should be table cells with a single child`)
+    const children = factory.getChildren(dom)
     const first = children[0]
     util.check(first.firstChild.tagName.toUpperCase() === 'SPAN',
                `Expected span as first cell`)
@@ -226,7 +213,7 @@ const Stage = {
       )
     }
     static fromHTML (factory, exprNode) {
-      return new Stage.filter(Expr.fromHTML(exprNode))
+      return new Stage.filter(Expr.fromHTML(factory, exprNode))
     }
     static MakeBlank () {
       const placeholder = new Expr.constant(false)
@@ -356,7 +343,7 @@ const Stage = {
     }
     static fromHTML (factory, nameNode, exprNode) {
       return new Stage.mutate(factory.fromInput(nameNode, false),
-                              Expr.fromHTML(exprNode))
+                              Expr.fromHTML(factory, exprNode))
     }
     static MakeBlank () {
       const placeholder = new Expr.constant(false)
@@ -533,10 +520,16 @@ const Stage = {
       return super.toJSON(this.operations.map(s => s.toJSON()))
     }
     toHTML (factory) {
-      return factory.widget(
+      const result = factory.widget(
         factory.label(this.name),
         ...this.operations.map(op => op.toHTML(factory))
       )
+      return result
+    }
+    static fromHTML (factory, ...dom) {
+      const rows = dom.map(d => factory.drillDown(d))
+      const summarizers = rows.map(r => Summarize.fromHTML(factory, r))
+      return new Stage.summarize(...summarizers)
     }
     static MakeBlank () {
       const placeholder = new Summarize.count('x')

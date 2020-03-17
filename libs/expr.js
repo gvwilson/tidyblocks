@@ -372,7 +372,7 @@ const Expr = {
       return json
     }
     util.check((json.length > 1) && (json[1] in Expr),
-              `Require indicator of known expression kind`)
+               `Require indicator of known expression kind`)
     const kind = json[1]
     const args = json.slice(2).map(p => Expr.fromJSON(p))
     return new Expr[kind](...args)
@@ -383,9 +383,12 @@ const Expr = {
    * @param {DOM} node Current node in recursive nesting.
    * @return Expression tree.
    */
-  fromHTML: (node) => {
-    const kind = 'constant' // FIXME
-    const args = [true] // FIXME
+  fromHTML: (factory, dom) => {
+    const children = factory.getChildren(dom)
+          .map(td => td.firstChild)
+          .map(item => factory.exprFromHTML(item))
+    const kind = children[0]
+    const args = children.slice(1)
     return new Expr[kind](...args)
   },
 
