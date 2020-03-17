@@ -209,7 +209,8 @@ const Stage = {
       this.expr = expr
     }
     equal (other) {
-      return super.equal(other) && this.expr.equal(other.expr)
+      return super.equal(other) &&
+        this.expr.equal(other.expr)
     }
     run (runner, df) {
       runner.appendLog(this.name)

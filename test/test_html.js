@@ -1,7 +1,5 @@
 'use strict'
 
-const cl = console.log
-
 const assert = require('assert')
 const {JSDOM} = require('jsdom')
 
@@ -293,6 +291,34 @@ describe('converts expressions to HTML', () => {
     done()
   })
 
+  it('converts different constant values to HTML', (done) => {
+    const factory = new HTMLFactory()
+    const allChecks = [
+      ['false', false],
+      ['true', true],
+      ['zero', 0],
+      ['non-zero', 123],
+      ['empty string', ''],
+      ['non-empty string', 'stuff']
+    ]
+    for (const [text, val] of allChecks) {
+      const factory = new HTMLFactory()
+      const expr = new Expr.constant(val)
+      const html = expr.toHTML(factory)
+      const node = makeNode(html)
+      const row = node.querySelector('tr')
+      const second = row.childNodes[1].firstChild
+      assert.equal(second.tagName, 'INPUT',
+                   `Second child should be input`)
+      assert.equal(second.getAttribute('type'), 'text',
+                   `Input should be of type text`)
+      const actual = second.getAttribute('value')
+      assert.equal(actual, `${val}`,
+                   `Value for ${text} should be "${val}", not "${actual}"`)
+    }
+    done()
+  })
+
   it('converts a column getter to HTML', (done) => {
     const factory = new HTMLFactory()
     const expr = new Expr.column('red')
@@ -465,11 +491,20 @@ describe('converts transforms to HTML', () => {
   })
 
   it('creates a filter widget', (done) => {
-    const node = checkStage(new Stage.filter(new Expr.constant(true)),
-                            'filter', 2)
-    assert.equal(node.querySelector('tbody >tr >td >select>option').getAttribute('value'),
-                 'constant',
-                 `Expected a constant`)
+    for (const [text, val] of [['true', true], ['false', false]]) {
+      const node = checkStage(new Stage.filter(new Expr.constant(val)),
+                              'filter', 2)
+      const selected = node
+            .querySelector('table.briq-widget >tbody >tr >td >select >option')
+            .getAttribute('value')
+      assert.equal(selected, 'constant',
+                   `Expected a constant`)
+      const actual = node
+            .querySelector('table.briq-widget >tbody >tr >td >input')
+            .getAttribute('value')
+      assert.equal(actual, text,
+                   `Expected value "${text}", not "${actual}"`)
+    }
     done()
   })
 
@@ -685,10 +720,8 @@ describe('converts HTML back to programs', () => {
   it('converts a program containing a single filter stage', (done) => {
     const factory = new HTMLFactory()
     const original = new Program(new Pipeline('name', new Stage.filter(new Expr.constant(false))))
-    console.log('original is', original)
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Program.fromHTML(factory, dom)
-    console.log('roundtrip is', original)
     assert(roundtrip.equal(original),
            `Roundtrip does not match original`)
     done()

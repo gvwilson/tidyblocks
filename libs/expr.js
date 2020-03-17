@@ -38,11 +38,10 @@ class ExprNullary extends ExprBase {
   }
 
   toHTML (factory) {
-    const result = factory.widget(
+    return factory.widget(
       factory.choose(this.options, this.kind),
       factory.input(this.value)
     )
-    return result
   }
 
   static MakeBlank () {

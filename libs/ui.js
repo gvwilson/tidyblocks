@@ -211,7 +211,6 @@ class UserInterface {
    * @param {Object} program Program to display.
    */
   displayProgram (program) {
-    console.log('ABOUT TO DISPLAY PROGRAM', program)
     if (program) {
       this.displayLog([`<pre>${JSON.stringify(program.toJSON(), null, 1)}</pre>`])
       program = program.toHTML(this.factory)
@@ -353,7 +352,6 @@ class UserInterface {
    * @param {string} html What to display.
    */
   displayInArea (id, html) {
-    console.log('ABOUT TO DISPLAY IN AREA', id, html)
     const div = document.getElementById(id)
     div.innerHTML = html ? html : ''
   }

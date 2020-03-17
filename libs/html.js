@@ -107,8 +107,8 @@ class HTMLFactory {
    * @param {string} value What to display or null.
    */
   input (value) {
-    value = value ? `value="${value}"` : ''
-    return `<input class="briq-textbox" type="text" ${value}/>`
+    const attribute = (value !== null) ? `value="${value}"` : ''
+    return `<input class="briq-textbox" type="text" ${attribute}/>`
   }
 
   /**
