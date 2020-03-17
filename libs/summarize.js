@@ -182,11 +182,6 @@ const Summarize = {
   }
 }
 
-util.registerFromJSON(
-  Summarize.fromJSON,
-  Summarize.KIND
-)
-
 module.exports = {
   SummarizeBase,
   Summarize

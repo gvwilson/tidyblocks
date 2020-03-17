@@ -268,7 +268,7 @@ class UserInterface {
     const name = file.name
     file.text().then(text => {
       const json = JSON.parse(text)
-      this.program = util.fromJSON(json)
+      this.program = Program.fromJSON(json)
       this.displayProgram(this.program)
     })
   }

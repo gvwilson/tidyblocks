@@ -138,8 +138,6 @@ class Program {
  */
 Program.KIND = '@program'
 
-util.registerFromJSON(Program.fromJSON, Program.KIND)
-
 module.exports = {
   Program
 }

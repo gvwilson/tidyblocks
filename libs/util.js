@@ -99,62 +99,11 @@ const csvToTable = (text) => {
  */
 const MISSING = null
 
-/**
- * Central dispatch for JSON persistence, placed here to avoid circular dependencies.
- */
-const DispatchJSON = new Map()
-
-/**
- * Register persistence lookup function.
- * @param {function} func JSON-to-object function.
- * @param {string[]} allKinds Identifiers to be handled by that function.
- */
-const registerFromJSON = (func, ...allKinds) => {
-  allKinds.forEach(kind => {
-    check(kind &&
-          (typeof kind === 'string') &&
-          (kind[0] === '@'),
-          `Require @name as kind not "${kind}"`)
-    check(typeof func === 'function',
-          `Require runnable function for dispatch`)
-    DispatchJSON.set(kind, func)
-  })
-}
-
-/**
- * Turn JSON into objects.
- * @param {JSON} json What to interpret.
- * @returns Object.
- */
-const fromJSON = (json) => {
-  if (!Array.isArray(json)) {
-    return json
-  }
-  if (json.length === 0) {
-    return json
-  }
-
-  const first = json[0]
-  if ((!first) ||
-      (typeof first != 'string') ||
-      (!first.startsWith('@'))) {
-    return json.map(x => fromJSON(x))
-  }
-
-  if (DispatchJSON.has(first)) {
-    return DispatchJSON.get(first)(json)
-  }
-
-  fail(`Unknown kind "${kind}"`)
-}
-
 module.exports = {
   fail,
   check,
   checkNumber,
   checkTypeEqual,
   csvToTable,
-  MISSING,
-  registerFromJSON,
-  fromJSON
+  MISSING
 }

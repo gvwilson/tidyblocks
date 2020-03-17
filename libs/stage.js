@@ -123,7 +123,14 @@ const Stage = {
                (json[1] in Stage),
                `Unknown stage kind "${json[1]}"`)
     const kind = json[1]
-    const args = json.slice(2).map(p => util.fromJSON(p))
+    const args = json.slice(2).map(p => {
+      if (Array.isArray(p) &&
+          (p.length > 0) &&
+          (p[0] === Summarize.KIND)) {
+        return Summarize.fromJSON(p)
+      }
+      return Expr.fromJSON(p)
+    })
     return new Stage[kind](...args)
   },
 
@@ -824,14 +831,6 @@ const Stage = {
     }
   }
 }
-
-// Register callbacks for persistence.
-util.registerFromJSON(
-  Stage.fromJSON,
-  Stage.TRANSFORM,
-  Stage.PLOT,
-  Stage.STATS
-)
 
 /**
  * Classes - must be done here to ensure Stage.TRANSFORM etc. have been

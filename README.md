@@ -20,7 +20,7 @@ and that your work may be made available under the terms of [our license](LICENS
 
 ### Source
 
--   `libs/util.js`: low-level utilities and the dispatch machinery for converting JSON back to programs.
+-   `libs/util.js`: low-level utilities.
 -   `libs/dataframe.js`: operations on data tables.
 -   `libs/expr.js`: operations on table rows.
     These may be nested (i.e., `add(multiply(2, column('red')), column('blue'))`

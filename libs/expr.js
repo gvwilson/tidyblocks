@@ -364,15 +364,18 @@ const Expr = {
    * @returns Expression tree.
    */
   fromJSON: (json) => {
-    util.check(Array.isArray(json) &&
-               (json.length > 1) &&
-               (typeof json[0] === 'string') &&
-               json[0].startsWith('@'),
-              `Require non-empty array beginning with @kind`)
-    util.check(json[1] in Expr,
-               `Unknown expression kind "${json[1]}"`)
+    // Values, empty arrays, and unmarked arrays are themselves.
+    if (!Array.isArray(json) ||
+        (json.length === 0) ||
+        (typeof json[0] !== 'string') ||
+        (json[0].length === 0) ||
+        (json[0][0] != '@')) {
+      return json
+    }
+    util.check((json.length > 1) && (json[1] in Expr),
+              `Require indicator of known expression kind`)
     const kind = json[1]
-    const args = json.slice(2).map(p => util.fromJSON(p))
+    const args = json.slice(2).map(p => Expr.fromJSON(p))
     return new Expr[kind](...args)
   },
 
@@ -958,20 +961,6 @@ const Expr = {
     }
   }
 }
-
-// Register callbacks for persistence.
-util.registerFromJSON(
-  Expr.fromJSON,
-  Expr.NULLARY,
-  Expr.NEGATE,
-  Expr.TYPECHECK,
-  Expr.CONVERT,
-  Expr.DATETIME,
-  Expr.ARITHMETIC,
-  Expr.COMPARE,
-  Expr.LOGICAL,
-  Expr.TERNARY
-)
 
 /**
  * Classes - must be done here to ensure Stage.TRANSFORM etc. have been

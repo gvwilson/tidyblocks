@@ -25,7 +25,7 @@ class Pipeline {
                (json[0] === Pipeline.KIND),
               `Expected array with pipeline element`)
     const name = json[1]
-    const stages = json.slice(2).map(blob => util.fromJSON(blob))
+    const stages = json.slice(2).map(blob => Stage.fromJSON(blob))
     return new Pipeline(name, ...stages)
   }
 
@@ -112,8 +112,6 @@ class Pipeline {
  * Indicate that persisted JSON is pipeline.
  */
 Pipeline.KIND = '@pipeline'
-
-util.registerFromJSON(Pipeline.fromJSON, Pipeline.KIND)
 
 module.exports = {
   Pipeline
