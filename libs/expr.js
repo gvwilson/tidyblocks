@@ -30,7 +30,7 @@ class ExprNullary extends ExprBase {
   equal (other) {
     return (other instanceof ExprNullary) &&
       (this.kind === other.kind) &&
-      (this.value === other.value)
+      util.equal(this.value, other.value)
   }
 
   toJSON () {
@@ -196,7 +196,7 @@ class ExprBinary extends ExprBase {
   }
 
   toHTML (factory) {
-    return factory.widget(
+    return factory.infixWidget(
       factory.expr(this.left),
       factory.choose(this.options, this.kind),
       factory.expr(this.right)
@@ -387,6 +387,12 @@ const Expr = {
     const children = factory.getChildren(dom)
           .map(td => td.firstChild)
           .map(item => factory.exprFromHTML(item))
+    if (dom.firstChild.hasAttribute('briq-infix')) {
+      util.check(children.length === 3,
+                 `Expect three children for infix operator`)
+      const [left, middle, right] = children
+      return new Expr[middle](left, right)
+    }
     const kind = children[0]
     const args = children.slice(1)
     return new Expr[kind](...args)
@@ -486,12 +492,7 @@ const Expr = {
       super('equal', left, right)
     }
     run (row, i) {
-      return this.comparison(row, i, (left, right) => {
-        if ((left instanceof Date) && (right instanceof Date)) {
-          return left.getTime() === right.getTime()
-        }
-        return left === right
-      })
+      return this.comparison(row, i, (left, right) => util.equal(left, right))
     }
   },
 
@@ -632,12 +633,7 @@ const Expr = {
       super('notEqual', left, right)
     }
     run (row, i) {
-      return this.comparison(row, i, (left, right) => {
-        if ((left instanceof Date) && (right instanceof Date)) {
-          return left.getTime() !== right.getTime()
-        }
-        return left !== right
-      })
+      return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
     }
   },
 

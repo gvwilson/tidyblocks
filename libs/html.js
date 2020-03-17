@@ -59,8 +59,8 @@ class HTMLFactory {
       const selected = dom.querySelector('[selected=selected]')
       return selected.getAttribute('value')
     }
-    else if (tagName === 'TABLE') {
-      return Expr.fromHTML(dom)
+    else if (tagName === 'DIV') {
+      return Expr.fromHTML(this, dom)
     }
     util.fail(`Unknown node type "${tagName}"`)
   }
@@ -128,12 +128,27 @@ class HTMLFactory {
    * Build a widget with several parts.
    */
   widget (...parts) {
+    return this._widget('', ...parts)
+  }
+
+  /**
+   * Build an infix widget.
+   */
+  infixWidget (...parts) {
+    return this._widget('briq-infix="true"', ...parts)
+  }
+
+  /**
+   * Build a widget with an attribute (utility method).
+   */
+  _widget (attr, ...parts) {
     parts = parts
       .map(p => (p === null)
            ? this.placeholder()
            : this.frozen(p))
       .join('')
-    const content = `<table class="briq-widget"><tbody><tr>${parts}</tr></tbody></table>`
+    attr = `class="briq-widget" ${attr}`
+    const content = `<table ${attr}><tbody><tr>${parts}</tr></tbody></table>`
     return `<div class="redips-drag redips-clone">${content}</div>`
   }
 

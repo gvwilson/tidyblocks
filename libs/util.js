@@ -45,6 +45,16 @@ const checkTypeEqual = (left, right) => {
 }
 
 /**
+ * Our own equality test because dates are special.
+ */
+const equal = (left, right) => {
+  if ((left instanceof Date) && (right instanceof Date)) {
+    return left.getTime() === right.getTime()
+  }
+  return left === right
+}
+
+/**
  * Convert CSV-formatted text to array of objects with uniform keys.
  * @param {string} text Text to parse.
  * @returns Array of objects.
@@ -104,6 +114,7 @@ module.exports = {
   check,
   checkNumber,
   checkTypeEqual,
+  equal,
   csvToTable,
   MISSING
 }

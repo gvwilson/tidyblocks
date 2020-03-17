@@ -697,13 +697,12 @@ describe('creates toolboxes', () => {
 })
 
 describe('converts HTML back to programs', () => {
-  it('converts empty programs and pipelines', (done) => {
+  it('fails for unknown DOM nodes', (done) => {
     const factory = new HTMLFactory()
-    const original = new Program(new Pipeline('name'))
-    const dom = makeNode(original.toHTML(factory))
-    const roundtrip = Program.fromHTML(factory, dom)
-    assert(roundtrip.equal(original),
-           `Roundtrip does not match original`)
+    const paragraph = makeNode('<p>paragraph</p>')
+    assert.throws(() => factory.exprFromHTML(paragraph),
+                  Error,
+                  `Should not convert paragraph`)
     done()
   })
 
@@ -732,6 +731,48 @@ describe('converts HTML back to programs', () => {
     const original = new Expr.constant('hello')
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts HTML to a date', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Expr.constant(new Date(1983, 11, 2, 7, 55, 19, 0))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts binary expressions', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Expr.multiply(new Expr.constant(1),
+                                       new Expr.constant(2))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts nested expressions', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Expr.subtract(new Expr.column('red'),
+                                       new Expr.constant(3))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts empty programs and pipelines', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Program(new Pipeline('name'))
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Program.fromHTML(factory, dom)
     assert(roundtrip.equal(original),
            `Roundtrip does not match original`)
     done()
