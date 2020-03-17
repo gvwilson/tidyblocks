@@ -480,3 +480,62 @@ describe('extract values from datetimes', () => {
     done()
   })
 })
+
+describe('equality tests', () => {
+  it('compares constants', (done) => {
+    const const_one = new Expr.constant('one')
+    assert(const_one.equal(const_one),
+           `Same should equal`)
+    const const_two = new Expr.constant('two')
+    assert(!const_one.equal(const_two),
+           `Different should not equal`)
+    const col_three = new Expr.column('three')
+    assert(!const_one.equal(col_three),
+           `Constant != column`)
+    const col_four = new Expr.column('four')
+    assert(!col_four.equal(col_three),
+           `Different columns`)
+    done()
+  })
+
+  it('compares unary expressions', (done) => {
+    const const_one = new Expr.constant('one')
+    const negate_one = new Expr.negate(const_one)
+    assert(negate_one.equal(negate_one),
+           `Same should equal`)
+    const negate_two = new Expr.negate(new Expr.constant('two'))
+    assert(!negate_one.equal(negate_two),
+           `Different nested should not equal`)
+    const not_one = new Expr.not(const_one)
+    assert(!negate_one.equal(not_one),
+           `Different operators should not equal`)
+    done()
+  })
+
+  it('compares binary expressions', (done) => {
+    const const_1 = new Expr.constant(1)
+    const const_2 = new Expr.constant(2)
+    const add_1_2 = new Expr.add(const_1, const_2)
+    const add_1_2_also = new Expr.add(const_1, const_2)
+    assert(add_1_2.equal(add_1_2_also),
+           `Equal addition`)
+    const add_2_2 = new Expr.add(const_2, const_2)
+    assert(!add_2_2.equal(add_1_2),
+           `Unequal sub-expressions`)
+    done()
+  })
+
+  it('compares ternary expressions', (done) => {
+    const cond_1 = new Expr.greater(new Expr.column('left'),
+                                    new Expr.constant(0))
+    const val_1_true = new Expr.add(new Expr.column('left'),
+                                    new Expr.constant(3))
+    const val_1_false = new Expr.constant(-1)
+    const if_1 = new Expr.ifElse(cond_1, val_1_true, val_1_false)
+    const val_2_false = new Expr.constant(-2)
+    const if_2 = new Expr.ifElse(cond_1, val_1_true, val_2_false)
+    assert(!if_2.equal(if_1),
+           `Unequal nested expressions`)
+    done()
+  })
+})

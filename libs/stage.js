@@ -30,7 +30,6 @@ class StageBase {
                requires.every(x => (typeof x === 'string')) &&
                ((produces === null) || (typeof produces === 'string')),
                `Bad parameters to constructor`)
-
     this.prefix = prefix
     this.name = name
     this.requires = requires
@@ -40,8 +39,20 @@ class StageBase {
   }
 
   equal (other) {
-    const result = (other instanceof StageBase) && (this.name === other.name)
+    return (other instanceof StageBase) &&
+      (this.name === other.name)
     return result
+  }
+
+  equalColumns (other) {
+    util.check('columns' in this,
+               `This object must have columns`)
+    util.check('columns' in other,
+               `Other object must have columns`)
+    return (other instanceof StageBase) &&
+      (this.name === other.name) &&
+      (this.columns.length === other.columns.length) &&
+      this.columns.every(x => other.columns.includes(x))
   }
 
   toJSON (...extras) {
@@ -158,6 +169,9 @@ const Stage = {
       super('drop', [], null, true, true)
       this.columns = columns
     }
+    equal (other) {
+      return this.equalColumns(other)
+    }
     run (runner, df) {
       runner.appendLog(this.name)
       return df.drop(this.columns)
@@ -188,6 +202,9 @@ const Stage = {
       super('filter', [], null, true, true)
       this.expr = expr
     }
+    equal (other) {
+      return super.equal(other) && this.expr.equal(other.expr)
+    }
     run (runner, df) {
       runner.appendLog(this.name)
       return df.filter(this.expr)
@@ -200,6 +217,9 @@ const Stage = {
         factory.label(this.name),
         factory.expr(this.expr)
       )
+    }
+    static fromHTML (factory, exprNode) {
+      return new Stage.filter(Expr.fromHTML(exprNode))
     }
     static MakeBlank () {
       const placeholder = new Expr.constant(false)
@@ -217,6 +237,9 @@ const Stage = {
     constructor (columns) {
       super('groupBy', [], null, true, true)
       this.columns = columns
+    }
+    equal (other) {
+      return this.equalColumns(other)
     }
     run (runner, df) {
       runner.appendLog(this.name)
@@ -253,6 +276,13 @@ const Stage = {
       this.leftCol = leftCol
       this.rightName = rightName
       this.rightCol = rightCol
+    }
+    equal (other) {
+      return super.equal(other) &&
+        (this.leftName === other.leftName) &&
+        (this.leftCol === other.leftCol) &&
+        (this.leftName === other.rightName) &&
+        (this.rightCol === other.rightCol)
     }
     run (runner, df) {
       runner.appendLog(this.name)
@@ -298,6 +328,11 @@ const Stage = {
       this.newName = newName
       this.expr = expr
     }
+    equal (other) {
+      return super.equal(other) &&
+        (this.newName === other.newName) &&
+        (this.expr.equal(other.expr))
+    }
     run (runner, df) {
       runner.appendLog(this.name)
       return df.mutate(this.newName, this.expr)
@@ -311,6 +346,10 @@ const Stage = {
         factory.input(this.newName),
         factory.expr(this.expr)
       )
+    }
+    static fromHTML (factory, nameNode, exprNode) {
+      return new Stage.mutate(factory.fromInput(nameNode, false),
+                              Expr.fromHTML(exprNode))
     }
     static MakeBlank () {
       const placeholder = new Expr.constant(false)
@@ -328,6 +367,10 @@ const Stage = {
     constructor (signal) {
       super('notify', [], signal, true, false)
       this.signal = signal
+    }
+    equal (other) {
+      return super.equal(other) &&
+        (this.signal === other.signal)
     }
     run (runner, df) {
       runner.appendLog(this.name)
@@ -358,6 +401,10 @@ const Stage = {
     constructor (path) {
       super('read', [], null, false, true)
       this.path = path
+    }
+    equal (other) {
+      return super.equal(other) &&
+        (this.path === other.path)
     }
     run (runner, df) {
       runner.appendLog(this.name)
@@ -391,6 +438,9 @@ const Stage = {
       super('select', [], null, true, true)
       this.columns = columns
     }
+    equal (other) {
+      return this.equalColumns(other)
+    }
     run (runner, df) {
       runner.appendLog(this.name)
       return df.select(this.columns)
@@ -422,6 +472,9 @@ const Stage = {
       super('sort', [], null, true, true)
       this.columns = columns
       this.reverse = reverse
+    }
+    equal (other) {
+      return this.equalColumns(other)
     }
     run (runner, df) {
       runner.appendLog(this.name)
@@ -459,6 +512,11 @@ const Stage = {
                  operations.every(s => s instanceof SummarizeBase),
                  `Require non-empty array of summarizers`)
       this.operations = operations
+    }
+    equal (other) {
+      return super.equal(other) &&
+        (this.operations.length === other.operations.length) &&
+        this.operations.every((op, i) => op.equal(other.operations[i]))
     }
     run (runner, df) {
       runner.appendLog(this.name)
@@ -516,6 +574,9 @@ const Stage = {
     constructor (columns) {
       super('unique', [], null, true, true)
       this.columns = columns
+    }
+    equal (other) {
+      return this.equalColumns(other)
     }
     run (runner, df) {
       runner.appendLog(this.name)

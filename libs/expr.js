@@ -27,6 +27,12 @@ class ExprNullary extends ExprBase {
     this.value = value
   }
 
+  equal (other) {
+    return (other instanceof ExprNullary) &&
+      (this.kind === other.kind) &&
+      (this.value === other.value)
+  }
+
   toJSON () {
     return [Expr.NULLARY, this.kind, this.value]
   }
@@ -54,6 +60,13 @@ class ExprUnary extends ExprBase {
     super(kind)
     this.prefix = prefix
     this.arg = arg
+  }
+
+  equal (other) {
+    return (other instanceof ExprUnary) &&
+      (this.prefix === other.prefix) &&
+      (this.kind === other.kind) &&
+      this.arg.equal(other.arg)
   }
 
   toJSON () {
@@ -170,6 +183,14 @@ class ExprBinary extends ExprBase {
     this.right = right
   }
 
+  equal (other) {
+    return (other instanceof ExprBinary) &&
+      (this.prefix === other.prefix) &&
+      (this.kind === other.kind) &&
+      this.left.equal(other.left) &&
+      this.right.equal(other.right)
+  }
+
   toJSON () {
     return [this.prefix, this.kind,
             this.left.toJSON(), this.right.toJSON()]
@@ -282,6 +303,15 @@ class ExprTernary extends ExprBase {
     this.right = right
   }
 
+  equal (other) {
+    return (other instanceof ExprTernary) &&
+      (this.prefix === other.prefix) &&
+      (this.kind === other.kind) &&
+      this.left.equal(other.left) &&
+      this.middle.equal(other.middle) &&
+      this.right.equal(other.right)
+  }
+
   toJSON () {
     return [this.prefix, this.kind,
             this.left.toJSON(),
@@ -343,6 +373,17 @@ const Expr = {
                `Unknown expression kind "${json[1]}"`)
     const kind = json[1]
     const args = json.slice(2).map(p => util.fromJSON(p))
+    return new Expr[kind](...args)
+  },
+
+  /**
+   * Build expression tree from HTML representation.
+   * @param {DOM} node Current node in recursive nesting.
+   * @return Expression tree.
+   */
+  fromHTML: (node) => {
+    const kind = 'constant' // FIXME
+    const args = [true] // FIXME
     return new Expr[kind](...args)
   },
 

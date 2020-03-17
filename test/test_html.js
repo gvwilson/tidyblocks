@@ -684,9 +684,11 @@ describe('converts HTML back to programs', () => {
 
   it('converts a program containing a single filter stage', (done) => {
     const factory = new HTMLFactory()
-    const original = new Program(new Pipeline('name', new Stage.filter(new Expr.constant(true))))
+    const original = new Program(new Pipeline('name', new Stage.filter(new Expr.constant(false))))
+    console.log('original is', original)
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Program.fromHTML(factory, dom)
+    console.log('roundtrip is', original)
     assert(roundtrip.equal(original),
            `Roundtrip does not match original`)
     done()
