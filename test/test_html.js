@@ -707,6 +707,36 @@ describe('converts HTML back to programs', () => {
     done()
   })
 
+  it('converts HTML to a boolean', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Expr.constant(true)
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts HTML to a number', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Expr.constant(456)
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
+  it('converts HTML to a string', (done) => {
+    const factory = new HTMLFactory()
+    const original = new Expr.constant('hello')
+    const dom = makeNode(original.toHTML(factory))
+    const roundtrip = Expr.fromHTML(factory, dom)
+    assert(roundtrip.equal(original),
+           `Roundtrip does not match original`)
+    done()
+  })
+
   it('converts a program containing a single drop stage with multiple columns', (done) => {
     const factory = new HTMLFactory()
     const original = new Program(new Pipeline('name', new Stage.drop(['yellow', 'orange'])))

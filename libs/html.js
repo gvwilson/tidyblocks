@@ -74,13 +74,8 @@ class HTMLFactory {
    * Convert text to value.
    */
   toValue (text) {
-    // String.
-    if (text.startsWith("'") || text.startsWith('"')) {
-      if (text.slice(-1) === text[0]) {
-        return text.slice(1, -1)
-      }
-      return text
-    }
+    util.check(typeof text === 'string',
+               `Require some text`)
 
     if (text.toUpperCase() === 'TRUE') {
       return true
@@ -89,18 +84,19 @@ class HTMLFactory {
       return false
     }
 
+    const asNumber = parseFloat(text)
+    if (!Number.isNaN(asNumber)) {
+        return asNumber
+    }
+
     const asDate = new Date(text)
     if ((typeof asDate === 'object') &&
         (asDate.toString() !== 'Invalid Date')) {
       return asDate
     }
 
-    const asNumber = parseFloat(value)
-    if (!Number.isNaN(value)) {
-        return asNumber
-    }
-
-    util.fail(`No idea what "${text}" is`)
+    // String.
+    return text
   }
 
   /**
