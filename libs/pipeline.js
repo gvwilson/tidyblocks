@@ -1,7 +1,7 @@
 'use strict'
 
 const util = require('./util')
-const {StageBase, Stage} = require('./stage')
+const {Stage} = require('./stage')
 
 /**
  * Manage a single pipeline.
@@ -89,7 +89,7 @@ class Pipeline {
   run (env) {
     util.check(Array.isArray(this.stages) &&
                (this.stages.length > 0) &&
-               this.stages.every(stage => stage instanceof StageBase),
+               this.stages.every(stage => stage instanceof Stage.base),
                `Require non-empty array of stages`)
     util.check(!this.stages[0].input,
                `First stage of pipeline cannot require input`)
