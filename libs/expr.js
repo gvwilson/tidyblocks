@@ -17,8 +17,10 @@ class ExprBase {
   }
 }
 
+// ----------------------------------------------------------------------
+
 /**
- * Nullary expressions.
+ * Generic nullary expression (never instantiated directly).
  */
 class ExprNullary extends ExprBase {
   constructor(kind, value) {
@@ -45,7 +47,7 @@ class ExprNullary extends ExprBase {
   }
 
   static MakeBlank () {
-    return new ExprNullary('constant', false)
+    return new ExprConstant(false)
   }
 }
 
@@ -77,93 +79,6 @@ class ExprUnary extends ExprBase {
       factory.choose(this.options, this.kind),
       factory.expr(this.arg)
     )
-  }
-}
-
-/**
- * Negations.
- */
-class ExprNegation extends ExprUnary {
-  constructor (kind, arg) {
-    super(Expr.NEGATE, kind, arg)
-    this.options = [['-', 'negate'], 'not']
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('constant', false)
-    const result = new ExprNegation('negate', placeholder)
-    result.arg = null
-    return result
-  }
-}
-
-/**
- * Unary type-checking expressions.
- */
-class ExprTypecheck extends ExprUnary {
-  constructor (kind, arg) {
-    super(Expr.TYPECHECK, kind, arg)
-    this.options = ['isBool', 'isDatetime', 'isMissing',
-                    'isNumber', 'isString']
-  }
-
-  typeCheck (row, i, typeName) {
-    const value = this.arg.run(row, i)
-    return (value === MISSING)
-      ? MISSING
-      : (typeof value === typeName)
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('constant', false)
-    const result = new ExprTypecheck('isBool', placeholder)
-    result.arg = null
-    return result
-  }
-}
-
-/**
- * Unary type conversion expressions.
- */
-class ExprConvert extends ExprUnary {
-  constructor (kind, arg) {
-    super(Expr.CONVERT, kind, arg)
-    this.options = ['toBool', 'toDatetime', 'toNumber', 'toString']
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('constant', false)
-    const result = new ExprConvert('toBool', placeholder)
-    result.arg = null
-    return result
-  }
-}
-
-/**
- * Unary datetime expressions.
- */
-class ExprDatetime extends ExprUnary {
-  constructor (kind, arg) {
-    super(Expr.DATETIME, kind, arg)
-    this.options = ['toYear', 'toMonth', 'toDay', 'toWeekday',
-                    'toHours', 'toMinutes', 'toSeconds']
-  }
-
-  dateValue (row, i, func) {
-    const value = this.arg.run(row, i)
-    if (value === MISSING) {
-      return MISSING
-    }
-    util.check(value instanceof Date,
-               `Require date for ${this.kind}`)
-    return func(value)
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('constant', false)
-    const result = new ExprDatetime('toYear', placeholder)
-    result.arg = null
-    return result
   }
 }
 
@@ -201,86 +116,6 @@ class ExprBinary extends ExprBase {
       factory.choose(this.options, this.kind),
       factory.expr(this.right)
     )
-  }
-}
-
-/**
- * Binary arithmetic expressions.
- */
-class ExprArithmetic extends ExprBinary {
-  constructor (kind, left, right) {
-    super(Expr.ARITHMETIC, kind, left, right)
-    this.options = [['+', 'add'], ['-', 'subtract'],
-                    ['*', 'multiply'], ['/', 'divide'],
-                    ['%', 'remainder'], ['**', 'power']]
-  }
-
-  arithmetic (row, i, func) {
-    const left = this.left.run(row, i)
-    util.checkNumber(left,
-                     `Require number for ${this.kind}`)
-    const right = this.right.run(row, i)
-    util.checkNumber(right,
-                     `Require number for ${this.kind}`)
-    return ((left === MISSING) || (right === MISSING))
-      ? MISSING
-      : this.safeValue(func(left, right))
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('constant', false)
-    const result = new ExprArithmetic('add', placeholder, placeholder)
-    result.left = null
-    result.right = null
-    return result
-  }
-}
-
-/**
- * Binary comparison expressions.
- */
-class ExprCompare extends ExprBinary {
-  constructor (kind, left, right) {
-    super(Expr.COMPARE, kind, left, right)
-    this.options = [['==', 'equal'], ['!=', 'notEqual'],
-                    ['&gt;', 'greater'], ['&gt;=', 'greaterEqual'],
-                    ['&lt;=', 'lessEqual'], ['&lt;', 'less']]
-  }
-
-  comparison (row, i, func) {
-    const left = this.left.run(row, i)
-    const right = this.right.run(row, i)
-    util.checkTypeEqual(left, right,
-                        `Require equal types for ${this.kind}`)
-    return ((left === MISSING) || (right === MISSING))
-      ? MISSING
-      : func(left, right)
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('equal', false)
-    const result = new ExprCompare('add', placeholder, placeholder)
-    result.left = null
-    result.right = null
-    return result
-  }
-}
-
-/**
- * Binary logical expressions.
- */
-class ExprLogical extends ExprBinary {
-  constructor (kind, left, right) {
-    super(Expr.LOGICAL, kind, left, right)
-    this.options = ['and', 'or']
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprNullary('equal', false)
-    const result = new ExprLogical('and', placeholder, placeholder)
-    result.left = null
-    result.right = null
-    return result
   }
 }
 
@@ -330,15 +165,16 @@ class ExprTernary extends ExprBase {
   }
 
   static MakeBlank () {
-    const placeholder = new ExprNullary('equal', false)
-    const result = new ExprTernary(Expr.TERNARY, 'ifElse',
-                                   placeholder, placeholder, placeholder)
+    const placeholder = new ExprConstant(false)
+    const result = new ExprIfElse(placeholder, placeholder, placeholder)
     result.left = null
     result.middle = null
     result.right = null
     return result
   }
 }
+
+// ----------------------------------------------------------------------
 
 /**
  * Constant value.
@@ -376,171 +212,22 @@ class ExprColumn extends ExprNullary {
   }
 }
 
-/**
- * Addition.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The sum.
- */
-class ExprAdd extends ExprArithmetic {
-  constructor (left, right) {
-    super('add', left, right)
-  }
-
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left + right)
-  }
-}
+// ----------------------------------------------------------------------
 
 /**
- * Logical conjunction.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The conjunction using short-circuit evaluation.
+ * Negations.
  */
-class ExprAnd extends ExprLogical {
-  constructor (left, right) {
-    super('and', left, right)
+class ExprNegation extends ExprUnary {
+  constructor (kind, arg) {
+    super(Expr.NEGATE, kind, arg)
+    this.options = [['-', 'negate'], 'not']
   }
 
-  run (row, i) {
-    const left = this.left.run(row, i)
-    if (!left) {
-      return left
-    }
-    return this.right.run(row, i)
-  }
-}
-
-/**
- * Division.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The quotient.
- */
-class ExprDivide extends ExprArithmetic {
-  constructor (left, right) {
-    super('divide', left, right)
-  }
-
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left / right)
-  }
-}
-
-/**
- * Equality.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprEqual extends ExprCompare {
-  constructor (left, right) {
-    super('equal', left, right)
-  }
-
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => util.equal(left, right))
-  }
-}
-
-/**
- * Strictly greater than.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprGreater extends ExprCompare {
-  constructor (left, right) {
-    super('greater', left, right)
-  }
-
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left > right))
-  }
-}
-
-/**
- * Greater than or equal.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprGreaterEqual extends ExprCompare {
-  constructor (left, right) {
-    super('greaterEqual', left, right)
-  }
-
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left >= right))
-  }
-}
-
-/**
- * Logical selection.
- * @param {expr} left How to get the left value.
- * @param {expr} middle How to get the middle value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprIfElse extends ExprTernary {
-  constructor (left, middle, right) {
-    super(Expr.TERNARY, 'ifElse', left, middle, right)
-  }
-
-  run (row, i) {
-    const cond = this.left.run(row, i)
-    return (cond === MISSING)
-      ? MISSING
-      : (cond ? this.middle.run(row, i) : this.right.run(row, i))
-  }
-}
-
-/**
- * Strictly less than.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprLess extends ExprCompare {
-  constructor (left, right) {
-    super('less', left, right)
-  }
-
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left < right))
-  }
-}
-
-/**
- * Less than or equal.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprLessEqual extends ExprCompare {
-  constructor (left, right) {
-    super('lessEqual', left, right)
-  }
-
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left <= right))
-  }
-}
-
-/**
- * Multiplication.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The product.
- */
-class ExprMultiply extends ExprArithmetic {
-  constructor (left, right) {
-    super('multiply', left, right)
-  }
-
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left * right)
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprNegate(placeholder)
+    result.arg = null
+    return result
   }
 }
 
@@ -578,87 +265,30 @@ class ExprNot extends ExprNegation {
   }
 }
 
-/**
- * Inequality.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The Boolean result.
- */
-class ExprNotEqual extends ExprCompare {
-  constructor (left, right) {
-    super('notEqual', left, right)
-  }
-
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
-  }
-}
+// ----------------------------------------------------------------------
 
 /**
- * Logical disjunction.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The disjunction using short-circuit evaluation.
+ * Unary type-checking expressions.
  */
-class ExprOr extends ExprLogical {
-  constructor (left, right) {
-    super('or', left, right)
+class ExprTypecheck extends ExprUnary {
+  constructor (kind, arg) {
+    super(Expr.TYPECHECK, kind, arg)
+    this.options = ['isBool', 'isDatetime', 'isMissing',
+                    'isNumber', 'isString']
   }
 
-  run (row, i) {
-    const left = this.left.run(row, i)
-    if (left) {
-      return left
-    }
-    return this.right.run(row, i)
-  }
-}
-
-/**
- * Exponentiation.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The power.
- */
-class ExprPower extends ExprArithmetic {
-  constructor (left, right) {
-    super('power', left, right)
+  typeCheck (row, i, typeName) {
+    const value = this.arg.run(row, i)
+    return (value === MISSING)
+      ? MISSING
+      : (typeof value === typeName)
   }
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left ** right)
-  }
-}
-
-/**
- * Remainder.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The remainder.
- */
-class ExprRemainder extends ExprArithmetic {
-  constructor (left, right) {
-    super('remainder', left, right)
-  }
-
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left % right)
-  }
-}
-
-/**
- * Subtraction.
- * @param {expr} left How to get the left value.
- * @param {expr} right How to get the right value.
- * @returns The difference.
- */
-class ExprSubtract extends ExprArithmetic {
-  constructor (left, right) {
-    super('subtract', left, right)
-  }
-
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left - right)
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprIsBool(placeholder)
+    result.arg = null
+    return result
   }
 }
 
@@ -736,6 +366,25 @@ class ExprIsString extends ExprTypecheck {
 
   run (row, i) {
     return this.typeCheck(row, i, 'string')
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
+ * Unary type conversion expressions.
+ */
+class ExprConvert extends ExprUnary {
+  constructor (kind, arg) {
+    super(Expr.CONVERT, kind, arg)
+    this.options = ['toBool', 'toDatetime', 'toNumber', 'toString']
+  }
+
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprToBool(placeholder)
+    result.arg = null
+    return result
   }
 }
 
@@ -828,6 +477,36 @@ class ExprToString extends ExprConvert {
       value = `${value}`
     }
     return value
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
+ * Unary datetime expressions.
+ */
+class ExprDatetime extends ExprUnary {
+  constructor (kind, arg) {
+    super(Expr.DATETIME, kind, arg)
+    this.options = ['toYear', 'toMonth', 'toDay', 'toWeekday',
+                    'toHours', 'toMinutes', 'toSeconds']
+  }
+
+  dateValue (row, i, func) {
+    const value = this.arg.run(row, i)
+    if (value === MISSING) {
+      return MISSING
+    }
+    util.check(value instanceof Date,
+               `Require date for ${this.kind}`)
+    return func(value)
+  }
+
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprToYear(placeholder)
+    result.arg = null
+    return result
   }
 }
 
@@ -935,6 +614,348 @@ class ExprToSeconds extends ExprDatetime {
     return this.dateValue(row, i, d => d.getSeconds())
   }
 }
+
+// ----------------------------------------------------------------------
+
+/**
+ * Binary arithmetic expressions.
+ */
+class ExprArithmetic extends ExprBinary {
+  constructor (kind, left, right) {
+    super(Expr.ARITHMETIC, kind, left, right)
+    this.options = [['+', 'add'], ['-', 'subtract'],
+                    ['*', 'multiply'], ['/', 'divide'],
+                    ['%', 'remainder'], ['**', 'power']]
+  }
+
+  arithmetic (row, i, func) {
+    const left = this.left.run(row, i)
+    util.checkNumber(left,
+                     `Require number for ${this.kind}`)
+    const right = this.right.run(row, i)
+    util.checkNumber(right,
+                     `Require number for ${this.kind}`)
+    return ((left === MISSING) || (right === MISSING))
+      ? MISSING
+      : this.safeValue(func(left, right))
+  }
+
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprAdd(placeholder, placeholder)
+    result.left = null
+    result.right = null
+    return result
+  }
+}
+
+/**
+ * Addition.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The sum.
+ */
+class ExprAdd extends ExprArithmetic {
+  constructor (left, right) {
+    super('add', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left + right)
+  }
+}
+
+/**
+ * Division.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The quotient.
+ */
+class ExprDivide extends ExprArithmetic {
+  constructor (left, right) {
+    super('divide', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left / right)
+  }
+}
+
+/**
+ * Multiplication.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The product.
+ */
+class ExprMultiply extends ExprArithmetic {
+  constructor (left, right) {
+    super('multiply', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left * right)
+  }
+}
+
+/**
+ * Exponentiation.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The power.
+ */
+class ExprPower extends ExprArithmetic {
+  constructor (left, right) {
+    super('power', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left ** right)
+  }
+}
+
+/**
+ * Remainder.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The remainder.
+ */
+class ExprRemainder extends ExprArithmetic {
+  constructor (left, right) {
+    super('remainder', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left % right)
+  }
+}
+
+/**
+ * Subtraction.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The difference.
+ */
+class ExprSubtract extends ExprArithmetic {
+  constructor (left, right) {
+    super('subtract', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left - right)
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
+ * Binary comparison expressions.
+ */
+class ExprCompare extends ExprBinary {
+  constructor (kind, left, right) {
+    super(Expr.COMPARE, kind, left, right)
+    this.options = [['==', 'equal'], ['!=', 'notEqual'],
+                    ['&gt;', 'greater'], ['&gt;=', 'greaterEqual'],
+                    ['&lt;=', 'lessEqual'], ['&lt;', 'less']]
+  }
+
+  comparison (row, i, func) {
+    const left = this.left.run(row, i)
+    const right = this.right.run(row, i)
+    util.checkTypeEqual(left, right,
+                        `Require equal types for ${this.kind}`)
+    return ((left === MISSING) || (right === MISSING))
+      ? MISSING
+      : func(left, right)
+  }
+
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprEqual(placeholder, placeholder)
+    result.left = null
+    result.right = null
+    return result
+  }
+}
+
+/**
+ * Equality.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprEqual extends ExprCompare {
+  constructor (left, right) {
+    super('equal', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => util.equal(left, right))
+  }
+}
+
+/**
+ * Strictly greater than.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprGreater extends ExprCompare {
+  constructor (left, right) {
+    super('greater', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left > right))
+  }
+}
+
+/**
+ * Greater than or equal.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprGreaterEqual extends ExprCompare {
+  constructor (left, right) {
+    super('greaterEqual', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left >= right))
+  }
+}
+
+/**
+ * Strictly less than.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprLess extends ExprCompare {
+  constructor (left, right) {
+    super('less', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left < right))
+  }
+}
+
+/**
+ * Less than or equal.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprLessEqual extends ExprCompare {
+  constructor (left, right) {
+    super('lessEqual', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left <= right))
+  }
+}
+
+/**
+ * Inequality.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprNotEqual extends ExprCompare {
+  constructor (left, right) {
+    super('notEqual', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
+ * Binary logical expressions.
+ */
+class ExprLogical extends ExprBinary {
+  constructor (kind, left, right) {
+    super(Expr.LOGICAL, kind, left, right)
+    this.options = ['and', 'or']
+  }
+
+  static MakeBlank () {
+    const placeholder = new ExprConstant(false)
+    const result = new ExprAnd(placeholder, placeholder)
+    result.left = null
+    result.right = null
+    return result
+  }
+}
+
+/**
+ * Logical conjunction.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The conjunction using short-circuit evaluation.
+ */
+class ExprAnd extends ExprLogical {
+  constructor (left, right) {
+    super('and', left, right)
+  }
+
+  run (row, i) {
+    const left = this.left.run(row, i)
+    if (!left) {
+      return left
+    }
+    return this.right.run(row, i)
+  }
+}
+
+/**
+ * Logical disjunction.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The disjunction using short-circuit evaluation.
+ */
+class ExprOr extends ExprLogical {
+  constructor (left, right) {
+    super('or', left, right)
+  }
+
+  run (row, i) {
+    const left = this.left.run(row, i)
+    if (left) {
+      return left
+    }
+    return this.right.run(row, i)
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
+ * Logical selection.
+ * @param {expr} left How to get the left value.
+ * @param {expr} middle How to get the middle value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprIfElse extends ExprTernary {
+  constructor (left, middle, right) {
+    super(Expr.TERNARY, 'ifElse', left, middle, right)
+  }
+
+  run (row, i) {
+    const cond = this.left.run(row, i)
+    return (cond === MISSING)
+      ? MISSING
+      : (cond ? this.middle.run(row, i) : this.right.run(row, i))
+  }
+}
+
+// ----------------------------------------------------------------------
 
 /**
  * Lookup table of everything exported from this file.
