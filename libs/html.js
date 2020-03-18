@@ -43,6 +43,13 @@ class HTMLFactory {
   }
 
   /**
+   * Is this an infix operator?
+   */
+  isInfix (dom) {
+    return dom.firstChild.hasAttribute('briq-infix')
+  }
+
+  /**
    * Top-level dispatch for things that might be in expression HTML.
    */
   exprFromHTML (dom) {

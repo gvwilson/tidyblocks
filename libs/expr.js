@@ -1004,7 +1004,7 @@ const Expr = {
     const children = factory.getChildren(dom)
           .map(td => td.firstChild)
           .map(item => factory.exprFromHTML(item))
-    if (dom.firstChild.hasAttribute('briq-infix')) {
+    if (factory.isInfix(dom)) {
       util.check(children.length === 3,
                  `Expect three children for infix operator`)
       const [left, middle, right] = children
