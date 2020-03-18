@@ -8,10 +8,8 @@ const util = require('../libs/util')
 const {Expr} = require('../libs/expr')
 const {Summarize} = require('../libs/summarize')
 const {Stage} = require('../libs/stage')
-const {
-  Pipeline,
-  Program
-} = require('../libs/runtime')
+const {Pipeline} = require('../libs/pipeline')
+const {Program} = require('../libs/program')
 
 //
 // All programs.

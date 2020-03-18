@@ -19,16 +19,9 @@
       "@transform",
       "summarize",
       [
-        [
-          "@summarize",
-          "maximum",
-          "green"
-        ],
-        [
-          "@summarize",
-          "minimum",
-          "blue"
-        ]
+        "@summarize",
+        "maximum",
+        "green"
       ]
     ]
   ]
