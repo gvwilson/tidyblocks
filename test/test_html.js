@@ -563,25 +563,14 @@ describe('converts transforms to HTML', () => {
 
   it('creates a summarize widget', (done) => {
     const maxLeft = new Summarize.maximum('left')
-    const minRight = new Summarize.minimum('right')
-    const node = checkStage(new Stage.summarize(maxLeft, minRight), 'summarize', 3)
+    const node = checkStage(new Stage.summarize(maxLeft), 'summarize', 3)
     const row = node.querySelector('table >tbody >tr')
-    const [label, s1, s2] = Array.from(row.children).map(child => child.firstChild)
-
-    const s1Selected = s1.querySelector('table >tbody >tr >td >select >option[selected=selected]')
-    assert.equal(s1Selected.getAttribute('value'), 'maximum',
+    const [label, func, column] = Array.from(row.children).map(child => child.firstChild)
+    const selected = func.querySelector('option[selected=selected]')
+    assert.equal(selected.getAttribute('value'), 'maximum',
                  `Expected maximum for first summarize`)
-    const s1Input = s1.querySelector('tbody >tr >td >input')
-    assert.equal(s1Input.getAttribute('value'), 'left',
+    assert.equal(column.getAttribute('value'), 'left',
                  `Expected left column for first summarize`)
-
-    const s2Selected = s2.querySelector('table >tbody >tr >td >select >option[selected=selected]')
-    assert.equal(s2Selected.getAttribute('value'), 'minimum',
-                 `Expected maximum for second summarize`)
-    const s2Input = s2.querySelector('tbody >tr >td >input')
-    assert.equal(s2Input.getAttribute('value'), 'right',
-                 `Expected left column for second summarize`)
-
     done()
   })
 
@@ -874,9 +863,8 @@ describe('converts HTML back to programs', () => {
 
   it('converts a program containing a single summarize stage with multiple summarizers', (done) => {
     const factory = new HTMLFactory()
-    const maxLeft = new Summarize.maximum('left')
     const minRight = new Summarize.minimum('right')
-    const stage = new Stage.summarize(maxLeft, minRight)
+    const stage = new Stage.summarize(minRight)
     const original = new Program(new Pipeline('name', stage))
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Program.fromHTML(factory, dom)

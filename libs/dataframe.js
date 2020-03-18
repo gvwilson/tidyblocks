@@ -206,27 +206,18 @@ class DataFrame {
 
   /**
    * Summarize values (possibly grouped).
-   * @param {string} operations A list of summarizer objects.
+   * @param {Summarizer} op What to do.
    * @returns A new dataframe.
    */
-  summarize (operations) {
-    util.check(Array.isArray(operations) &&
-               operations.every(op => op instanceof Summarize.base),
-               `Operations must be summarizer objects`)
-    util.check(this.hasColumns(operations.map(op => op.column)),
-               `unknown column(s) in summarize`)
-
-    // Summarize operation by operation.
+  summarize (op) {
+    util.check(op instanceof Summarize.base,
+               `Operation must be summarizer object`)
+    util.check(this.hasColumns([op.column]),
+               `unknown column in summarize`)
     const newData = this.data.map(row => { return {...row} })
-    const newColumnNames = []
-    operations.forEach(op => {
-      const destCol = `${op.column}_${op.name}`
-      newColumnNames.push(destCol)
-      this._summarizeColumn(newData, op, destCol)
-    })
-
-    // Create new dataframe.
-    return new DataFrame(newData, newColumnNames)
+    const destCol = `${op.column}_${op.name}`
+    this._summarizeColumn(newData, op, destCol)
+    return new DataFrame(newData, [destCol])
   }
 
   /**

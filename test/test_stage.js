@@ -118,11 +118,10 @@ describe('build dataframe operations', () => {
   it('summarizes', (done) => {
     const df = new DataFrame([{left: 3}])
     const runner = new Environment()
-    const stage = new Stage.summarize(new Summarize.maximum('left'),
-                                      new Summarize.minimum('left'))
+    const stage = new Stage.summarize(new Summarize.maximum('left'))
     const result = stage.run(runner, df)
     assert.deepEqual(result.data,
-                     [{left: 3, left_minimum: 3, left_maximum: 3}],
+                     [{left: 3, left_maximum: 3}],
                      `Incorrect summary`)
     done()
   })

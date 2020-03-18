@@ -42,18 +42,6 @@ class SummarizeBase {
   }
 
   /**
-   * Convert to HTML.
-   * @param {HTMLFactory} factory HTML generator.
-   * @returns HTML text.
-   */
-  toHTML (factory) {
-    return factory.widget(
-      factory.choose(this.options, this.name),
-      factory.input(this.column)
-    )
-  }
-
-  /**
    * Calculate variance of an array of values.
    * @param {number[]} values To be computed with.
    * @returns Variance.
@@ -240,9 +228,9 @@ const Summarize = {
   /**
    * Convert from HTML back to summarizer.
    */
-  fromHTML: (factory, dom) => {
-    const op = dom.querySelector('[selected=selected]').getAttribute('value')
-    const column = factory.fromInput(dom.querySelector('input'), false)
+  fromHTML: (factory, funcNode, columnNode) => {
+    const op = factory.getSelected(funcNode)
+    const column = factory.fromInput(columnNode, false)
     return new Summarize[op](column)
   },
 

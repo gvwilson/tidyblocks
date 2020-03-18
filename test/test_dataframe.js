@@ -534,9 +534,19 @@ describe('sort', () => {
 })
 
 describe('summarize', () => {
-  it('requires non-empty column names', (done) => {
+  it('requires a summarizer', (done) => {
     const df = new DataFrame(TwoRows)
-    assert.throws(() => df.summarize([Summarize.count, '']),
+    assert.throws(() => df.summarize(null),
+                  Error,
+                 `Require a summarizer`)
+    assert.throws(() => df.summarize(new Date()),
+                  Error,
+                 `Require a summarizer`)
+    done()
+  })
+
+  it('requires non-empty column names', (done) => {
+    assert.throws(() => new Summarize.count(''),
                   Error,
                   `Expected error with empty column name`)
     done()
@@ -544,7 +554,7 @@ describe('summarize', () => {
 
   it('require columns to exist', (done) => {
     const df = new DataFrame(TwoRows)
-    assert.throws(() => df.summarize([Summarize.count, 'nope']),
+    assert.throws(() => df.summarize(new Summarize.count('nope')),
                   Error,
                   `Expected error with nonexistent column name`)
     done()
@@ -552,7 +562,7 @@ describe('summarize', () => {
 
   it('can summarize a single ungrouped column', (done) => {
     const df = new DataFrame(TwoRows)
-    const result = df.summarize([new Summarize.count('ones')])
+    const result = df.summarize(new Summarize.count('ones'))
     assert(result.equal(new DataFrame([{ones: 1, tens: 10,
                                         ones_count: 2},
                                        {ones: 2, tens: 20,
@@ -563,8 +573,9 @@ describe('summarize', () => {
 
   it('can summarize multiple ungrouped columns', (done) => {
     const df = new DataFrame(TwoRows)
-    const result = df.summarize([new Summarize.count('ones'),
-                                 new Summarize.maximum('tens')])
+    const result = df
+          .summarize(new Summarize.count('ones'))
+          .summarize(new Summarize.maximum('tens'))
     assert(result.equal(new DataFrame([{ones: 1, tens: 10,
                                         ones_count: 2, tens_maximum: 20},
                                        {ones: 2, tens: 20,
@@ -575,8 +586,9 @@ describe('summarize', () => {
 
   it('can summarize the same ungrouped column multiple times', (done) => {
     const df = new DataFrame(TwoRows)
-    const result = df.summarize([new Summarize.minimum('tens'),
-                                 new Summarize.maximum('tens')])
+    const result = df
+          .summarize(new Summarize.minimum('tens'))
+          .summarize(new Summarize.maximum('tens'))
     assert(result.equal(new DataFrame([{ones: 1, tens: 10,
                                         tens_minimum: 10, tens_maximum: 20},
                                        {ones: 2, tens: 20,
@@ -587,7 +599,7 @@ describe('summarize', () => {
 
   it('can summarize a single grouped column', (done) => {
     const df = new DataFrame(Colors).groupBy(['red'])
-    const result = df.summarize([new Summarize.count('red')])
+    const result = df.summarize(new Summarize.count('red'))
     assert(
       result.data.every(row => (row.red_count === GroupRedCountRed.get(row.red))),
       `Wrong count(s) for grouped values`)
@@ -596,8 +608,9 @@ describe('summarize', () => {
 
   it('can summarize multiple grouped columns', (done) => {
     const df = new DataFrame(Colors).groupBy(['red'])
-    const result = df.summarize([new Summarize.count('red'),
-                                 new Summarize.maximum('green')])
+    const result = df
+          .summarize(new Summarize.count('red'))
+          .summarize(new Summarize.maximum('green'))
     assert(
       result.data.every(row => (row.red_count === GroupRedCountRed.get(row.red))),
       `Wrong count(s) for grouped values`)
@@ -609,8 +622,9 @@ describe('summarize', () => {
 
   it('can summarize the same grouped column multiple times', (done) => {
     const df = new DataFrame(Colors).groupBy(['red'])
-    const result = df.summarize([new Summarize.count('red'),
-                                 new Summarize.maximum('red')])
+    const result = df
+          .summarize(new Summarize.count('red'))
+          .summarize(new Summarize.maximum('red'))
     assert(
       result.data.every(row => (row.red_count === GroupRedCountRed.get(row.red))),
       `Wrong count(s) for grouped values`)

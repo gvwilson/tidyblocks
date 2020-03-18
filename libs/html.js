@@ -56,13 +56,20 @@ class HTMLFactory {
       return this.toValue(text)
     }
     else if (tagName === 'SELECT') {
-      const selected = dom.querySelector('[selected=selected]')
-      return selected.getAttribute('value')
+      return this.getSelected(dom)
     }
     else if (tagName === 'DIV') {
       return Expr.fromHTML(this, dom)
     }
     util.fail(`Unknown node type "${tagName}"`)
+  }
+
+  /**
+   * Get a selected value.
+   */
+  getSelected (dom) {
+    const selected = dom.querySelector('[selected=selected]')
+    return selected.getAttribute('value')
   }
 
   /**

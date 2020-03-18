@@ -413,38 +413,34 @@ class StageSort extends StageTransform {
  * @param {Summarize[]} Summarizers.
  */
 class StageSummarize extends StageTransform {
-  constructor (...operations) {
+  constructor (op) {
     super('summarize', [], null, true, true)
-    util.check(operations &&
-               Array.isArray(operations) &&
-               (operations.length > 0) &&
-               operations.every(s => s instanceof Summarize.base),
-               `Require non-empty array of summarizers`)
-    this.operations = operations
+    util.check(op && (op instanceof Summarize.base),
+               `Require summarizers`)
+    this.op = op
   }
   equal (other) {
     return super.equal(other) &&
-      (this.operations.length === other.operations.length) &&
-      this.operations.every((op, i) => op.equal(other.operations[i]))
+      this.op.equal(other.op)
   }
   run (runner, df) {
     runner.appendLog(this.name)
-    return df.summarize(this.operations)
+    return df.summarize(this.op)
   }
   toJSON () {
-    return super.toJSON(this.operations.map(s => s.toJSON()))
+    return super.toJSON(this.op.toJSON())
   }
   toHTML (factory) {
     const result = factory.widget(
       factory.label(this.name),
-      ...this.operations.map(op => op.toHTML(factory))
+      factory.choose(this.op.options, this.op.name),
+      factory.input(this.op.column)
     )
     return result
   }
-  static fromHTML (factory, ...dom) {
-    const rows = dom.map(d => factory.drillDown(d))
-    const summarizers = rows.map(r => Summarize.fromHTML(factory, r))
-    return new Stage.summarize(...summarizers)
+  static fromHTML (factory, funcNode, columnNode) {
+    const summarizer = Summarize.fromHTML(factory, funcNode, columnNode)
+    return new Stage.summarize(summarizer)
   }
   static MakeBlank () {
     const placeholder = new Summarize.count('x')

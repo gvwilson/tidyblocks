@@ -275,7 +275,7 @@ describe('stage persistence', () => {
 
   it('persists summarize', (done) => {
     const stage = new Stage.summarize(new Summarize.maximum('red'))
-    assert.deepEqual([Stage.TRANSFORM, 'summarize', [[Summarize.KIND, 'maximum', 'red']]],
+    assert.deepEqual([Stage.TRANSFORM, 'summarize', [Summarize.KIND, 'maximum', 'red']],
                      stage.toJSON(),
                      `Mis-match`)
     done()
