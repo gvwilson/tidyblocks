@@ -2,10 +2,7 @@
 
 const util = require('./util')
 const MISSING = util.MISSING
-const {
-  ExprBase,
-  Expr
-} = require('./expr')
+const {Expr} = require('./expr')
 const {Summarize} = require('./summarize')
 
 /**
@@ -84,11 +81,11 @@ class DataFrame {
 
   /**
    * Filter rows, keeping those that pass a test.
-   * @param {ExprBase} expr The expression object that tests rows.
+   * @param {Expr.base} expr The expression object that tests rows.
    * @returns A new dataframe (possibly empty).
    */
   filter (expr) {
-    util.check(expr instanceof ExprBase,
+    util.check(expr instanceof Expr.base,
                `filter expression is not an expression object`)
     const newData = this.data.filter((row, i) => expr.run(row, i))
     const newColumns = this._makeColumns(newData, this.columns)
@@ -126,7 +123,7 @@ class DataFrame {
   /**
    * Create a new column using values from existing columns.
    * @param {string} newName New column's name. (If column already exists, it is replaced.)
-   * @param {ExprBase} expr The expression object that calculates new values.
+   * @param {Expr.base} expr The expression object that calculates new values.
    * @returns A new dataframe.
    */
   mutate (newName, expr) {
@@ -134,7 +131,7 @@ class DataFrame {
                `empty new column name for mutate`)
     util.check(newName.match(DataFrame.COLUMN_NAME),
                `illegal new name for column`)
-    util.check(expr instanceof ExprBase,
+    util.check(expr instanceof Expr.base,
                `new value expression is not an expression object`)
     const newData = this.data.map((row, i) => {
       const newRow = {...row}

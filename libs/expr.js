@@ -83,7 +83,7 @@ class ExprUnary extends ExprBase {
 /**
  * Negations.
  */
-class ExprNegate extends ExprUnary {
+class ExprNegation extends ExprUnary {
   constructor (kind, arg) {
     super(Expr.NEGATE, kind, arg)
     this.options = [['-', 'negate'], 'not']
@@ -91,7 +91,7 @@ class ExprNegate extends ExprUnary {
 
   static MakeBlank () {
     const placeholder = new ExprNullary('constant', false)
-    const result = new ExprNegate('negate', placeholder)
+    const result = new ExprNegation('negate', placeholder)
     result.arg = null
     return result
   }
@@ -341,6 +341,602 @@ class ExprTernary extends ExprBase {
 }
 
 /**
+ * Constant value.
+ * @param {any} value The value to return.
+ * @returns The value
+ */
+class ExprConstant extends ExprNullary {
+  constructor (value) {
+    super('constant', value)
+  }
+
+  run (row, i) {
+    return this.value
+  }
+}
+
+/**
+ * Column value.
+ * @param {string} column The column name.
+ * @returns The value
+ */
+class ExprColumn extends ExprNullary {
+  constructor (name) {
+    util.check(name && (typeof name === 'string'),
+               `Column name must be string`)
+    super('column', name)
+  }
+
+  run (row, i) {
+    util.check(typeof row === 'object',
+               `Row must be object`)
+    util.check(this.value in row,
+               `${this.name} not in row`)
+    return row[this.value]
+  }
+}
+
+/**
+ * Addition.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The sum.
+ */
+class ExprAdd extends ExprArithmetic {
+  constructor (left, right) {
+    super('add', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left + right)
+  }
+}
+
+/**
+ * Logical conjunction.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The conjunction using short-circuit evaluation.
+ */
+class ExprAnd extends ExprLogical {
+  constructor (left, right) {
+    super('and', left, right)
+  }
+
+  run (row, i) {
+    const left = this.left.run(row, i)
+    if (!left) {
+      return left
+    }
+    return this.right.run(row, i)
+  }
+}
+
+/**
+ * Division.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The quotient.
+ */
+class ExprDivide extends ExprArithmetic {
+  constructor (left, right) {
+    super('divide', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left / right)
+  }
+}
+
+/**
+ * Equality.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprEqual extends ExprCompare {
+  constructor (left, right) {
+    super('equal', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => util.equal(left, right))
+  }
+}
+
+/**
+ * Strictly greater than.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprGreater extends ExprCompare {
+  constructor (left, right) {
+    super('greater', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left > right))
+  }
+}
+
+/**
+ * Greater than or equal.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprGreaterEqual extends ExprCompare {
+  constructor (left, right) {
+    super('greaterEqual', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left >= right))
+  }
+}
+
+/**
+ * Logical selection.
+ * @param {expr} left How to get the left value.
+ * @param {expr} middle How to get the middle value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprIfElse extends ExprTernary {
+  constructor (left, middle, right) {
+    super(Expr.TERNARY, 'ifElse', left, middle, right)
+  }
+
+  run (row, i) {
+    const cond = this.left.run(row, i)
+    return (cond === MISSING)
+      ? MISSING
+      : (cond ? this.middle.run(row, i) : this.right.run(row, i))
+  }
+}
+
+/**
+ * Strictly less than.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprLess extends ExprCompare {
+  constructor (left, right) {
+    super('less', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left < right))
+  }
+}
+
+/**
+ * Less than or equal.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprLessEqual extends ExprCompare {
+  constructor (left, right) {
+    super('lessEqual', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (left <= right))
+  }
+}
+
+/**
+ * Multiplication.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The product.
+ */
+class ExprMultiply extends ExprArithmetic {
+  constructor (left, right) {
+    super('multiply', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left * right)
+  }
+}
+
+/**
+ * Arithmetic negation.
+ * @param {expr} arg How to get the value.
+ * @returns The negation.
+ */
+class ExprNegate extends ExprNegation {
+  constructor (arg) {
+    super('negate', arg)
+  }
+
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    util.checkNumber(value,
+                     `Require number for ${this.name}`)
+    return (value === MISSING) ? MISSING : this.safeValue(-value)
+  }
+}
+
+/**
+ * Logical negation.
+ * @param {expr} arg How to get the value.
+ * @returns The negation.
+ */
+class ExprNot extends ExprNegation {
+  constructor (arg) {
+    super('not', arg)
+  }
+
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    return (value === MISSING) ? MISSING : ((!value) ? true : false)
+  }
+}
+
+/**
+ * Inequality.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The Boolean result.
+ */
+class ExprNotEqual extends ExprCompare {
+  constructor (left, right) {
+    super('notEqual', left, right)
+  }
+
+  run (row, i) {
+    return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
+  }
+}
+
+/**
+ * Logical disjunction.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The disjunction using short-circuit evaluation.
+ */
+class ExprOr extends ExprLogical {
+  constructor (left, right) {
+    super('or', left, right)
+  }
+
+  run (row, i) {
+    const left = this.left.run(row, i)
+    if (left) {
+      return left
+    }
+    return this.right.run(row, i)
+  }
+}
+
+/**
+ * Exponentiation.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The power.
+ */
+class ExprPower extends ExprArithmetic {
+  constructor (left, right) {
+    super('power', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left ** right)
+  }
+}
+
+/**
+ * Remainder.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The remainder.
+ */
+class ExprRemainder extends ExprArithmetic {
+  constructor (left, right) {
+    super('remainder', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left % right)
+  }
+}
+
+/**
+ * Subtraction.
+ * @param {expr} left How to get the left value.
+ * @param {expr} right How to get the right value.
+ * @returns The difference.
+ */
+class ExprSubtract extends ExprArithmetic {
+  constructor (left, right) {
+    super('subtract', left, right)
+  }
+
+  run (row, i) {
+    return this.arithmetic(row, i, (left, right) => left - right)
+  }
+}
+
+/**
+ * Check if a value is Boolean.
+ * @param {expr} arg How to get the value.
+ * @returns Boolean result.
+ */
+class ExprIsBool extends ExprTypecheck {
+  constructor (arg) {
+    super('isBool', arg)
+  }
+
+  run (row, i) {
+    return this.typeCheck(row, i, 'boolean')
+  }
+}
+
+/**
+ * Check if a value is a datetime.
+ * @param {expr} arg How to get the value.
+ * @returns Boolean result.
+ */
+class ExprIsDatetime extends ExprTypecheck {
+  constructor (arg) {
+    super('isDatetime', arg)
+  }
+
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    return (value === MISSING) ? MISSING : (value instanceof Date)
+  }
+}
+
+/**
+ * Check if a value is missing.
+ * @param {expr} arg How to get the value.
+ * @returns Boolean result.
+ */
+class ExprIsMissing extends ExprTypecheck {
+  constructor (arg) {
+    super('isMissing', arg)
+  }
+
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    return value === MISSING
+  }
+}
+
+/**
+ * Check if a value is numeric.
+ * @param {expr} arg How to get the value.
+ * @returns Boolean result.
+ */
+class ExprIsNumber extends ExprTypecheck {
+  constructor (arg) {
+    super('isNumber', arg)
+  }
+
+  run (row, i) {
+    return this.typeCheck(row, i, 'number')
+  }
+}
+
+/**
+ * Check if a value is a string.
+ * @param {expr} arg How to get the value.
+ * @returns Boolean result.
+ */
+class ExprIsString extends ExprTypecheck {
+  constructor (arg) {
+    super('isString', arg)
+  }
+
+  run (row, i) {
+    return this.typeCheck(row, i, 'string')
+  }
+}
+
+/**
+ * Convert a value to Boolean.
+ * @param {expr} arg How to get the value.
+ * @returns Converted value.
+ */
+class ExprToBool extends ExprConvert {
+  constructor (arg) {
+    super('toBool', arg)
+  }
+
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    return (value === MISSING)
+      ? MISSING
+      : (value ? true : false)
+  }
+}
+
+/**
+ * Convert a value to a datetime.
+ * @param {expr} arg How to get the value.
+ * @returns Converted value.
+ */
+class ExprToDatetime extends ExprConvert {
+  constructor (arg) {
+    super('toDatetime', arg)
+  }
+
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    if (value === MISSING) {
+      return MISSING
+    }
+    let result = new Date(value)
+    if ((typeof result === 'object') &&
+        (result.toString() === 'Invalid Date')) {
+      result = MISSING
+    }
+    return result
+  }
+}
+
+/**
+ * Convert a value to a number.
+ * @param {expr} arg How to get the value.
+ * @returns Converted value.
+ */
+class ExprToNumber extends ExprConvert {
+  constructor (arg) {
+    super('toNumber', arg)
+  }
+
+  run (row, i) {
+    let value = this.arg.run(row, i)
+    if (typeof value === 'boolean') {
+      value = value ? 1 : 0
+    }
+    else if (value instanceof Date) {
+      value = value.getTime()
+    }
+    else if (typeof value === 'string') {
+      value = parseFloat(value)
+      if (Number.isNaN(value)) {
+        value = MISSING
+      }
+    }
+    return value
+  }
+}
+
+/**
+ * Convert a value to a string.
+ * @param {expr} arg How to get the value.
+ * @returns Converted value.
+ */
+class ExprToString extends ExprConvert {
+  constructor (arg) {
+    super('toString', arg)
+  }
+
+  run (row, i) {
+    let value = this.arg.run(row, i)
+    if (value === MISSING) {
+      return MISSING
+    }
+    if (typeof value !== 'string') {
+      value = `${value}`
+    }
+    return value
+  }
+}
+
+/**
+ * Extract year from date.
+ * @param {expr} arg How to get the value.
+ * @returns Month.
+ */
+class ExprToYear extends ExprDatetime {
+  constructor (arg) {
+    super('toYear', arg)
+  }
+
+  run (row, i) {
+    return this.dateValue(row, i, d => d.getFullYear())
+  }
+}
+
+/**
+ * Extract month from date.
+ * @param {expr} arg How to get the value.
+ * @returns Month.
+ */
+class ExprToMonth extends ExprDatetime {
+  constructor (arg) {
+    super('toMonth', arg)
+  }
+
+  run (row, i) {
+    return this.dateValue(row, i, d => d.getMonth() + 1)
+  }
+}
+
+/**
+ * Extract day of month from date.
+ * @param {expr} arg How to get the value.
+ * @returns Day.
+ */
+class ExprToDay extends ExprDatetime {
+  constructor (arg) {
+    super('toDay', arg)
+  }
+
+  run (row, i) {
+    return this.dateValue(row, i, d => d.getDate())
+  }
+}
+
+/**
+ * Extract day of week from date.
+ * @param {expr} arg How to get the value.
+ * @returns Day.
+ */
+class ExprToWeekday extends ExprDatetime {
+  constructor (arg) {
+    super('toWeekday', arg)
+  }
+
+  run (row, i) {
+    return this.dateValue(row, i, d => d.getDay())
+  }
+}
+
+/**
+ * Extract hour from date.
+ * @param {expr} arg How to get the value.
+ * @returns Hour.
+ */
+class ExprToHours extends ExprDatetime {
+  constructor (arg) {
+    super('toHours', arg)
+  }
+
+  run (row, i) {
+    return this.dateValue(row, i, d => d.getHours())
+  }
+}
+
+/**
+ * Extract minutes from date.
+ * @param {expr} arg How to get the value.
+ * @returns Minutes.
+ */
+class ExprToMinutes extends ExprDatetime {
+  constructor (arg) {
+    super('toMinutes', arg)
+  }
+
+  run (row, i) {
+    return this.dateValue(row, i, d => d.getMinutes())
+  }
+}
+
+/**
+ * Extract seconds from date.
+ * @param {expr} arg How to get the value.
+ * @returns Seconds.
+ */
+class ExprToSeconds extends ExprDatetime {
+  constructor (arg) {
+    super('toSeconds', arg)
+  }
+
+  run (row, i) { 
+    return this.dateValue(row, i, d => d.getSeconds())
+  }
+}
+
+/**
  * Lookup table of everything exported from this file.
  */
 const Expr = {
@@ -398,566 +994,42 @@ const Expr = {
     return new Expr[kind](...args)
   },
 
-  /**
-   * Constant value.
-   * @param {any} value The value to return.
-   * @returns The value
-   */
-  constant: class extends ExprNullary {
-    constructor (value) {
-      super('constant', value)
-    }
-    run (row, i) {
-      return this.value
-    }
-  },
-
-  /**
-   * Column value.
-   * @param {string} column The column name.
-   * @returns The value
-   */
-  column: class extends ExprNullary {
-    constructor (name) {
-      util.check(name && (typeof name === 'string'),
-                 `Column name must be string`)
-      super('column', name)
-    }
-    run (row, i) {
-      util.check(typeof row === 'object',
-                 `Row must be object`)
-      util.check(this.value in row,
-                 `${this.name} not in row`)
-      return row[this.value]
-    }
-  },
-
-  /**
-   * Addition.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The sum.
-   */
-  add: class extends ExprArithmetic {
-    constructor (left, right) {
-      super('add', left, right)
-    }
-    run (row, i) {
-      return this.arithmetic(row, i, (left, right) => left + right)
-    }
-  },
-
-  /**
-   * Logical conjunction.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The conjunction using short-circuit evaluation.
-   */
-  and: class extends ExprLogical {
-    constructor (left, right) {
-      super('and', left, right)
-    }
-    run (row, i) {
-      const left = this.left.run(row, i)
-      if (!left) {
-        return left
-      }
-      return this.right.run(row, i)
-    }
-  },
-
-  /**
-   * Division.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The quotient.
-   */
-  divide: class extends ExprArithmetic {
-    constructor (left, right) {
-      super('divide', left, right)
-    }
-    run (row, i) {
-      return this.arithmetic(row, i, (left, right) => left / right)
-    }
-  },
-
-  /**
-   * Equality.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  equal: class extends ExprCompare {
-    constructor (left, right) {
-      super('equal', left, right)
-    }
-    run (row, i) {
-      return this.comparison(row, i, (left, right) => util.equal(left, right))
-    }
-  },
-
-  /**
-   * Strictly greater than.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  greater: class extends ExprCompare {
-    constructor (left, right) {
-      super('greater', left, right)
-    }
-    run (row, i) {
-      return this.comparison(row, i, (left, right) => (left > right))
-    }
-  },
-
-  /**
-   * Greater than or equal.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  greaterEqual: class extends ExprCompare {
-    constructor (left, right) {
-      super('greaterEqual', left, right)
-    }
-    run (row, i) {
-      return this.comparison(row, i, (left, right) => (left >= right))
-    }
-  },
-
-  /**
-   * Logical selection.
-   * @param {expr} left How to get the left value.
-   * @param {expr} middle How to get the middle value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  ifElse: class extends ExprTernary {
-    constructor (left, middle, right) {
-      super(Expr.TERNARY, 'ifElse', left, middle, right)
-    }
-    run (row, i) {
-      const cond = this.left.run(row, i)
-      return (cond === MISSING)
-        ? MISSING
-        : (cond ? this.middle.run(row, i) : this.right.run(row, i))
-    }
-  },
-
-  /**
-   * Strictly less than.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  less: class extends ExprCompare {
-    constructor (left, right) {
-      super('less', left, right)
-    }
-    run (row, i) {
-      return this.comparison(row, i, (left, right) => (left < right))
-    }
-  },
-
-  /**
-   * Less than or equal.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  lessEqual: class extends ExprCompare {
-    constructor (left, right) {
-      super('lessEqual', left, right)
-    }
-    run (row, i) {
-      return this.comparison(row, i, (left, right) => (left <= right))
-    }
-  },
-
-  /**
-   * Multiplication.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The product.
-   */
-  multiply: class extends ExprArithmetic {
-    constructor (left, right) {
-      super('multiply', left, right)
-    }
-    run (row, i) {
-      return this.arithmetic(row, i, (left, right) => left * right)
-    }
-  },
-
-  /**
-   * Arithmetic negation.
-   * @param {expr} arg How to get the value.
-   * @returns The negation.
-   */
-  negate: class extends ExprNegate {
-    constructor (arg) {
-      super('negate', arg)
-    }
-    run (row, i) {
-      const value = this.arg.run(row, i)
-      util.checkNumber(value,
-                       `Require number for ${this.name}`)
-      return (value === MISSING) ? MISSING : this.safeValue(-value)
-    }
-  },
-
-  /**
-   * Logical negation.
-   * @param {expr} arg How to get the value.
-   * @returns The negation.
-   */
-  not: class extends ExprNegate {
-    constructor (arg) {
-      super('not', arg)
-    }
-    run (row, i) {
-      const value = this.arg.run(row, i)
-      return (value === MISSING) ? MISSING : ((!value) ? true : false)
-    }
-  },
-
-  /**
-   * Inequality.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The Boolean result.
-   */
-  notEqual: class extends ExprCompare {
-    constructor (left, right) {
-      super('notEqual', left, right)
-    }
-    run (row, i) {
-      return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
-    }
-  },
-
-  /**
-   * Logical disjunction.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The disjunction using short-circuit evaluation.
-   */
-  or: class extends ExprLogical {
-    constructor (left, right) {
-      super('or', left, right)
-    }
-    run (row, i) {
-      const left = this.left.run(row, i)
-      if (left) {
-        return left
-      }
-      return this.right.run(row, i)
-    }
-  },
-
-  /**
-   * Exponentiation.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The power.
-   */
-  power: class extends ExprArithmetic {
-    constructor (left, right) {
-      super('power', left, right)
-    }
-    run (row, i) {
-      return this.arithmetic(row, i, (left, right) => left ** right)
-    }
-  },
-
-  /**
-   * Remainder.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The remainder.
-   */
-  remainder: class extends ExprArithmetic {
-    constructor (left, right) {
-      super('remainder', left, right)
-    }
-    run (row, i) {
-      return this.arithmetic(row, i, (left, right) => left % right)
-    }
-  },
-
-  /**
-   * Subtraction.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   * @returns The difference.
-   */
-  subtract: class extends ExprArithmetic {
-    constructor (left, right) {
-      super('subtract', left, right)
-    }
-    run (row, i) {
-      return this.arithmetic(row, i, (left, right) => left - right)
-    }
-  },
-
-  /**
-   * Check if a value is Boolean.
-   * @param {expr} arg How to get the value.
-   * @returns Boolean result.
-   */
-  isBool: class extends ExprTypecheck {
-    constructor (arg) {
-      super('isBool', arg)
-    }
-    run (row, i) {
-      return this.typeCheck(row, i, 'boolean')
-    }
-  },
-
-  /**
-   * Check if a value is a datetime.
-   * @param {expr} arg How to get the value.
-   * @returns Boolean result.
-   */
-  isDatetime: class extends ExprTypecheck {
-    constructor (arg) {
-      super('isDatetime', arg)
-    }
-    run (row, i) {
-      const value = this.arg.run(row, i)
-      return (value === MISSING) ? MISSING : (value instanceof Date)
-    }
-  },
-
-  /**
-   * Check if a value is missing.
-   * @param {expr} arg How to get the value.
-   * @returns Boolean result.
-   */
-  isMissing: class extends ExprTypecheck {
-    constructor (arg) {
-      super('isMissing', arg)
-    }
-    run (row, i) {
-      const value = this.arg.run(row, i)
-      return value === MISSING
-    }
-  },
-
-  /**
-   * Check if a value is numeric.
-   * @param {expr} arg How to get the value.
-   * @returns Boolean result.
-   */
-  isNumber: class extends ExprTypecheck {
-    constructor (arg) {
-      super('isNumber', arg)
-    }
-    run (row, i) {
-      return this.typeCheck(row, i, 'number')
-    }
-  },
-
-  /**
-   * Check if a value is a string.
-   * @param {expr} arg How to get the value.
-   * @returns Boolean result.
-   */
-  isString: class extends ExprTypecheck {
-    constructor (arg) {
-      super('isString', arg)
-    }
-    run (row, i) {
-      return this.typeCheck(row, i, 'string')
-    }
-  },
-
-  /**
-   * Convert a value to Boolean.
-   * @param {expr} arg How to get the value.
-   * @returns Converted value.
-   */
-  toBool: class extends ExprConvert {
-    constructor (arg) {
-      super('toBool', arg)
-    }
-    run (row, i) {
-      const value = this.arg.run(row, i)
-      return (value === MISSING)
-        ? MISSING
-        : (value ? true : false)
-    }
-  },
-
-  /**
-   * Convert a value to a datetime.
-   * @param {expr} arg How to get the value.
-   * @returns Converted value.
-   */
-  toDatetime: class extends ExprConvert {
-    constructor (arg) {
-      super('toDatetime', arg)
-    }
-    run (row, i) {
-      const value = this.arg.run(row, i)
-      if (value === MISSING) {
-        return MISSING
-      }
-      let result = new Date(value)
-      if ((typeof result === 'object') &&
-          (result.toString() === 'Invalid Date')) {
-        result = MISSING
-      }
-      return result
-    }
-  },
-
-  /**
-   * Convert a value to a number.
-   * @param {expr} arg How to get the value.
-   * @returns Converted value.
-   */
-  toNumber: class extends ExprConvert {
-    constructor (arg) {
-      super('toNumber', arg)
-    }
-    run (row, i) {
-      let value = this.arg.run(row, i)
-      if (typeof value === 'boolean') {
-        value = value ? 1 : 0
-      }
-      else if (value instanceof Date) {
-        value = value.getTime()
-      }
-      else if (typeof value === 'string') {
-        value = parseFloat(value)
-        if (Number.isNaN(value)) {
-          value = MISSING
-        }
-      }
-      return value
-    }
-  },
-
-  /**
-   * Convert a value to a string.
-   * @param {expr} arg How to get the value.
-   * @returns Converted value.
-   */
-  toString: class extends ExprConvert {
-    constructor (arg) {
-      super('toString', arg)
-    }
-    run (row, i) {
-      let value = this.arg.run(row, i)
-      if (value === MISSING) {
-        return MISSING
-      }
-      if (typeof value !== 'string') {
-        value = `${value}`
-      }
-      return value
-    }
-  },
-
-  /**
-   * Extract year from date.
-   * @param {expr} arg How to get the value.
-   * @returns Month.
-   */
-  toYear: class extends ExprDatetime {
-    constructor (arg) {
-      super('toYear', arg)
-    }
-    run (row, i) {
-      return this.dateValue(row, i, d => d.getFullYear())
-    }
-  },
-
-  /**
-   * Extract month from date.
-   * @param {expr} arg How to get the value.
-   * @returns Month.
-   */
-  toMonth: class extends ExprDatetime {
-    constructor (arg) {
-      super('toMonth', arg)
-    }
-    run (row, i) {
-      return this.dateValue(row, i, d => d.getMonth() + 1)
-    }
-  },
-
-  /**
-   * Extract day of month from date.
-   * @param {expr} arg How to get the value.
-   * @returns Day.
-   */
-  toDay: class extends ExprDatetime {
-    constructor (arg) {
-      super('toDay', arg)
-    }
-    run (row, i) {
-      return this.dateValue(row, i, d => d.getDate())
-    }
-  },
-
-  /**
-   * Extract day of week from date.
-   * @param {expr} arg How to get the value.
-   * @returns Day.
-   */
-  toWeekday: class extends ExprDatetime {
-    constructor (arg) {
-      super('toWeekday', arg)
-    }
-    run (row, i) {
-      return this.dateValue(row, i, d => d.getDay())
-    }
-  },
-
-  /**
-   * Extract hour from date.
-   * @param {expr} arg How to get the value.
-   * @returns Hour.
-   */
-  toHours: class extends ExprDatetime {
-    constructor (arg) {
-      super('toHours', arg)
-    }
-    run (row, i) {
-      return this.dateValue(row, i, d => d.getHours())
-    }
-  },
-
-  /**
-   * Extract minutes from date.
-   * @param {expr} arg How to get the value.
-   * @returns Minutes.
-   */
-  toMinutes: class extends ExprDatetime {
-    constructor (arg) {
-      super('toMinutes', arg)
-    }
-    run (row, i) {
-      return this.dateValue(row, i, d => d.getMinutes())
-    }
-  },
-
-  /**
-   * Extract seconds from date.
-   * @param {expr} arg How to get the value.
-   * @returns Seconds.
-   */
-  toSeconds: class extends ExprDatetime {
-    constructor (arg) {
-      super('toSeconds', arg)
-    }
-    run (row, i) { 
-     return this.dateValue(row, i, d => d.getSeconds())
-    }
-  }
+  base: ExprBase,
+  constant: ExprConstant,
+  column: ExprColumn,
+  add: ExprAdd,
+  and: ExprAnd,
+  divide: ExprDivide,
+  equal: ExprEqual,
+  greater: ExprGreater,
+  greaterEqual: ExprGreaterEqual,
+  ifElse: ExprIfElse,
+  less: ExprLess,
+  lessEqual: ExprLessEqual,
+  multiply: ExprMultiply,
+  negate: ExprNegate,
+  not: ExprNot,
+  notEqual: ExprNotEqual,
+  or: ExprOr,
+  power: ExprPower,
+  remainder: ExprRemainder,
+  subtract: ExprSubtract,
+  isBool: ExprIsBool,
+  isDatetime: ExprIsDatetime,
+  isMissing: ExprIsMissing,
+  isNumber: ExprIsNumber,
+  isString: ExprIsString,
+  toBool: ExprToBool,
+  toDatetime: ExprToDatetime,
+  toNumber: ExprToNumber,
+  toString: ExprToString,
+  toYear: ExprToYear,
+  toMonth: ExprToMonth,
+  toDay: ExprToDay,
+  toWeekday: ExprToWeekday,
+  toHours: ExprToHours,
+  toMinutes: ExprToMinutes,
+  toSeconds: ExprToSeconds
 }
 
 /**
@@ -976,7 +1048,4 @@ Expr.CLASSES = [
   ExprTernary
 ]
 
-module.exports = {
-  ExprBase,
-  Expr
-}
+module.exports = {Expr}
