@@ -6,10 +6,7 @@ const {
   ExprBase,
   Expr
 } = require('./expr')
-const {
-  SummarizeBase,
-  Summarize
-} = require('./summarize')
+const {Summarize} = require('./summarize')
 
 /**
  * Store a dataframe.
@@ -217,7 +214,7 @@ class DataFrame {
    */
   summarize (operations) {
     util.check(Array.isArray(operations) &&
-               operations.every(op => op instanceof SummarizeBase),
+               operations.every(op => op instanceof Summarize.base),
                `Operations must be summarizer objects`)
     util.check(this.hasColumns(operations.map(op => op.column)),
                `unknown column(s) in summarize`)

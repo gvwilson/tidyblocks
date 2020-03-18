@@ -3,10 +3,7 @@
 const util = require('./util')
 const MISSING = util.MISSING
 const {Expr} = require('./expr')
-const {
-  SummarizeBase,
-  Summarize
-} = require('./summarize')
+const {Summarize} = require('./summarize')
 const {DataFrame} = require('./dataframe')
 const {Statistics} = require('./statistics')
 
@@ -504,7 +501,7 @@ const Stage = {
       util.check(operations &&
                  Array.isArray(operations) &&
                  (operations.length > 0) &&
-                 operations.every(s => s instanceof SummarizeBase),
+                 operations.every(s => s instanceof Summarize.base),
                  `Require non-empty array of summarizers`)
       this.operations = operations
     }
