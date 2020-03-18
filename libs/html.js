@@ -250,7 +250,9 @@ class HTMLFactory {
    */
   makeToolbox (classes) {
     const blanks = classes.map(cls => cls.MakeBlank())
-    const contents = blanks.map(blank => this.frozen(blank.toHTML(this)))
+    const contents = blanks.map(blank => {
+      return this.frozen(blank.toHTML(this))
+    })
     const rows = contents.map(c => `<tr>${c}</tr>`).join('')
     return `<table class="briq-toolbox"><tbody>${rows}</tbody></table>`
   }

@@ -16,29 +16,9 @@ class SummarizeBase {
     util.check(name && (typeof name === 'string') &&
                column && (typeof column === 'string'),
                `Require non-empty strings as name and column`)
-    this.options = ['count', 'maximum', 'mean', 'median',
-                    'minimum', 'stdDev', 'sum', 'variance']
+    this.options = Summarize.Options
     this.name = name
     this.column = column
-  }
-
-  /**
-   * Check equality with another object.
-   * @param {Object} other What to compare to.
-   * @returns Boolean result.
-   */
-  equal (other) {
-    return (other instanceof SummarizeBase) &&
-      (this.name === other.name) &&
-      (this.column === other.column)
-  }
-
-  /**
-   * Convert to JSON.
-   * @returns JSON representation.
-   */
-  toJSON () {
-    return [Summarize.KIND, this.name, this.column]
   }
 
   /**
@@ -209,30 +189,10 @@ const Summarize = {
   KIND: '@summarize',
 
   /**
-   * Build summarizer from JSON representation.
-   * @param {JSON} json Persisted data.
-   * @returns Summarizer.
+   * Options for pulldown.
    */
-  fromJSON: (json) => {
-    util.check(Array.isArray(json) &&
-               (json.length === 3) &&
-               (json[0] === Summarize.KIND),
-               `Require non-empty array beginning with correct kind`)
-    util.check(json[1] in Summarize,
-               `Unknown summarizer kind "${json[1]}"`)
-    const kind = json[1]
-    const column = json[2]
-    return new Summarize[kind](column)
-  },
-
-  /**
-   * Convert from HTML back to summarizer.
-   */
-  fromHTML: (factory, funcNode, columnNode) => {
-    const op = factory.getSelected(funcNode)
-    const column = factory.fromInput(columnNode, false)
-    return new Summarize[op](column)
-  },
+  Options: ['count', 'maximum', 'mean', 'median',
+            'minimum', 'stdDev', 'sum', 'variance'],
 
   base: SummarizeBase,
   count: SummarizeCount,

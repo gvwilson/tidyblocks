@@ -274,8 +274,8 @@ describe('stage persistence', () => {
   })
 
   it('persists summarize', (done) => {
-    const stage = new Stage.summarize(new Summarize.maximum('red'))
-    assert.deepEqual([Stage.TRANSFORM, 'summarize', [Summarize.KIND, 'maximum', 'red']],
+    const stage = new Stage.summarize('maximum', 'red')
+    assert.deepEqual([Stage.TRANSFORM, 'summarize', 'maximum', 'red'],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -376,12 +376,9 @@ describe('stage persistence', () => {
   })
 
   it('restores summarize from JSON', (done) => {
-    const stage = new Stage.summarize(new Summarize.mean('red'),
-                                      new Summarize.variance('blue'))
+    const stage = new Stage.summarize('mean', 'red')
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'summarize',
-                 [Summarize.KIND, 'mean', 'red'],
-                 [Summarize.KIND, 'variance', 'blue']],
+                [Stage.TRANSFORM, 'summarize', 'mean', 'red'],
                 stage,
                 `summarize`)
     done()

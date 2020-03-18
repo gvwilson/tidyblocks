@@ -413,40 +413,40 @@ class StageSort extends StageTransform {
  * @param {Summarize[]} Summarizers.
  */
 class StageSummarize extends StageTransform {
-  constructor (op) {
+  constructor (op, column) {
     super('summarize', [], null, true, true)
-    util.check(op && (op instanceof Summarize.base),
-               `Require summarizers`)
     this.op = op
+    this.column = column
   }
   equal (other) {
     return super.equal(other) &&
-      this.op.equal(other.op)
+      (this.op === other.op) &&
+      (this.column === other.column)
   }
   run (runner, df) {
     runner.appendLog(this.name)
-    return df.summarize(this.op)
+    const summarizer = new Summarize[this.op](this.column)
+    return df.summarize(summarizer)
   }
   toJSON () {
-    return super.toJSON(this.op.toJSON())
+    return super.toJSON(this.op, this.column)
   }
   toHTML (factory) {
     const result = factory.widget(
       factory.label(this.name),
-      factory.choose(this.op.options, this.op.name),
-      factory.input(this.op.column)
+      factory.choose(Summarize.Options, this.op),
+      factory.input(this.column)
     )
     return result
   }
   static fromHTML (factory, funcNode, columnNode) {
-    const summarizer = Summarize.fromHTML(factory, funcNode, columnNode)
-    return new Stage.summarize(summarizer)
+    return new Stage.summarize(
+      factory.getSelected(funcNode),
+      factory.fromInput(columnNode, false)
+    )
   }
   static MakeBlank () {
-    const placeholder = new Summarize.count('x')
-    const result = new Stage.summarize(placeholder)
-    result.operations = []
-    return result
+    return new Stage.summarize('', '')
   }
 }
 
@@ -797,14 +797,7 @@ const Stage = {
                (json[1] in Stage),
                `Unknown stage kind "${json[1]}"`)
     const kind = json[1]
-    const args = json.slice(2).map(p => {
-      if (Array.isArray(p) &&
-          (p.length > 0) &&
-          (p[0] === Summarize.KIND)) {
-        return Summarize.fromJSON(p)
-      }
-      return Expr.fromJSON(p)
-    })
+    const args = json.slice(2).map(p => Expr.fromJSON(p))
     return new Stage[kind](...args)
   },
 

@@ -562,8 +562,7 @@ describe('converts transforms to HTML', () => {
   })
 
   it('creates a summarize widget', (done) => {
-    const maxLeft = new Summarize.maximum('left')
-    const node = checkStage(new Stage.summarize(maxLeft), 'summarize', 3)
+    const node = checkStage(new Stage.summarize('maximum', 'left'), 'summarize', 3)
     const row = node.querySelector('table >tbody >tr')
     const [label, func, column] = Array.from(row.children).map(child => child.firstChild)
     const selected = func.querySelector('option[selected=selected]')
@@ -863,8 +862,7 @@ describe('converts HTML back to programs', () => {
 
   it('converts a program containing a single summarize stage with multiple summarizers', (done) => {
     const factory = new HTMLFactory()
-    const minRight = new Summarize.minimum('right')
-    const stage = new Stage.summarize(minRight)
+    const stage = new Stage.summarize('minimum', 'right')
     const original = new Program(new Pipeline('name', stage))
     const dom = makeNode(original.toHTML(factory))
     const roundtrip = Program.fromHTML(factory, dom)

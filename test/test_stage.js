@@ -12,7 +12,7 @@ const {Environment} = require('../libs/environment')
 const fixture = require('./fixture')
 
 describe('build dataframe operations', () => {
-  it('drops columns', (done) => {
+  it('builds drop columns stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.drop(['personal'])
     const result = stage.run(runner, new DataFrame(fixture.names))
@@ -22,7 +22,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('filters rows', (done) => {
+  it('builds filter stage', (done) => {
     const runner = new Environment()
     const expr = new Expr.column('right')
     const stage = new Stage.filter(expr)
@@ -34,7 +34,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('groups data', (done) => {
+  it('builds group data stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.groupBy(['left'])
     const result = stage.run(runner, new DataFrame(fixture.number))
@@ -44,7 +44,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('joins', (done) => {
+  it('builds join stage', (done) => {
     const leftData = new DataFrame([{leftName: 7, value: 'leftVal'}])
     const rightData = new DataFrame([{rightName: 7, value: 'rightVal'}])
     const runner = new Environment()
@@ -59,7 +59,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('mutates', (done) => {
+  it('builds mutate stage', (done) => {
     const runner = new Environment()
     const mutater = new Expr.constant('stuff')
     const stage = new Stage.mutate('value', mutater)
@@ -71,7 +71,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('notifies', (done) => {
+  it('builds notify stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.notify('answer')
     const input = new DataFrame(fixture.names)
@@ -83,7 +83,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('reads data', (done) => {
+  it('builds read data stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.read('names.csv')
     const result = stage.run(runner, null)
@@ -94,7 +94,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('selects', (done) => {
+  it('builds select stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.select(['personal'])
     const result = stage.run(runner, new DataFrame(fixture.names))
@@ -104,7 +104,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('sorts', (done) => {
+  it('builds sort stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.sort(['left'], true)
     const result = stage.run(runner, new DataFrame(fixture.string))
@@ -115,10 +115,10 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('summarizes', (done) => {
+  it('builds summarize stage', (done) => {
     const df = new DataFrame([{left: 3}])
     const runner = new Environment()
-    const stage = new Stage.summarize(new Summarize.maximum('left'))
+    const stage = new Stage.summarize('maximum', 'left')
     const result = stage.run(runner, df)
     assert.deepEqual(result.data,
                      [{left: 3, left_maximum: 3}],
@@ -126,7 +126,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('ungroups', (done) => {
+  it('build ungroup stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.ungroup()
     const input = [{a: 1}, {a: 2}]
@@ -137,7 +137,7 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('finds unique values', (done) => {
+  it('builds unique values stage', (done) => {
     const runner = new Environment()
     const stage = new Stage.unique(['a'])
     const input = [{a: 1}, {a: 1}, {a: 2}, {a: 1}]
@@ -456,11 +456,15 @@ describe('stage equality tests', () => {
   })
 
   it('compares summarize stages', (done) => {
-    const max_left = new Summarize.maximum('left')
-    const min_left = new Summarize.minimum('left')
-    const max_min_left = new Stage.summarize(max_left, min_left)
-    assert(max_min_left.equal(max_min_left),
+    const max_left = new Stage.summarize('maximum', 'left')
+    const min_left = new Stage.summarize('minimum', 'left')
+    const max_right = new Stage.summarize('maximum', 'right')
+    assert(max_left.equal(max_left),
            `Same should equal`)
+    assert(!max_left.equal(min_left),
+           `Different summarize functions should be unequal`)
+    assert(!max_right.equal(max_left),
+           `Different summarize columns should be unequal`)
     done()
   })
 
