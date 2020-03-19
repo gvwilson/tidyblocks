@@ -2,14 +2,13 @@
   "@program",
   [
     "@pipeline",
-    "read_plot",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@plot",
+      "@stage",
       "scatter"
     ]
   ]

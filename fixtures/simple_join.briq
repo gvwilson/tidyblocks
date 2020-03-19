@@ -2,37 +2,34 @@
   "@program",
   [
     "@pipeline",
-    "simple_join_alpha",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "notify",
       "alpha"
     ]
   ],
   [
     "@pipeline",
-    "simple_join_beta",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "notify",
       "beta"
     ]
   ],
   [
     "@pipeline",
-    "join_em_up",
     [
-      "@transform",
+      "@stage",
       "join",
       "alpha",
       "red",
@@ -40,7 +37,7 @@
       "green"
     ],
     [
-      "@transform",
+      "@stage",
       "notify",
       "final"
     ]

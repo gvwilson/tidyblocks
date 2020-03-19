@@ -17,13 +17,11 @@ const {Program} = require('../libs/program')
 const Programs = {
   read_only: () => new Program(
     new Pipeline(
-      'read_only',
       new Stage.read('colors.csv'))
   ),
 
   read_notify: () => new Program(
     new Pipeline(
-      'read_notify',
       new Stage.read('colors.csv'),
       new Stage.notify('answer')
     )
@@ -31,7 +29,6 @@ const Programs = {
 
   read_plot: () => new Program(
     new Pipeline(
-      'read_plot',
       new Stage.read('colors.csv'),
       new Stage.scatter('red', 'green', null)
     )
@@ -39,7 +36,6 @@ const Programs = {
 
   read_sort: () => new Program(
     new Pipeline(
-      'read_sort',
       new Stage.read('colors.csv'),
       new Stage.sort(['red'], true),
     )
@@ -47,7 +43,6 @@ const Programs = {
 
   group_summarize: () => new Program(
     new Pipeline(
-      'group_summarize',
       new Stage.read('colors.csv'),
       new Stage.groupBy(['red']),
       new Stage.summarize(new Summarize.maximum('green'),
@@ -57,7 +52,6 @@ const Programs = {
 
   math: () => new Program(
     new Pipeline(
-      'math',
       new Stage.read('colors.csv'),
       new Stage.mutate('sum', new Expr.add(
         new Expr.constant(1),
@@ -71,12 +65,10 @@ const Programs = {
 
   parallel_two: () => new Program(
     new Pipeline(
-      'parallel_two_alpha',
       new Stage.read('colors.csv'),
       new Stage.notify('alpha')
     ),
     new Pipeline(
-      'parallel_two_beta',
       new Stage.read('colors.csv'),
       new Stage.notify('beta')
     )
@@ -84,17 +76,14 @@ const Programs = {
 
   simple_join: () => new Program(
     new Pipeline(
-      'simple_join_alpha',
       new Stage.read('colors.csv'),
       new Stage.notify('alpha')
     ),
     new Pipeline(
-      'simple_join_beta',
       new Stage.read('colors.csv'),
       new Stage.notify('beta')
     ),
     new Pipeline(
-      'join_em_up',
       new Stage.join('alpha', 'red', 'beta', 'green'),
       new Stage.notify('final')
     )
@@ -102,7 +91,6 @@ const Programs = {
 
   stats_test: () => new Program(
     new Pipeline(
-      'stats_test',
       new Stage.read('colors.csv'),
       new Stage.ZTestOneSample(100, 10, 0.01, 'red')
     )

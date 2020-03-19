@@ -16,7 +16,7 @@ class SummarizeBase {
     util.check(name && (typeof name === 'string') &&
                column && (typeof column === 'string'),
                `Require non-empty strings as name and column`)
-    this.options = Summarize.Options
+    this.options = Summarize.OPTIONS
     this.name = name
     this.column = column
   }
@@ -184,14 +184,9 @@ class SummarizeVariance extends SummarizeBase {
  */
 const Summarize = {
   /**
-   * Indicator.
-   */
-  KIND: '@summarize',
-
-  /**
    * Options for pulldown.
    */
-  Options: ['count', 'maximum', 'mean', 'median',
+  OPTIONS: ['count', 'maximum', 'mean', 'median',
             'minimum', 'stdDev', 'sum', 'variance'],
 
   base: SummarizeBase,

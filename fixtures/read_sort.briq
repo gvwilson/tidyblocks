@@ -2,14 +2,13 @@
   "@program",
   [
     "@pipeline",
-    "read_sort",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "sort",
       [
         "red"

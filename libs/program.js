@@ -42,14 +42,6 @@ class Program {
   }
 
   /**
-   * Convert program to HTML.
-   */
-  toHTML (factory) {
-    const pipelines = this.pipelines.map(p => p.stages.map(s => `<td>${s.toHTML(factory)}</td>`))
-    return factory.program(pipelines)
-  }
-
-  /**
    * Convert HTML to program.
    */
   static fromHTML (factory, table) {

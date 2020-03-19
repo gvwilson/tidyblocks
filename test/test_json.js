@@ -40,21 +40,21 @@ describe('expression persistence', () => {
   
   it('restores a constant', (done) => {
     checkObject(Expr.fromJSON,
-                [Expr.NULLARY, 'constant', 123],
+                ['@expr', 'constant', 123],
                 new Expr.constant(123),
                 `Constant`)
     done()
   })
 
   it('persists constants', (done) => {
-    assert.deepEqual([Expr.NULLARY, 'constant', 'orange'],
+    assert.deepEqual(['@expr', 'constant', 'orange'],
                      (new Expr.constant('orange')).toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists column getters', (done) => {
-    assert.deepEqual([Expr.NULLARY, 'column', 'orange'],
+    assert.deepEqual(['@expr', 'column', 'orange'],
                      (new Expr.column('orange')).toJSON(),
                      `Mis-match`)
     done()
@@ -62,7 +62,7 @@ describe('expression persistence', () => {
 
   it('persists unary expressions', (done) => {
     const expr = new Expr.not(new Expr.constant(false))
-    assert.deepEqual([Expr.NEGATE, 'not', [Expr.NULLARY, 'constant', false]],
+    assert.deepEqual(['@expr', 'not', ['@expr', 'constant', false]],
                      expr.toJSON(),
                      `Mis-match`)
     done()
@@ -70,9 +70,9 @@ describe('expression persistence', () => {
 
   it('persists binary expressions', (done) => {
     const expr = new Expr.power(new Expr.constant(1), new Expr.constant(2))
-    assert.deepEqual([Expr.ARITHMETIC, 'power',
-                      [Expr.NULLARY, 'constant', 1],
-                      [Expr.NULLARY, 'constant', 2]],
+    assert.deepEqual(['@expr', 'power',
+                      ['@expr', 'constant', 1],
+                      ['@expr', 'constant', 2]],
                      expr.toJSON(),
                      `Mis-match`)
     done()
@@ -82,10 +82,10 @@ describe('expression persistence', () => {
     const expr = new Expr.ifElse(new Expr.constant(true),
                                  new Expr.constant('a'),
                                  new Expr.constant('b'))
-    const expected = [Expr.TERNARY, 'ifElse',
-                      [Expr.NULLARY, 'constant', true],
-                      [Expr.NULLARY, 'constant', 'a'],
-                      [Expr.NULLARY, 'constant', 'b']]
+    const expected = ['@expr', 'ifElse',
+                      ['@expr', 'constant', true],
+                      ['@expr', 'constant', 'a'],
+                      ['@expr', 'constant', 'b']]
     assert.deepEqual(expected, expr.toJSON(),
                      `Mis-match`)
     done()
@@ -93,7 +93,7 @@ describe('expression persistence', () => {
 
   it('restores a column', (done) => {
     checkObject(Expr.fromJSON,
-                [Expr.NULLARY, 'column', 'blue'],
+                ['@expr', 'column', 'blue'],
                 new Expr.column('blue'),
                 `Column`)
     done()
@@ -108,7 +108,7 @@ describe('expression persistence', () => {
     ]
     for (const [name, func] of allChecks) {
       checkObject(Expr.fromJSON,
-                  [Expr.NEGATE, name, childJSON],
+                  ['@expr', name, childJSON],
                   new func(child),
                  `Failed to restore unary "${name}"`)
     }
@@ -136,7 +136,7 @@ describe('expression persistence', () => {
     ]
     for (const [name, func] of allChecks) {
       checkObject(Expr.fromJSON,
-                  [Expr.ARITHMETIC, name, childJSON, childJSON],
+                  ['@expr', name, childJSON, childJSON],
                   new func(child, child),
                   `Failed to restore binary "${name}"`)
     }
@@ -151,7 +151,7 @@ describe('expression persistence', () => {
     ]
     for (const [name, func] of allChecks) {
       checkObject(Expr.fromJSON,
-                  [Expr.TERNARY, name, childJSON, childJSON, childJSON],
+                  ['@expr', name, childJSON, childJSON, childJSON],
                   new func(child, child, child),
                   `Failed to restore ternary "${name}"`)
     }
@@ -170,7 +170,7 @@ describe('expression persistence', () => {
     ]
     for (const [name, func] of allChecks) {
       checkObject(Expr.fromJSON,
-                  [Expr.TYPECHECK, name, childJSON],
+                  ['@expr', name, childJSON],
                   new func(child),
                   `Failed to restore type-checking expression ${name}`)
     }
@@ -188,7 +188,7 @@ describe('expression persistence', () => {
     ]
     for (const [name, func] of allChecks) {
       checkObject(Expr.fromJSON,
-                  [Expr.CONVERT, name, childJSON],
+                  ['@expr', name, childJSON],
                   new func(child),
                   `Failed to restore conversion expression ${name}`)
     }
@@ -210,7 +210,7 @@ describe('expression persistence', () => {
     ]
     for (const [name, func] of allChecks) {
       checkObject(Expr.fromJSON,
-                  [Expr.DATETIME, name, childJSON],
+                  ['@expr', name, childJSON],
                   new func(child),
                   `Failed to restore datetime operation ${name}`)
     }
@@ -227,7 +227,7 @@ describe('stage persistence', () => {
   })
 
   it('persists drop', (done) => {
-    assert.deepEqual([Stage.TRANSFORM, 'drop', ['left', 'right']],
+    assert.deepEqual(['@stage', 'drop', ['left', 'right']],
                      (new Stage.drop(['left', 'right'])).toJSON(),
                      `Mis-match`)
     done()
@@ -235,7 +235,7 @@ describe('stage persistence', () => {
 
   it('persists filter', (done) => {
     const stage = new Stage.filter(new Expr.column('keep'))
-    assert.deepEqual([Stage.TRANSFORM, 'filter', [Expr.NULLARY, 'column', 'keep']],
+    assert.deepEqual(['@stage', 'filter', ['@expr', 'column', 'keep']],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -243,7 +243,7 @@ describe('stage persistence', () => {
 
   it('persists groupBy', (done) => {
     const stage = new Stage.groupBy(['pink', 'yellow'])
-    assert.deepEqual([Stage.TRANSFORM, 'groupBy', ['pink', 'yellow']],
+    assert.deepEqual(['@stage', 'groupBy', ['pink', 'yellow']],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -251,7 +251,7 @@ describe('stage persistence', () => {
 
   it('persists join', (done) => {
     const stage = new Stage.join('west', 'up', 'east', 'down')
-    assert.deepEqual([Stage.TRANSFORM, 'join', 'west', 'up', 'east', 'down'],
+    assert.deepEqual(['@stage', 'join', 'west', 'up', 'east', 'down'],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -259,7 +259,7 @@ describe('stage persistence', () => {
 
   it('persists mutate', (done) => {
     const stage = new Stage.mutate('fresh', new Expr.constant(true))
-    assert.deepEqual([Stage.TRANSFORM, 'mutate', 'fresh', [Expr.NULLARY, 'constant', true]],
+    assert.deepEqual(['@stage', 'mutate', 'fresh', ['@expr', 'constant', true]],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -267,7 +267,7 @@ describe('stage persistence', () => {
 
   it('persists select', (done) => {
     const stage = new Stage.select(['pink', 'orange'])
-    assert.deepEqual([Stage.TRANSFORM, 'select', ['pink', 'orange']],
+    assert.deepEqual(['@stage', 'select', ['pink', 'orange']],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -275,7 +275,7 @@ describe('stage persistence', () => {
 
   it('persists summarize', (done) => {
     const stage = new Stage.summarize('maximum', 'red')
-    assert.deepEqual([Stage.TRANSFORM, 'summarize', 'maximum', 'red'],
+    assert.deepEqual(['@stage', 'summarize', 'maximum', 'red'],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -283,7 +283,7 @@ describe('stage persistence', () => {
 
   it('persists ungroup', (done) => {
     const stage = new Stage.ungroup()
-    assert.deepEqual([Stage.TRANSFORM, 'ungroup'],
+    assert.deepEqual(['@stage', 'ungroup'],
                      stage.toJSON(),
                      `Mis-match`)
     done()
@@ -291,7 +291,7 @@ describe('stage persistence', () => {
 
   it('restores drop from JSON', (done) => {
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'drop', ['left', 'right']],
+                ['@stage', 'drop', ['left', 'right']],
                 new Stage.drop(['left', 'right']),
                 `drop`)
     done()
@@ -301,7 +301,7 @@ describe('stage persistence', () => {
     const child = new Expr.constant(true)
     const childJSON = child.toJSON()
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'filter', childJSON],
+                ['@stage', 'filter', childJSON],
                 new Stage.filter(child),
                 `filter`)
     done()
@@ -310,7 +310,7 @@ describe('stage persistence', () => {
   it('restores groupBy from JSON', (done) => {
     const columns = ['left', 'right']
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'groupBy', columns],
+                ['@stage', 'groupBy', columns],
                 new Stage.groupBy(columns),
                 `groupBy`)
     done()
@@ -322,7 +322,7 @@ describe('stage persistence', () => {
           rightName = 'after',
           rightCol = 'blue'
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'join', leftName, leftCol, rightName, rightCol],
+                ['@stage', 'join', leftName, leftCol, rightName, rightCol],
                 new Stage.join(leftName, leftCol, rightName, rightCol),
                 `join`)
     done()
@@ -333,7 +333,7 @@ describe('stage persistence', () => {
     const child = new Expr.constant(true)
     const childJSON = child.toJSON()
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'mutate', newName, childJSON],
+                ['@stage', 'mutate', newName, childJSON],
                 new Stage.mutate(newName, child),
                 `mutate`)
     done()
@@ -342,7 +342,7 @@ describe('stage persistence', () => {
   it('restores notify from JSON', (done) => {
     const label = 'signal'
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'notify', 'signal'],
+                ['@stage', 'notify', 'signal'],
                 new Stage.notify(label),
                 `notify`)
     done()
@@ -351,7 +351,7 @@ describe('stage persistence', () => {
   it('restores read from JSON', (done) => {
     const path = '/to/file'
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'read', path],
+                ['@stage', 'read', path],
                 new Stage.read(path),
                 `notify`)
     done()
@@ -360,7 +360,7 @@ describe('stage persistence', () => {
   it('restores select from JSON', (done) => {
     const columns = ['left', 'right']
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'select', columns],
+                ['@stage', 'select', columns],
                 new Stage.select(columns),
                 `select`)
     done()
@@ -369,7 +369,7 @@ describe('stage persistence', () => {
   it('restores sort from JSON', (done) => {
     const columns = ['left', 'right']
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'sort', columns],
+                ['@stage', 'sort', columns],
                 new Stage.sort(columns),
                 `sort`)
     done()
@@ -378,7 +378,7 @@ describe('stage persistence', () => {
   it('restores summarize from JSON', (done) => {
     const stage = new Stage.summarize('mean', 'red')
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'summarize', 'mean', 'red'],
+                ['@stage', 'summarize', 'mean', 'red'],
                 stage,
                 `summarize`)
     done()
@@ -386,7 +386,7 @@ describe('stage persistence', () => {
 
   it('restores ungroup from JSON', (done) => {
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'ungroup'],
+                ['@stage', 'ungroup'],
                 new Stage.ungroup(),
                 `ungroup`)
     done()
@@ -395,7 +395,7 @@ describe('stage persistence', () => {
   it('restores unique from JSON', (done) => {
     const columns = ['left', 'right']
     checkObject(Stage.fromJSON,
-                [Stage.TRANSFORM, 'unique', columns],
+                ['@stage', 'unique', columns],
                 new Stage.unique(columns),
                 `unique`)
     done()
@@ -406,7 +406,7 @@ describe('plot persistence', () => {
   it('restores bar from JSON', (done) => {
     const x_axis = 'age', y_axis = 'height'
     checkObject(Stage.fromJSON,
-                [Stage.PLOT, 'bar', x_axis, y_axis],
+                ['@stage', 'bar', x_axis, y_axis],
                 new Stage.bar(x_axis, y_axis),
                 `bar`)
     done()
@@ -415,7 +415,7 @@ describe('plot persistence', () => {
   it('restores box from JSON', (done) => {
     const x_axis = 'age', y_axis = 'height'
     checkObject(Stage.fromJSON,
-                [Stage.PLOT, 'box', x_axis, y_axis],
+                ['@stage', 'box', x_axis, y_axis],
                 new Stage.box(x_axis, y_axis),
                 `box`)
     done()
@@ -424,7 +424,7 @@ describe('plot persistence', () => {
   it('restores dot from JSON', (done) => {
     const x_axis = 'age'
     checkObject(Stage.fromJSON,
-                [Stage.PLOT, 'dot', x_axis],
+                ['@stage', 'dot', x_axis],
                 new Stage.dot(x_axis),
                 `dot`)
     done()
@@ -434,7 +434,7 @@ describe('plot persistence', () => {
     const column = 'age'
     const bins = 17
     checkObject(Stage.fromJSON,
-                [Stage.PLOT, 'histogram', column, bins],
+                ['@stage', 'histogram', column, bins],
                 new Stage.histogram(column, bins),
                 `histogram`)
     done()
@@ -443,7 +443,7 @@ describe('plot persistence', () => {
   it('restores scatter from JSON', (done) => {
     const x_axis = 'age', y_axis = 'height', color = 'vermilion'
     checkObject(Stage.fromJSON,
-                [Stage.PLOT, 'scatter', x_axis, y_axis, color],
+                ['@stage', 'scatter', x_axis, y_axis, color],
                 new Stage.scatter(x_axis, y_axis, color),
                 `scatter`)
     done()
@@ -454,7 +454,7 @@ describe('statistics persistence', () => {
   it('restores ANOVA from JSON', (done) => {
     const significance = 0.03, groupName = 'red', valueName = 'blue'
     checkObject(Stage.fromJSON,
-                [Stage.STATS, 'ANOVA', significance, groupName, valueName],
+                ['@stage', 'ANOVA', significance, groupName, valueName],
                 new Stage.ANOVA(significance, groupName, valueName),
                 `ANOVA`)
     done()
@@ -463,7 +463,7 @@ describe('statistics persistence', () => {
   it('restores Kolmogorov-Smirnov from JSON', (done) => {
     const mean = 0.1, stdDev = 0.3, significance = 0.03, colName = 'red'
     checkObject(Stage.fromJSON,
-                [Stage.STATS, 'KolmogorovSmirnov', mean, stdDev, significance, colName],
+                ['@stage', 'KolmogorovSmirnov', mean, stdDev, significance, colName],
                 new Stage.KolmogorovSmirnov(mean, stdDev, significance, colName),
                 `Kolmogorov-Smirnov`)
     done()
@@ -472,7 +472,7 @@ describe('statistics persistence', () => {
   it('restores Kruskal-Wallis from JSON', (done) => {
     const significance = 0.03, groupName = 'red', valueName = 'blue'
     checkObject(Stage.fromJSON,
-                [Stage.STATS, 'KruskalWallis', significance, groupName, valueName],
+                ['@stage', 'KruskalWallis', significance, groupName, valueName],
                 new Stage.KruskalWallis(significance, groupName, valueName),
                 `Kruskal-Wallis`)
     done()
@@ -481,7 +481,7 @@ describe('statistics persistence', () => {
   it('restores one-sample t test from JSON', (done) => {
     const mean = 0.1, significance = 0.03, colName = 'red'
     checkObject(Stage.fromJSON,
-                [Stage.STATS, 'TTestOneSample', mean, significance, colName],
+                ['@stage', 'TTestOneSample', mean, significance, colName],
                 new Stage.TTestOneSample(mean, significance, colName),
                 `one-sample t test`)
     done()
@@ -490,7 +490,7 @@ describe('statistics persistence', () => {
   it('restores paired two-sided t test from JSON', (done) => {
     const significance = 0.03, leftCol = 'green', rightCol = 'blue'
     checkObject(Stage.fromJSON,
-                [Stage.STATS, 'TTestPaired', significance, leftCol, rightCol],
+                ['@stage', 'TTestPaired', significance, leftCol, rightCol],
                 new Stage.TTestPaired(significance, leftCol, rightCol),
                 `paired t test`)
     done()
@@ -499,7 +499,7 @@ describe('statistics persistence', () => {
   it('restores one-sample z test from JSON', (done) => {
     const mean = 0.1, stdDev = 0.04, significance = 0.03, colName = 'red'
     checkObject(Stage.fromJSON,
-                [Stage.STATS, 'ZTestOneSample', mean, stdDev, significance, colName],
+                ['@stage', 'ZTestOneSample', mean, stdDev, significance, colName],
                 new Stage.ZTestOneSample(mean, stdDev, significance, colName),
                 `one-sample z test`)
     done()
@@ -509,23 +509,22 @@ describe('statistics persistence', () => {
 describe('pipeline persistence', () => {
   it('turns a single pipeline into JSON', (done) => {
     const path = '/path/to/file'
-    const pipeline = new Pipeline('pipe', new Stage.read(path), new Stage.sort(['left'], true))
+    const pipeline = new Pipeline(new Stage.read(path), new Stage.sort(['left'], true))
     const actual = pipeline.toJSON()
-    const expected = [Pipeline.KIND, 'pipe',
-                      [Stage.TRANSFORM, 'read', path],
-                      [Stage.TRANSFORM, 'sort', ['left'], true]]
+    const expected = ['@pipeline',
+                      ['@stage', 'read', path],
+                      ['@stage', 'sort', ['left'], true]]
     assert.deepEqual(actual, expected,
                      `Wrong JSON`)
     done()
   })
 
   it('turns JSON into a single pipeline', (done) => {
-    const fixture = [Pipeline.KIND, 'name',
-                     [Stage.TRANSFORM, 'read', 'colors.csv'],
-                     [Stage.TRANSFORM, 'sort', ['left', 'right'], false]]
+    const fixture = ['@pipeline',
+                     ['@stage', 'read', 'colors.csv'],
+                     ['@stage', 'sort', ['left', 'right'], false]]
     const actual = Pipeline.fromJSON(fixture)
-    const expected = new Pipeline('name',
-                                  new Stage.read('colors.csv'),
+    const expected = new Pipeline(new Stage.read('colors.csv'),
                                   new Stage.sort(['left', 'right'], false))
     assert.deepEqual(actual, expected,
                      `Wrong result from reading pipeline`)
@@ -536,21 +535,21 @@ describe('pipeline persistence', () => {
 describe('program persistence', () => {
   it('turns a multi-pipeline program into JSON', (done) => {
     const program = new Program(
-      new Pipeline('first', new Stage.read('/path/to/first')),
-      new Pipeline('second', new Stage.read('/path/to/second'), new Stage.unique(['left'])),
-      new Pipeline('third', new Stage.read('/path/to/third'), new Stage.notify('signal'))
+      new Pipeline(new Stage.read('/path/to/first')),
+      new Pipeline(new Stage.read('/path/to/second'), new Stage.unique(['left'])),
+      new Pipeline(new Stage.read('/path/to/third'), new Stage.notify('signal'))
     )
     const actual = program.toJSON()
     const expected = [
       Program.KIND,
-      [Pipeline.KIND, 'first',
-       [Stage.TRANSFORM, 'read', '/path/to/first']],
-      [Pipeline.KIND, 'second',
-       [Stage.TRANSFORM, 'read', '/path/to/second'],
-       [Stage.TRANSFORM, 'unique', ['left']]],
-      [Pipeline.KIND, 'third',
-       [Stage.TRANSFORM, 'read', '/path/to/third'],
-       [Stage.TRANSFORM, 'notify', 'signal']]
+      ['@pipeline',
+       ['@stage', 'read', '/path/to/first']],
+      ['@pipeline',
+       ['@stage', 'read', '/path/to/second'],
+       ['@stage', 'unique', ['left']]],
+      ['@pipeline',
+       ['@stage', 'read', '/path/to/third'],
+       ['@stage', 'notify', 'signal']]
     ]
     assert.deepEqual(actual, expected,
                      `Wrong result for persisting program`)
@@ -560,14 +559,14 @@ describe('program persistence', () => {
   it('turns JSON into a multi-pipeline program', (done) => {
     const fixture = [
       Program.KIND,
-      [Pipeline.KIND, 'alpha',
-       [Stage.TRANSFORM, 'read', 'colors.csv']],
-      [Pipeline.KIND, 'beta',
-       [Stage.TRANSFORM, 'read', 'colors.csv'],
-       [Stage.TRANSFORM, 'unique', ['red']]],
-      [Pipeline.KIND, 'gamma',
-       [Stage.TRANSFORM, 'read', 'colors.csv'],
-       [Stage.TRANSFORM, 'notify', 'signal']]
+      ['@pipeline',
+       ['@stage', 'read', 'colors.csv']],
+      ['@pipeline',
+       ['@stage', 'read', 'colors.csv'],
+       ['@stage', 'unique', ['red']]],
+      ['@pipeline',
+       ['@stage', 'read', 'colors.csv'],
+       ['@stage', 'notify', 'signal']]
     ]
     const program = Program.fromJSON(fixture)
     const roundtrip = program.toJSON()

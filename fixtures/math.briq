@@ -2,34 +2,33 @@
   "@program",
   [
     "@pipeline",
-    "math",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "mutate",
       "sum",
       [
-        "@arithmetic",
+        "@expr",
         "add",
         [
-          "@nullary",
+          "@expr",
           "constant",
           1
         ],
         [
-          "@arithmetic",
+          "@expr",
           "multiply",
           [
-            "@nullary",
+            "@expr",
             "column",
             "green"
           ],
           [
-            "@nullary",
+            "@expr",
             "column",
             "blue"
           ]

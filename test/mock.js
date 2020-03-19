@@ -13,7 +13,7 @@ const LOCAL_DATA_DIR = 'data'
  */
 class MockStage extends StageBase {
   constructor (name, func, requires, produces, input, output) {
-    super('@mock', name, requires, produces, input, output)
+    super(name, requires, produces, input, output)
     this.func = func
   }
   run = (runner, df) => {

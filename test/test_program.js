@@ -48,7 +48,7 @@ describe('executes program', () => {
   })
 
   it('requires valid pipelines when registering', (done) => {
-    const pipeline = new Pipeline('test')
+    const pipeline = new Pipeline()
     const program = new Program()
     assert.throws(() => program.register(null),
                   Error,
@@ -61,7 +61,7 @@ describe('executes program', () => {
 
   it('registers a pipeline that depends on nothing', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline('test', Middle)
+    const pipeline = new Pipeline(Middle)
 
     program.register(pipeline)
     assert.equal(program.queue.length, 1,
@@ -77,7 +77,7 @@ describe('executes program', () => {
     const program = new Program()
     const requires = ['first', 'second']
     const stage = new MockStage('stage', Pass, requires, null, true, true)
-    const pipeline = new Pipeline('test', stage)
+    const pipeline = new Pipeline(stage)
 
     program.register(pipeline)
     assert.equal(program.queue.length, 0,
@@ -92,7 +92,7 @@ describe('executes program', () => {
   it('makes something runnable when its single dependency resolves', (done) => {
     const program = new Program()
     const stage = new MockStage('stage', Pass, ['first'], null, true, true)
-    const second = new Pipeline('second', stage)
+    const second = new Pipeline(stage)
     const df = new DataFrame([])
 
     program.register(second)
@@ -117,7 +117,7 @@ describe('executes program', () => {
     program.env = new Environment()
     const requires = ['first', 'second', 'third']
     const last = new MockStage('last', Pass, requires, null, true, true)
-    const lastPipe = new Pipeline('lastPipe', last)
+    const lastPipe = new Pipeline(last)
     const df = new DataFrame([])
 
     program.register(lastPipe)
@@ -146,10 +146,10 @@ describe('executes program', () => {
     const program = new Program()
     program.env = new Environment()
     const leftStage = new MockStage('left', Pass, ['something'], null, true, true)
-    const leftPipe = new Pipeline('leftPipe', leftStage)
+    const leftPipe = new Pipeline(leftStage)
     const df = new DataFrame([])
     const rightStage = new MockStage('right', Pass, ['else'], null, true, true)
-    const rightPipe = new Pipeline('rightPipe', rightStage)
+    const rightPipe = new Pipeline(rightStage)
 
     program.register(leftPipe)
     program.register(rightPipe)
@@ -171,7 +171,7 @@ describe('executes program', () => {
     const stage = new MockStage('stage',
                                 (runner, df) => util.fail('error message'),
                                 [], null, false, true)
-    const failure = new Pipeline('failure', stage)
+    const failure = new Pipeline(stage)
     program.register(failure)
 
     const env = new Environment()
@@ -185,7 +185,7 @@ describe('executes program', () => {
 
   it('runs a single pipeline with no dependencies that does not notify', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline('test', Head, Tail)
+    const pipeline = new Pipeline(Head, Tail)
     program.register(pipeline)
 
     const env = new Environment()
@@ -197,7 +197,7 @@ describe('executes program', () => {
 
   it('runs a single pipeline with no dependencies that notifies', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline('test', Head, TailNotify)
+    const pipeline = new Pipeline(Head, TailNotify)
     program.register(pipeline)
 
     const env = new Environment()
@@ -210,9 +210,9 @@ describe('executes program', () => {
   it('runs two independent pipelines in some order', (done) => {
     const program = new Program()
     const tailLocal = new MockStage('tailLocal', Pass, [], 'local', true, false)
-    const pipeLocal = new Pipeline('pipeLocal', Head, tailLocal)
+    const pipeLocal = new Pipeline(Head, tailLocal)
     program.register(pipeLocal)
-    const pipeNotify = new Pipeline('pipeNotify', Head, TailNotify)
+    const pipeNotify = new Pipeline(Head, TailNotify)
     program.register(pipeNotify)
 
     const env = new Environment()
@@ -231,8 +231,8 @@ describe('executes program', () => {
                                       ['keyword'], null, false, true)
     const tailLocal = new MockStage('tailLocal', Pass,
                                     [], 'local', true, false)
-    const pipeNotify = new Pipeline('pipeNotify', Head, TailNotify)
-    const pipeRequireLocal = new Pipeline('pipeRequireLocal', headRequire, tailLocal)
+    const pipeNotify = new Pipeline(Head, TailNotify)
+    const pipeRequireLocal = new Pipeline(headRequire, tailLocal)
     program.register(pipeNotify)
     program.register(pipeRequireLocal)
 
@@ -251,9 +251,9 @@ describe('executes program', () => {
     const tailBeta = new MockStage('tailBeta', Pass, [], 'beta', true, false)
     const join = new Stage.join('alpha', 'left', 'beta', 'left')
 
-    program.register(new Pipeline('makeAlpha', Head, tailAlpha))
-    program.register(new Pipeline('makeBeta', Head, tailBeta))
-    program.register(new Pipeline('doJoin', join, TailNotify))
+    program.register(new Pipeline(Head, tailAlpha))
+    program.register(new Pipeline(Head, tailBeta))
+    program.register(new Pipeline(join, TailNotify))
 
     const env = new Environment()
     program.run(env)

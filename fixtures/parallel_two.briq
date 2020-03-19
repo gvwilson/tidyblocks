@@ -2,28 +2,26 @@
   "@program",
   [
     "@pipeline",
-    "parallel_two_alpha",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "notify",
       "alpha"
     ]
   ],
   [
     "@pipeline",
-    "parallel_two_beta",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "notify",
       "beta"
     ]

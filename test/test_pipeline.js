@@ -18,22 +18,17 @@ const {
 } = require('./fixture')
 
 describe('executes pipelines', () => {
-  it('requires a name for a pipeline', (done) => {
-    assert.throws(() => new Pipeline(''),
-                  Error,
-                  `Should require name for pipeline`)
-    done()
-  })
-
   it('can construct an empty pipeline', (done) => {
-    const pipeline = new Pipeline('test')
+    const pipeline = new Pipeline()
+    assert.deepEqual(pipeline.stages, [],
+                     `Empty pipeline should not have stages`)
     assert.deepEqual(pipeline.requires(), [],
                      `Empty pipeline should not require anything`)
     done()
   })
 
   it('refuses to execute an empty pipeline', (done) => {
-    const pipeline = new Pipeline('test')
+    const pipeline = new Pipeline()
     assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute empty pipeline`)
@@ -41,7 +36,7 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose first stage requires input', (done) => {
-    const pipeline = new Pipeline('test', Middle)
+    const pipeline = new Pipeline(Middle)
     assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute pipeline requiring input`)
@@ -49,7 +44,7 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose later stages require input', (done) => {
-    const pipeline = new Pipeline('test', Head, Middle, Head, Middle)
+    const pipeline = new Pipeline(Head, Middle, Head, Middle)
     assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute pipeline whose middle stages require input`)
@@ -57,7 +52,7 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose early stages do not produce output', (done) => {
-    const pipeline = new Pipeline('test', Head, Tail, Tail)
+    const pipeline = new Pipeline(Head, Tail, Tail)
     assert.throws(() => pipeline.run(new Environment()),
                   Error,
                   `Should not execute pipeline whose middle stage does not produce output`)
@@ -65,7 +60,7 @@ describe('executes pipelines', () => {
   })
 
   it('executes a single-stage pipeline without a tail', (done) => {
-    const pipeline = new Pipeline('test', Head)
+    const pipeline = new Pipeline(Head)
     const result = pipeline.run(new Environment())
     assert.equal(result.name, null,
                  `Result should not be named`)
@@ -75,7 +70,7 @@ describe('executes pipelines', () => {
   })
 
   it('executes a two-stage pipeline without a tail', (done) => {
-    const pipeline = new Pipeline('test', Head, Middle)
+    const pipeline = new Pipeline(Head, Middle)
     const result = pipeline.run(new Environment())
     assert.equal(result.name, null,
                  `Result should not be named`)
@@ -85,7 +80,7 @@ describe('executes pipelines', () => {
   })
 
   it('executes a three-stage pipeline with a tail', (done) => {
-    const pipeline = new Pipeline('test', Head, Middle, Tail)
+    const pipeline = new Pipeline(Head, Middle, Tail)
     const result = pipeline.run(new Environment())
     assert.equal(result.name, null,
                  `Result should not be named`)
@@ -95,7 +90,7 @@ describe('executes pipelines', () => {
   })
 
   it('executes a pipeline with notification', (done) => {
-    const pipeline = new Pipeline('test', Head, TailNotify)
+    const pipeline = new Pipeline(Head, TailNotify)
     const result = pipeline.run(new Environment())
     assert.equal(result.name, 'keyword',
                  `Result should include name`)
@@ -106,7 +101,7 @@ describe('executes pipelines', () => {
 
   it('logs execution', (done) => {
     const runner = new Environment()
-    const pipeline = new Pipeline('test', Head, Middle, Tail)
+    const pipeline = new Pipeline(Head, Middle, Tail)
     const result = pipeline.run(runner)
     assert.deepEqual(runner.log, ['head', 'middle', 'tail'],
                      `Stages not logged`)

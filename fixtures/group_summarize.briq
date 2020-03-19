@@ -2,27 +2,49 @@
   "@program",
   [
     "@pipeline",
-    "group_summarize",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "groupBy",
       [
         "red"
       ]
     ],
     [
-      "@transform",
+      "@stage",
       "summarize",
-      [
-        "@summarize",
-        "maximum",
-        "green"
-      ]
+      {
+        "options": [
+          "count",
+          "maximum",
+          "mean",
+          "median",
+          "minimum",
+          "stdDev",
+          "sum",
+          "variance"
+        ],
+        "name": "maximum",
+        "column": "green"
+      },
+      {
+        "options": [
+          "count",
+          "maximum",
+          "mean",
+          "median",
+          "minimum",
+          "stdDev",
+          "sum",
+          "variance"
+        ],
+        "name": "minimum",
+        "column": "blue"
+      }
     ]
   ]
 ]

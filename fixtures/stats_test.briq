@@ -2,14 +2,13 @@
   "@program",
   [
     "@pipeline",
-    "stats_test",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@stats",
+      "@stage",
       "ZTestOneSample"
     ]
   ]

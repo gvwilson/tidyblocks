@@ -2,14 +2,13 @@
   "@program",
   [
     "@pipeline",
-    "read_notify",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ],
     [
-      "@transform",
+      "@stage",
       "notify",
       "answer"
     ]

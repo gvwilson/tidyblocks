@@ -7,10 +7,9 @@ const {Stage} = require('./stage')
  * Manage a single pipeline.
  */
 class Pipeline {
-  constructor (name, ...stages) {
-    util.check(name && (typeof name === 'string'),
-               `Require non-empty name for pipeline`)
-    this.name = name
+  constructor (...stages) {
+    util.check(stages.every(s => s instanceof Stage.base),
+               `Pipeline must be made of stages`)
     this.stages = stages
   }
 
@@ -22,19 +21,17 @@ class Pipeline {
   static fromJSON (json) {
     util.check(Array.isArray(json) &&
                (json.length > 1) &&
-               (json[0] === Pipeline.KIND),
+               (json[0] === '@pipeline'),
               `Expected array with pipeline element`)
-    const name = json[1]
-    const stages = json.slice(2).map(blob => Stage.fromJSON(blob))
-    return new Pipeline(name, ...stages)
+    const stages = json.slice(1).map(blob => Stage.fromJSON(blob))
+    return new Pipeline(...stages)
   }
 
   /**
    * Convert to JSON.
    */
   toJSON () {
-    return [Pipeline.KIND,
-            this.name,
+    return ['@pipeline',
             ...this.stages.map(stage => stage.toJSON())]
   }
 
@@ -107,11 +104,6 @@ class Pipeline {
     return {name: last.produces, data: data}
   }
 }
-
-/**
- * Indicate that persisted JSON is pipeline.
- */
-Pipeline.KIND = '@pipeline'
 
 module.exports = {
   Pipeline

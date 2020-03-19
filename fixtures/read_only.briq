@@ -2,9 +2,8 @@
   "@program",
   [
     "@pipeline",
-    "read_only",
     [
-      "@transform",
+      "@stage",
       "read",
       "colors.csv"
     ]

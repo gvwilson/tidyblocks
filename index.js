@@ -8,7 +8,7 @@ const {Stage} = require('./libs/stage')
 const {Environment} = require('./libs/environment')
 const {Pipeline} = require('./libs/pipeline')
 const {Program} = require('./libs/program')
-const {HTMLFactory} = require('./libs/html')
+const {JsonToHtml} = require('./libs/html')
 const {UserInterface} = require('./libs/ui')
 
 module.exports = UserInterface
