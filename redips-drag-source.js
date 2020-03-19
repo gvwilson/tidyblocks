@@ -95,13 +95,13 @@ REDIPS.drag = (function () {
 		formElements,				// set form values in cloned row (to prevent reset values of form elements)
 		normalize,					// private method returns normalized spaces from input string
 		hasChilds,					// private method (returns true if element contains child nodes with nodeType === 1)
-	
+
 		//
 		// private parameters
 		//
 		objMargin = null,			// space from clicked point to the object bounds (top, right, bottom, left)
 		regexDrag = /\bredips-drag\b/i,	// regular expression to search "redips-drag" class name
-		
+
 		// window width and height (parameters are set in onload and onresize event handler)
 		// just for a note: window and Window is reserved word in JS so I named variable "screen")
 		screen = {width: 0,
