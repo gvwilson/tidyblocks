@@ -46,7 +46,7 @@ class Program {
    */
   toHTML (factory) {
     const pipelines = this.pipelines.map(p => p.stages.map(s => `<td>${s.toHTML(factory)}</td>`))
-    return factory.program(pipelines)
+    return factory.makeProgram(pipelines)
   }
 
   /**

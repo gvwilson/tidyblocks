@@ -40,9 +40,9 @@ class ExprNullary extends ExprBase {
   }
 
   toHTML (factory) {
-    return factory.widget(
-      factory.choose(this.options, this.kind),
-      factory.input(this.value)
+    return factory.makeWidget(
+      factory.makeSelect(this.options, this.kind),
+      factory.makeInput(this.value)
     )
   }
 
@@ -75,9 +75,9 @@ class ExprUnary extends ExprBase {
   }
 
   toHTML (factory) {
-    return factory.widget(
-      factory.choose(this.options, this.kind),
-      factory.expr(this.arg)
+    return factory.makeWidget(
+      factory.makeSelect(this.options, this.kind),
+      factory.makeExpr(this.arg)
     )
   }
 }
@@ -111,10 +111,10 @@ class ExprBinary extends ExprBase {
   }
 
   toHTML (factory) {
-    return factory.infixWidget(
-      factory.expr(this.left),
-      factory.choose(this.options, this.kind),
-      factory.expr(this.right)
+    return factory.makeInfixWidget(
+      factory.makeExpr(this.left),
+      factory.makeSelect(this.options, this.kind),
+      factory.makeExpr(this.right)
     )
   }
 }
@@ -154,13 +154,13 @@ class ExprTernary extends ExprBase {
   }
 
   toHTML (factory) {
-    return factory.widget(
+    return factory.makeWidget(
       'if',
-      factory.expr(this.left),
+      factory.makeExpr(this.left),
       'then',
-      factory.expr(this.middle),
+      factory.makeExpr(this.middle),
       'else',
-      factory.expr(this.right)
+      factory.makeExpr(this.right)
     )
   }
 
@@ -1003,7 +1003,7 @@ const Expr = {
   fromHTML: (factory, dom) => {
     const children = factory.getChildren(dom)
           .map(td => td.firstChild)
-          .map(item => factory.exprFromHTML(item))
+          .map(item => factory.getExpr(item))
     if (factory.isInfix(dom)) {
       util.check(children.length === 3,
                  `Expect three children for infix operator`)

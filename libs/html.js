@@ -14,9 +14,11 @@ class HTMLFactory {
   }
 
   /**
-   * Drill down.
+   * Get the children of a draggable div.
+   * @param {DOM} dom The draggable div containing a table with a single row.
+   * @returns An array of children.
    */
-  drillDown (dom) {
+  getChildren (dom) {
     ['DIV', 'TABLE', 'TBODY'].forEach(tag => {
       util.check((dom.tagName.toUpperCase() === tag) &&
                  (dom.children.length === 1),
@@ -25,14 +27,6 @@ class HTMLFactory {
     })
     util.check(dom.tagName.toUpperCase() === 'TR',
                `Expected table row`)
-    return dom
-  }
-
-  /**
-   * Get the children of a draggable div.
-   */
-  getChildren (dom) {
-    dom = this.drillDown(dom)
     const children = Array.from(dom.children)
     util.check(children.length,
                `widget must have children`)
@@ -43,40 +37,40 @@ class HTMLFactory {
   }
 
   /**
-   * Is this an infix operator?
-   */
-  isInfix (dom) {
-    return dom.firstChild.hasAttribute('briq-infix')
-  }
-
-  /**
    * Top-level dispatch for things that might be in expression HTML.
+   * @param {DOM} dom The current node in the expression tree.
+   * @returns An expression (possibly containing other expressions).
    */
-  exprFromHTML (dom) {
+  getExpr (dom) {
     util.check(dom,
                `Require something to working with`)
     const tagName = dom.tagName.toUpperCase()
+
     if (tagName === 'INPUT') {
       util.check(dom.getAttribute('type').toUpperCase() == 'TEXT',
                  `Expected only text nodes in expressions`)
       const text = dom.getAttribute('value')
       return this.toValue(text)
     }
+
     else if (tagName === 'SELECT') {
-      return this.getSelected(dom)
+      return this.getSelect(dom)
     }
+
     else if (tagName === 'DIV') {
       return Expr.fromHTML(this, dom)
     }
+
     util.fail(`Unknown node type "${tagName}"`)
   }
 
   /**
-   * Get a selected value.
+   * Is this an infix operator?
+   * @param {DOM} dom The table cell. (This is a big of a hack.)
+   * @returns Boolean.
    */
-  getSelected (dom) {
-    const selected = dom.querySelector('[selected=selected]')
-    return selected.getAttribute('value')
+  isInfix (dom) {
+    return dom.firstChild.hasAttribute('briq-infix')
   }
 
   /**
@@ -111,19 +105,19 @@ class HTMLFactory {
   /**
    * Create a table containing an entire program.
    */
-  program (pipelines) {
+  makeProgram (pipelines) {
     // Fill in short pipelines.
     const longest = Math.max(...pipelines.map(p => p.length))
     const justified = pipelines.map(p => {
       const temp = [...p]
       while (temp.length < longest) {
-        temp.push(this.placeholder())
+        temp.push(this.makePlaceholder())
       }
       return temp
     })
     // Create table.
     const body = justified
-      .map((p, i) => `<tr>${this.pipelineIDCell(i)}${p.join('')}</tr>`)
+      .map((p, i) => `<tr>${this.makePipelineIDCell(i)}${p.join('')}</tr>`)
       .join('')
     const table = `<table id="briq-program"><tbody>${body}</tbody></table>`
     return table
@@ -132,8 +126,8 @@ class HTMLFactory {
   /**
    * Create an empty program as a placeholder.
    */
-  emptyProgram () {
-    const content = `${this.pipelineIDCell(0)}${this.placeholder()}`
+  makeEmptyProgram () {
+    const content = `${this.makePipelineIDCell(0)}${this.makePlaceholder()}`
     const table = `<table id="briq-program"><tbody><tr>${content}</tr></tbody></table>`
     return table
   }
@@ -141,35 +135,21 @@ class HTMLFactory {
   /**
    * Build a widget with several parts.
    */
-  widget (...parts) {
+  makeWidget (...parts) {
     return this._widget('', ...parts)
   }
 
   /**
    * Build an infix widget.
    */
-  infixWidget (...parts) {
+  makeInfixWidget (...parts) {
     return this._widget('briq-infix="true"', ...parts)
-  }
-
-  /**
-   * Build a widget with an attribute (utility method).
-   */
-  _widget (attr, ...parts) {
-    parts = parts
-      .map(p => (p === null)
-           ? this.placeholder()
-           : this.frozen(p))
-      .join('')
-    attr = `class="briq-widget" ${attr}`
-    const content = `<table ${attr}><tbody><tr>${parts}</tr></tbody></table>`
-    return `<div class="redips-drag redips-clone">${content}</div>`
   }
 
   /**
    * Turn an expression into HTML.
    */
-  expr (thing) {
+  makeExpr (thing) {
     if (thing === null) {
       return null
     }
@@ -184,7 +164,7 @@ class HTMLFactory {
   /**
    * Build a checkbox.
    */
-  check (isChecked) {
+  makeCheck (isChecked) {
     const checked = isChecked ? 'checked="checked"' : ''
     return `<input class="briq-checkbox" type="checkbox" ${checked}/>`
   }
@@ -192,7 +172,7 @@ class HTMLFactory {
   /**
    * Recover a Boolean value from a checkbox.
    */
-  fromCheck (dom) {
+  getCheck (dom) {
     util.check(dom && (dom.tagName.toUpperCase() == 'INPUT'),
                `Expected input cell`)
     return dom.hasAttribute('checked')
@@ -201,7 +181,7 @@ class HTMLFactory {
   /**
    * Build an option selector.
    */
-  choose (options, selected) {
+  makeSelect (options, selected) {
     options = options.map(opt => {
       let display = null, value = null
       if (Array.isArray(opt)) {
@@ -224,10 +204,18 @@ class HTMLFactory {
   }
 
   /**
+   * Get a selected value.
+   */
+  getSelect (dom) {
+    const selected = dom.querySelector('[selected=selected]')
+    return selected.getAttribute('value')
+  }
+
+  /**
    * Build an input field.
    * @param {string} value What to display or null.
    */
-  input (value) {
+  makeInput (value) {
     const attribute = (value === null) ? '' : `value="${value}"`
     return `<input class="briq-textbox" type="text" ${attribute}/>`
   }
@@ -235,7 +223,7 @@ class HTMLFactory {
   /**
    * Restore an input field.
    */
-  fromInput (dom, splitOnCommas) {
+  getInput (dom, splitOnCommas) {
     util.check(dom && (dom.tagName.toUpperCase() === 'INPUT'),
                `Expected input cell`)
     const raw = dom.getAttribute('value')
@@ -247,7 +235,7 @@ class HTMLFactory {
   /**
    * Build label text.
    */
-  label (text) {
+  makeLabel (text) {
     text = text ? text : ''
     return `<span>${text}</span>`
   }
@@ -258,7 +246,7 @@ class HTMLFactory {
   makeToolbox (classes) {
     const blanks = classes.map(cls => cls.MakeBlank())
     const contents = blanks.map(blank => {
-      return this.frozen(blank.toHTML(this))
+      return this.makeFrozen(blank.toHTML(this))
     })
     const rows = contents.map(c => `<tr>${c}</tr>`).join('')
     return `<table class="briq-toolbox"><tbody>${rows}</tbody></table>`
@@ -267,22 +255,36 @@ class HTMLFactory {
   /**
    * Build a table cell that can be filled in.
    */
-  placeholder () {
+  makePlaceholder () {
     return `<td class="briq-placeholder"></td>`
   }
 
   /**
    * Build a table cell that cannot be filled in.
    */
-  frozen (content) {
+  makeFrozen (content) {
     return `<td class="redips-mark">${content}</td>`
   }
 
   /**
    * Create a pipeline ID cell.
    */
-  pipelineIDCell (i) {
+  makePipelineIDCell (i) {
     return `<th class="redips-mark">${i}</th>`
+  }
+
+  /**
+   * Build a widget with an attribute (utility method).
+   */
+  _widget (attr, ...parts) {
+    parts = parts
+      .map(p => (p === null)
+           ? this.makePlaceholder()
+           : this.makeFrozen(p))
+      .join('')
+    attr = `class="briq-widget" ${attr}`
+    const content = `<table ${attr}><tbody><tr>${parts}</tr></tbody></table>`
+    return `<div class="redips-drag redips-clone">${content}</div>`
   }
 }
 

@@ -38,13 +38,13 @@ describe('creates the right HTML for basic types', () => {
   it('builds label text', (done) => {
     const factory = new HTMLFactory()
 
-    const noLabel = makeNode(factory.label(null))
+    const noLabel = makeNode(factory.makeLabel(null))
     assert.equal(noLabel.tagName, 'SPAN',
                  `Expected span`)
     assert.equal(noLabel.childNodes.length, 0,
                  `Span should not have children`)
 
-    const withLabel = makeNode(factory.label('content'))
+    const withLabel = makeNode(factory.makeLabel('content'))
     assert.equal(withLabel.tagName, 'SPAN',
                  `Expected span`)
     assert.equal(withLabel.childNodes.length, 1,
@@ -58,7 +58,7 @@ describe('creates the right HTML for basic types', () => {
   it('builds an input field', (done) => {
     const factory = new HTMLFactory()
 
-    const noDisplay = makeNode(factory.input(null))
+    const noDisplay = makeNode(factory.makeInput(null))
     assert.equal(noDisplay.tagName, 'INPUT',
                  `Wrong node type`)
     assert.equal(noDisplay.childNodes.length, 0,
@@ -68,7 +68,7 @@ describe('creates the right HTML for basic types', () => {
     assert.equal(noDisplay.getAttribute('value'), null,
                  `Input should not have initial value set`)
 
-    const withDisplay = makeNode(factory.input('valuable'))
+    const withDisplay = makeNode(factory.makeInput('valuable'))
     assert.equal(withDisplay.tagName, 'INPUT',
                  `Wrong node type`)
     assert.equal(withDisplay.childNodes.length, 0,
@@ -82,7 +82,7 @@ describe('creates the right HTML for basic types', () => {
 
   it('builds a checkbox', (done) => {
     const factory = new HTMLFactory()
-    const node = makeNode(factory.check())
+    const node = makeNode(factory.makeCheck())
     assert.equal(node.tagName, 'INPUT',
                  `Wrong node type`)
     assert.equal(node.getAttribute('type'), 'checkbox',
@@ -92,7 +92,7 @@ describe('creates the right HTML for basic types', () => {
 
   it('builds a simple selector with nothing chosen', (done) => {
     const factory = new HTMLFactory()
-    const node = makeNode(factory.choose(['a', 'b'], null))
+    const node = makeNode(factory.makeSelect(['a', 'b'], null))
 
     assert.equal(node.tagName, 'SELECT',
                  `Wrong node type`)
@@ -120,7 +120,7 @@ describe('creates the right HTML for basic types', () => {
 
   it('builds a simple selector with something chosen', (done) => {
     const factory = new HTMLFactory()
-    const node = makeNode(factory.choose(['a', 'b'], 'b'))
+    const node = makeNode(factory.makeSelect(['a', 'b'], 'b'))
 
     assert.equal(node.tagName, 'SELECT',
                  `Wrong node type`)
@@ -148,7 +148,7 @@ describe('creates the right HTML for basic types', () => {
 
   it('builds a mixed selector with nothing chosen', (done) => {
     const factory = new HTMLFactory()
-    const node = makeNode(factory.choose([['Show A', 'a'], 'b'], null))
+    const node = makeNode(factory.makeSelect([['Show A', 'a'], 'b'], null))
 
     assert.equal(node.tagName, 'SELECT',
                  `Wrong node type`)
@@ -176,7 +176,7 @@ describe('creates the right HTML for basic types', () => {
 
   it('builds a mixed selector with something chosen', (done) => {
     const factory = new HTMLFactory()
-    const node = makeNode(factory.choose([['Show A', 'a'], 'b'], 'a'))
+    const node = makeNode(factory.makeSelect([['Show A', 'a'], 'b'], 'a'))
 
     assert.equal(node.tagName, 'SELECT',
                  `Wrong node type`)
@@ -204,9 +204,9 @@ describe('creates the right HTML for basic types', () => {
 
   it('builds expression placeholders', (done) => {
     const factory = new HTMLFactory()
-    assert.equal(factory.expr(null), null,
+    assert.equal(factory.makeExpr(null), null,
                  `Should get null back for null expression`)
-    assert.throws(() => factory.expr('some text'),
+    assert.throws(() => factory.makeExpr('some text'),
                   Error,
                   `Should not be able to called with string`)
 
@@ -215,7 +215,7 @@ describe('creates the right HTML for basic types', () => {
 
   it('requires valid HTML for expression placeholders', (done) => {
     const factory = new HTMLFactory()
-    assert.throws(() => factory.expr('plain text'),
+    assert.throws(() => factory.makeExpr('plain text'),
                   Error,
                   `Should not be able to create plain text expression`)
     done()
@@ -224,10 +224,10 @@ describe('creates the right HTML for basic types', () => {
   it('builds widgets', (done) => {
     const factory = new HTMLFactory()
 
-    const widget = makeNode(factory.widget(
-      factory.label('LABEL'),
-      factory.input(null),
-      factory.expr(new Expr.constant(false))
+    const widget = makeNode(factory.makeWidget(
+      factory.makeLabel('LABEL'),
+      factory.makeInput(null),
+      factory.makeExpr(new Expr.constant(false))
     ))
 
     assert.equal(widget.tagName, 'DIV',
@@ -600,7 +600,7 @@ describe('converts transforms to HTML', () => {
 describe('converts entire programs to HTML', () => {
   it('creates an empty program', (done) => {
     const factory = new HTMLFactory()
-    const empty = makeNode(factory.emptyProgram())
+    const empty = makeNode(factory.makeEmptyProgram())
     assert.equal(empty.tagName, 'TABLE',
                  `Expected table`)
     assert.equal(empty.getAttribute('id'), 'briq-program',
@@ -688,7 +688,7 @@ describe('converts HTML back to programs', () => {
   it('fails for unknown DOM nodes', (done) => {
     const factory = new HTMLFactory()
     const paragraph = makeNode('<p>paragraph</p>')
-    assert.throws(() => factory.exprFromHTML(paragraph),
+    assert.throws(() => factory.makeExprFromHTML(paragraph),
                   Error,
                   `Should not convert paragraph`)
     done()

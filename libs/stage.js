@@ -87,13 +87,13 @@ class StageDrop extends StageTransform {
     return super.toJSON(this.columns)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.columns.join(', '))
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.columns.join(', '))
     )
   }
   static fromHTML (factory, columnsNode) {
-    return new Stage.drop(factory.fromInput(columnsNode, true))
+    return new Stage.drop(factory.getInput(columnsNode, true))
   }
   static MakeBlank () {
     return new Stage.drop([])
@@ -121,9 +121,9 @@ class StageFilter extends StageTransform {
     return super.toJSON(this.expr.toJSON())
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.expr(this.expr)
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeExpr(this.expr)
     )
   }
   static fromHTML (factory, exprNode) {
@@ -157,13 +157,13 @@ class StageGroupBy extends StageTransform {
     return super.toJSON(this.columns)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.columns.join(', '))
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.columns.join(', '))
     )
   }
   static fromHTML (factory, columnsNode) {
-    return new Stage.groupBy(factory.fromInput(columnsNode, true))
+    return new Stage.groupBy(factory.getInput(columnsNode, true))
   }
   static MakeBlank () {
     return new Stage.groupBy([])
@@ -206,18 +206,19 @@ class StageJoin extends StageTransform {
                         this.rightName, this.rightCol)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.label('left'),
-      factory.input(this.leftName),
-      factory.input(this.leftCol),
-      factory.label('right'),
-      factory.input(this.rightName),
-      factory.input(this.rightCol)
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeLabel('left'),
+      factory.makeInput(this.leftName),
+      factory.makeInput(this.leftCol),
+      factory.makeLabel('right'),
+      factory.makeInput(this.rightName),
+      factory.makeInput(this.rightCol)
     )
   }
   static fromHTML (factory, leftNameNode, leftColNode, rightNameNode, rightColNode) {
-    const args = [leftNameNode, leftColNode, rightNameNode, rightColNode].map(n => factory.fromInput(n, false))
+    const packed = [leftNameNode, leftColNode, rightNameNode, rightColNode]
+    const args = packed.map(n => factory.getInput(n, false))
     return new Stage.join(...args)
   }
   static MakeBlank () {
@@ -249,14 +250,14 @@ class StageMutate extends StageTransform {
     return super.toJSON(this.newName, this.expr.toJSON())
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.newName),
-      factory.expr(this.expr)
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.newName),
+      factory.makeExpr(this.expr)
     )
   }
   static fromHTML (factory, nameNode, exprNode) {
-    return new Stage.mutate(factory.fromInput(nameNode, false),
+    return new Stage.mutate(factory.getInput(nameNode, false),
                             Expr.fromHTML(factory, exprNode))
   }
   static MakeBlank () {
@@ -288,13 +289,13 @@ class StageNotify extends StageTransform {
     return super.toJSON(this.signal)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.signal)
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.signal)
     )
   }
   static fromHTML (factory, signalNode) {
-    return new Stage.notify(factory.fromInput(signalNode, false))
+    return new Stage.notify(factory.getInput(signalNode, false))
   }
   static MakeBlank () {
     return new Stage.notify('')
@@ -324,13 +325,13 @@ class StageRead extends StageTransform {
     return super.toJSON(this.path)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.path)
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.path)
     )
   }
   static fromHTML (factory, pathNode) {
-    return new Stage.read(factory.fromInput(pathNode, false))
+    return new Stage.read(factory.getInput(pathNode, false))
   }
   static MakeBlank () {
     return new Stage.read('')
@@ -357,13 +358,13 @@ class StageSelect extends StageTransform {
     return super.toJSON(this.columns)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.columns.join(', '))
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.columns.join(', '))
     )
   }
   static fromHTML (factory, columnsNode) {
-    return new Stage.select(factory.fromInput(columnsNode, true))
+    return new Stage.select(factory.getInput(columnsNode, true))
   }
   static MakeBlank () {
     return new Stage.select([])
@@ -392,16 +393,16 @@ class StageSort extends StageTransform {
     return super.toJSON(this.columns, this.reverse)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.columns.join(', ')),
-      factory.label('reverse'),
-      factory.check(this.reverse)
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.columns.join(', ')),
+      factory.makeLabel('reverse'),
+      factory.makeCheck(this.reverse)
     )
   }
   static fromHTML (factory, columnsNode, reverseNode) {
-    return new Stage.sort(factory.fromInput(columnsNode, true),
-                          factory.fromCheck(reverseNode))
+    return new Stage.sort(factory.getInput(columnsNode, true),
+                          factory.getCheck(reverseNode))
   }
   static MakeBlank () {
     return new Stage.sort([])
@@ -432,17 +433,17 @@ class StageSummarize extends StageTransform {
     return super.toJSON(this.op, this.column)
   }
   toHTML (factory) {
-    const result = factory.widget(
-      factory.label(this.name),
-      factory.choose(Summarize.Options, this.op),
-      factory.input(this.column)
+    const result = factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeSelect(Summarize.Options, this.op),
+      factory.makeInput(this.column)
     )
     return result
   }
   static fromHTML (factory, funcNode, columnNode) {
     return new Stage.summarize(
-      factory.getSelected(funcNode),
-      factory.fromInput(columnNode, false)
+      factory.getSelect(funcNode),
+      factory.getInput(columnNode, false)
     )
   }
   static MakeBlank () {
@@ -465,8 +466,8 @@ class StageUngroup extends StageTransform {
     return super.toJSON()
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name)
+    return factory.makeWidget(
+      factory.makeLabel(this.name)
     )
   }
   static fromHTML (factory) {
@@ -497,13 +498,13 @@ class StageUnique extends StageTransform {
     return super.toJSON(this.columns)
   }
   toHTML (factory) {
-    return factory.widget(
-      factory.label(this.name),
-      factory.input(this.columns.join(', '))
+    return factory.makeWidget(
+      factory.makeLabel(this.name),
+      factory.makeInput(this.columns.join(', '))
     )
   }
   static fromHTML (factory, columnsNode) {
-    return new Stage.unique(factory.fromInput(columnsNode, true))
+    return new Stage.unique(factory.getInput(columnsNode, true))
   }
   static MakeBlank () {
     return new Stage.unique([])
@@ -736,7 +737,8 @@ class StageTTestOneSample extends StageStats {
     super('TTestOneSample', {mean, significance, colName})
   }
   runStats (df) {
-    return Statistics.TTestOneSample(df, this.mean, this.significance, this.colName)
+    return Statistics.TTestOneSample(df, this.mean,
+                                     this.significance, this.colName)
   }
 }
 

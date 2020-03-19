@@ -217,7 +217,7 @@ class UserInterface {
     }
     else {
       this.displayLog(['clear program'])
-      program = this.factory.emptyProgram()
+      program = this.factory.makeEmptyProgram()
     }
     this.displayInArea('programArea', program)
   }
@@ -306,8 +306,8 @@ class UserInterface {
     util.check(width > 1,
                `Must have some columns in order to add a row`)
     const content = [
-      this.factory.pipelineIDCell(height),
-      ...Array(width-1).fill(this.factory.placeholder()).join('')
+      this.factory.makePipelineIDCell(height),
+      ...Array(width-1).fill(this.factory.makePlaceholder()).join('')
     ].join('')
     const newRow = document.createElement('tr')
     newRow.innerHTML = content
@@ -322,7 +322,7 @@ class UserInterface {
     const temp = document.createElement('tr')
     const children = Array.from(body.children)
     children.forEach(row => {
-      temp.innerHTML = this.factory.placeholder()
+      temp.innerHTML = this.factory.makePlaceholder()
       row.appendChild(temp.firstChild)
     })
   }
