@@ -2,11 +2,10 @@
 
 const util = require('./util')
 const {DataFrame} = require('./dataframe')
-const {Expr} = require('./expr')
-const {Stage} = require('./stage')
 const {Environment} = require('./environment')
 const {Program} = require('./program')
-const {HTMLFactory} = require('./html')
+const {JsonToObj} = require('./json2obj')
+const {HtmlFactory} = require('./html')
 
 /**
  * Browser-based interface.
@@ -46,7 +45,6 @@ class UserInterface {
     this.env = new Environment()
     this.data = new Map()
     this.program = null
-    this.factory = new HTMLFactory()
     this.redisplay()
   }
 
@@ -196,11 +194,11 @@ class UserInterface {
    */
   displayToolbox () {
     const allTabs = [
-      ['exprTab', Expr.CLASSES],
-      ['transformTab', Stage.CLASSES]
+      ['expr', 'exprTab'],
+      ['stage', 'transformTab']
     ]
-    for (const [id, classes] of allTabs) {
-      const toolbox = this.factory.makeToolbox(classes)
+    for (const [label, id] of allTabs) {
+      const toolbox = HtmlFactory.Toolbox(label)
       const div = document.getElementById(id)
       div.innerHTML = toolbox
     }
@@ -217,7 +215,7 @@ class UserInterface {
     }
     else {
       this.displayLog(['clear program'])
-      program = this.factory.makeEmptyProgram()
+      program = HtmlFactory.EmptyProgram()
     }
     this.displayInArea('programArea', program)
   }
@@ -267,7 +265,7 @@ class UserInterface {
     const name = file.name
     file.text().then(text => {
       const json = JSON.parse(text)
-      this.program = Program.fromJSON(json)
+      this.program = (new JsonToObj()).program(json)
       this.displayProgram(this.program)
     })
   }
@@ -306,8 +304,8 @@ class UserInterface {
     util.check(width > 1,
                `Must have some columns in order to add a row`)
     const content = [
-      this.factory.makePipelineIDCell(height),
-      ...Array(width-1).fill(this.factory.makePlaceholder()).join('')
+      HtmlFactory.PipelineIDCell(height),
+      ...Array(width-1).fill(HtmlFactory.Placeholder()).join('')
     ].join('')
     const newRow = document.createElement('tr')
     newRow.innerHTML = content
@@ -322,7 +320,7 @@ class UserInterface {
     const temp = document.createElement('tr')
     const children = Array.from(body.children)
     children.forEach(row => {
-      temp.innerHTML = this.factory.makePlaceholder()
+      temp.innerHTML = HtmlFactory.Placeholder()
       row.appendChild(temp.firstChild)
     })
   }

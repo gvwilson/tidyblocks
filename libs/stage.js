@@ -49,7 +49,7 @@ class StageBase {
   }
 
   toJSON (...extras) {
-    return ['@stage', this.name, ...extras]
+    return [Stage.KIND, this.name, ...extras]
   }
 }
 
@@ -66,10 +66,11 @@ class StageTransform extends StageBase {
 
 /**
  * Drop columns.
- * @param {string[]} columns The names of the columns to discard.
  */
 class StageDrop extends StageTransform {
   constructor (columns) {
+    util.check(Array.isArray(columns),
+               `Expected array of columns`)
     super(StageDrop.KIND, [], null, true, true)
     this.columns = columns
   }
@@ -85,10 +86,6 @@ class StageDrop extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.columns)
-  }
-
-  static fromHTML (factory, columnsNode) {
-    return new Stage.drop(factory.getInput(columnsNode, true))
   }
 
   static MakeBlank () {
@@ -108,6 +105,8 @@ StageDrop.KIND = 'drop'
  */
 class StageFilter extends StageTransform {
   constructor (expr) {
+    util.check(expr instanceof Expr.base,
+               `Expected expression`)
     super(StageFilter.KIND, [], null, true, true)
     this.expr = expr
   }
@@ -126,15 +125,9 @@ class StageFilter extends StageTransform {
     return super.toJSON(this.expr.toJSON())
   }
 
-  static fromHTML (factory, exprNode) {
-    return new Stage.filter(Expr.fromHTML(factory, exprNode))
-  }
-
   static MakeBlank () {
-    const placeholder = new Expr.constant(false)
-    const result = new Stage.filter(placeholder)
-    result.expr = null
-    return result
+    const placeholder = new Expr.placeholder()
+    return new Stage.filter(placeholder)
   }
 
   static Fields () {
@@ -150,28 +143,25 @@ StageFilter.KIND = 'filter'
  */
 class StageGroupBy extends StageTransform {
   constructor (columns) {
+    util.check(Array.isArray(columns),
+               `Expected array of columns`)
     super(StageGroupBy.KIND, [], null, true, true)
     this.columns = columns
   }
+
   equal (other) {
     return this.equalColumns(other)
   }
+
   run (runner, df) {
     runner.appendLog(this.name)
     return df.groupBy(this.columns)
   }
+
   toJSON () {
     return super.toJSON(this.columns)
   }
-  toHTML (factory) {
-    return factory.makeWidget(
-      factory.makeLabel(this.name),
-      factory.makeInput(this.columns.join(', '))
-    )
-  }
-  static fromHTML (factory, columnsNode) {
-    return new Stage.groupBy(factory.getInput(columnsNode, true))
-  }
+
   static MakeBlank () {
     return new Stage.groupBy([])
   }
@@ -222,18 +212,6 @@ class StageJoin extends StageTransform {
                         this.rightName, this.rightCol)
   }
 
-  toHTML (factory) {
-    return factory.makeWidget(
-      factory.makeLabel(this.name),
-      factory.makeLabel('left'),
-      factory.makeInput(this.leftName),
-      factory.makeInput(this.leftCol),
-      factory.makeLabel('right'),
-      factory.makeInput(this.rightName),
-      factory.makeInput(this.rightCol)
-    )
-  }
-
   static MakeBlank () {
     return new Stage.join('', '', '', '')
   }
@@ -256,6 +234,10 @@ StageJoin.KIND = 'join'
  */
 class StageMutate extends StageTransform {
   constructor (newName, expr) {
+    util.check(typeof newName === 'string',
+               `Expected string as new name`)
+    util.check(expr instanceof Expr.base,
+               `Expected expression`)
     super(StageMutate.KIND, [], null, true, true)
     this.newName = newName
     this.expr = expr
@@ -276,16 +258,9 @@ class StageMutate extends StageTransform {
     return super.toJSON(this.newName, this.expr.toJSON())
   }
 
-  static fromHTML (factory, nameNode, exprNode) {
-    return new Stage.mutate(factory.getInput(nameNode, false),
-                            Expr.fromHTML(factory, exprNode))
-  }
-
   static MakeBlank () {
-    const placeholder = new Expr.constant(false)
-    const result = new Stage.mutate('', placeholder)
-    result.expr = null
-    return result
+    const placeholder = new Expr.placeholder()
+    return new Stage.mutate('', placeholder)
   }
 
   static Fields () {
@@ -302,6 +277,8 @@ StageMutate.KIND = 'mutate'
  */
 class StageNotify extends StageTransform {
   constructor (signal) {
+    util.check(typeof signal === 'string',
+               `Expected string`)
     super(StageNotify.KIND, [], signal, true, false)
     this.signal = signal
   }
@@ -318,10 +295,6 @@ class StageNotify extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.signal)
-  }
-
-  static fromHTML (factory, signalNode) {
-    return new Stage.notify(factory.getInput(signalNode, false))
   }
 
   static MakeBlank () {
@@ -341,6 +314,8 @@ StageNotify.KIND = 'notify'
  */
 class StageRead extends StageTransform {
   constructor (path) {
+    util.check(typeof path === 'string',
+               `Expected string`)
     super(StageRead.KIND, [], null, false, true)
     this.path = path
   }
@@ -361,10 +336,6 @@ class StageRead extends StageTransform {
     return super.toJSON(this.path)
   }
 
-  static fromHTML (factory, pathNode) {
-    return new Stage.read(factory.getInput(pathNode, false))
-  }
-
   static MakeBlank () {
     return new Stage.read('')
   }
@@ -382,6 +353,8 @@ StageRead.KIND = 'read'
  */
 class StageSelect extends StageTransform {
   constructor (columns) {
+    util.check(Array.isArray(columns),
+               `Expected array of columns`)
     super(StageSelect.KIND, [], null, true, true)
     this.columns = columns
   }
@@ -397,10 +370,6 @@ class StageSelect extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.columns)
-  }
-
-  static fromHTML (factory, columnsNode) {
-    return new Stage.select(factory.getInput(columnsNode, true))
   }
 
   static MakeBlank () {
@@ -421,6 +390,10 @@ StageSelect.KIND = 'select'
  */
 class StageSort extends StageTransform {
   constructor (columns, reverse) {
+    util.check(Array.isArray(columns),
+               `Expected array of columns`)
+    util.check(typeof reverse === 'boolean',
+               `Expected boolean`)
     super(StageSort.KIND, [], null, true, true)
     this.columns = columns
     this.reverse = reverse
@@ -439,13 +412,8 @@ class StageSort extends StageTransform {
     return super.toJSON(this.columns, this.reverse)
   }
 
-  static fromHTML (factory, columnsNode, reverseNode) {
-    return new Stage.sort(factory.getInput(columnsNode, true),
-                          factory.getCheck(reverseNode))
-  }
-
   static MakeBlank () {
-    return new Stage.sort([])
+    return new Stage.sort([], false)
   }
 
   static Fields () {
@@ -461,6 +429,10 @@ StageSort.KIND = 'sort'
  */
 class StageSummarize extends StageTransform {
   constructor (op, column) {
+    util.check(typeof op === 'string',
+               `Expected string as op`)
+    util.check(typeof column === 'string',
+               `Expected string as column`)
     super(StageSummarize.KIND, [], null, true, true)
     this.op = op
     this.column = column
@@ -480,13 +452,6 @@ class StageSummarize extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.op, this.column)
-  }
-
-  static fromHTML (factory, funcNode, columnNode) {
-    return new Stage.summarize(
-      factory.getSelect(funcNode),
-      factory.getInput(columnNode, false)
-    )
   }
 
   static MakeBlank () {
@@ -518,10 +483,6 @@ class StageUngroup extends StageTransform {
     return super.toJSON()
   }
 
-  static fromHTML (factory) {
-    return new Stage.ungroup()
-  }
-
   static MakeBlank () {
     return new Stage.ungroup()
   }
@@ -538,6 +499,8 @@ StageUngroup.KIND = 'ungroup'
  */
 class StageUnique extends StageTransform {
   constructor (columns) {
+    util.check(Array.isArray(columns),
+               `Expected array of columns`)
     super('unique', [], null, true, true)
     this.columns = columns
   }
@@ -553,10 +516,6 @@ class StageUnique extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.columns)
-  }
-
-  static fromHTML (factory, columnsNode) {
-    return new Stage.unique(factory.getInput(columnsNode, true))
   }
 
   static MakeBlank () {
@@ -840,39 +799,24 @@ class StageZTestOneSample extends StageStats {
  * Construct pipeline stages.
  */
 const Stage = {
-  /**
-   * Build stage from JSON representation.
-   * @param {JSON} json List-of-lists.
-   * @returns Stage
-   */
-  fromJSON: (json) => {
-    util.check(Array.isArray(json) &&
-               (json.length > 1) &&
-               (json[0] === '@stage') &&
-               (json[1] in Stage),
-               `Unknown stage kind "${json[1]}"`)
-    const kind = json[1]
-    const args = json.slice(2).map(p => Expr.fromJSON(p))
-    return new Stage[kind](...args)
-  },
+  KIND: '@stage',
 
-  /**
-   * Build stage from HTML representation.
-   * @param {HTML} dom DOM node.
-   * @returns Stage.
-   */
-  fromHTML: (factory, dom) => {
-    const children = factory.getChildren(dom)
-    const first = children[0]
-    util.check(first.firstChild.tagName.toUpperCase() === 'SPAN',
-               `Expected span as first cell`)
-    const name = first.textContent
-    util.check(name in Stage,
-               `Unknown stage name ${name}`)
-    const rest = children.slice(1)
-          .map(child => child.firstChild)
-          .filter(child => child.tagName.toUpperCase() != 'SPAN')
-    return Stage[name].fromHTML(factory, ...rest)
+  makeBlanks: () => {
+    const classes = [
+      Stage.drop,
+      Stage.filter,
+      Stage.groupBy,
+      Stage.join,
+      Stage.mutate,
+      Stage.notify,
+      Stage.read,
+      Stage.select,
+      Stage.sort,
+      Stage.summarize,
+      Stage.ungroup,
+      Stage.unique
+    ]
+    return classes.map(cls => cls.MakeBlank().toJSON())
   },
 
   base: StageBase,
@@ -900,25 +844,6 @@ const Stage = {
   TTestPaired: StageTTestPaired,
   ZTestOneSample: StageZTestOneSample
 }
-
-/**
- * Classes - must be done here to ensure Stage.TRANSFORM etc. have been
- * defined.
- */
-Stage.CLASSES = [
-  Stage.drop,
-  Stage.filter,
-  Stage.groupBy,
-  Stage.join,
-  Stage.mutate,
-  Stage.notify,
-  Stage.read,
-  Stage.select,
-  Stage.sort,
-  Stage.summarize,
-  Stage.ungroup,
-  Stage.unique
-]
 
 module.exports = {
   StageBase,

@@ -5,7 +5,6 @@ const MISSING = util.MISSING
 
 /**
  * Represent an expression as an object. Derived classes must provide `run(row, i)` and `toJSON()`.
- * @param {string} kind What kind of expression this is.
  */
 class ExprBase {
   constructor (kind) {
@@ -17,32 +16,46 @@ class ExprBase {
   }
 }
 
+/**
+ * Placeholder used when building blanks for cloning.
+ */
+class ExprPlaceholder extends ExprBase {
+  constructor () {
+    super(ExprPlaceholder.KIND)
+  }
+
+  toJSON () {
+    return [Expr.KIND, this.kind]
+  }
+}
+ExprPlaceholder.KIND = 'placeholder'
+
 // ----------------------------------------------------------------------
 
 /**
  * Generic nullary expression (never instantiated directly).
  */
-class ExprNullary extends ExprBase {
+class ExprNullaryBase extends ExprBase {
   constructor(kind, value) {
     super(kind)
     this.value = value
   }
 
   equal (other) {
-    return (other instanceof ExprNullary) &&
+    return (other instanceof ExprNullaryBase) &&
       (this.kind === other.kind) &&
       util.equal(this.value, other.value)
   }
 
   toJSON () {
-    return ['@expr', this.kind, this.value]
+    return [Expr.KIND, this.kind, this.value]
   }
 
   static MakeBlank () {
-    return new ExprConstant(false)
+    return new ExprLogical(false)
   }
 }
-ExprNullary.OPTIONS = ['constant', 'column']
+ExprNullaryBase.OPTIONS = ['logical', 'number', 'string', 'datetime', 'column']
 
 /**
  * Generic unary expressions (never instantiated directly).
@@ -62,7 +75,7 @@ class ExprUnary extends ExprBase {
   }
 
   toJSON () {
-    return ['@expr', this.kind, this.arg.toJSON()]
+    return [Expr.KIND, this.kind, this.arg.toJSON()]
   }
 }
 
@@ -88,14 +101,14 @@ class ExprBinary extends ExprBase {
   }
 
   toJSON () {
-    return ['@expr', this.kind, this.left.toJSON(), this.right.toJSON()]
+    return [Expr.KIND, this.kind, this.left.toJSON(), this.right.toJSON()]
   }
 }
 
 /**
  * Ternary expressions.
  */
-class ExprTernary extends ExprBase {
+class ExprTernaryBase extends ExprBase {
   constructor (kind, left, middle, right) {
     util.check(left instanceof ExprBase,
                `Require expression as left child`)
@@ -110,7 +123,7 @@ class ExprTernary extends ExprBase {
   }
 
   equal (other) {
-    return (other instanceof ExprTernary) &&
+    return (other instanceof ExprTernaryBase) &&
       (this.kind === other.kind) &&
       this.left.equal(other.left) &&
       this.middle.equal(other.middle) &&
@@ -118,30 +131,26 @@ class ExprTernary extends ExprBase {
   }
 
   toJSON () {
-    return ['@expr', this.kind, this.left.toJSON(),
+    return [Expr.KIND, this.kind, this.left.toJSON(),
             this.middle.toJSON(), this.right.toJSON()]
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprIfElse(placeholder, placeholder, placeholder)
-    result.left = null
-    result.middle = null
-    result.right = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprIfElse(placeholder, placeholder, placeholder)
   }
 }
 
 // ----------------------------------------------------------------------
 
 /**
- * Constant value.
- * @param {any} value The value to return.
- * @returns The value
+ * Logical value.
  */
-class ExprConstant extends ExprNullary {
+class ExprLogical extends ExprNullaryBase {
   constructor (value) {
-    super(ExprConstant.KIND, value)
+    util.check((value === MISSING) || (typeof value === 'boolean'),
+               `Logical value must be missing or true/false`)
+    super(ExprLogical.KIND, value)
   }
 
   run (row, i) {
@@ -149,18 +158,81 @@ class ExprConstant extends ExprNullary {
   }
 
   static Fields () {
-    return [['selectKind', ExprNullary.OPTIONS, ExprConstant.KIND],
+    return [['selectKind', ExprNullaryBase.OPTIONS, ExprLogical.KIND],
             ['text', 'value']]
   }
 }
-ExprConstant.KIND = 'constant'
+ExprLogical.KIND = 'logical'
+
+/**
+ * Numeric value.
+ */
+class ExprNumber extends ExprNullaryBase {
+  constructor (value) {
+    util.check((value === MISSING) || (typeof value === 'number'),
+               `Numeric value must be missing or number`)
+    super(ExprNumber.KIND, value)
+  }
+
+  run (row, i) {
+    return this.value
+  }
+
+  static Fields () {
+    return [['selectKind', ExprNullaryBase.OPTIONS, ExprNumber.KIND],
+            ['text', 'value']]
+  }
+}
+ExprNumber.KIND = 'number'
+
+/**
+ * Text value.
+ */
+class ExprString extends ExprNullaryBase {
+  constructor (value) {
+    util.check((value === MISSING) || (typeof value === 'string'),
+               `String value must be missing or string`)
+    super(ExprString.KIND, value)
+  }
+
+  run (row, i) {
+    return this.value
+  }
+
+  static Fields () {
+    return [['selectKind', ExprNullaryBase.OPTIONS, ExprString.KIND],
+            ['text', 'value']]
+  }
+}
+ExprString.KIND = 'string'
+
+/**
+ * Datetime value.
+ */
+class ExprDatetime extends ExprNullaryBase {
+  constructor (value) {
+    util.check((value === MISSING) || (value instanceof Date),
+               `Datetime value must be missing or date`)
+    super(ExprDatetime.KIND, value)
+  }
+
+  run (row, i) {
+    return this.value
+  }
+
+  static Fields () {
+    return [['selectKind', ExprNullaryBase.OPTIONS, ExprDatetime.KIND],
+            ['text', 'value']]
+  }
+}
+ExprDatetime.KIND = 'datetime'
 
 /**
  * Column value.
  * @param {string} column The column name.
  * @returns The value
  */
-class ExprColumn extends ExprNullary {
+class ExprColumn extends ExprNullaryBase {
   constructor (name) {
     util.check(name && (typeof name === 'string'),
                `Column name must be string`)
@@ -176,7 +248,7 @@ class ExprColumn extends ExprNullary {
   }
 
   static Fields () {
-    return [['selectKind', ExprNullary.OPTIONS, ExprColumn.KIND],
+    return [['selectKind', ExprNullaryBase.OPTIONS, ExprColumn.KIND],
             ['text', 'name']]
   }
 }
@@ -187,31 +259,29 @@ ExprColumn.KIND = 'column'
 /**
  * Negations.
  */
-class ExprNegation extends ExprUnary {
+class ExprNegationBase extends ExprUnary {
   constructor (kind, arg) {
     super(kind, arg)
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprNegate(placeholder)
-    result.arg = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprNegate(placeholder)
   }
 
   static _Fields (kind) {
-    return [['selectKind', ExprNegation.OPTIONS, kind],
+    return [['selectKind', ExprNegationBase.OPTIONS, kind],
             ['expr', 'arg']]
   }
 }
-ExprNegation.OPTIONS = [['-', 'negate'], 'not']
+ExprNegationBase.OPTIONS = [['-', 'negate'], 'not']
 
 /**
  * Arithmetic negation.
  * @param {expr} arg How to get the value.
  * @returns The negation.
  */
-class ExprNegate extends ExprNegation {
+class ExprNegate extends ExprNegationBase {
   constructor (arg) {
     super(ExprNegate.KIND, arg)
   }
@@ -224,7 +294,7 @@ class ExprNegate extends ExprNegation {
   }
 
   static Fields () {
-    return ExprNegation._Fields(ExprNegate.KIND)
+    return ExprNegationBase._Fields(ExprNegate.KIND)
   }
 }
 ExprNegate.KIND = 'negate'
@@ -234,7 +304,7 @@ ExprNegate.KIND = 'negate'
  * @param {expr} arg How to get the value.
  * @returns The negation.
  */
-class ExprNot extends ExprNegation {
+class ExprNot extends ExprNegationBase {
   constructor (arg) {
     super(ExprNot.KIND, arg)
   }
@@ -245,7 +315,7 @@ class ExprNot extends ExprNegation {
   }
 
   static Fields () {
-    return ExprNegation._Fields(ExprNot.KIND)
+    return ExprNegationBase._Fields(ExprNot.KIND)
   }
 }
 ExprNot.KIND = 'not'
@@ -255,7 +325,7 @@ ExprNot.KIND = 'not'
 /**
  * Unary type-checking expressions.
  */
-class ExprTypecheck extends ExprUnary {
+class ExprTypecheckBase extends ExprUnary {
   constructor (kind, arg) {
     super(kind, arg)
   }
@@ -268,28 +338,26 @@ class ExprTypecheck extends ExprUnary {
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprIsBool(placeholder)
-    result.arg = null
-    return result
+    const placeholder = new ExprPlaceholder
+    return new ExprIsLogical(placeholder)
   }
 
   static _Fields (kind) {
-    return [['selectKind', ExprTypecheck.OPTIONS, kind],
+    return [['selectKind', ExprTypecheckBase.OPTIONS, kind],
             ['expr', 'arg']]
   }
 }
-ExprTypecheck.OPTIONS = ['isBool', 'isDatetime', 'isMissing',
-                         'isNumber', 'isString']
+ExprTypecheckBase.OPTIONS = ['isLogical', 'isDatetime', 'isMissing',
+                             'isNumber', 'isString']
 
 /**
  * Check if a value is Boolean.
  * @param {expr} arg How to get the value.
  * @returns Boolean result.
  */
-class ExprIsBool extends ExprTypecheck {
+class ExprIsLogical extends ExprTypecheckBase {
   constructor (arg) {
-    super(ExprIsBool.KIND, arg)
+    super(ExprIsLogical.KIND, arg)
   }
 
   run (row, i) {
@@ -297,17 +365,17 @@ class ExprIsBool extends ExprTypecheck {
   }
 
   static Fields () {
-    return ExprTypecheck._Fields(ExprIsBool.KIND)
+    return ExprTypecheckBase._Fields(ExprIsLogical.KIND)
   }
 }
-ExprIsBool.KIND = 'isBool'
+ExprIsLogical.KIND = 'isLogical'
 
 /**
  * Check if a value is a datetime.
  * @param {expr} arg How to get the value.
  * @returns Boolean result.
  */
-class ExprIsDatetime extends ExprTypecheck {
+class ExprIsDatetime extends ExprTypecheckBase {
   constructor (arg) {
     super(ExprIsDatetime.KIND, arg)
   }
@@ -318,7 +386,7 @@ class ExprIsDatetime extends ExprTypecheck {
   }
 
   static Fields () {
-    return ExprTypecheck._Fields(ExprIsDatetime.KIND)
+    return ExprTypecheckBase._Fields(ExprIsDatetime.KIND)
   }
 }
 ExprIsDatetime.KIND = 'isDatetime'
@@ -328,7 +396,7 @@ ExprIsDatetime.KIND = 'isDatetime'
  * @param {expr} arg How to get the value.
  * @returns Boolean result.
  */
-class ExprIsMissing extends ExprTypecheck {
+class ExprIsMissing extends ExprTypecheckBase {
   constructor (arg) {
     super(ExprIsMissing.KIND, arg)
   }
@@ -339,7 +407,7 @@ class ExprIsMissing extends ExprTypecheck {
   }
 
   static Fields () {
-    return ExprTypecheck._Fields(ExprIsMissing.KIND)
+    return ExprTypecheckBase._Fields(ExprIsMissing.KIND)
   }
 }
 ExprIsMissing.KIND = 'isMissing'
@@ -349,7 +417,7 @@ ExprIsMissing.KIND = 'isMissing'
  * @param {expr} arg How to get the value.
  * @returns Boolean result.
  */
-class ExprIsNumber extends ExprTypecheck {
+class ExprIsNumber extends ExprTypecheckBase {
   constructor (arg) {
     super(ExprIsNumber.KIND, arg)
   }
@@ -359,7 +427,7 @@ class ExprIsNumber extends ExprTypecheck {
   }
 
   static Fields () {
-    return ExprTypecheck._Fields(ExprIsNumber.KIND)
+    return ExprTypecheckBase._Fields(ExprIsNumber.KIND)
   }
 }
 ExprIsNumber.KIND = 'isNumber'
@@ -369,7 +437,7 @@ ExprIsNumber.KIND = 'isNumber'
  * @param {expr} arg How to get the value.
  * @returns Boolean result.
  */
-class ExprIsString extends ExprTypecheck {
+class ExprIsString extends ExprTypecheckBase {
   constructor (arg) {
     super(ExprIsString.KIND, arg)
   }
@@ -379,7 +447,7 @@ class ExprIsString extends ExprTypecheck {
   }
 
   static Fields () {
-    return ExprTypecheck._Fields(ExprIsString.KIND)
+    return ExprTypecheckBase._Fields(ExprIsString.KIND)
   }
 }
 ExprIsString.KIND = 'isString'
@@ -389,33 +457,31 @@ ExprIsString.KIND = 'isString'
 /**
  * Unary type conversion expressions.
  */
-class ExprConvert extends ExprUnary {
+class ExprConvertBase extends ExprUnary {
   constructor (kind, arg) {
     super(kind, arg)
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprToBool(placeholder)
-    result.arg = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprToLogical(placeholder)
   }
 
   static _Fields (kind) {
-    return [['selectKind', ExprConvert.OPTIONS, kind],
+    return [['selectKind', ExprConvertBase.OPTIONS, kind],
             ['expr', 'arg']]
   }
 }
-ExprConvert.OPTIONS = ['toBool', 'toDatetime', 'toNumber', 'toString']
+ExprConvertBase.OPTIONS = ['toLogical', 'toDatetime', 'toNumber', 'toString']
 
 /**
  * Convert a value to Boolean.
  * @param {expr} arg How to get the value.
  * @returns Converted value.
  */
-class ExprToBool extends ExprConvert {
+class ExprToLogical extends ExprConvertBase {
   constructor (arg) {
-    super(ExprToBool.KIND, arg)
+    super(ExprToLogical.KIND, arg)
   }
 
   run (row, i) {
@@ -426,17 +492,17 @@ class ExprToBool extends ExprConvert {
   }
 
   static Fields () {
-    return ExprConvert._Fields(ExprToBool.KIND)
+    return ExprConvertBase._Fields(ExprToLogical.KIND)
   }
 }
-ExprToBool.KIND = 'toBool'
+ExprToLogical.KIND = 'toLogical'
 
 /**
  * Convert a value to a datetime.
  * @param {expr} arg How to get the value.
  * @returns Converted value.
  */
-class ExprToDatetime extends ExprConvert {
+class ExprToDatetime extends ExprConvertBase {
   constructor (arg) {
     super(ExprToDatetime.KIND, arg)
   }
@@ -455,7 +521,7 @@ class ExprToDatetime extends ExprConvert {
   }
 
   static Fields () {
-    return ExprConvert._Fields(ExprToDatetime.KIND)
+    return ExprConvertBase._Fields(ExprToDatetime.KIND)
   }
 }
 ExprToDatetime.KIND = 'toDatetime'
@@ -465,7 +531,7 @@ ExprToDatetime.KIND = 'toDatetime'
  * @param {expr} arg How to get the value.
  * @returns Converted value.
  */
-class ExprToNumber extends ExprConvert {
+class ExprToNumber extends ExprConvertBase {
   constructor (arg) {
     super(ExprToNumber.KIND, arg)
   }
@@ -488,7 +554,7 @@ class ExprToNumber extends ExprConvert {
   }
 
   static Fields () {
-    return ExprConvert._Fields(ExprToNumber.KIND)
+    return ExprConvertBase._Fields(ExprToNumber.KIND)
   }
 }
 ExprToNumber.KIND = 'toNumber'
@@ -498,7 +564,7 @@ ExprToNumber.KIND = 'toNumber'
  * @param {expr} arg How to get the value.
  * @returns Converted value.
  */
-class ExprToString extends ExprConvert {
+class ExprToString extends ExprConvertBase {
   constructor (arg) {
     super(ExprToString.KIND, arg)
   }
@@ -515,7 +581,7 @@ class ExprToString extends ExprConvert {
   }
 
   static Fields () {
-    return ExprConvert._Fields(ExprToString.KIND)
+    return ExprConvertBase._Fields(ExprToString.KIND)
   }
 }
 ExprToString.KIND = 'toString'
@@ -525,7 +591,7 @@ ExprToString.KIND = 'toString'
 /**
  * Unary datetime expressions.
  */
-class ExprDatetime extends ExprUnary {
+class ExprDatetimeBase extends ExprUnary {
   constructor (kind, arg) {
     super(kind, arg)
   }
@@ -541,26 +607,24 @@ class ExprDatetime extends ExprUnary {
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprToYear(placeholder)
-    result.arg = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprToYear(placeholder)
   }
 
   static _Fields (kind) {
-    return [['selectKind', ExprDatetime.OPTIONS, kind],
+    return [['selectKind', ExprDatetimeBase.OPTIONS, kind],
             ['expr', 'arg']]
   }
 }
-ExprDatetime.OPTIONS = ['toYear', 'toMonth', 'toDay', 'toWeekday',
-                        'toHours', 'toMinutes', 'toSeconds']
+ExprDatetimeBase.OPTIONS = ['toYear', 'toMonth', 'toDay', 'toWeekday',
+                            'toHours', 'toMinutes', 'toSeconds']
 
 /**
  * Extract year from date.
  * @param {expr} arg How to get the value.
  * @returns Month.
  */
-class ExprToYear extends ExprDatetime {
+class ExprToYear extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToYear.KIND, arg)
   }
@@ -570,7 +634,7 @@ class ExprToYear extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToYear.KIND)
+    return ExprDatetimeBase._Fields(ExprToYear.KIND)
   }
 }
 ExprToYear.KIND = 'toYear'
@@ -580,7 +644,7 @@ ExprToYear.KIND = 'toYear'
  * @param {expr} arg How to get the value.
  * @returns Month.
  */
-class ExprToMonth extends ExprDatetime {
+class ExprToMonth extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToMonth.KIND, arg)
   }
@@ -590,7 +654,7 @@ class ExprToMonth extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToMonth.KIND)
+    return ExprDatetimeBase._Fields(ExprToMonth.KIND)
   }
 }
 ExprToMonth.KIND = 'toMonth'
@@ -600,7 +664,7 @@ ExprToMonth.KIND = 'toMonth'
  * @param {expr} arg How to get the value.
  * @returns Day.
  */
-class ExprToDay extends ExprDatetime {
+class ExprToDay extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToDay.KIND, arg)
   }
@@ -610,7 +674,7 @@ class ExprToDay extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToDay.KIND)
+    return ExprDatetimeBase._Fields(ExprToDay.KIND)
   }
 }
 ExprToDay.KIND = 'toDay'
@@ -620,7 +684,7 @@ ExprToDay.KIND = 'toDay'
  * @param {expr} arg How to get the value.
  * @returns Day.
  */
-class ExprToWeekday extends ExprDatetime {
+class ExprToWeekday extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToWeekday.KIND, arg)
   }
@@ -630,7 +694,7 @@ class ExprToWeekday extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToWeekday.KIND)
+    return ExprDatetimeBase._Fields(ExprToWeekday.KIND)
   }
 }
 ExprToWeekday.KIND = 'toWeekday'
@@ -640,7 +704,7 @@ ExprToWeekday.KIND = 'toWeekday'
  * @param {expr} arg How to get the value.
  * @returns Hour.
  */
-class ExprToHours extends ExprDatetime {
+class ExprToHours extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToHours.KIND, arg)
   }
@@ -650,7 +714,7 @@ class ExprToHours extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToHours.KIND)
+    return ExprDatetimeBase._Fields(ExprToHours.KIND)
   }
 }
 ExprToHours.KIND = 'toHours'
@@ -660,7 +724,7 @@ ExprToHours.KIND = 'toHours'
  * @param {expr} arg How to get the value.
  * @returns Minutes.
  */
-class ExprToMinutes extends ExprDatetime {
+class ExprToMinutes extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToMinutes.KIND, arg)
   }
@@ -670,7 +734,7 @@ class ExprToMinutes extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToMinutes.KIND)
+    return ExprDatetimeBase._Fields(ExprToMinutes.KIND)
   }
 }
 ExprToMinutes.KIND = 'toMinutes'
@@ -680,7 +744,7 @@ ExprToMinutes.KIND = 'toMinutes'
  * @param {expr} arg How to get the value.
  * @returns Seconds.
  */
-class ExprToSeconds extends ExprDatetime {
+class ExprToSeconds extends ExprDatetimeBase {
   constructor (arg) {
     super(ExprToSeconds.KIND, arg)
   }
@@ -690,7 +754,7 @@ class ExprToSeconds extends ExprDatetime {
   }
 
   static Fields () {
-    return ExprDatetime._Fields(ExprToSeconds.KIND)
+    return ExprDatetimeBase._Fields(ExprToSeconds.KIND)
   }
 }
 ExprToSeconds.KIND = 'toSeconds'
@@ -700,7 +764,7 @@ ExprToSeconds.KIND = 'toSeconds'
 /**
  * Binary arithmetic expressions.
  */
-class ExprArithmetic extends ExprBinary {
+class ExprArithmeticBase extends ExprBinary {
   constructor (kind, left, right) {
     super(kind, left, right)
   }
@@ -718,20 +782,17 @@ class ExprArithmetic extends ExprBinary {
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprAdd(placeholder, placeholder)
-    result.left = null
-    result.right = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprAdd(placeholder, placeholder)
   }
 
   static _Fields (kind) {
     return [['expr', 'left'],
-            ['selectKind', ExprArithmetic.OPTIONS, kind],
+            ['selectKind', ExprArithmeticBase.OPTIONS, kind],
             ['expr', 'right']]
   }
 }
-ExprArithmetic.OPTIONS = [['+', 'add'], ['-', 'subtract'],
+ExprArithmeticBase.OPTIONS = [['+', 'add'], ['-', 'subtract'],
                           ['*', 'multiply'], ['/', 'divide'],
                           ['%', 'remainder'], ['**', 'power']]
 
@@ -741,7 +802,7 @@ ExprArithmetic.OPTIONS = [['+', 'add'], ['-', 'subtract'],
  * @param {expr} right How to get the right value.
  * @returns The sum.
  */
-class ExprAdd extends ExprArithmetic {
+class ExprAdd extends ExprArithmeticBase {
   constructor (left, right) {
     super(ExprAdd.KIND, left, right)
   }
@@ -751,7 +812,7 @@ class ExprAdd extends ExprArithmetic {
   }
 
   static Fields () {
-    return ExprArithmetic._Fields(ExprAdd.KIND)
+    return ExprArithmeticBase._Fields(ExprAdd.KIND)
   }
 }
 ExprAdd.KIND = 'add'
@@ -762,7 +823,7 @@ ExprAdd.KIND = 'add'
  * @param {expr} right How to get the right value.
  * @returns The quotient.
  */
-class ExprDivide extends ExprArithmetic {
+class ExprDivide extends ExprArithmeticBase {
   constructor (left, right) {
     super(ExprDivide.KIND, left, right)
   }
@@ -772,7 +833,7 @@ class ExprDivide extends ExprArithmetic {
   }
 
   static Fields () {
-    return ExprArithmetic._Fields(ExprDivide.KIND)
+    return ExprArithmeticBase._Fields(ExprDivide.KIND)
   }
 }
 ExprDivide.KIND = 'divide'
@@ -783,7 +844,7 @@ ExprDivide.KIND = 'divide'
  * @param {expr} right How to get the right value.
  * @returns The product.
  */
-class ExprMultiply extends ExprArithmetic {
+class ExprMultiply extends ExprArithmeticBase {
   constructor (left, right) {
     super(ExprMultiply.KIND, left, right)
   }
@@ -793,7 +854,7 @@ class ExprMultiply extends ExprArithmetic {
   }
 
   static Fields () {
-    return ExprArithmetic._Fields(ExprMultiply.KIND)
+    return ExprArithmeticBase._Fields(ExprMultiply.KIND)
   }
 }
 ExprMultiply.KIND = 'multiply'
@@ -804,7 +865,7 @@ ExprMultiply.KIND = 'multiply'
  * @param {expr} right How to get the right value.
  * @returns The power.
  */
-class ExprPower extends ExprArithmetic {
+class ExprPower extends ExprArithmeticBase {
   constructor (left, right) {
     super(ExprPower.KIND, left, right)
   }
@@ -814,7 +875,7 @@ class ExprPower extends ExprArithmetic {
   }
 
   static Fields () {
-    return ExprArithmetic._Fields(ExprPower.KIND)
+    return ExprArithmeticBase._Fields(ExprPower.KIND)
   }
 }
 ExprPower.KIND = 'power'
@@ -825,7 +886,7 @@ ExprPower.KIND = 'power'
  * @param {expr} right How to get the right value.
  * @returns The remainder.
  */
-class ExprRemainder extends ExprArithmetic {
+class ExprRemainder extends ExprArithmeticBase {
   constructor (left, right) {
     super(ExprRemainder.KIND, left, right)
   }
@@ -835,7 +896,7 @@ class ExprRemainder extends ExprArithmetic {
   }
 
   static Fields () {
-    return ExprArithmetic._Fields(ExprRemainder.KIND)
+    return ExprArithmeticBase._Fields(ExprRemainder.KIND)
   }
 }
 ExprRemainder.KIND = 'remainder'
@@ -846,7 +907,7 @@ ExprRemainder.KIND = 'remainder'
  * @param {expr} right How to get the right value.
  * @returns The difference.
  */
-class ExprSubtract extends ExprArithmetic {
+class ExprSubtract extends ExprArithmeticBase {
   constructor (left, right) {
     super(ExprSubtract.KIND, left, right)
   }
@@ -856,7 +917,7 @@ class ExprSubtract extends ExprArithmetic {
   }
 
   static Fields () {
-    return ExprArithmetic._Fields(ExprSubtract.KIND)
+    return ExprArithmeticBase._Fields(ExprSubtract.KIND)
   }
 }
 ExprSubtract.KIND = 'subtract'
@@ -866,7 +927,7 @@ ExprSubtract.KIND = 'subtract'
 /**
  * Binary comparison expressions.
  */
-class ExprCompare extends ExprBinary {
+class ExprCompareBase extends ExprBinary {
   constructor (kind, left, right) {
     super(kind, left, right)
   }
@@ -882,20 +943,17 @@ class ExprCompare extends ExprBinary {
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprEqual(placeholder, placeholder)
-    result.left = null
-    result.right = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprEqual(placeholder, placeholder)
   }
 
   static _Fields (kind) {
     return [['expr', 'left'],
-            ['selectKind', ExprCompare.OPTIONS, kind],
+            ['selectKind', ExprCompareBase.OPTIONS, kind],
             ['expr', 'right']]
   }
 }
-ExprCompare.OPTIONS = [['==', 'equal'], ['!=', 'notEqual'],
+ExprCompareBase.OPTIONS = [['==', 'equal'], ['!=', 'notEqual'],
                        ['&gt;', 'greater'], ['&gt;=', 'greaterEqual'],
                        ['&lt;=', 'lessEqual'], ['&lt;', 'less']]
 
@@ -905,7 +963,7 @@ ExprCompare.OPTIONS = [['==', 'equal'], ['!=', 'notEqual'],
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprEqual extends ExprCompare {
+class ExprEqual extends ExprCompareBase {
   constructor (left, right) {
     super(ExprEqual.KIND, left, right)
   }
@@ -915,7 +973,7 @@ class ExprEqual extends ExprCompare {
   }
 
   static Fields () {
-    return ExprCompare._Fields(ExprEqual.KIND)
+    return ExprCompareBase._Fields(ExprEqual.KIND)
   }
 }
 ExprEqual.KIND = 'equal'
@@ -926,7 +984,7 @@ ExprEqual.KIND = 'equal'
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprGreater extends ExprCompare {
+class ExprGreater extends ExprCompareBase {
   constructor (left, right) {
     super(ExprGreater.KIND, left, right)
   }
@@ -936,7 +994,7 @@ class ExprGreater extends ExprCompare {
   }
 
   static Fields () {
-    return ExprCompare._Fields(ExprGreater.KIND)
+    return ExprCompareBase._Fields(ExprGreater.KIND)
   }
 }
 ExprGreater.KIND = 'greater'
@@ -947,7 +1005,7 @@ ExprGreater.KIND = 'greater'
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprGreaterEqual extends ExprCompare {
+class ExprGreaterEqual extends ExprCompareBase {
   constructor (left, right) {
     super(ExprGreaterEqual.KIND, left, right)
   }
@@ -957,7 +1015,7 @@ class ExprGreaterEqual extends ExprCompare {
   }
 
   static Fields () {
-    return ExprCompare._Fields(ExprGreaterEqual.KIND)
+    return ExprCompareBase._Fields(ExprGreaterEqual.KIND)
   }
 }
 ExprGreaterEqual.KIND = 'greaterEqual'
@@ -968,7 +1026,7 @@ ExprGreaterEqual.KIND = 'greaterEqual'
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprLess extends ExprCompare {
+class ExprLess extends ExprCompareBase {
   constructor (left, right) {
     super(ExprLess.KIND, left, right)
   }
@@ -978,7 +1036,7 @@ class ExprLess extends ExprCompare {
   }
 
   static Fields () {
-    return ExprCompare._Fields(ExprLess.KIND)
+    return ExprCompareBase._Fields(ExprLess.KIND)
   }
 }
 ExprLess.KIND = 'less'
@@ -989,7 +1047,7 @@ ExprLess.KIND = 'less'
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprLessEqual extends ExprCompare {
+class ExprLessEqual extends ExprCompareBase {
   constructor (left, right) {
     super(ExprLessEqual.KIND, left, right)
   }
@@ -999,7 +1057,7 @@ class ExprLessEqual extends ExprCompare {
   }
 
   static Fields () {
-    return ExprCompare._Fields(ExprLessEqual.KIND)
+    return ExprCompareBase._Fields(ExprLessEqual.KIND)
   }
 }
 ExprLessEqual.KIND = 'lessEqual'
@@ -1010,7 +1068,7 @@ ExprLessEqual.KIND = 'lessEqual'
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprNotEqual extends ExprCompare {
+class ExprNotEqual extends ExprCompareBase {
   constructor (left, right) {
     super(ExprNotEqual.KIND, left, right)
   }
@@ -1020,7 +1078,7 @@ class ExprNotEqual extends ExprCompare {
   }
 
   static Fields () {
-    return ExprCompare._Fields(ExprNotEqual.KIND)
+    return ExprCompareBase._Fields(ExprNotEqual.KIND)
   }
 }
 ExprNotEqual.KIND = 'notEqual'
@@ -1030,26 +1088,23 @@ ExprNotEqual.KIND = 'notEqual'
 /**
  * Binary logical expressions.
  */
-class ExprLogical extends ExprBinary {
+class ExprLogicalBase extends ExprBinary {
   constructor (kind, left, right) {
     super(kind, left, right)
   }
 
   static MakeBlank () {
-    const placeholder = new ExprConstant(false)
-    const result = new ExprAnd(placeholder, placeholder)
-    result.left = null
-    result.right = null
-    return result
+    const placeholder = new ExprPlaceholder()
+    return new ExprAnd(placeholder, placeholder)
   }
 
   static _Fields (kind) {
     return [['expr', 'left'],
-            ['selectKind', ExprLogical.OPTIONS, kind],
+            ['selectKind', ExprLogicalBase.OPTIONS, kind],
             ['expr', 'right']]
   }
 }
-ExprLogical.OPTIONS = ['and', 'or']
+ExprLogicalBase.OPTIONS = ['and', 'or']
 
 /**
  * Logical conjunction.
@@ -1057,7 +1112,7 @@ ExprLogical.OPTIONS = ['and', 'or']
  * @param {expr} right How to get the right value.
  * @returns The conjunction using short-circuit evaluation.
  */
-class ExprAnd extends ExprLogical {
+class ExprAnd extends ExprLogicalBase {
   constructor (left, right) {
     super(ExprAnd.KIND, left, right)
   }
@@ -1071,7 +1126,7 @@ class ExprAnd extends ExprLogical {
   }
 
   static Fields () {
-    return ExprLogical._Fields(ExprAnd.KIND)
+    return ExprLogicalBase._Fields(ExprAnd.KIND)
   }
 }
 ExprAnd.KIND = 'and'
@@ -1082,7 +1137,7 @@ ExprAnd.KIND = 'and'
  * @param {expr} right How to get the right value.
  * @returns The disjunction using short-circuit evaluation.
  */
-class ExprOr extends ExprLogical {
+class ExprOr extends ExprLogicalBase {
   constructor (left, right) {
     super(ExprOr.KIND, left, right)
   }
@@ -1096,7 +1151,7 @@ class ExprOr extends ExprLogical {
   }
 
   static Fields () {
-    return ExprLogical._Fields(ExprOr.KIND)
+    return ExprLogicalBase._Fields(ExprOr.KIND)
   }
 }
 ExprOr.KIND = 'or'
@@ -1110,7 +1165,7 @@ ExprOr.KIND = 'or'
  * @param {expr} right How to get the right value.
  * @returns The Boolean result.
  */
-class ExprIfElse extends ExprTernary {
+class ExprIfElse extends ExprTernaryBase {
   constructor (left, middle, right) {
     super(ExprIfElse.KIND, left, middle, right)
   }
@@ -1139,51 +1194,29 @@ ExprIfElse.KIND = 'ifElse'
  * Lookup table of everything exported from this file.
  */
 const Expr = {
-  /**
-   * Build expression tree from JSON representation.
-   * @param {JSON} json List-of-lists.
-   * @returns Expression tree.
-   */
-  fromJSON: (json) => {
-    // Values, empty arrays, and unmarked arrays are themselves.
-    if (!Array.isArray(json) ||
-        (json.length === 0) ||
-        (typeof json[0] !== 'string') ||
-        (json[0].length === 0) ||
-        (json[0][0] != '@')) {
-      return json
-    }
-    util.check((json.length > 1) &&
-               (json[0] === '@expr') &&
-               (json[1] in Expr),
-               `Require indicator of known expression kind`)
-    const kind = json[1]
-    const args = json.slice(2).map(p => Expr.fromJSON(p))
-    return new Expr[kind](...args)
-  },
+  KIND: '@expr',
 
-  /**
-   * Build expression tree from HTML representation.
-   * @param {DOM} node Current node in recursive nesting.
-   * @return Expression tree.
-   */
-  fromHTML: (factory, dom) => {
-    const children = factory.getChildren(dom)
-          .map(td => td.firstChild)
-          .map(item => factory.getExpr(item))
-    if (factory.isInfix(dom)) {
-      util.check(children.length === 3,
-                 `Expect three children for infix operator`)
-      const [left, middle, right] = children
-      return new Expr[middle](left, right)
-    }
-    const kind = children[0]
-    const args = children.slice(1)
-    return new Expr[kind](...args)
+  makeBlanks: () => {
+    const classes = [
+      ExprNullaryBase,
+      ExprNegationBase,
+      ExprTypecheckBase,
+      ExprConvertBase,
+      ExprDatetimeBase,
+      ExprArithmeticBase,
+      ExprCompareBase,
+      ExprLogicalBase,
+      ExprTernaryBase
+    ]
+    return classes.map(cls => cls.MakeBlank().toJSON())
   },
 
   base: ExprBase,
-  constant: ExprConstant,
+  placeholder: ExprPlaceholder,
+  logical: ExprLogical,
+  number: ExprNumber,
+  string: ExprString,
+  datetime: ExprDatetime,
   column: ExprColumn,
   add: ExprAdd,
   and: ExprAnd,
@@ -1202,12 +1235,12 @@ const Expr = {
   power: ExprPower,
   remainder: ExprRemainder,
   subtract: ExprSubtract,
-  isBool: ExprIsBool,
+  isLogical: ExprIsLogical,
   isDatetime: ExprIsDatetime,
   isMissing: ExprIsMissing,
   isNumber: ExprIsNumber,
   isString: ExprIsString,
-  toBool: ExprToBool,
+  toLogical: ExprToLogical,
   toDatetime: ExprToDatetime,
   toNumber: ExprToNumber,
   toString: ExprToString,
@@ -1219,21 +1252,5 @@ const Expr = {
   toMinutes: ExprToMinutes,
   toSeconds: ExprToSeconds
 }
-
-/**
- * Classes - must be done here to ensure Stage.TRANSFORM etc. have been
- * defined.
- */
-Expr.CLASSES = [
-  ExprNullary,
-  ExprNegate,
-  ExprTypecheck,
-  ExprConvert,
-  ExprDatetime,
-  ExprArithmetic,
-  ExprCompare,
-  ExprLogical,
-  ExprTernary
-]
 
 module.exports = {Expr}

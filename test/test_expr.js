@@ -245,7 +245,7 @@ describe('comparison on strings', () => {
 
 describe('comparison on dates', () => {
   it('greater dates', (done) => {
-    const test = new Expr.constant(new Date(4000))
+    const test = new Expr.datetime(new Date(4000))
     const op = new Expr.greater(test, getDate)
     const expected = [true, true, true]
     const actual = threeDates.map((row, i) => op.run(row, i))
@@ -255,7 +255,7 @@ describe('comparison on dates', () => {
   })
 
   it('greater equals dates', (done) => {
-    const test = new Expr.constant(new Date(20))
+    const test = new Expr.datetime(new Date(20))
     const op = new Expr.greaterEqual(test, getDate)
     const expected = [true, true, false]
     const actual = threeDates.map((row, i) => op.run(row, i))
@@ -265,7 +265,7 @@ describe('comparison on dates', () => {
   })
 
   it('equals dates', (done) => {
-    const test = new Expr.constant(new Date(20))
+    const test = new Expr.datetime(new Date(20))
     const op = new Expr.equal(test, getDate)
     const expected = [false, true, false]
     const actual = threeDates.map((row, i) => op.run(row, i))
@@ -275,7 +275,7 @@ describe('comparison on dates', () => {
   })
 
   it('not equals dates', (done) => {
-    const test = new Expr.constant(new Date(20))
+    const test = new Expr.datetime(new Date(20))
     const op = new Expr.notEqual(test, getDate)
     const expected = [true, false, true]
     const actual = threeDates.map((row, i) => op.run(row, i))
@@ -285,7 +285,7 @@ describe('comparison on dates', () => {
   })
 
   it('less equals dates', (done) => {
-    const test = new Expr.constant(new Date(20))
+    const test = new Expr.datetime(new Date(20))
     const op = new Expr.lessEqual(test, getDate)
     const expected = [false, true, true]
     const actual = threeDates.map((row, i) => op.run(row, i))
@@ -295,7 +295,7 @@ describe('comparison on dates', () => {
   })
 
   it('less dates', (done) => {
-    const test = new Expr.constant(new Date(1))
+    const test = new Expr.datetime(new Date(1))
     const op = new Expr.less(test, getDate)
     const expected = [false, true, true]
     const actual = threeDates.map((row, i) => op.run(row, i))
@@ -322,13 +322,13 @@ describe('type checks', () => {
       [new Expr.isDatetime(getBool), 'datetime', 'bool'],
       [new Expr.isNumber(getBool), 'num', 'bool'],
       [new Expr.isString(getBool), 'text', 'bool'],
-      [new Expr.isBool(getDate), 'bool', 'datetime'],
+      [new Expr.isLogical(getDate), 'bool', 'datetime'],
       [new Expr.isNumber(getDate), 'num', 'datetime'],
       [new Expr.isString(getDate), 'text', 'datetime'],
-      [new Expr.isBool(getNum), 'bool', 'num'],
+      [new Expr.isLogical(getNum), 'bool', 'num'],
       [new Expr.isDatetime(getNum), 'datetime', 'num'],
       [new Expr.isString(getNum), 'text', 'num'],
-      [new Expr.isBool(getStr), 'bool', 'str'],
+      [new Expr.isLogical(getStr), 'bool', 'str'],
       [new Expr.isDatetime(getStr), 'datetime', 'str'],
       [new Expr.isNumber(getStr), 'num', 'str']
     ]
@@ -342,7 +342,7 @@ describe('type checks', () => {
 
   it('correctly identifies right types', (done) => {
     const allChecks = [
-      [new Expr.isBool(getBool), 'bool'],
+      [new Expr.isLogical(getBool), 'bool'],
       [new Expr.isDatetime(getDate), 'datetime'],
       [new Expr.isNumber(getNum), 'num'],
       [new Expr.isString(getStr), 'text']
@@ -375,65 +375,62 @@ describe('type checks', () => {
 describe('type conversions', () => {
   it('converts basic types correctly', (done) => {
     const checks = [
-      ['bool', Expr.toBool, MISSING, MISSING],
-      ['bool', Expr.toBool, false, false],
-      ['bool', Expr.toBool, true, true],
-      ['bool', Expr.toBool, '', false],
-      ['bool', Expr.toBool, 'abc', true],
-      ['bool', Expr.toBool, 0, false],
-      ['bool', Expr.toBool, -3, true],
-      ['bool', Expr.toBool, 9.5, true],
-      ['number', Expr.toNumber, MISSING, MISSING],
-      ['number', Expr.toNumber, false, 0],
-      ['number', Expr.toNumber, true, 1],
-      ['number', Expr.toNumber, '123.4', 123.4],
-      ['number', Expr.toNumber, 'abc', MISSING],
-      ['number', Expr.toNumber, new Date(0), 0],
-      ['string', Expr.toString, MISSING, MISSING],
-      ['string', Expr.toString, false, 'false'],
-      ['string', Expr.toString, true, 'true'],
-      ['string', Expr.toString, -123, '-123'],
-      ['string', Expr.toString, 'abc', 'abc'],
-      ['string', Expr.toString, new Date(0), 'Wed Dec 31 1969 19:00:00 GMT-0500 (Eastern Standard Time)']
+      [new Expr.logical(MISSING), Expr.toLogical, MISSING],
+      [new Expr.logical(false), Expr.toLogical, false],
+      [new Expr.logical(true), Expr.toLogical, true],
+      [new Expr.string(''), Expr.toLogical, false],
+      [new Expr.string('abc'), Expr.toLogical, true],
+      [new Expr.number(0), Expr.toLogical, false],
+      [new Expr.number(-3), Expr.toLogical, true],
+      [new Expr.number(9.5), Expr.toLogical, true],
+      [new Expr.number(MISSING), Expr.toNumber, MISSING],
+      [new Expr.logical(false), Expr.toNumber, 0],
+      [new Expr.logical(true), Expr.toNumber, 1],
+      [new Expr.number(123.4), Expr.toNumber, 123.4],
+      [new Expr.string('abc'), Expr.toNumber, MISSING],
+      [new Expr.string('678'), Expr.toNumber, 678],
+      [new Expr.datetime(new Date(0)), Expr.toNumber, 0],
+      [new Expr.string(MISSING), Expr.toString, MISSING],
+      [new Expr.logical(false), Expr.toString, 'false'],
+      [new Expr.logical(true), Expr.toString, 'true'],
+      [new Expr.number(-123), Expr.toString, '-123'],
+      [new Expr.string('abc'), Expr.toString, 'abc'],
+      [new Expr.datetime(new Date(0)), Expr.toString,
+       'Wed Dec 31 1969 19:00:00 GMT-0500 (Eastern Standard Time)']
     ]
-    for (const [name, convert, input, expected] of checks) {
-      const value = new Expr.constant(input)
+    for (const [value, convert, expected] of checks) {
       const op = new convert(value)
       const actual = op.run({}, 0)
       assert.equal(actual, expected,
-                   `Wrong result for ${name} with ${input}: expected ${expected}, got ${actual}`)
+                   `Wrong result for ${value} and ${convert}: expected ${expected}, got ${actual}`)
     }
     done()
   })
 
   it('converts non-datetimes correctly', (done) => {
-    const checks = [
-      ['datetime', Expr.toDatetime, MISSING, MISSING],
-      ['datetime', Expr.toDatetime, '', MISSING],
-      ['datetime', Expr.toDatetime, 'abc', MISSING]
-    ]
-    for (const [name, convert, input, expected] of checks) {
-      const op = new convert(new Expr.constant(input))
+    const checks = [new Expr.logical(MISSING),
+                    new Expr.string(''),
+                    new Expr.string('abc')]
+    for (const input of checks) {
+      const op = new Expr.toDatetime(input)
       const actual = op.run({}, 0)
-      assert.equal(actual, expected,
-                   `Wrong result for ${name}: ${input} => ${actual}`)
+      assert.equal(actual, MISSING,
+                   `Wrong result for converting "${input}": got "${actual}"`)
     }
     done()
   })
 
   it('converts valid datetimes correctly', (done) => {
-    const checks = [
-      ['datetime', Expr.toDatetime, '1983-12-02', new Date('1983-12-02')],
-      ['datetime', Expr.toDatetime, 123, new Date(123)],
-      ['datetime', Expr.toDatetime, new Date(456), new Date(456)]
+    const checks = [[new Expr.string('1983-12-02'), new Date('1983-12-02')],
+                    [new Expr.number(123), new Date(123)]
     ]
-    for (const [name, convert, input, expected] of checks) {
-      const op = new convert(new Expr.constant(input))
+    for (const [expr, expected] of checks) {
+      const op = new Expr.toDatetime(expr)
       const actual = op.run({}, 0)
       assert(actual instanceof Date,
-             `Wrong result type for ${name}`)
+             `Wrong result type for ${expected}`)
       assert.equal(actual.getTime(), expected.getTime(),
-                   `Wrong result for ${name}`)
+                   `Wrong result for ${expected}`)
     }
     done()
   })
@@ -442,7 +439,7 @@ describe('type conversions', () => {
 describe('extract values from datetimes', () => {
   it('extracts components of datetimes', (done) => {
     // Zero-based month in constructor *sigh*.
-    const value = new Expr.constant(new Date(1983, 11, 2, 7, 55, 19, 0))
+    const value = new Expr.datetime(new Date(1983, 11, 2, 7, 55, 19, 0))
     assert.equal((new Expr.toYear(value)).run({}, 0), 1983,
                  `Wrong year`)
     assert.equal((new Expr.toMonth(value)).run({}, 0), 12,
@@ -470,7 +467,7 @@ describe('extract values from datetimes', () => {
       ['minutes', Expr.toMinutes],
       ['seconds', Expr.toSeconds]
     ]
-    const value = new Expr.constant(MISSING)
+    const value = new Expr.datetime(MISSING)
     for (const [name, conv] of converters) {
       const op = new conv(value)
       const result = op.run({}, 0)
@@ -483,10 +480,10 @@ describe('extract values from datetimes', () => {
 
 describe('expression equality tests', () => {
   it('compares constants', (done) => {
-    const const_one = new Expr.constant('one')
+    const const_one = new Expr.string('one')
     assert(const_one.equal(const_one),
            `Same should equal`)
-    const const_two = new Expr.constant('two')
+    const const_two = new Expr.string('two')
     assert(!const_one.equal(const_two),
            `Different should not equal`)
     const col_three = new Expr.column('three')
@@ -499,11 +496,11 @@ describe('expression equality tests', () => {
   })
 
   it('compares unary expressions', (done) => {
-    const const_one = new Expr.constant('one')
+    const const_one = new Expr.string('one')
     const negate_one = new Expr.negate(const_one)
     assert(negate_one.equal(negate_one),
            `Same should equal`)
-    const negate_two = new Expr.negate(new Expr.constant('two'))
+    const negate_two = new Expr.negate(new Expr.string('two'))
     assert(!negate_one.equal(negate_two),
            `Different nested should not equal`)
     const not_one = new Expr.not(const_one)
@@ -513,8 +510,8 @@ describe('expression equality tests', () => {
   })
 
   it('compares binary expressions', (done) => {
-    const const_1 = new Expr.constant(1)
-    const const_2 = new Expr.constant(2)
+    const const_1 = new Expr.number(1)
+    const const_2 = new Expr.number(2)
     const add_1_2 = new Expr.add(const_1, const_2)
     const add_1_2_also = new Expr.add(const_1, const_2)
     assert(add_1_2.equal(add_1_2_also),
@@ -527,15 +524,22 @@ describe('expression equality tests', () => {
 
   it('compares ternary expressions', (done) => {
     const cond_1 = new Expr.greater(new Expr.column('left'),
-                                    new Expr.constant(0))
+                                    new Expr.number(0))
     const val_1_true = new Expr.add(new Expr.column('left'),
-                                    new Expr.constant(3))
-    const val_1_false = new Expr.constant(-1)
+                                    new Expr.number(3))
+    const val_1_false = new Expr.number(-1)
     const if_1 = new Expr.ifElse(cond_1, val_1_true, val_1_false)
-    const val_2_false = new Expr.constant(-2)
+    const val_2_false = new Expr.number(-2)
     const if_2 = new Expr.ifElse(cond_1, val_1_true, val_2_false)
     assert(!if_2.equal(if_1),
            `Unequal nested expressions`)
+    done()
+  })
+})
+
+describe('make blank expressions', () => {
+  it('makes blank expressions', (done) => {
+    const blanks = Expr.makeBlanks()
     done()
   })
 })

@@ -168,7 +168,7 @@ describe('standard deviation', () => {
 })
 
 describe('sum', () => {
-  it('requires a valid column name for stdDev', (done) => {
+  it('requires a valid column name for sum', (done) => {
     assert.throws(() => new Summarize.sum(''),
                   Error,
                   `Should not be able to summarize with empty column name`)
@@ -191,7 +191,7 @@ describe('sum', () => {
 })
 
 describe('variance', () => {
-  it('requires a valid column name for stdDev', (done) => {
+  it('requires a valid column name for variance', (done) => {
     assert.throws(() => new Summarize.variance(77),
                   Error,
                   `Should not be able to summarize with number as column name`)

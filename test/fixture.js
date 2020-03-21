@@ -1,8 +1,49 @@
+'use strict'
+
+const fs = require('fs')
+const {JSDOM} = require('jsdom')
+
 const util = require('../libs/util')
 const MISSING = util.MISSING
 const {DataFrame} = require('../libs/dataframe')
+const {StageBase} = require('../libs/stage')
+const {Environment} = require('../libs/environment')
 
-const {MockStage} = require('./mock')
+/**
+ * Where to read data when testing.
+ */
+const LOCAL_DATA_DIR = 'data'
+
+/**
+ * Testing replacement for a stage (easier constructor).
+ */
+class MockStage extends StageBase {
+  constructor (name, func, requires, produces, input, output) {
+    super(name, requires, produces, input, output)
+    this.func = func
+  }
+  run = (runner, df) => {
+    runner.appendLog(this.name)
+    return this.func(runner, df)
+  }
+}
+
+/**
+ * Override browser-based method for getting data.
+ * @param {string} path Local path to dataset.
+ * @returns Table to turn into dataframe.
+ */
+Environment.HowToGetData = (path) => {
+  util.check(path && (typeof path === 'string'),
+             `Path must be non-empty string`)
+  path = `${process.cwd()}/${LOCAL_DATA_DIR}/${path}`
+  const text = fs.readFileSync(path, 'utf-8')
+  return util.csvToTable(text)
+}
+
+/*
+ * Some fixtures for testing.
+ */
 
 const Table = new DataFrame([{left: 1, right: 10},
                              {left: 2, right: 20}])
@@ -14,10 +55,39 @@ const Middle = new MockStage('middle', Pass, [], null, true, true)
 const Tail = new MockStage('tail', Pass, [], null, true, false)
 const TailNotify = new MockStage('tailNotify', Pass, [], 'keyword', true, false)
 
-/**
- * Some fixtures for testing.
+/*
+ * Some support for testing DOM.
  */
+const DOM = new JSDOM(`<body></body>`)
+const BODY = DOM.window.document.querySelector('body')
+
+const makeNode = (html) => {
+  BODY.innerHTML = '<div/>'
+  BODY.firstChild.innerHTML = html
+  return BODY.firstChild.firstChild
+}
+
+const makeRow = (html) => {
+  BODY.innerHTML = '<table><tbody></tbody></table>'
+  const body = BODY.querySelector('tbody')
+  body.innerHTML = html
+  return body.firstChild
+}
+
+const makeCell = (html) => {
+  BODY.innerHTML = '<table><tbody><tr></tr></tbody></table>'
+  const row = BODY.querySelector('tr')
+  row.innerHTML = html
+  return row.firstChild
+}
+
+/*
+ * A bag full of exports.
+ */
+
 module.exports = {
+  MockStage,
+  concert: new Date(1983, 11, 2, 7, 55, 19, 0),
   bool: [
     {left: true, right: true},
     {left: true, right: false},
@@ -74,5 +144,8 @@ module.exports = {
   Head,
   Middle,
   Tail,
-  TailNotify
+  TailNotify,
+  makeNode,
+  makeRow,
+  makeCell
 }

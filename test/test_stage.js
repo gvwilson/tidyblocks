@@ -61,7 +61,7 @@ describe('build dataframe operations', () => {
 
   it('builds mutate stage', (done) => {
     const runner = new Environment()
-    const mutater = new Expr.constant('stuff')
+    const mutater = new Expr.string('stuff')
     const stage = new Stage.mutate('value', mutater)
     const result = stage.run(runner, new DataFrame(fixture.names))
     assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),
@@ -346,8 +346,8 @@ describe('stage equality tests', () => {
   })
 
   it('compares filters', (done) => {
-    const filter_true = new Stage.filter(new Expr.constant(true))
-    const filter_false = new Stage.filter(new Expr.constant(false))
+    const filter_true = new Stage.filter(new Expr.logical(true))
+    const filter_false = new Stage.filter(new Expr.logical(false))
     assert(filter_true.equal(filter_true),
            `Same should equal`)
     assert(!filter_false.equal(filter_true),
@@ -388,13 +388,13 @@ describe('stage equality tests', () => {
   })
 
   it('compares mutates', (done) => {
-    const mutate_true = new Stage.mutate('name', new Expr.constant(true))
-    const mutate_false = new Stage.mutate('name', new Expr.constant(false))
+    const mutate_true = new Stage.mutate('name', new Expr.logical(true))
+    const mutate_false = new Stage.mutate('name', new Expr.logical(false))
     assert(mutate_true.equal(mutate_true),
            `Same should equal`)
     assert(!mutate_false.equal(mutate_true),
            `Different should not equal`)
-    const mutate_true_other = new Stage.mutate('other', new Expr.constant(true))
+    const mutate_true_other = new Stage.mutate('other', new Expr.logical(true))
     assert(!mutate_true.equal(mutate_true_other),
            `Names should matter`)
     const groupBy = new Stage.groupBy(['left'])
@@ -443,8 +443,8 @@ describe('stage equality tests', () => {
   })
 
   it('compares sort stages', (done) => {
-    const sort_left = new Stage.sort(['left'])
-    const sort_right = new Stage.sort(['right'])
+    const sort_left = new Stage.sort(['left'], false)
+    const sort_right = new Stage.sort(['right'], true)
     assert(sort_left.equal(sort_left),
            `Same should equal`)
     assert(!sort_left.equal(sort_right),
@@ -489,6 +489,13 @@ describe('stage equality tests', () => {
     const groupBy = new Stage.groupBy(['left'])
     assert(!unique_left.equal(groupBy),
            `Different stages should not equal`)
+    done()
+  })
+})
+
+describe('make blank stages', () => {
+  it('makes blank stages', (done) => {
+    const blanks = Stage.makeBlanks()
     done()
   })
 })

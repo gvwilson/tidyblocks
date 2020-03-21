@@ -23,33 +23,10 @@ class Program {
   }
 
   /**
-   * Restore from JSON.
-   */
-  static fromJSON (json) {
-    util.check(Array.isArray(json) &&
-               (json.length > 0) &&
-               (json[0] === Program.KIND),
-              `Expected array with program kind`)
-    const pipelines = json.slice(1).map(blob => Pipeline.fromJSON(blob))
-    return new Program(...pipelines)
-  }
-
-  /**
    * Convert program to JSON.
    */
   toJSON () {
     return [Program.KIND, ...this.pipelines.map(pipeline => pipeline.toJSON())]
-  }
-
-  /**
-   * Convert HTML to program.
-   */
-  static fromHTML (factory, table) {
-    util.check(table && (table.tagName.toUpperCase() === 'TABLE'),
-               `Expected table`)
-    const body = table.firstChild
-    const pipelines = Array.from(body.children).map(row => Pipeline.fromHTML(factory, row))
-    return new Program(...pipelines)
   }
 
   /**

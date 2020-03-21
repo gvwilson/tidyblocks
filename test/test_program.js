@@ -9,9 +9,8 @@ const {Environment} = require('../libs/environment')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 
-const {MockStage} = require('./mock')
-
 const {
+  MockStage,
   Table,
   Pass,
   Head,
@@ -19,6 +18,19 @@ const {
   Tail,
   TailNotify
 } = require('./fixture')
+
+describe('program utilities', () => {
+  it('checks program equality', (done) => {
+    const first = new Program(new Pipeline(new Stage.read('/path')))
+    const second = new Program(new Pipeline(new Stage.read('/path'),
+                                            new Stage.drop(['red'])))
+    assert(first.equal(first),
+           `Program should equal itself`)
+    assert(!first.equal(second),
+           `Different programs should not be equal`)
+    done()
+  })
+})
 
 describe('executes program', () => {
   it('requires a name and some data when notifying', (done) => {

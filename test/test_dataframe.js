@@ -292,7 +292,7 @@ describe('drop and select', () => {
 
 describe('filter', () => {
   it('keeps all rows', (done) => {
-    const expr = new Expr.constant(true)
+    const expr = new Expr.logical(true)
     const df = new DataFrame(TwoRows)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame(TwoRows.slice())),
@@ -301,7 +301,7 @@ describe('filter', () => {
   })
 
   it('discards all rows', (done) => {
-    const expr = new Expr.constant(false)
+    const expr = new Expr.logical(false)
     const df = new DataFrame(TwoRows)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame([], ['ones', 'tens'])),
@@ -311,7 +311,7 @@ describe('filter', () => {
 
   it('discards some rows', (done) => {
     const expr = new Expr.lessEqual(new Expr.column('tens'),
-                                    new Expr.constant(20))
+                                    new Expr.number(20))
     const df = new DataFrame(ThreeRows)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame(TwoRows.slice())),
@@ -409,7 +409,7 @@ describe('group and ungroup', () => {
 describe('mutate', () => {
   it('requires a new column name', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.constant(99)
+    const expr = new Expr.number(99)
     assert.throws(() => df.mutate('', expr),
                   Error,
                   `Expected error with empty new column name`)
@@ -418,7 +418,7 @@ describe('mutate', () => {
 
   it('only allows legal column names', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.constant(99)
+    const expr = new Expr.number(99)
     assert.throws(() => df.mutate(' with spaces ', expr),
                   Error,
                   `Expected error with illegal column name`)
@@ -427,7 +427,7 @@ describe('mutate', () => {
 
   it('mutates an empty dataframe', (done) => {
     const df = new DataFrame([])
-    const expr = new Expr.constant(99)
+    const expr = new Expr.number(99)
     const result = df.mutate('col', expr)
     assert.deepEqual(result.data, [],
                      `Expected empty dataframe`)
@@ -436,7 +436,7 @@ describe('mutate', () => {
 
   it('creates an entirely new column', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.constant(99)
+    const expr = new Expr.number(99)
     const result = df.mutate('col', expr)
     assert(result.equal(new DataFrame([{ones: 1, tens: 10, col: 99},
                                        {ones: 2, tens: 20, col: 99}])),
@@ -446,7 +446,7 @@ describe('mutate', () => {
 
   it('replaces an existing column', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.constant(99)
+    const expr = new Expr.number(99)
     const result = df.mutate('ones', expr)
     assert(result.equal(new DataFrame([{ones: 99, tens: 10},
                                        {ones: 99, tens: 20}])),

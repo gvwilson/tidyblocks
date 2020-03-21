@@ -1,7 +1,6 @@
 'use strict'
 
 const assert = require('assert')
-const {JSDOM} = require('jsdom')
 
 const util = require('../libs/util')
 const MISSING = util.MISSING
@@ -10,25 +9,11 @@ const {Summarize} = require('../libs/summarize')
 const {Stage} = require('../libs/stage')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
-const {JsonToHtml} = require('../libs/html')
+const {JsonToHtml} = require('../libs/json2html')
 
-const DOM = new JSDOM(`<body></body>`)
-const BODY = DOM.window.document.querySelector('body')
-
-const makeNode = (html) => {
-  BODY.innerHTML = '<div/>'
-  BODY.firstChild.innerHTML = html
-  const result = BODY.firstChild.firstChild
-  return result
-}
-
-const makeCell = (html) => {
-  BODY.innerHTML = '<table><tbody><tr></tr></tbody></table>'
-  const row = BODY.querySelector('tr')
-  row.innerHTML = html
-  const result = row.firstChild
-  return result
-}
+const fixture = require('./fixture')
+const makeNode = fixture.makeNode
+const makeCell = fixture.makeCell
 
 const SELECT_STAGE = 'table[data-briq-class="@stage"]'
 
@@ -72,7 +57,7 @@ const checkStage = (stage, label, length) => {
 }
 
 describe('creates HTML for basic fields', () => {
-  it('builds label text', (done) => {
+  it('creates HTML for label text', (done) => {
     const factory = new JsonToHtml()
     const node = makeCell(factory.label('label', 'stuff'))
     assert.match(node.tagName, /td/i,
@@ -84,13 +69,13 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('builds a multi-text input field', (done) => {
+  it('creates HTML for a multi-text input field', (done) => {
     const factory = new JsonToHtml()
     const value = 'a, b, c'
     const node = makeNode(factory.multiText(value))
     assert.match(node.tagName, /input/i,
                  `Expected input field`)
-    assert.equal(node.getAttribute('data-briq-class'), '@input',
+    assert.equal(node.getAttribute('data-briq-class'), '@multiInput',
                  `Expected @input class`)
     assert.equal(node.getAttribute('type'), 'text',
                  `Expected text input`)
@@ -99,7 +84,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('builds a single text input field', (done) => {
+  it('creates HTML for a single text input field', (done) => {
     const factory = new JsonToHtml()
     const value = 'a'
     const node = makeNode(factory.text(value))
@@ -114,7 +99,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('builds a simple selector with nothing chosen', (done) => {
+  it('creates HTML for a simple selector with nothing chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind(null, ['a', 'b']))
     checkSelect(node, 2)
@@ -123,7 +108,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('builds a simple selector with something chosen', (done) => {
+  it('creates HTML for a simple selector with something chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind('b', ['a', 'b']))
     checkSelect(node, 2)
@@ -132,7 +117,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('builds a mixed selector with nothing chosen', (done) => {
+  it('creates HTML for a mixed selector with nothing chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind(null, [['Show A', 'a'], 'b']))
     checkSelect(node, 2)
@@ -141,7 +126,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('builds a mixed selector with something chosen', (done) => {
+  it('creates HTML for a mixed selector with something chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind('a', [['Show A', 'a'], 'b']))
     checkSelect(node, 2)
@@ -153,7 +138,7 @@ describe('creates HTML for basic fields', () => {
 
 describe('creates HTML for expressions', () => {
   it('creates a constant', (done) => {
-    const expr = new Expr.constant('something')
+    const expr = new Expr.string('something')
     const json = expr.toJSON()
     const factory = new JsonToHtml()
     const node = makeCell(factory.expr(json))
@@ -164,11 +149,11 @@ describe('creates HTML for expressions', () => {
           second = row.childNodes[1].firstChild
     assert.match(first.tagName, /select/i,
                  `First child should be selector`)
-    assert.equal(first.childNodes.length, 2,
-                 `Selector should have two options`)
+    assert.equal(first.childNodes.length, 5,
+                 `Selector should have five options`)
     const selected = first.querySelector('option[selected=selected]')
-    assert.equal(selected.getAttribute('value'), 'constant',
-                 `Selector should have "constant" selected`)
+    assert.equal(selected.getAttribute('value'), 'string',
+                 `Selector should have "string" selected`)
     assert.match(second.tagName, /input/i,
                  `Second child should be input`)
     assert.equal(second.getAttribute('type'), 'text',
@@ -180,15 +165,14 @@ describe('creates HTML for expressions', () => {
 
   it('converts different constant values to HTML', (done) => {
     const allChecks = [
-      ['false', false],
-      ['true', true],
-      ['zero', 0],
-      ['non-zero', 123],
-      ['empty string', ''],
-      ['non-empty string', 'stuff']
+      ['false', new Expr.logical(false)],
+      ['true', new Expr.logical(true)],
+      ['zero', new Expr.number(0)],
+      ['non-zero', new Expr.number(123)],
+      ['empty string', new Expr.string('')],
+      ['non-empty string', new Expr.string('stuff')]
     ]
-    for (const [text, val] of allChecks) {
-      const expr = new Expr.constant(val)
+    for (const [text, expr] of allChecks) {
       const json = expr.toJSON()
       const factory = new JsonToHtml()
       const node = makeCell(factory.expr(json))
@@ -199,8 +183,8 @@ describe('creates HTML for expressions', () => {
       assert.equal(second.getAttribute('type'), 'text',
                    `Input should be of type text`)
       const actual = second.getAttribute('value')
-      assert.equal(actual, `${val}`,
-                   `Value for ${text} should be "${val}", not "${actual}"`)
+      assert.equal(actual, `${expr.value}`,
+                   `Value for ${text} should be "${expr.value}", not "${actual}"`)
     }
     done()
   })
@@ -217,8 +201,8 @@ describe('creates HTML for expressions', () => {
           second = row.childNodes[1].firstChild
     assert.equal(first.tagName, 'SELECT',
                  `First child should be selector`)
-    assert.equal(first.childNodes.length, 2,
-                 `Selector should have two options`)
+    assert.equal(first.childNodes.length, 5,
+                 `Selector should have five options`)
     const selected = first.querySelector('option[selected=selected]')
     assert.equal(selected.getAttribute('value'), 'column',
                  `Selector should have "column" selected`)
@@ -230,27 +214,27 @@ describe('creates HTML for expressions', () => {
   it('converts unary expressions to HTML', (done) => {
     const theDate = new Date(1983, 11, 2, 7, 55, 19, 0)
     const allChecks = [
-      ['negate', 987],
-      ['not', false],
-      ['isBool', true],
-      ['isDatetime', theDate],
-      ['isMissing', MISSING],
-      ['isNumber', -8.9],
-      ['isString', 'yes'],
-      ['toBool', 0],
-      ['toDatetime', '1983-11-02'],
-      ['toNumber', '16'],
-      ['toString', 16],
-      ['toYear', theDate],
-      ['toMonth', theDate],
-      ['toDay', theDate],
-      ['toWeekday', theDate],
-      ['toHours', theDate],
-      ['toMinutes', theDate],
-      ['toSeconds', theDate]
+      ['negate', new Expr.number(987)],
+      ['not', new Expr.logical(false)],
+      ['isLogical', new Expr.logical(true)],
+      ['isDatetime', new Expr.datetime(theDate)],
+      ['isMissing', new Expr.logical(MISSING)],
+      ['isNumber', new Expr.number(-8.9)],
+      ['isString', new Expr.string('yes')],
+      ['toLogical', new Expr.number(0)],
+      ['toDatetime', new Expr.string('1983-11-02')],
+      ['toNumber', new Expr.string('16')],
+      ['toString', new Expr.number(16)],
+      ['toYear', new Expr.datetime(theDate)],
+      ['toMonth', new Expr.datetime(theDate)],
+      ['toDay', new Expr.datetime(theDate)],
+      ['toWeekday', new Expr.datetime(theDate)],
+      ['toHours', new Expr.datetime(theDate)],
+      ['toMinutes', new Expr.datetime(theDate)],
+      ['toSeconds', new Expr.datetime(theDate)]
     ]
     for (let [name, val] of allChecks) {
-      const expr = new Expr[name](new Expr.constant(val))
+      const expr = new Expr[name](val)
       const json = expr.toJSON()
       const factory = new JsonToHtml()
       const node = makeCell(factory.expr(json))
@@ -288,24 +272,23 @@ describe('creates HTML for expressions', () => {
 
   it('converts binary expressions to HTML', (done) => {
     const allChecks = [
-      ['add', 987, 654],
-      ['and', false, true],
-      ['divide', 987, 654],
-      ['equal', 987, 654],
-      ['greater', 987, 654],
-      ['greaterEqual', 987, 654],
-      ['less', 987, 654],
-      ['lessEqual', 987, 654],
-      ['multiply', 987, 654],
-      ['notEqual', 987, 654],
-      ['or', 987, 654],
-      ['power', 987, 654],
-      ['remainder', 987, 654],
-      ['subtract', 987, 654]
+      ['add', new Expr.number(987), new Expr.number(654)],
+      ['and', new Expr.logical(false), new Expr.logical(true)],
+      ['divide', new Expr.number(987), new Expr.number(654)],
+      ['equal', new Expr.number(987), new Expr.number(654)],
+      ['greater', new Expr.number(987), new Expr.number(654)],
+      ['greaterEqual', new Expr.number(987), new Expr.number(654)],
+      ['less', new Expr.number(987), new Expr.number(654)],
+      ['lessEqual', new Expr.number(987), new Expr.number(654)],
+      ['multiply', new Expr.number(987), new Expr.number(654)],
+      ['notEqual', new Expr.number(987), new Expr.number(654)],
+      ['or', new Expr.logical(false), new Expr.logical(true)],
+      ['power', new Expr.number(987), new Expr.number(654)],
+      ['remainder', new Expr.number(987), new Expr.number(654)],
+      ['subtract', new Expr.number(987), new Expr.number(654)]
     ]
     for (let [name, leftVal, rightVal] of allChecks) {
-      const expr = new Expr[name](new Expr.constant(leftVal),
-                                  new Expr.constant(rightVal))
+      const expr = new Expr[name](leftVal, rightVal)
       const json = expr.toJSON()
       const factory = new JsonToHtml()
       const node = makeCell(factory.expr(json))
@@ -348,9 +331,9 @@ describe('creates HTML for expressions', () => {
   })
 
   it('converts ternary expressions to HTML', (done) => {
-    const expr = new Expr.ifElse(new Expr.constant(true),
-                                 new Expr.constant(1),
-                                 new Expr.constant(2))
+    const expr = new Expr.ifElse(new Expr.logical(true),
+                                 new Expr.number(1),
+                                 new Expr.number(2))
     const json = expr.toJSON()
     const factory = new JsonToHtml()
     const node = makeCell(factory.expr(json))
@@ -371,7 +354,9 @@ describe('creates HTML for expressions', () => {
                  `Widget should have six children`)
 
     for (let [i, word] of [[0, 'if'], [2, 'then'], [4, 'else']]) {
-      assert.equal(row.children[i].innerHTML, word,
+      assert.match(row.children[i].firstChild.tagName, /span/i,
+                   `Expected label to contain span`)
+      assert.equal(row.children[i].firstChild.innerHTML, word,
                    `Expected word ${i} to be "${word}"`)
     }
 
@@ -390,7 +375,7 @@ describe('creates HTML for expressions', () => {
 
 describe('creates HTML for stages', () => {
   it('creates a drop stage from JSON', (done) => {
-    const stage = new Stage.drop('left, right')
+    const stage = new Stage.drop(['left, right'])
     const cells = checkStage(stage, 'drop', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,
                  `Second child should be input`)
@@ -399,7 +384,7 @@ describe('creates HTML for stages', () => {
 
   it('creates a filter stage from JSON', (done) => {
     for (const [text, val] of [['true', true], ['false', false]]) {
-      const stage = new Stage.filter(new Expr.constant(val))
+      const stage = new Stage.filter(new Expr.logical(val))
       const cells = checkStage(stage, 'filter', 2)
       assert.equal(cells[1].querySelectorAll('table[data-briq-class="@expr"]').length, 1,
                    `Should have one expression as a child`)
@@ -432,7 +417,7 @@ describe('creates HTML for stages', () => {
   })
 
   it('creates a mutate stage from JSON', (done) => {
-    const stage = new Stage.mutate('update', new Expr.constant(true))
+    const stage = new Stage.mutate('update', new Expr.logical(true))
     const cells = checkStage(stage, 'mutate', 3)
     assert.match(cells[1].firstChild.tagName, /input/i,
                  `Second child should be input`)
@@ -466,10 +451,18 @@ describe('creates HTML for stages', () => {
   })
 
   it('creates a sort stage from JSON', (done) => {
-    const stage = new Stage.sort(['red', 'green'], false)
-    const cells = checkStage(stage, 'sort', 2)
-    assert.match(cells[1].firstChild.tagName, /input/i,
-                 `Second child should be input`)
+    for (const reverse of [true, false]) {
+      const stage = new Stage.sort(['red', 'green'], reverse)
+      const cells = checkStage(stage, 'sort', 3)
+      assert.match(cells[1].firstChild.tagName, /input/i,
+                   `Second child should be input`)
+      assert.equal(cells[1].firstChild.getAttribute('type'), 'text',
+                   `Second child should be text input`)
+      assert.match(cells[2].firstChild.tagName, /input/i,
+                   `Third child should be input`)
+      assert.equal(cells[2].firstChild.getAttribute('type'), 'checkbox',
+                   `Third child should be checkbox input`)
+    }
     done()
   })
 

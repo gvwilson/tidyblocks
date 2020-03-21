@@ -14,48 +14,11 @@ class Pipeline {
   }
 
   /**
-   * Restore from JSON.
-   * @param {JSON} json To convert.
-   * @returns Pipeline.
-   */
-  static fromJSON (json) {
-    util.check(Array.isArray(json) &&
-               (json.length > 1) &&
-               (json[0] === '@pipeline'),
-              `Expected array with pipeline element`)
-    const stages = json.slice(1).map(blob => Stage.fromJSON(blob))
-    return new Pipeline(...stages)
-  }
-
-  /**
    * Convert to JSON.
    */
   toJSON () {
     return ['@pipeline',
             ...this.stages.map(stage => stage.toJSON())]
-  }
-
-  /**
-   * Turn HTML row into a pipeline.
-   */
-  static fromHTML (factory, row) {
-    util.check(row && (row.tagName.toUpperCase() === 'TR'),
-               `Expected table row`)
-    util.check(row.children.length >= 1,
-               `Pipeline must have at least one cell (its name)`)
-    const first = row.children[0]
-    util.check(first.tagName.toUpperCase() === 'TH',
-               `First cell must be <th> not ${first.tagName}`)
-    const name = first.textContent
-    const cells = Array.from(row.children).slice(1)
-    const stages = cells.map(cell => {
-      util.check((cell.tagName.toUpperCase() === 'TD') &&
-                 (cell.children.length === 1) &&
-                 (cell.firstChild.tagName.toUpperCase() === 'DIV'),
-                 `Expected table cell with one div child in pipeline`)
-      return Stage.fromHTML(factory, cell.firstChild)
-    })
-    return new Pipeline(name, ...stages)
   }
 
   /**
@@ -104,6 +67,7 @@ class Pipeline {
     return {name: last.produces, data: data}
   }
 }
+Pipeline.KIND = '@pipeline'
 
 module.exports = {
   Pipeline
