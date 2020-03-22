@@ -14,7 +14,7 @@ class JsonToHtml {
     this._check(json, 'program')
     const pipelines = json.slice(1).map(x => this.pipeline(x))
     return this._stitch(
-      ['table', 'id="briq-program"', 'data-briq-class="@program"'],
+      ['table', 'id="briq-program"', `data-briq-class="${Program.KIND}"`],
       ['tbody'],
       pipelines.join('')
     )
@@ -24,7 +24,7 @@ class JsonToHtml {
     this._check(json, 'pipeline')
     const stages = json.slice(1).map(x => this.stage(x))
     return this._stitch(
-      ['tr', 'data-briq-class="@pipeline"'],
+      ['tr', `data-briq-class="${Pipeline.KIND}"`],
       stages.join('')
     )
   }
@@ -42,7 +42,7 @@ class JsonToHtml {
     return this._stitch(
       ['td'],
       ['div', 'class="redips-drag redips-clone"'],
-      ['table', 'data-briq-class="@stage"', `data-briq-kind="${kind}"`],
+      ['table', `data-briq-class="${Stage.KIND}"`, `data-briq-kind="${kind}"`],
       ['tbody'],
       ['tr'],
       converted.join('')
@@ -63,7 +63,7 @@ class JsonToHtml {
     const converted = this._convert(kind, fields, rest)
     return this._stitch(
       ['td'],
-      ['table', 'data-briq-class="@expr"', `data-briq-kind="${kind}"`],
+      ['table', `data-briq-class="${Expr.KIND}"`, `data-briq-kind="${kind}"`],
       ['tbody'],
       ['tr'],
       converted.join('')

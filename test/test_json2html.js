@@ -15,7 +15,7 @@ const fixture = require('./fixture')
 const makeNode = fixture.makeNode
 const makeCell = fixture.makeCell
 
-const SELECT_STAGE = 'table[data-briq-class="@stage"]'
+const SELECT_STAGE = `table[data-briq-class="${Stage.KIND}"]`
 
 const checkSelect = (node, length) => {
   assert.match(node.tagName, /select/i,
@@ -245,7 +245,7 @@ describe('creates HTML for expressions', () => {
       const table = node.firstChild
       assert.match(table.tagName, /table/i,
                    `First child should be table`)
-      assert.equal(table.getAttribute('data-briq-class'), '@expr',
+      assert.equal(table.getAttribute('data-briq-class'), Expr.KIND,
                    `Table should be expression`)
       assert.equal(table.getAttribute('data-briq-kind'), name,
                    `Table kind should be "${name}"`)
@@ -264,7 +264,7 @@ describe('creates HTML for expressions', () => {
       const second = row.childNodes[1].firstChild
       assert.match(second.tagName, /table/i,
                    `Second child should be sub-expression`)
-      assert.equal(second.getAttribute('data-briq-class'), '@expr',
+      assert.equal(second.getAttribute('data-briq-class'), Expr.KIND,
                    `Second child should be expression`)
     }
     done()
@@ -299,7 +299,7 @@ describe('creates HTML for expressions', () => {
       const table = node.firstChild
       assert.match(table.tagName, /table/i,
                    `First child should be table`)
-      assert.equal(table.getAttribute('data-briq-class'), '@expr',
+      assert.equal(table.getAttribute('data-briq-class'), Expr.KIND,
                    `Table should be expression`)
       assert.equal(table.getAttribute('data-briq-kind'), name,
                    `Table kind should be "${name}"`)
@@ -311,7 +311,7 @@ describe('creates HTML for expressions', () => {
       const first = row.childNodes[0].firstChild
       assert.match(first.tagName, /table/i,
                    `middle child should be sub-cell`)
-      assert.equal(first.getAttribute('data-briq-class'), '@expr',
+      assert.equal(first.getAttribute('data-briq-class'), Expr.KIND,
                    `First child should be expression`)
 
       const middle = row.childNodes[1].firstChild
@@ -324,7 +324,7 @@ describe('creates HTML for expressions', () => {
       const last = row.childNodes[2].firstChild
       assert.match(last.tagName, /table/i,
                    `last child should be sub-cell`)
-      assert.equal(last.getAttribute('data-briq-class'), '@expr',
+      assert.equal(last.getAttribute('data-briq-class'), Expr.KIND,
                    `Last child should be expression`)
     }
     done()
@@ -344,7 +344,7 @@ describe('creates HTML for expressions', () => {
     const table = node.firstChild
     assert.match(table.tagName, /table/i,
                  `First child should be table`)
-    assert.equal(table.getAttribute('data-briq-class'), '@expr',
+    assert.equal(table.getAttribute('data-briq-class'), Expr.KIND,
                  `Table should be expression`)
     assert.equal(table.getAttribute('data-briq-kind'), 'ifElse',
                  `Table kind should be "ifElse"`)
@@ -383,10 +383,11 @@ describe('creates HTML for stages', () => {
   })
 
   it('creates a filter stage from JSON', (done) => {
+    const selector = `table[data-briq-class="${Expr.KIND}"]`
     for (const [text, val] of [['true', true], ['false', false]]) {
       const stage = new Stage.filter(new Expr.logical(val))
       const cells = checkStage(stage, 'filter', 2)
-      assert.equal(cells[1].querySelectorAll('table[data-briq-class="@expr"]').length, 1,
+      assert.equal(cells[1].querySelectorAll(selector).length, 1,
                    `Should have one expression as a child`)
     }
     done()
@@ -421,7 +422,8 @@ describe('creates HTML for stages', () => {
     const cells = checkStage(stage, 'mutate', 3)
     assert.match(cells[1].firstChild.tagName, /input/i,
                  `Second child should be input`)
-    assert.equal(cells[2].querySelectorAll('table[data-briq-class="@expr"]').length, 1,
+    const selector = `table[data-briq-class="${Expr.KIND}"]`
+    assert.equal(cells[2].querySelectorAll(selector).length, 1,
                  `Should have one expression as a child`)
     done()
   })

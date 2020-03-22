@@ -2,8 +2,10 @@
 
 const util = require('./util')
 const MISSING = util.MISSING
-const {Stage} = require('./stage')
 const {Expr} = require('./expr')
+const {Stage} = require('./stage')
+const {Pipeline} = require('./pipeline')
+const {Program} = require('./program')
 
 const VALUES = new Set(['logical', 'number', 'string', 'datetime'])
 const BINARY = new Set(['add', 'subtract', 'multiply', 'divide',
@@ -17,24 +19,24 @@ class HtmlToJson {
   }
 
   program (dom) {
-    this._check(dom, 'table', '@program')
+    this._check(dom, 'table', Program.KIND)
     const pipelines = this._all(dom, 'tr[data-briq-class="@pipeline"]')
           .map(node => this.pipeline(node))
-    return ['@program', ...pipelines]
+    return [Program.KIND, ...pipelines]
   }
 
   pipeline (dom) {
-    this._check(dom, 'tr', '@pipeline')
+    this._check(dom, 'tr', Pipeline.KIND)
     const stages = this._all(dom, 'div[class="redips-drag redips-clone"]')
           .map(node => this.stage(node))
-    return ['@pipeline', ...stages]
+    return [Pipeline.KIND, ...stages]
   }
 
   stage (dom) {
     util.check(dom.tagName.match(/div/i,),
                `Expected DIV`)
     dom = dom.firstChild
-    this._check(dom, 'table', '@stage')
+    this._check(dom, 'table', Stage.KIND)
     const kind = dom.getAttribute('data-briq-kind')
     util.check(kind in Stage,
                `Unknown kind of stage "${kind}"`)
@@ -46,11 +48,11 @@ class HtmlToJson {
     const fields = children.slice(1)
           .map(field => this._convert(field))
           .filter(field => (field !== null))
-    return ['@stage', kind, ...fields]
+    return [Stage.KIND, kind, ...fields]
   }
 
   expr (dom) {
-    this._check(dom, 'table', '@expr')
+    this._check(dom, 'table', Expr.KIND)
     const kind = dom.getAttribute('data-briq-kind')
     util.check(kind in Expr,
                `Unknown kind of expression "${kind}"`)
@@ -64,16 +66,16 @@ class HtmlToJson {
     if (VALUES.has(kind)) {
       util.check((fields.length === 2) && (kind === fields[0]),
                  `Expected two fields and first field to match kind`)
-      return this._fixTypes(['@expr', ...fields])
+      return this._fixTypes([Expr.KIND, ...fields])
     }
     else if (BINARY.has(kind)) {
       util.check((fields.length === 3) && (kind === fields[1]),
                  `Expected three fields and second field to match kind`)
       const temp = [fields[1], fields[0], fields[2]]
-      return ['@expr', ...temp]
+      return [Expr.KIND, ...temp]
     }
 
-    return ['@expr', ...fields]
+    return [Expr.KIND, ...fields]
   }
 
   check (dom) {
@@ -160,7 +162,7 @@ class HtmlToJson {
     util.check(expr &&
                Array.isArray(expr) &&
                (expr.length === 3) &&
-               (expr[0] === '@expr'),
+               (expr[0] === Expr.KIND),
                `Expected expression array`)
 
     // Missing value.

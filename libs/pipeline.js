@@ -17,7 +17,7 @@ class Pipeline {
    * Convert to JSON.
    */
   toJSON () {
-    return ['@pipeline',
+    return [Pipeline.KIND,
             ...this.stages.map(stage => stage.toJSON())]
   }
 
