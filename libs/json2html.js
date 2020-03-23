@@ -63,10 +63,18 @@ class JsonToHtml {
     const converted = this._convert(kind, fields, rest)
     return this._stitch(
       ['td'],
+      ['div', 'class="redips-drag redips-clone"'],
       ['table', `data-briq-class="${Expr.KIND}"`, `data-briq-kind="${kind}"`],
       ['tbody'],
       ['tr'],
       converted.join('')
+    )
+  }
+
+  placeholder () {
+    return this._stitch(
+      ['td', 'class="placeholder"', 'data-briq-class="placeholder"'],
+      ''
     )
   }
   

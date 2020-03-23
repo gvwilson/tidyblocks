@@ -16,6 +16,7 @@ class UserInterface {
    */
   static Setup () {
     UserInterface.instance = new UserInterface()
+    return UserInterface.instance
   }
 
   /**

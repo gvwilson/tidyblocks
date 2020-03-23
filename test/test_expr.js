@@ -536,10 +536,3 @@ describe('expression equality tests', () => {
     done()
   })
 })
-
-describe('make blank expressions', () => {
-  it('makes blank expressions', (done) => {
-    const blanks = Expr.makeBlanks()
-    done()
-  })
-})

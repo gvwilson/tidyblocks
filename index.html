@@ -12,13 +12,10 @@
     <script>
       let UI = null
       const setup = () => {
-        briq.Setup()
-        UI = briq.instance
-
+        UI = briq.Setup()
         REDIPS.drag.init('redips-drag')
         REDIPS.drag.dropMode = 'single' // one item per cell
         REDIPS.drag.trash.question = null // don't confirm deletion
-
         Array.from(document.getElementsByClassName('buttonDefault')).forEach(b => b.click())
       }
     </script>

@@ -2,6 +2,7 @@
 
 const {Expr} = require('./expr')
 const {Stage} = require('./stage')
+const {JsonToHtml} = require('./json2html')
 
 /**
  * Utilities for generating HTML (here for testing).
@@ -11,6 +12,7 @@ class HtmlFactory {
    * Create a toolbox of draggables.
    */
   static Toolbox (label) {
+    const factory = new JsonToHtml()
     let contents = null
     if (label === 'expr') {
       contents = Expr
@@ -26,17 +28,9 @@ class HtmlFactory {
       util.fail(`Unknown toolbox label ${label}`)
     }
     contents = contents
-      .map(html => HtmlFactory.Frozen(html))
       .map(html => `<tr>${html}</tr>`)
       .join('')
     return `<table class="briq-toolbox"><tbody>${contents}</tbody></table>`
-  }
-
-  /**
-   * Build a table cell that cannot be filled in.
-   */
-  static Frozen (content) {
-    return `<td class="redips-mark">${content}</td>`
   }
 
   /**

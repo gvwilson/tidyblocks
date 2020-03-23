@@ -492,10 +492,3 @@ describe('stage equality tests', () => {
     done()
   })
 })
-
-describe('make blank stages', () => {
-  it('makes blank stages', (done) => {
-    const blanks = Stage.makeBlanks()
-    done()
-  })
-})

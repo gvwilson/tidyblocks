@@ -27,6 +27,10 @@ class ExprPlaceholder extends ExprBase {
   toJSON () {
     return [Expr.KIND, this.kind]
   }
+
+  static Fields () {
+    return [['placeholder']]
+  }
 }
 ExprPlaceholder.KIND = 'placeholder'
 
