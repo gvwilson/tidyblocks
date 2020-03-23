@@ -7,21 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
-    <script src="./redips-drag-source.js"></script>
+    <script src="./redips-drag-min.js"></script>
     <script src="./briq.min.js"></script>
-    <script>
-      let UI = null
-      const setup = () => {
-        briq.Setup()
-        UI = briq.instance
-
-        REDIPS.drag.init('redips-drag')
-        REDIPS.drag.dropMode = 'single' // one item per cell
-        REDIPS.drag.trash.question = null // don't confirm deletion
-
-        Array.from(document.getElementsByClassName('buttonDefault')).forEach(b => b.click())
-      }
-    </script>
+    <script src="./script.js"></script>
   </head>
   <body onload="setup()">
 
@@ -90,13 +78,13 @@
                   id="briq-trash">
                 [trash]
               </th>
-              <th>
+              <th class="redips-mark">
                 <button class="menuButton briq-control"
                         onclick="UI.addProgramRow()">
                   [+row]
                 </button>
               </th>
-              <th>
+              <th class="redips-mark">
                 <button class="menuButton briq-control"
                         onclick="UI.addProgramCol()">
                   [+col]
@@ -113,7 +101,7 @@
           <div class="column width25">
             <table>
               <tr>
-                <td>
+                <td class="redips-mark">
                   <button class="menuButton tabButton width100 buttonDefault"
                           data-briq-buttongroup="toolbox"
                           onclick="UI.showTab(event, 'transformTab')">
@@ -122,7 +110,7 @@
                 </td>
               </tr>
               <tr>
-                <td>
+                <td class="redips-mark">
                   <button class="menuButton tabButton width100"
                           data-briq-buttongroup="toolbox"
                           onclick="UI.showTab(event, 'exprTab')">
