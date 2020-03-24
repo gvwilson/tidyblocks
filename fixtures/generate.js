@@ -45,8 +45,8 @@ const Programs = {
     new Pipeline(
       new Stage.read('colors.csv'),
       new Stage.groupBy(['red']),
-      new Stage.summarize(new Summarize.maximum('green'),
-                          new Summarize.minimum('blue'))
+      new Stage.summarize('maximum', 'green'),
+      new Stage.summarize('minimum', 'blue')
     )
   ),
 
@@ -54,7 +54,7 @@ const Programs = {
     new Pipeline(
       new Stage.read('colors.csv'),
       new Stage.mutate('sum', new Expr.add(
-        new Expr.constant(1),
+        new Expr.number(1),
         new Expr.multiply(
           new Expr.column('green'),
           new Expr.column('blue')

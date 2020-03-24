@@ -9,9 +9,10 @@ class Environment {
   /**
    * Construct a new runtime environment.
    */
-  constructor () {
-    util.check(typeof Environment.HowToGetData === 'function',
-               `Cannot construct environment before setting data data`)
+  constructor (readData) {
+    util.check(typeof readData === 'function',
+               `Require function for reading data`)
+    this.readData = readData
     this.log = []
     this.errors = []
     this.results = new Map()
@@ -25,7 +26,7 @@ class Environment {
    * @returns Data table.
    */
   getData (path) {
-    return Environment.HowToGetData(path)
+    return this.readData(path)
   }
 
   /**
@@ -83,11 +84,6 @@ class Environment {
     this.errors.push(message)
   }
 }
-
-/**
- * Function for getting data must be set before class is instantiated.
- */
-Environment.HowToGetData = null
 
 module.exports = {
   Environment

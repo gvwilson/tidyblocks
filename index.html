@@ -16,55 +16,61 @@
     <nav class="two-columns">
       <!-- main navigation left (program and toolbox) -->
       <div class="column width50">
-        <button class="menuButton" onclick="UI.runProgram(event)">
+        <button class="menuButton" onclick="UI.onRunProgram()">
           Run
         </button>
-        <button class="menuButton" onclick="UI.triggerInput('loadProgram')">
+        <button class="menuButton" onclick="UI.onTriggerInput('loadProgram')">
           Load Program
         </button>
-        <button class="menuButton" onclick="UI.triggerInput('loadData')">
+        <button class="menuButton" onclick="UI.onTriggerInput('loadData')">
           Load Data
         </button>
       </div>
 
       <!-- main navigation right (display areas) -->
       <div class="column width50">
-        <button class="menuButton tabButton buttonDefault"
+        <button id="dataButton"
+                class="menuButton tabButton buttonDefault"
                 data-briq-buttongroup="display"
-                onclick="UI.showTab(event, 'dataTab', 'data')">
+                onclick="UI.onShowTab(event, 'dataTab', 'data')">
           Data
         </button>
-        <button class="menuButton tabButton"
+        <button id="resultsButton"
+                class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.showTab(event, 'resultsTab', 'results')">
+                onclick="UI.onShowTab(event, 'resultsTab', 'results')">
           Results
         </button>
-        <button class="menuButton tabButton"
+        <button id="plotButton"
+                class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.showTab(event, 'plotTab')">
+                onclick="UI.onShowTab(event, 'plotTab')">
           Plot
         </button>
-        <button class="menuButton tabButton"
+        <button id="statisticsButton"
+                class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.showTab(event, 'statisticsTab')">
+                onclick="UI.onShowTab(event, 'statisticsTab')">
           Statistics
         </button>
-        <button class="menuButton tabButton"
+        <button id="logButton"
+                class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.showTab(event, 'logTab')">
+                onclick="UI.onShowTab(event, 'logTab')">
           Log
         </button>
-        <button class="menuButton tabButton"
+        <button id="errorButton"
+                class="menuButton tabButton"
                 data-briq-buttongroup="display"
-                onclick="UI.showTab(event, 'errorTab')">
+                onclick="UI.onShowTab(event, 'errorTab')">
           Error
         </button>
       </div>
     </nav>
 
     <!-- invisible controls to be "clicked" by button actions -->
-    <input type="file" id="loadProgram" style="display:none" onchange="UI.loadProgram(this.files)"/>
-    <input type="file" id="loadData" style="display:none" onchange="UI.loadData(this.files)"/>
+    <input type="file" id="loadProgram" style="display:none" onchange="UI.onLoadProgram(this.files)"/>
+    <input type="file" id="loadData" style="display:none" onchange="UI.onLoadData(this.files)"/>
 
     <main class="two-columns">
       <!-- main workbench area (program and tools) -->
@@ -80,13 +86,13 @@
               </th>
               <th class="redips-mark">
                 <button class="menuButton briq-control"
-                        onclick="UI.addProgramRow()">
+                        onclick="UI.onAddProgramRow()">
                   [+row]
                 </button>
               </th>
               <th class="redips-mark">
                 <button class="menuButton briq-control"
-                        onclick="UI.addProgramCol()">
+                        onclick="UI.onAddProgramCol()">
                   [+col]
                 </button>
               </th>
@@ -104,7 +110,7 @@
                 <td class="redips-mark">
                   <button class="menuButton tabButton width100 buttonDefault"
                           data-briq-buttongroup="toolbox"
-                          onclick="UI.showTab(event, 'transformTab')">
+                          onclick="UI.onShowTab(event, 'transformTab')">
                     Transforms
                   </button>
                 </td>
@@ -113,7 +119,7 @@
                 <td class="redips-mark">
                   <button class="menuButton tabButton width100"
                           data-briq-buttongroup="toolbox"
-                          onclick="UI.showTab(event, 'exprTab')">
+                          onclick="UI.onShowTab(event, 'exprTab')">
                     Expressions
                   </button>
                 </td>
@@ -136,33 +142,33 @@
         <div id="dataTab" class="tabContent">
           <h2>
             Data
-            <select class="tableSelector" id="dataSelect" onchange="UI.displayTable('data')"></select>
+            <select class="tableSelector" id="dataSelect" onchange="UI.onDisplayTable('data')"></select>
           </h2>
-          <div id="dataArea"></div>
+          <div id="dataArea" data-briq-tabgroup="display"></div>
         </div>
         <div id="resultsTab" class="tabContent">
           <h2>
             Results
-            <select class="tableSelector" id="resultsSelect" onchange="UI.displayTable('results')"></select>
-            <button class="displayButton" onclick="UI.saveResults(event)">Save</button>
+            <select class="tableSelector" id="resultsSelect" onchange="UI.onDisplayTable('results')"></select>
+            <button class="displayButton" onclick="UI.onSaveResults(event)">Save</button>
           </h2>
-          <div id="resultsArea"></div>
+          <div id="resultsArea" data-briq-tabgroup="display"></div>
         </div>
         <div id="plotTab" class="tabContent">
           <h2>Plot</h2>
-          <div id="plotArea"></div>
+          <div id="plotArea" data-briq-tabgroup="display"></div>
         </div>
         <div id="statisticsTab" class="tabContent">
           <h2>Statistics</h2>
-          <div id="statisticsArea"></div>
+          <div id="statisticsArea" data-briq-tabgroup="display"></div>
         </div>
         <div id="logTab" class="tabContent">
           <h2>Log</h2>
-          <div id="logArea"></div>
+          <div id="logArea" data-briq-tabgroup="display"></div>
         </div>
         <div id="errorTab" class="tabContent">
           <h2>Error</h2>
-          <div id="errorArea"></div>
+          <div id="errorArea" data-briq-tabgroup="display"></div>
         </div>
       </div>
     </main>

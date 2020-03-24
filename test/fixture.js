@@ -33,7 +33,7 @@ class MockStage extends StageBase {
  * @param {string} path Local path to dataset.
  * @returns Table to turn into dataframe.
  */
-Environment.HowToGetData = (path) => {
+const ReadLocalData = (path) => {
   util.check(path && (typeof path === 'string'),
              `Path must be non-empty string`)
   path = `${process.cwd()}/${LOCAL_DATA_DIR}/${path}`
@@ -79,7 +79,9 @@ const makeRow = (html) => {
  */
 
 module.exports = {
+  DOM,
   MockStage,
+  ReadLocalData,
   concert: new Date(1983, 11, 2, 7, 55, 19, 0),
   bool: [
     {left: true, right: true},

@@ -11,6 +11,7 @@ const {Program} = require('../libs/program')
 
 const {
   MockStage,
+  ReadLocalData,
   Table,
   Pass,
   Head,
@@ -38,7 +39,7 @@ describe('executes program', () => {
     assert.throws(() => program.notify('name', new DataFrame([])),
                   Error,
                   `Should require environment when doing notification`)
-    program.env = new Environment()
+    program.env = new Environment(ReadLocalData)
     assert.throws(() => program.notify('', new DataFrame([])),
                   Error,
                   `Should require notification name`)
@@ -51,7 +52,7 @@ describe('executes program', () => {
   it('can notify when nothing is waiting', (done) => {
     const program = new Program()
     const df = new DataFrame([])
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.env = env
     program.signal('name', df)
     assert(df.equal(env.getResult('name')),
@@ -113,7 +114,7 @@ describe('executes program', () => {
     assert.equal(program.waiting.size, 1,
                  `Should have one non-runnable pipeline`)
 
-    program.env = new Environment()
+    program.env = new Environment(ReadLocalData)
     program.signal('first', df)
     assert.equal(program.waiting.size, 0,
                  `Waiting set should be empty`)
@@ -126,7 +127,7 @@ describe('executes program', () => {
 
   it('makes something runnable when its last dependency resolves', (done) => {
     const program = new Program()
-    program.env = new Environment()
+    program.env = new Environment(ReadLocalData)
     const requires = ['first', 'second', 'third']
     const last = new MockStage('last', Pass, requires, null, true, true)
     const lastPipe = new Pipeline(last)
@@ -156,7 +157,7 @@ describe('executes program', () => {
 
   it('only makes some things runnable', (done) => {
     const program = new Program()
-    program.env = new Environment()
+    program.env = new Environment(ReadLocalData)
     const leftStage = new MockStage('left', Pass, ['something'], null, true, true)
     const leftPipe = new Pipeline(leftStage)
     const df = new DataFrame([])
@@ -186,7 +187,7 @@ describe('executes program', () => {
     const failure = new Pipeline(stage)
     program.register(failure)
 
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.run(env)
     assert.equal(env.errors.length, 1,
                  `No saved error message`)
@@ -200,7 +201,7 @@ describe('executes program', () => {
     const pipeline = new Pipeline(Head, Tail)
     program.register(pipeline)
 
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.run(env)
     assert.equal(env.results.size, 0,
                  `Nothing should be registered`)
@@ -212,7 +213,7 @@ describe('executes program', () => {
     const pipeline = new Pipeline(Head, TailNotify)
     program.register(pipeline)
 
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.run(env)
     assert(env.getResult('keyword').equal(Table),
            `Missing or incorrect table`)
@@ -227,7 +228,7 @@ describe('executes program', () => {
     const pipeNotify = new Pipeline(Head, TailNotify)
     program.register(pipeNotify)
 
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.run(env)
     assert(env.getResult('keyword').equal(Table),
            `Missing or incorrect table`)
@@ -248,7 +249,7 @@ describe('executes program', () => {
     program.register(pipeNotify)
     program.register(pipeRequireLocal)
 
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.run(env)
     assert(env.getResult('keyword').equal(Table),
            `Missing or incorrect table`)
@@ -267,7 +268,7 @@ describe('executes program', () => {
     program.register(new Pipeline(Head, tailBeta))
     program.register(new Pipeline(join, TailNotify))
 
-    const env = new Environment()
+    const env = new Environment(ReadLocalData)
     program.run(env)
     assert.deepEqual(env.errors, [],
                      `Should not have an error message`)

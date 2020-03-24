@@ -3,7 +3,7 @@
 // User interface initialization.
 let UI = null
 const setup = () => {
-  briq.Setup()
+  briq.Setup(window.document)
   UI = briq.instance
   Array.from(document.getElementsByClassName('buttonDefault'))
     .forEach(b => b.click())

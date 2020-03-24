@@ -9,6 +9,7 @@ const {Environment} = require('../libs/environment')
 const {Pipeline} = require('../libs/pipeline')
 
 const {
+  ReadLocalData,
   Table,
   Pass,
   Head,
@@ -29,7 +30,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute an empty pipeline', (done) => {
     const pipeline = new Pipeline()
-    assert.throws(() => pipeline.run(new Environment()),
+    assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
                   `Should not execute empty pipeline`)
     done()
@@ -37,7 +38,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute a pipeline whose first stage requires input', (done) => {
     const pipeline = new Pipeline(Middle)
-    assert.throws(() => pipeline.run(new Environment()),
+    assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
                   `Should not execute pipeline requiring input`)
     done()
@@ -45,7 +46,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute a pipeline whose later stages require input', (done) => {
     const pipeline = new Pipeline(Head, Middle, Head, Middle)
-    assert.throws(() => pipeline.run(new Environment()),
+    assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
                   `Should not execute pipeline whose middle stages require input`)
     done()
@@ -53,7 +54,7 @@ describe('executes pipelines', () => {
 
   it('refuses to execute a pipeline whose early stages do not produce output', (done) => {
     const pipeline = new Pipeline(Head, Tail, Tail)
-    assert.throws(() => pipeline.run(new Environment()),
+    assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
                   `Should not execute pipeline whose middle stage does not produce output`)
     done()
@@ -61,7 +62,7 @@ describe('executes pipelines', () => {
 
   it('executes a single-stage pipeline without a tail', (done) => {
     const pipeline = new Pipeline(Head)
-    const result = pipeline.run(new Environment())
+    const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, null,
                  `Result should not be named`)
     assert(result.data.equal(Table),
@@ -71,7 +72,7 @@ describe('executes pipelines', () => {
 
   it('executes a two-stage pipeline without a tail', (done) => {
     const pipeline = new Pipeline(Head, Middle)
-    const result = pipeline.run(new Environment())
+    const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, null,
                  `Result should not be named`)
     assert(result.data.equal(Table),
@@ -81,7 +82,7 @@ describe('executes pipelines', () => {
 
   it('executes a three-stage pipeline with a tail', (done) => {
     const pipeline = new Pipeline(Head, Middle, Tail)
-    const result = pipeline.run(new Environment())
+    const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, null,
                  `Result should not be named`)
     assert(result.data.equal(Table),
@@ -91,7 +92,7 @@ describe('executes pipelines', () => {
 
   it('executes a pipeline with notification', (done) => {
     const pipeline = new Pipeline(Head, TailNotify)
-    const result = pipeline.run(new Environment())
+    const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, 'keyword',
                  `Result should include name`)
     assert(result.data.equal(Table),
@@ -100,7 +101,7 @@ describe('executes pipelines', () => {
   })
 
   it('logs execution', (done) => {
-    const runner = new Environment()
+    const runner = new Environment(ReadLocalData)
     const pipeline = new Pipeline(Head, Middle, Tail)
     const result = pipeline.run(runner)
     assert.deepEqual(runner.log, ['head', 'middle', 'tail'],

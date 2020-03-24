@@ -16,7 +16,7 @@
         "add",
         [
           "@expr",
-          "constant",
+          "number",
           1
         ],
         [

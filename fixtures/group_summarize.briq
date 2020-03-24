@@ -17,34 +17,14 @@
     [
       "@stage",
       "summarize",
-      {
-        "options": [
-          "count",
-          "maximum",
-          "mean",
-          "median",
-          "minimum",
-          "stdDev",
-          "sum",
-          "variance"
-        ],
-        "name": "maximum",
-        "column": "green"
-      },
-      {
-        "options": [
-          "count",
-          "maximum",
-          "mean",
-          "median",
-          "minimum",
-          "stdDev",
-          "sum",
-          "variance"
-        ],
-        "name": "minimum",
-        "column": "blue"
-      }
+      "maximum",
+      "green"
+    ],
+    [
+      "@stage",
+      "summarize",
+      "minimum",
+      "blue"
     ]
   ]
 ]

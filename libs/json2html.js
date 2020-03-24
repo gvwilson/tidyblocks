@@ -12,7 +12,8 @@ class JsonToHtml {
 
   program (json) {
     this._check(json, 'program')
-    const pipelines = json.slice(1).map(x => this.pipeline(x))
+    const pipelines = json.slice(1)
+          .map(x => this.pipeline(x))
     return this._stitch(
       ['table', 'id="briq-program"', `data-briq-class="${Program.KIND}"`],
       ['tbody'],
@@ -111,6 +112,10 @@ class JsonToHtml {
 
   selectValue (selected, options) {
     return this._select(selected, options)
+  }
+
+  makePlaceholder () {
+    return `<td class="briq-placeholder"></td>`
   }
 
   _check (json, kind) {
