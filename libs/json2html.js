@@ -25,7 +25,7 @@ class JsonToHtml {
     const stages = json.slice(1).map(x => this.stage(x))
     return this._stitch(
       ['tr', `data-briq-class="${Pipeline.KIND}"`],
-      stages.join('')
+      this._combineCells(stages)
     )
   }
 
@@ -40,12 +40,11 @@ class JsonToHtml {
     const fields = Stage[kind].Fields()
     const converted = this._convert(kind, fields, rest)
     return this._stitch(
-      ['td'],
       ['div', 'class="redips-drag redips-clone"'],
       ['table', `data-briq-class="${Stage.KIND}"`, `data-briq-kind="${kind}"`],
       ['tbody'],
       ['tr'],
-      converted.join('')
+      this._combineCells(converted)
     )
   }
 
@@ -62,18 +61,17 @@ class JsonToHtml {
     const fields = Expr[kind].Fields()
     const converted = this._convert(kind, fields, rest)
     return this._stitch(
-      ['td'],
       ['div', 'class="redips-drag redips-clone"'],
       ['table', `data-briq-class="${Expr.KIND}"`, `data-briq-kind="${kind}"`],
       ['tbody'],
       ['tr'],
-      converted.join('')
+      this._combineCells(converted)
     )
   }
 
   placeholder () {
     return this._stitch(
-      ['td', 'class="placeholder"', 'data-briq-class="placeholder"'],
+      ['span', 'data-briq-class="placeholder"'],
       ''
     )
   }
@@ -81,7 +79,6 @@ class JsonToHtml {
   check (isChecked, _unused) {
     const checkedAttr = isChecked ? 'checked="checked"' : ''
     return this._stitch(
-      ['td'],
       ['input', 'data-briq-class="@check"', 'type="checkbox"', checkedAttr],
       ''
     )
@@ -89,7 +86,6 @@ class JsonToHtml {
 
   label (kind, text) {
     return this._stitch(
-      ['td', 'class="redips-mark"'],
       ['span', 'data-briq-class="@label"'],
       text
     )
@@ -97,7 +93,6 @@ class JsonToHtml {
 
   multiText (text, _unused) {
     return this._stitch(
-      ['td'],
       ['input', 'data-briq-class="@multiInput"', 'type="text"', `value="${text}"`],
       ''
     )
@@ -105,7 +100,6 @@ class JsonToHtml {
 
   text (text, _unused) {
     return this._stitch(
-      ['td'],
       ['input', 'data-briq-class="@input"', 'type="text"', `value="${text}"`],
       ''
     )
@@ -157,7 +151,6 @@ class JsonToHtml {
     })
     options = options.join('')
     return this._stitch(
-      ['td'],
       ['select', 'data-briq-class="@select"'],
       options
     )
@@ -171,6 +164,10 @@ class JsonToHtml {
     const suffix = things.slice(0, -1).reverse().map(thing => `</${thing[0]}>`)
     const result = `${prefix.join('')}${things.slice(-1)}${suffix.join('')}`
     return result
+  }
+
+  _combineCells (items) {
+    return items.map(x => `<td>${x}</td>`).join('')
   }
 
   _isStatic (key) {

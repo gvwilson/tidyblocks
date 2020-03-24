@@ -74,13 +74,6 @@ const makeRow = (html) => {
   return body.firstChild
 }
 
-const makeCell = (html) => {
-  BODY.innerHTML = '<table><tbody><tr></tr></tbody></table>'
-  const row = BODY.querySelector('tr')
-  row.innerHTML = html
-  return row.firstChild
-}
-
 /*
  * A bag full of exports.
  */
@@ -146,6 +139,5 @@ module.exports = {
   Tail,
   TailNotify,
   makeNode,
-  makeRow,
-  makeCell
+  makeRow
 }

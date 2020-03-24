@@ -13,7 +13,6 @@ const {JsonToHtml} = require('../libs/json2html')
 
 const fixture = require('./fixture')
 const makeNode = fixture.makeNode
-const makeCell = fixture.makeCell
 
 const SELECT_STAGE = `table[data-briq-class="${Stage.KIND}"]`
 
@@ -40,7 +39,7 @@ const checkOptions = (children, options) => {
 const checkStage = (stage, label, length) => {
   const json = stage.toJSON()
   const factory = new JsonToHtml()
-  const node = makeCell(factory.stage(json))
+  const node = makeNode(factory.stage(json))
   assert.equal(node.querySelectorAll(SELECT_STAGE).length, 1,
                `Expected one stage`)
   const table = node.querySelector(SELECT_STAGE)
@@ -56,20 +55,20 @@ const checkStage = (stage, label, length) => {
   return cells
 }
 
-describe('creates HTML for basic fields', () => {
-  it('creates HTML for label text', (done) => {
+describe('converts JSON to HTML for basic fields', () => {
+  it('converts JSON to HTML for label text', (done) => {
     const factory = new JsonToHtml()
-    const node = makeCell(factory.label('label', 'stuff'))
-    assert.match(node.tagName, /td/i,
-                 `Expected table cell`)
-    assert(node.classList.contains('redips-mark'),
-           `Expected marked cell`)
+    const node = makeNode(factory.label('label', 'stuff'))
+    assert.match(node.tagName, /span/i,
+                 `Expected span`)
+    assert.equal(node.getAttribute('data-briq-class'), '@label',
+                 `Expected label`)
     assert.equal(node.textContent, 'stuff',
                  `Wrong content`)
     done()
   })
 
-  it('creates HTML for a multi-text input field', (done) => {
+  it('converts JSON to HTML for a multi-text input field', (done) => {
     const factory = new JsonToHtml()
     const value = 'a, b, c'
     const node = makeNode(factory.multiText(value))
@@ -84,7 +83,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('creates HTML for a single text input field', (done) => {
+  it('converts JSON to HTML for a single text input field', (done) => {
     const factory = new JsonToHtml()
     const value = 'a'
     const node = makeNode(factory.text(value))
@@ -99,7 +98,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('creates HTML for a simple selector with nothing chosen', (done) => {
+  it('converts JSON to HTML for a simple selector with nothing chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind(null, ['a', 'b']))
     checkSelect(node, 2)
@@ -108,7 +107,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('creates HTML for a simple selector with something chosen', (done) => {
+  it('converts JSON to HTML for a simple selector with something chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind('b', ['a', 'b']))
     checkSelect(node, 2)
@@ -117,7 +116,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('creates HTML for a mixed selector with nothing chosen', (done) => {
+  it('converts JSON to HTML for a mixed selector with nothing chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind(null, [['Show A', 'a'], 'b']))
     checkSelect(node, 2)
@@ -126,7 +125,7 @@ describe('creates HTML for basic fields', () => {
     done()
   })
 
-  it('creates HTML for a mixed selector with something chosen', (done) => {
+  it('converts JSON to HTML for a mixed selector with something chosen', (done) => {
     const factory = new JsonToHtml()
     const node = makeNode(factory.selectKind('a', [['Show A', 'a'], 'b']))
     checkSelect(node, 2)
@@ -136,20 +135,23 @@ describe('creates HTML for basic fields', () => {
   })
 })
 
-describe('creates HTML for expressions', () => {
-  it('creates a constant', (done) => {
+describe('converts JSON to HTML for expressions', () => {
+  it('converts JSON to HTML for a constant', (done) => {
     const expr = new Expr.string('something')
     const json = expr.toJSON()
     const factory = new JsonToHtml()
-    const node = makeCell(factory.expr(json))
+    const html = factory.expr(json)
+    const node = makeNode(html)
+    assert.match(node.tagName, /div/i,
+                 `Expected DIV for expression`)
     const row = node.querySelector('table >tbody >tr')
-    assert.equal(row.childNodes.length, 2,
+    assert.equal(row.children.length, 2,
                  `Widget should have two children`)
-    const first = row.childNodes[0].firstChild,
-          second = row.childNodes[1].firstChild
+    const first = row.children[0].firstChild,
+          second = row.children[1].firstChild
     assert.match(first.tagName, /select/i,
                  `First child should be selector`)
-    assert.equal(first.childNodes.length, 5,
+    assert.equal(first.children.length, 5,
                  `Selector should have five options`)
     const selected = first.querySelector('option[selected=selected]')
     assert.equal(selected.getAttribute('value'), 'string',
@@ -163,7 +165,7 @@ describe('creates HTML for expressions', () => {
     done()
   })
 
-  it('converts different constant values to HTML', (done) => {
+  it('converts JSON to HTML for different constant values', (done) => {
     const allChecks = [
       ['false', new Expr.logical(false)],
       ['true', new Expr.logical(true)],
@@ -175,9 +177,10 @@ describe('creates HTML for expressions', () => {
     for (const [text, expr] of allChecks) {
       const json = expr.toJSON()
       const factory = new JsonToHtml()
-      const node = makeCell(factory.expr(json))
+      const html = factory.expr(json)
+      const node = makeNode(html)
       const row = node.querySelector('tr')
-      const second = row.childNodes[1].firstChild
+      const second = row.children[1].firstChild
       assert.match(second.tagName, /input/i,
                    `Second child should be input`)
       assert.equal(second.getAttribute('type'), 'text',
@@ -189,19 +192,20 @@ describe('creates HTML for expressions', () => {
     done()
   })
 
-  it('converts a column getter to HTML', (done) => {
+  it('converts JSON to HTML for a column getter', (done) => {
     const expr = new Expr.column('red')
     const json = expr.toJSON()
     const factory = new JsonToHtml()
-    const node = makeCell(factory.expr(json))
+    const html = factory.expr(json)
+    const node = makeNode(html)
     const row = node.querySelector('table >tbody >tr')
-    assert.equal(row.childNodes.length, 2,
+    assert.equal(row.children.length, 2,
                  `Widget should have two children`)
-    const first = row.childNodes[0].firstChild,
-          second = row.childNodes[1].firstChild
+    const first = row.children[0].firstChild,
+          second = row.children[1].firstChild
     assert.equal(first.tagName, 'SELECT',
                  `First child should be selector`)
-    assert.equal(first.childNodes.length, 5,
+    assert.equal(first.children.length, 5,
                  `Selector should have five options`)
     const selected = first.querySelector('option[selected=selected]')
     assert.equal(selected.getAttribute('value'), 'column',
@@ -211,13 +215,12 @@ describe('creates HTML for expressions', () => {
     done()
   })
 
-  it('converts unary expressions to HTML', (done) => {
-    const theDate = new Date(1983, 11, 2, 7, 55, 19, 0)
+  it('converts JSON to HTML for unary expressions', (done) => {
     const allChecks = [
       ['negate', new Expr.number(987)],
       ['not', new Expr.logical(false)],
       ['isLogical', new Expr.logical(true)],
-      ['isDatetime', new Expr.datetime(theDate)],
+      ['isDatetime', new Expr.datetime(fixture.concert)],
       ['isMissing', new Expr.logical(MISSING)],
       ['isNumber', new Expr.number(-8.9)],
       ['isString', new Expr.string('yes')],
@@ -225,23 +228,23 @@ describe('creates HTML for expressions', () => {
       ['toDatetime', new Expr.string('1983-11-02')],
       ['toNumber', new Expr.string('16')],
       ['toString', new Expr.number(16)],
-      ['toYear', new Expr.datetime(theDate)],
-      ['toMonth', new Expr.datetime(theDate)],
-      ['toDay', new Expr.datetime(theDate)],
-      ['toWeekday', new Expr.datetime(theDate)],
-      ['toHours', new Expr.datetime(theDate)],
-      ['toMinutes', new Expr.datetime(theDate)],
-      ['toSeconds', new Expr.datetime(theDate)]
+      ['toYear', new Expr.datetime(fixture.concert)],
+      ['toMonth', new Expr.datetime(fixture.concert)],
+      ['toDay', new Expr.datetime(fixture.concert)],
+      ['toWeekday', new Expr.datetime(fixture.concert)],
+      ['toHours', new Expr.datetime(fixture.concert)],
+      ['toMinutes', new Expr.datetime(fixture.concert)],
+      ['toSeconds', new Expr.datetime(fixture.concert)]
     ]
     for (let [name, val] of allChecks) {
       const expr = new Expr[name](val)
       const json = expr.toJSON()
       const factory = new JsonToHtml()
-      const node = makeCell(factory.expr(json))
-      
-      assert.match(node.tagName, /td/i,
-                   `expression should be a table cell`)
+      const html = factory.expr(json)
+      const node = makeNode(html)
 
+      assert.match(node.tagName, /div/i,
+                   `Top-level expression should be DIV`)
       const table = node.firstChild
       assert.match(table.tagName, /table/i,
                    `First child should be table`)
@@ -251,26 +254,28 @@ describe('creates HTML for expressions', () => {
                    `Table kind should be "${name}"`)
 
       const row = node.querySelector('table >tbody >tr')
-      assert.equal(row.childNodes.length, 2,
+      assert.equal(row.children.length, 2,
                    `Widget should have two children`)
 
-      const first = row.childNodes[0].firstChild
+      const first = row.children[0].firstChild
       assert.match(first.tagName, /select/i,
                    `First child should be selector`)
       const selected = first.querySelector('option[selected=selected]')
       assert.equal(selected.getAttribute('value'), name,
                    `Wrong function selected`)
 
-      const second = row.childNodes[1].firstChild
-      assert.match(second.tagName, /table/i,
+      const second = row.children[1].firstChild
+      assert.match(second.tagName, /div/i,
                    `Second child should be sub-expression`)
-      assert.equal(second.getAttribute('data-briq-class'), Expr.KIND,
+      assert.match(second.firstChild.tagName, /table/i,
+                   `Second child contain table`)
+      assert.equal(second.firstChild.getAttribute('data-briq-class'), Expr.KIND,
                    `Second child should be expression`)
     }
     done()
   })
 
-  it('converts binary expressions to HTML', (done) => {
+  it('converts JSON to HTML for binary expressions', (done) => {
     const allChecks = [
       ['add', new Expr.number(987), new Expr.number(654)],
       ['and', new Expr.logical(false), new Expr.logical(true)],
@@ -291,11 +296,11 @@ describe('creates HTML for expressions', () => {
       const expr = new Expr[name](leftVal, rightVal)
       const json = expr.toJSON()
       const factory = new JsonToHtml()
-      const node = makeCell(factory.expr(json))
+      const html = factory.expr(json)
+      const node = makeNode(html)
 
-      assert.match(node.tagName, /td/i,
-                   `expression should be a table cell`)
-
+      assert.match(node.tagName, /div/i,
+                   `expression should be a DIV`)
       const table = node.firstChild
       assert.match(table.tagName, /table/i,
                    `First child should be table`)
@@ -305,42 +310,46 @@ describe('creates HTML for expressions', () => {
                    `Table kind should be "${name}"`)
 
       const row = node.querySelector('table >tbody >tr')
-      assert.equal(row.childNodes.length, 3,
+      assert.equal(row.children.length, 3,
                    `Widget should have three children`)
 
-      const first = row.childNodes[0].firstChild
-      assert.match(first.tagName, /table/i,
-                   `middle child should be sub-cell`)
-      assert.equal(first.getAttribute('data-briq-class'), Expr.KIND,
-                   `First child should be expression`)
+      const first = row.children[0].firstChild
+      assert.match(first.tagName, /div/i,
+                   `first child should be sub-expression`)
+      assert.match(first.firstChild.tagName, /table/i,
+                   `first child should contain table-expression`)
+      assert.equal(first.firstChild.getAttribute('data-briq-class'), Expr.KIND,
+                   `first child should be expression`)
 
-      const middle = row.childNodes[1].firstChild
+      const middle = row.children[1].firstChild
       assert.match(middle.tagName, /select/i,
                    `Middle child should be selector`)
       const selected = middle.querySelector('option[selected=selected]')
       assert.equal(selected.getAttribute('value'), name,
                    `Wrong function selected`)
 
-      const last = row.childNodes[2].firstChild
-      assert.match(last.tagName, /table/i,
-                   `last child should be sub-cell`)
-      assert.equal(last.getAttribute('data-briq-class'), Expr.KIND,
-                   `Last child should be expression`)
+      const last = row.children[2].firstChild
+      assert.match(last.tagName, /div/i,
+                   `last child should be sub-expression`)
+      assert.match(last.firstChild.tagName, /table/i,
+                   `last child should contain table-expression`)
+      assert.equal(last.firstChild.getAttribute('data-briq-class'), Expr.KIND,
+                   `last child should be expression`)
     }
     done()
   })
 
-  it('converts ternary expressions to HTML', (done) => {
+  it('converts JSON to HTML for ternary expressions', (done) => {
     const expr = new Expr.ifElse(new Expr.logical(true),
                                  new Expr.number(1),
                                  new Expr.number(2))
     const json = expr.toJSON()
     const factory = new JsonToHtml()
-    const node = makeCell(factory.expr(json))
+    const html = factory.expr(json)
+    const node = makeNode(html)
 
-    assert.match(node.tagName, /td/i,
-                 `expression should be a table cell`)
-
+    assert.match(node.tagName, /div/i,
+                 `expression should be a DIV`)
     const table = node.firstChild
     assert.match(table.tagName, /table/i,
                  `First child should be table`)
@@ -350,7 +359,7 @@ describe('creates HTML for expressions', () => {
                  `Table kind should be "ifElse"`)
     
     const row = node.querySelector('table >tbody >tr')
-    assert.equal(row.childNodes.length, 6,
+    assert.equal(row.children.length, 6,
                  `Widget should have six children`)
 
     for (let [i, word] of [[0, 'if'], [2, 'then'], [4, 'else']]) {
@@ -373,8 +382,8 @@ describe('creates HTML for expressions', () => {
   })
 })
 
-describe('creates HTML for stages', () => {
-  it('creates a drop stage from JSON', (done) => {
+describe('converts JSON to HTML for stages', () => {
+  it('converts JSON to HTML for a drop stage', (done) => {
     const stage = new Stage.drop(['left, right'])
     const cells = checkStage(stage, 'drop', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,
@@ -382,7 +391,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a filter stage from JSON', (done) => {
+  it('converts JSON to HTML for a filter stage', (done) => {
     const selector = `table[data-briq-class="${Expr.KIND}"]`
     for (const [text, val] of [['true', true], ['false', false]]) {
       const stage = new Stage.filter(new Expr.logical(val))
@@ -393,7 +402,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a groupBy stage from JSON', (done) => {
+  it('converts JSON to HTML for a groupBy stage', (done) => {
     const stage = new Stage.groupBy(['red', 'green'])
     const cells = checkStage(stage, 'groupBy', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,
@@ -401,7 +410,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a join stage from JSON', (done) => {
+  it('converts JSON to HTML for a join stage', (done) => {
     const stage = new Stage.join('aTable', 'aCol', 'bTable', 'bCol')
     const cells = checkStage(stage, 'join', 6)
     assert.equal(cells[1].firstChild.getAttribute('value'), 'aTable',
@@ -417,7 +426,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a mutate stage from JSON', (done) => {
+  it('converts JSON to HTML for a mutate stage', (done) => {
     const stage = new Stage.mutate('update', new Expr.logical(true))
     const cells = checkStage(stage, 'mutate', 3)
     assert.match(cells[1].firstChild.tagName, /input/i,
@@ -428,7 +437,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a notify stage from JSON', (done) => {
+  it('converts JSON to HTML for a notify stage', (done) => {
     const stage = new Stage.notify('signal')
     const cells = checkStage(stage, 'notify', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,
@@ -436,7 +445,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a read stage from JSON', (done) => {
+  it('converts JSON to HTML for a read stage', (done) => {
     const stage = new Stage.read('/path')
     const cells = checkStage(stage, 'read', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,
@@ -444,7 +453,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a select stage from JSON', (done) => {
+  it('converts JSON to HTML for a select stage', (done) => {
     const stage = new Stage.select(['red', 'green'])
     const cells = checkStage(stage, 'select', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,
@@ -452,7 +461,7 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a sort stage from JSON', (done) => {
+  it('converts JSON to HTML for a sort stage', (done) => {
     for (const reverse of [true, false]) {
       const stage = new Stage.sort(['red', 'green'], reverse)
       const cells = checkStage(stage, 'sort', 3)
@@ -468,14 +477,14 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates a summarize stage from JSON', (done) => {
+  it('converts JSON to HTML for a summarize stage', (done) => {
     const stage = new Stage.summarize('maximum', 'left')
     const cells = checkStage(stage, 'summarize', 3)
     const second = cells[1].firstChild
     const third = cells[2].firstChild
     assert.match(second.tagName, /select/i,
                  `Second child should be selector`)
-    assert.equal(second.childNodes.length, Summarize.OPTIONS.length,
+    assert.equal(second.children.length, Summarize.OPTIONS.length,
                  `Selector has wrong number of options`)
     const selected = second.querySelector('option[selected=selected]')
     assert.equal(selected.getAttribute('value'), 'maximum',
@@ -489,13 +498,13 @@ describe('creates HTML for stages', () => {
     done()
   })
 
-  it('creates an ungroup stage from JSON', (done) => {
+  it('converts JSON to HTML for an ungroup stage', (done) => {
     const stage = new Stage.ungroup()
     const cells = checkStage(stage, 'ungroup', 1)
     done()
   })
 
-  it('creates a unique stage from JSON', (done) => {
+  it('converts JSON to HTML for a unique stage', (done) => {
     const stage = new Stage.unique(['red', 'green'])
     const cells = checkStage(stage, 'unique', 2)
     assert.match(cells[1].firstChild.tagName, /input/i,

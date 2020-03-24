@@ -19,14 +19,14 @@ class HtmlToJson {
   }
 
   program (dom) {
-    this._check(dom, 'table', Program.KIND)
+    this._checkKind(dom, 'table', Program.KIND)
     const pipelines = this._all(dom, 'tr[data-briq-class="@pipeline"]')
           .map(node => this.pipeline(node))
     return [Program.KIND, ...pipelines]
   }
 
   pipeline (dom) {
-    this._check(dom, 'tr', Pipeline.KIND)
+    this._checkKind(dom, 'tr', Pipeline.KIND)
     const stages = this._all(dom, 'div[class="redips-drag redips-clone"]')
           .map(node => this.stage(node))
     return [Pipeline.KIND, ...stages]
@@ -36,7 +36,7 @@ class HtmlToJson {
     util.check(dom.tagName.match(/div/i,),
                `Expected DIV`)
     dom = dom.firstChild
-    this._check(dom, 'table', Stage.KIND)
+    this._checkKind(dom, 'table', Stage.KIND)
     const kind = dom.getAttribute('data-briq-kind')
     util.check(kind in Stage,
                `Unknown kind of stage "${kind}"`)
@@ -52,7 +52,10 @@ class HtmlToJson {
   }
 
   expr (dom) {
-    this._check(dom, 'table', Expr.KIND)
+    util.check(dom.tagName.match(/div/i,),
+               `Expected DIV`)
+    dom = dom.firstChild
+    this._checkKind(dom, 'table', Expr.KIND)
     const kind = dom.getAttribute('data-briq-kind')
     util.check(kind in Expr,
                `Unknown kind of expression "${kind}"`)
@@ -130,7 +133,7 @@ class HtmlToJson {
     return Array.from(dom.querySelectorAll(selector))
   }
 
-  _check (dom, tagName, briqClass) {
+  _checkKind (dom, tagName, briqClass) {
     util.check(dom.tagName.match(new RegExp(tagName, 'i')),
                `Wrong tag name "${dom.tagName}" instead of "${tagName}"`)
     util.check(dom.hasAttribute('data-briq-class'),
@@ -145,7 +148,19 @@ class HtmlToJson {
                `Expected <td>, not "${dom.tagName}"`)
     util.check(dom.children.length === 1,
                `Expected table cell to have exactly one child`)
+
     dom = dom.firstChild
+    if (dom.tagName.match(/div/i)) {
+      util.check(dom.getAttribute('class').match(/redips-drag/i),
+                 `Expected draggable DIV`)
+      util.check(dom.children.length === 1,
+                 `Expected draggable DIV to have one child`)
+      const contained = dom.firstChild
+      util.check(contained.getAttribute('data-briq-class') === Expr.KIND,
+                 `Expected contained expression`)
+      return this.expr(dom)
+    }
+
     const briqClass = dom.getAttribute('data-briq-class')
     util.check(briqClass,
                `Expected data-briq-class attribute`)
