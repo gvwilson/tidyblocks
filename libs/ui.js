@@ -34,10 +34,8 @@ class UserInterface {
   // Handling events.
   // ----------------------------------------------------------------------
 
-  showTab (chosenButton, tabName, selector) {
+  showTab (chosenButton, tabName, selector = null) {
     const buttonGroup = chosenButton.getAttribute('data-briq-buttongroup')
-    util.check(buttonGroup,
-               `Tab button must be part of button group`)
     const buttons = this.document.querySelectorAll(`[data-briq-buttongroup=${buttonGroup}]`)
     Array.from(buttons)
       .forEach(button => {button.classList.remove('active')})
@@ -45,8 +43,6 @@ class UserInterface {
 
     const chosenTab = this.document.getElementById(tabName)
     const tabGroup = chosenTab.getAttribute('data-briq-tabgroup')
-    util.check(tabGroup,
-               `Tab must be part of tab group`)
     const tabs = this.document.querySelectorAll(`[data-briq-tabgroup=${tabGroup}]`)
     Array.from(tabs)
       .forEach(tab => tab.style.display = 'none')
@@ -344,7 +340,7 @@ class UserInterface {
       util.fail(`Unknown toolbox label ${label}`)
     }
     contents = contents
-      .map(html => `<tr>${html}</tr>`)
+      .map(html => `<tr><td>${html}</td></tr>`)
       .join('')
     return `<table class="briq-toolbox"><tbody>${contents}</tbody></table>`
   }

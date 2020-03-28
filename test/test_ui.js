@@ -29,20 +29,20 @@ const reset = () => {
   const body = document.querySelector('body')
 
   const programArea = `<div id="programArea"></div>`
+
+  const toolboxButtons = [
+    'exprButton',
+    'transformButton'
+  ].map(
+    id => `<button id="${id}" data-briq-buttongroup="toolbox"></button>`
+  ).join()
   
   const toolboxDivs = [
     'exprTab',
     'transformTab',
-  ].map(id => `<div id="${id}"></div>`).join('')
-
-  const displayDivs = [
-    'dataArea',
-    'resultsArea',
-    'plotArea',
-    'statisticsArea',
-    'logArea',
-    'errorArea'
-  ].map(id => `<div id="${id}" data-briq-tabgroup="display"></div>`).join('')
+  ].map(
+    id => `<div id="${id}" data-briq-tabgroup="toolbox"></div>`
+  ).join('')
 
   const displayButtons = [
     'dataButton',
@@ -56,13 +56,27 @@ const reset = () => {
     return `<button id="${id}" ${buttonDefault} data-briq-buttongroup="display"></button>`
   }).join('')
 
+  const displayDivs = [
+    'dataArea',
+    'resultsArea',
+    'plotArea',
+    'statisticsArea',
+    'logArea',
+    'errorArea'
+  ].map(
+    id => `<div id="${id}" data-briq-tabgroup="display"></div>`
+  ).join('')
+
   const selectors = [
     'dataSelect',
     'resultsSelect'
-  ].map(id => `<select id="${id}"></select>`).join('')
+  ].map(
+    id => `<select id="${id}"></select>`
+  ).join('')
 
   body.innerHTML = [
     programArea,
+    toolboxButtons,
     toolboxDivs,
     displayDivs,
     selectors,
@@ -186,6 +200,28 @@ describe('loads things', () => {
 })
 
 describe('displays things', () => {
+  it('can display the expressions toolbox', (done) => {
+    const ui = reset()
+    const exprButton = document.getElementById('exprButton')
+    ui.showTab(exprButton, 'exprTab')
+    assert.match(document.getElementById('exprTab').style.display, /block/i,
+                 `Expr tab should be displayed`)
+    assert.match(document.getElementById('transformTab').style.display, /none/i,
+                 `Transform tab should not be active`)
+    done()
+  })
+
+  it('can display the transforms toolbox', (done) => {
+    const ui = reset()
+    const transformButton = document.getElementById('transformButton')
+    ui.showTab(transformButton, 'transformTab')
+    assert.match(document.getElementById('exprTab').style.display, /none/i,
+                 `Expr tab should not be active`)
+    assert.match(document.getElementById('transformTab').style.display, /block/i,
+                 `Transform tab should be active`)
+    done()
+  })
+
   it('can select every display tab', (done) => {
     const allCases = [
       ['dataButton', 'dataArea', 'data'],

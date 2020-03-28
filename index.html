@@ -108,7 +108,8 @@
             <table>
               <tr>
                 <td class="redips-mark">
-                  <button class="menuButton tabButton width100 buttonDefault"
+                  <button id="transformButton"
+                          class="menuButton tabButton width100 buttonDefault"
                           data-briq-buttongroup="toolbox"
                           onclick="UI.onShowTab(event, 'transformTab')">
                     Transforms
@@ -117,7 +118,8 @@
               </tr>
               <tr>
                 <td class="redips-mark">
-                  <button class="menuButton tabButton width100"
+                  <button id="exprButton"
+                          class="menuButton tabButton width100"
                           data-briq-buttongroup="toolbox"
                           onclick="UI.onShowTab(event, 'exprTab')">
                     Expressions
@@ -127,12 +129,8 @@
             </table>
           </div>
           <div class="column width75">
-            <div id="exprTab" class="tabContent">
-              <div id="exprArea"></div>
-            </div>
-            <div id="transformTab" class="tabContent">
-              <div id="transformArea"></div>
-            </div>
+            <div id="exprTab" class="tabContent" data-briq-tabgroup="toolbox"></div>
+            <div id="transformTab" class="tabContent" data-briq-tabgroup="toolbox"></div>
           </div>
         </div>
       </div>
