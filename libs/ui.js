@@ -35,16 +35,15 @@ class UserInterface {
   // ----------------------------------------------------------------------
 
   showTab (chosenButton, tabName, selector = null) {
-    const buttonGroup = chosenButton.getAttribute('data-briq-buttongroup')
-    const buttons = this.document.querySelectorAll(`[data-briq-buttongroup=${buttonGroup}]`)
-    Array.from(buttons)
+    const group = chosenButton.getAttribute('data-briq-group')
+    Array.from(this.document.querySelectorAll(`button[data-briq-group=${group}]`))
       .forEach(button => {button.classList.remove('active')})
     chosenButton.classList.add('active')
 
     const chosenTab = this.document.getElementById(tabName)
-    const tabGroup = chosenTab.getAttribute('data-briq-tabgroup')
-    const tabs = this.document.querySelectorAll(`[data-briq-tabgroup=${tabGroup}]`)
-    Array.from(tabs)
+    util.check(group === chosenTab.getAttribute('data-briq-group'),
+               `Tab should have same group as button`)
+    Array.from(this.document.querySelectorAll(`div[data-briq-group=${group}]`))
       .forEach(tab => tab.style.display = 'none')
     chosenTab.style.display = 'block'
 

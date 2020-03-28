@@ -34,14 +34,14 @@ const reset = () => {
     'exprButton',
     'transformButton'
   ].map(
-    id => `<button id="${id}" data-briq-buttongroup="toolbox"></button>`
+    id => `<button id="${id}" data-briq-group="toolbox"></button>`
   ).join()
   
   const toolboxDivs = [
     'exprTab',
     'transformTab',
   ].map(
-    id => `<div id="${id}" data-briq-tabgroup="toolbox"></div>`
+    id => `<div id="${id}" data-briq-group="toolbox"></div>`
   ).join('')
 
   const displayButtons = [
@@ -53,7 +53,7 @@ const reset = () => {
     'errorButton'
   ].map((id, i) => {
     const buttonDefault = (i === 0) ? 'class="buttonDefault"' : ''
-    return `<button id="${id}" ${buttonDefault} data-briq-buttongroup="display"></button>`
+    return `<button id="${id}" ${buttonDefault} data-briq-group="display"></button>`
   }).join('')
 
   const displayDivs = [
@@ -64,7 +64,7 @@ const reset = () => {
     'logArea',
     'errorArea'
   ].map(
-    id => `<div id="${id}" data-briq-tabgroup="display"></div>`
+    id => `<div id="${id}" data-briq-group="display"></div>`
   ).join('')
 
   const selectors = [
@@ -235,14 +235,14 @@ describe('displays things', () => {
       const thisButton = document.getElementById(buttonId)
       ui.showTab(thisButton, tabId, selectorId)
 
-      assert(Array.from(document.querySelectorAll('button[data-briq-buttongroup="display"]'))
+      assert(Array.from(document.querySelectorAll('button[data-briq-group="display"]'))
              .every(button => {
                return (button.getAttribute('id') === buttonId)
                  ? button.classList.contains('active')
                  : !button.classList.contains('active')
              }), `Expected only clicked button to be active`)
 
-      assert(Array.from(document.querySelectorAll('div[data-briq-tabgroup="display"]'))
+      assert(Array.from(document.querySelectorAll('div[data-briq-group="display"]'))
              .every(div => {
                return (div.getAttribute('id') === tabId)
                  ? (div.style.display === 'block')
