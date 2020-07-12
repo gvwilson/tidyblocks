@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <script src="./jeff.min.js"></script>
+    <script>
+      window.onload = () => {
+        const settings = {
+          toolbox: document.getElementById('toolbox'),
+          theme: jeff.theme
+        }
+        const workspace = jeff.Blockly.inject('blocklyDiv', settings)
+      }
+    </script>
+  </head>
+  <body>
+    <h1>TidyBlocks</h1>
+    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <xml id="toolbox" style="display: none">
+      <category name="data" categorystyle="data">
+        <block type="data_colors"></block>
+      </category>
+      <category name="operation" categorystyle="operation">
+        <block type="operation_compare"></block>
+      </category>
+      <category name="transform" categorystyle="transform">
+        <block type="transform_filter"></block>
+      </category>
+      <category name="value" categorystyle="value">
+        <block type="value_column"></block>
+        <block type="value_number"></block>
+      </category>
+    </xml>
+  </body>
+</html>

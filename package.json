@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "browserify index.js -s jeff -t [ babelify --presets [ @babel/preset-env ] ] > jeff.min.js",
-    "blockly_build": "browserify embedding_test/test.js -s bbb -t [ babelify --presets [ @babel/preset-env ] ] > embedding_test/blockly.min.js",
+    "jeff": "browserify jeff/index.js -s jeff -t [ babelify --presets [ @babel/preset-env ] ] > jeff/jeff.min.js",
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
     "fixtures": "fixtures/generate.js fixtures",
