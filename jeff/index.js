@@ -2,6 +2,11 @@
 
 const Blockly = require('blockly')
 
+// Markers so that we can separate pipelines stages after the fact.
+// Multiple stacks are automatically separated by newline '\n'.
+const STAGE_PREFIX = '\v'
+const STAGE_SUFFIX = '\f'
+
 // ----------------------------------------------------------------------
 // Data blocks
 // ----------------------------------------------------------------------
@@ -17,6 +22,11 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'eleven colors'
   }
 ])
+
+// Colors
+Blockly.JavaScript['data_colors'] = (block) => {
+  return `${STAGE_PREFIX}["@stage", "read", "colors.csv"]${STAGE_SUFFIX}`
+}
 
 // ----------------------------------------------------------------------
 // Operation blocks
@@ -36,12 +46,12 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'OP',
         options: [
-          ['=', 'tbEq'],
-          ['\u2260', 'tbNeq'],
-          ['\u200F<', 'tbLt'],
-          ['\u200F\u2264', 'tbLeq'],
-          ['\u200F>', 'tbGt'],
-          ['\u200F\u2265', 'tbGeq']
+          ['=', 'eq'],
+          ['\u2260', 'neq'],
+          ['\u200F<', 'lt'],
+          ['\u200F\u2264', 'leq'],
+          ['\u200F>', 'gt'],
+          ['\u200F\u2265', 'geq']
         ]
       },
       {
@@ -56,6 +66,18 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: ''
   }
 ])
+
+// Comparisons
+Blockly.JavaScript['operation_compare'] = (block) => {
+  const op = block.getFieldValue('OP')
+  const order = (op === 'eq' || op === 'neq')
+        ? Blockly.JavaScript.ORDER_EQUALITY
+        : Blockly.JavaScript.ORDER_RELATIONAL
+  const left = Blockly.JavaScript.valueToCode(block, 'LEFT', order)
+  const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', order)
+  const code = `["@expr", "${op}", ${left}, ${right}]`
+  return [code, order]
+}
 
 // ----------------------------------------------------------------------
 // Transform blocks
@@ -80,6 +102,12 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: ''
   }
 ])
+
+// Filter
+Blockly.JavaScript['transform_filter'] = (block) => {
+  const expr = Blockly.JavaScript.valueToCode(block, 'TEST', Blockly.JavaScript.ORDER_NONE)
+  return `${STAGE_PREFIX}["@stage", "filter", ${expr}]${STAGE_SUFFIX}`
+}
 
 // ----------------------------------------------------------------------
 // Value blocks
@@ -115,6 +143,23 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'constant number'
   }
 ])
+
+// Column name
+Blockly.JavaScript['value_column'] = (block) => {
+  const column = block.getFieldValue('COLUMN')
+  const code = `["@expr", "column", "${column}"]`
+  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+}
+
+// Number
+Blockly.JavaScript['value_number'] = (block) => {
+  const value = parseFloat(block.getFieldValue('VALUE'))
+  const order = (value >= 0)
+        ? Blockly.JavaScript.ORDER_ATOMIC
+        : Blockly.JavaScript.ORDER_UNARY_NEGATION
+  const code = `["@expr", "number", ${value}]`
+  return [code, order]
+}
 
 // ----------------------------------------------------------------------
 // Theme
@@ -165,6 +210,22 @@ const theme = Blockly.Theme.defineTheme('jeff', {
 // Exports
 // ----------------------------------------------------------------------
 
+let _Workspace = null // assigned in setup
+const getWorkspace = () => {
+  return _Workspace
+}
+
+const getCode = () => {
+  const raw = Blockly.JavaScript.workspaceToCode(getWorkspace())
+  const stagesSeparated = raw.replace(`${STAGE_SUFFIX}${STAGE_PREFIX}`, ', ')
+  const pipelinesWrapped = stagesSeparated
+        .replace(STAGE_PREFIX, '["@pipeline", ')
+        .replace(STAGE_SUFFIX, ']')
+  const pipelinesSeparated = pipelinesWrapped.replace('\n', ', ')
+  const code = `["@program", ${pipelinesSeparated}]`
+  return code
+}
+
 const setup = (divId, toolbox) => {
   const settings = {
     toolbox: toolbox,
@@ -178,10 +239,13 @@ const setup = (divId, toolbox) => {
     },
     theme: theme
   }
-  return Blockly.inject(divId, settings)
+  _Workspace = Blockly.inject(divId, settings)
+  return _Workspace
 }
 
 module.exports = {
   Blockly,
+  getWorkspace,
+  getCode,
   setup
 }
