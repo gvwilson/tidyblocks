@@ -111,7 +111,7 @@ class BrowserInterface extends UserInterface {
    * @param {event} evt Browser event (ignored).
    */
   onSaveProgram (evt) {
-    const filename = 'program.briq' // FIXME how to trigger dialog to ask for filename?
+    const filename = 'program.jeff' // FIXME how to trigger dialog to ask for filename?
     const text = 'saved program' // FIXME get the actual JSON
     this._saveFile(filename, text)
   }

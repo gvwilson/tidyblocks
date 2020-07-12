@@ -7,8 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
-    <script src="./redips-drag-min.js"></script>
-    <script src="./briq.min.js"></script>
+    <script src="./jeff.min.js"></script>
     <script src="./script.js"></script>
   </head>
   <body onload="setup()">
@@ -31,37 +30,37 @@
       <div class="column width50">
         <button id="dataButton"
                 class="menuButton tabButton buttonDefault"
-                data-briq-group="display"
+                data-jeff-group="display"
                 onclick="UI.onShowTab(event, 'dataTab', 'data')">
           Data
         </button>
         <button id="resultsButton"
                 class="menuButton tabButton"
-                data-briq-group="display"
+                data-jeff-group="display"
                 onclick="UI.onShowTab(event, 'resultsTab', 'results')">
           Results
         </button>
         <button id="plotButton"
                 class="menuButton tabButton"
-                data-briq-group="display"
+                data-jeff-group="display"
                 onclick="UI.onShowTab(event, 'plotTab')">
           Plot
         </button>
         <button id="statisticsButton"
                 class="menuButton tabButton"
-                data-briq-group="display"
+                data-jeff-group="display"
                 onclick="UI.onShowTab(event, 'statisticsTab')">
           Statistics
         </button>
         <button id="logButton"
                 class="menuButton tabButton"
-                data-briq-group="display"
+                data-jeff-group="display"
                 onclick="UI.onShowTab(event, 'logTab')">
           Log
         </button>
         <button id="errorButton"
                 class="menuButton tabButton"
-                data-briq-group="display"
+                data-jeff-group="display"
                 onclick="UI.onShowTab(event, 'errorTab')">
           Error
         </button>
@@ -74,99 +73,41 @@
 
     <main class="two-columns">
       <!-- main workbench area (program and tools) -->
-      <div id="redips-drag" class="left width50 workbench">
-        <!-- program display -->
-        <h2>Program</h2>
-        <table>
-          <tbody>
-            <tr>
-              <th class="redips-trash briq-control"
-                  id="briq-trash">
-                [trash]
-              </th>
-              <th class="redips-mark">
-                <button class="menuButton briq-control"
-                        onclick="UI.onAddProgramRow()">
-                  [+row]
-                </button>
-              </th>
-              <th class="redips-mark">
-                <button class="menuButton briq-control"
-                        onclick="UI.onAddProgramCol()">
-                  [+col]
-                </button>
-              </th>
-            </tr>
-          </tbody>
-        </table>
-        <div id="programArea"></div>
-
-        <!-- tabbed toolboxes -->
-        <h2>Toolboxes</h2>
-        <div class="two-columns">
-          <div class="column width25">
-            <table>
-              <tr>
-                <td class="redips-mark">
-                  <button id="transformButton"
-                          class="menuButton tabButton width100 buttonDefault"
-                          data-briq-group="toolbox"
-                          onclick="UI.onShowTab(event, 'transformTab')">
-                    Transforms
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td class="redips-mark">
-                  <button id="exprButton"
-                          class="menuButton tabButton width100"
-                          data-briq-group="toolbox"
-                          onclick="UI.onShowTab(event, 'exprTab')">
-                    Expressions
-                  </button>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="column width75">
-            <div id="exprTab" class="tabContent" data-briq-group="toolbox"></div>
-            <div id="transformTab" class="tabContent" data-briq-group="toolbox"></div>
-          </div>
-        </div>
+      <div id="workbench" class="left width50 workbench">
       </div>
 
       <!-- main display area -->
       <div class="right width50 displays">
-        <div id="dataTab" class="tabContent" data-briq-group="display">
+        <div id="dataTab" class="tabContent" data-jeff-group="display">
           <h2>
             Data
             <select class="tableSelector" id="dataSelect" onchange="UI.onDisplayTable('data')"></select>
           </h2>
-          <div id="dataArea" data-briq-group="display"></div>
+          <div id="dataArea" data-jeff-group="display"></div>
         </div>
-        <div id="resultsTab" class="tabContent" data-briq-group="display">
+        <div id="resultsTab" class="tabContent" data-jeff-group="display">
           <h2>
             Results
             <select class="tableSelector" id="resultsSelect" onchange="UI.onDisplayTable('results')"></select>
             <button class="displayButton" onclick="UI.onSaveResults(event)">Save</button>
           </h2>
-          <div id="resultsArea" data-briq-group="display"></div>
+          <div id="resultsArea" data-jeff-group="display"></div>
         </div>
-        <div id="plotTab" class="tabContent" data-briq-group="display">
+        <div id="plotTab" class="tabContent" data-jeff-group="display">
           <h2>Plot</h2>
-          <div id="plotArea" data-briq-group="display"></div>
+          <div id="plotArea" data-jeff-group="display"></div>
         </div>
-        <div id="statisticsTab" class="tabContent" data-briq-group="display">
+        <div id="statisticsTab" class="tabContent" data-jeff-group="display">
           <h2>Statistics</h2>
-          <div id="statisticsArea" data-briq-group="display"></div>
+          <div id="statisticsArea" data-jeff-group="display"></div>
         </div>
-        <div id="logTab" class="tabContent" data-briq-group="display">
+        <div id="logTab" class="tabContent" data-jeff-group="display">
           <h2>Log</h2>
-          <div id="logArea" data-briq-group="display"></div>
+          <div id="logArea" data-jeff-group="display"></div>
         </div>
-        <div id="errorTab" class="tabContent" data-briq-group="display">
+        <div id="errorTab" class="tabContent" data-jeff-group="display">
           <h2>Error</h2>
-          <div id="errorArea" data-briq-group="display"></div>
+          <div id="errorArea" data-jeff-group="display"></div>
         </div>
       </div>
     </main>

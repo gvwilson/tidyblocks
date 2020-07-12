@@ -45,7 +45,7 @@ class JsonToObj {
         (json.length === 0) ||
         (typeof json[0] !== 'string') ||
         (json[0].length === 0) ||
-        (json[0][0] != '@')) {
+        (json[0][0] !== '@')) {
       return json
     }
     util.check((json.length > 1) &&

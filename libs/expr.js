@@ -16,31 +16,13 @@ class ExprBase {
   }
 }
 
-/**
- * Placeholder used when building blanks for cloning.
- */
-class ExprPlaceholder extends ExprBase {
-  constructor () {
-    super(ExprPlaceholder.KIND)
-  }
-
-  toJSON () {
-    return [Expr.KIND, this.kind]
-  }
-
-  static Fields () {
-    return [['placeholder']]
-  }
-}
-ExprPlaceholder.KIND = 'placeholder'
-
 // ----------------------------------------------------------------------
 
 /**
  * Generic nullary expression (never instantiated directly).
  */
 class ExprNullaryBase extends ExprBase {
-  constructor(kind, value) {
+  constructor (kind, value) {
     super(kind)
     this.value = value
   }
@@ -53,10 +35,6 @@ class ExprNullaryBase extends ExprBase {
 
   toJSON () {
     return [Expr.KIND, this.kind, this.value]
-  }
-
-  static MakeBlank () {
-    return new ExprLogical(false)
   }
 }
 ExprNullaryBase.OPTIONS = ['logical', 'number', 'string', 'datetime', 'column']
@@ -138,11 +116,6 @@ class ExprTernaryBase extends ExprBase {
     return [Expr.KIND, this.kind, this.left.toJSON(),
             this.middle.toJSON(), this.right.toJSON()]
   }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprIfElse(placeholder, placeholder, placeholder)
-  }
 }
 
 // ----------------------------------------------------------------------
@@ -160,11 +133,6 @@ class ExprLogical extends ExprNullaryBase {
   run (row, i) {
     return this.value
   }
-
-  static Fields () {
-    return [['selectKind', ExprNullaryBase.OPTIONS, ExprLogical.KIND],
-            ['text', 'value']]
-  }
 }
 ExprLogical.KIND = 'logical'
 
@@ -180,11 +148,6 @@ class ExprNumber extends ExprNullaryBase {
 
   run (row, i) {
     return this.value
-  }
-
-  static Fields () {
-    return [['selectKind', ExprNullaryBase.OPTIONS, ExprNumber.KIND],
-            ['text', 'value']]
   }
 }
 ExprNumber.KIND = 'number'
@@ -202,11 +165,6 @@ class ExprString extends ExprNullaryBase {
   run (row, i) {
     return this.value
   }
-
-  static Fields () {
-    return [['selectKind', ExprNullaryBase.OPTIONS, ExprString.KIND],
-            ['text', 'value']]
-  }
 }
 ExprString.KIND = 'string'
 
@@ -222,11 +180,6 @@ class ExprDatetime extends ExprNullaryBase {
 
   run (row, i) {
     return this.value
-  }
-
-  static Fields () {
-    return [['selectKind', ExprNullaryBase.OPTIONS, ExprDatetime.KIND],
-            ['text', 'value']]
   }
 }
 ExprDatetime.KIND = 'datetime'
@@ -250,11 +203,6 @@ class ExprColumn extends ExprNullaryBase {
                `${this.name} not in row`)
     return row[this.value]
   }
-
-  static Fields () {
-    return [['selectKind', ExprNullaryBase.OPTIONS, ExprColumn.KIND],
-            ['text', 'name']]
-  }
 }
 ExprColumn.KIND = 'column'
 
@@ -266,16 +214,6 @@ ExprColumn.KIND = 'column'
 class ExprNegationBase extends ExprUnary {
   constructor (kind, arg) {
     super(kind, arg)
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprNegate(placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['selectKind', ExprNegationBase.OPTIONS, kind],
-            ['expr', 'arg']]
   }
 }
 ExprNegationBase.OPTIONS = [['-', 'negate'], 'not']
@@ -296,10 +234,6 @@ class ExprNegate extends ExprNegationBase {
                      `Require number for ${this.name}`)
     return (value === MISSING) ? MISSING : this.safeValue(-value)
   }
-
-  static Fields () {
-    return ExprNegationBase._Fields(ExprNegate.KIND)
-  }
 }
 ExprNegate.KIND = 'negate'
 
@@ -316,10 +250,6 @@ class ExprNot extends ExprNegationBase {
   run (row, i) {
     const value = this.arg.run(row, i)
     return (value === MISSING) ? MISSING : ((!value) ? true : false)
-  }
-
-  static Fields () {
-    return ExprNegationBase._Fields(ExprNot.KIND)
   }
 }
 ExprNot.KIND = 'not'
@@ -340,16 +270,6 @@ class ExprTypecheckBase extends ExprUnary {
       ? MISSING
       : (typeof value === typeName)
   }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder
-    return new ExprIsLogical(placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['selectKind', ExprTypecheckBase.OPTIONS, kind],
-            ['expr', 'arg']]
-  }
 }
 ExprTypecheckBase.OPTIONS = ['isLogical', 'isDatetime', 'isMissing',
                              'isNumber', 'isString']
@@ -366,10 +286,6 @@ class ExprIsLogical extends ExprTypecheckBase {
 
   run (row, i) {
     return this.typeCheck(row, i, 'boolean')
-  }
-
-  static Fields () {
-    return ExprTypecheckBase._Fields(ExprIsLogical.KIND)
   }
 }
 ExprIsLogical.KIND = 'isLogical'
@@ -388,10 +304,6 @@ class ExprIsDatetime extends ExprTypecheckBase {
     const value = this.arg.run(row, i)
     return (value === MISSING) ? MISSING : (value instanceof Date)
   }
-
-  static Fields () {
-    return ExprTypecheckBase._Fields(ExprIsDatetime.KIND)
-  }
 }
 ExprIsDatetime.KIND = 'isDatetime'
 
@@ -409,10 +321,6 @@ class ExprIsMissing extends ExprTypecheckBase {
     const value = this.arg.run(row, i)
     return value === MISSING
   }
-
-  static Fields () {
-    return ExprTypecheckBase._Fields(ExprIsMissing.KIND)
-  }
 }
 ExprIsMissing.KIND = 'isMissing'
 
@@ -428,10 +336,6 @@ class ExprIsNumber extends ExprTypecheckBase {
 
   run (row, i) {
     return this.typeCheck(row, i, 'number')
-  }
-
-  static Fields () {
-    return ExprTypecheckBase._Fields(ExprIsNumber.KIND)
   }
 }
 ExprIsNumber.KIND = 'isNumber'
@@ -449,10 +353,6 @@ class ExprIsString extends ExprTypecheckBase {
   run (row, i) {
     return this.typeCheck(row, i, 'string')
   }
-
-  static Fields () {
-    return ExprTypecheckBase._Fields(ExprIsString.KIND)
-  }
 }
 ExprIsString.KIND = 'isString'
 
@@ -464,16 +364,6 @@ ExprIsString.KIND = 'isString'
 class ExprConvertBase extends ExprUnary {
   constructor (kind, arg) {
     super(kind, arg)
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprToLogical(placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['selectKind', ExprConvertBase.OPTIONS, kind],
-            ['expr', 'arg']]
   }
 }
 ExprConvertBase.OPTIONS = ['toLogical', 'toDatetime', 'toNumber', 'toString']
@@ -493,10 +383,6 @@ class ExprToLogical extends ExprConvertBase {
     return (value === MISSING)
       ? MISSING
       : (value ? true : false)
-  }
-
-  static Fields () {
-    return ExprConvertBase._Fields(ExprToLogical.KIND)
   }
 }
 ExprToLogical.KIND = 'toLogical'
@@ -522,10 +408,6 @@ class ExprToDatetime extends ExprConvertBase {
       result = MISSING
     }
     return result
-  }
-
-  static Fields () {
-    return ExprConvertBase._Fields(ExprToDatetime.KIND)
   }
 }
 ExprToDatetime.KIND = 'toDatetime'
@@ -556,10 +438,6 @@ class ExprToNumber extends ExprConvertBase {
     }
     return value
   }
-
-  static Fields () {
-    return ExprConvertBase._Fields(ExprToNumber.KIND)
-  }
 }
 ExprToNumber.KIND = 'toNumber'
 
@@ -583,10 +461,6 @@ class ExprToString extends ExprConvertBase {
     }
     return value
   }
-
-  static Fields () {
-    return ExprConvertBase._Fields(ExprToString.KIND)
-  }
 }
 ExprToString.KIND = 'toString'
 
@@ -609,16 +483,6 @@ class ExprDatetimeBase extends ExprUnary {
                `Require date for ${this.kind}`)
     return func(value)
   }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprToYear(placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['selectKind', ExprDatetimeBase.OPTIONS, kind],
-            ['expr', 'arg']]
-  }
 }
 ExprDatetimeBase.OPTIONS = ['toYear', 'toMonth', 'toDay', 'toWeekday',
                             'toHours', 'toMinutes', 'toSeconds']
@@ -636,10 +500,6 @@ class ExprToYear extends ExprDatetimeBase {
   run (row, i) {
     return this.dateValue(row, i, d => d.getFullYear())
   }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToYear.KIND)
-  }
 }
 ExprToYear.KIND = 'toYear'
 
@@ -655,10 +515,6 @@ class ExprToMonth extends ExprDatetimeBase {
 
   run (row, i) {
     return this.dateValue(row, i, d => d.getMonth() + 1)
-  }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToMonth.KIND)
   }
 }
 ExprToMonth.KIND = 'toMonth'
@@ -676,10 +532,6 @@ class ExprToDay extends ExprDatetimeBase {
   run (row, i) {
     return this.dateValue(row, i, d => d.getDate())
   }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToDay.KIND)
-  }
 }
 ExprToDay.KIND = 'toDay'
 
@@ -695,10 +547,6 @@ class ExprToWeekday extends ExprDatetimeBase {
 
   run (row, i) {
     return this.dateValue(row, i, d => d.getDay())
-  }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToWeekday.KIND)
   }
 }
 ExprToWeekday.KIND = 'toWeekday'
@@ -716,10 +564,6 @@ class ExprToHours extends ExprDatetimeBase {
   run (row, i) {
     return this.dateValue(row, i, d => d.getHours())
   }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToHours.KIND)
-  }
 }
 ExprToHours.KIND = 'toHours'
 
@@ -736,10 +580,6 @@ class ExprToMinutes extends ExprDatetimeBase {
   run (row, i) {
     return this.dateValue(row, i, d => d.getMinutes())
   }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToMinutes.KIND)
-  }
 }
 ExprToMinutes.KIND = 'toMinutes'
 
@@ -753,12 +593,8 @@ class ExprToSeconds extends ExprDatetimeBase {
     super(ExprToSeconds.KIND, arg)
   }
 
-  run (row, i) { 
+  run (row, i) {
     return this.dateValue(row, i, d => d.getSeconds())
-  }
-
-  static Fields () {
-    return ExprDatetimeBase._Fields(ExprToSeconds.KIND)
   }
 }
 ExprToSeconds.KIND = 'toSeconds'
@@ -784,17 +620,6 @@ class ExprArithmeticBase extends ExprBinary {
       ? MISSING
       : this.safeValue(func(left, right))
   }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprAdd(placeholder, placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['expr', 'left'],
-            ['selectKind', ExprArithmeticBase.OPTIONS, kind],
-            ['expr', 'right']]
-  }
 }
 ExprArithmeticBase.OPTIONS = [['+', 'add'], ['-', 'subtract'],
                           ['*', 'multiply'], ['/', 'divide'],
@@ -814,10 +639,6 @@ class ExprAdd extends ExprArithmeticBase {
   run (row, i) {
     return this.arithmetic(row, i, (left, right) => left + right)
   }
-
-  static Fields () {
-    return ExprArithmeticBase._Fields(ExprAdd.KIND)
-  }
 }
 ExprAdd.KIND = 'add'
 
@@ -834,10 +655,6 @@ class ExprDivide extends ExprArithmeticBase {
 
   run (row, i) {
     return this.arithmetic(row, i, (left, right) => left / right)
-  }
-
-  static Fields () {
-    return ExprArithmeticBase._Fields(ExprDivide.KIND)
   }
 }
 ExprDivide.KIND = 'divide'
@@ -856,10 +673,6 @@ class ExprMultiply extends ExprArithmeticBase {
   run (row, i) {
     return this.arithmetic(row, i, (left, right) => left * right)
   }
-
-  static Fields () {
-    return ExprArithmeticBase._Fields(ExprMultiply.KIND)
-  }
 }
 ExprMultiply.KIND = 'multiply'
 
@@ -876,10 +689,6 @@ class ExprPower extends ExprArithmeticBase {
 
   run (row, i) {
     return this.arithmetic(row, i, (left, right) => left ** right)
-  }
-
-  static Fields () {
-    return ExprArithmeticBase._Fields(ExprPower.KIND)
   }
 }
 ExprPower.KIND = 'power'
@@ -898,10 +707,6 @@ class ExprRemainder extends ExprArithmeticBase {
   run (row, i) {
     return this.arithmetic(row, i, (left, right) => left % right)
   }
-
-  static Fields () {
-    return ExprArithmeticBase._Fields(ExprRemainder.KIND)
-  }
 }
 ExprRemainder.KIND = 'remainder'
 
@@ -918,10 +723,6 @@ class ExprSubtract extends ExprArithmeticBase {
 
   run (row, i) {
     return this.arithmetic(row, i, (left, right) => left - right)
-  }
-
-  static Fields () {
-    return ExprArithmeticBase._Fields(ExprSubtract.KIND)
   }
 }
 ExprSubtract.KIND = 'subtract'
@@ -945,17 +746,6 @@ class ExprCompareBase extends ExprBinary {
       ? MISSING
       : func(left, right)
   }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprEqual(placeholder, placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['expr', 'left'],
-            ['selectKind', ExprCompareBase.OPTIONS, kind],
-            ['expr', 'right']]
-  }
 }
 ExprCompareBase.OPTIONS = [['==', 'equal'], ['!=', 'notEqual'],
                        ['&gt;', 'greater'], ['&gt;=', 'greaterEqual'],
@@ -975,10 +765,6 @@ class ExprEqual extends ExprCompareBase {
   run (row, i) {
     return this.comparison(row, i, (left, right) => util.equal(left, right))
   }
-
-  static Fields () {
-    return ExprCompareBase._Fields(ExprEqual.KIND)
-  }
 }
 ExprEqual.KIND = 'equal'
 
@@ -995,10 +781,6 @@ class ExprGreater extends ExprCompareBase {
 
   run (row, i) {
     return this.comparison(row, i, (left, right) => (left > right))
-  }
-
-  static Fields () {
-    return ExprCompareBase._Fields(ExprGreater.KIND)
   }
 }
 ExprGreater.KIND = 'greater'
@@ -1017,10 +799,6 @@ class ExprGreaterEqual extends ExprCompareBase {
   run (row, i) {
     return this.comparison(row, i, (left, right) => (left >= right))
   }
-
-  static Fields () {
-    return ExprCompareBase._Fields(ExprGreaterEqual.KIND)
-  }
 }
 ExprGreaterEqual.KIND = 'greaterEqual'
 
@@ -1037,10 +815,6 @@ class ExprLess extends ExprCompareBase {
 
   run (row, i) {
     return this.comparison(row, i, (left, right) => (left < right))
-  }
-
-  static Fields () {
-    return ExprCompareBase._Fields(ExprLess.KIND)
   }
 }
 ExprLess.KIND = 'less'
@@ -1059,10 +833,6 @@ class ExprLessEqual extends ExprCompareBase {
   run (row, i) {
     return this.comparison(row, i, (left, right) => (left <= right))
   }
-
-  static Fields () {
-    return ExprCompareBase._Fields(ExprLessEqual.KIND)
-  }
 }
 ExprLessEqual.KIND = 'lessEqual'
 
@@ -1080,10 +850,6 @@ class ExprNotEqual extends ExprCompareBase {
   run (row, i) {
     return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
   }
-
-  static Fields () {
-    return ExprCompareBase._Fields(ExprNotEqual.KIND)
-  }
 }
 ExprNotEqual.KIND = 'notEqual'
 
@@ -1095,17 +861,6 @@ ExprNotEqual.KIND = 'notEqual'
 class ExprLogicalBase extends ExprBinary {
   constructor (kind, left, right) {
     super(kind, left, right)
-  }
-
-  static MakeBlank () {
-    const placeholder = new ExprPlaceholder()
-    return new ExprAnd(placeholder, placeholder)
-  }
-
-  static _Fields (kind) {
-    return [['expr', 'left'],
-            ['selectKind', ExprLogicalBase.OPTIONS, kind],
-            ['expr', 'right']]
   }
 }
 ExprLogicalBase.OPTIONS = ['and', 'or']
@@ -1128,10 +883,6 @@ class ExprAnd extends ExprLogicalBase {
     }
     return this.right.run(row, i)
   }
-
-  static Fields () {
-    return ExprLogicalBase._Fields(ExprAnd.KIND)
-  }
 }
 ExprAnd.KIND = 'and'
 
@@ -1152,10 +903,6 @@ class ExprOr extends ExprLogicalBase {
       return left
     }
     return this.right.run(row, i)
-  }
-
-  static Fields () {
-    return ExprLogicalBase._Fields(ExprOr.KIND)
   }
 }
 ExprOr.KIND = 'or'
@@ -1180,15 +927,6 @@ class ExprIfElse extends ExprTernaryBase {
       ? MISSING
       : (cond ? this.middle.run(row, i) : this.right.run(row, i))
   }
-
-  static Fields () {
-    return [['label', 'if'],
-            ['expr', 'left'],
-            ['label', 'then'],
-            ['expr', 'middle'],
-            ['label', 'else'],
-            ['expr', 'right']]
-  }
 }
 ExprIfElse.KIND = 'ifElse'
 
@@ -1200,23 +938,7 @@ ExprIfElse.KIND = 'ifElse'
 const Expr = {
   KIND: '@expr',
 
-  makeBlanks: () => {
-    const classes = [
-      ExprNullaryBase,
-      ExprNegationBase,
-      ExprTypecheckBase,
-      ExprConvertBase,
-      ExprDatetimeBase,
-      ExprArithmeticBase,
-      ExprCompareBase,
-      ExprLogicalBase,
-      ExprTernaryBase
-    ]
-    return classes.map(cls => cls.MakeBlank().toJSON())
-  },
-
   base: ExprBase,
-  placeholder: ExprPlaceholder,
   logical: ExprLogical,
   number: ExprNumber,
   string: ExprString,

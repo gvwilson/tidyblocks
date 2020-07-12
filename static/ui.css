@@ -137,53 +137,6 @@ select.tableSelector {
     font-size: 10pt;
 }
 
-/* Program */
-
-table#briq-program {
-    background-color: violet;
-    min-height: 1em;
-    min-width: 4em;
-}
-
-th.briq-control {
-    background-color: #f0f0f0;
-}
-
-table#briq-toolbox {
-    background-color: aqua;
-}
-
-table.briq-widget {
-    font-size: inherit;
-    background-color: pink;
-    padding: 4px;
-}
-
-input.briq-textbox {
-    background-color: lightblue;
-    width: 6em;
-}
-
-input.briq-checkbox {
-    background-color: lightblue;
-    width: 2em;
-}
-
-select.briq-select {
-    background-color: lightblue;
-    font-family: "Helvetica Neue", Helvetica;
-    font-size: 80%;
-}
-
-td.briq-placeholder {
-    width: 4em;
-    background-color: lightgreen;
-}
-
-.briq-clickable {
-    cursor: pointer;
-}
-
 /* Footer */
 
 footer {

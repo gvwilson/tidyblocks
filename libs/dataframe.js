@@ -279,8 +279,8 @@ class DataFrame {
                `other table does not have column ${otherCol}`)
 
     const result = []
-    for (let thisRow of this.data) { 
-      for (let otherRow of other.data) { 
+    for (let thisRow of this.data) {
+      for (let otherRow of other.data) {
         if (thisRow[thisCol] === otherRow[otherCol]) {
           const row = {}
           row[DataFrame.JOINCOL] = thisRow[thisCol]
@@ -312,7 +312,7 @@ class DataFrame {
   hasColumns (names, exact = false) {
     util.check(Array.isArray(names),
                `require array of names`)
-    if (exact && (names.length != this.columns.size)) {
+    if (exact && (names.length !== this.columns.size)) {
       return false
     }
     return names.every(n => (this.columns.has(n)))

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: browser.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: browser.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const util = require('./util')
+const {UserInterface} = require('./ui')
+
+/**
+ * Browser-based interface.
+ */
+class BrowserInterface extends UserInterface {
+  /**
+   * Set up after DOM is loaded: create singleton and show default tab.
+   */
+  static Setup (document) {
+    BrowserInterface.instance =
+      new BrowserInterface(document,
+                           BrowserInterface.GetData,
+                           BrowserInterface.ShowPlot)
+    return BrowserInterface.instance
+  }
+
+  /**
+   * Get a named dataset (provided as callback to runtime environment objects).
+   * @param {string} name Name of previously-loaded data set.
+   * @returns Tabular data to be converted to dataframe.
+   */
+  static GetData (name) {
+    util.check(BrowserInterface.instance,
+               `BrowserInterface instance not defined`)
+    util.check(name &amp;&amp; (typeof name === 'string'),
+               `Require non-empty string as dataset name`)
+    util.check(BrowserInterface.instance.data.has(name),
+               `Cannot get unknown dataset ${name}`)
+    return BrowserInterface.instance.data.get(name).data
+  }
+
+  /**
+   * Display a plot.
+   * @param {JSON} spec Plotting specification.
+   */
+  static ShowPlot (spec) {
+    vegaEmbed('#plotArea', spec, {})
+  }
+
+  /**
+   * Build instance.
+   * @param {object} document The DOM document.
+   * @param {function} howToGetData How to read datasets.
+   * @param {function} howToShowPlot How to display a plot.
+   */
+  constructor (document, howToGetData, howToShowPlot) {
+    super(document, howToGetData, howToShowPlot)
+  }
+
+  /**
+   * Show the specified tab.
+   * @param {event} evt Browser event.
+   * @param {string} tabName Name of the tab (must match an id in the page).
+   * @param {string} selector Select dataset to display (or null).
+   */
+  onShowTab (evt, tabName, selector = null) {
+    const chosenButton = evt.target
+    this.showTab(chosenButton, tabName, selector)
+  }
+
+  /**
+   * Trigger an input element when a button is clicked.
+   * @param {string} id ID of element to trigger.
+   */
+  onTriggerInput (id) {
+    this.document.getElementById(id).click()
+  }
+
+  /**
+   * Load a CSV data file.
+   * @param {FileList} fileList List of files provided by browser file selection dialog.
+   */
+  onLoadData (fileList) {
+    if (fileList.length === 0) {
+      return
+    }
+    const file = fileList[0]
+    const name = file.name
+    file.text().then(text => this.loadData(name, text))
+  }
+
+  /**
+   * Save the current results to disk.
+   * @param {event} evt Browser event (ignored).
+   */
+  onSaveResults (evt) {
+    const filename = 'result.csv' // FIXME how to trigger dialog to ask for filename?
+    const text = 'a,b,c' // FIXME get the current result
+    this._saveFile(filename, text)
+  }
+
+  /**
+   * Load a program from disk.
+   * @param {FileList} fileList List of files provided by browser file selection dialog.
+   */
+  onLoadProgram (fileList) {
+    if (fileList.length === 0) {
+      return
+    }
+    const file = fileList[0]
+    const name = file.name
+    file.text().then(text => this.loadProgram(name, text))
+  }
+
+  /**
+   * Save a program to disk.
+   * @param {event} evt Browser event (ignored).
+   */
+  onSaveProgram (evt) {
+    const filename = 'program.jeff' // FIXME how to trigger dialog to ask for filename?
+    const text = 'saved program' // FIXME get the actual JSON
+    this._saveFile(filename, text)
+  }
+
+  /**
+   * Display a named data table as an HTML table.
+   * @param {string} which Which table to display.
+   */
+  onDisplayTable (which) {
+    this.displayTable(which, null)
+  }
+
+  /**
+   * Run the current program.
+   */
+  onRunProgram () {
+    this.runProgram()
+  }
+
+  /**
+   * Add a row to the program area.
+   */
+  onAddProgramRow () {
+    this.addProgramRow()
+  }
+
+  /**
+   * Add a column to the program area.
+   */
+  onAddProgramCol () {
+    this.addProgramCol()
+  }
+
+  /**
+   * Save a file locally.
+   * @param {string} filename Name of file to save to.
+   * @param {whatever} content Data to save.
+   */
+  _saveFile (filename, content) {
+    const element = this.document.createElement('a')
+    element.setAttribute('href', 'data:text/plaincharset=utf-8,' + encodeURIComponent(content))
+    element.setAttribute('download', filename)
+    element.style.display = 'none'
+    this.document.body.appendChild(element)
+    element.click()
+    this.document.body.removeChild(element)
+  }
+}
+
+module.exports = {
+  BrowserInterface
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BrowserInterface.html">BrowserInterface</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Environment.html">Environment</a></li><li><a href="ExprAdd.html">ExprAdd</a></li><li><a href="ExprAnd.html">ExprAnd</a></li><li><a href="ExprArithmeticBase.html">ExprArithmeticBase</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprColumn.html">ExprColumn</a></li><li><a href="ExprCompareBase.html">ExprCompareBase</a></li><li><a href="ExprConvertBase.html">ExprConvertBase</a></li><li><a href="ExprDatetime.html">ExprDatetime</a></li><li><a href="ExprDatetimeBase.html">ExprDatetimeBase</a></li><li><a href="ExprDivide.html">ExprDivide</a></li><li><a href="ExprEqual.html">ExprEqual</a></li><li><a href="ExprGreater.html">ExprGreater</a></li><li><a href="ExprGreaterEqual.html">ExprGreaterEqual</a></li><li><a href="ExprIfElse.html">ExprIfElse</a></li><li><a href="ExprIsDatetime.html">ExprIsDatetime</a></li><li><a href="ExprIsLogical.html">ExprIsLogical</a></li><li><a href="ExprIsMissing.html">ExprIsMissing</a></li><li><a href="ExprIsNumber.html">ExprIsNumber</a></li><li><a href="ExprIsString.html">ExprIsString</a></li><li><a href="ExprLess.html">ExprLess</a></li><li><a href="ExprLessEqual.html">ExprLessEqual</a></li><li><a href="ExprLogical.html">ExprLogical</a></li><li><a href="ExprLogicalBase.html">ExprLogicalBase</a></li><li><a href="ExprMultiply.html">ExprMultiply</a></li><li><a href="ExprNegate.html">ExprNegate</a></li><li><a href="ExprNegationBase.html">ExprNegationBase</a></li><li><a href="ExprNot.html">ExprNot</a></li><li><a href="ExprNotEqual.html">ExprNotEqual</a></li><li><a href="ExprNullaryBase.html">ExprNullaryBase</a></li><li><a href="ExprNumber.html">ExprNumber</a></li><li><a href="ExprOr.html">ExprOr</a></li><li><a href="ExprPower.html">ExprPower</a></li><li><a href="ExprRemainder.html">ExprRemainder</a></li><li><a href="ExprString.html">ExprString</a></li><li><a href="ExprSubtract.html">ExprSubtract</a></li><li><a href="ExprTernaryBase.html">ExprTernaryBase</a></li><li><a href="ExprToDatetime.html">ExprToDatetime</a></li><li><a href="ExprToDay.html">ExprToDay</a></li><li><a href="ExprToHours.html">ExprToHours</a></li><li><a href="ExprToLogical.html">ExprToLogical</a></li><li><a href="ExprToMinutes.html">ExprToMinutes</a></li><li><a href="ExprToMonth.html">ExprToMonth</a></li><li><a href="ExprToNumber.html">ExprToNumber</a></li><li><a href="ExprToSeconds.html">ExprToSeconds</a></li><li><a href="ExprToString.html">ExprToString</a></li><li><a href="ExprToWeekday.html">ExprToWeekday</a></li><li><a href="ExprToYear.html">ExprToYear</a></li><li><a href="ExprTypecheckBase.html">ExprTypecheckBase</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="StageANOVA.html">StageANOVA</a></li><li><a href="StageBar.html">StageBar</a></li><li><a href="StageBase.html">StageBase</a></li><li><a href="StageBox.html">StageBox</a></li><li><a href="StageDot.html">StageDot</a></li><li><a href="StageDrop.html">StageDrop</a></li><li><a href="StageFilter.html">StageFilter</a></li><li><a href="StageGroupBy.html">StageGroupBy</a></li><li><a href="StageHistogram.html">StageHistogram</a></li><li><a href="StageJoin.html">StageJoin</a></li><li><a href="StageKolmogorovSmirnov.html">StageKolmogorovSmirnov</a></li><li><a href="StageKruskalWallis.html">StageKruskalWallis</a></li><li><a href="StageMutate.html">StageMutate</a></li><li><a href="StageNotify.html">StageNotify</a></li><li><a href="StagePlot.html">StagePlot</a></li><li><a href="StageRead.html">StageRead</a></li><li><a href="StageScatter.html">StageScatter</a></li><li><a href="StageSelect.html">StageSelect</a></li><li><a href="StageSort.html">StageSort</a></li><li><a href="StageStats.html">StageStats</a></li><li><a href="StageSummarize.html">StageSummarize</a></li><li><a href="StageTransform.html">StageTransform</a></li><li><a href="StageTTestOneSample.html">StageTTestOneSample</a></li><li><a href="StageTTestPaired.html">StageTTestPaired</a></li><li><a href="StageUngroup.html">StageUngroup</a></li><li><a href="StageUnique.html">StageUnique</a></li><li><a href="StageZTestOneSample.html">StageZTestOneSample</a></li><li><a href="Statistics.html">Statistics</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="UserInterface.html">UserInterface</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#Expr">Expr</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#Stage">Stage</a></li><li><a href="global.html#Summarize">Summarize</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

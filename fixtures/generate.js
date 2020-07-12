@@ -105,7 +105,7 @@ const main = () => {
          `Require output directory as command-line argument`)
   const outDir = process.argv[2]
   for (let stem in Programs) {
-    const filename = `${outDir}/${stem}.briq`
+    const filename = `${outDir}/${stem}.jeff`
     const program = Programs[stem]()
     const json = program.toJSON()
     fs.writeFileSync(filename, JSON.stringify(json, null, 2))

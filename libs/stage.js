@@ -1,7 +1,6 @@
 'use strict'
 
 const util = require('./util')
-const MISSING = util.MISSING
 const {Expr} = require('./expr')
 const {Summarize} = require('./summarize')
 const {DataFrame} = require('./dataframe')
@@ -87,15 +86,6 @@ class StageDrop extends StageTransform {
   toJSON () {
     return super.toJSON(this.columns)
   }
-
-  static MakeBlank () {
-    return new Stage.drop([])
-  }
-
-  static Fields () {
-    return [['label', StageDrop.KIND],
-            ['multiText', 'columns']]
-  }
 }
 StageDrop.KIND = 'drop'
 
@@ -124,16 +114,6 @@ class StageFilter extends StageTransform {
   toJSON () {
     return super.toJSON(this.expr.toJSON())
   }
-
-  static MakeBlank () {
-    const placeholder = new Expr.placeholder()
-    return new Stage.filter(placeholder)
-  }
-
-  static Fields () {
-    return [['label', StageFilter.KIND],
-            ['expr', 'expr']]
-  }
 }
 StageFilter.KIND = 'filter'
 
@@ -160,15 +140,6 @@ class StageGroupBy extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.columns)
-  }
-
-  static MakeBlank () {
-    return new Stage.groupBy([])
-  }
-
-  static Fields () {
-    return [['label', StageGroupBy.KIND],
-            ['multiText', 'columns']]
   }
 }
 StageGroupBy.KIND = 'groupBy'
@@ -211,19 +182,6 @@ class StageJoin extends StageTransform {
     return super.toJSON(this.leftName, this.leftCol,
                         this.rightName, this.rightCol)
   }
-
-  static MakeBlank () {
-    return new Stage.join('', '', '', '')
-  }
-
-  static Fields () {
-    return [['label', StageJoin.KIND],
-            ['text', 'leftName'],
-            ['text', 'leftCol'],
-            ['label', 'to'],
-            ['text', 'rightName'],
-            ['text', 'rightCol']]
-  }
 }
 StageJoin.KIND = 'join'
 
@@ -257,17 +215,6 @@ class StageMutate extends StageTransform {
   toJSON () {
     return super.toJSON(this.newName, this.expr.toJSON())
   }
-
-  static MakeBlank () {
-    const placeholder = new Expr.placeholder()
-    return new Stage.mutate('', placeholder)
-  }
-
-  static Fields () {
-    return [['label', StageMutate.KIND],
-            ['text', 'newName'],
-            ['expr', 'expr']]
-  }
 }
 StageMutate.KIND = 'mutate'
 
@@ -295,15 +242,6 @@ class StageNotify extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.signal)
-  }
-
-  static MakeBlank () {
-    return new Stage.notify('')
-  }
-
-  static Fields () {
-    return [['label', StageNotify.KIND],
-            ['text', 'signal']]
   }
 }
 StageNotify.KIND = 'notify'
@@ -335,15 +273,6 @@ class StageRead extends StageTransform {
   toJSON () {
     return super.toJSON(this.path)
   }
-
-  static MakeBlank () {
-    return new Stage.read('')
-  }
-
-  static Fields () {
-    return [['label', StageRead.KIND],
-            ['text', 'path']]
-  }
 }
 StageRead.KIND = 'read'
 
@@ -370,15 +299,6 @@ class StageSelect extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.columns)
-  }
-
-  static MakeBlank () {
-    return new Stage.select([])
-  }
-
-  static Fields () {
-    return [['label', StageSelect.KIND],
-            ['multiText', 'columns']]
   }
 }
 StageSelect.KIND = 'select'
@@ -410,16 +330,6 @@ class StageSort extends StageTransform {
 
   toJSON () {
     return super.toJSON(this.columns, this.reverse)
-  }
-
-  static MakeBlank () {
-    return new Stage.sort([], false)
-  }
-
-  static Fields () {
-    return [['label', StageSort.KIND],
-            ['multiText', 'columns'],
-            ['check', 'reverse']]
   }
 }
 StageSort.KIND = 'sort'
@@ -453,16 +363,6 @@ class StageSummarize extends StageTransform {
   toJSON () {
     return super.toJSON(this.op, this.column)
   }
-
-  static MakeBlank () {
-    return new Stage.summarize('', '')
-  }
-
-  static Fields (kind) {
-    return [['label', StageSummarize.KIND],
-            ['selectValue', Summarize.OPTIONS],
-            ['text', 'column']]
-  }
 }
 StageSummarize.KIND = 'summarize'
 
@@ -481,14 +381,6 @@ class StageUngroup extends StageTransform {
 
   toJSON () {
     return super.toJSON()
-  }
-
-  static MakeBlank () {
-    return new Stage.ungroup()
-  }
-
-  static Fields () {
-    return [['label', StageUngroup.KIND]]
   }
 }
 StageUngroup.KIND = 'ungroup'
@@ -517,15 +409,6 @@ class StageUnique extends StageTransform {
   toJSON () {
     return super.toJSON(this.columns)
   }
-
-  static MakeBlank () {
-    return new Stage.unique([])
-  }
-
-  static Fields () {
-    return [['label', StageUnique.KIND],
-            ['multiText', 'columns']]
-  }
 }
 StageUnique.KIND = 'unique'
 
@@ -549,71 +432,75 @@ class StagePlot extends StageBase {
 
 /**
  * Create a bar plot.
- * @param {string} x_axis Which column to use for the X axis.
- * @param {string} y_axis Which column to use for the Y axis.
+ * @param {string} axisX Which column to use for the X axis.
+ * @param {string} axisY Which column to use for the Y axis.
  */
 class StageBar extends StagePlot {
-  constructor (x_axis, y_axis) {
-    util.check(x_axis && (typeof x_axis === 'string') &&
-               y_axis && (typeof y_axis === 'string'),
+  constructor (axisX, axisY) {
+    util.check(axisX && (typeof axisX === 'string') &&
+               axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
     const spec = {
       data: {values: null},
       mark: 'bar',
       encoding: {
-        x: {field: x_axis, type: 'ordinal'},
-        y: {field: y_axis, type: 'quantitative'},
-        tooltip: {field: y_axis, type: 'quantitative'}
+        x: {field: axisX, type: 'ordinal'},
+        y: {field: axisY, type: 'quantitative'},
+        tooltip: {field: axisY, type: 'quantitative'}
       }
     }
-    super('bar', spec, {x_axis, y_axis})
+    super('bar', spec, {axisX, axisY})
   }
 }
 
 /**
  * Create a box plot.
- * @param {string} x_axis Which column to use for the X axis.
- * @param {string} y_axis Which column to use for the Y axis.
+ * @param {string} axisX Which column to use for the X axis.
+ * @param {string} axisY Which column to use for the Y axis.
  */
 class StageBox extends StagePlot {
-  constructor (x_axis, y_axis) {
-    util.check(x_axis && (typeof x_axis === 'string') &&
-               y_axis && (typeof y_axis === 'string'),
+  constructor (axisX, axisY) {
+    util.check(axisX && (typeof axisX === 'string') &&
+               axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
     const spec = {
       data: {values: null},
       mark: {type: 'boxplot', extent: 1.5},
       encoding: {
-        x: {field: x_axis, type: 'ordinal'},
-        y: {field: y_axis, type: 'quantitative'}
+        x: {field: axisX, type: 'ordinal'},
+        y: {field: axisY, type: 'quantitative'}
       }
     }
-    super('box', spec, {x_axis, y_axis})
+    super('box', spec, {axisX, axisY})
   }
 }
 
 /**
  * Create a dot plot.
- * @param {string} x_axis Which column to use for the X axis.
+ * @param {string} axisX Which column to use for the X axis.
  */
 class StageDot extends StagePlot {
-  constructor (x_axis) {
-    util.check(x_axis && (typeof x_axis === 'string'),
+  constructor (axisX) {
+    util.check(axisX && (typeof axisX === 'string'),
                `Must provide non-empty string for axis`)
     const spec = {
       data: {values: null},
       mark: {type: 'circle', opacity: 1},
       transform: [{
         window: [{op: 'rank', as: 'id'}],
-        groupby: [x_axis]
+        groupby: [axisX]
       }],
       encoding: {
-        x: {field: x_axis, type: 'ordinal'},
-        y: {field: 'id', type: 'ordinal',
-            axis: null, sort: 'descending'}
+        x: {field: axisX, type: 'ordinal'},
+        y: {
+          field: 'id',
+          type: 'ordinal',
+          axis: null,
+          sort: 'descending'
+        }
       }
     }
-    super('dot', spec, {x_axis})
+    super('dot', spec, {axisX})
   }
 }
 
@@ -649,14 +536,14 @@ class StageHistogram extends StagePlot {
 
 /**
  * Create a scatter plot.
- * @param {string} x_axis Which column to use for the X axis.
- * @param {string} y_axis Which column to use for the Y axis.
+ * @param {string} axisX Which column to use for the X axis.
+ * @param {string} axisY Which column to use for the Y axis.
  * @param {string} color Which column to use for color (if any).
  */
 class StageScatter extends StagePlot {
-  constructor (x_axis, y_axis, color) {
-    util.check(x_axis && (typeof x_axis === 'string') &&
-               y_axis && (typeof y_axis === 'string'),
+  constructor (axisX, axisY, color) {
+    util.check(axisX && (typeof axisX === 'string') &&
+               axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
     util.check((color === null) ||
                ((typeof color === 'string') && color),
@@ -665,14 +552,14 @@ class StageScatter extends StagePlot {
       data: {values: null},
       mark: 'point',
       encoding: {
-        x: {field: x_axis, type: 'quantitative'},
-        y: {field: y_axis, type: 'quantitative'}
+        x: {field: axisX, type: 'quantitative'},
+        y: {field: axisY, type: 'quantitative'}
       }
     }
     if (color) {
       spec.encoding.color = {field: color, type: 'nominal'}
     }
-    super('scatter', spec, {x_axis, y_axis, color})
+    super('scatter', spec, {axisX, axisY, color})
   }
 }
 
@@ -800,24 +687,6 @@ class StageZTestOneSample extends StageStats {
  */
 const Stage = {
   KIND: '@stage',
-
-  makeBlanks: () => {
-    const classes = [
-      Stage.drop,
-      Stage.filter,
-      Stage.groupBy,
-      Stage.join,
-      Stage.mutate,
-      Stage.notify,
-      Stage.read,
-      Stage.select,
-      Stage.sort,
-      Stage.summarize,
-      Stage.ungroup,
-      Stage.unique
-    ]
-    return classes.map(cls => cls.MakeBlank().toJSON())
-  },
 
   base: StageBase,
   drop: StageDrop,

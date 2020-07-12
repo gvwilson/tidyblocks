@@ -1,15 +1,9 @@
 'use strict'
 
-const pretty = require('pretty')
-
 const util = require('./util')
 const {DataFrame} = require('./dataframe')
-const {Expr} = require('./expr')
-const {Stage} = require('./stage')
 const {Environment} = require('./environment')
-const {Program} = require('./program')
 const {JsonToObj} = require('./json2obj')
-const {JsonToHtml} = require('./json2html')
 
 /**
  * Generic user interface.
@@ -35,16 +29,16 @@ class UserInterface {
   // ----------------------------------------------------------------------
 
   showTab (chosenButton, tabName, selector = null) {
-    const group = chosenButton.getAttribute('data-briq-group')
-    Array.from(this.document.querySelectorAll(`button[data-briq-group=${group}]`))
-      .forEach(button => {button.classList.remove('active')})
+    const group = chosenButton.getAttribute('data-jeff-group')
+    Array.from(this.document.querySelectorAll(`button[data-jeff-group=${group}]`))
+      .forEach(button => { button.classList.remove('active') })
     chosenButton.classList.add('active')
 
     const chosenTab = this.document.getElementById(tabName)
-    util.check(group === chosenTab.getAttribute('data-briq-group'),
+    util.check(group === chosenTab.getAttribute('data-jeff-group'),
                `Tab should have same group as button`)
-    Array.from(this.document.querySelectorAll(`div[data-briq-group=${group}]`))
-      .forEach(tab => tab.style.display = 'none')
+    Array.from(this.document.querySelectorAll(`div[data-jeff-group=${group}]`))
+      .forEach(tab => { tab.style.display = 'none' })
     chosenTab.style.display = 'block'
 
     if (selector) {
@@ -59,7 +53,7 @@ class UserInterface {
     this.displayTable('data', name)
   }
 
-  loadProgram(name, text) {
+  loadProgram (name, text) {
     const json = JSON.parse(text)
     this.program = (new JsonToObj()).program(json)
     this.displayProgram(json)
@@ -73,7 +67,6 @@ class UserInterface {
    * Reset stored data and displays before running program.
    */
   redisplay () {
-    this.displayToolbox()
     this.displayProgram(null)
     this.displayTable('data', null)
     this.displayTable('results', null)
@@ -163,33 +156,20 @@ class UserInterface {
   }
 
   /**
-   * Make and display the toolbox.
-   */
-  displayToolbox () {
-    const allTabs = [
-      ['expr', 'exprTab'],
-      ['stage', 'transformTab']
-    ]
-    for (const [label, id] of allTabs) {
-      const toolbox = this.makeToolbox(label)
-      const div = this.document.getElementById(id)
-      div.innerHTML = toolbox
-    }
-  }
-
-  /**
    * Display a program's structure.
    * @param {Object} json JSON representation of program to display.
    */
   displayProgram (json) {
     if (json) {
       this.displayLog([`<pre>${JSON.stringify(json, null, 1)}</pre>`])
-      const factory = new JsonToHtml()
-      this.displayInArea('programArea', factory.program(json))
+      // FIXME
+      // const factory = new JsonToHtml()
+      // this.displayInArea('programArea', factory.program(json))
     }
     else {
       this.displayLog(['clear program'])
-      this.displayInArea('programArea', this.makeEmptyProgram())
+      // FIXME
+      // this.displayInArea('programArea', this.makeEmptyProgram())
     }
   }
 
@@ -206,49 +186,6 @@ class UserInterface {
     this.program.run(this.env)
     this.displayLog(this.env.log)
     this.displayError(this.env.errors)
-  }
-
-  /**
-   * Add a row to the program area.
-   */
-  addProgramRow () {
-    const body = this.getProgramBody()
-    const height = body.children.length
-    const width = body.firstChild.children.length
-    util.check(width > 0,
-               `Must have at least one column before adding row`)
-    const factory = new JsonToHtml()
-    const content = Array(width).fill(factory.makePlaceholder()).join('')
-    const newRow = this.document.createElement('tr')
-    newRow.innerHTML = content
-    body.appendChild(newRow)
-  }
-
-  /**
-   * Add a column to the program area.
-   */
-  addProgramCol () {
-    const factory = new JsonToHtml()
-    const body = this.getProgramBody()
-    const temp = this.document.createElement('tr')
-    const children = Array.from(body.children)
-    children.forEach(row => {
-      temp.innerHTML = factory.makePlaceholder()
-      row.appendChild(temp.firstChild)
-    })
-  }
-
-  /**
-   * Get body of program table.
-   */
-  getProgramBody () {
-    const table = this.document.getElementById('briq-program')
-    util.check(table.tagName.match(/table/i),
-               `Cannot find valid program`)
-    const body = table.firstChild
-    util.check(body.tagName.match(/tbody/i),
-               `Program table does not have a valid body`)
-    return body
   }
 
   // ----------------------------------------------------------------------
@@ -278,7 +215,7 @@ class UserInterface {
     const keys = Array.from(Object.keys(data[0]))
     const header = '<tr>' + keys.map(k => `<th>${k}</th>`).join('') + '</tr>'
     const body = data.map(row => '<tr>' + keys.map(k => `<td>${row[k]}</td>`).join('') + '</tr>').join('')
-    const html = `<table class="data" briq-data-tablename="${name}">${header}${body}</table>`
+    const html = `<table class="data" jeff-data-tablename="${name}">${header}${body}</table>`
     return html
   }
 
@@ -317,41 +254,6 @@ class UserInterface {
    */
   listToHTML (messages) {
     return '<ol>' + messages.map(m => `<li>${m}</li>`).join('') + '</ol>'
-  }
-
-  /**
-   * Create a toolbox of draggables.
-   */
-  makeToolbox (label) {
-    const factory = new JsonToHtml()
-    let contents = null
-    if (label === 'expr') {
-      contents = Expr
-        .makeBlanks()
-        .map(expr => factory.expr(expr))
-    }
-    else if (label === 'stage') {
-      contents = Stage
-        .makeBlanks()
-        .map(expr => factory.stage(expr))
-    }
-    else {
-      util.fail(`Unknown toolbox label ${label}`)
-    }
-    contents = contents
-      .map(html => `<tr><td>${html}</td></tr>`)
-      .join('')
-    return `<table class="briq-toolbox"><tbody>${contents}</tbody></table>`
-  }
-
-  /**
-   * Create an empty program as a placeholder.
-   */
-  makeEmptyProgram () {
-    const factory = new JsonToHtml()
-    const placeholder = factory.makePlaceholder()
-    const table = `<table id="briq-program"><tbody><tr>${placeholder}</tr></tbody></table>`
-    return table
   }
 }
 

@@ -1,10 +1,10 @@
 {
-  "name": "briq",
+  "name": "jeff",
   "version": "0.1.0",
   "description": "TidyBlocks reimagined.",
   "main": "index.js",
   "scripts": {
-    "build": "browserify index.js -s briq -t [ babelify --presets [ @babel/preset-env ] ] > briq.min.js",
+    "build": "browserify index.js -s jeff -t [ babelify --presets [ @babel/preset-env ] ] > jeff.min.js",
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
     "fixtures": "fixtures/generate.js fixtures",
@@ -27,6 +27,7 @@
     "@stdlib/stdlib": "0.0.90",
     "assert": "^2.0.0",
     "babelify": "^10.0.0",
+    "blockly": "^3.20200625.2",
     "browserify": "^16.5.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",

@@ -296,28 +296,28 @@ describe('stage persistence', () => {
 
 describe('plot persistence', () => {
   it('restores bar from JSON', (done) => {
-    const x_axis = 'age', y_axis = 'height'
+    const axisX = 'age', axisY = 'height'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'bar', x_axis, y_axis]),
-                     new Stage.bar(x_axis, y_axis),
+    assert.deepEqual(factory.stage([Stage.KIND, 'bar', axisX, axisY]),
+                     new Stage.bar(axisX, axisY),
                      `bar`)
     done()
   })
 
   it('restores box from JSON', (done) => {
-    const x_axis = 'age', y_axis = 'height'
+    const axisX = 'age', axisY = 'height'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'box', x_axis, y_axis]),
-                     new Stage.box(x_axis, y_axis),
+    assert.deepEqual(factory.stage([Stage.KIND, 'box', axisX, axisY]),
+                     new Stage.box(axisX, axisY),
                      `box`)
     done()
   })
 
   it('restores dot from JSON', (done) => {
-    const x_axis = 'age'
+    const axisX = 'age'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'dot', x_axis]),
-                     new Stage.dot(x_axis),
+    assert.deepEqual(factory.stage([Stage.KIND, 'dot', axisX]),
+                     new Stage.dot(axisX),
                      `dot`)
     done()
   })
@@ -333,10 +333,10 @@ describe('plot persistence', () => {
   })
 
   it('restores scatter from JSON', (done) => {
-    const x_axis = 'age', y_axis = 'height', color = 'vermilion'
+    const axisX = 'age', axisY = 'height', color = 'vermilion'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'scatter', x_axis, y_axis, color]),
-                     new Stage.scatter(x_axis, y_axis, color),
+    assert.deepEqual(factory.stage([Stage.KIND, 'scatter', axisX, axisY, color]),
+                     new Stage.scatter(axisX, axisY, color),
                      `scatter`)
     done()
   })
