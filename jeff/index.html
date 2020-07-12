@@ -3,11 +3,8 @@
     <script src="./jeff.min.js"></script>
     <script>
       window.onload = () => {
-        const settings = {
-          toolbox: document.getElementById('toolbox'),
-          theme: jeff.theme
-        }
-        const workspace = jeff.Blockly.inject('blocklyDiv', settings)
+        const toolbox = document.getElementById('toolbox')
+        const workspace = jeff.setup('blocklyDiv', toolbox)
       }
     </script>
   </head>
