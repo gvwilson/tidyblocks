@@ -2,7 +2,7 @@
 .jekyll-cache
 _site
 coverage
-jeff.min.js
+*.min.js
 
 #----------------------------------------
 
