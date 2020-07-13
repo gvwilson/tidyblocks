@@ -141,8 +141,8 @@ const setup = () => {
           type: 'field_dropdown',
           name: 'TYPE',
           options: [
-            ['boolean', 'isBoolean'],
             ['date', 'isDateTime'],
+            ['logical', 'isLogical'],
             ['missing', 'isMissing'],
             ['number', 'isNumber'],
             ['string', 'isString']

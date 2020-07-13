@@ -108,7 +108,7 @@ const getCode = () => {
         .replace(STAGE_PREFIX, '["@pipeline", ')
         .replace(STAGE_SUFFIX, ']')
         .replace('\n', ', ')
-  const code = `["@program", ${pipelinesSeparated}]`
+  const code = `["@program", ${pipelines}]`
   return code
 }
 
