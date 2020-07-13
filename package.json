@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/gvwilson/briq#readme",
   "dependencies": {
+    "@babel/compat-data": "^7.10.4",
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
     "@stdlib/stdlib": "0.0.90",
