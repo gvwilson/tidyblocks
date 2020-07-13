@@ -15,8 +15,8 @@ class StageBase {
    * @param {string} name What this stage is called.
    * @param {string[]} requires What datasets are required before this can run?
    * @param {string} produces What dataset does this stage produce?
-   * @param {boolean} input Does this stage require input?
-   * @param {boolean} output Does this stage produce input?
+   * @param {Boolean} input Does this stage require input?
+   * @param {Boolean} output Does this stage produce input?
    */
   constructor (name, requires, produces, input, output) {
     util.check(name && (typeof name === 'string') &&
@@ -313,7 +313,7 @@ class StageSort extends StageTransform {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
     util.check(typeof reverse === 'boolean',
-               `Expected boolean`)
+               `Expected Boolean`)
     super(StageSort.KIND, [], null, true, true)
     this.columns = columns
     this.reverse = reverse
