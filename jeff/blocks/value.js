@@ -1,5 +1,4 @@
 const Blockly = require('blockly')
-const {STAGE_PREFIX, STAGE_SUFFIX} = require('./util')
 
 const setup = () => {
 
