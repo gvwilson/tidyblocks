@@ -126,7 +126,8 @@ Blockly.defineBlocksWithJsonArray([
     output: 'String',
     style: 'value_block',
     helpUrl: '',
-    tooltip: 'get the value of a column'
+    tooltip: 'get the value of a column',
+    extensions: ['validate_COLUMN']
   },
   // Number
   {
@@ -165,7 +166,7 @@ Blockly.JavaScript['value_number'] = (block) => {
 // Theme
 // ----------------------------------------------------------------------
 
-const theme = Blockly.Theme.defineTheme('jeff', {
+const TidyBlocksTheme = Blockly.Theme.defineTheme('jeff', {
   base: Blockly.Themes.Classic,
   blockStyles: {
     data_block: {
@@ -210,23 +211,103 @@ const theme = Blockly.Theme.defineTheme('jeff', {
 // Exports
 // ----------------------------------------------------------------------
 
-let _Workspace = null // assigned in setup
+/**
+ * Blockly workspace.
+ */
+let TidyBlocksWorkspace = null // assigned in setup
+
+/**
+ * Get the workspace or throw an Error if it has not yet been set up.
+ */
 const getWorkspace = () => {
-  return _Workspace
+  if (!TidyBlocksWorkspace) {
+    throw new Error('Workspace not initialized')
+  }
+  return TidyBlocksWorkspace
 }
 
+/**
+ * Get the JSON representation of the workspace contents.
+ * -   Every stage has a prefix and suffix.
+ * -   When these are adjacent, replace with a comma to separate stages.
+ * -   Any dangling prefix is the start of a pipeline.
+ * -   Any dangling suffix is the end of a pipeline.
+ * -   Every newline is a break between stacks.
+ */
 const getCode = () => {
-  const raw = Blockly.JavaScript.workspaceToCode(getWorkspace())
-  const stagesSeparated = raw.replace(`${STAGE_SUFFIX}${STAGE_PREFIX}`, ', ')
-  const pipelinesWrapped = stagesSeparated
+  const pipelines = Blockly.JavaScript.workspaceToCode(getWorkspace())
+        .replace(`${STAGE_SUFFIX}${STAGE_PREFIX}`, ', ')
         .replace(STAGE_PREFIX, '["@pipeline", ')
         .replace(STAGE_SUFFIX, ']')
-  const pipelinesSeparated = pipelinesWrapped.replace('\n', ', ')
+        .replace('\n', ', ')
   const code = `["@program", ${pipelinesSeparated}]`
   return code
 }
 
-const setup = (divId, toolbox) => {
+/**
+ * Create a function to match a pattern against a column name, returning the
+ * stripped string value if the pattern matches or null if the match fails.
+ */
+const createValidatorFunction = (columnName, pattern) => {
+  return function () {
+    const field = this.getField(columnName)
+    field.setValidator((newValue) => {
+      if (newValue.match(pattern)) {
+        return newValue.trim() // strip leading and trailing spaces
+      }
+      return null // fails validation
+    })
+  }
+}
+
+/**
+ * Create validators for all fields that take a single column name or multiple
+ * column names.
+ */
+const createValidators = () => {
+  // Match valid single column name: spaces before and/or after, starts with
+  // letter, followed by letter/digit/underscore.
+  const matchColName = /^ *[_A-Za-z][_A-Za-z0-9]* *$/
+
+  // Validate fields in blocks that take a single column name.
+  const singleColFields = [
+    'COLOR',
+    'COLUMN',
+    'FORMAT',
+    'GROUPS',
+    'LEFT_COLUMN',
+    'LEFT_TABLE',
+    'NAME',
+    'RIGHT_COLUMN',
+    'RIGHT_TABLE',
+    'VALUES',
+    'X_AXIS',
+    'Y_AXIS'
+  ]
+  singleColFields.forEach(col => {
+    Blockly.Extensions.register(`validate_${col}`,
+                                createValidatorFunction(col, matchColName))
+  })
+
+  // Match one or more column names separated by commas (and optionally
+  // surrounded by spaces).
+  const matchMultiColNames = /^ *([_A-Za-z][_A-Za-z0-9]*)( *, *[_A-Za-z][_A-Za-z0-9]*)* *$/
+
+  // Validate fields in blocks that take multiple column names.
+  const multiColFields = [
+    'MULTIPLE_COLUMNS'
+  ]
+  multiColFields.forEach(col => {
+    Blockly.Extensions.register(`validate_${col}`,
+                                createValidatorFunction(col, matchMultiColNames))
+  })
+}
+
+/**
+ * Create the JSON settings used to initialize the workspace.  Requires the DOM
+ * element containing the block definitions.
+ */
+const createSettings = (toolbox) => {
   const settings = {
     toolbox: toolbox,
     zoom: {
@@ -237,10 +318,21 @@ const setup = (divId, toolbox) => {
       minScale: 0.3,
       scaleSpeed: 1.2
     },
-    theme: theme
+    theme: TidyBlocksTheme
   }
-  _Workspace = Blockly.inject(divId, settings)
-  return _Workspace
+  return settings
+}
+
+/**
+ * Set up the workspace given the ID of the elements that will contain
+ * the UI and of the element that contains the block specs.
+ */
+const setup = (divId, toolboxId) => {
+  createValidators()
+  const toolbox = document.getElementById(toolboxId)
+  const settings = createSettings(toolbox)
+  TidyBlocksWorkspace = Blockly.inject(divId, settings)
+  return TidyBlocksWorkspace
 }
 
 module.exports = {
