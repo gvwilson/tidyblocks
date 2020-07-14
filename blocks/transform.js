@@ -1,9 +1,5 @@
 const Blockly = require('blockly')
-const {
-  STAGE_PREFIX,
-  STAGE_SUFFIX,
-  formatMultipleColumnNames
-} = require('./util')
+const {formatMultipleColumnNames} = require('./util')
 
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
@@ -171,50 +167,50 @@ const setup = () => {
   // Drop
   Blockly.JavaScript['transform_drop'] = (block) => {
     const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
-    return `${STAGE_PREFIX}["@stage", "drop", ${columns}]${STAGE_SUFFIX}`
+    return `["@stage", "drop", ${columns}]`
   }
 
   // Filter
   Blockly.JavaScript['transform_filter'] = (block) => {
     const expr = Blockly.JavaScript.valueToCode(block, 'TEST', Blockly.JavaScript.ORDER_NONE)
-    return `${STAGE_PREFIX}["@stage", "filter", ${expr}]${STAGE_SUFFIX}`
+    return `["@stage", "filter", ${expr}]`
   }
 
   // Group
   Blockly.JavaScript['transform_groupBy'] = (block) => {
     const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
-    return `${STAGE_PREFIX}["@stage", "group", ${columns}]${STAGE_SUFFIX}`
+    return `["@stage", "group", ${columns}]`
   }
 
   // Mutate
   Blockly.JavaScript['transform_mutate'] = (block) => {
     const column = Blockly.JavaScript.quote_(block.getFieldValue('COLUMN'))
     const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE)
-    return `${STAGE_PREFIX}["@stage", "mutate", ${column}, ${value}]${STAGE_SUFFIX}`
+    return `["@stage", "mutate", ${column}, ${value}]`
   }
 
   // Select
   Blockly.JavaScript['transform_select'] = (block) => {
     const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
-    return `${STAGE_PREFIX}["@stage", "select", ${columns}]${STAGE_SUFFIX}`
+    return `["@stage", "select", ${columns}]`
   }
 
   // Sort
   Blockly.JavaScript['transform_sort'] = (block) => {
     const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
-    return `${STAGE_PREFIX}["@stage", "sort", ${columns}, ${descending}]${STAGE_SUFFIX}`
+    return `["@stage", "sort", ${columns}, ${descending}]`
   }
 
   // Ungroup
   Blockly.JavaScript['transform_ungroup'] = (block) => {
-    return `${STAGE_PREFIX}["@stage", "ungroup"]${STAGE_SUFFIX}`
+    return `["@stage", "ungroup"]`
   }
 
   // Unique
   Blockly.JavaScript['transform_unique'] = (block) => {
     const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
-    return `${STAGE_PREFIX}["@stage", "unique", ${columns}]${STAGE_SUFFIX}`
+    return `["@stage", "unique", ${columns}]`
   }
 }
 

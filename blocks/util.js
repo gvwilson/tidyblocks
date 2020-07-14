@@ -1,10 +1,5 @@
 const Blockly = require('blockly')
 
-// Markers so that we can separate pipelines stages after the fact.
-// Multiple stacks are automatically separated by newline '\n'.
-const STAGE_PREFIX = '\v'
-const STAGE_SUFFIX = '\f'
-
 const formatMultipleColumnNames = (raw) => {
   const joined = raw
         .split(',')
@@ -16,7 +11,5 @@ const formatMultipleColumnNames = (raw) => {
 }
 
 module.exports = {
-  STAGE_PREFIX,
-  STAGE_SUFFIX,
   formatMultipleColumnNames
 }

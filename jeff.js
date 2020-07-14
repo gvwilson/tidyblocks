@@ -95,21 +95,22 @@ const getWorkspace = () => {
 }
 
 /**
- * Get the JSON representation of the workspace contents.
- * -   Every stage has a prefix and suffix.
- * -   When these are adjacent, replace with a comma to separate stages.
- * -   Any dangling prefix is the start of a pipeline.
- * -   Any dangling suffix is the end of a pipeline.
- * -   Every newline is a break between stacks.
+ * Get the JSON string representation of the workspace contents.
  */
 const getCode = () => {
-  const pipelines = Blockly.JavaScript.workspaceToCode(getWorkspace())
-        .replace(`${STAGE_SUFFIX}${STAGE_PREFIX}`, ', ')
-        .replace(STAGE_PREFIX, '["@pipeline", ')
-        .replace(STAGE_SUFFIX, ']')
-        .replace('\n', ', ')
-  const code = `["@program", ${pipelines}]`
-  return code
+  const pipelines = getWorkspace()
+        .getTopBlocks()
+        .map(top => {
+          const blocks = []
+          for (let curr = top; curr; curr = curr.getNextBlock()) {
+            blocks.push(curr)
+          }
+          const stages = blocks.map(block => Blockly.JavaScript.blockToCode(block, true))
+          stages.unshift('"@pipeline"')
+          return `[${stages}]`
+        })
+  pipelines.unshift('"@program"')
+  return `[${pipelines}]`
 }
 
 /**
