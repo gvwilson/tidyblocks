@@ -16,7 +16,11 @@ and that your work may be made available under the terms of [our license](LICENS
 
 ## Actions
 
--   `npm run build`: regenerate `tidyblocks.min.js`.
+-   `npm run build`: regenerate `tidyblocks.min.js`, then open `index.html` to see it.
+    This is currently broken.
+
+-   `npm run jeff`: regenerates `jeff.min.js` for testing, then open `jeff.html` to see it.
+    Drag out a few blocks, then open the console and run `jeff.getCode()` to see the JSON for the blocks.
 
 -   `npm run coverage`: run tests and report code coverage (open `coverage/index.html` to see results).
 
@@ -61,11 +65,17 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 -   `libs/ui.js` and `libs/browser.js`: handle interactions with the user.
     **FIXME: these two files should be combined into one.**
 
+-   `blocks/*.js`: implementation of blocks.
+
 ### Other Files
 
 -   `index.html`: user interface page.
 
--   `index.js`: gathers contents of `libs/*.js` for bundling.
+-   `index.js`: gathers contents of `libs/*.js` for bundling to create `tidyblocks.min.js`.
+
+-   `jeff.html`: testing interface page.
+
+-   `jeff.js`: gathers blocks for bundling to create `jeff.min.js` for testing.
 
 -   `test/test_*.js`: unit tests.
 
