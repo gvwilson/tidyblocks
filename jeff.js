@@ -2,13 +2,16 @@
 
 const Blockly = require('blockly')
 
+const {DataFrame} = require('./libs/dataframe')
 const {JsonToObj} = require('./libs/json2obj')
+const {Environment} = require('./libs/environment')
 
 const {STAGE_PREFIX, STAGE_SUFFIX} = require('./blocks/util')
 const data_blocks = require('./blocks/data')
 const operation_blocks = require('./blocks/operation')
 const transform_blocks = require('./blocks/transform')
 const value_blocks = require('./blocks/value')
+const combine_blocks = require('./blocks/combine')
 
 // Match valid single column name: spaces before and/or after, starts with
 // letter, followed by letter/digit/underscore.
@@ -46,7 +49,8 @@ const createTheme = () => {
   const data_color = '#FEBE4C',
         operation_color = '#F9B5B2',
         transform_color = '#76AADB',
-        value_color = '#E7553C'
+        value_color = '#E7553C',
+        combine_color = '#404040'
 
   return Blockly.Theme.defineTheme('jeff', {
     base: Blockly.Themes.Classic,
@@ -71,13 +75,20 @@ const createTheme = () => {
         colourPrimary: value_color,
         colourSecondary: '#64C7FF',
         colourTertiary: '#760918'
-      }
+      },
+      combine_block: {
+        colourPrimary: combine_color,
+        colourSecondary: '#404040',
+        colourTertiary: '#A0A0A0',
+        hat: 'cap'
+      },
     },
     categoryStyles: {
       data: {colour: data_color},
       operation: {colour: operation_color},
       transform: {colour: transform_color},
-      value: {colour: value_color}
+      value: {colour: value_color},
+      combine: {colour: combine_color}
     }
   })
 }
@@ -133,6 +144,35 @@ const getProgram = () => {
   const json = JSON.parse(code)
   const program = (new JsonToObj()).program(json)
   return program
+}
+
+/**
+ * Get data for testing purposes.
+ */
+const getData = (name) => {
+  return [
+    {name: 'black', red: 0, green: 0, blue: 0},
+    {name: 'red', red: 255, green: 0, blue: 0},
+    {name: 'maroon', red: 128, green: 0, blue: 0},
+    {name: 'lime', red: 0, green: 255, blue: 0},
+    {name: 'green', red: 0, green: 128, blue: 0},
+    {name: 'blue', red: 0, green: 0, blue: 255},
+    {name: 'navy', red: 0, green: 0, blue: 128},
+    {name: 'yellow', red: 255, green: 255, blue: 0},
+    {name: 'fuchsia', red: 255, green: 0, blue: 255},
+    {name: 'aqua', red: 0, green: 255, blue: 255},
+    {name: 'white', red: 255, green: 255, blue: 255}
+  ]
+}
+
+/**
+ * Run the current program.
+ */
+const runProgram = () => {
+  const program = getProgram()
+  const env = new Environment(getData)
+  program.run(env)
+  return env
 }
 
 /**
@@ -194,7 +234,8 @@ const setup = (divId, toolboxId) => {
     data_blocks,
     operation_blocks,
     transform_blocks,
-    value_blocks
+    value_blocks,
+    combine_blocks
   ].forEach(b => b.setup())
   createValidators()
 
@@ -210,5 +251,7 @@ module.exports = {
   getWorkspace,
   getCode,
   getProgram,
+  getData,
+  runProgram,
   setup
 }
