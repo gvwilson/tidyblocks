@@ -335,14 +335,18 @@ class StageSort extends StageTransform {
 StageSort.KIND = 'sort'
 
 /**
- * Base class for summarizing data.
+ * Summarize data.
+ * @param {string} op Name of operation.
+ * @param {string} column Column to summarize.
  */
 class StageSummarize extends StageTransform {
   constructor (op, column) {
     util.check(typeof op === 'string',
                `Expected string as op`)
+    util.check(op in Summarize,
+               `Unknown summarization operation ${op}`)
     util.check(typeof column === 'string',
-               `Expected string as column`)
+               `Expected string as column name`)
     super(StageSummarize.KIND, [], null, true, true)
     this.op = op
     this.column = column

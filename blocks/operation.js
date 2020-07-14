@@ -274,7 +274,7 @@ const setup = () => {
 
   // Binary logical operations
   Blockly.JavaScript['operation_logical'] = (block) => {
-    const operator = block.getFieldValue('OP')
+    const op = block.getFieldValue('OP')
     const order = Blockly.JavaScript.ORDER_NONE
     const left = Blockly.JavaScript.valueToCode(block, 'LEFT', order)
     const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', order)

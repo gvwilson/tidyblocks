@@ -130,6 +130,40 @@ const setup = () => {
       helpUrl: ""
     },
 
+    // Summarize
+    {
+      type: 'transform_summarize',
+      message0: 'Summarize %1 %2',
+      args0: [
+        {
+          type: 'field_dropdown',
+          name: 'OP',
+          options: [
+            ['count', 'count'],
+            ['maximum', 'maximum'],
+            ['mean', 'mean'],
+            ['median', 'median'],
+            ['minimum', 'minimum'],
+            ['stdDev', 'stdDev'],
+            ['sum', 'sum'],
+            ['variance', 'variance']
+          ]
+        },
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: 'column'
+        }
+      ],
+      inputsInline: true,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: 'summarize values in  column',
+      helpUrl: '',
+      extensions: ['validate_COLUMN']
+    },
+
     // Ungroup
     {
       type: 'transform_ungroup',
@@ -200,6 +234,13 @@ const setup = () => {
     const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
     return `["@stage", "sort", ${columns}, ${descending}]`
+  }
+
+  // Summarize
+  Blockly.JavaScript['transform_summarize'] = (block) => {
+    const op = block.getFieldValue('OP')
+    const column = Blockly.JavaScript.quote_(block.getFieldValue('COLUMN'))
+    return `["@stage", "summarize", "${op}", ${column}]`
   }
 
   // Ungroup
