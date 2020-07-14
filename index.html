@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
-    <script src="./jeff.min.js"></script>
+    <script src="./tidyblocks.min.js"></script>
     <script src="./script.js"></script>
   </head>
   <body onload="setup()">
@@ -30,37 +30,37 @@
       <div class="column width50">
         <button id="dataButton"
                 class="menuButton tabButton buttonDefault"
-                data-jeff-group="display"
+                data-tb-group="display"
                 onclick="UI.onShowTab(event, 'dataTab', 'data')">
           Data
         </button>
         <button id="resultsButton"
                 class="menuButton tabButton"
-                data-jeff-group="display"
+                data-tb-group="display"
                 onclick="UI.onShowTab(event, 'resultsTab', 'results')">
           Results
         </button>
         <button id="plotButton"
                 class="menuButton tabButton"
-                data-jeff-group="display"
+                data-tb-group="display"
                 onclick="UI.onShowTab(event, 'plotTab')">
           Plot
         </button>
         <button id="statisticsButton"
                 class="menuButton tabButton"
-                data-jeff-group="display"
+                data-tb-group="display"
                 onclick="UI.onShowTab(event, 'statisticsTab')">
           Statistics
         </button>
         <button id="logButton"
                 class="menuButton tabButton"
-                data-jeff-group="display"
+                data-tb-group="display"
                 onclick="UI.onShowTab(event, 'logTab')">
           Log
         </button>
         <button id="errorButton"
                 class="menuButton tabButton"
-                data-jeff-group="display"
+                data-tb-group="display"
                 onclick="UI.onShowTab(event, 'errorTab')">
           Error
         </button>
@@ -78,36 +78,36 @@
 
       <!-- main display area -->
       <div class="right width50 displays">
-        <div id="dataTab" class="tabContent" data-jeff-group="display">
+        <div id="dataTab" class="tabContent" data-tb-group="display">
           <h2>
             Data
             <select class="tableSelector" id="dataSelect" onchange="UI.onDisplayTable('data')"></select>
           </h2>
-          <div id="dataArea" data-jeff-group="display"></div>
+          <div id="dataArea" data-tb-group="display"></div>
         </div>
-        <div id="resultsTab" class="tabContent" data-jeff-group="display">
+        <div id="resultsTab" class="tabContent" data-tb-group="display">
           <h2>
             Results
             <select class="tableSelector" id="resultsSelect" onchange="UI.onDisplayTable('results')"></select>
             <button class="displayButton" onclick="UI.onSaveResults(event)">Save</button>
           </h2>
-          <div id="resultsArea" data-jeff-group="display"></div>
+          <div id="resultsArea" data-tb-group="display"></div>
         </div>
-        <div id="plotTab" class="tabContent" data-jeff-group="display">
+        <div id="plotTab" class="tabContent" data-tb-group="display">
           <h2>Plot</h2>
-          <div id="plotArea" data-jeff-group="display"></div>
+          <div id="plotArea" data-tb-group="display"></div>
         </div>
-        <div id="statisticsTab" class="tabContent" data-jeff-group="display">
+        <div id="statisticsTab" class="tabContent" data-tb-group="display">
           <h2>Statistics</h2>
-          <div id="statisticsArea" data-jeff-group="display"></div>
+          <div id="statisticsArea" data-tb-group="display"></div>
         </div>
-        <div id="logTab" class="tabContent" data-jeff-group="display">
+        <div id="logTab" class="tabContent" data-tb-group="display">
           <h2>Log</h2>
-          <div id="logArea" data-jeff-group="display"></div>
+          <div id="logArea" data-tb-group="display"></div>
         </div>
-        <div id="errorTab" class="tabContent" data-jeff-group="display">
+        <div id="errorTab" class="tabContent" data-tb-group="display">
           <h2>Error</h2>
-          <div id="errorArea" data-jeff-group="display"></div>
+          <div id="errorArea" data-tb-group="display"></div>
         </div>
       </div>
     </main>

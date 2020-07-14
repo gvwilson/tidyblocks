@@ -29,15 +29,15 @@ class UserInterface {
   // ----------------------------------------------------------------------
 
   showTab (chosenButton, tabName, selector = null) {
-    const group = chosenButton.getAttribute('data-jeff-group')
-    Array.from(this.document.querySelectorAll(`button[data-jeff-group=${group}]`))
+    const group = chosenButton.getAttribute('data-tb-group')
+    Array.from(this.document.querySelectorAll(`button[data-tb-group=${group}]`))
       .forEach(button => { button.classList.remove('active') })
     chosenButton.classList.add('active')
 
     const chosenTab = this.document.getElementById(tabName)
-    util.check(group === chosenTab.getAttribute('data-jeff-group'),
+    util.check(group === chosenTab.getAttribute('data-tb-group'),
                `Tab should have same group as button`)
-    Array.from(this.document.querySelectorAll(`div[data-jeff-group=${group}]`))
+    Array.from(this.document.querySelectorAll(`div[data-tb-group=${group}]`))
       .forEach(tab => { tab.style.display = 'none' })
     chosenTab.style.display = 'block'
 
@@ -215,7 +215,7 @@ class UserInterface {
     const keys = Array.from(Object.keys(data[0]))
     const header = '<tr>' + keys.map(k => `<th>${k}</th>`).join('') + '</tr>'
     const body = data.map(row => '<tr>' + keys.map(k => `<td>${row[k]}</td>`).join('') + '</tr>').join('')
-    const html = `<table class="data" jeff-data-tablename="${name}">${header}${body}</table>`
+    const html = `<table class="data" data-tb-tablename="${name}">${header}${body}</table>`
     return html
   }
 

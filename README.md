@@ -16,7 +16,7 @@ and that your work may be made available under the terms of [our license](LICENS
 
 ## Actions
 
--   `npm run build`: regenerate `jeff.min.js`.
+-   `npm run build`: regenerate `tidyblocks.min.js`.
 
 -   `npm run coverage`: run tests and report code coverage (open `coverage/index.html` to see results).
 

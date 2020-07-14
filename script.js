@@ -2,8 +2,8 @@
 
 let UI = null
 const setup = () => {
-  jeff.Setup(window.document)
-  UI = jeff.instance
+  tidyblocks.Setup(window.document)
+  UI = tidyblocks.instance
   Array.from(document.getElementsByClassName('buttonDefault'))
     .forEach(b => b.click())
 }
