@@ -1,6 +1,9 @@
 'use strict'
 
 const Blockly = require('blockly')
+
+const {JsonToObj} = require('./libs/json2obj')
+
 const {STAGE_PREFIX, STAGE_SUFFIX} = require('./blocks/util')
 const data_blocks = require('./blocks/data')
 const operation_blocks = require('./blocks/operation')
@@ -123,6 +126,16 @@ const getCode = () => {
 }
 
 /**
+ * Get the object representation of the current program.
+ */
+const getProgram = () => {
+  const code = getCode()
+  const json = JSON.parse(code)
+  const program = (new JsonToObj()).program(json)
+  return program
+}
+
+/**
  * Create validators for all fields that take a single column name or multiple
  * column names.
  */
@@ -196,5 +209,6 @@ module.exports = {
   Blockly,
   getWorkspace,
   getCode,
+  getProgram,
   setup
 }
