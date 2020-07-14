@@ -167,11 +167,16 @@ const createSettings = (toolbox) => {
  * the UI and of the element that contains the block specs.
  */
 const setup = (divId, toolboxId) => {
-  data_blocks.setup()
-  operation_blocks.setup()
-  transform_blocks.setup()
-  value_blocks.setup()
+  // Initialize blocks.
+  [
+    data_blocks,
+    operation_blocks,
+    transform_blocks,
+    value_blocks
+  ].forEach(b => b.setup())
   createValidators()
+
+  // Create workspace.
   const toolbox = document.getElementById(toolboxId)
   const settings = createSettings(toolbox)
   TidyBlocksWorkspace = Blockly.inject(divId, settings)
