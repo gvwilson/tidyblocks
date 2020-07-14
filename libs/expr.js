@@ -1,6 +1,7 @@
 'use strict'
 
 const util = require('./util')
+const stdlib = require('@stdlib/stdlib')
 const MISSING = util.MISSING
 
 /**
@@ -37,7 +38,13 @@ class ExprNullaryBase extends ExprBase {
     return [Expr.KIND, this.kind, this.value]
   }
 }
-ExprNullaryBase.OPTIONS = ['logical', 'number', 'string', 'datetime', 'column']
+ExprNullaryBase.OPTIONS = [
+  'column',
+  'datetime',
+  'logical',
+  'number',
+  'text'
+]
 
 /**
  * Generic unary expressions (never instantiated directly).
@@ -121,6 +128,44 @@ class ExprTernaryBase extends ExprBase {
 // ----------------------------------------------------------------------
 
 /**
+ * Column value.
+ * @param {string} column The column name.
+ * @returns The value
+ */
+class ExprColumn extends ExprNullaryBase {
+  constructor (name) {
+    util.check(name && (typeof name === 'string'),
+               `Column name must be string`)
+    super(ExprColumn.KIND, name)
+  }
+
+  run (row, i) {
+    util.check(typeof row === 'object',
+               `Row must be object`)
+    util.check(this.value in row,
+               `${this.name} not in row`)
+    return row[this.value]
+  }
+}
+ExprColumn.KIND = 'column'
+
+/**
+ * Datetime value.
+ */
+class ExprDatetime extends ExprNullaryBase {
+  constructor (value) {
+    util.check((value === MISSING) || (value instanceof Date),
+               `Datetime value must be missing or date`)
+    super(ExprDatetime.KIND, value)
+  }
+
+  run (row, i) {
+    return this.value
+  }
+}
+ExprDatetime.KIND = 'datetime'
+
+/**
  * Logical value.
  */
 class ExprLogical extends ExprNullaryBase {
@@ -155,56 +200,115 @@ ExprNumber.KIND = 'number'
 /**
  * Text value.
  */
-class ExprString extends ExprNullaryBase {
+class ExprText extends ExprNullaryBase {
   constructor (value) {
     util.check((value === MISSING) || (typeof value === 'string'),
                `String value must be missing or string`)
-    super(ExprString.KIND, value)
+    super(ExprText.KIND, value)
   }
 
   run (row, i) {
     return this.value
   }
 }
-ExprString.KIND = 'string'
+ExprText.KIND = 'text'
 
 /**
- * Datetime value.
+ * Row number.
  */
-class ExprDatetime extends ExprNullaryBase {
-  constructor (value) {
-    util.check((value === MISSING) || (value instanceof Date),
-               `Datetime value must be missing or date`)
-    super(ExprDatetime.KIND, value)
+class ExprRowNum extends ExprBase {
+  constructor () {
+    super(ExprRowNum.KIND)
+  }
+
+  equal (other) {
+    return other instanceof ExprRowNum
+  }
+
+  toJSON () {
+    return [ExprKIND, this.kind]
   }
 
   run (row, i) {
-    return this.value
+    return i
   }
 }
-ExprDatetime.KIND = 'datetime'
+ExprRowNum.KIND = 'rownum'
 
 /**
- * Column value.
- * @param {string} column The column name.
- * @returns The value
+ * Exponential random variable
  */
-class ExprColumn extends ExprNullaryBase {
-  constructor (name) {
-    util.check(name && (typeof name === 'string'),
-               `Column name must be string`)
-    super(ExprColumn.KIND, name)
+class ExprExponential extends ExprBase {
+  constructor (rate) {
+    super(ExprExponential.KIND)
+    this.rate = rate
+  }
+
+  equal (other) {
+    return other instanceof ExprExponential
+  }
+
+  toJSON () {
+    return [Expr.KIND, this.kind, this.rate]
   }
 
   run (row, i) {
-    util.check(typeof row === 'object',
-               `Row must be object`)
-    util.check(this.value in row,
-               `${this.name} not in row`)
-    return row[this.value]
+    return stdlib.random.base.exponential(this.rate)
   }
 }
-ExprColumn.KIND = 'column'
+ExprExponential.KIND = 'exponential'
+
+/**
+ * Normal random variable
+ */
+class ExprNormal extends ExprBase {
+  constructor (mean, stdDev) {
+    super(ExprNormal.KIND)
+    this.mean = mean
+    this.stdDev = stdDev
+  }
+
+  equal (other) {
+    return (other instanceof ExprNormal) &&
+      (this.mean === other.mean) &&
+      (this.stdDev === other.stdDev)
+  }
+
+  toJSON () {
+    return [Expr.KIND, this.kind, this.mean, this.stdDev]
+  }
+
+  run (row, i) {
+    return stdlib.random.base.normal(this.mean, this.stdDev)
+  }
+}
+ExprNormal.KIND = 'normal'
+
+/**
+ * Uniform random variable
+ */
+class ExprUniform extends ExprBase {
+  constructor (low, high) {
+    super(ExprUniform.KIND)
+    this.low = low
+    this.high = high
+  }
+
+  equal (other) {
+    return (other instanceof ExprNormal) &&
+      (this.low === other.low) &&
+      (this.high === other.high)
+  }
+
+  toJSON () {
+    return [Expr.KIND, this.kind, this.low, this.high]
+  }
+
+  run (row, i) {
+    return stdlib.random.base.uniform(this.low, this.high)
+  }
+}
+ExprUniform.KIND = 'uniform'
 
 // ----------------------------------------------------------------------
 
@@ -939,11 +1043,15 @@ const Expr = {
   KIND: '@expr',
 
   base: ExprBase,
+  column: ExprColumn,
+  datetime: ExprDatetime,
   logical: ExprLogical,
   number: ExprNumber,
-  string: ExprString,
-  datetime: ExprDatetime,
-  column: ExprColumn,
+  text: ExprText,
+  rownum: ExprRowNum,
+  exponential: ExprExponential,
+  normal: ExprNormal,
+  uniform: ExprUniform,
   add: ExprAdd,
   and: ExprAnd,
   divide: ExprDivide,

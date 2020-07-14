@@ -102,10 +102,19 @@ const getCode = () => {
         .getTopBlocks()
         .map(top => {
           const blocks = []
-          for (let curr = top; curr; curr = curr.getNextBlock()) {
+          let curr = top
+          while (curr && (curr instanceof Blockly.Block)) {
             blocks.push(curr)
+            curr = curr.getNextBlock()
           }
-          const stages = blocks.map(block => Blockly.JavaScript.blockToCode(block, true))
+          const stages = blocks.map(block => {
+            // Expressions are pairs of (code, priority), so extract code.
+            let temp = Blockly.JavaScript.blockToCode(block, true)
+            if (Array.isArray(temp)) {
+              temp = temp[0]
+            }
+            return temp
+          })
           stages.unshift('"@pipeline"')
           return `[${stages}]`
         })

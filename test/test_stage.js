@@ -61,7 +61,7 @@ describe('build dataframe operations', () => {
 
   it('builds mutate stage', (done) => {
     const runner = new Environment(fixture.ReadLocalData)
-    const mutater = new Expr.string('stuff')
+    const mutater = new Expr.text('stuff')
     const stage = new Stage.mutate('value', mutater)
     const result = stage.run(runner, new DataFrame(fixture.names))
     assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),

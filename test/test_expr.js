@@ -378,8 +378,8 @@ describe('type conversions', () => {
       [new Expr.logical(MISSING), Expr.toLogical, MISSING],
       [new Expr.logical(false), Expr.toLogical, false],
       [new Expr.logical(true), Expr.toLogical, true],
-      [new Expr.string(''), Expr.toLogical, false],
-      [new Expr.string('abc'), Expr.toLogical, true],
+      [new Expr.text(''), Expr.toLogical, false],
+      [new Expr.text('abc'), Expr.toLogical, true],
       [new Expr.number(0), Expr.toLogical, false],
       [new Expr.number(-3), Expr.toLogical, true],
       [new Expr.number(9.5), Expr.toLogical, true],
@@ -387,14 +387,14 @@ describe('type conversions', () => {
       [new Expr.logical(false), Expr.toNumber, 0],
       [new Expr.logical(true), Expr.toNumber, 1],
       [new Expr.number(123.4), Expr.toNumber, 123.4],
-      [new Expr.string('abc'), Expr.toNumber, MISSING],
-      [new Expr.string('678'), Expr.toNumber, 678],
+      [new Expr.text('abc'), Expr.toNumber, MISSING],
+      [new Expr.text('678'), Expr.toNumber, 678],
       [new Expr.datetime(new Date(0)), Expr.toNumber, 0],
-      [new Expr.string(MISSING), Expr.toString, MISSING],
+      [new Expr.text(MISSING), Expr.toString, MISSING],
       [new Expr.logical(false), Expr.toString, 'false'],
       [new Expr.logical(true), Expr.toString, 'true'],
       [new Expr.number(-123), Expr.toString, '-123'],
-      [new Expr.string('abc'), Expr.toString, 'abc'],
+      [new Expr.text('abc'), Expr.toString, 'abc'],
       [new Expr.datetime(new Date(0)), Expr.toString,
        'Wed Dec 31 1969 19:00:00 GMT-0500 (Eastern Standard Time)']
     ]
@@ -409,8 +409,8 @@ describe('type conversions', () => {
 
   it('converts non-datetimes correctly', (done) => {
     const checks = [new Expr.logical(MISSING),
-                    new Expr.string(''),
-                    new Expr.string('abc')]
+                    new Expr.text(''),
+                    new Expr.text('abc')]
     for (const input of checks) {
       const op = new Expr.toDatetime(input)
       const actual = op.run({}, 0)
@@ -421,7 +421,7 @@ describe('type conversions', () => {
   })
 
   it('converts valid datetimes correctly', (done) => {
-    const checks = [[new Expr.string('1983-12-02'), new Date('1983-12-02')],
+    const checks = [[new Expr.text('1983-12-02'), new Date('1983-12-02')],
                     [new Expr.number(123), new Date(123)]
     ]
     for (const [expr, expected] of checks) {
@@ -480,10 +480,10 @@ describe('extract values from datetimes', () => {
 
 describe('expression equality tests', () => {
   it('compares constants', (done) => {
-    const const_one = new Expr.string('one')
+    const const_one = new Expr.text('one')
     assert(const_one.equal(const_one),
            `Same should equal`)
-    const const_two = new Expr.string('two')
+    const const_two = new Expr.text('two')
     assert(!const_one.equal(const_two),
            `Different should not equal`)
     const col_three = new Expr.column('three')
@@ -496,11 +496,11 @@ describe('expression equality tests', () => {
   })
 
   it('compares unary expressions', (done) => {
-    const const_one = new Expr.string('one')
+    const const_one = new Expr.text('one')
     const negate_one = new Expr.negate(const_one)
     assert(negate_one.equal(negate_one),
            `Same should equal`)
-    const negate_two = new Expr.negate(new Expr.string('two'))
+    const negate_two = new Expr.negate(new Expr.text('two'))
     assert(!negate_one.equal(negate_two),
            `Different nested should not equal`)
     const not_one = new Expr.not(const_one)
@@ -533,6 +533,49 @@ describe('expression equality tests', () => {
     const if_2 = new Expr.ifElse(cond_1, val_1_true, val_2_false)
     assert(!if_2.equal(if_1),
            `Unequal nested expressions`)
+    done()
+  })
+})
+
+describe('row numbers', () => {
+  it('extracts row numbers', (done) => {
+    const rownum = new Expr.rownum()
+    const expected = [0, 1, 2, 3, 4, 5]
+    const actual = fixture.number.map((row, i) => rownum.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Got wrong value(s)`)
+    done()
+  })
+})
+
+describe('random values', () => {
+  it('generates exponential values', (done) => {
+    const exponential = new Expr.exponential(1.0)
+    const actual = fixture.number.map((row, i) => exponential.run(row, i))
+    assert.equal(fixture.number.length, actual.length,
+                 `Wrong number of values`)
+    assert(actual.every(x => (0 <= x)),
+           `Expected non-negative values`)
+    done()
+  })
+
+  it('generates normal values', (done) => {
+    const normal = new Expr.normal(5.0, 0.1)
+    const actual = fixture.number.map((row, i) => normal.run(row, i))
+    assert.equal(fixture.number.length, actual.length,
+                 `Wrong number of values`)
+    assert(actual.every(x => (0 <= x)),
+           `Expected non-negative values`)
+    done()
+  })
+
+  it('generates uniform values', (done) => {
+    const uniform = new Expr.uniform(1.0, 2.0)
+    const actual = fixture.number.map((row, i) => uniform.run(row, i))
+    assert.equal(fixture.number.length, actual.length,
+                 `Wrong number of values`)
+    assert(actual.every(x => ((1.0 <= x) && (x <= 2.0))),
+           `Expected values in range`)
     done()
   })
 })

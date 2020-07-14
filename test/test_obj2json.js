@@ -29,8 +29,8 @@ describe('persistence infrastructure', () => {
 
 describe('expression persistence', () => {
   it('persists constants', (done) => {
-    assert.deepEqual([Expr.KIND, 'string', 'orange'],
-                     (new Expr.string('orange')).toJSON(),
+    assert.deepEqual([Expr.KIND, 'text', 'orange'],
+                     (new Expr.text('orange')).toJSON(),
                      `Mis-match`)
     done()
   })
@@ -62,12 +62,12 @@ describe('expression persistence', () => {
 
   it('persists ternary expressions', (done) => {
     const expr = new Expr.ifElse(new Expr.logical(true),
-                                 new Expr.string('a'),
-                                 new Expr.string('b'))
+                                 new Expr.text('a'),
+                                 new Expr.text('b'))
     const expected = [Expr.KIND, 'ifElse',
                       [Expr.KIND, 'logical', true],
-                      [Expr.KIND, 'string', 'a'],
-                      [Expr.KIND, 'string', 'b']]
+                      [Expr.KIND, 'text', 'a'],
+                      [Expr.KIND, 'text', 'b']]
     assert.deepEqual(expected, expr.toJSON(),
                      `Mis-match`)
     done()
