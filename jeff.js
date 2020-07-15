@@ -6,12 +6,12 @@ const {DataFrame} = require('./libs/dataframe')
 const {JsonToObj} = require('./libs/json2obj')
 const {Environment} = require('./libs/environment')
 
-const {STAGE_PREFIX, STAGE_SUFFIX} = require('./blocks/util')
-const data_blocks = require('./blocks/data')
-const operation_blocks = require('./blocks/operation')
-const transform_blocks = require('./blocks/transform')
-const value_blocks = require('./blocks/value')
-const combine_blocks = require('./blocks/combine')
+// Load for their side effects (block definitions).
+require('./blocks/data')
+require('./blocks/operation')
+require('./blocks/transform')
+require('./blocks/value')
+require('./blocks/combine')
 
 // Match valid single column name: spaces before and/or after, starts with
 // letter, followed by letter/digit/underscore.
@@ -229,17 +229,7 @@ const createSettings = (toolbox) => {
  * the UI and of the element that contains the block specs.
  */
 const setup = (divId, toolboxId) => {
-  // Initialize blocks.
-  [
-    data_blocks,
-    operation_blocks,
-    transform_blocks,
-    value_blocks,
-    combine_blocks
-  ].forEach(b => b.setup())
   createValidators()
-
-  // Create workspace.
   const toolbox = document.getElementById(toolboxId)
   const settings = createSettings(toolbox)
   TidyBlocksWorkspace = Blockly.inject(divId, settings)

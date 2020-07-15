@@ -1,24 +1,18 @@
 const Blockly = require('blockly')
 
-const setup = () => {
-  Blockly.defineBlocksWithJsonArray([
-    // Colors
-    {
-      type: 'data_colors',
-      message0: 'Colors dataset',
-      nextStatement: null,
-      style: 'data_block',
-      hat: 'cap',
-      tooltip: 'eleven colors'
-    }
-  ])
-
+Blockly.defineBlocksWithJsonArray([
   // Colors
-  Blockly.JavaScript['data_colors'] = (block) => {
-    return `["@stage", "read", "colors.csv"]`
+  {
+    type: 'data_colors',
+    message0: 'Colors dataset',
+    nextStatement: null,
+    style: 'data_block',
+    hat: 'cap',
+    tooltip: 'eleven colors'
   }
-}
+])
 
-module.exports = {
-  setup
+// Colors
+Blockly.JavaScript['data_colors'] = (block) => {
+  return `["@stage", "read", "colors.csv"]`
 }
