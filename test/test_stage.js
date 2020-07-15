@@ -281,20 +281,6 @@ describe('build plots', () => {
 })
 
 describe('build statistics', () => {
-  it('runs an ANOVA', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
-    const stage = new Stage.ANOVA(0.05, 'green', 'blue')
-    const result = stage.run(runner, new DataFrame(fixture.Colors))
-    done()
-  })
-
-  it('runs Kolmogorov-Smirnov', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
-    const stage = new Stage.KolmogorovSmirnov(0.01, 2.0, 0.75, 'blue')
-    const result = stage.run(runner, new DataFrame(fixture.Colors))
-    done()
-  })
-
   it('runs Kruskal-Wallis', (done) => {
     const runner = new Environment(fixture.ReadLocalData)
     const stage = new Stage.KruskalWallis(0.05, 'green', 'blue')

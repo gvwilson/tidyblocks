@@ -7,53 +7,6 @@ const stats = require('@stdlib/stats')
  */
 class Statistics {
   /**
-   * ANOVA test.
-   * @param {DataFrame} df Dataframe being operated on.
-   * @param {number} significance Significance threshold.
-   * @param {string} groupName Column to use for grouping.
-   * @param {string} valueName Column to use for values.
-   * @returns Result and legend.
-   */
-  static ANOVA (df, significance, groupName, valueName) {
-    const groups = df.data.map(row => row[groupName])
-    const values = df.data.map(row => row[valueName])
-    const result = stats.anova1(values, groups,
-                                {alpha: significance})
-    const legend = {
-      _title: 'ANOVA',
-      rejected: 'is null hypothesis rejected?',
-      pValue: 'p-value',
-      statistic: 'measure value',
-      alpha: 'significance'
-    }
-    return {result, legend}
-  }
-
-  /**
-   * Kolmogorov-Smirnov test for normality.
-   * @param {DataFrame} df Dataframe being operated on.
-   * @param {number} mean Mean value tested for.
-   * @param {number} stdDev Standard deviation tested for.
-   * @param {number} significance Significance threshold.
-   * @param {string} colName The column being analyzed.
-   * @returns Result and legend.
-   */
-  static KolmogorovSmirnov (df, mean, stdDev, significance, colName) {
-    const samples = df.data.map(row => row[colName])
-    const result = stats.kstest(samples, 'uniform',
-                                mean, stdDev,
-                                {alpha: significance})
-    const legend = {
-      _title: 'Kolmogorov-Smirnov test for normality',
-      rejected: 'is null hypothesis rejected?',
-      pValue: 'p-value',
-      statistic: 'measure value',
-      alpha: 'significance'
-    }
-    return {result, legend}
-  }
-
-  /**
    * Kruskal-Wallis test.
    * @param {DataFrame} df Dataframe being operated on.
    * @param {number} significance Significance threshold.

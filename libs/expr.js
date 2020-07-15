@@ -1,7 +1,7 @@
 'use strict'
 
 const util = require('./util')
-const stdlib = require('@stdlib/stdlib')
+const random = require('@stdlib/random/base')
 const MISSING = util.MISSING
 
 /**
@@ -253,7 +253,7 @@ class ExprExponential extends ExprBase {
   }
 
   run (row, i) {
-    return stdlib.random.base.exponential(this.rate)
+    return random.exponential(this.rate)
   }
 }
 ExprExponential.KIND = 'exponential'
@@ -279,7 +279,7 @@ class ExprNormal extends ExprBase {
   }
 
   run (row, i) {
-    return stdlib.random.base.normal(this.mean, this.stdDev)
+    return random.normal(this.mean, this.stdDev)
   }
 }
 ExprNormal.KIND = 'normal'
@@ -305,7 +305,7 @@ class ExprUniform extends ExprBase {
   }
 
   run (row, i) {
-    return stdlib.random.base.uniform(this.low, this.high)
+    return random.uniform(this.low, this.high)
   }
 }
 ExprUniform.KIND = 'uniform'
