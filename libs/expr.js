@@ -38,13 +38,6 @@ class ExprNullaryBase extends ExprBase {
     return [Expr.KIND, this.kind, this.value]
   }
 }
-ExprNullaryBase.OPTIONS = [
-  'column',
-  'datetime',
-  'logical',
-  'number',
-  'text'
-]
 
 /**
  * Generic unary expressions (never instantiated directly).
@@ -320,10 +313,6 @@ class ExprNegationBase extends ExprUnary {
     super(kind, arg)
   }
 }
-ExprNegationBase.OPTIONS = [
-  ['-', 'negate'],
-  'not'
-]
 
 /**
  * Arithmetic negation.
@@ -378,13 +367,6 @@ class ExprTypecheckBase extends ExprUnary {
       : (typeof value === typeName)
   }
 }
-ExprTypecheckBase.OPTIONS = [
-  'isDatetime',
-  'isLogical',
-  'isMissing',
-  'isNumber',
-  'isText'
-]
 
 /**
  * Check if a value is Boolean.
@@ -478,7 +460,6 @@ class ExprConvertBase extends ExprUnary {
     super(kind, arg)
   }
 }
-ExprConvertBase.OPTIONS = ['toLogical', 'toDatetime', 'toNumber', 'toString']
 
 /**
  * Convert a value to Boolean.
@@ -596,8 +577,6 @@ class ExprDatetimeBase extends ExprUnary {
     return func(value)
   }
 }
-ExprDatetimeBase.OPTIONS = ['toYear', 'toMonth', 'toDay', 'toWeekday',
-                            'toHours', 'toMinutes', 'toSeconds']
 
 /**
  * Extract year from date.
@@ -733,9 +712,6 @@ class ExprArithmeticBase extends ExprBinary {
       : this.safeValue(func(left, right))
   }
 }
-ExprArithmeticBase.OPTIONS = [['+', 'add'], ['-', 'subtract'],
-                          ['*', 'multiply'], ['/', 'divide'],
-                          ['%', 'remainder'], ['**', 'power']]
 
 /**
  * Addition.
@@ -859,9 +835,6 @@ class ExprCompareBase extends ExprBinary {
       : func(left, right)
   }
 }
-ExprCompareBase.OPTIONS = [['==', 'equal'], ['!=', 'notEqual'],
-                       ['&gt;', 'greater'], ['&gt;=', 'greaterEqual'],
-                       ['&lt;=', 'lessEqual'], ['&lt;', 'less']]
 
 /**
  * Equality.
@@ -975,7 +948,6 @@ class ExprLogicalBase extends ExprBinary {
     super(kind, left, right)
   }
 }
-ExprLogicalBase.OPTIONS = ['and', 'or']
 
 /**
  * Logical conjunction.
