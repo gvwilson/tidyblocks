@@ -453,20 +453,20 @@ class ExprIsNumber extends ExprTypecheckBase {
 ExprIsNumber.KIND = 'isNumber'
 
 /**
- * Check if a value is a string.
+ * Check if a value is text.
  * @param {expr} arg How to get the value.
  * @returns Boolean result.
  */
-class ExprIsString extends ExprTypecheckBase {
+class ExprIsText extends ExprTypecheckBase {
   constructor (arg) {
-    super(ExprIsString.KIND, arg)
+    super(ExprIsText.KIND, arg)
   }
 
   run (row, i) {
     return this.typeCheck(row, i, 'string')
   }
 }
-ExprIsString.KIND = 'isString'
+ExprIsText.KIND = 'isText'
 
 // ----------------------------------------------------------------------
 
@@ -1081,7 +1081,7 @@ const Expr = {
   isDatetime: ExprIsDatetime,
   isMissing: ExprIsMissing,
   isNumber: ExprIsNumber,
-  isString: ExprIsString,
+  isText: ExprIsText,
   toLogical: ExprToLogical,
   toDatetime: ExprToDatetime,
   toNumber: ExprToNumber,
