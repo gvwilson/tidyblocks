@@ -54,7 +54,7 @@ describe('executes program', () => {
     const df = new DataFrame([])
     const env = new Environment(ReadLocalData)
     program.env = env
-    program.signal('name', df)
+    program.notify('name', df)
     assert(df.equal(env.getResult('name')),
            `Should be able to get data after notifying`)
     done()
@@ -115,7 +115,7 @@ describe('executes program', () => {
                  `Should have one non-runnable pipeline`)
 
     program.env = new Environment(ReadLocalData)
-    program.signal('first', df)
+    program.notify('first', df)
     assert.equal(program.waiting.size, 0,
                  `Waiting set should be empty`)
     assert.equal(program.queue.length, 1,
@@ -138,14 +138,14 @@ describe('executes program', () => {
                  `Should have one non-runnable pipeline`)
 
     for (const name of ['third', 'second']) {
-      program.signal(name, df)
+      program.notify(name, df)
       assert(program.waiting.size > 0,
              `Pipeline should still be waiting`)
       assert.equal(program.queue.length, 0,
                    `Nothing should be runnable`)
     }
 
-    program.signal('first', df)
+    program.notify('first', df)
     assert.equal(program.waiting.size, 0,
                  `Nothing should be waiting`)
     assert.equal(program.queue.length, 1,
@@ -169,7 +169,7 @@ describe('executes program', () => {
     assert.equal(program.waiting.size, 2,
                  `Should have two non-runnable pipelines`)
 
-    program.signal('else', df)
+    program.notify('else', df)
     assert.equal(program.waiting.size, 1,
                  `Should still have one waiting pipeline`)
     assert.equal(program.queue.length, 1,

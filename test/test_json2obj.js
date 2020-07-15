@@ -232,9 +232,9 @@ describe('stage persistence', () => {
   })
 
   it('restores notify from JSON', (done) => {
-    const label = 'signal'
+    const label = 'notification'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'notify', 'signal']),
+    assert.deepEqual(factory.stage([Stage.KIND, 'notify', label]),
                      new Stage.notify(label),
                      `notify`)
     done()
@@ -343,24 +343,6 @@ describe('plot persistence', () => {
 })
 
 describe('statistics persistence', () => {
-  it('restores ANOVA from JSON', (done) => {
-    const significance = 0.03, groupName = 'red', valueName = 'blue'
-    const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'ANOVA', significance, groupName, valueName]),
-                     new Stage.ANOVA(significance, groupName, valueName),
-                     `ANOVA`)
-    done()
-  })
-
-  it('restores Kolmogorov-Smirnov from JSON', (done) => {
-    const mean = 0.1, stdDev = 0.3, significance = 0.03, colName = 'red'
-    const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'KolmogorovSmirnov', mean, stdDev, significance, colName]),
-                     new Stage.KolmogorovSmirnov(mean, stdDev, significance, colName),
-                     `Kolmogorov-Smirnov`)
-    done()
-  })
-
   it('restores Kruskal-Wallis from JSON', (done) => {
     const significance = 0.03, groupName = 'red', valueName = 'blue'
     const factory = new JsonToObj()
@@ -424,7 +406,7 @@ describe('program persistence', () => {
        [Stage.KIND, 'unique', ['red']]],
       [Pipeline.KIND,
        [Stage.KIND, 'read', 'colors.csv'],
-       [Stage.KIND, 'notify', 'signal']]
+       [Stage.KIND, 'notify', 'notification']]
     ]
     const factory = new JsonToObj()
     const program = factory.program(fixture)

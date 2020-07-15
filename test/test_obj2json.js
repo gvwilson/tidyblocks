@@ -137,6 +137,14 @@ describe('stage persistence', () => {
                      `Mis-match`)
     done()
   })
+
+  it('persists notify', (done) => {
+    const stage = new Stage.notify('notification')
+    assert.deepEqual([Stage.KIND, 'notify', 'notification'],
+                     stage.toJSON(),
+                     `Mis-match`)
+    done()
+  })
 })
 
 describe('pipeline persistence', () => {
@@ -158,7 +166,7 @@ describe('program persistence', () => {
     const program = new Program(
       new Pipeline(new Stage.read('/path/to/first')),
       new Pipeline(new Stage.read('/path/to/second'), new Stage.unique(['left'])),
-      new Pipeline(new Stage.read('/path/to/third'), new Stage.notify('signal'))
+      new Pipeline(new Stage.read('/path/to/third'), new Stage.notify('notification'))
     )
     const actual = program.toJSON()
     const expected = [
@@ -170,7 +178,7 @@ describe('program persistence', () => {
        [Stage.KIND, 'unique', ['left']]],
       [Pipeline.KIND,
        [Stage.KIND, 'read', '/path/to/third'],
-       [Stage.KIND, 'notify', 'signal']]
+       [Stage.KIND, 'notify', 'notification']]
     ]
     assert.deepEqual(actual, expected,
                      `Wrong result for persisting program`)

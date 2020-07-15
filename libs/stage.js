@@ -220,19 +220,19 @@ StageMutate.KIND = 'mutate'
 
 /**
  * Notify that a result is available.
- * @param {string} signal Name to use for notification.
+ * @param {string} label Name to use for notification.
  */
 class StageNotify extends StageTransform {
-  constructor (signal) {
-    util.check(typeof signal === 'string',
+  constructor (label) {
+    util.check(typeof label === 'string',
                `Expected string`)
-    super(StageNotify.KIND, [], signal, true, false)
-    this.signal = signal
+    super(StageNotify.KIND, [], label, true, false)
+    this.label = label
   }
 
   equal (other) {
     return super.equal(other) &&
-      (this.signal === other.signal)
+      (this.label === other.label)
   }
 
   run (runner, df) {
@@ -241,7 +241,7 @@ class StageNotify extends StageTransform {
   }
 
   toJSON () {
-    return super.toJSON(this.signal)
+    return super.toJSON(this.label)
   }
 }
 StageNotify.KIND = 'notify'
@@ -587,39 +587,6 @@ class StageStats extends StageBase {
 }
 
 /**
- * ANOVA test.
- * @param {number} significane Significance threshold.
- * @param {string} groupName Column to use for grouping.
- * @param {string} valueName Column to use for values.
- */
-class StageANOVA extends StageStats {
-  constructor (significance, groupName, valueName) {
-    super('ANOVA', {significance, groupName, valueName})
-  }
-  runStats (df) {
-    return Statistics.ANOVA(df, this.significance,
-                            this.groupName, this.valueName)
-  }
-}
-
-/**
- * Kolmogorov-Smirnov test for normality.
- * @param {number} mean Mean value tested for.
- * @param {number} stdDev Standard deviation tested for.
- * @param {number} significance Significance threshold.
- * @param {string} colName The column being analyzed.
- */
-class StageKolmogorovSmirnov extends StageStats {
-  constructor (mean, stdDev, significance, colName) {
-    super('KolmogorovSmirnov', {mean, stdDev, significance, colName})
-  }
-  runStats (df) {
-    return Statistics.KolmogorovSmirnov(df, this.mean, this.stdDev,
-                                        this.significance, this.colName)
-  }
-}
-
-/**
  * Kruskal-Wallis test.
  * @param {number} significance Significance threshold.
  * @param {string} groupName Column to use for grouping.
@@ -710,8 +677,6 @@ const Stage = {
   dot: StageDot,
   histogram: StageHistogram,
   scatter: StageScatter,
-  ANOVA: StageANOVA,
-  KolmogorovSmirnov: StageKolmogorovSmirnov,
   KruskalWallis: StageKruskalWallis,
   TTestOneSample: StageTTestOneSample,
   TTestPaired: StageTTestPaired,

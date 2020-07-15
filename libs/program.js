@@ -40,18 +40,18 @@ class Program {
   }
 
   /**
-   * Signal the manager that a named pipeline has finished running.
+   * Notify the manager that a named pipeline has finished running.
    * This enqueues pipeline functions to run if their dependencies are satisfied.
    * @param {string} name Name of the pipeline that just completed.
    * @param {Object} data The DataFrame produced by the pipeline.
    */
-  signal (name, data) {
+  notify (name, data) {
     util.check(name && (typeof name === 'string'),
-               `Cannot signal with empty name`)
+               `Cannot notify with empty name`)
     util.check(data instanceof DataFrame,
                `Data must be a dataframe`)
     util.check(this.env instanceof Environment,
-               `Program must have non-null environment when signalling`)
+               `Program must have non-null environment when notifying`)
     this.env.setResult(name, data)
     const toRemove = []
     this.waiting.forEach((dependencies, pipeline) => {
@@ -83,7 +83,7 @@ class Program {
 
   /**
    * Run all pipelines in an order that respects dependencies within an environment.
-   * This depends on `signal` to add pipelines to the queue.
+   * This depends on `notify` to add pipelines to the queue.
    */
   run (env) {
     this.env = env
@@ -92,7 +92,7 @@ class Program {
         const pipeline = this.queue.shift()
         const {name, data} = pipeline.run(this.env)
         if (name) {
-          this.signal(name, data)
+          this.notify(name, data)
         }
       }
     }
