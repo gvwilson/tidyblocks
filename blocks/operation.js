@@ -314,7 +314,7 @@ Blockly.JavaScript['operation_datetime'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.JavaScript.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
-  const code = `(row, i) => ${type}(row, i, ${value})`
+  const code = `["@expr", "datetime", "${type}", ${value}]`
   return [code, order]
 }
 
