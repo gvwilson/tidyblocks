@@ -7,11 +7,12 @@ const {JsonToObj} = require('./libs/json2obj')
 const {Environment} = require('./libs/environment')
 
 // Load for their side effects (block definitions).
+require('./blocks/combine')
 require('./blocks/data')
 require('./blocks/operation')
+require('./blocks/plot')
 require('./blocks/transform')
 require('./blocks/value')
-require('./blocks/combine')
 
 // Match valid single column name: spaces before and/or after, starts with
 // letter, followed by letter/digit/underscore.
@@ -46,11 +47,12 @@ const MULTI_COL_FIELDS = [
  * Theme for all blocks.
  */
 const createTheme = () => {
-  const data_color = '#FEBE4C',
+  const combine_color = '#404040',
+        data_color = '#FEBE4C',
         operation_color = '#F9B5B2',
+        plot_color = '#A4C588',
         transform_color = '#76AADB',
-        value_color = '#E7553C',
-        combine_color = '#404040'
+        value_color = '#E7553C'
 
   return Blockly.Theme.defineTheme('jeff', {
     base: Blockly.Themes.Classic,
@@ -61,10 +63,21 @@ const createTheme = () => {
         colourTertiary: '#9B732F',
         hat: 'cap'
       },
+      combine_block: {
+        colourPrimary: combine_color,
+        colourSecondary: '#404040',
+        colourTertiary: '#A0A0A0',
+        hat: 'cap'
+      },
       operation_block: {
         colourPrimary: operation_color,
         colourSecondary: '#CD5C5C',
         colourTertiary: '#CD5C5C'
+      },
+      plot_block: {
+        colourPrimary: plot_color,
+        colourSecondary: '#64C7FF',
+        colourTertiary: '#586B4B'
       },
       transform_block: {
         colourPrimary: transform_color,
@@ -75,20 +88,15 @@ const createTheme = () => {
         colourPrimary: value_color,
         colourSecondary: '#64C7FF',
         colourTertiary: '#760918'
-      },
-      combine_block: {
-        colourPrimary: combine_color,
-        colourSecondary: '#404040',
-        colourTertiary: '#A0A0A0',
-        hat: 'cap'
-      },
+      }
     },
     categoryStyles: {
+      combine: {colour: combine_color},
       data: {colour: data_color},
       operation: {colour: operation_color},
+      plot: {colour: plot_color},
       transform: {colour: transform_color},
-      value: {colour: value_color},
-      combine: {colour: combine_color}
+      value: {colour: value_color}
     }
   })
 }
