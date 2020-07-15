@@ -166,7 +166,7 @@ Blockly.JavaScript['value_column'] = (block) => {
 
 // Datetime
 Blockly.JavaScript['value_datetime'] = (block) => {
-  const value = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
+  const value = block.getFieldValue('VALUE')
   const code = `["@expr", "datetime", "${value}"]`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
@@ -191,8 +191,8 @@ Blockly.JavaScript['value_number'] = (block) => {
 
 // Text
 Blockly.JavaScript['value_text'] = (block) => {
-  const value = Blockly.JavaScript.quote_(block.getFieldValue('VALUE'))
-  const code = `["@expr", "text", ${value}]`
+  const value = block.getFieldValue('VALUE')
+  const code = `["@expr", "text", "${value}"]`
   return [code, Blockly.JavaScript.ORDER_ATOMIC]
 }
 

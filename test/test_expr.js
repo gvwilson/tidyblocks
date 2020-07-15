@@ -321,13 +321,13 @@ describe('type checks', () => {
     const allChecks = [
       [new Expr.isDatetime(getBool), 'datetime', 'bool'],
       [new Expr.isNumber(getBool), 'num', 'bool'],
-      [new Expr.isString(getBool), 'text', 'bool'],
+      [new Expr.isText(getBool), 'text', 'bool'],
       [new Expr.isLogical(getDate), 'bool', 'datetime'],
       [new Expr.isNumber(getDate), 'num', 'datetime'],
-      [new Expr.isString(getDate), 'text', 'datetime'],
+      [new Expr.isText(getDate), 'text', 'datetime'],
       [new Expr.isLogical(getNum), 'bool', 'num'],
       [new Expr.isDatetime(getNum), 'datetime', 'num'],
-      [new Expr.isString(getNum), 'text', 'num'],
+      [new Expr.isText(getNum), 'text', 'num'],
       [new Expr.isLogical(getStr), 'bool', 'str'],
       [new Expr.isDatetime(getStr), 'datetime', 'str'],
       [new Expr.isNumber(getStr), 'num', 'str']
@@ -345,7 +345,7 @@ describe('type checks', () => {
       [new Expr.isLogical(getBool), 'bool'],
       [new Expr.isDatetime(getDate), 'datetime'],
       [new Expr.isNumber(getNum), 'num'],
-      [new Expr.isString(getStr), 'text']
+      [new Expr.isText(getStr), 'text']
     ]
     for (const [check, name] of allChecks) {
       assert.deepEqual(fixture.mixed.map((row, i) => check.run(row, i)),

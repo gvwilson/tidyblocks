@@ -121,7 +121,7 @@ describe('expression persistence', () => {
       ['isDatetime', Expr.isDatetime],
       ['isMissing', Expr.isMissing],
       ['isNumber', Expr.isNumber],
-      ['isString', Expr.isString]
+      ['isText', Expr.isText]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()

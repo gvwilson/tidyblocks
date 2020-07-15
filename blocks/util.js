@@ -1,5 +1,9 @@
 const Blockly = require('blockly')
 
+/**
+ * Turn a string containing comma-separated column names into an array of
+ * JavaScript strings.
+ */
 const formatMultipleColumnNames = (raw) => {
   const joined = raw
         .split(',')
@@ -10,6 +14,14 @@ const formatMultipleColumnNames = (raw) => {
   return `[${joined}]`
 }
 
+/**
+ * Get the value of a sub-block as text or null if the sub-block is empty.
+ */
+const valueToCode = (block, label, order) => {
+  return Blockly.JavaScript.valueToCode(block, label, order) || null
+}
+
 module.exports = {
-  formatMultipleColumnNames
+  formatMultipleColumnNames,
+  valueToCode
 }

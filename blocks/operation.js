@@ -1,5 +1,7 @@
 const Blockly = require('blockly')
 
+const {valueToCode} = require('./util')
+
 Blockly.defineBlocksWithJsonArray([
   // Binary arithmetic
   {
@@ -143,11 +145,11 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'TYPE',
         options: [
-          ['date', 'isDateTime'],
+          ['date', 'isDatetime'],
           ['logical', 'isLogical'],
           ['missing', 'isMissing'],
           ['number', 'isNumber'],
-          ['string', 'isString']
+          ['text', 'isText']
         ]
       }
     ],
@@ -243,10 +245,10 @@ Blockly.defineBlocksWithJsonArray([
 
 // Binary arithmetic
 Blockly.JavaScript['operation_arithmetic'] = (block) => {
-  const operator = block.getFieldValue('OP')
+  const op = block.getFieldValue('OP')
   const order = Blockly.JavaScript.ORDER_NONE
-  const left = Blockly.JavaScript.valueToCode(block, 'LEFT', order)
-  const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', order)
+  const left = valueToCode(block, 'LEFT', order)
+  const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "${op}", ${left}, ${right}]`
   return [code, order]
 }
@@ -254,7 +256,7 @@ Blockly.JavaScript['operation_arithmetic'] = (block) => {
 // Arithmetic negation
 Blockly.JavaScript['operation_negate'] = (block) => {
   const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
+  const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "negate", ${value}]`
   return [code, order]
 }
@@ -265,8 +267,8 @@ Blockly.JavaScript['operation_compare'] = (block) => {
   const order = (op === 'eq' || op === 'neq')
         ? Blockly.JavaScript.ORDER_EQUALITY
         : Blockly.JavaScript.ORDER_RELATIONAL
-  const left = Blockly.JavaScript.valueToCode(block, 'LEFT', order)
-  const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', order)
+  const left = valueToCode(block, 'LEFT', order)
+  const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "${op}", ${left}, ${right}]`
   return [code, order]
 }
@@ -275,8 +277,8 @@ Blockly.JavaScript['operation_compare'] = (block) => {
 Blockly.JavaScript['operation_logical'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.JavaScript.ORDER_NONE
-  const left = Blockly.JavaScript.valueToCode(block, 'LEFT', order)
-  const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', order)
+  const left = valueToCode(block, 'LEFT', order)
+  const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "${op}", ${left}, ${right}]`
   return [code, Blockly.JavaScript.ORDER_NONE]
 }
@@ -284,7 +286,7 @@ Blockly.JavaScript['operation_logical'] = (block) => {
 // Logical negation
 Blockly.JavaScript['operation_not'] = (block) => {
   const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
+  const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "not", ${value}]`
   return [code, order]
 }
@@ -293,7 +295,7 @@ Blockly.JavaScript['operation_not'] = (block) => {
 Blockly.JavaScript['operation_type'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
+  const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "${type}", ${value}]`
   return [code, order]
 }
@@ -302,7 +304,7 @@ Blockly.JavaScript['operation_type'] = (block) => {
 Blockly.JavaScript['operation_convert'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
+  const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "${type}", ${value}]`
   return [code, order]
 }
@@ -311,7 +313,7 @@ Blockly.JavaScript['operation_convert'] = (block) => {
 Blockly.JavaScript['operation_datetime'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.JavaScript.ORDER_NONE
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', order)
+  const value = valueToCode(block, 'VALUE', order)
   const code = `(row, i) => ${type}(row, i, ${value})`
   return [code, order]
 }
@@ -319,9 +321,9 @@ Blockly.JavaScript['operation_datetime'] = (block) => {
 // Conditional
 Blockly.JavaScript['operation_conditional'] = (block) => {
   const order = Blockly.JavaScript.ORDER_NONE
-  const cond = Blockly.JavaScript.valueToCode(block, 'COND', order)
-  const left = Blockly.JavaScript.valueToCode(block, 'LEFT', order)
-  const right = Blockly.JavaScript.valueToCode(block, 'RIGHT', order)
+  const cond = valueToCode(block, 'COND', order)
+  const left = valueToCode(block, 'LEFT', order)
+  const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "ifElse", ${cond}, ${left}, ${right}]`
   return [code, Blockly.JavaScript.ORDER_NONE]
 }

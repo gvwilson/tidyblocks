@@ -1,5 +1,8 @@
 const Blockly = require('blockly')
-const {formatMultipleColumnNames} = require('./util')
+const {
+  formatMultipleColumnNames,
+  valueToCode
+} = require('./util')
 
 Blockly.defineBlocksWithJsonArray([
   // Drop
@@ -205,7 +208,7 @@ Blockly.JavaScript['transform_drop'] = (block) => {
 
 // Filter
 Blockly.JavaScript['transform_filter'] = (block) => {
-  const expr = Blockly.JavaScript.valueToCode(block, 'TEST', Blockly.JavaScript.ORDER_NONE)
+  const expr = valueToCode(block, 'TEST', Blockly.JavaScript.ORDER_NONE)
   return `["@stage", "filter", ${expr}]`
 }
 
@@ -218,7 +221,7 @@ Blockly.JavaScript['transform_groupBy'] = (block) => {
 // Mutate
 Blockly.JavaScript['transform_mutate'] = (block) => {
   const column = block.getFieldValue('COLUMN')
-  const value = Blockly.JavaScript.valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE)
+  const value = valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE)
   return `["@stage", "mutate", "${column}", ${value}]`
 }
 

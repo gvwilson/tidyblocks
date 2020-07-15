@@ -320,7 +320,10 @@ class ExprNegationBase extends ExprUnary {
     super(kind, arg)
   }
 }
-ExprNegationBase.OPTIONS = [['-', 'negate'], 'not']
+ExprNegationBase.OPTIONS = [
+  ['-', 'negate'],
+  'not'
+]
 
 /**
  * Arithmetic negation.
@@ -375,8 +378,13 @@ class ExprTypecheckBase extends ExprUnary {
       : (typeof value === typeName)
   }
 }
-ExprTypecheckBase.OPTIONS = ['isLogical', 'isDatetime', 'isMissing',
-                             'isNumber', 'isString']
+ExprTypecheckBase.OPTIONS = [
+  'isDatetime',
+  'isLogical',
+  'isMissing',
+  'isNumber',
+  'isText'
+]
 
 /**
  * Check if a value is Boolean.
