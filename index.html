@@ -8,7 +8,15 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
     <script src="./tidyblocks.min.js"></script>
-    <script src="./script.js"></script>
+    <script>
+      let UI = null
+      const setup = () => {
+        tidyblocks.Setup(window.document)
+        UI = tidyblocks.instance
+        Array.from(document.getElementsByClassName('buttonDefault'))
+          .forEach(b => b.click())
+      }
+    </script>
   </head>
   <body onload="setup()">
 
