@@ -122,6 +122,7 @@ const getWorkspace = () => {
 const getCode = () => {
   const pipelines = getWorkspace()
         .getTopBlocks()
+        .filter(block => (block.hat === 'cap'))
         .map(top => {
           const blocks = []
           let curr = top
