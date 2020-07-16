@@ -121,6 +121,28 @@ class ExprTernaryBase extends ExprBase {
 // ----------------------------------------------------------------------
 
 /**
+ * Absent value (placeholder for incomplete expressions).
+ */
+class ExprAbsent extends ExprBase {
+  constructor () {
+    super(ExprAbsent.KIND)
+  }
+
+  equal (other) {
+    return other instanceof ExprAbsent
+  }
+
+  toJSON () {
+    return [Expr.KIND, this.kind]
+  }
+
+  run (row, i) {
+    util.fail('Missing expression')
+  }
+}
+ExprAbsent.KIND = 'absent'
+
+/**
  * Column value.
  * @param {string} column The column name.
  * @returns The value
@@ -219,7 +241,7 @@ class ExprRowNum extends ExprBase {
   }
 
   toJSON () {
-    return [ExprKIND, this.kind]
+    return [Expr.KIND, this.kind]
   }
 
   run (row, i) {
@@ -1023,6 +1045,7 @@ const Expr = {
   KIND: '@expr',
 
   base: ExprBase,
+  absent: ExprAbsent,
   column: ExprColumn,
   datetime: ExprDatetime,
   logical: ExprLogical,

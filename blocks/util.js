@@ -15,10 +15,11 @@ const formatMultipleColumnNames = (raw) => {
 }
 
 /**
- * Get the value of a sub-block as text or null if the sub-block is empty.
+ * Get the value of a sub-block as text or an 'absent' placeholder if the
+ * sub-block is missing.
  */
 const valueToCode = (block, label, order) => {
-  return Blockly.JavaScript.valueToCode(block, label, order) || null
+  return Blockly.JavaScript.valueToCode(block, label, order) || `["@expr", "absent"]`
 }
 
 module.exports = {
