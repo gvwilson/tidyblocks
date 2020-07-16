@@ -42,14 +42,14 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 -   `libs/dataframe.js`: operations on data tables.
 
--   `libs/expr.js`: operations on table rows.
+-   `libs/expr.js`, `libs/value.js`, and `libs.op.js`: things that can go in table rows.
     These may be nested (i.e., `add(multiply(2, column('red')), column('blue'))`
 
 -   `libs/summarize.js`: summarization operations (such as `sum` and `max`).
 
 -   `libs/statistics.js`: statistical tests.
 
--   `libs/stage.js`: operations on entire tables.
+-   `libs/transform.js`: operations on entire tables.
     These use expressions, summarizers, and statistical tests.
 
 -   `libs/pipeline.js`: pipelines made up of stages.

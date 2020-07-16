@@ -3,25 +3,25 @@
   [
     "@pipeline",
     [
-      "@stage",
+      "@transform",
       "read",
       "colors.csv"
     ],
     [
-      "@stage",
+      "@transform",
       "groupBy",
       [
         "red"
       ]
     ],
     [
-      "@stage",
+      "@transform",
       "summarize",
       "maximum",
       "green"
     ],
     [
-      "@stage",
+      "@transform",
       "summarize",
       "minimum",
       "blue"

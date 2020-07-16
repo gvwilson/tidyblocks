@@ -3,32 +3,32 @@
   [
     "@pipeline",
     [
-      "@stage",
+      "@transform",
       "read",
       "colors.csv"
     ],
     [
-      "@stage",
+      "@transform",
       "mutate",
       "sum",
       [
-        "@expr",
+        "@op",
         "add",
         [
-          "@expr",
+          "@value",
           "number",
           1
         ],
         [
-          "@expr",
+          "@op",
           "multiply",
           [
-            "@expr",
+            "@value",
             "column",
             "green"
           ],
           [
-            "@expr",
+            "@value",
             "column",
             "blue"
           ]

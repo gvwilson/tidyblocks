@@ -3,12 +3,12 @@
   [
     "@pipeline",
     [
-      "@stage",
+      "@transform",
       "read",
       "colors.csv"
     ],
     [
-      "@stage",
+      "@transform",
       "sort",
       [
         "red"

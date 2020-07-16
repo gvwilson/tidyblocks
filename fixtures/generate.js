@@ -5,9 +5,10 @@ const assert = require('assert')
 const fs = require('fs')
 
 const util = require('../libs/util')
-const {Expr} = require('../libs/expr')
-const {Summarize} = require('../libs/summarize')
-const {Stage} = require('../libs/stage')
+const Value = require('../libs/value')
+const Op = require('../libs/op')
+const Summarize = require('../libs/summarize')
+const Transform = require('../libs/transform')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 
@@ -17,47 +18,47 @@ const {Program} = require('../libs/program')
 const Programs = {
   read_only: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'))
+      new Transform.read('colors.csv'))
   ),
 
   read_notify: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.notify('answer')
+      new Transform.read('colors.csv'),
+      new Transform.notify('answer')
     )
   ),
 
   read_plot: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.scatter('red', 'green', null)
+      new Transform.read('colors.csv'),
+      new Transform.scatter('red', 'green', null)
     )
   ),
 
   read_sort: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.sort(['red'], true),
+      new Transform.read('colors.csv'),
+      new Transform.sort(['red'], true),
     )
   ),
 
   group_summarize: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.groupBy(['red']),
-      new Stage.summarize('maximum', 'green'),
-      new Stage.summarize('minimum', 'blue')
+      new Transform.read('colors.csv'),
+      new Transform.groupBy(['red']),
+      new Transform.summarize('maximum', 'green'),
+      new Transform.summarize('minimum', 'blue')
     )
   ),
 
   math: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.mutate('sum', new Expr.add(
-        new Expr.number(1),
-        new Expr.multiply(
-          new Expr.column('green'),
-          new Expr.column('blue')
+      new Transform.read('colors.csv'),
+      new Transform.mutate('sum', new Op.add(
+        new Value.number(1),
+        new Op.multiply(
+          new Value.column('green'),
+          new Value.column('blue')
         )
       ))
     )
@@ -65,34 +66,34 @@ const Programs = {
 
   parallel_two: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.notify('alpha')
+      new Transform.read('colors.csv'),
+      new Transform.notify('alpha')
     ),
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.notify('beta')
+      new Transform.read('colors.csv'),
+      new Transform.notify('beta')
     )
   ),
 
   simple_join: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.notify('alpha')
+      new Transform.read('colors.csv'),
+      new Transform.notify('alpha')
     ),
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.notify('beta')
+      new Transform.read('colors.csv'),
+      new Transform.notify('beta')
     ),
     new Pipeline(
-      new Stage.join('alpha', 'red', 'beta', 'green'),
-      new Stage.notify('final')
+      new Transform.join('alpha', 'red', 'beta', 'green'),
+      new Transform.notify('final')
     )
   ),
 
   stats_test: () => new Program(
     new Pipeline(
-      new Stage.read('colors.csv'),
-      new Stage.ZTestOneSample(100, 10, 0.01, 'red')
+      new Transform.read('colors.csv'),
+      new Transform.ZTestOneSample(100, 10, 0.01, 'red')
     )
   )
 }

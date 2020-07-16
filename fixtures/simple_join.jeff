@@ -3,12 +3,12 @@
   [
     "@pipeline",
     [
-      "@stage",
+      "@transform",
       "read",
       "colors.csv"
     ],
     [
-      "@stage",
+      "@transform",
       "notify",
       "alpha"
     ]
@@ -16,12 +16,12 @@
   [
     "@pipeline",
     [
-      "@stage",
+      "@transform",
       "read",
       "colors.csv"
     ],
     [
-      "@stage",
+      "@transform",
       "notify",
       "beta"
     ]
@@ -29,7 +29,7 @@
   [
     "@pipeline",
     [
-      "@stage",
+      "@transform",
       "join",
       "alpha",
       "red",
@@ -37,7 +37,7 @@
       "green"
     ],
     [
-      "@stage",
+      "@transform",
       "notify",
       "final"
     ]
