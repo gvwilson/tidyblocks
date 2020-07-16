@@ -141,6 +141,8 @@ Blockly.defineBlocksWithJsonArray([
         type: 'field_dropdown',
         name: 'OP',
         options: [
+          ['all', 'all'],
+          ['any', 'any'],
           ['count', 'count'],
           ['maximum', 'maximum'],
           ['mean', 'mean'],
@@ -241,8 +243,8 @@ Blockly.JavaScript['transform_sort'] = (block) => {
 // Summarize
 Blockly.JavaScript['transform_summarize'] = (block) => {
   const op = block.getFieldValue('OP')
-  const column = Blockly.JavaScript.quote_(block.getFieldValue('COLUMN'))
-  return `["@stage", "summarize", "${op}", ${column}]`
+  const column = block.getFieldValue('COLUMN')
+  return `["@stage", "summarize", "${op}", "${column}"]`
 }
 
 // Ungroup

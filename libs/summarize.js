@@ -34,6 +34,42 @@ class SummarizeBase {
 }
 
 /**
+ * Determine if all are true (logical and).
+ */
+class SummarizeAll extends SummarizeBase {
+  constructor (column) {
+    super('all', column)
+  }
+
+  run (rows) {
+    if (rows.length === 0) {
+      return MISSING
+    }
+    return rows.reduce((soFar, row) => {
+      return (soFar && row[this.column]) ? true : false
+    }, true)
+  }
+}
+
+/**
+ * Determine if any are true (logical or).
+ */
+class SummarizeAny extends SummarizeBase {
+  constructor (column) {
+    super('any', column)
+  }
+
+  run (rows) {
+    if (rows.length === 0) {
+      return MISSING
+    }
+    return rows.reduce((soFar, row) => {
+      return (soFar || row[this.column]) ? true : false
+    }, true)
+  }
+}
+
+/**
  * Count rows.
  */
 class SummarizeCount extends SummarizeBase {
@@ -183,6 +219,8 @@ class SummarizeVariance extends SummarizeBase {
  */
 const Summarize = {
   base: SummarizeBase,
+  all: SummarizeAll,
+  any: SummarizeAny,
   count: SummarizeCount,
   maximum: SummarizeMaximum,
   mean: SummarizeMean,
