@@ -5,7 +5,7 @@ const assert = require('assert')
 const util = require('../libs/util')
 const {Expr} = require('../libs/expr')
 const {Summarize} = require('../libs/summarize')
-const {Stage} = require('../libs/stage')
+const {Transform} = require('../libs/transform')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 const {JsonToObj} = require('../libs/json2obj')
@@ -74,74 +74,74 @@ describe('expression persistence', () => {
   })
 })
 
-describe('stage persistence', () => {
+describe('transform persistence', () => {
   it('persists drop', (done) => {
-    assert.deepEqual([Stage.KIND, 'drop', ['left', 'right']],
-                     (new Stage.drop(['left', 'right'])).toJSON(),
+    assert.deepEqual([Transform.KIND, 'drop', ['left', 'right']],
+                     (new Transform.drop(['left', 'right'])).toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists filter', (done) => {
-    const stage = new Stage.filter(new Expr.column('keep'))
-    assert.deepEqual([Stage.KIND, 'filter', [Expr.KIND, 'column', 'keep']],
-                     stage.toJSON(),
+    const transform = new Transform.filter(new Expr.column('keep'))
+    assert.deepEqual([Transform.KIND, 'filter', [Expr.KIND, 'column', 'keep']],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists groupBy', (done) => {
-    const stage = new Stage.groupBy(['pink', 'yellow'])
-    assert.deepEqual([Stage.KIND, 'groupBy', ['pink', 'yellow']],
-                     stage.toJSON(),
+    const transform = new Transform.groupBy(['pink', 'yellow'])
+    assert.deepEqual([Transform.KIND, 'groupBy', ['pink', 'yellow']],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists join', (done) => {
-    const stage = new Stage.join('west', 'up', 'east', 'down')
-    assert.deepEqual([Stage.KIND, 'join', 'west', 'up', 'east', 'down'],
-                     stage.toJSON(),
+    const transform = new Transform.join('west', 'up', 'east', 'down')
+    assert.deepEqual([Transform.KIND, 'join', 'west', 'up', 'east', 'down'],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists mutate', (done) => {
-    const stage = new Stage.mutate('fresh', new Expr.logical(true))
-    assert.deepEqual([Stage.KIND, 'mutate', 'fresh', [Expr.KIND, 'logical', true]],
-                     stage.toJSON(),
+    const transform = new Transform.mutate('fresh', new Expr.logical(true))
+    assert.deepEqual([Transform.KIND, 'mutate', 'fresh', [Expr.KIND, 'logical', true]],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists select', (done) => {
-    const stage = new Stage.select(['pink', 'orange'])
-    assert.deepEqual([Stage.KIND, 'select', ['pink', 'orange']],
-                     stage.toJSON(),
+    const transform = new Transform.select(['pink', 'orange'])
+    assert.deepEqual([Transform.KIND, 'select', ['pink', 'orange']],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists summarize', (done) => {
-    const stage = new Stage.summarize('maximum', 'red')
-    assert.deepEqual([Stage.KIND, 'summarize', 'maximum', 'red'],
-                     stage.toJSON(),
+    const transform = new Transform.summarize('maximum', 'red')
+    assert.deepEqual([Transform.KIND, 'summarize', 'maximum', 'red'],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists ungroup', (done) => {
-    const stage = new Stage.ungroup()
-    assert.deepEqual([Stage.KIND, 'ungroup'],
-                     stage.toJSON(),
+    const transform = new Transform.ungroup()
+    assert.deepEqual([Transform.KIND, 'ungroup'],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists notify', (done) => {
-    const stage = new Stage.notify('notification')
-    assert.deepEqual([Stage.KIND, 'notify', 'notification'],
-                     stage.toJSON(),
+    const transform = new Transform.notify('notification')
+    assert.deepEqual([Transform.KIND, 'notify', 'notification'],
+                     transform.toJSON(),
                      `Mis-match`)
     done()
   })
@@ -150,11 +150,11 @@ describe('stage persistence', () => {
 describe('pipeline persistence', () => {
   it('turns a single pipeline into JSON', (done) => {
     const path = '/path/to/file'
-    const pipeline = new Pipeline(new Stage.read(path), new Stage.sort(['left'], true))
+    const pipeline = new Pipeline(new Transform.read(path), new Transform.sort(['left'], true))
     const actual = pipeline.toJSON()
     const expected = [Pipeline.KIND,
-                      [Stage.KIND, 'read', path],
-                      [Stage.KIND, 'sort', ['left'], true]]
+                      [Transform.KIND, 'read', path],
+                      [Transform.KIND, 'sort', ['left'], true]]
     assert.deepEqual(actual, expected,
                      `Wrong JSON`)
     done()
@@ -164,21 +164,21 @@ describe('pipeline persistence', () => {
 describe('program persistence', () => {
   it('turns a multi-pipeline program into JSON', (done) => {
     const program = new Program(
-      new Pipeline(new Stage.read('/path/to/first')),
-      new Pipeline(new Stage.read('/path/to/second'), new Stage.unique(['left'])),
-      new Pipeline(new Stage.read('/path/to/third'), new Stage.notify('notification'))
+      new Pipeline(new Transform.read('/path/to/first')),
+      new Pipeline(new Transform.read('/path/to/second'), new Transform.unique(['left'])),
+      new Pipeline(new Transform.read('/path/to/third'), new Transform.notify('notification'))
     )
     const actual = program.toJSON()
     const expected = [
       Program.KIND,
       [Pipeline.KIND,
-       [Stage.KIND, 'read', '/path/to/first']],
+       [Transform.KIND, 'read', '/path/to/first']],
       [Pipeline.KIND,
-       [Stage.KIND, 'read', '/path/to/second'],
-       [Stage.KIND, 'unique', ['left']]],
+       [Transform.KIND, 'read', '/path/to/second'],
+       [Transform.KIND, 'unique', ['left']]],
       [Pipeline.KIND,
-       [Stage.KIND, 'read', '/path/to/third'],
-       [Stage.KIND, 'notify', 'notification']]
+       [Transform.KIND, 'read', '/path/to/third'],
+       [Transform.KIND, 'notify', 'notification']]
     ]
     assert.deepEqual(actual, expected,
                      `Wrong result for persisting program`)

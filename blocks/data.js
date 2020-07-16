@@ -14,5 +14,5 @@ Blockly.defineBlocksWithJsonArray([
 
 // Colors
 Blockly.JavaScript['data_colors'] = (block) => {
-  return `["@stage", "read", "colors.csv"]`
+  return `["@transform", "read", "colors.csv"]`
 }

@@ -7,16 +7,16 @@ const {DataFrame} = require('./dataframe')
 const {Statistics} = require('./statistics')
 
 /**
- * Store information about a stage in a pipeline
+ * Store information about a transform in a pipeline
  * Derived classes must provide `run(runner, dataframe)` and `toJSON()`.
  */
-class StageBase {
+class TransformBase {
   /**
-   * @param {string} name What this stage is called.
+   * @param {string} name What this transform is called.
    * @param {string[]} requires What datasets are required before this can run?
-   * @param {string} produces What dataset does this stage produce?
-   * @param {Boolean} input Does this stage require input?
-   * @param {Boolean} output Does this stage produce input?
+   * @param {string} produces What dataset does this transform produce?
+   * @param {Boolean} input Does this transform require input?
+   * @param {Boolean} output Does this transform produce input?
    */
   constructor (name, requires, produces, input, output) {
     util.check(name && (typeof name === 'string') &&
@@ -32,7 +32,7 @@ class StageBase {
   }
 
   equal (other) {
-    return (other instanceof StageBase) &&
+    return (other instanceof TransformBase) &&
       (this.name === other.name)
   }
 
@@ -41,36 +41,27 @@ class StageBase {
                `This object must have columns`)
     util.check('columns' in other,
                `Other object must have columns`)
-    return (other instanceof StageBase) &&
+    return (other instanceof TransformBase) &&
       (this.name === other.name) &&
       (this.columns.length === other.columns.length) &&
       this.columns.every(x => other.columns.includes(x))
   }
 
   toJSON (...extras) {
-    return [Stage.KIND, this.name, ...extras]
+    return [Transform.KIND, this.name, ...extras]
   }
 }
 
 // ----------------------------------------------------------------------
 
 /**
- * Store information about a transformation stage.
- */
-class StageTransform extends StageBase {
-  constructor (name, requires, produces, input, output) {
-    super(name, requires, produces, input, output)
-  }
-}
-
-/**
  * Drop columns.
  */
-class StageDrop extends StageTransform {
+class TransformDrop extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super(StageDrop.KIND, [], null, true, true)
+    super(TransformDrop.KIND, [], null, true, true)
     this.columns = columns
   }
 
@@ -87,17 +78,17 @@ class StageDrop extends StageTransform {
     return super.toJSON(this.columns)
   }
 }
-StageDrop.KIND = 'drop'
+TransformDrop.KIND = 'drop'
 
 /**
  * Filter rows.
  * @param {Expr} expr The operation function that tests rows.
  */
-class StageFilter extends StageTransform {
+class TransformFilter extends TransformBase {
   constructor (expr) {
     util.check(expr instanceof Expr.base,
                `Expected expression`)
-    super(StageFilter.KIND, [], null, true, true)
+    super(TransformFilter.KIND, [], null, true, true)
     this.expr = expr
   }
 
@@ -115,17 +106,17 @@ class StageFilter extends StageTransform {
     return super.toJSON(this.expr.toJSON())
   }
 }
-StageFilter.KIND = 'filter'
+TransformFilter.KIND = 'filter'
 
 /**
  * Group values.
  * @param {string[]} columns The columns that determine groups.
  */
-class StageGroupBy extends StageTransform {
+class TransformGroupBy extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super(StageGroupBy.KIND, [], null, true, true)
+    super(TransformGroupBy.KIND, [], null, true, true)
     this.columns = columns
   }
 
@@ -142,7 +133,7 @@ class StageGroupBy extends StageTransform {
     return super.toJSON(this.columns)
   }
 }
-StageGroupBy.KIND = 'groupBy'
+TransformGroupBy.KIND = 'groupBy'
 
 /**
  * Join values.
@@ -151,9 +142,9 @@ StageGroupBy.KIND = 'groupBy'
  * @param {string} rightName Name of right table to wait for.
  * @param {string} rightCol Name of column in right table.
  */
-class StageJoin extends StageTransform {
+class TransformJoin extends TransformBase {
   constructor (leftName, leftCol, rightName, rightCol) {
-    super(StageJoin.KIND, [leftName, rightName], null, false, true)
+    super(TransformJoin.KIND, [leftName, rightName], null, false, true)
     this.leftName = leftName
     this.leftCol = leftCol
     this.rightName = rightName
@@ -183,20 +174,20 @@ class StageJoin extends StageTransform {
                         this.rightName, this.rightCol)
   }
 }
-StageJoin.KIND = 'join'
+TransformJoin.KIND = 'join'
 
 /**
  * Create new columns.
  * @param {string} newName New column's name.
  * @param {function} expr Create new values.
  */
-class StageMutate extends StageTransform {
+class TransformMutate extends TransformBase {
   constructor (newName, expr) {
     util.check(typeof newName === 'string',
                `Expected string as new name`)
     util.check(expr instanceof Expr.base,
                `Expected expression`)
-    super(StageMutate.KIND, [], null, true, true)
+    super(TransformMutate.KIND, [], null, true, true)
     this.newName = newName
     this.expr = expr
   }
@@ -216,17 +207,17 @@ class StageMutate extends StageTransform {
     return super.toJSON(this.newName, this.expr.toJSON())
   }
 }
-StageMutate.KIND = 'mutate'
+TransformMutate.KIND = 'mutate'
 
 /**
  * Notify that a result is available.
  * @param {string} label Name to use for notification.
  */
-class StageNotify extends StageTransform {
+class TransformNotify extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
                `Expected string`)
-    super(StageNotify.KIND, [], label, true, false)
+    super(TransformNotify.KIND, [], label, true, false)
     this.label = label
   }
 
@@ -244,17 +235,17 @@ class StageNotify extends StageTransform {
     return super.toJSON(this.label)
   }
 }
-StageNotify.KIND = 'notify'
+TransformNotify.KIND = 'notify'
 
 /**
  * Read a dataset.
  * @param {string} path Path to data.
  */
-class StageRead extends StageTransform {
+class TransformRead extends TransformBase {
   constructor (path) {
     util.check(typeof path === 'string',
                `Expected string`)
-    super(StageRead.KIND, [], null, false, true)
+    super(TransformRead.KIND, [], null, false, true)
     this.path = path
   }
 
@@ -274,17 +265,17 @@ class StageRead extends StageTransform {
     return super.toJSON(this.path)
   }
 }
-StageRead.KIND = 'read'
+TransformRead.KIND = 'read'
 
 /**
  * Select columns.
  * @param {string[]} columns The names of the columns to keep.
  */
-class StageSelect extends StageTransform {
+class TransformSelect extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super(StageSelect.KIND, [], null, true, true)
+    super(TransformSelect.KIND, [], null, true, true)
     this.columns = columns
   }
 
@@ -301,20 +292,20 @@ class StageSelect extends StageTransform {
     return super.toJSON(this.columns)
   }
 }
-StageSelect.KIND = 'select'
+TransformSelect.KIND = 'select'
 
 /**
  * Sort data.
  * @param {string[]} columns Names of columns to sort by.
  * @param {Boolean} reverse Sort in reverse (descending) order?
  */
-class StageSort extends StageTransform {
+class TransformSort extends TransformBase {
   constructor (columns, reverse) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
     util.check(typeof reverse === 'boolean',
                `Expected Boolean`)
-    super(StageSort.KIND, [], null, true, true)
+    super(TransformSort.KIND, [], null, true, true)
     this.columns = columns
     this.reverse = reverse
   }
@@ -332,14 +323,14 @@ class StageSort extends StageTransform {
     return super.toJSON(this.columns, this.reverse)
   }
 }
-StageSort.KIND = 'sort'
+TransformSort.KIND = 'sort'
 
 /**
  * Summarize data.
  * @param {string} op Name of operation.
  * @param {string} column Column to summarize.
  */
-class StageSummarize extends StageTransform {
+class TransformSummarize extends TransformBase {
   constructor (op, column) {
     util.check(typeof op === 'string',
                `Expected string as op`)
@@ -347,7 +338,7 @@ class StageSummarize extends StageTransform {
                `Unknown summarization operation ${op}`)
     util.check(typeof column === 'string',
                `Expected string as column name`)
-    super(StageSummarize.KIND, [], null, true, true)
+    super(TransformSummarize.KIND, [], null, true, true)
     this.op = op
     this.column = column
   }
@@ -368,14 +359,14 @@ class StageSummarize extends StageTransform {
     return super.toJSON(this.op, this.column)
   }
 }
-StageSummarize.KIND = 'summarize'
+TransformSummarize.KIND = 'summarize'
 
 /**
  * Make a function to remove grouping
  */
-class StageUngroup extends StageTransform {
+class TransformUngroup extends TransformBase {
   constructor () {
-    super(StageUngroup.KIND, [], null, true, true)
+    super(TransformUngroup.KIND, [], null, true, true)
   }
 
   run (runner, df) {
@@ -387,13 +378,13 @@ class StageUngroup extends StageTransform {
     return super.toJSON()
   }
 }
-StageUngroup.KIND = 'ungroup'
+TransformUngroup.KIND = 'ungroup'
 
 /**
  * Select rows with unique values.
  * @param {string[]} columns The columns to use for uniqueness test.
  */
-class StageUnique extends StageTransform {
+class TransformUnique extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
@@ -414,14 +405,14 @@ class StageUnique extends StageTransform {
     return super.toJSON(this.columns)
   }
 }
-StageUnique.KIND = 'unique'
+TransformUnique.KIND = 'unique'
 
 // ----------------------------------------------------------------------
 
 /**
- * Store information about a plotting stage.
+ * Store information about a plotting transform.
  */
-class StagePlot extends StageBase {
+class TransformPlot extends TransformBase {
   constructor (name, spec, fillin) {
     super(name, [], null, true, false)
     this.spec = Object.assign({}, spec, fillin, {name})
@@ -439,7 +430,7 @@ class StagePlot extends StageBase {
  * @param {string} axisX Which column to use for the X axis.
  * @param {string} axisY Which column to use for the Y axis.
  */
-class StageBar extends StagePlot {
+class TransformBar extends TransformPlot {
   constructor (axisX, axisY) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
@@ -462,7 +453,7 @@ class StageBar extends StagePlot {
  * @param {string} axisX Which column to use for the X axis.
  * @param {string} axisY Which column to use for the Y axis.
  */
-class StageBox extends StagePlot {
+class TransformBox extends TransformPlot {
   constructor (axisX, axisY) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
@@ -483,7 +474,7 @@ class StageBox extends StagePlot {
  * Create a dot plot.
  * @param {string} axisX Which column to use for the X axis.
  */
-class StageDot extends StagePlot {
+class TransformDot extends TransformPlot {
   constructor (axisX) {
     util.check(axisX && (typeof axisX === 'string'),
                `Must provide non-empty string for axis`)
@@ -513,7 +504,7 @@ class StageDot extends StagePlot {
  * @param {string} column Which column to use for values.
  * @param {number} bins How many bins to use.
  */
-class StageHistogram extends StagePlot {
+class TransformHistogram extends TransformPlot {
   constructor (column, bins) {
     util.check(column && (typeof column === 'string') &&
                (typeof bins === 'number') && (bins > 0),
@@ -544,7 +535,7 @@ class StageHistogram extends StagePlot {
  * @param {string} axisY Which column to use for the Y axis.
  * @param {string} color Which column to use for color (if any).
  */
-class StageScatter extends StagePlot {
+class TransformScatter extends TransformPlot {
   constructor (axisX, axisY, color) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
@@ -572,7 +563,7 @@ class StageScatter extends StagePlot {
 /**
  * Store information about a statistical test.
  */
-class StageStats extends StageBase {
+class TransformStats extends TransformBase {
   constructor (name, fields) {
     super(name, [], null, true, false)
     Object.assign(this, fields)
@@ -592,7 +583,7 @@ class StageStats extends StageBase {
  * @param {string} groupName Column to use for grouping.
  * @param {string} valueName Column to use for values.
  */
-class StageKruskalWallis extends StageStats {
+class TransformKruskalWallis extends TransformStats {
   constructor (significance, groupName, valueName) {
     super('KruskalWallis', {significance, groupName, valueName})
   }
@@ -608,7 +599,7 @@ class StageKruskalWallis extends StageStats {
  * @param {number} significance Significance threshold.
  * @param {string} colName The column to get values from.
  */
-class StageTTestOneSample extends StageStats {
+class TransformTTestOneSample extends TransformStats {
   constructor (mean, significance, colName) {
     super('TTestOneSample', {mean, significance, colName})
   }
@@ -624,7 +615,7 @@ class StageTTestOneSample extends StageStats {
  * @param {string} leftCol The column to get one set of values from.
  * @param {string} rightCol The column to get the other set of values from.
  */
-class StageTTestPaired extends StageStats {
+class TransformTTestPaired extends TransformStats {
   constructor (significance, leftCol, rightCol) {
     super('TTestPaired', {significance, leftCol, rightCol})
   }
@@ -641,7 +632,7 @@ class StageTTestPaired extends StageStats {
  * @param {number} significance Significance threshold.
  * @param {string} colName The column to get values from.
  */
-class StageZTestOneSample extends StageStats {
+class TransformZTestOneSample extends TransformStats {
   constructor (mean, stdDev, significance, colName) {
     super('ZTestOneSample', {mean, stdDev, significance, colName})
   }
@@ -654,36 +645,33 @@ class StageZTestOneSample extends StageStats {
 // ----------------------------------------------------------------------
 
 /**
- * Construct pipeline stages.
+ * Construct transforms.
  */
-const Stage = {
-  KIND: '@stage',
+const Transform = {
+  KIND: '@transform',
 
-  base: StageBase,
-  drop: StageDrop,
-  filter: StageFilter,
-  groupBy: StageGroupBy,
-  join: StageJoin,
-  mutate: StageMutate,
-  notify: StageNotify,
-  read: StageRead,
-  select: StageSelect,
-  sort: StageSort,
-  summarize: StageSummarize,
-  ungroup: StageUngroup,
-  unique: StageUnique,
-  bar: StageBar,
-  box: StageBox,
-  dot: StageDot,
-  histogram: StageHistogram,
-  scatter: StageScatter,
-  KruskalWallis: StageKruskalWallis,
-  TTestOneSample: StageTTestOneSample,
-  TTestPaired: StageTTestPaired,
-  ZTestOneSample: StageZTestOneSample
+  base: TransformBase,
+  drop: TransformDrop,
+  filter: TransformFilter,
+  groupBy: TransformGroupBy,
+  join: TransformJoin,
+  mutate: TransformMutate,
+  notify: TransformNotify,
+  read: TransformRead,
+  select: TransformSelect,
+  sort: TransformSort,
+  summarize: TransformSummarize,
+  ungroup: TransformUngroup,
+  unique: TransformUnique,
+  bar: TransformBar,
+  box: TransformBox,
+  dot: TransformDot,
+  histogram: TransformHistogram,
+  scatter: TransformScatter,
+  KruskalWallis: TransformKruskalWallis,
+  TTestOneSample: TransformTTestOneSample,
+  TTestPaired: TransformTTestPaired,
+  ZTestOneSample: TransformZTestOneSample
 }
 
-module.exports = {
-  StageBase,
-  Stage
-}
+module.exports = {Transform}

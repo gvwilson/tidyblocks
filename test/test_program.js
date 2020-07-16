@@ -4,13 +4,13 @@ const assert = require('assert')
 
 const util = require('../libs/util')
 const {DataFrame} = require('../libs/dataframe')
-const {Stage} = require('../libs/stage')
+const {Transform} = require('../libs/transform')
 const {Environment} = require('../libs/environment')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 
 const {
-  MockStage,
+  MockTransform,
   ReadLocalData,
   Table,
   Pass,
@@ -22,9 +22,9 @@ const {
 
 describe('program utilities', () => {
   it('checks program equality', (done) => {
-    const first = new Program(new Pipeline(new Stage.read('/path')))
-    const second = new Program(new Pipeline(new Stage.read('/path'),
-                                            new Stage.drop(['red'])))
+    const first = new Program(new Pipeline(new Transform.read('/path')))
+    const second = new Program(new Pipeline(new Transform.read('/path'),
+                                            new Transform.drop(['red'])))
     assert(first.equal(first),
            `Program should equal itself`)
     assert(!first.equal(second),
@@ -89,8 +89,8 @@ describe('executes program', () => {
   it('registers a pipeline with dependencies', (done) => {
     const program = new Program()
     const requires = ['first', 'second']
-    const stage = new MockStage('stage', Pass, requires, null, true, true)
-    const pipeline = new Pipeline(stage)
+    const transform = new MockTransform('transform', Pass, requires, null, true, true)
+    const pipeline = new Pipeline(transform)
 
     program.register(pipeline)
     assert.equal(program.queue.length, 0,
@@ -104,8 +104,8 @@ describe('executes program', () => {
 
   it('makes something runnable when its single dependency resolves', (done) => {
     const program = new Program()
-    const stage = new MockStage('stage', Pass, ['first'], null, true, true)
-    const second = new Pipeline(stage)
+    const transform = new MockTransform('transform', Pass, ['first'], null, true, true)
+    const second = new Pipeline(transform)
     const df = new DataFrame([])
 
     program.register(second)
@@ -129,7 +129,7 @@ describe('executes program', () => {
     const program = new Program()
     program.env = new Environment(ReadLocalData)
     const requires = ['first', 'second', 'third']
-    const last = new MockStage('last', Pass, requires, null, true, true)
+    const last = new MockTransform('last', Pass, requires, null, true, true)
     const lastPipe = new Pipeline(last)
     const df = new DataFrame([])
 
@@ -158,11 +158,11 @@ describe('executes program', () => {
   it('only makes some things runnable', (done) => {
     const program = new Program()
     program.env = new Environment(ReadLocalData)
-    const leftStage = new MockStage('left', Pass, ['something'], null, true, true)
-    const leftPipe = new Pipeline(leftStage)
+    const leftTransform = new MockTransform('left', Pass, ['something'], null, true, true)
+    const leftPipe = new Pipeline(leftTransform)
     const df = new DataFrame([])
-    const rightStage = new MockStage('right', Pass, ['else'], null, true, true)
-    const rightPipe = new Pipeline(rightStage)
+    const rightTransform = new MockTransform('right', Pass, ['else'], null, true, true)
+    const rightPipe = new Pipeline(rightTransform)
 
     program.register(leftPipe)
     program.register(rightPipe)
@@ -181,10 +181,10 @@ describe('executes program', () => {
 
   it('catches errors in pipelines', (done) => {
     const program = new Program()
-    const stage = new MockStage('stage',
+    const transform = new MockTransform('transform',
                                 (runner, df) => util.fail('error message'),
                                 [], null, false, true)
-    const failure = new Pipeline(stage)
+    const failure = new Pipeline(transform)
     program.register(failure)
 
     const env = new Environment(ReadLocalData)
@@ -222,7 +222,7 @@ describe('executes program', () => {
 
   it('runs two independent pipelines in some order', (done) => {
     const program = new Program()
-    const tailLocal = new MockStage('tailLocal', Pass, [], 'local', true, false)
+    const tailLocal = new MockTransform('tailLocal', Pass, [], 'local', true, false)
     const pipeLocal = new Pipeline(Head, tailLocal)
     program.register(pipeLocal)
     const pipeNotify = new Pipeline(Head, TailNotify)
@@ -239,10 +239,10 @@ describe('executes program', () => {
 
   it('runs pipelines that depend on each other', (done) => {
     const program = new Program()
-    const headRequire = new MockStage('headRequire',
+    const headRequire = new MockTransform('headRequire',
                                       (runner, df) => Table,
                                       ['keyword'], null, false, true)
-    const tailLocal = new MockStage('tailLocal', Pass,
+    const tailLocal = new MockTransform('tailLocal', Pass,
                                     [], 'local', true, false)
     const pipeNotify = new Pipeline(Head, TailNotify)
     const pipeRequireLocal = new Pipeline(headRequire, tailLocal)
@@ -260,9 +260,9 @@ describe('executes program', () => {
 
   it('handles a join correctly', (done) => {
     const program = new Program()
-    const tailAlpha = new MockStage('tailAlpha', Pass, [], 'alpha', true, false)
-    const tailBeta = new MockStage('tailBeta', Pass, [], 'beta', true, false)
-    const join = new Stage.join('alpha', 'left', 'beta', 'left')
+    const tailAlpha = new MockTransform('tailAlpha', Pass, [], 'alpha', true, false)
+    const tailBeta = new MockTransform('tailBeta', Pass, [], 'beta', true, false)
+    const join = new Transform.join('alpha', 'left', 'beta', 'left')
 
     program.register(new Pipeline(Head, tailAlpha))
     program.register(new Pipeline(Head, tailBeta))

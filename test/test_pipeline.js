@@ -4,7 +4,7 @@ const assert = require('assert')
 
 const util = require('../libs/util')
 const {DataFrame} = require('../libs/dataframe')
-const {Stage} = require('../libs/stage')
+const {Transform} = require('../libs/transform')
 const {Environment} = require('../libs/environment')
 const {Pipeline} = require('../libs/pipeline')
 
@@ -21,8 +21,8 @@ const {
 describe('executes pipelines', () => {
   it('can construct an empty pipeline', (done) => {
     const pipeline = new Pipeline()
-    assert.deepEqual(pipeline.stages, [],
-                     `Empty pipeline should not have stages`)
+    assert.deepEqual(pipeline.transforms, [],
+                     `Empty pipeline should not have transforms`)
     assert.deepEqual(pipeline.requires(), [],
                      `Empty pipeline should not require anything`)
     done()
@@ -36,7 +36,7 @@ describe('executes pipelines', () => {
     done()
   })
 
-  it('refuses to execute a pipeline whose first stage requires input', (done) => {
+  it('refuses to execute a pipeline whose first transform requires input', (done) => {
     const pipeline = new Pipeline(Middle)
     assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
@@ -44,23 +44,23 @@ describe('executes pipelines', () => {
     done()
   })
 
-  it('refuses to execute a pipeline whose later stages require input', (done) => {
+  it('refuses to execute a pipeline whose later transforms require input', (done) => {
     const pipeline = new Pipeline(Head, Middle, Head, Middle)
     assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
-                  `Should not execute pipeline whose middle stages require input`)
+                  `Should not execute pipeline whose middle transforms require input`)
     done()
   })
 
-  it('refuses to execute a pipeline whose early stages do not produce output', (done) => {
+  it('refuses to execute a pipeline whose early transforms do not produce output', (done) => {
     const pipeline = new Pipeline(Head, Tail, Tail)
     assert.throws(() => pipeline.run(new Environment(ReadLocalData)),
                   Error,
-                  `Should not execute pipeline whose middle stage does not produce output`)
+                  `Should not execute pipeline whose middle transform does not produce output`)
     done()
   })
 
-  it('executes a single-stage pipeline without a tail', (done) => {
+  it('executes a single-transform pipeline without a tail', (done) => {
     const pipeline = new Pipeline(Head)
     const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, null,
@@ -70,7 +70,7 @@ describe('executes pipelines', () => {
     done()
   })
 
-  it('executes a two-stage pipeline without a tail', (done) => {
+  it('executes a two-transform pipeline without a tail', (done) => {
     const pipeline = new Pipeline(Head, Middle)
     const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, null,
@@ -80,7 +80,7 @@ describe('executes pipelines', () => {
     done()
   })
 
-  it('executes a three-stage pipeline with a tail', (done) => {
+  it('executes a three-transform pipeline with a tail', (done) => {
     const pipeline = new Pipeline(Head, Middle, Tail)
     const result = pipeline.run(new Environment(ReadLocalData))
     assert.equal(result.name, null,
@@ -105,7 +105,7 @@ describe('executes pipelines', () => {
     const pipeline = new Pipeline(Head, Middle, Tail)
     const result = pipeline.run(runner)
     assert.deepEqual(runner.log, ['head', 'middle', 'tail'],
-                     `Stages not logged`)
+                     `Transforms not logged`)
     done()
   })
 })

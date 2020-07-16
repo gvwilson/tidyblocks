@@ -5,7 +5,7 @@ const assert = require('assert')
 const util = require('../libs/util')
 const {Expr} = require('../libs/expr')
 const {Summarize} = require('../libs/summarize')
-const {Stage} = require('../libs/stage')
+const {Transform} = require('../libs/transform')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 const {JsonToObj} = require('../libs/json2obj')
@@ -172,19 +172,19 @@ describe('expression persistence', () => {
   })
 })
 
-describe('stage persistence', () => {
-  it('requires a known kind of stage', (done) => {
+describe('transform persistence', () => {
+  it('requires a known kind of transform', (done) => {
     const factory = new JsonToObj()
-    assert.throws(() => factory.stage(['@whoops', 'whoops']),
+    assert.throws(() => factory.transform(['@whoops', 'whoops']),
                   Error,
-                  `Requires known kind of stage`)
+                  `Requires known kind of transform`)
     done()
   })
 
   it('restores drop from JSON', (done) => {
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'drop', ['left', 'right']]),
-                     new Stage.drop(['left', 'right']),
+    assert.deepEqual(factory.transform([Transform.KIND, 'drop', ['left', 'right']]),
+                     new Transform.drop(['left', 'right']),
                      `drop`)
     done()
   })
@@ -193,8 +193,8 @@ describe('stage persistence', () => {
     const child = new Expr.logical(true)
     const childJSON = child.toJSON()
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'filter', childJSON]),
-                     new Stage.filter(child),
+    assert.deepEqual(factory.transform([Transform.KIND, 'filter', childJSON]),
+                     new Transform.filter(child),
                      `filter`)
     done()
   })
@@ -202,8 +202,8 @@ describe('stage persistence', () => {
   it('restores groupBy from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'groupBy', columns]),
-                     new Stage.groupBy(columns),
+    assert.deepEqual(factory.transform([Transform.KIND, 'groupBy', columns]),
+                     new Transform.groupBy(columns),
                      `groupBy`)
     done()
   })
@@ -214,8 +214,8 @@ describe('stage persistence', () => {
           rightName = 'after',
           rightCol = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'join', leftName, leftCol, rightName, rightCol]),
-                     new Stage.join(leftName, leftCol, rightName, rightCol),
+    assert.deepEqual(factory.transform([Transform.KIND, 'join', leftName, leftCol, rightName, rightCol]),
+                     new Transform.join(leftName, leftCol, rightName, rightCol),
                      `join`)
     done()
   })
@@ -225,8 +225,8 @@ describe('stage persistence', () => {
     const child = new Expr.logical(true)
     const childJSON = child.toJSON()
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'mutate', newName, childJSON]),
-                     new Stage.mutate(newName, child),
+    assert.deepEqual(factory.transform([Transform.KIND, 'mutate', newName, childJSON]),
+                     new Transform.mutate(newName, child),
                      `mutate`)
     done()
   })
@@ -234,8 +234,8 @@ describe('stage persistence', () => {
   it('restores notify from JSON', (done) => {
     const label = 'notification'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'notify', label]),
-                     new Stage.notify(label),
+    assert.deepEqual(factory.transform([Transform.KIND, 'notify', label]),
+                     new Transform.notify(label),
                      `notify`)
     done()
   })
@@ -243,8 +243,8 @@ describe('stage persistence', () => {
   it('restores read from JSON', (done) => {
     const path = '/to/file'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'read', path]),
-                     new Stage.read(path),
+    assert.deepEqual(factory.transform([Transform.KIND, 'read', path]),
+                     new Transform.read(path),
                      `notify`)
     done()
   })
@@ -252,8 +252,8 @@ describe('stage persistence', () => {
   it('restores select from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'select', columns]),
-                     new Stage.select(columns),
+    assert.deepEqual(factory.transform([Transform.KIND, 'select', columns]),
+                     new Transform.select(columns),
                      `select`)
     done()
   })
@@ -261,25 +261,25 @@ describe('stage persistence', () => {
   it('restores sort from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'sort', columns, false]),
-                     new Stage.sort(columns, false),
+    assert.deepEqual(factory.transform([Transform.KIND, 'sort', columns, false]),
+                     new Transform.sort(columns, false),
                      `sort`)
     done()
   })
 
   it('restores summarize from JSON', (done) => {
-    const stage = new Stage.summarize('mean', 'red')
+    const transform = new Transform.summarize('mean', 'red')
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'summarize', 'mean', 'red']),
-                     stage,
+    assert.deepEqual(factory.transform([Transform.KIND, 'summarize', 'mean', 'red']),
+                     transform,
                      `summarize`)
     done()
   })
 
   it('restores ungroup from JSON', (done) => {
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'ungroup']),
-                     new Stage.ungroup(),
+    assert.deepEqual(factory.transform([Transform.KIND, 'ungroup']),
+                     new Transform.ungroup(),
                      `ungroup`)
     done()
   })
@@ -287,8 +287,8 @@ describe('stage persistence', () => {
   it('restores unique from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'unique', columns]),
-                     new Stage.unique(columns),
+    assert.deepEqual(factory.transform([Transform.KIND, 'unique', columns]),
+                     new Transform.unique(columns),
                      `unique`)
     done()
   })
@@ -298,8 +298,8 @@ describe('plot persistence', () => {
   it('restores bar from JSON', (done) => {
     const axisX = 'age', axisY = 'height'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'bar', axisX, axisY]),
-                     new Stage.bar(axisX, axisY),
+    assert.deepEqual(factory.transform([Transform.KIND, 'bar', axisX, axisY]),
+                     new Transform.bar(axisX, axisY),
                      `bar`)
     done()
   })
@@ -307,8 +307,8 @@ describe('plot persistence', () => {
   it('restores box from JSON', (done) => {
     const axisX = 'age', axisY = 'height'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'box', axisX, axisY]),
-                     new Stage.box(axisX, axisY),
+    assert.deepEqual(factory.transform([Transform.KIND, 'box', axisX, axisY]),
+                     new Transform.box(axisX, axisY),
                      `box`)
     done()
   })
@@ -316,8 +316,8 @@ describe('plot persistence', () => {
   it('restores dot from JSON', (done) => {
     const axisX = 'age'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'dot', axisX]),
-                     new Stage.dot(axisX),
+    assert.deepEqual(factory.transform([Transform.KIND, 'dot', axisX]),
+                     new Transform.dot(axisX),
                      `dot`)
     done()
   })
@@ -326,8 +326,8 @@ describe('plot persistence', () => {
     const column = 'age'
     const bins = 17
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'histogram', column, bins]),
-                     new Stage.histogram(column, bins),
+    assert.deepEqual(factory.transform([Transform.KIND, 'histogram', column, bins]),
+                     new Transform.histogram(column, bins),
                      `histogram`)
     done()
   })
@@ -335,8 +335,8 @@ describe('plot persistence', () => {
   it('restores scatter from JSON', (done) => {
     const axisX = 'age', axisY = 'height', color = 'vermilion'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'scatter', axisX, axisY, color]),
-                     new Stage.scatter(axisX, axisY, color),
+    assert.deepEqual(factory.transform([Transform.KIND, 'scatter', axisX, axisY, color]),
+                     new Transform.scatter(axisX, axisY, color),
                      `scatter`)
     done()
   })
@@ -346,8 +346,8 @@ describe('statistics persistence', () => {
   it('restores Kruskal-Wallis from JSON', (done) => {
     const significance = 0.03, groupName = 'red', valueName = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'KruskalWallis', significance, groupName, valueName]),
-                     new Stage.KruskalWallis(significance, groupName, valueName),
+    assert.deepEqual(factory.transform([Transform.KIND, 'KruskalWallis', significance, groupName, valueName]),
+                     new Transform.KruskalWallis(significance, groupName, valueName),
                      `Kruskal-Wallis`)
     done()
   })
@@ -355,8 +355,8 @@ describe('statistics persistence', () => {
   it('restores one-sample t test from JSON', (done) => {
     const mean = 0.1, significance = 0.03, colName = 'red'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'TTestOneSample', mean, significance, colName]),
-                     new Stage.TTestOneSample(mean, significance, colName),
+    assert.deepEqual(factory.transform([Transform.KIND, 'TTestOneSample', mean, significance, colName]),
+                     new Transform.TTestOneSample(mean, significance, colName),
                      `one-sample t test`)
     done()
   })
@@ -364,8 +364,8 @@ describe('statistics persistence', () => {
   it('restores paired two-sided t test from JSON', (done) => {
     const significance = 0.03, leftCol = 'green', rightCol = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'TTestPaired', significance, leftCol, rightCol]),
-                     new Stage.TTestPaired(significance, leftCol, rightCol),
+    assert.deepEqual(factory.transform([Transform.KIND, 'TTestPaired', significance, leftCol, rightCol]),
+                     new Transform.TTestPaired(significance, leftCol, rightCol),
                      `paired t test`)
     done()
   })
@@ -373,8 +373,8 @@ describe('statistics persistence', () => {
   it('restores one-sample z test from JSON', (done) => {
     const mean = 0.1, stdDev = 0.04, significance = 0.03, colName = 'red'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.stage([Stage.KIND, 'ZTestOneSample', mean, stdDev, significance, colName]),
-                     new Stage.ZTestOneSample(mean, stdDev, significance, colName),
+    assert.deepEqual(factory.transform([Transform.KIND, 'ZTestOneSample', mean, stdDev, significance, colName]),
+                     new Transform.ZTestOneSample(mean, stdDev, significance, colName),
                      `one-sample z test`)
     done()
   })
@@ -384,11 +384,11 @@ describe('pipeline persistence', () => {
   const factory = new JsonToObj()
   it('turns JSON into a single pipeline', (done) => {
     const fixture = [Pipeline.KIND,
-                     [Stage.KIND, 'read', 'colors.csv'],
-                     [Stage.KIND, 'sort', ['left', 'right'], false]]
+                     [Transform.KIND, 'read', 'colors.csv'],
+                     [Transform.KIND, 'sort', ['left', 'right'], false]]
     const actual = factory.pipeline(fixture)
-    const expected = new Pipeline(new Stage.read('colors.csv'),
-                                  new Stage.sort(['left', 'right'], false))
+    const expected = new Pipeline(new Transform.read('colors.csv'),
+                                  new Transform.sort(['left', 'right'], false))
     assert.deepEqual(actual, expected,
                      `Wrong result from reading pipeline`)
     done()
@@ -400,13 +400,13 @@ describe('program persistence', () => {
     const fixture = [
       Program.KIND,
       [Pipeline.KIND,
-       [Stage.KIND, 'read', 'colors.csv']],
+       [Transform.KIND, 'read', 'colors.csv']],
       [Pipeline.KIND,
-       [Stage.KIND, 'read', 'colors.csv'],
-       [Stage.KIND, 'unique', ['red']]],
+       [Transform.KIND, 'read', 'colors.csv'],
+       [Transform.KIND, 'unique', ['red']]],
       [Pipeline.KIND,
-       [Stage.KIND, 'read', 'colors.csv'],
-       [Stage.KIND, 'notify', 'notification']]
+       [Transform.KIND, 'read', 'colors.csv'],
+       [Transform.KIND, 'notify', 'notification']]
     ]
     const factory = new JsonToObj()
     const program = factory.program(fixture)

@@ -23,6 +23,6 @@ Blockly.defineBlocksWithJsonArray([
 // Notify
 Blockly.JavaScript['combine_notify'] = (block) => {
   const name = block.getFieldValue('NAME')
-  const code = `["@stage", "notify", "${name}"]`
+  const code = `["@transform", "notify", "${name}"]`
   return code
 }

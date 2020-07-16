@@ -2,7 +2,7 @@
 
 const util = require('./util')
 const {Expr} = require('./expr')
-const {Stage} = require('./stage')
+const {Transform} = require('./transform')
 const {Pipeline} = require('./pipeline')
 const {Program} = require('./program')
 
@@ -24,19 +24,19 @@ class JsonToObj {
                (json.length > 1) &&
                (json[0] === Pipeline.KIND),
               `Expected array with pipeline element`)
-    const stages = json.slice(1).map(blob => this.stage(blob))
-    return new Pipeline(...stages)
+    const transforms = json.slice(1).map(blob => this.transform(blob))
+    return new Pipeline(...transforms)
   }
 
-  stage (json) {
+  transform (json) {
     util.check(Array.isArray(json) &&
                (json.length > 1) &&
-               (json[0] === Stage.KIND) &&
-               (json[1] in Stage),
-               `Unknown stage kind "${json[1]}"`)
+               (json[0] === Transform.KIND) &&
+               (json[1] in Transform),
+               `Unknown transform kind "${json[1]}"`)
     const kind = json[1]
     const args = json.slice(2).map(p => this.expr(p))
-    return new Stage[kind](...args)
+    return new Transform[kind](...args)
   }
 
   expr (json) {

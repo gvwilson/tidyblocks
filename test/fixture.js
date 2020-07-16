@@ -6,7 +6,7 @@ const {JSDOM} = require('jsdom')
 const util = require('../libs/util')
 const MISSING = util.MISSING
 const {DataFrame} = require('../libs/dataframe')
-const {StageBase} = require('../libs/stage')
+const {Transform} = require('../libs/transform')
 const {Environment} = require('../libs/environment')
 
 /**
@@ -15,9 +15,9 @@ const {Environment} = require('../libs/environment')
 const LOCAL_DATA_DIR = 'data'
 
 /**
- * Testing replacement for a stage (easier constructor).
+ * Testing replacement for a transform (easier constructor).
  */
-class MockStage extends StageBase {
+class MockTransform extends Transform.base {
   constructor (name, func, requires, produces, input, output) {
     super(name, requires, produces, input, output)
     this.func = func
@@ -49,11 +49,11 @@ const Table = new DataFrame([{left: 1, right: 10},
                              {left: 2, right: 20}])
 
 const Pass = (runner, df) => df
-const Head = new MockStage('head', (runner, df) => Table,
+const Head = new MockTransform('head', (runner, df) => Table,
                            [], null, false, true)
-const Middle = new MockStage('middle', Pass, [], null, true, true)
-const Tail = new MockStage('tail', Pass, [], null, true, false)
-const TailNotify = new MockStage('tailNotify', Pass, [], 'keyword', true, false)
+const Middle = new MockTransform('middle', Pass, [], null, true, true)
+const Tail = new MockTransform('tail', Pass, [], null, true, false)
+const TailNotify = new MockTransform('tailNotify', Pass, [], 'keyword', true, false)
 
 /*
  * Some support for testing DOM.
@@ -80,7 +80,7 @@ const makeRow = (html) => {
 
 module.exports = {
   DOM,
-  MockStage,
+  MockTransform,
   ReadLocalData,
   concert: new Date(1983, 11, 2, 7, 55, 19, 0),
   bool: [

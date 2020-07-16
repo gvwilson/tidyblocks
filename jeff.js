@@ -129,7 +129,7 @@ const getCode = () => {
             blocks.push(curr)
             curr = curr.getNextBlock()
           }
-          const stages = blocks.map(block => {
+          const transforms = blocks.map(block => {
             // Expressions are pairs of (code, priority), so extract code.
             let temp = Blockly.JavaScript.blockToCode(block, true)
             if (Array.isArray(temp)) {
@@ -137,8 +137,8 @@ const getCode = () => {
             }
             return temp
           })
-          stages.unshift('"@pipeline"')
-          return `[${stages}]`
+          transforms.unshift('"@pipeline"')
+          return `[${transforms}]`
         })
   pipelines.unshift('"@program"')
   return `[${pipelines}]`

@@ -126,28 +126,28 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.JavaScript['plot_bar'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
-  return `["@stage", "bar", "${x_axis}", "${y_axis}"]`
+  return `["@transform", "bar", "${x_axis}", "${y_axis}"]`
 }
 
 // Box plot
 Blockly.JavaScript['plot_box'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
-  return `["@stage", "box", "${x_axis}", "${y_axis}"]`
+  return `["@transform", "box", "${x_axis}", "${y_axis}"]`
 }
 
 // Dot plot
 Blockly.JavaScript['plot_dot'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
-  return `["@stage", "dot", "${x_axis}", "${y_axis}"]`
+  return `["@transform", "dot", "${x_axis}", "${y_axis}"]`
 }
 
 // Histogram plot
 Blockly.JavaScript['plot_histogram'] = (block) => {
   const column = block.getFieldValue('COLUMN')
   const bins = parseFloat(block.getFieldValue('BINS'))
-  return `["@stage", "histogram", "${column}", ${bins}]`
+  return `["@transform", "histogram", "${column}", ${bins}]`
 }
 
 // Scatter plot
@@ -155,5 +155,5 @@ Blockly.JavaScript['plot_scatter'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
   const y_axis = block.getFieldValue('Y_AXIS')
   const color = block.getFieldValue('COLOR')
-  return `["@stage", "scatter", "${x_axis}", "${y_axis}", "${color}"]`
+  return `["@transform", "scatter", "${x_axis}", "${y_axis}", "${color}"]`
 }
