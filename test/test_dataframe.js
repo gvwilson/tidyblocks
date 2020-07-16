@@ -3,9 +3,9 @@
 const assert = require('assert')
 
 const util = require('../libs/util')
-const MISSING = util.MISSING
-const {Expr} = require('../libs/expr')
-const {Summarize} = require('../libs/summarize')
+const Value = require('../libs/value')
+const Op = require('../libs/op')
+const Summarize = require('../libs/summarize')
 const {DataFrame} = require('../libs/dataframe')
 
 const ZeroRows = []
@@ -292,7 +292,7 @@ describe('drop and select', () => {
 
 describe('filter', () => {
   it('keeps all rows', (done) => {
-    const expr = new Expr.logical(true)
+    const expr = new Value.logical(true)
     const df = new DataFrame(TwoRows)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame(TwoRows.slice())),
@@ -301,7 +301,7 @@ describe('filter', () => {
   })
 
   it('discards all rows', (done) => {
-    const expr = new Expr.logical(false)
+    const expr = new Value.logical(false)
     const df = new DataFrame(TwoRows)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame([], ['ones', 'tens'])),
@@ -310,8 +310,8 @@ describe('filter', () => {
   })
 
   it('discards some rows', (done) => {
-    const expr = new Expr.lessEqual(new Expr.column('tens'),
-                                    new Expr.number(20))
+    const expr = new Op.lessEqual(new Value.column('tens'),
+                                    new Value.number(20))
     const df = new DataFrame(ThreeRows)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame(TwoRows.slice())),
@@ -409,7 +409,7 @@ describe('group and ungroup', () => {
 describe('mutate', () => {
   it('requires a new column name', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.number(99)
+    const expr = new Value.number(99)
     assert.throws(() => df.mutate('', expr),
                   Error,
                   `Expected error with empty new column name`)
@@ -418,7 +418,7 @@ describe('mutate', () => {
 
   it('only allows legal column names', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.number(99)
+    const expr = new Value.number(99)
     assert.throws(() => df.mutate(' with spaces ', expr),
                   Error,
                   `Expected error with illegal column name`)
@@ -427,7 +427,7 @@ describe('mutate', () => {
 
   it('mutates an empty dataframe', (done) => {
     const df = new DataFrame([])
-    const expr = new Expr.number(99)
+    const expr = new Value.number(99)
     const result = df.mutate('col', expr)
     assert.deepEqual(result.data, [],
                      `Expected empty dataframe`)
@@ -436,7 +436,7 @@ describe('mutate', () => {
 
   it('creates an entirely new column', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.number(99)
+    const expr = new Value.number(99)
     const result = df.mutate('col', expr)
     assert(result.equal(new DataFrame([{ones: 1, tens: 10, col: 99},
                                        {ones: 2, tens: 20, col: 99}])),
@@ -446,7 +446,7 @@ describe('mutate', () => {
 
   it('replaces an existing column', (done) => {
     const df = new DataFrame(TwoRows)
-    const expr = new Expr.number(99)
+    const expr = new Value.number(99)
     const result = df.mutate('ones', expr)
     assert(result.equal(new DataFrame([{ones: 99, tens: 10},
                                        {ones: 99, tens: 20}])),
@@ -516,15 +516,15 @@ describe('sort', () => {
 
   it('sorts with missing data', (done) => {
     const input = [{first: 'a', second: 'Q'},
-                   {first: MISSING, second: 'Q'},
-                   {first: 'a', second: MISSING},
-                   {first: MISSING, second: MISSING}]
+                   {first: util.MISSING, second: 'Q'},
+                   {first: 'a', second: util.MISSING},
+                   {first: util.MISSING, second: util.MISSING}]
     const df = new DataFrame(input)
     const result = df.sort(['first', 'second'])
     const expected = [
-      { first: MISSING, second: MISSING },
-      { first: MISSING, second: 'Q' },
-      { first: 'a', second: MISSING },
+      { first: util.MISSING, second: util.MISSING },
+      { first: util.MISSING, second: 'Q' },
+      { first: 'a', second: util.MISSING },
       { first: 'a', second: 'Q' }
     ]
     assert.deepEqual(result.data, expected,

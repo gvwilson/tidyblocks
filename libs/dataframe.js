@@ -1,9 +1,8 @@
 'use strict'
 
 const util = require('./util')
-const MISSING = util.MISSING
-const {Expr} = require('./expr')
-const {Summarize} = require('./summarize')
+const {ExprBase} = require('./expr')
+const Summarize = require('./summarize')
 
 /**
  * Store a dataframe.
@@ -81,11 +80,11 @@ class DataFrame {
 
   /**
    * Filter rows, keeping those that pass a test.
-   * @param {Expr.base} expr The expression object that tests rows.
+   * @param {ExprBase} expr The expression object that tests rows.
    * @returns A new dataframe (possibly empty).
    */
   filter (expr) {
-    util.check(expr instanceof Expr.base,
+    util.check(expr instanceof ExprBase,
                `filter expression is not an expression object`)
     const newData = this.data.filter((row, i) => expr.run(row, i))
     const newColumns = this._makeColumns(newData, this.columns)
@@ -123,7 +122,7 @@ class DataFrame {
   /**
    * Create a new column using values from existing columns.
    * @param {string} newName New column's name. (If column already exists, it is replaced.)
-   * @param {Expr.base} expr The expression object that calculates new values.
+   * @param {ExprBase} expr The expression object that calculates new values.
    * @returns A new dataframe.
    */
   mutate (newName, expr) {
@@ -131,7 +130,7 @@ class DataFrame {
                `empty new column name for mutate`)
     util.check(newName.match(DataFrame.COLUMN_NAME),
                `illegal new name for column`)
-    util.check(expr instanceof Expr.base,
+    util.check(expr instanceof ExprBase,
                `new value expression is not an expression object`)
     const newData = this.data.map((row, i) => {
       const newRow = {...row}
@@ -183,10 +182,10 @@ class DataFrame {
         if (soFar !== 0) {
           return soFar
         }
-        if (left[col] === MISSING) {
+        if (left[col] === util.MISSING) {
           return -1
         }
-        if (right[col] === MISSING) {
+        if (right[col] === util.MISSING) {
           return 1
         }
         if (left[col] < right[col]) {

@@ -1,7 +1,7 @@
 'use strict'
 
 const util = require('./util')
-const {Transform} = require('./transform')
+const Transform = require('./transform')
 
 /**
  * Manage a single pipeline.
@@ -17,7 +17,7 @@ class Pipeline {
    * Convert to JSON.
    */
   toJSON () {
-    return [Pipeline.KIND,
+    return [Pipeline.FAMILY,
             ...this.transforms.map(transform => transform.toJSON())]
   }
 
@@ -67,7 +67,7 @@ class Pipeline {
     return {name: last.produces, data: data}
   }
 }
-Pipeline.KIND = '@pipeline'
+Pipeline.FAMILY = '@pipeline'
 
 module.exports = {
   Pipeline

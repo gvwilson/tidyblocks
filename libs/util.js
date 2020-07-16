@@ -55,6 +55,15 @@ const equal = (left, right) => {
 }
 
 /**
+ * Convert extraordinary values into our MISSING.
+ * @param {value} Value to check (and convert).
+ * @returns Safe value.
+ */
+const safeValue = (value) => {
+  return isFinite(value) ? value : MISSING
+}
+
+/**
  * Convert CSV-formatted text to array of objects with uniform keys.
  * @param {string} text Text to parse.
  * @returns Array of objects.
@@ -115,6 +124,7 @@ module.exports = {
   checkNumber,
   checkTypeEqual,
   equal,
+  safeValue,
   csvToTable,
   MISSING
 }

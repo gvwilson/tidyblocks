@@ -3,9 +3,10 @@
 const assert = require('assert')
 
 const util = require('../libs/util')
-const {Expr} = require('../libs/expr')
-const {Summarize} = require('../libs/summarize')
-const {Transform} = require('../libs/transform')
+const Value = require('../libs/value')
+const Op = require('../libs/op')
+const Summarize = require('../libs/summarize')
+const Transform = require('../libs/transform')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 const {JsonToObj} = require('../libs/json2obj')
@@ -40,30 +41,30 @@ describe('expression persistence', () => {
   
   it('restores a constant', (done) => {
     const factory = new JsonToObj()
-    assert.deepEqual(factory.expr([Expr.KIND, 'number', 123]),
-                     new Expr.number(123),
+    assert.deepEqual(factory.expr([Value.FAMILY, 'number', 123]),
+                     new Value.number(123),
                      `Constant`)
     done()
   })
 
   it('restores a column', (done) => {
     const factory = new JsonToObj()
-    assert.deepEqual(factory.expr([Expr.KIND, 'column', 'blue']),
-                     new Expr.column('blue'),
+    assert.deepEqual(factory.expr([Value.FAMILY, 'column', 'blue']),
+                     new Value.column('blue'),
                      `Column`)
     done()
   })
 
   it('restores unary operations', (done) => {
-    const child = new Expr.number(123)
+    const child = new Value.number(123)
     const childJSON = child.toJSON()
     const allChecks = [
-      ['negate', Expr.negate],
-      ['not', Expr.not]
+      ['negate', Op.negate],
+      ['not', Op.not]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()
-      assert.deepEqual(factory.expr([Expr.KIND, name, childJSON]),
+      assert.deepEqual(factory.expr([Op.FAMILY, name, childJSON]),
                        new func(child),
                        `Failed to restore unary "${name}"`)
     }
@@ -71,27 +72,27 @@ describe('expression persistence', () => {
   })
 
   it('restores binary operations', (done) => {
-    const child = new Expr.number(123)
+    const child = new Value.number(123)
     const childJSON = child.toJSON()
     const allChecks = [
-      ['add', Expr.add],
-      ['and', Expr.and],
-      ['divide', Expr.divide],
-      ['equal', Expr.equal],
-      ['greater', Expr.greater],
-      ['greaterEqual', Expr.greaterEqual],
-      ['less', Expr.less],
-      ['lessEqual', Expr.lessEqual],
-      ['multiply', Expr.multiply],
-      ['notEqual', Expr.notEqual],
-      ['or', Expr.or],
-      ['power', Expr.power],
-      ['remainder', Expr.remainder],
-      ['subtract', Expr.subtract]
+      ['add', Op.add],
+      ['and', Op.and],
+      ['divide', Op.divide],
+      ['equal', Op.equal],
+      ['greater', Op.greater],
+      ['greaterEqual', Op.greaterEqual],
+      ['less', Op.less],
+      ['lessEqual', Op.lessEqual],
+      ['multiply', Op.multiply],
+      ['notEqual', Op.notEqual],
+      ['or', Op.or],
+      ['power', Op.power],
+      ['remainder', Op.remainder],
+      ['subtract', Op.subtract]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()
-      assert.deepEqual(factory.expr([Expr.KIND, name, childJSON, childJSON]),
+      assert.deepEqual(factory.expr([Op.FAMILY, name, childJSON, childJSON]),
                        new func(child, child),
                        `Failed to restore binary "${name}"`)
     }
@@ -99,14 +100,14 @@ describe('expression persistence', () => {
   })
 
   it('restores ternary operations', (done) => {
-    const child = new Expr.number(123)
+    const child = new Value.number(123)
     const childJSON = child.toJSON()
     const allChecks = [
-      ['ifElse', Expr.ifElse]
+      ['ifElse', Op.ifElse]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()
-      assert.deepEqual(factory.expr([Expr.KIND, name, childJSON, childJSON, childJSON]),
+      assert.deepEqual(factory.expr([Op.FAMILY, name, childJSON, childJSON, childJSON]),
                        new func(child, child, child),
                        `Failed to restore ternary "${name}"`)
     }
@@ -114,18 +115,18 @@ describe('expression persistence', () => {
   })
 
   it('restores type-checking operations', (done) => {
-    const child = new Expr.number(123)
+    const child = new Value.number(123)
     const childJSON = child.toJSON()
     const allChecks = [
-      ['isLogical', Expr.isLogical],
-      ['isDatetime', Expr.isDatetime],
-      ['isMissing', Expr.isMissing],
-      ['isNumber', Expr.isNumber],
-      ['isText', Expr.isText]
+      ['isLogical', Op.isLogical],
+      ['isDatetime', Op.isDatetime],
+      ['isMissing', Op.isMissing],
+      ['isNumber', Op.isNumber],
+      ['isText', Op.isText]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()
-      assert.deepEqual(factory.expr([Expr.KIND, name, childJSON]),
+      assert.deepEqual(factory.expr([Op.FAMILY, name, childJSON]),
                        new func(child),
                        `Failed to restore type-checking expression ${name}`)
     }
@@ -133,17 +134,17 @@ describe('expression persistence', () => {
   })
 
   it('restores conversion operations', (done) => {
-    const child = new Expr.number(123)
+    const child = new Value.number(123)
     const childJSON = child.toJSON()
     const allChecks = [
-      ['toLogical', Expr.toLogical],
-      ['toDatetime', Expr.toDatetime],
-      ['toNumber', Expr.toNumber],
-      ['toString', Expr.toString]
+      ['toLogical', Op.toLogical],
+      ['toDatetime', Op.toDatetime],
+      ['toNumber', Op.toNumber],
+      ['toString', Op.toString]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()
-      assert.deepEqual(factory.expr([Expr.KIND, name, childJSON]),
+      assert.deepEqual(factory.expr([Op.FAMILY, name, childJSON]),
                        new func(child),
                        `Failed to restore conversion expression ${name}`)
     }
@@ -151,20 +152,20 @@ describe('expression persistence', () => {
   })
 
   it('restores datetime operations', (done) => {
-    const child = new Expr.datetime(fixture.concert)
+    const child = new Value.datetime(fixture.concert)
     const childJSON = child.toJSON()
     const allChecks = [
-      ['toYear', Expr.toYear],
-      ['toMonth', Expr.toMonth],
-      ['toDay', Expr.toDay],
-      ['toWeekday', Expr.toWeekday],
-      ['toHours', Expr.toHours],
-      ['toMinutes', Expr.toMinutes],
-      ['toSeconds', Expr.toSeconds]
+      ['toYear', Op.toYear],
+      ['toMonth', Op.toMonth],
+      ['toDay', Op.toDay],
+      ['toWeekday', Op.toWeekday],
+      ['toHours', Op.toHours],
+      ['toMinutes', Op.toMinutes],
+      ['toSeconds', Op.toSeconds]
     ]
     for (const [name, func] of allChecks) {
       const factory = new JsonToObj()
-      assert.deepEqual(factory.expr([Expr.KIND, name, childJSON]),
+      assert.deepEqual(factory.expr([Op.FAMILY, name, childJSON]),
                        new func(child),
                        `Failed to restore datetime operation ${name}`)
     }
@@ -183,17 +184,17 @@ describe('transform persistence', () => {
 
   it('restores drop from JSON', (done) => {
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'drop', ['left', 'right']]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'drop', ['left', 'right']]),
                      new Transform.drop(['left', 'right']),
                      `drop`)
     done()
   })
 
   it('restores filter from JSON', (done) => {
-    const child = new Expr.logical(true)
+    const child = new Value.logical(true)
     const childJSON = child.toJSON()
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'filter', childJSON]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'filter', childJSON]),
                      new Transform.filter(child),
                      `filter`)
     done()
@@ -202,7 +203,7 @@ describe('transform persistence', () => {
   it('restores groupBy from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'groupBy', columns]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'groupBy', columns]),
                      new Transform.groupBy(columns),
                      `groupBy`)
     done()
@@ -214,7 +215,7 @@ describe('transform persistence', () => {
           rightName = 'after',
           rightCol = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'join', leftName, leftCol, rightName, rightCol]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'join', leftName, leftCol, rightName, rightCol]),
                      new Transform.join(leftName, leftCol, rightName, rightCol),
                      `join`)
     done()
@@ -222,10 +223,10 @@ describe('transform persistence', () => {
 
   it('restores mutate from JSON', (done) => {
     const newName = 'finished'
-    const child = new Expr.logical(true)
+    const child = new Value.logical(true)
     const childJSON = child.toJSON()
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'mutate', newName, childJSON]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'mutate', newName, childJSON]),
                      new Transform.mutate(newName, child),
                      `mutate`)
     done()
@@ -234,7 +235,7 @@ describe('transform persistence', () => {
   it('restores notify from JSON', (done) => {
     const label = 'notification'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'notify', label]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'notify', label]),
                      new Transform.notify(label),
                      `notify`)
     done()
@@ -243,7 +244,7 @@ describe('transform persistence', () => {
   it('restores read from JSON', (done) => {
     const path = '/to/file'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'read', path]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'read', path]),
                      new Transform.read(path),
                      `notify`)
     done()
@@ -252,7 +253,7 @@ describe('transform persistence', () => {
   it('restores select from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'select', columns]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'select', columns]),
                      new Transform.select(columns),
                      `select`)
     done()
@@ -261,7 +262,7 @@ describe('transform persistence', () => {
   it('restores sort from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'sort', columns, false]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'sort', columns, false]),
                      new Transform.sort(columns, false),
                      `sort`)
     done()
@@ -270,7 +271,7 @@ describe('transform persistence', () => {
   it('restores summarize from JSON', (done) => {
     const transform = new Transform.summarize('mean', 'red')
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'summarize', 'mean', 'red']),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'summarize', 'mean', 'red']),
                      transform,
                      `summarize`)
     done()
@@ -278,7 +279,7 @@ describe('transform persistence', () => {
 
   it('restores ungroup from JSON', (done) => {
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'ungroup']),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'ungroup']),
                      new Transform.ungroup(),
                      `ungroup`)
     done()
@@ -287,7 +288,7 @@ describe('transform persistence', () => {
   it('restores unique from JSON', (done) => {
     const columns = ['left', 'right']
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'unique', columns]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'unique', columns]),
                      new Transform.unique(columns),
                      `unique`)
     done()
@@ -298,7 +299,7 @@ describe('plot persistence', () => {
   it('restores bar from JSON', (done) => {
     const axisX = 'age', axisY = 'height'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'bar', axisX, axisY]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'bar', axisX, axisY]),
                      new Transform.bar(axisX, axisY),
                      `bar`)
     done()
@@ -307,7 +308,7 @@ describe('plot persistence', () => {
   it('restores box from JSON', (done) => {
     const axisX = 'age', axisY = 'height'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'box', axisX, axisY]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'box', axisX, axisY]),
                      new Transform.box(axisX, axisY),
                      `box`)
     done()
@@ -316,7 +317,7 @@ describe('plot persistence', () => {
   it('restores dot from JSON', (done) => {
     const axisX = 'age'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'dot', axisX]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'dot', axisX]),
                      new Transform.dot(axisX),
                      `dot`)
     done()
@@ -326,7 +327,7 @@ describe('plot persistence', () => {
     const column = 'age'
     const bins = 17
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'histogram', column, bins]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'histogram', column, bins]),
                      new Transform.histogram(column, bins),
                      `histogram`)
     done()
@@ -335,7 +336,7 @@ describe('plot persistence', () => {
   it('restores scatter from JSON', (done) => {
     const axisX = 'age', axisY = 'height', color = 'vermilion'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'scatter', axisX, axisY, color]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'scatter', axisX, axisY, color]),
                      new Transform.scatter(axisX, axisY, color),
                      `scatter`)
     done()
@@ -346,7 +347,7 @@ describe('statistics persistence', () => {
   it('restores Kruskal-Wallis from JSON', (done) => {
     const significance = 0.03, groupName = 'red', valueName = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'KruskalWallis', significance, groupName, valueName]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'KruskalWallis', significance, groupName, valueName]),
                      new Transform.KruskalWallis(significance, groupName, valueName),
                      `Kruskal-Wallis`)
     done()
@@ -355,7 +356,7 @@ describe('statistics persistence', () => {
   it('restores one-sample t test from JSON', (done) => {
     const mean = 0.1, significance = 0.03, colName = 'red'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'TTestOneSample', mean, significance, colName]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'TTestOneSample', mean, significance, colName]),
                      new Transform.TTestOneSample(mean, significance, colName),
                      `one-sample t test`)
     done()
@@ -364,7 +365,7 @@ describe('statistics persistence', () => {
   it('restores paired two-sided t test from JSON', (done) => {
     const significance = 0.03, leftCol = 'green', rightCol = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'TTestPaired', significance, leftCol, rightCol]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'TTestPaired', significance, leftCol, rightCol]),
                      new Transform.TTestPaired(significance, leftCol, rightCol),
                      `paired t test`)
     done()
@@ -373,7 +374,7 @@ describe('statistics persistence', () => {
   it('restores one-sample z test from JSON', (done) => {
     const mean = 0.1, stdDev = 0.04, significance = 0.03, colName = 'red'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.KIND, 'ZTestOneSample', mean, stdDev, significance, colName]),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'ZTestOneSample', mean, stdDev, significance, colName]),
                      new Transform.ZTestOneSample(mean, stdDev, significance, colName),
                      `one-sample z test`)
     done()
@@ -383,9 +384,9 @@ describe('statistics persistence', () => {
 describe('pipeline persistence', () => {
   const factory = new JsonToObj()
   it('turns JSON into a single pipeline', (done) => {
-    const fixture = [Pipeline.KIND,
-                     [Transform.KIND, 'read', 'colors.csv'],
-                     [Transform.KIND, 'sort', ['left', 'right'], false]]
+    const fixture = [Pipeline.FAMILY,
+                     [Transform.FAMILY, 'read', 'colors.csv'],
+                     [Transform.FAMILY, 'sort', ['left', 'right'], false]]
     const actual = factory.pipeline(fixture)
     const expected = new Pipeline(new Transform.read('colors.csv'),
                                   new Transform.sort(['left', 'right'], false))
@@ -398,15 +399,15 @@ describe('pipeline persistence', () => {
 describe('program persistence', () => {
   it('turns JSON into a multi-pipeline program', (done) => {
     const fixture = [
-      Program.KIND,
-      [Pipeline.KIND,
-       [Transform.KIND, 'read', 'colors.csv']],
-      [Pipeline.KIND,
-       [Transform.KIND, 'read', 'colors.csv'],
-       [Transform.KIND, 'unique', ['red']]],
-      [Pipeline.KIND,
-       [Transform.KIND, 'read', 'colors.csv'],
-       [Transform.KIND, 'notify', 'notification']]
+      Program.FAMILY,
+      [Pipeline.FAMILY,
+       [Transform.FAMILY, 'read', 'colors.csv']],
+      [Pipeline.FAMILY,
+       [Transform.FAMILY, 'read', 'colors.csv'],
+       [Transform.FAMILY, 'unique', ['red']]],
+      [Pipeline.FAMILY,
+       [Transform.FAMILY, 'read', 'colors.csv'],
+       [Transform.FAMILY, 'notify', 'notification']]
     ]
     const factory = new JsonToObj()
     const program = factory.program(fixture)

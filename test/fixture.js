@@ -4,9 +4,8 @@ const fs = require('fs')
 const {JSDOM} = require('jsdom')
 
 const util = require('../libs/util')
-const MISSING = util.MISSING
+const Transform = require('../libs/transform')
 const {DataFrame} = require('../libs/dataframe')
-const {Transform} = require('../libs/transform')
 const {Environment} = require('../libs/environment')
 
 /**
@@ -88,26 +87,26 @@ module.exports = {
     {left: true, right: false},
     {left: false, right: true},
     {left: false, right: false},
-    {left: MISSING, right: false},
-    {left: false, right: MISSING},
-    {left: MISSING, right: MISSING}
+    {left: util.MISSING, right: false},
+    {left: false, right: util.MISSING},
+    {left: util.MISSING, right: util.MISSING}
   ],
   number: [
     {left: 2, right: 2},
     {left: 5, right: 2},
     {left: 2, right: 0},
-    {left: MISSING, right: 3},
-    {left: 4, right: MISSING},
-    {left: MISSING, right: MISSING}
+    {left: util.MISSING, right: 3},
+    {left: 4, right: util.MISSING},
+    {left: util.MISSING, right: util.MISSING}
   ],
   string: [
     {left: 'pqr', right: 'pqr'},
     {left: 'abc', right: 'def'},
     {left: 'def', right: 'abc'},
     {left: 'abc', right: ''},
-    {left: MISSING, right: 'def'},
-    {left: 'abc', right: MISSING},
-    {left: MISSING, right: MISSING}
+    {left: util.MISSING, right: 'def'},
+    {left: 'abc', right: util.MISSING},
+    {left: util.MISSING, right: util.MISSING}
   ],
   names: [
     {personal: 'William', family: 'Dyer'},
@@ -116,7 +115,7 @@ module.exports = {
   ],
   mixed: [
     {num: -1, date: new Date(), str: "abc", bool: true},
-    {num: MISSING, date: MISSING, str: MISSING, bool: MISSING}
+    {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
   ],
   Colors: [
     {name: 'black', red: 0, green: 0, blue: 0},

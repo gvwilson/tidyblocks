@@ -1,7 +1,6 @@
 'use strict'
 
 const util = require('./util')
-const MISSING = util.MISSING
 
 /**
  * Represent summarization as object.
@@ -43,7 +42,7 @@ class SummarizeAll extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     return rows.reduce((soFar, row) => {
       return (soFar && row[this.column]) ? true : false
@@ -61,11 +60,11 @@ class SummarizeAny extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     return rows.reduce((soFar, row) => {
       return (soFar || row[this.column]) ? true : false
-    }, true)
+    }, false)
   }
 }
 
@@ -92,7 +91,7 @@ class SummarizeMaximum extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     return rows.reduce((soFar, row) => {
       return (row[this.column] > soFar) ? row[this.column] : soFar
@@ -110,7 +109,7 @@ class SummarizeMean extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     return rows.reduce((total, row) => {
       return total + row[this.column]
@@ -128,7 +127,7 @@ class SummarizeMedian extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     const temp = [...rows]
     temp.sort((left, right) => {
@@ -154,7 +153,7 @@ class SummarizeMinimum extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     return rows.reduce((soFar, row) => {
       return (row[this.column] < soFar) ? row[this.column] : soFar
@@ -172,7 +171,7 @@ class SummarizeStdDev extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     const values = rows.map(row => row[this.column])
     return Math.sqrt(this._variance(values))
@@ -189,7 +188,7 @@ class SummarizeSum extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     return rows.reduce((total, row) => {
       return total + row[this.column]
@@ -207,17 +206,14 @@ class SummarizeVariance extends SummarizeBase {
 
   run (rows) {
     if (rows.length === 0) {
-      return MISSING
+      return util.MISSING
     }
     const values = rows.map(row => row[this.column])
     return this._variance(values)
   }
 }
 
-/**
- * Summarization structure.
- */
-const Summarize = {
+module.exports = {
   base: SummarizeBase,
   all: SummarizeAll,
   any: SummarizeAny,
@@ -230,5 +226,3 @@ const Summarize = {
   sum: SummarizeSum,
   variance: SummarizeVariance
 }
-
-module.exports = {Summarize}

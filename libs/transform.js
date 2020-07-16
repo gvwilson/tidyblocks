@@ -1,10 +1,12 @@
 'use strict'
 
 const util = require('./util')
-const {Expr} = require('./expr')
-const {Summarize} = require('./summarize')
+const {ExprBase} = require('./expr')
 const {DataFrame} = require('./dataframe')
-const {Statistics} = require('./statistics')
+const Summarize = require('./summarize')
+const Statistics = require('./statistics')
+
+const FAMILY = '@transform'
 
 /**
  * Store information about a transform in a pipeline
@@ -48,7 +50,7 @@ class TransformBase {
   }
 
   toJSON (...extras) {
-    return [Transform.KIND, this.name, ...extras]
+    return [FAMILY, this.name, ...extras]
   }
 }
 
@@ -61,7 +63,7 @@ class TransformDrop extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super(TransformDrop.KIND, [], null, true, true)
+    super('drop', [], null, true, true)
     this.columns = columns
   }
 
@@ -78,7 +80,6 @@ class TransformDrop extends TransformBase {
     return super.toJSON(this.columns)
   }
 }
-TransformDrop.KIND = 'drop'
 
 /**
  * Filter rows.
@@ -86,9 +87,9 @@ TransformDrop.KIND = 'drop'
  */
 class TransformFilter extends TransformBase {
   constructor (expr) {
-    util.check(expr instanceof Expr.base,
+    util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super(TransformFilter.KIND, [], null, true, true)
+    super('filter', [], null, true, true)
     this.expr = expr
   }
 
@@ -106,7 +107,6 @@ class TransformFilter extends TransformBase {
     return super.toJSON(this.expr.toJSON())
   }
 }
-TransformFilter.KIND = 'filter'
 
 /**
  * Group values.
@@ -116,7 +116,7 @@ class TransformGroupBy extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super(TransformGroupBy.KIND, [], null, true, true)
+    super('groupBy', [], null, true, true)
     this.columns = columns
   }
 
@@ -133,7 +133,6 @@ class TransformGroupBy extends TransformBase {
     return super.toJSON(this.columns)
   }
 }
-TransformGroupBy.KIND = 'groupBy'
 
 /**
  * Join values.
@@ -144,7 +143,7 @@ TransformGroupBy.KIND = 'groupBy'
  */
 class TransformJoin extends TransformBase {
   constructor (leftName, leftCol, rightName, rightCol) {
-    super(TransformJoin.KIND, [leftName, rightName], null, false, true)
+    super('join', [leftName, rightName], null, false, true)
     this.leftName = leftName
     this.leftCol = leftCol
     this.rightName = rightName
@@ -174,7 +173,6 @@ class TransformJoin extends TransformBase {
                         this.rightName, this.rightCol)
   }
 }
-TransformJoin.KIND = 'join'
 
 /**
  * Create new columns.
@@ -185,9 +183,9 @@ class TransformMutate extends TransformBase {
   constructor (newName, expr) {
     util.check(typeof newName === 'string',
                `Expected string as new name`)
-    util.check(expr instanceof Expr.base,
+    util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super(TransformMutate.KIND, [], null, true, true)
+    super('mutate', [], null, true, true)
     this.newName = newName
     this.expr = expr
   }
@@ -207,7 +205,6 @@ class TransformMutate extends TransformBase {
     return super.toJSON(this.newName, this.expr.toJSON())
   }
 }
-TransformMutate.KIND = 'mutate'
 
 /**
  * Notify that a result is available.
@@ -217,7 +214,7 @@ class TransformNotify extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
                `Expected string`)
-    super(TransformNotify.KIND, [], label, true, false)
+    super('notify', [], label, true, false)
     this.label = label
   }
 
@@ -235,7 +232,6 @@ class TransformNotify extends TransformBase {
     return super.toJSON(this.label)
   }
 }
-TransformNotify.KIND = 'notify'
 
 /**
  * Read a dataset.
@@ -245,7 +241,7 @@ class TransformRead extends TransformBase {
   constructor (path) {
     util.check(typeof path === 'string',
                `Expected string`)
-    super(TransformRead.KIND, [], null, false, true)
+    super('read', [], null, false, true)
     this.path = path
   }
 
@@ -265,7 +261,6 @@ class TransformRead extends TransformBase {
     return super.toJSON(this.path)
   }
 }
-TransformRead.KIND = 'read'
 
 /**
  * Select columns.
@@ -275,7 +270,7 @@ class TransformSelect extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super(TransformSelect.KIND, [], null, true, true)
+    super('select', [], null, true, true)
     this.columns = columns
   }
 
@@ -292,7 +287,6 @@ class TransformSelect extends TransformBase {
     return super.toJSON(this.columns)
   }
 }
-TransformSelect.KIND = 'select'
 
 /**
  * Sort data.
@@ -305,7 +299,7 @@ class TransformSort extends TransformBase {
                `Expected array of columns`)
     util.check(typeof reverse === 'boolean',
                `Expected Boolean`)
-    super(TransformSort.KIND, [], null, true, true)
+    super('sort', [], null, true, true)
     this.columns = columns
     this.reverse = reverse
   }
@@ -323,7 +317,6 @@ class TransformSort extends TransformBase {
     return super.toJSON(this.columns, this.reverse)
   }
 }
-TransformSort.KIND = 'sort'
 
 /**
  * Summarize data.
@@ -338,7 +331,7 @@ class TransformSummarize extends TransformBase {
                `Unknown summarization operation ${op}`)
     util.check(typeof column === 'string',
                `Expected string as column name`)
-    super(TransformSummarize.KIND, [], null, true, true)
+    super('summarize', [], null, true, true)
     this.op = op
     this.column = column
   }
@@ -359,14 +352,13 @@ class TransformSummarize extends TransformBase {
     return super.toJSON(this.op, this.column)
   }
 }
-TransformSummarize.KIND = 'summarize'
 
 /**
  * Make a function to remove grouping
  */
 class TransformUngroup extends TransformBase {
   constructor () {
-    super(TransformUngroup.KIND, [], null, true, true)
+    super('ungroup', [], null, true, true)
   }
 
   run (runner, df) {
@@ -378,7 +370,6 @@ class TransformUngroup extends TransformBase {
     return super.toJSON()
   }
 }
-TransformUngroup.KIND = 'ungroup'
 
 /**
  * Select rows with unique values.
@@ -405,7 +396,6 @@ class TransformUnique extends TransformBase {
     return super.toJSON(this.columns)
   }
 }
-TransformUnique.KIND = 'unique'
 
 // ----------------------------------------------------------------------
 
@@ -644,12 +634,8 @@ class TransformZTestOneSample extends TransformStats {
 
 // ----------------------------------------------------------------------
 
-/**
- * Construct transforms.
- */
-const Transform = {
-  KIND: '@transform',
-
+module.exports = {
+  FAMILY: FAMILY,
   base: TransformBase,
   drop: TransformDrop,
   filter: TransformFilter,
@@ -673,5 +659,3 @@ const Transform = {
   TTestPaired: TransformTTestPaired,
   ZTestOneSample: TransformZTestOneSample
 }
-
-module.exports = {Transform}

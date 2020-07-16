@@ -3,9 +3,10 @@
 const assert = require('assert')
 
 const util = require('../libs/util')
-const {Expr} = require('../libs/expr')
-const {Summarize} = require('../libs/summarize')
-const {Transform} = require('../libs/transform')
+const Value = require('../libs/value')
+const Op = require('../libs/op')
+const Summarize = require('../libs/summarize')
+const Transform = require('../libs/transform')
 const {Pipeline} = require('../libs/pipeline')
 const {Program} = require('../libs/program')
 const {JsonToObj} = require('../libs/json2obj')
@@ -28,46 +29,67 @@ describe('persistence infrastructure', () => {
 })
 
 describe('expression persistence', () => {
+  it('persists absent values', (done) => {
+    assert.deepEqual([Value.FAMILY, 'absent'],
+                     (new Value.absent()).toJSON(),
+                     `Mis-match`)
+    done()
+  })
+
   it('persists constants', (done) => {
-    assert.deepEqual([Expr.KIND, 'text', 'orange'],
-                     (new Expr.text('orange')).toJSON(),
+    assert.deepEqual([Value.FAMILY, 'text', 'orange'],
+                     (new Value.text('orange')).toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists column getters', (done) => {
-    assert.deepEqual([Expr.KIND, 'column', 'orange'],
-                     (new Expr.column('orange')).toJSON(),
+    assert.deepEqual([Value.FAMILY, 'column', 'orange'],
+                     (new Value.column('orange')).toJSON(),
+                     `Mis-match`)
+    done()
+  })
+
+  it('persists normal distributions', (done) => {
+    assert.deepEqual([Value.FAMILY, 'normal', 1.2, 3.4],
+                     (new Value.normal(1.2, 3.4)).toJSON(),
+                     `Mis-match`)
+    done()
+  })
+
+  it('persists uniform distributions', (done) => {
+    assert.deepEqual([Value.FAMILY, 'uniform', 1.2, 3.4],
+                     (new Value.uniform(1.2, 3.4)).toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists unary expressions', (done) => {
-    const expr = new Expr.not(new Expr.logical(false))
-    assert.deepEqual([Expr.KIND, 'not', [Expr.KIND, 'logical', false]],
+    const expr = new Op.not(new Value.logical(false))
+    assert.deepEqual([Op.FAMILY, 'not', [Value.FAMILY, 'logical', false]],
                      expr.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists binary expressions', (done) => {
-    const expr = new Expr.power(new Expr.number(1), new Expr.number(2))
-    assert.deepEqual([Expr.KIND, 'power',
-                      [Expr.KIND, 'number', 1],
-                      [Expr.KIND, 'number', 2]],
+    const expr = new Op.power(new Value.number(1), new Value.number(2))
+    assert.deepEqual([Op.FAMILY, 'power',
+                      [Value.FAMILY, 'number', 1],
+                      [Value.FAMILY, 'number', 2]],
                      expr.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists ternary expressions', (done) => {
-    const expr = new Expr.ifElse(new Expr.logical(true),
-                                 new Expr.text('a'),
-                                 new Expr.text('b'))
-    const expected = [Expr.KIND, 'ifElse',
-                      [Expr.KIND, 'logical', true],
-                      [Expr.KIND, 'text', 'a'],
-                      [Expr.KIND, 'text', 'b']]
+    const expr = new Op.ifElse(new Value.logical(true),
+                               new Value.text('a'),
+                               new Value.text('b'))
+    const expected = [Op.FAMILY, 'ifElse',
+                      [Value.FAMILY, 'logical', true],
+                      [Value.FAMILY, 'text', 'a'],
+                      [Value.FAMILY, 'text', 'b']]
     assert.deepEqual(expected, expr.toJSON(),
                      `Mis-match`)
     done()
@@ -76,15 +98,15 @@ describe('expression persistence', () => {
 
 describe('transform persistence', () => {
   it('persists drop', (done) => {
-    assert.deepEqual([Transform.KIND, 'drop', ['left', 'right']],
+    assert.deepEqual([Transform.FAMILY, 'drop', ['left', 'right']],
                      (new Transform.drop(['left', 'right'])).toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists filter', (done) => {
-    const transform = new Transform.filter(new Expr.column('keep'))
-    assert.deepEqual([Transform.KIND, 'filter', [Expr.KIND, 'column', 'keep']],
+    const transform = new Transform.filter(new Value.column('keep'))
+    assert.deepEqual([Transform.FAMILY, 'filter', [Value.FAMILY, 'column', 'keep']],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -92,7 +114,7 @@ describe('transform persistence', () => {
 
   it('persists groupBy', (done) => {
     const transform = new Transform.groupBy(['pink', 'yellow'])
-    assert.deepEqual([Transform.KIND, 'groupBy', ['pink', 'yellow']],
+    assert.deepEqual([Transform.FAMILY, 'groupBy', ['pink', 'yellow']],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -100,15 +122,15 @@ describe('transform persistence', () => {
 
   it('persists join', (done) => {
     const transform = new Transform.join('west', 'up', 'east', 'down')
-    assert.deepEqual([Transform.KIND, 'join', 'west', 'up', 'east', 'down'],
+    assert.deepEqual([Transform.FAMILY, 'join', 'west', 'up', 'east', 'down'],
                      transform.toJSON(),
                      `Mis-match`)
     done()
   })
 
   it('persists mutate', (done) => {
-    const transform = new Transform.mutate('fresh', new Expr.logical(true))
-    assert.deepEqual([Transform.KIND, 'mutate', 'fresh', [Expr.KIND, 'logical', true]],
+    const transform = new Transform.mutate('fresh', new Value.logical(true))
+    assert.deepEqual([Transform.FAMILY, 'mutate', 'fresh', [Value.FAMILY, 'logical', true]],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -116,7 +138,7 @@ describe('transform persistence', () => {
 
   it('persists select', (done) => {
     const transform = new Transform.select(['pink', 'orange'])
-    assert.deepEqual([Transform.KIND, 'select', ['pink', 'orange']],
+    assert.deepEqual([Transform.FAMILY, 'select', ['pink', 'orange']],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -124,7 +146,7 @@ describe('transform persistence', () => {
 
   it('persists summarize', (done) => {
     const transform = new Transform.summarize('maximum', 'red')
-    assert.deepEqual([Transform.KIND, 'summarize', 'maximum', 'red'],
+    assert.deepEqual([Transform.FAMILY, 'summarize', 'maximum', 'red'],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -132,7 +154,7 @@ describe('transform persistence', () => {
 
   it('persists ungroup', (done) => {
     const transform = new Transform.ungroup()
-    assert.deepEqual([Transform.KIND, 'ungroup'],
+    assert.deepEqual([Transform.FAMILY, 'ungroup'],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -140,7 +162,7 @@ describe('transform persistence', () => {
 
   it('persists notify', (done) => {
     const transform = new Transform.notify('notification')
-    assert.deepEqual([Transform.KIND, 'notify', 'notification'],
+    assert.deepEqual([Transform.FAMILY, 'notify', 'notification'],
                      transform.toJSON(),
                      `Mis-match`)
     done()
@@ -152,9 +174,9 @@ describe('pipeline persistence', () => {
     const path = '/path/to/file'
     const pipeline = new Pipeline(new Transform.read(path), new Transform.sort(['left'], true))
     const actual = pipeline.toJSON()
-    const expected = [Pipeline.KIND,
-                      [Transform.KIND, 'read', path],
-                      [Transform.KIND, 'sort', ['left'], true]]
+    const expected = [Pipeline.FAMILY,
+                      [Transform.FAMILY, 'read', path],
+                      [Transform.FAMILY, 'sort', ['left'], true]]
     assert.deepEqual(actual, expected,
                      `Wrong JSON`)
     done()
@@ -170,15 +192,15 @@ describe('program persistence', () => {
     )
     const actual = program.toJSON()
     const expected = [
-      Program.KIND,
-      [Pipeline.KIND,
-       [Transform.KIND, 'read', '/path/to/first']],
-      [Pipeline.KIND,
-       [Transform.KIND, 'read', '/path/to/second'],
-       [Transform.KIND, 'unique', ['left']]],
-      [Pipeline.KIND,
-       [Transform.KIND, 'read', '/path/to/third'],
-       [Transform.KIND, 'notify', 'notification']]
+      Program.FAMILY,
+      [Pipeline.FAMILY,
+       [Transform.FAMILY, 'read', '/path/to/first']],
+      [Pipeline.FAMILY,
+       [Transform.FAMILY, 'read', '/path/to/second'],
+       [Transform.FAMILY, 'unique', ['left']]],
+      [Pipeline.FAMILY,
+       [Transform.FAMILY, 'read', '/path/to/third'],
+       [Transform.FAMILY, 'notify', 'notification']]
     ]
     assert.deepEqual(actual, expected,
                      `Wrong result for persisting program`)

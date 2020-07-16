@@ -3,7 +3,6 @@
 const assert = require('assert')
 
 const util = require('../libs/util')
-const MISSING = util.MISSING
 
 const csvTest = (fixture, expected, message) => {
   fixture = fixture.join('\n')
@@ -29,9 +28,9 @@ describe('basic functionality', () => {
     done()
   })
 
-  it('checks that only numbers and MISSING are numbers', (done) => {
+  it('checks that only numbers and util.MISSING are numbers', (done) => {
     util.checkNumber(123)
-    util.checkNumber(MISSING)
+    util.checkNumber(util.MISSING)
     assert.throws(() => util.checkNumber('abc'),
                   Error,
                   `Expected an Error for string`)
@@ -41,15 +40,15 @@ describe('basic functionality', () => {
     done()
   })
 
-  it('checks that types are MISSING or equal', (done) => {
+  it('checks that types are util.MISSING or equal', (done) => {
     const firstDate = new Date('1983-12-02')
     util.checkTypeEqual(1, 2)
     util.checkTypeEqual('a', 'b')
-    util.checkTypeEqual(MISSING, MISSING)
+    util.checkTypeEqual(util.MISSING, util.MISSING)
     util.checkTypeEqual(firstDate, new Date())
-    util.checkTypeEqual(MISSING, 'a')
-    util.checkTypeEqual(1, MISSING)
-    util.checkTypeEqual(firstDate, MISSING)
+    util.checkTypeEqual(util.MISSING, 'a')
+    util.checkTypeEqual(1, util.MISSING)
+    util.checkTypeEqual(firstDate, util.MISSING)
     assert.throws(() => util.checkTypeEqual(1, 'a'),
                   Error,
                   `Expected an Error for number and string`)

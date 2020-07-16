@@ -3,8 +3,7 @@
 const assert = require('assert')
 
 const util = require('../libs/util')
-const MISSING = util.MISSING
-const {Summarize} = require('../libs/summarize')
+const Summarize = require('../libs/summarize')
 
 const twoRows = [{ones: 1, tens: 10},
                  {ones: 2, tens: 20}]
@@ -13,6 +12,53 @@ const threeRows = [{ones: 3},
                    {ones: 2},
                    {ones: 2},
                    {ones: 1}]
+
+describe('all', () => {
+  it('requires a column name for all', (done) => {
+    assert.throws(() => new Summarize.all(''),
+                  Error,
+                  `Should not be able to logical-and with empty column`)
+    done()
+  })
+
+  it('does all on empty tables', (done) => {
+    const op = new Summarize.all('name')
+    assert.equal(op.run([]), util.MISSING,
+                 `Expected MISSING for empty table`)
+    done()
+  })
+
+  it('does all on non-empty tables', (done) => {
+    const op = new Summarize.all('name')
+    assert.equal(op.run([{name: true}, {name: false}]),
+                 false,
+                 `Expected false`)
+    done()
+  })
+})
+
+describe('any', () => {
+  it('requires a column name for any', (done) => {
+    assert.throws(() => new Summarize.any(''),
+                  Error,
+                  `Should not be able to logical-or with empty column`)
+    done()
+  })
+
+  it('does any on empty tables', (done) => {
+    const op = new Summarize.any('name')
+    assert.equal(op.run([]), util.MISSING,
+                 `Expected MISSING for empty table`)
+    done()
+  })
+
+  it('does any on non-empty tables', (done) => {
+    const op = new Summarize.any('name')
+    assert.equal(op.run([{name: false}, {name: true}]), true,
+                 `Expected true`)
+    done()
+  })
+})
 
 describe('count', () => {
   it('requires a column name for count', (done) => {
@@ -47,7 +93,7 @@ describe('maximum', () => {
 
   it('finds maximum of empty tables', (done) => {
     const op = new Summarize.maximum('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })
@@ -70,7 +116,7 @@ describe('mean', () => {
 
   it('finds mean of empty tables', (done) => {
     const op = new Summarize.mean('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })
@@ -93,7 +139,7 @@ describe('median', () => {
 
   it('finds median of empty tables', (done) => {
     const op = new Summarize.median('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })
@@ -123,7 +169,7 @@ describe('minimum', () => {
 
   it('finds minimum of empty tables', (done) => {
     const op = new Summarize.minimum('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })
@@ -146,15 +192,15 @@ describe('minimum', () => {
 
 describe('standard deviation', () => {
   it('requires a valid column name for stdDev', (done) => {
-    assert.throws(() => new Summarize.stdDev(MISSING),
+    assert.throws(() => new Summarize.stdDev(util.MISSING),
                   Error,
-                  `Should not be able to summarize with MISSING as column name`)
+                  `Should not be able to summarize with util.MISSING as column name`)
     done()
   })
 
   it('finds standard deviation of empty tables', (done) => {
     const op = new Summarize.stdDev('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })
@@ -177,7 +223,7 @@ describe('sum', () => {
 
   it('finds sum of empty tables', (done) => {
     const op = new Summarize.sum('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })
@@ -200,7 +246,7 @@ describe('variance', () => {
 
   it('finds variance of empty tables', (done) => {
     const op = new Summarize.variance('ones')
-    assert.equal(op.run([]), MISSING,
+    assert.equal(op.run([]), util.MISSING,
                  `Expected missing value`)
     done()
   })

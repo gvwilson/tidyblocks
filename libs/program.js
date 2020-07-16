@@ -26,7 +26,7 @@ class Program {
    * Convert program to JSON.
    */
   toJSON () {
-    return [Program.KIND, ...this.pipelines.map(pipeline => pipeline.toJSON())]
+    return [Program.FAMILY, ...this.pipelines.map(pipeline => pipeline.toJSON())]
   }
 
   /**
@@ -105,7 +105,7 @@ class Program {
 /**
  * Indicate that persisted JSON is program.
  */
-Program.KIND = '@program'
+Program.FAMILY = '@program'
 
 module.exports = {
   Program

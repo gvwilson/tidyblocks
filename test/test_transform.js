@@ -2,11 +2,10 @@
 
 const assert = require('assert')
 const util = require('../libs/util')
-const MISSING = util.MISSING
 const {DataFrame} = require('../libs/dataframe')
-const {Expr} = require('../libs/expr')
-const {Summarize} = require('../libs/summarize')
-const {Transform} = require('../libs/transform')
+const Value = require('../libs/value')
+const Summarize = require('../libs/summarize')
+const Transform = require('../libs/transform')
 const {Environment} = require('../libs/environment')
 
 const fixture = require('./fixture')
@@ -24,7 +23,7 @@ describe('build dataframe operations', () => {
 
   it('builds filter transform', (done) => {
     const runner = new Environment(fixture.ReadLocalData)
-    const expr = new Expr.column('right')
+    const expr = new Value.column('right')
     const transform = new Transform.filter(expr)
     const result = transform.run(runner, new DataFrame(fixture.bool))
     const expected = fixture.bool.filter(row => (row.right === true))
@@ -61,7 +60,7 @@ describe('build dataframe operations', () => {
 
   it('builds mutate transform', (done) => {
     const runner = new Environment(fixture.ReadLocalData)
-    const mutater = new Expr.text('stuff')
+    const mutater = new Value.text('stuff')
     const transform = new Transform.mutate('value', mutater)
     const result = transform.run(runner, new DataFrame(fixture.names))
     assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),
@@ -109,7 +108,7 @@ describe('build dataframe operations', () => {
     const transform = new Transform.sort(['left'], true)
     const result = transform.run(runner, new DataFrame(fixture.string))
     const actual = result.data.map(row => row.left)
-    const expected = ['pqr', 'def', 'abc', 'abc', 'abc', MISSING, MISSING]
+    const expected = ['pqr', 'def', 'abc', 'abc', 'abc', util.MISSING, util.MISSING]
     assert.deepEqual(actual, expected,
                      `Wrong sorted values`)
     done()
@@ -332,8 +331,8 @@ describe('transform equality tests', () => {
   })
 
   it('compares filters', (done) => {
-    const filter_true = new Transform.filter(new Expr.logical(true))
-    const filter_false = new Transform.filter(new Expr.logical(false))
+    const filter_true = new Transform.filter(new Value.logical(true))
+    const filter_false = new Transform.filter(new Value.logical(false))
     assert(filter_true.equal(filter_true),
            `Same should equal`)
     assert(!filter_false.equal(filter_true),
@@ -374,13 +373,13 @@ describe('transform equality tests', () => {
   })
 
   it('compares mutates', (done) => {
-    const mutate_true = new Transform.mutate('name', new Expr.logical(true))
-    const mutate_false = new Transform.mutate('name', new Expr.logical(false))
+    const mutate_true = new Transform.mutate('name', new Value.logical(true))
+    const mutate_false = new Transform.mutate('name', new Value.logical(false))
     assert(mutate_true.equal(mutate_true),
            `Same should equal`)
     assert(!mutate_false.equal(mutate_true),
            `Different should not equal`)
-    const mutate_true_other = new Transform.mutate('other', new Expr.logical(true))
+    const mutate_true_other = new Transform.mutate('other', new Value.logical(true))
     assert(!mutate_true.equal(mutate_true_other),
            `Names should matter`)
     const groupBy = new Transform.groupBy(['left'])
