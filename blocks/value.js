@@ -160,14 +160,14 @@ Blockly.defineBlocksWithJsonArray([
 // Column name
 Blockly.TidyBlocks['value_column'] = (block) => {
   const column = block.getFieldValue('COLUMN')
-  const code = `["@expr", "column", "${column}"]`
+  const code = `["@value", "column", "${column}"]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Datetime
 Blockly.TidyBlocks['value_datetime'] = (block) => {
   const value = block.getFieldValue('VALUE')
-  const code = `["@expr", "datetime", "${value}"]`
+  const code = `["@value", "datetime", "${value}"]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
@@ -175,27 +175,27 @@ Blockly.TidyBlocks['value_datetime'] = (block) => {
 Blockly.TidyBlocks['value_logical'] = (block) => {
   const value = block.getFieldValue('VALUE')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const code = `["@expr", "logical", ${value}]`
+  const code = `["@value", "logical", ${value}]`
   return [code, order]
 }
 
 // Number
 Blockly.TidyBlocks['value_number'] = (block) => {
   const value = parseFloat(block.getFieldValue('VALUE'))
-  const code = `["@expr", "number", ${value}]`
+  const code = `["@value", "number", ${value}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Text
 Blockly.TidyBlocks['value_text'] = (block) => {
   const value = block.getFieldValue('VALUE')
-  const code = `["@expr", "text", "${value}"]`
+  const code = `["@value", "text", "${value}"]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Row number
 Blockly.TidyBlocks['value_rownum'] = (block) => {
-  const code = `["@expr", "rownum"]`
+  const code = `["@value", "rownum"]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
@@ -205,7 +205,7 @@ Blockly.TidyBlocks['value_exponential'] = (block) => {
   if (Number.isNaN(rate)) {
     throw new Error(`exponential rate is not a number`)
   }
-  const code = `["@expr", "exponential", ${rate}]`
+  const code = `["@value", "exponential", ${rate}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
@@ -219,7 +219,7 @@ Blockly.TidyBlocks['value_normal'] = (block) => {
   if (Number.isNaN(variance) || (variance < 0)) {
     throw new Error(`normal variance is not a non-negative number`)
   }
-  const code = `["@expr", "normal", ${mean}, ${variance}]`
+  const code = `["@value", "normal", ${mean}, ${variance}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
@@ -233,6 +233,6 @@ Blockly.TidyBlocks['value_uniform'] = (block) => {
   if (Number.isNaN(high)) {
     throw new Error(`uniform high bound is not a number`)
   }
-  const code = `["@expr", "uniform", ${low}, ${high}]`
+  const code = `["@value", "uniform", ${low}, ${high}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }

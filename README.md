@@ -17,10 +17,7 @@ and that your work may be made available under the terms of [our license](LICENS
 ## Actions
 
 -   `npm run build`: regenerate `tidyblocks.min.js`, then open `index.html` to see it.
-    This is currently broken.
-
--   `npm run jeff`: regenerates `jeff.min.js` for testing, then open `jeff.html` to see it.
-    Drag out a few blocks, then open the console and run `jeff.getCode()` to see the JSON for the blocks.
+    Drag out a few blocks, then open the console and run `tidyblocks.getCode()` to see the JSON for the blocks.
 
 -   `npm run coverage`: run tests and report code coverage (open `coverage/index.html` to see results).
 
@@ -69,13 +66,9 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 ### Other Files
 
--   `index.html`: user interface page.
+-   `index.html`: interface page.
 
--   `index.js`: gathers contents of `libs/*.js` for bundling to create `tidyblocks.min.js`.
-
--   `jeff.html`: testing interface page.
-
--   `jeff.js`: gathers blocks for bundling to create `jeff.min.js` for testing.
+-   `index.js`: gathers blocks for bundling to create `tidyblocks.min.js` for testing.
 
 -   `test/test_*.js`: unit tests.
 
@@ -99,16 +92,16 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 ## How It Works
 
-This section describes the implementation in `jeff.html` and `jeff.js`,
+This section describes the implementation in `index.html` and `index.js`,
 which replaces the half-finished one in `index.html` and `index.js`
 and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
 (which is online at <http://tidyblocks.tech>).
 
--   On launch, `jeff.html` loads `jeff.min.js` with the namespace `jeff`
-    and then calls `jeff.setup`.
+-   On launch, `index.html` loads `tidyblocks.min.js` with the namespace `tidyblocks`
+    and then calls `tidyblocks.setup`.
 
--   As `jeff.min.js` is loaded,
-    the code in `jeff.js` loads `blocks/*.js`
+-   As `tidyblocks.min.js` is loaded,
+    the code in `index.js` loads `blocks/*.js`
     to register blocks with Blockly.
     When `setup` is called,
     it creates input validators for those blocks
@@ -125,9 +118,9 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
         a future cleanup would be to unify these somehow to remove the duplication.*
 
 -   The user can now drag blocks out to build a program.
-    Only those blocks listed in the `xml` element with the ID `toolbox` in `jeff.html` are visible.
+    Only those blocks listed in the `xml` element with the ID `toolbox` in `index.html` are visible.
 
--   The function `getCode` (`jeff.js`) builds a JSON representation of the current program.
+-   The function `getCode` (`index.js`) builds a JSON representation of the current program.
     (This has to be run in the JavaScript console right now, but will be connected to a button in the UI.)
     It relies on `Blockly.TidyBlocks.workspaceToCode` (`blocks/codegen.js`):
     1.  Get the top block of each stack in the workspace.
@@ -156,7 +149,7 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
     -   *The UI should flag absent values and refuse to run pipelines containing them
         rather than running and raising errors.*
 
--   The function `getProgram` (`jeff.js`) gets the stringified representation of the program,
+-   The function `getProgram` (`index.js`) gets the stringified representation of the program,
     then creates an instance of `JsonToObj` (`libs/json2obj.js`)
     and passes the JSON to its `.program` method
     to convert the JSON to runnable objects.

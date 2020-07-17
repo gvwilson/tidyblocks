@@ -19,7 +19,7 @@ const formatMultipleColumnNames = (raw) => {
  * sub-block is missing.
  */
 const valueToCode = (block, label, order) => {
-  return Blockly.TidyBlocks.valueToCode(block, label, order) || `["@expr", "absent"]`
+  return Blockly.TidyBlocks.valueToCode(block, label, order) || `["@value", "absent"]`
 }
 
 module.exports = {

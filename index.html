@@ -1,127 +1,68 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="static/ui.css">
-    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
     <script src="./tidyblocks.min.js"></script>
     <script>
-      let UI = null
-      const setup = () => {
-        tidyblocks.Setup(window.document)
-        UI = tidyblocks.instance
-        Array.from(document.getElementsByClassName('buttonDefault'))
-          .forEach(b => b.click())
+      window.onload = () => {
+        tidyblocks.setup('blocklyDiv', 'toolbox')
       }
     </script>
   </head>
-  <body onload="setup()">
-
-    <nav class="two-columns">
-      <!-- main navigation left (program and toolbox) -->
-      <div class="column width50">
-        <button class="menuButton" onclick="UI.onRunProgram()">
-          Run
-        </button>
-        <button class="menuButton" onclick="UI.onTriggerInput('loadProgram')">
-          Load Program
-        </button>
-        <button class="menuButton" onclick="UI.onTriggerInput('loadData')">
-          Load Data
-        </button>
-      </div>
-
-      <!-- main navigation right (display areas) -->
-      <div class="column width50">
-        <button id="dataButton"
-                class="menuButton tabButton buttonDefault"
-                data-tb-group="display"
-                onclick="UI.onShowTab(event, 'dataTab', 'data')">
-          Data
-        </button>
-        <button id="resultsButton"
-                class="menuButton tabButton"
-                data-tb-group="display"
-                onclick="UI.onShowTab(event, 'resultsTab', 'results')">
-          Results
-        </button>
-        <button id="plotButton"
-                class="menuButton tabButton"
-                data-tb-group="display"
-                onclick="UI.onShowTab(event, 'plotTab')">
-          Plot
-        </button>
-        <button id="statisticsButton"
-                class="menuButton tabButton"
-                data-tb-group="display"
-                onclick="UI.onShowTab(event, 'statisticsTab')">
-          Statistics
-        </button>
-        <button id="logButton"
-                class="menuButton tabButton"
-                data-tb-group="display"
-                onclick="UI.onShowTab(event, 'logTab')">
-          Log
-        </button>
-        <button id="errorButton"
-                class="menuButton tabButton"
-                data-tb-group="display"
-                onclick="UI.onShowTab(event, 'errorTab')">
-          Error
-        </button>
-      </div>
-    </nav>
-
-    <!-- invisible controls to be "clicked" by button actions -->
-    <input type="file" id="loadProgram" style="display:none" onchange="UI.onLoadProgram(this.files)"/>
-    <input type="file" id="loadData" style="display:none" onchange="UI.onLoadData(this.files)"/>
-
-    <main class="two-columns">
-      <!-- main workbench area (program and tools) -->
-      <div id="workbench" class="left width50 workbench">
-      </div>
-
-      <!-- main display area -->
-      <div class="right width50 displays">
-        <div id="dataTab" class="tabContent" data-tb-group="display">
-          <h2>
-            Data
-            <select class="tableSelector" id="dataSelect" onchange="UI.onDisplayTable('data')"></select>
-          </h2>
-          <div id="dataArea" data-tb-group="display"></div>
-        </div>
-        <div id="resultsTab" class="tabContent" data-tb-group="display">
-          <h2>
-            Results
-            <select class="tableSelector" id="resultsSelect" onchange="UI.onDisplayTable('results')"></select>
-            <button class="displayButton" onclick="UI.onSaveResults(event)">Save</button>
-          </h2>
-          <div id="resultsArea" data-tb-group="display"></div>
-        </div>
-        <div id="plotTab" class="tabContent" data-tb-group="display">
-          <h2>Plot</h2>
-          <div id="plotArea" data-tb-group="display"></div>
-        </div>
-        <div id="statisticsTab" class="tabContent" data-tb-group="display">
-          <h2>Statistics</h2>
-          <div id="statisticsArea" data-tb-group="display"></div>
-        </div>
-        <div id="logTab" class="tabContent" data-tb-group="display">
-          <h2>Log</h2>
-          <div id="logArea" data-tb-group="display"></div>
-        </div>
-        <div id="errorTab" class="tabContent" data-tb-group="display">
-          <h2>Error</h2>
-          <div id="errorArea" data-tb-group="display"></div>
-        </div>
-      </div>
-    </main>
-
-    <footer>
-      <p>TidyBlocks</p>
-    </footer>
+  <body>
+    <h1>TidyBlocks</h1>
+    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <xml id="toolbox" style="display: none">
+      <category name="data" categorystyle="data">
+        <block type="data_colors"></block>
+      </category>
+      <category name="transform" categorystyle="transform">
+        <block type="transform_drop"></block>
+        <block type="transform_filter"></block>
+        <block type="transform_groupBy"></block>
+        <block type="transform_mutate"></block>
+        <block type="transform_select"></block>
+        <block type="transform_sort"></block>
+        <block type="transform_summarize"></block>
+        <block type="transform_ungroup"></block>
+        <block type="transform_unique"></block>
+      </category>
+      <category name="plot" categorystyle="plot">
+        <block type="plot_bar"></block>
+        <block type="plot_box"></block>
+        <block type="plot_dot"></block>
+        <block type="plot_histogram"></block>
+        <block type="plot_scatter"></block>
+      </category>
+      <category name="statistics" categorystyle="statistics">
+        <block type="statistics_ttest_one"></block>
+        <block type="statistics_ttest_two"></block>
+      </category>
+      <category name="operation" categorystyle="operation">
+        <block type="operation_arithmetic"></block>
+        <block type="operation_negate"></block>
+        <block type="operation_compare"></block>
+        <block type="operation_logical"></block>
+        <block type="operation_not"></block>
+        <block type="operation_type"></block>
+        <block type="operation_convert"></block>
+        <block type="operation_datetime"></block>
+        <block type="operation_conditional"></block>
+      </category>
+      <category name="value" categorystyle="value">
+        <block type="value_column"></block>
+        <block type="value_datetime"></block>
+        <block type="value_logical"></block>
+        <block type="value_number"></block>
+        <block type="value_text"></block>
+        <block type="value_rownum"></block>
+        <block type="value_exponential"></block>
+        <block type="value_normal"></block>
+        <block type="value_uniform"></block>
+      </category>
+      <category name="combine" categorystyle="combine">
+        <block type="combine_notify"></block>
+      </category>
+    </xml>
   </body>
 </html>
