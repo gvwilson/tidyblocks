@@ -47,8 +47,6 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 -   `libs/summarize.js`: summarization operations (such as `sum` and `max`).
 
--   `libs/statistics.js`: statistical tests.
-
 -   `libs/transform.js`: operations on entire tables.
     These use expressions, summarizers, and statistical tests.
 
@@ -205,9 +203,6 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
         All operations handle this value,
         e.g.,
         `add` of `MISSING` and 3 is `MISSING`.
-
--   The functions in `libs/statistics.js` implement some statistical tests,
-    and are used by the sub-classes of `TransformStats` (`libs/transform.js`).
 
 -   The sub-classes of `SummarizeBase` (`libs/summarize.js`) implement summarization operations
     such as averaging.
