@@ -1,4 +1,5 @@
-const Blockly = require('blockly')
+const Blockly = require('blockly/blockly_compressed')
+require('blockly/javascript_compressed')
 
 const {valueToCode} = require('./util')
 

@@ -1,6 +1,7 @@
 'use strict'
 
-const Blockly = require('blockly')
+const Blockly = require('blockly/blockly_compressed')
+require('blockly/javascript_compressed')
 
 const {JsonToObj} = require('./libs/json2obj')
 const {Environment} = require('./libs/environment')

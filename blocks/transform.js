@@ -1,4 +1,6 @@
-const Blockly = require('blockly')
+const Blockly = require('blockly/blockly_compressed')
+require('blockly/javascript_compressed')
+
 const {
   formatMultipleColumnNames,
   valueToCode
