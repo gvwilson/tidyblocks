@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 Blockly.defineBlocksWithJsonArray([
   // Notify
@@ -22,7 +21,7 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 // Notify
-Blockly.JavaScript['combine_notify'] = (block) => {
+Blockly.TidyBlocks['combine_notify'] = (block) => {
   const name = block.getFieldValue('NAME')
   const code = `["@transform", "notify", "${name}"]`
   return code

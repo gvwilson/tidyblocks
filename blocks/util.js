@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 /**
  * Turn a string containing comma-separated column names into an array of
@@ -20,7 +19,7 @@ const formatMultipleColumnNames = (raw) => {
  * sub-block is missing.
  */
 const valueToCode = (block, label, order) => {
-  return Blockly.JavaScript.valueToCode(block, label, order) || `["@expr", "absent"]`
+  return Blockly.TidyBlocks.valueToCode(block, label, order) || `["@expr", "absent"]`
 }
 
 module.exports = {

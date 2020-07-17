@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 const {
   formatMultipleColumnNames,
@@ -205,57 +204,57 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 // Drop
-Blockly.JavaScript['transform_drop'] = (block) => {
+Blockly.TidyBlocks['transform_drop'] = (block) => {
   const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "drop", ${columns}]`
 }
 
 // Filter
-Blockly.JavaScript['transform_filter'] = (block) => {
-  const expr = valueToCode(block, 'TEST', Blockly.JavaScript.ORDER_NONE)
+Blockly.TidyBlocks['transform_filter'] = (block) => {
+  const expr = valueToCode(block, 'TEST', Blockly.TidyBlocks.ORDER_NONE)
   return `["@transform", "filter", ${expr}]`
 }
 
 // Group
-Blockly.JavaScript['transform_groupBy'] = (block) => {
+Blockly.TidyBlocks['transform_groupBy'] = (block) => {
   const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "group", ${columns}]`
 }
 
 // Mutate
-Blockly.JavaScript['transform_mutate'] = (block) => {
+Blockly.TidyBlocks['transform_mutate'] = (block) => {
   const column = block.getFieldValue('COLUMN')
-  const value = valueToCode(block, 'VALUE', Blockly.JavaScript.ORDER_NONE)
+  const value = valueToCode(block, 'VALUE', Blockly.TidyBlocks.ORDER_NONE)
   return `["@transform", "mutate", "${column}", ${value}]`
 }
 
 // Select
-Blockly.JavaScript['transform_select'] = (block) => {
+Blockly.TidyBlocks['transform_select'] = (block) => {
   const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "select", ${columns}]`
 }
 
 // Sort
-Blockly.JavaScript['transform_sort'] = (block) => {
+Blockly.TidyBlocks['transform_sort'] = (block) => {
   const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
   return `["@transform", "sort", ${columns}, ${descending}]`
 }
 
 // Summarize
-Blockly.JavaScript['transform_summarize'] = (block) => {
+Blockly.TidyBlocks['transform_summarize'] = (block) => {
   const op = block.getFieldValue('OP')
   const column = block.getFieldValue('COLUMN')
   return `["@transform", "summarize", "${op}", "${column}"]`
 }
 
 // Ungroup
-Blockly.JavaScript['transform_ungroup'] = (block) => {
+Blockly.TidyBlocks['transform_ungroup'] = (block) => {
   return `["@transform", "ungroup"]`
 }
 
 // Unique
-Blockly.JavaScript['transform_unique'] = (block) => {
+Blockly.TidyBlocks['transform_unique'] = (block) => {
   const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "unique", ${columns}]`
 }

@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 Blockly.defineBlocksWithJsonArray([
   // Colors
@@ -14,6 +13,6 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 // Colors
-Blockly.JavaScript['data_colors'] = (block) => {
+Blockly.TidyBlocks['data_colors'] = (block) => {
   return `["@transform", "read", "colors.csv"]`
 }

@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 Blockly.defineBlocksWithJsonArray([
   // Column name
@@ -159,62 +158,59 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 // Column name
-Blockly.JavaScript['value_column'] = (block) => {
+Blockly.TidyBlocks['value_column'] = (block) => {
   const column = block.getFieldValue('COLUMN')
   const code = `["@expr", "column", "${column}"]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Datetime
-Blockly.JavaScript['value_datetime'] = (block) => {
+Blockly.TidyBlocks['value_datetime'] = (block) => {
   const value = block.getFieldValue('VALUE')
   const code = `["@expr", "datetime", "${value}"]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Logical
-Blockly.JavaScript['value_logical'] = (block) => {
+Blockly.TidyBlocks['value_logical'] = (block) => {
   const value = block.getFieldValue('VALUE')
-  const order = Blockly.JavaScript.ORDER_NONE
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const code = `["@expr", "logical", ${value}]`
   return [code, order]
 }
 
 // Number
-Blockly.JavaScript['value_number'] = (block) => {
+Blockly.TidyBlocks['value_number'] = (block) => {
   const value = parseFloat(block.getFieldValue('VALUE'))
-  const order = (value >= 0)
-        ? Blockly.JavaScript.ORDER_ATOMIC
-        : Blockly.JavaScript.ORDER_UNARY_NEGATION
   const code = `["@expr", "number", ${value}]`
-  return [code, order]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Text
-Blockly.JavaScript['value_text'] = (block) => {
+Blockly.TidyBlocks['value_text'] = (block) => {
   const value = block.getFieldValue('VALUE')
   const code = `["@expr", "text", "${value}"]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Row number
-Blockly.JavaScript['value_rownum'] = (block) => {
+Blockly.TidyBlocks['value_rownum'] = (block) => {
   const code = `["@expr", "rownum"]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Exponential random variable
-Blockly.JavaScript['value_exponential'] = (block) => {
+Blockly.TidyBlocks['value_exponential'] = (block) => {
   const rate = parseFloat(block.getFieldValue('VALUE_1'))
   if (Number.isNaN(rate)) {
     throw new Error(`exponential rate is not a number`)
   }
   const code = `["@expr", "exponential", ${rate}]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Normal random variable
-Blockly.JavaScript['value_normal'] = (block) => {
+Blockly.TidyBlocks['value_normal'] = (block) => {
   const mean = parseFloat(block.getFieldValue('VALUE_1'))
   if (Number.isNaN(mean)) {
     throw new Error(`normal mean is not a number`)
@@ -224,11 +220,11 @@ Blockly.JavaScript['value_normal'] = (block) => {
     throw new Error(`normal variance is not a non-negative number`)
   }
   const code = `["@expr", "normal", ${mean}, ${variance}]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Uniform random variable
-Blockly.JavaScript['value_uniform'] = (block) => {
+Blockly.TidyBlocks['value_uniform'] = (block) => {
   const low = parseFloat(block.getFieldValue('VALUE_1'))
   if (Number.isNaN(low)) {
     throw new Error(`uniform low bound is not a number`)
@@ -238,5 +234,5 @@ Blockly.JavaScript['value_uniform'] = (block) => {
     throw new Error(`uniform high bound is not a number`)
   }
   const code = `["@expr", "uniform", ${low}, ${high}]`
-  return [code, Blockly.JavaScript.ORDER_ATOMIC]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }

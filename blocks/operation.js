@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 const {valueToCode} = require('./util')
 
@@ -245,9 +244,9 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 // Binary arithmetic
-Blockly.JavaScript['operation_arithmetic'] = (block) => {
+Blockly.TidyBlocks['operation_arithmetic'] = (block) => {
   const op = block.getFieldValue('OP')
-  const order = Blockly.JavaScript.ORDER_NONE
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const left = valueToCode(block, 'LEFT', order)
   const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "${op}", ${left}, ${right}]`
@@ -255,19 +254,17 @@ Blockly.JavaScript['operation_arithmetic'] = (block) => {
 }
 
 // Arithmetic negation
-Blockly.JavaScript['operation_negate'] = (block) => {
-  const order = Blockly.JavaScript.ORDER_NONE
+Blockly.TidyBlocks['operation_negate'] = (block) => {
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "negate", ${value}]`
   return [code, order]
 }
 
 // Comparisons
-Blockly.JavaScript['operation_compare'] = (block) => {
+Blockly.TidyBlocks['operation_compare'] = (block) => {
   const op = block.getFieldValue('OP')
-  const order = (op === 'eq' || op === 'neq')
-        ? Blockly.JavaScript.ORDER_EQUALITY
-        : Blockly.JavaScript.ORDER_RELATIONAL
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const left = valueToCode(block, 'LEFT', order)
   const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "${op}", ${left}, ${right}]`
@@ -275,56 +272,56 @@ Blockly.JavaScript['operation_compare'] = (block) => {
 }
 
 // Binary logical operations
-Blockly.JavaScript['operation_logical'] = (block) => {
+Blockly.TidyBlocks['operation_logical'] = (block) => {
   const op = block.getFieldValue('OP')
-  const order = Blockly.JavaScript.ORDER_NONE
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const left = valueToCode(block, 'LEFT', order)
   const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "${op}", ${left}, ${right}]`
-  return [code, Blockly.JavaScript.ORDER_NONE]
+  return [code, order]
 }
 
 // Logical negation
-Blockly.JavaScript['operation_not'] = (block) => {
-  const order = Blockly.JavaScript.ORDER_NONE
+Blockly.TidyBlocks['operation_not'] = (block) => {
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "not", ${value}]`
   return [code, order]
 }
 
 // Type checking
-Blockly.JavaScript['operation_type'] = (block) => {
+Blockly.TidyBlocks['operation_type'] = (block) => {
   const type = block.getFieldValue('TYPE')
-  const order = Blockly.JavaScript.ORDER_NONE
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "${type}", ${value}]`
   return [code, order]
 }
 
 // Type conversion
-Blockly.JavaScript['operation_convert'] = (block) => {
+Blockly.TidyBlocks['operation_convert'] = (block) => {
   const type = block.getFieldValue('TYPE')
-  const order = Blockly.JavaScript.ORDER_NONE
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "${type}", ${value}]`
   return [code, order]
 }
 
 // Datetime conversions
-Blockly.JavaScript['operation_datetime'] = (block) => {
+Blockly.TidyBlocks['operation_datetime'] = (block) => {
   const type = block.getFieldValue('TYPE')
-  const order = Blockly.JavaScript.ORDER_NONE
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@expr", "datetime", "${type}", ${value}]`
   return [code, order]
 }
 
 // Conditional
-Blockly.JavaScript['operation_conditional'] = (block) => {
-  const order = Blockly.JavaScript.ORDER_NONE
+Blockly.TidyBlocks['operation_conditional'] = (block) => {
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const cond = valueToCode(block, 'COND', order)
   const left = valueToCode(block, 'LEFT', order)
   const right = valueToCode(block, 'RIGHT', order)
   const code = `["@expr", "ifElse", ${cond}, ${left}, ${right}]`
-  return [code, Blockly.JavaScript.ORDER_NONE]
+  return [code, order]
 }

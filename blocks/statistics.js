@@ -1,5 +1,4 @@
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
 
 Blockly.defineBlocksWithJsonArray([
   // One-sample two-sided t-test
@@ -54,8 +53,8 @@ Blockly.defineBlocksWithJsonArray([
 ])
 
 // One-sample two-sided t-test.
-Blockly.JavaScript['statistics_ttest_one'] = (block) => {
-  const order = Blockly.JavaScript.ORDER_NONE
+Blockly.TidyBlocks['statistics_ttest_one'] = (block) => {
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const column = block.getFieldValue('COLUMN')
   const mean = block.getFieldValue('MEAN')
   return `["@transform", "ttest_one", "${column}", ${mean}]`
@@ -64,8 +63,8 @@ Blockly.JavaScript['statistics_ttest_one'] = (block) => {
 //
 // Create a paired two-sided t-test.
 //
-Blockly.JavaScript['statistics_ttest_two'] = (block) => {
-  const order = Blockly.JavaScript.ORDER_NONE
+Blockly.TidyBlocks['statistics_ttest_two'] = (block) => {
+  const order = Blockly.TidyBlocks.ORDER_NONE
   const left = block.getFieldValue('LEFT_COLUMN')
   const right = block.getFieldValue('RIGHT_COLUMN')
   return `["@transform", "ttest_two", "${left}", "${right}"]`

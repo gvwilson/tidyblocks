@@ -64,6 +64,8 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
     **FIXME: these two files should be combined into one.**
 
 -   `blocks/*.js`: implementation of blocks.
+    -   `blocks/codegen.js`: code generator.
+    -   `blocks/util.js`: utilities.
 
 ### Other Files
 
@@ -127,11 +129,12 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
 
 -   The function `getCode` (`jeff.js`) builds a JSON representation of the current program.
     (This has to be run in the JavaScript console right now, but will be connected to a button in the UI.)
+    It relies on `Blockly.TidyBlocks.workspaceToCode` (`blocks/codegen.js`):
     1.  Get the top block of each stack in the workspace.
     2.  Ignore any that aren't hat blocks (i.e., top-of-stack blocks).
     3.  Build a list of the top-level blocks in this stack.
     4.  Ask each to generate its stringified JSON.
-        -   If the result of `Blockly.JavaScript.blockToCode` is an array,
+        -   If the result of `Blockly.TidyBlocks.blockToCode` is an array,
             the first element contains the JSON
             and the second contains a precedence indicator,
             so extract the first part.

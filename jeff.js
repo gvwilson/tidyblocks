@@ -1,7 +1,7 @@
 'use strict'
 
 const Blockly = require('blockly/blockly_compressed')
-require('blockly/javascript_compressed')
+require('./blocks/codegen')
 
 const {JsonToObj} = require('./libs/json2obj')
 const {Environment} = require('./libs/environment')
@@ -128,29 +128,8 @@ const getWorkspace = () => {
  * Get the JSON string representation of the workspace contents.
  */
 const getCode = () => {
-  const pipelines = getWorkspace()
-        .getTopBlocks()
-        .filter(block => (block.hat === 'cap'))
-        .map(top => {
-          const blocks = []
-          let curr = top
-          while (curr && (curr instanceof Blockly.Block)) {
-            blocks.push(curr)
-            curr = curr.getNextBlock()
-          }
-          const transforms = blocks.map(block => {
-            // Expressions are pairs of (code, priority), so extract code.
-            let temp = Blockly.JavaScript.blockToCode(block, true)
-            if (Array.isArray(temp)) {
-              temp = temp[0]
-            }
-            return temp
-          })
-          transforms.unshift('"@pipeline"')
-          return `[${transforms}]`
-        })
-  pipelines.unshift('"@program"')
-  return `[${pipelines}]`
+  const workspace = getWorkspace()
+  return Blockly.TidyBlocks.workspaceToCode(workspace)
 }
 
 /**
@@ -159,8 +138,8 @@ const getCode = () => {
 const getProgram = () => {
   const code = getCode()
   const json = JSON.parse(code)
-  const program = (new JsonToObj()).program(json)
-  return program
+  const converter = new JsonToObj()
+  return converter.program(json)
 }
 
 /**
