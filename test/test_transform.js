@@ -280,37 +280,16 @@ describe('build plots', () => {
 })
 
 describe('build statistics', () => {
-  it('runs Kruskal-Wallis', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
-    const transform = new Transform.KruskalWallis(0.05, 'green', 'blue')
-    const result = transform.run(runner, new DataFrame(fixture.Colors))
-    done()
-  })
-
   it('runs one-sided two-sample t-test', (done) => {
     const runner = new Environment(fixture.ReadLocalData)
-    const transform = new Transform.TTestOneSample(0.0, 0.05, 'blue')
+    const transform = new Transform.ttest_one('blue', 0.0)
     const result = transform.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
-  it('runs a paired two-sided t-test with different values', (done) => {
+  it('runs a paired two-sided t-test', (done) => {
     const runner = new Environment(fixture.ReadLocalData)
-    const transform = new Transform.TTestPaired(0.05, 'blue', 'green')
-    const result = transform.run(runner, new DataFrame(fixture.Colors))
-    done()
-  })
-
-  it('runs a paired two-sided t-test with matching values', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
-    const transform = new Transform.TTestPaired(0.05, 'blue', 'blue')
-    const result = transform.run(runner, new DataFrame(fixture.Colors))
-    done()
-  })
-
-  it('runs a one-sample z-test', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
-    const transform = new Transform.ZTestOneSample(1.0, 0.5, 0.05, 'blue')
+    const transform = new Transform.ttest_two('blue', 'green')
     const result = transform.run(runner, new DataFrame(fixture.Colors))
     done()
   })

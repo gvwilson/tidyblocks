@@ -26,7 +26,6 @@
     "@babel/compat-data": "^7.10.4",
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
-    "@stdlib/stdlib": "0.0.90",
     "assert": "^2.0.0",
     "babelify": "^10.0.0",
     "blockly": "^3.20200625.2",
@@ -41,6 +40,8 @@
     "mocha": "^7.0.1",
     "nyc": "^15.0.0",
     "papaparse": "^5.1.1",
-    "pretty": "^2.0.0"
+    "pretty": "^2.0.0",
+    "random": "^2.2.0",
+    "simple-statistics": "^7.1.0"
   }
 }

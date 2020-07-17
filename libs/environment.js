@@ -61,11 +61,10 @@ class Environment {
 
   /**
    * Store results of a statistical test.
-   * @param {Object} result Result of test.
-   * @param {Object} legend Explanation of result.
+   * @param {Object} result Result of test (p-value)
    */
-  setStatistics (result, legend) {
-    this.stats = {result, legend}
+  setStatistics (result) {
+    this.stats = result
   }
 
   /**

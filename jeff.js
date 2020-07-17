@@ -11,6 +11,7 @@ require('./blocks/combine')
 require('./blocks/data')
 require('./blocks/operation')
 require('./blocks/plot')
+require('./blocks/statistics')
 require('./blocks/transform')
 require('./blocks/value')
 
@@ -51,6 +52,7 @@ const createTheme = () => {
         data_color = '#FEBE4C',
         operation_color = '#F9B5B2',
         plot_color = '#A4C588',
+        statistics_color = '#70A0C0',
         transform_color = '#76AADB',
         value_color = '#E7553C'
 
@@ -79,6 +81,11 @@ const createTheme = () => {
         colourSecondary: '#64C7FF',
         colourTertiary: '#586B4B'
       },
+      statistics_blocks: {
+        colourPrimary: statistics_color,
+        colourSecondary: '#70A0C0',
+        colourTertiary: '#C070A0'
+      },
       transform_block: {
         colourPrimary: transform_color,
         colourSecondary: '#3976AD',
@@ -95,6 +102,7 @@ const createTheme = () => {
       data: {colour: data_color},
       operation: {colour: operation_color},
       plot: {colour: plot_color},
+      statistics: {colour: statistics_color},
       transform: {colour: transform_color},
       value: {colour: value_color}
     }

@@ -344,20 +344,11 @@ describe('plot persistence', () => {
 })
 
 describe('statistics persistence', () => {
-  it('restores Kruskal-Wallis from JSON', (done) => {
-    const significance = 0.03, groupName = 'red', valueName = 'blue'
-    const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'KruskalWallis', significance, groupName, valueName]),
-                     new Transform.KruskalWallis(significance, groupName, valueName),
-                     `Kruskal-Wallis`)
-    done()
-  })
-
   it('restores one-sample t test from JSON', (done) => {
     const mean = 0.1, significance = 0.03, colName = 'red'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'TTestOneSample', mean, significance, colName]),
-                     new Transform.TTestOneSample(mean, significance, colName),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'ttest_one', colName, mean]),
+                     new Transform.ttest_one(colName, mean),
                      `one-sample t test`)
     done()
   })
@@ -365,18 +356,9 @@ describe('statistics persistence', () => {
   it('restores paired two-sided t test from JSON', (done) => {
     const significance = 0.03, leftCol = 'green', rightCol = 'blue'
     const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'TTestPaired', significance, leftCol, rightCol]),
-                     new Transform.TTestPaired(significance, leftCol, rightCol),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'ttest_two', leftCol, rightCol]),
+                     new Transform.ttest_two(leftCol, rightCol),
                      `paired t test`)
-    done()
-  })
-
-  it('restores one-sample z test from JSON', (done) => {
-    const mean = 0.1, stdDev = 0.04, significance = 0.03, colName = 'red'
-    const factory = new JsonToObj()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'ZTestOneSample', mean, stdDev, significance, colName]),
-                     new Transform.ZTestOneSample(mean, stdDev, significance, colName),
-                     `one-sample z test`)
     done()
   })
 })

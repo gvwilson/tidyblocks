@@ -1,10 +1,11 @@
 'use strict'
 
+const stats = require('simple-statistics')
+
 const util = require('./util')
 const {ExprBase} = require('./expr')
 const {DataFrame} = require('./dataframe')
 const Summarize = require('./summarize')
-const Statistics = require('./statistics')
 
 const FAMILY = '@transform'
 
@@ -551,51 +552,23 @@ class TransformScatter extends TransformPlot {
 // ----------------------------------------------------------------------
 
 /**
- * Store information about a statistical test.
+ * One-sample two-sided t-test.
+ * @param {string} colName The column to get values from.
+ * @param {number} mean Mean value tested for.
  */
-class TransformStats extends TransformBase {
-  constructor (name, fields) {
-    super(name, [], null, true, false)
-    Object.assign(this, fields)
+class TransformTTestOneSample extends TransformBase {
+  constructor (colName, mean) {
+    super('ttest_one', [], null, true, false)
+    this.colName = colName
+    this.mean = mean
   }
 
   run (runner, df) {
     runner.appendLog(this.name)
-    const {result, legend} = this.runStats(df)
-    runner.setStatistics(result, legend)
+    const samples = df.data.map(row => row[this.colName])
+    const pValue = stats.tTest(samples, this.mean)
+    runner.setStatistics(pValue)
     return df
-  }
-}
-
-/**
- * Kruskal-Wallis test.
- * @param {number} significance Significance threshold.
- * @param {string} groupName Column to use for grouping.
- * @param {string} valueName Column to use for values.
- */
-class TransformKruskalWallis extends TransformStats {
-  constructor (significance, groupName, valueName) {
-    super('KruskalWallis', {significance, groupName, valueName})
-  }
-  runStats (df) {
-    return Statistics.KruskalWallis(df, this.significance,
-                                    this.groupName, this.valueName)
-  }
-}
-
-/**
- * One-sample two-sided t-test.
- * @param {number} mean Mean value tested for.
- * @param {number} significance Significance threshold.
- * @param {string} colName The column to get values from.
- */
-class TransformTTestOneSample extends TransformStats {
-  constructor (mean, significance, colName) {
-    super('TTestOneSample', {mean, significance, colName})
-  }
-  runStats (df) {
-    return Statistics.TTestOneSample(df, this.mean,
-                                     this.significance, this.colName)
   }
 }
 
@@ -605,30 +578,20 @@ class TransformTTestOneSample extends TransformStats {
  * @param {string} leftCol The column to get one set of values from.
  * @param {string} rightCol The column to get the other set of values from.
  */
-class TransformTTestPaired extends TransformStats {
-  constructor (significance, leftCol, rightCol) {
-    super('TTestPaired', {significance, leftCol, rightCol})
+class TransformTTestPaired extends TransformBase {
+  constructor (leftCol, rightCol) {
+    super('ttest_two', [], null, true, false)
+    this.leftCol = leftCol
+    this.rightCol = rightCol
   }
-  runStats (df) {
-    return Statistics.TTestPaired(df, this.significance,
-                                  this.leftCol, this.rightCol)
-  }
-}
 
-/**
- * One-sample Z-test.
- * @param {number} mean Mean value tested for.
- * @param {number} stdDev Standard deviation tested for.
- * @param {number} significance Significance threshold.
- * @param {string} colName The column to get values from.
- */
-class TransformZTestOneSample extends TransformStats {
-  constructor (mean, stdDev, significance, colName) {
-    super('ZTestOneSample', {mean, stdDev, significance, colName})
-  }
-  runStats (df) {
-    return Statistics.ZTestOneSample(df, this.mean, this.stdDev,
-                                     this.significance, this.colName)
+  run (runner, df) {
+    runner.appendLog(this.name)
+    const left = df.data.map(row => row[this.leftCol])
+    const right = df.data.map(row => row[this.rightCol])
+    const pValue = stats.tTestTwoSample(left, right, 0)
+    runner.setStatistics(pValue)
+    return df
   }
 }
 
@@ -654,8 +617,6 @@ module.exports = {
   dot: TransformDot,
   histogram: TransformHistogram,
   scatter: TransformScatter,
-  KruskalWallis: TransformKruskalWallis,
-  TTestOneSample: TransformTTestOneSample,
-  TTestPaired: TransformTTestPaired,
-  ZTestOneSample: TransformZTestOneSample
+  ttest_one: TransformTTestOneSample,
+  ttest_two: TransformTTestPaired
 }

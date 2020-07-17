@@ -1,4 +1,4 @@
-const random = require('@stdlib/random/base')
+const random = require('random')
 
 const util = require('./util')
 const {
@@ -130,10 +130,11 @@ class ValueText extends ExprValue {
 class ValueExponential extends ExprValue {
   constructor (rate) {
     super(FAMILY, 'exponential', rate)
+    this.generator = random.exponential(this.value)
   }
 
   run (row, i) {
-    return random.exponential(this.value)
+    return this.generator()
   }
 }
 
@@ -145,6 +146,7 @@ class ValueNormal extends ExprBase {
     super(FAMILY, 'normal')
     this.mean = mean
     this.stdDev = stdDev
+    this.generator = random.normal(this.mean, this.stdDev)
   }
 
   equal (other) {
@@ -158,7 +160,7 @@ class ValueNormal extends ExprBase {
   }
 
   run (row, i) {
-    return random.normal(this.mean, this.stdDev)
+    return this.generator()
   }
 }
 
@@ -170,6 +172,7 @@ class ValueUniform extends ExprBase {
     super(FAMILY, 'uniform')
     this.low = low
     this.high = high
+    this.generator = random.uniform(this.low, this.high)
   }
 
   equal (other) {
@@ -183,7 +186,7 @@ class ValueUniform extends ExprBase {
   }
 
   run (row, i) {
-    return random.uniform(this.low, this.high)
+    return this.generator()
   }
 }
 

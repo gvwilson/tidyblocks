@@ -124,11 +124,10 @@ class UserInterface {
 
   /**
    * Display statistics.
-   * @param {Object} results Results of statistical test.
-   * @param {Object} legend Explanatory legend.
+   * @param {Object} results Results of statistical test (p-value)
    */
-  displayStatistics (results, legend) {
-    const html = (results && legend) ? this.statisticsToHTML(results, legend) : ''
+  displayStatistics (results) {
+    const html = this.statisticsToHTML(results)
     this.displayInArea('statisticsArea', html)
   }
 
@@ -222,29 +221,8 @@ class UserInterface {
   /**
    * Convert results of statistical test to HTML.
    */
-  statisticsToHTML (results, legend) {
-    const title = legend._title
-    const header = '<tr><th>Result</th><th>Value</th><th>Explanation</th></tr>'
-    const body = Object.keys(legend).map(key => {
-      if (key === '_title') {
-        return ''
-      }
-      let value = results[key]
-      if (value === undefined) {
-        value = ''
-      }
-      else if (Array.isArray(value)) {
-        value = value.map(x => x.toPrecision(UserInterface.PRECISION)).join(',<br/>')
-      }
-      else {
-        util.check(typeof value === 'number',
-                   `Unknown type of value in legend`)
-        value = value.toPrecision(UserInterface.PRECISION)
-      }
-      return `<tr><td>${key}</td><td>${value}</td><td>${legend[key]}</td></tr>`
-    }).join('')
-    const html = `<p>${title}</p><table class="statistics">${header}${body}</table>`
-    return html
+  statisticsToHTML (results) {
+    return `<p>p-value: ${results}</p>`
   }
 
   /**
