@@ -2,7 +2,6 @@
 
 const Blockly = require('blockly')
 
-const {DataFrame} = require('./libs/dataframe')
 const {JsonToObj} = require('./libs/json2obj')
 const {Environment} = require('./libs/environment')
 

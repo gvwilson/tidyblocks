@@ -96,3 +96,119 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 -   `guide/*`: source for user guide (written with Jekyll).
     **FIXME: incomplete.**
+
+## How It Works
+
+This section describes the implementation in `jeff.html` and `jeff.js`,
+which replaces the half-finished one in `index.html` and `index.js`
+and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
+(which is online at <http://tidyblocks.tech>).
+
+-   On launch, `jeff.html` loads `jeff.min.js` with the namespace `jeff`
+    and then calls `jeff.setup`.
+
+-   As `jeff.min.js` is loaded,
+    the code in `jeff.js` loads `blocks/*.js`
+    to register blocks with Blockly.
+    When `setup` is called,
+    it creates input validators for those blocks
+    (e.g., to check that user-defined column names match regular expressions),
+    then creates the Blockly workspace.
+
+-   Each file in `blocks/*.js` uses `Blockly.defineBlocksWithJsonArray`
+    to define the appearance of a group of blocks
+    and then creates a code generation function for each of those blocks.
+    Blockly requires code generators to return strings,
+    so the code generation functions return stringified JSON rather than JSON objects.
+
+    -   *This JSON must match the JSON produced by the `.toJSON` methods in `libs/*.js`;
+        a future cleanup would be to unify these somehow to remove the duplication.*
+
+-   The user can now drag blocks out to build a program.
+    Only those blocks listed in the `xml` element with the ID `toolbox` in `jeff.html` are visible.
+
+-   The function `getCode` (`jeff.js`) builds a JSON representation of the current program.
+    (This has to be run in the JavaScript console right now, but will be connected to a button in the UI.)
+    1.  Get the top block of each stack in the workspace.
+    2.  Ignore any that aren't hat blocks (i.e., top-of-stack blocks).
+    3.  Build a list of the top-level blocks in this stack.
+    4.  Ask each to generate its stringified JSON.
+        -   If the result of `Blockly.JavaScript.blockToCode` is an array,
+            the first element contains the JSON
+            and the second contains a precedence indicator,
+            so extract the first part.
+    5.  Put the JSON for the pipeline's stages into a list
+        and insert the prefix `"@pipeline"` at the start.
+    6.  Put the pipelines in a list
+        and insert the prefix `"@program"` at the start.
+
+-   This algorithm ensures that if a stack *doesn't* start with a hat block,
+    its pipeline *isn't* included in the program.
+    However,
+    pipelines might still contain holes,
+    e.g.,
+    there might be a `filter` block that doesn't yet have a filter expression
+    or an `add` operation that is missing one or both operands.
+    The code generator inserts the JSON `["@value", "absent"]` to mark these places.
+    When the program runs, these blocks raise errors.
+
+    -   *The UI should flag absent values and refuse to run pipelines containing them
+        rather than running and raising errors.*
+
+-   The function `getProgram` (`jeff.js`) gets the stringified representation of the program,
+    then creates an instance of `JsonToObj` (`libs/json2obj.js`)
+    and passes the JSON to its `.program` method
+    to convert the JSON to runnable objects.
+
+    -   *`JsonToObject` assumes a program-to-pipeline-to-expression structure.
+        If TidyBlocks ever acquires C-blocks or other structures,
+        this function will need to be revisited.*
+
+-   The runnable representation of the program is build using instances of:
+    -   `Program` (`libs/program.js`)
+    -   `Pipeline` (`libs/pipeline.js`)
+    -   Subclasses of `TransformBase` (`libs/transform.js`)
+    -   Subclasses of `ExprBase` (`libs/operation.js` and `libs/value.js`)
+
+-   `Program` keeps track of all its `Pipeline` objects in two member variables:
+    -   `queue` stores the pipelines that are ready to run.
+    -   `waiting` stores the pipelines that are waiting for the results of other pipelines.
+    The execution algorithm is:
+    -   A pipeline that starts with a data-reading block goes straight into `queue`.
+    -   A pipeline that starts with a `join` block goes into `waiting`.
+    -   Whenever a pipeline that ends in a `notify` block finishes,
+        the program checks all of the pipelines in `waiting`.
+        If any of them now have all of their dependencies satisfied,
+        they are moved to `queue` for execution.
+    -   When there is nothing left in `queue`,
+        the program stops.
+    *The program should notify users of pipelines that didn't run
+    because their dependencies were never satisfied.*
+
+-   To run, the program requires an `Environment` object (`libs/environment.js`).
+    This object stores programs' output,
+    such as the plots, data tables, and error messages that pipelines produce.
+    -   `Environment`'s constructor requires a `readData` function.
+        In the browser, this reads an external file using `XMLHttpRequest`.
+        The tests in `test/*.js` provide a function that reads directly from disk instead.
+
+-   Programs create and manipulate `DataFrame` objects (`libs/dataframe.js`).
+    A dataframe stores zero or more rows in the `.data` member variable.
+    Each row is an object whose keys must match the column names stored in the `.columns` member variable.
+    -   The dataframe stores the column names in `.columns` so that
+        if an operation results in zero rows,
+        the dataframe can still be displayed sensibly.
+    All of the values for a particular key must be of the same type,
+    e.g.,
+    they must all be numbers or dates.
+    -   The special value `util.MISSING` represents missing data.
+        All operations handle this value,
+        e.g.,
+        `add` of `MISSING` and 3 is `MISSING`.
+
+-   The functions in `libs/statistics.js` implement some statistical tests,
+    and are used by the sub-classes of `TransformStats` (`libs/transform.js`).
+
+-   The sub-classes of `SummarizeBase` (`libs/summarize.js`) implement summarization operations
+    such as averaging.
+    These objects are used by the `TransformSummarize` block (`libs/transform.js`).
