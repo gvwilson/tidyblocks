@@ -5,6 +5,7 @@ require('./blocks/codegen')
 
 const {JsonToObj} = require('./libs/json2obj')
 const {Environment} = require('./libs/environment')
+const {BrowserInterface} = require('./libs/browser')
 
 // Load for their side effects (block definitions).
 require('./blocks/combine')

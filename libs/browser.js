@@ -1,5 +1,7 @@
 'use strict'
 
+const vegaEmbed = require('vega-embed')
+
 const util = require('./util')
 const {UserInterface} = require('./ui')
 
@@ -38,7 +40,7 @@ class BrowserInterface extends UserInterface {
    * @param {JSON} spec Plotting specification.
    */
   static ShowPlot (spec) {
-    vegaEmbed('#plotArea', spec, {})
+    vegaEmbed.embed('#plotArea', spec, {})
   }
 
   /**

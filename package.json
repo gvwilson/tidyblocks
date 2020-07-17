@@ -41,6 +41,9 @@
     "papaparse": "^5.1.1",
     "pretty": "^2.0.0",
     "random": "^2.2.0",
-    "simple-statistics": "^7.1.0"
+    "simple-statistics": "^7.1.0",
+    "vega": "^5.13.0",
+    "vega-embed": "^6.10.0",
+    "vega-lite": "^4.13.1"
   }
 }
