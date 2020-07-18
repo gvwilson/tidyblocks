@@ -218,7 +218,7 @@ Blockly.TidyBlocks['transform_filter'] = (block) => {
 // Group
 Blockly.TidyBlocks['transform_groupBy'] = (block) => {
   const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
-  return `["@transform", "group", ${columns}]`
+  return `["@transform", "groupBy", ${columns}]`
 }
 
 // Mutate

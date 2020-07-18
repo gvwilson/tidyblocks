@@ -14,14 +14,6 @@ class Pipeline {
   }
 
   /**
-   * Convert to JSON.
-   */
-  toJSON () {
-    return [Pipeline.FAMILY,
-            ...this.transforms.map(transform => transform.toJSON())]
-  }
-
-  /**
    * Equality check (primarily for testing).
    * @param {Pipeline} other Other pipeline to compare to.
    * @returns Boolean.

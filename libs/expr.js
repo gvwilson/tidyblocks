@@ -4,7 +4,7 @@ const util = require('./util')
 
 /**
  * Represent an expression as an object. Derived classes must provide a member
- * variable `family` and implement `equal(other)`, `run(row, i)` and `toJSON()`.
+ * variable `family` and implement `equal(other)` and `run(row, i)`.
  */
 class ExprBase {
   constructor (family, kind) {
@@ -19,10 +19,6 @@ class ExprBase {
 class ExprNullary extends ExprBase {
   constructor (family, kind) {
     super(family, kind)
-  }
-
-  toJSON () {
-    return [this.family, this.kind]
   }
 }
 
@@ -39,10 +35,6 @@ class ExprValue extends ExprBase {
     return (other instanceof ExprValue) &&
       (this.kind === other.kind) &&
       util.equal(this.value, other.value)
-  }
-
-  toJSON () {
-    return [this.family, this.kind, this.value]
   }
 }
 
@@ -61,10 +53,6 @@ class ExprUnary extends ExprBase {
     return (other instanceof ExprUnary) &&
       (this.kind === other.kind) &&
       this.arg.equal(other.arg)
-  }
-
-  toJSON () {
-    return [this.family, this.kind, this.arg.toJSON()]
   }
 }
 
@@ -87,10 +75,6 @@ class ExprBinary extends ExprBase {
       (this.kind === other.kind) &&
       this.left.equal(other.left) &&
       this.right.equal(other.right)
-  }
-
-  toJSON () {
-    return [this.family, this.kind, this.left.toJSON(), this.right.toJSON()]
   }
 }
 
@@ -117,11 +101,6 @@ class ExprTernary extends ExprBase {
       this.left.equal(other.left) &&
       this.middle.equal(other.middle) &&
       this.right.equal(other.right)
-  }
-
-  toJSON () {
-    return [this.family, this.kind, this.left.toJSON(),
-            this.middle.toJSON(), this.right.toJSON()]
   }
 }
 

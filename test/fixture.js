@@ -77,11 +77,14 @@ const makeRow = (html) => {
  * A bag full of exports.
  */
 
+const concert = new Date(1983, 11, 2, 7, 55, 19, 0)
+const concertStr = concert.toISOString()
 module.exports = {
   DOM,
   MockTransform,
   ReadLocalData,
-  concert: new Date(1983, 11, 2, 7, 55, 19, 0),
+  concert,
+  concertStr,
   bool: [
     {left: true, right: true},
     {left: true, right: false},

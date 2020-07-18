@@ -1,6 +1,17 @@
 const Blockly = require('blockly/blockly_compressed')
 
 Blockly.defineBlocksWithJsonArray([
+  // Absent value
+  {
+    type: 'value_absent',
+    message0: 'Absent',
+    args0: [],
+    output: 'String',
+    style: 'value_block',
+    helpUrl: '',
+    tooltip: 'represent a hole'
+  },
+
   // Column name
   {
     type: 'value_column',
@@ -23,13 +34,14 @@ Blockly.defineBlocksWithJsonArray([
     message0: '%1',
     args0: [{
       type: 'field_input',
-      name: 'VALUE',
+      name: 'DATE',
       text: 'YYYY-MM-DD'
     }],
     output: 'DateTime',
     style: 'value_block',
     helpUrl: '',
-    tooltip: 'constant date/time'
+    tooltip: 'constant date/time',
+    extensions: ['validate_DATE']
   },
 
   // Logical
@@ -102,7 +114,7 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'VALUE_1',
+        name: 'VALUE',
         text: '0'
       }
     ],
@@ -157,6 +169,12 @@ Blockly.defineBlocksWithJsonArray([
   }
 ])
 
+// Absent value
+Blockly.TidyBlocks['value_absent'] = (block) => {
+  const code = `["@value", "absent"]`
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
+}
+
 // Column name
 Blockly.TidyBlocks['value_column'] = (block) => {
   const column = block.getFieldValue('COLUMN')
@@ -201,7 +219,7 @@ Blockly.TidyBlocks['value_rownum'] = (block) => {
 
 // Exponential random variable
 Blockly.TidyBlocks['value_exponential'] = (block) => {
-  const rate = parseFloat(block.getFieldValue('VALUE_1'))
+  const rate = parseFloat(block.getFieldValue('VALUE'))
   if (Number.isNaN(rate)) {
     throw new Error(`exponential rate is not a number`)
   }

@@ -155,10 +155,6 @@ class ValueNormal extends ExprBase {
       (this.stdDev === other.stdDev)
   }
 
-  toJSON () {
-    return [FAMILY, this.kind, this.mean, this.stdDev]
-  }
-
   run (row, i) {
     return this.generator()
   }
@@ -179,10 +175,6 @@ class ValueUniform extends ExprBase {
     return (other instanceof ValueUniform) &&
       (this.low === other.low) &&
       (this.high === other.high)
-  }
-
-  toJSON () {
-    return [FAMILY, this.kind, this.low, this.high]
   }
 
   run (row, i) {

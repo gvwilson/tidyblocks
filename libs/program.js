@@ -23,13 +23,6 @@ class Program {
   }
 
   /**
-   * Convert program to JSON.
-   */
-  toJSON () {
-    return [Program.FAMILY, ...this.pipelines.map(pipeline => pipeline.toJSON())]
-  }
-
-  /**
    * Check equality with another program (primarily for testing).
    */
   equal (other) {

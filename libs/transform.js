@@ -11,7 +11,7 @@ const FAMILY = '@transform'
 
 /**
  * Store information about a transform in a pipeline
- * Derived classes must provide `run(runner, dataframe)` and `toJSON()`.
+ * Derived classes must provide `run(runner, dataframe)`.
  */
 class TransformBase {
   /**
@@ -49,10 +49,6 @@ class TransformBase {
       (this.columns.length === other.columns.length) &&
       this.columns.every(x => other.columns.includes(x))
   }
-
-  toJSON (...extras) {
-    return [FAMILY, this.name, ...extras]
-  }
 }
 
 // ----------------------------------------------------------------------
@@ -75,10 +71,6 @@ class TransformDrop extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.drop(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 
@@ -103,10 +95,6 @@ class TransformFilter extends TransformBase {
     runner.appendLog(this.name)
     return df.filter(this.expr)
   }
-
-  toJSON () {
-    return super.toJSON(this.expr.toJSON())
-  }
 }
 
 /**
@@ -128,10 +116,6 @@ class TransformGroupBy extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.groupBy(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 
@@ -168,11 +152,6 @@ class TransformJoin extends TransformBase {
     return left.join(this.leftName, this.leftCol,
                      right, this.rightName, this.rightCol)
   }
-
-  toJSON () {
-    return super.toJSON(this.leftName, this.leftCol,
-                        this.rightName, this.rightCol)
-  }
 }
 
 /**
@@ -201,10 +180,6 @@ class TransformMutate extends TransformBase {
     runner.appendLog(this.name)
     return df.mutate(this.newName, this.expr)
   }
-
-  toJSON () {
-    return super.toJSON(this.newName, this.expr.toJSON())
-  }
 }
 
 /**
@@ -227,10 +202,6 @@ class TransformNotify extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df
-  }
-
-  toJSON () {
-    return super.toJSON(this.label)
   }
 }
 
@@ -257,10 +228,6 @@ class TransformRead extends TransformBase {
                `Cannot provide input dataframe to reader`)
     return new DataFrame(runner.getData(this.path))
   }
-
-  toJSON () {
-    return super.toJSON(this.path)
-  }
 }
 
 /**
@@ -282,10 +249,6 @@ class TransformSelect extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.select(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 
@@ -312,10 +275,6 @@ class TransformSort extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.sort(this.columns, this.reverse)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns, this.reverse)
   }
 }
 
@@ -348,10 +307,6 @@ class TransformSummarize extends TransformBase {
     const summarizer = new Summarize[this.op](this.column)
     return df.summarize(summarizer)
   }
-
-  toJSON () {
-    return super.toJSON(this.op, this.column)
-  }
 }
 
 /**
@@ -365,10 +320,6 @@ class TransformUngroup extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.ungroup()
-  }
-
-  toJSON () {
-    return super.toJSON()
   }
 }
 
@@ -391,10 +342,6 @@ class TransformUnique extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.unique(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 

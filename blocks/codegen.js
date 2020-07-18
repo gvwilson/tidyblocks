@@ -26,14 +26,8 @@ Blockly.TidyBlocks.workspaceToCode = (workspace) => {
             blocks.push(curr)
             curr = curr.getNextBlock()
           }
-          const transforms = blocks.map(block => {
-            // Expressions are pairs of (code, priority), so extract code.
-            let temp = Blockly.TidyBlocks.blockToCode(block, true)
-            if (Array.isArray(temp)) {
-              temp = temp[0]
-            }
-            return temp
-          })
+          const transforms =
+                blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
           transforms.unshift('"@pipeline"')
           return `[${transforms}]`
         })
