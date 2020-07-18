@@ -139,8 +139,7 @@ Blockly.TidyBlocks['plot_box'] = (block) => {
 // Dot plot
 Blockly.TidyBlocks['plot_dot'] = (block) => {
   const x_axis = block.getFieldValue('X_AXIS')
-  const y_axis = block.getFieldValue('Y_AXIS')
-  return `["@transform", "dot", "${x_axis}", "${y_axis}"]`
+  return `["@transform", "dot", "${x_axis}"]`
 }
 
 // Histogram plot

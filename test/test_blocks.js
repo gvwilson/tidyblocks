@@ -128,13 +128,32 @@ describe('value persistence', () => {
     done()
   })
 
+  it('persists row numbers', (done) => {
+    const expected = [Value.FAMILY, 'rownum']
+    const w = workspace()
+    const block = w.newBlock('value_rownum')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('persists exponential distributions', (done) => {
     const expected = [Value.FAMILY, 'exponential', 0.5]
     const w = workspace()
     const block = w.newBlock('value_exponential')
-    block.setFieldValue(0.5, 'VALUE')
+    block.setFieldValue(0.5, 'RATE')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('requires numbers for exponential distributions', (done) => {
+    const w = workspace()
+    const block = w.newBlock('value_exponential')
+    const before = block.getFieldValue('RATE')
+    block.setFieldValue('$$$', 'RATE')
+    const after = block.getFieldValue('RATE')
+    assert.equal(before, after, `Value should not have changed`)
     done()
   })
 
@@ -142,8 +161,8 @@ describe('value persistence', () => {
     const expected = [Value.FAMILY, 'normal', 1.2, 3.4]
     const w = workspace()
     const block = w.newBlock('value_normal')
-    block.setFieldValue(1.2, 'VALUE_1')
-    block.setFieldValue(3.4, 'VALUE_2')
+    block.setFieldValue(1.2, 'MEAN')
+    block.setFieldValue(3.4, 'STDDEV')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
@@ -153,8 +172,8 @@ describe('value persistence', () => {
     const expected = [Value.FAMILY, 'uniform', 1.2, 3.4]
     const w = workspace()
     const block = w.newBlock('value_uniform')
-    block.setFieldValue(1.2, 'VALUE_1')
-    block.setFieldValue(3.4, 'VALUE_2')
+    block.setFieldValue(1.2, 'LOW')
+    block.setFieldValue(3.4, 'HIGH')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
@@ -171,7 +190,7 @@ describe('expression persistence', () => {
     done()
   })
 
-  it('persists unary expressions', (done) => {
+  it('persists logical negation', (done) => {
     const expected = [Op.FAMILY, 'not', [Value.FAMILY, 'logical', false]]
     const w = workspace()
     const arg = w.newBlock('value_logical')
@@ -183,7 +202,37 @@ describe('expression persistence', () => {
     done()
   })
 
-  it('persists binary expressions', (done) => {
+  it('persists arithmetic negation', (done) => {
+    const expected = [Op.FAMILY, 'negate', [Value.FAMILY, 'number', 3]]
+    const w = workspace()
+    const arg = w.newBlock('value_number')
+    arg.setFieldValue(3, 'VALUE')
+    const block = w.newBlock('operation_negate')
+    connect(block, 'VALUE', arg)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists comparisons', (done) => {
+    const expected = [Op.FAMILY, 'leq',
+                      [Value.FAMILY, 'number', 1],
+                      [Value.FAMILY, 'number', 2]]
+    const w = workspace()
+    const left = w.newBlock('value_number')
+    left.setFieldValue(1, 'VALUE')
+    const right = w.newBlock('value_number')
+    right.setFieldValue(2, 'VALUE')
+    const block = w.newBlock('operation_compare')
+    block.setFieldValue('leq', 'OP')
+    connect(block, 'LEFT', left)
+    connect(block, 'RIGHT', right)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists binary arithmetic', (done) => {
     const expected = [Op.FAMILY, 'exp',
                       [Value.FAMILY, 'number', 1],
                       [Value.FAMILY, 'number', 2]]
@@ -194,6 +243,24 @@ describe('expression persistence', () => {
     right.setFieldValue(2, 'VALUE')
     const block = w.newBlock('operation_arithmetic')
     block.setFieldValue('exp', 'OP')
+    connect(block, 'LEFT', left)
+    connect(block, 'RIGHT', right)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists binary logical operations', (done) => {
+    const expected = [Op.FAMILY, 'and',
+                      [Value.FAMILY, 'logical', true],
+                      [Value.FAMILY, 'logical', false]]
+    const w = workspace()
+    const left = w.newBlock('value_logical')
+    left.setFieldValue('true', 'VALUE')
+    const right = w.newBlock('value_logical')
+    right.setFieldValue('false', 'VALUE')
+    const block = w.newBlock('operation_logical')
+    block.setFieldValue('and', 'OP')
     connect(block, 'LEFT', left)
     connect(block, 'RIGHT', right)
     const actual = getCode(block)
@@ -217,6 +284,45 @@ describe('expression persistence', () => {
     connect(block, 'COND', cond)
     connect(block, 'LEFT', left)
     connect(block, 'RIGHT', right)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists type checking', (done) => {
+    const expected = [Op.FAMILY, 'isLogical', [Value.FAMILY, 'number', 123]]
+    const w = workspace()
+    const arg = w.newBlock('value_number')
+    arg.setFieldValue(123, 'VALUE')
+    const block = w.newBlock('operation_type')
+    block.setFieldValue('isLogical', 'TYPE')
+    connect(block, 'VALUE', arg)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists type conversion', (done) => {
+    const expected = [Op.FAMILY, 'toLogical', [Value.FAMILY, 'number', 123]]
+    const w = workspace()
+    const arg = w.newBlock('value_number')
+    arg.setFieldValue(123, 'VALUE')
+    const block = w.newBlock('operation_convert')
+    block.setFieldValue('toLogical', 'TYPE')
+    connect(block, 'VALUE', arg)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists datetime conversion', (done) => {
+    const expected = [Op.FAMILY, 'toMonth', [Value.FAMILY, 'datetime', fixture.concert]]
+    const w = workspace()
+    const arg = w.newBlock('value_datetime')
+    arg.setFieldValue(fixture.concert, 'DATE')
+    const block = w.newBlock('operation_datetime')
+    block.setFieldValue('toMonth', 'TYPE')
+    connect(block, 'VALUE', arg)
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
@@ -672,12 +778,91 @@ describe('statistics persistence', () => {
     done()
   })
 
+  it('creates one-sample t test from blocks', (done) => {
+    const expected = [Transform.FAMILY, 'ttest_one', 'red', 3.5]
+    const w = workspace()
+    const block = w.newBlock('statistics_ttest_one')
+    block.setFieldValue('red', 'COLUMN')
+    block.setFieldValue(3.5, 'MEAN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('restores paired two-sided t test from JSON', (done) => {
     const significance = 0.03, leftCol = 'green', rightCol = 'blue'
     const factory = new JsonToObj()
     assert.deepEqual(factory.transform([Transform.FAMILY, 'ttest_two', leftCol, rightCol]),
                      new Transform.ttest_two(leftCol, rightCol),
                      `paired t test`)
+    done()
+  })
+
+  it('creates two-sample t test from blocks', (done) => {
+    const expected = [Transform.FAMILY, 'ttest_two', 'red', 'green']
+    const w = workspace()
+    const block = w.newBlock('statistics_ttest_two')
+    block.setFieldValue('red', 'LEFT_COLUMN')
+    block.setFieldValue('green', 'RIGHT_COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+})
+
+describe('plot code generation', () => {
+  it('persists a bar plot', (done) => {
+    const expected = [Transform.FAMILY, 'bar', 'red', 'green']
+    const w = workspace()
+    const block = w.newBlock('plot_bar')
+    block.setFieldValue('red', 'X_AXIS')
+    block.setFieldValue('green', 'Y_AXIS')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists a box plot', (done) => {
+    const expected = [Transform.FAMILY, 'box', 'red', 'green']
+    const w = workspace()
+    const block = w.newBlock('plot_box')
+    block.setFieldValue('red', 'X_AXIS')
+    block.setFieldValue('green', 'Y_AXIS')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists a dot plot', (done) => {
+    const expected = [Transform.FAMILY, 'dot', 'red']
+    const w = workspace()
+    const block = w.newBlock('plot_dot')
+    block.setFieldValue('red', 'X_AXIS')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists a histogram plot', (done) => {
+    const expected = [Transform.FAMILY, 'histogram', 'red', 5]
+    const w = workspace()
+    const block = w.newBlock('plot_histogram')
+    block.setFieldValue('red', 'COLUMN')
+    block.setFieldValue(5, 'BINS')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('persists a scatter plot', (done) => {
+    const expected = [Transform.FAMILY, 'scatter', 'red', 'green', 'blue']
+    const w = workspace()
+    const block = w.newBlock('plot_scatter')
+    block.setFieldValue('red', 'X_AXIS')
+    block.setFieldValue('green', 'Y_AXIS')
+    block.setFieldValue('blue', 'COLOR')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
     done()
   })
 })

@@ -21,7 +21,7 @@ describe('basic functionality', () => {
     try {
       util.check(false, msg)
     }
-    catch(err) {
+    catch (err) {
       assert(err.message.includes(msg),
              `Error does not include "${msg}"`)
     }

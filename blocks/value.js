@@ -114,14 +114,15 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'VALUE',
+        name: 'RATE',
         text: '0'
       }
     ],
     output: 'Number',
     style: 'value_block',
     helpUrl: '',
-    tooltip: 'exponential random value'
+    tooltip: 'exponential random value',
+    extensions: ['validate_RATE']
   },
 
   // Normal random variable
@@ -131,19 +132,20 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'VALUE_1',
+        name: 'MEAN',
         text: '0'
       },
       {
         type: 'field_input',
-        name: 'VALUE_2',
+        name: 'STDDEV',
         text: '1'
       }
     ],
     output: 'Number',
     style: 'value_block',
     helpUrl: '',
-    tooltip: 'normal random value'
+    tooltip: 'normal random value',
+    extensions: ['validate_STDDEV']
   },
 
   // Uniform random variable
@@ -153,12 +155,12 @@ Blockly.defineBlocksWithJsonArray([
     args0: [
       {
         type: 'field_input',
-        name: 'VALUE_1',
+        name: 'LOW',
         text: '0'
       },
       {
         type: 'field_input',
-        name: 'VALUE_2',
+        name: 'HIGH',
         text: '1'
       }
     ],
@@ -219,38 +221,23 @@ Blockly.TidyBlocks['value_rownum'] = (block) => {
 
 // Exponential random variable
 Blockly.TidyBlocks['value_exponential'] = (block) => {
-  const rate = parseFloat(block.getFieldValue('VALUE'))
-  if (Number.isNaN(rate)) {
-    throw new Error(`exponential rate is not a number`)
-  }
+  const rate = parseFloat(block.getFieldValue('RATE'))
   const code = `["@value", "exponential", ${rate}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Normal random variable
 Blockly.TidyBlocks['value_normal'] = (block) => {
-  const mean = parseFloat(block.getFieldValue('VALUE_1'))
-  if (Number.isNaN(mean)) {
-    throw new Error(`normal mean is not a number`)
-  }
-  const variance = parseFloat(block.getFieldValue('VALUE_2'))
-  if (Number.isNaN(variance) || (variance < 0)) {
-    throw new Error(`normal variance is not a non-negative number`)
-  }
+  const mean = parseFloat(block.getFieldValue('MEAN'))
+  const variance = parseFloat(block.getFieldValue('STDDEV'))
   const code = `["@value", "normal", ${mean}, ${variance}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Uniform random variable
 Blockly.TidyBlocks['value_uniform'] = (block) => {
-  const low = parseFloat(block.getFieldValue('VALUE_1'))
-  if (Number.isNaN(low)) {
-    throw new Error(`uniform low bound is not a number`)
-  }
-  const high = parseFloat(block.getFieldValue('VALUE_2'))
-  if (Number.isNaN(high)) {
-    throw new Error(`uniform high bound is not a number`)
-  }
+  const low = parseFloat(block.getFieldValue('LOW'))
+  const high = parseFloat(block.getFieldValue('HIGH'))
   const code = `["@value", "uniform", ${low}, ${high}]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }

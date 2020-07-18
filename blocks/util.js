@@ -140,6 +140,20 @@ const createValidators = () => {
     }
   }
 
+  // Create a function to check that a field has a non-negative number.
+  const _createNonNeg = (columnName) => {
+    return function () {
+      const field = this.getField(columnName)
+      field.setValidator((newValue) => {
+        const v = parseFloat(newValue)
+        if (v >= 0.0) {
+          return newValue
+        }
+        return null
+      })
+    }
+  }
+
   SINGLE_COL_FIELDS.forEach(col => {
     Blockly.Extensions.register(`validate_${col}`, _create(col, MATCH_COL_NAME))
   })
@@ -149,6 +163,9 @@ const createValidators = () => {
   })
 
   Blockly.Extensions.register('validate_DATE', _create('DATE', MATCH_DATE))
+
+  Blockly.Extensions.register('validate_RATE', _createNonNeg('RATE'))
+  Blockly.Extensions.register('validate_STDDEV', _createNonNeg('STDDEV'))
 }
 
 module.exports = {
