@@ -514,7 +514,7 @@ class TransformTTestOneSample extends TransformBase {
     runner.appendLog(this.name)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
-    runner.setStatistics(pValue)
+    runner.setStats(pValue)
     return df
   }
 }
@@ -537,7 +537,7 @@ class TransformTTestPaired extends TransformBase {
     const left = df.data.map(row => row[this.leftCol])
     const right = df.data.map(row => row[this.rightCol])
     const pValue = stats.tTestTwoSample(left, right, 0)
-    runner.setStatistics(pValue)
+    runner.setStats(pValue)
     return df
   }
 }

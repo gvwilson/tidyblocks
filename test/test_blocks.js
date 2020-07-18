@@ -26,7 +26,7 @@ require('../blocks/combine')
 require('../blocks/data')
 require('../blocks/op')
 require('../blocks/plot')
-require('../blocks/statistics')
+require('../blocks/stats')
 require('../blocks/transform')
 require('../blocks/value')
 
@@ -794,7 +794,7 @@ describe('statistics persistence', () => {
   it('creates one-sample t test from blocks', (done) => {
     const expected = [Transform.FAMILY, 'ttest_one', 'red', 3.5]
     const w = workspace()
-    const block = w.newBlock('statistics_ttest_one')
+    const block = w.newBlock('stats_ttest_one')
     block.setFieldValue('red', 'COLUMN')
     block.setFieldValue(3.5, 'MEAN')
     const actual = getCode(block)
@@ -814,7 +814,7 @@ describe('statistics persistence', () => {
   it('creates two-sample t test from blocks', (done) => {
     const expected = [Transform.FAMILY, 'ttest_two', 'red', 'green']
     const w = workspace()
-    const block = w.newBlock('statistics_ttest_two')
+    const block = w.newBlock('stats_ttest_two')
     block.setFieldValue('red', 'LEFT_COLUMN')
     block.setFieldValue('green', 'RIGHT_COLUMN')
     const actual = getCode(block)

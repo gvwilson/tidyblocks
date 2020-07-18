@@ -63,7 +63,7 @@ class Environment {
    * Store results of a statistical test.
    * @param {Object} result Result of test (p-value)
    */
-  setStatistics (result) {
+  setStats (result) {
     this.stats = result
   }
 

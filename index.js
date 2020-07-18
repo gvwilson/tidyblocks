@@ -16,7 +16,7 @@ require('./blocks/combine')
 require('./blocks/data')
 require('./blocks/op')
 require('./blocks/plot')
-require('./blocks/statistics')
+require('./blocks/stats')
 require('./blocks/transform')
 require('./blocks/value')
 

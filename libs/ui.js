@@ -71,7 +71,7 @@ class UserInterface {
     this.displayTable('data', null)
     this.displayTable('results', null)
     this.displayPlot(null)
-    this.displayStatistics(null, null)
+    this.displayStats(null, null)
     this.displayLog(null)
     this.displayError(null)
   }
@@ -126,9 +126,9 @@ class UserInterface {
    * Display statistics.
    * @param {Object} results Results of statistical test (p-value)
    */
-  displayStatistics (results) {
-    const html = this.statisticsToHTML(results)
-    this.displayInArea('statisticsArea', html)
+  displayStats (results) {
+    const html = this.statsToHTML(results)
+    this.displayInArea('statsArea', html)
   }
 
   /**
@@ -221,7 +221,7 @@ class UserInterface {
   /**
    * Convert results of statistical test to HTML.
    */
-  statisticsToHTML (results) {
+  statsToHTML (results) {
     return `<p>p-value: ${results}</p>`
   }
 

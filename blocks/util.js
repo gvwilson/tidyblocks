@@ -8,7 +8,7 @@ const createTheme = () => {
         data_color = '#FEBE4C',
         op_color = '#F9B5B2',
         plot_color = '#A4C588',
-        statistics_color = '#70A0C0',
+        stats_color = '#70A0C0',
         transform_color = '#76AADB',
         value_color = '#E7553C'
 
@@ -37,8 +37,8 @@ const createTheme = () => {
         colourSecondary: '#64C7FF',
         colourTertiary: '#586B4B'
       },
-      statistics_blocks: {
-        colourPrimary: statistics_color,
+      stats_blocks: {
+        colourPrimary: stats_color,
         colourSecondary: '#70A0C0',
         colourTertiary: '#C070A0'
       },
@@ -58,7 +58,7 @@ const createTheme = () => {
       data: {colour: data_color},
       op: {colour: op_color},
       plot: {colour: plot_color},
-      statistics: {colour: statistics_color},
+      stats: {colour: stats_color},
       transform: {colour: transform_color},
       value: {colour: value_color}
     }

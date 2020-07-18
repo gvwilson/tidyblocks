@@ -3,7 +3,7 @@ const Blockly = require('blockly/blockly_compressed')
 Blockly.defineBlocksWithJsonArray([
   // One-sample two-sided t-test
   {
-    type: 'statistics_ttest_one',
+    type: 'stats_ttest_one',
     message0: 'One-sample t-test',
     args0: [],
     message1: 'column %1 mean \u03BC %2',
@@ -21,14 +21,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: false,
     previousStatement: null,
-    style: 'statistics_blocks',
+    style: 'stats_blocks',
     tooltip: 'perform one-sample two-sided t-test',
     helpUrl: ''
   },
 
   // Two-sample two-sided t-test
   {
-    type: 'statistics_ttest_two',
+    type: 'stats_ttest_two',
     message0: 'Two-sample t-test',
     args0: [],
     message1: 'column %1 column %2',
@@ -46,14 +46,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: false,
     previousStatement: null,
-    style: 'statistics_blocks',
+    style: 'stats_blocks',
     tooltip: 'perform two-sample two-sided t-test',
     helpUrl: ''
   }
 ])
 
 // One-sample two-sided t-test.
-Blockly.TidyBlocks['statistics_ttest_one'] = (block) => {
+Blockly.TidyBlocks['stats_ttest_one'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
   const column = block.getFieldValue('COLUMN')
   const mean = block.getFieldValue('MEAN')
@@ -63,7 +63,7 @@ Blockly.TidyBlocks['statistics_ttest_one'] = (block) => {
 //
 // Create a paired two-sided t-test.
 //
-Blockly.TidyBlocks['statistics_ttest_two'] = (block) => {
+Blockly.TidyBlocks['stats_ttest_two'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
   const left = block.getFieldValue('LEFT_COLUMN')
   const right = block.getFieldValue('RIGHT_COLUMN')
