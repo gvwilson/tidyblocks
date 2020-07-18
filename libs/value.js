@@ -68,9 +68,22 @@ class ValueColumn extends ExprValue {
  * Datetime value.
  */
 class ValueDatetime extends ExprValue {
+  static MakeDate (value) {
+    if ((value === util.MISSING) || (value instanceof Date)) {
+      return value
+    }
+    util.check(typeof value === 'string',
+               `Cannot create date from ${value} of type ${typeof value}`)
+    value = new Date(value)
+    util.check(value.toString() !== 'Invalid Date',
+               `Cannot create date from ${value} of type ${typeof value}`)
+    return value
+  }
+
   constructor (value) {
+    value = ValueDatetime.MakeDate(value)
     util.check((value === util.MISSING) || (value instanceof Date),
-               `Datetime value must be missing or date`)
+               `Datetime value must be missing, date, or convertible string`)
     super(FAMILY, 'datetime', value)
   }
 

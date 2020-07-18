@@ -128,6 +128,18 @@ describe('value persistence', () => {
     done()
   })
 
+  it('rejects invalid dates', (done) => {
+    const w = workspace()
+    const block = w.newBlock('value_datetime')
+    block.setFieldValue('1970-01-01', 'DATE')
+    assert.equal(block.getFieldValue('DATE'), '1970-01-01',
+                 `Value not set`)
+    block.setFieldValue('abc', 'DATE')
+    assert.equal(block.getFieldValue('DATE'), '1970-01-01',
+                 `Value should not have changed`)
+    done()
+  })
+
   it('persists row numbers', (done) => {
     const expected = [Value.FAMILY, 'rownum']
     const w = workspace()
@@ -316,10 +328,11 @@ describe('expression persistence', () => {
   })
 
   it('persists datetime conversion', (done) => {
-    const expected = [Op.FAMILY, 'toMonth', [Value.FAMILY, 'datetime', fixture.concert]]
+    const expected = [Op.FAMILY, 'datetime', 'toMonth',
+                      [Value.FAMILY, 'datetime', fixture.concertStr]]
     const w = workspace()
     const arg = w.newBlock('value_datetime')
-    arg.setFieldValue(fixture.concert, 'DATE')
+    arg.setFieldValue(fixture.concertStr, 'DATE')
     const block = w.newBlock('operation_datetime')
     block.setFieldValue('toMonth', 'TYPE')
     connect(block, 'VALUE', arg)
@@ -592,7 +605,7 @@ describe('expression persistence', () => {
       const factory = new JsonToObj()
       const json = [Op.FAMILY, name, childJSON]
       assert.deepEqual(factory.expr(json),
-                       new func(child),
+                       new func(childObj),
                        `Failed to restore datetime ${name}`)
     }
     done()

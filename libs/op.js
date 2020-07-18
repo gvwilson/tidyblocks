@@ -192,8 +192,7 @@ class OpToDatetime extends OpConvertBase {
       return util.MISSING
     }
     let result = new Date(value)
-    if ((typeof result === 'object') &&
-        (result.toString() === 'Invalid Date')) {
+    if (result.toString() === 'Invalid Date') {
       result = util.MISSING
     }
     return result

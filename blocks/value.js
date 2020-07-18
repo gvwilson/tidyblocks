@@ -186,7 +186,7 @@ Blockly.TidyBlocks['value_column'] = (block) => {
 
 // Datetime
 Blockly.TidyBlocks['value_datetime'] = (block) => {
-  const value = block.getFieldValue('VALUE')
+  const value = block.getFieldValue('DATE')
   const code = `["@value", "datetime", "${value}"]`
   return [code, Blockly.TidyBlocks.ORDER_NONE]
 }

@@ -117,9 +117,6 @@ const MULTI_COL_FIELDS = [
   'MULTIPLE_COLUMNS'
 ]
 
-// Match YYYY-MM-DD date.
-const MATCH_DATE = /^ *[0-9]{4}-[0-9]{2}-[0-9]{2} *$/
-
 /**
  * Create validators for all fields that take a single column name or multiple
  * column names.
@@ -154,6 +151,20 @@ const createValidators = () => {
     }
   }
 
+  // Create a date validator.
+  const validateDate = (columnName) => {
+    return function () {
+      const field = this.getField(columnName)
+      field.setValidator((newValue) => {
+        const temp = new Date(newValue)
+        if (temp.toString() === 'Invalid Date') {
+          return null
+        }
+        return newValue
+      })
+    }
+  }
+
   SINGLE_COL_FIELDS.forEach(col => {
     Blockly.Extensions.register(`validate_${col}`, _create(col, MATCH_COL_NAME))
   })
@@ -162,10 +173,10 @@ const createValidators = () => {
     Blockly.Extensions.register(`validate_${col}`, _create(col, MATCH_MULTI_COL_NAMES))
   })
 
-  Blockly.Extensions.register('validate_DATE', _create('DATE', MATCH_DATE))
-
   Blockly.Extensions.register('validate_RATE', _createNonNeg('RATE'))
   Blockly.Extensions.register('validate_STDDEV', _createNonNeg('STDDEV'))
+
+  Blockly.Extensions.register('validate_DATE', validateDate('DATE'))
 }
 
 module.exports = {
