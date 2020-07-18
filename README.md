@@ -162,7 +162,7 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
     -   `Program` (`libs/program.js`)
     -   `Pipeline` (`libs/pipeline.js`)
     -   Subclasses of `TransformBase` (`libs/transform.js`)
-    -   Subclasses of `ExprBase` (`libs/operation.js` and `libs/value.js`)
+    -   Subclasses of `ExprBase` (`libs/op.js` and `libs/value.js`)
 
 -   `Program` keeps track of all its `Pipeline` objects in two member variables:
     -   `queue` stores the pipelines that are ready to run.

@@ -6,7 +6,7 @@ const Blockly = require('blockly/blockly_compressed')
 const createTheme = () => {
   const combine_color = '#404040',
         data_color = '#FEBE4C',
-        operation_color = '#F9B5B2',
+        op_color = '#F9B5B2',
         plot_color = '#A4C588',
         statistics_color = '#70A0C0',
         transform_color = '#76AADB',
@@ -27,8 +27,8 @@ const createTheme = () => {
         colourTertiary: '#A0A0A0',
         hat: 'cap'
       },
-      operation_block: {
-        colourPrimary: operation_color,
+      op_block: {
+        colourPrimary: op_color,
         colourSecondary: '#CD5C5C',
         colourTertiary: '#CD5C5C'
       },
@@ -56,7 +56,7 @@ const createTheme = () => {
     categoryStyles: {
       combine: {colour: combine_color},
       data: {colour: data_color},
-      operation: {colour: operation_color},
+      op: {colour: op_color},
       plot: {colour: plot_color},
       statistics: {colour: statistics_color},
       transform: {colour: transform_color},

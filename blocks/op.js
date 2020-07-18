@@ -5,7 +5,7 @@ const {valueToCode} = require('./util')
 Blockly.defineBlocksWithJsonArray([
   // Binary arithmetic
   {
-    type: 'operation_arithmetic',
+    type: 'op_arithmetic',
     message0: '%1 %2 %3',
     args0: [
       {
@@ -31,14 +31,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Number',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'do arithmetic',
     helpUrl: ''
   },
 
   // Arithmetic negation
   {
-    type: 'operation_negate',
+    type: 'op_negate',
     message0: '- %1',
     args0: [
       {
@@ -48,14 +48,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Number',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'negate a numeric column',
     helpUrl: ''
   },
 
   // Comparisons
   {
-    type: 'operation_compare',
+    type: 'op_compare',
     message0: '%1 %2 %3',
     args0: [
       {
@@ -81,14 +81,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'compare two columns',
     helpUrl: ''
   },
 
   // Binary logical operations
   {
-    type: 'operation_logical',
+    type: 'op_logical',
     message0: '%1 %2 %3',
     args0: [
       {
@@ -110,14 +110,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'combine logical values of two columns',
     helpUrl: ''
   },
 
   // Logical negation
   {
-    type: 'operation_not',
+    type: 'op_not',
     message0: 'not %1',
     args0: [
       {
@@ -127,14 +127,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'negate a logical column',
     helpUrl: ''
   },
 
   // Type checking
   {
-    type: 'operation_type',
+    type: 'op_type',
     message0: '%1 is %2 ?',
     args0: [
       {
@@ -155,14 +155,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'check the type of a value',
     helpUrl: ''
   },
 
   // Type conversion
   {
-    type: 'operation_convert',
+    type: 'op_convert',
     message0: '%1 to %2',
     args0: [
       {
@@ -182,14 +182,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Number',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'change the datatype of a value',
     helpUrl: ''
   },
 
   // Datetime conversions
   {
-    type: 'operation_datetime',
+    type: 'op_datetime',
     message0: 'get %1 from %2',
     args0: [
       {
@@ -212,14 +212,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Number',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'change the datatype of a value',
     helpUrl: ''
   },
 
   // Conditional
   {
-    type: 'operation_conditional',
+    type: 'op_conditional',
     message0: 'If %1 then %2 else %3',
     args0: [
       {
@@ -237,14 +237,14 @@ Blockly.defineBlocksWithJsonArray([
     ],
     inputsInline: true,
     output: 'Boolean',
-    style: 'operation_block',
+    style: 'op_block',
     tooltip: 'select value based on condition',
     helpUrl: ''
   }
 ])
 
 // Binary arithmetic
-Blockly.TidyBlocks['operation_arithmetic'] = (block) => {
+Blockly.TidyBlocks['op_arithmetic'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.TidyBlocks.ORDER_NONE
   const left = valueToCode(block, 'LEFT', order)
@@ -254,7 +254,7 @@ Blockly.TidyBlocks['operation_arithmetic'] = (block) => {
 }
 
 // Arithmetic negation
-Blockly.TidyBlocks['operation_negate'] = (block) => {
+Blockly.TidyBlocks['op_negate'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@op", "negate", ${value}]`
@@ -262,7 +262,7 @@ Blockly.TidyBlocks['operation_negate'] = (block) => {
 }
 
 // Comparisons
-Blockly.TidyBlocks['operation_compare'] = (block) => {
+Blockly.TidyBlocks['op_compare'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.TidyBlocks.ORDER_NONE
   const left = valueToCode(block, 'LEFT', order)
@@ -272,7 +272,7 @@ Blockly.TidyBlocks['operation_compare'] = (block) => {
 }
 
 // Binary logical operations
-Blockly.TidyBlocks['operation_logical'] = (block) => {
+Blockly.TidyBlocks['op_logical'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.TidyBlocks.ORDER_NONE
   const left = valueToCode(block, 'LEFT', order)
@@ -282,7 +282,7 @@ Blockly.TidyBlocks['operation_logical'] = (block) => {
 }
 
 // Logical negation
-Blockly.TidyBlocks['operation_not'] = (block) => {
+Blockly.TidyBlocks['op_not'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
   const code = `["@op", "not", ${value}]`
@@ -290,7 +290,7 @@ Blockly.TidyBlocks['operation_not'] = (block) => {
 }
 
 // Type checking
-Blockly.TidyBlocks['operation_type'] = (block) => {
+Blockly.TidyBlocks['op_type'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
@@ -299,7 +299,7 @@ Blockly.TidyBlocks['operation_type'] = (block) => {
 }
 
 // Type conversion
-Blockly.TidyBlocks['operation_convert'] = (block) => {
+Blockly.TidyBlocks['op_convert'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
@@ -308,7 +308,7 @@ Blockly.TidyBlocks['operation_convert'] = (block) => {
 }
 
 // Datetime conversions
-Blockly.TidyBlocks['operation_datetime'] = (block) => {
+Blockly.TidyBlocks['op_datetime'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.TidyBlocks.ORDER_NONE
   const value = valueToCode(block, 'VALUE', order)
@@ -317,7 +317,7 @@ Blockly.TidyBlocks['operation_datetime'] = (block) => {
 }
 
 // Conditional
-Blockly.TidyBlocks['operation_conditional'] = (block) => {
+Blockly.TidyBlocks['op_conditional'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
   const cond = valueToCode(block, 'COND', order)
   const left = valueToCode(block, 'LEFT', order)

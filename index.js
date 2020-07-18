@@ -14,7 +14,7 @@ const {
 // Load for their side effects (block definitions).
 require('./blocks/combine')
 require('./blocks/data')
-require('./blocks/operation')
+require('./blocks/op')
 require('./blocks/plot')
 require('./blocks/statistics')
 require('./blocks/transform')
