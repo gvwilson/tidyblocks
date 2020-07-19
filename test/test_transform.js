@@ -11,6 +11,19 @@ const Environment = require('../libs/environment')
 const fixture = require('./fixture')
 
 describe('build dataframe operations', () => {
+  it('builds data loading transform', (done) => {
+    for (let name of ['colors', 'earthquakes', 'penguins']) {
+      const raw = require(`../data/${name}`)
+      const expected = new DataFrame(raw)
+      const runner = new Environment()
+      const transform = new Transform.data(name)
+      const actual = transform.run(runner, null)
+      assert(actual.equal(expected),
+             `Mis-match in dataframes`)
+    }
+    done()
+  })
+
   it('builds drop columns transform', (done) => {
     const runner = new Environment()
     const transform = new Transform.drop(['personal'])

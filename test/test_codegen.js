@@ -340,6 +340,17 @@ describe('expression code generation', () => {
 })
 
 describe('transform code generation', () => {
+  it('generates code for data loading', (done) => {
+    for (let name of ['colors', 'earthquakes', 'penguins']) {
+      const expected = [Transform.FAMILY, 'data', name]
+      const w = workspace()
+      const block = w.newBlock(`data_${name}`)
+      const actual = getCode(block)
+      assert.deepEqual(expected, actual, `Mis-match`)
+    }
+    done()
+  })
+
   it('generates code for drop', (done) => {
     const expected = [Transform.FAMILY, 'drop', ['left', 'right']]
     const w = workspace()
