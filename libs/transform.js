@@ -54,6 +54,32 @@ class TransformBase {
 // ----------------------------------------------------------------------
 
 /**
+ * Get a dataset.
+ * @param {string} dataset Name of dataset.
+ */
+class TransformData extends TransformBase {
+  constructor (dataset) {
+    util.check(typeof dataset === 'string',
+               `Expected string`)
+    super('read', [], null, false, true)
+    this.dataset = dataset
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.dataset === other.dataset)
+  }
+
+  run (runner, df) {
+    runner.appendLog(this.name)
+    util.check(df === null,
+               `Cannot provide input dataframe to reader`)
+    const dataTable = runner.getData(this.dataset)
+    return new DataFrame(dataTable)
+  }
+}
+
+/**
  * Drop columns.
  */
 class TransformDrop extends TransformBase {
@@ -206,31 +232,6 @@ class TransformNotify extends TransformBase {
 }
 
 /**
- * Read a dataset.
- * @param {string} path Path to data.
- */
-class TransformRead extends TransformBase {
-  constructor (path) {
-    util.check(typeof path === 'string',
-               `Expected string`)
-    super('read', [], null, false, true)
-    this.path = path
-  }
-
-  equal (other) {
-    return super.equal(other) &&
-      (this.path === other.path)
-  }
-
-  run (runner, df) {
-    runner.appendLog(this.name)
-    util.check(df === null,
-               `Cannot provide input dataframe to reader`)
-    return new DataFrame(runner.getData(this.path))
-  }
-}
-
-/**
  * Select columns.
  * @param {string[]} columns The names of the columns to keep.
  */
@@ -249,6 +250,39 @@ class TransformSelect extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.select(this.columns)
+  }
+}
+
+/**
+ * Create a numerical sequence.
+ * @param {string} newName New column's name.
+ * @param {number} limit How many to create.
+ */
+class TransformSequence extends TransformBase {
+  constructor (newName, limit) {
+    util.check(typeof newName === 'string',
+               `Expected string as new name`)
+    super('sequence', [], null, true, true)
+    this.newName = newName
+    this.limit = limit
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.newName === other.newName) &&
+      (this.limit === other.limit)
+  }
+
+  run (runner, df) {
+    runner.appendLog(this.name)
+    const raw = Array.from(
+      {length:this.limit},
+      (v, k) => {
+        const result = {}
+        result[this.newName] = k + 1
+        return result
+      })
+    return new DataFrame(raw)
   }
 }
 
@@ -547,13 +581,13 @@ class TransformTTestPaired extends TransformBase {
 module.exports = {
   FAMILY: FAMILY,
   base: TransformBase,
+  data: TransformData,
   drop: TransformDrop,
   filter: TransformFilter,
   groupBy: TransformGroupBy,
   join: TransformJoin,
   mutate: TransformMutate,
   notify: TransformNotify,
-  read: TransformRead,
   select: TransformSelect,
   sort: TransformSort,
   summarize: TransformSummarize,

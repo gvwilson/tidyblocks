@@ -239,11 +239,11 @@ describe('transform persistence', () => {
     done()
   })
 
-  it('restores read from JSON', (done) => {
-    const path = '/to/file'
+  it('restores data loader from JSON', (done) => {
+    const dataset = 'dataset'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'read', path]),
-                     new Transform.read(path),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'data', dataset]),
+                     new Transform.data(dataset),
                      `notify`)
     done()
   })
@@ -363,8 +363,8 @@ describe('generates code for statistics', () => {
 
 describe('program and pipeline persistence', () => {
   it('restores a single pipeline', (done) => {
-    const expected = new Program(new Pipeline(new Transform.read('data.csv')))
-    const json = [Program.FAMILY, [Pipeline.FAMILY, [Transform.FAMILY, 'read', 'data.csv']]]
+    const expected = new Program(new Pipeline(new Transform.data('colors')))
+    const json = [Program.FAMILY, [Pipeline.FAMILY, [Transform.FAMILY, 'data', 'colors']]]
     const factory = new Restore()
     const actual = factory.program(json)
     assert.deepEqual(actual, expected, `Mis-match`)

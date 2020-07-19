@@ -100,7 +100,8 @@ const csvToTable = (text) => {
     return name
   }
 
-  const result = papaparse.parse(text.trim(), {
+  const trimmed = text.trim()
+  const result = papaparse.parse(trimmed, {
     dynamicTyping: true,
     header: true,
     skipEmptyLines: true,

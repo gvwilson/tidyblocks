@@ -9,8 +9,8 @@ const Value = require('../libs/value')
 const Op = require('../libs/op')
 const Summarize = require('../libs/summarize')
 const Transform = require('../libs/transform')
-const {Pipeline} = require('../libs/pipeline')
-const {Program} = require('../libs/program')
+const Pipeline = require('../libs/pipeline')
+const Program = require('../libs/program')
 
 //
 // All programs.

@@ -533,7 +533,7 @@ describe('program code generation', () => {
   it('generates code for a program', (done) => {
     const expected = [Program.FAMILY,
                       [Pipeline.FAMILY,
-                       [Transform.FAMILY, 'read', 'colors.csv'],
+                       [Transform.FAMILY, 'data', 'colors'],
                        [Transform.FAMILY, 'filter', [Value.FAMILY, 'column', 'keep']]]]
     const w = workspace()
     const colors = w.newBlock('data_colors')

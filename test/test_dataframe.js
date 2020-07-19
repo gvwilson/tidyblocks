@@ -8,6 +8,7 @@ const Op = require('../libs/op')
 const Summarize = require('../libs/summarize')
 const DataFrame = require('../libs/dataframe')
 
+const fixture = require('./fixture')
 const ZeroRows = []
 const OneRow = [{ones: 1, tens: 10}]
 const OneRowBig = [{ones: 9, tens: 90}]
@@ -16,12 +17,6 @@ const TwoRows = [{ones: 1, tens: 10},
 const ThreeRows = [{ones: 1, tens: 10},
                    {ones: 2, tens: 20},
                    {ones: 3, tens: 30}]
-const {
-  Colors,
-  GroupRedCountRed,
-  GroupRedMaxGreen,
-  GroupRedMaxRed
-} = require('./fixture')
 
 describe('dataframe construction', () => {
   it('will not create a dataframe from invalid values', (done) => {
@@ -598,38 +593,38 @@ describe('summarize', () => {
   })
 
   it('can summarize a single grouped column', (done) => {
-    const df = new DataFrame(Colors).groupBy(['red'])
+    const df = new DataFrame(fixture.Colors).groupBy(['red'])
     const result = df.summarize(new Summarize.count('red'))
     assert(
-      result.data.every(row => (row.red_count === GroupRedCountRed.get(row.red))),
+      result.data.every(row => (row.red_count === fixture.GroupRedCountRed.get(row.red))),
       `Wrong count(s) for grouped values`)
     done()
   })
 
   it('can summarize multiple grouped columns', (done) => {
-    const df = new DataFrame(Colors).groupBy(['red'])
+    const df = new DataFrame(fixture.Colors).groupBy(['red'])
     const result = df
           .summarize(new Summarize.count('red'))
           .summarize(new Summarize.maximum('green'))
     assert(
-      result.data.every(row => (row.red_count === GroupRedCountRed.get(row.red))),
+      result.data.every(row => (row.red_count === fixture.GroupRedCountRed.get(row.red))),
       `Wrong count(s) for grouped values`)
     assert(
-      result.data.every(row => (row.green_maximum === GroupRedMaxGreen.get(row.red))),
+      result.data.every(row => (row.green_maximum === fixture.GroupRedMaxGreen.get(row.red))),
       `Wrong maximum(s) for grouped values`)
     done()
   })
 
   it('can summarize the same grouped column multiple times', (done) => {
-    const df = new DataFrame(Colors).groupBy(['red'])
+    const df = new DataFrame(fixture.Colors).groupBy(['red'])
     const result = df
           .summarize(new Summarize.count('red'))
           .summarize(new Summarize.maximum('red'))
     assert(
-      result.data.every(row => (row.red_count === GroupRedCountRed.get(row.red))),
+      result.data.every(row => (row.red_count === fixture.GroupRedCountRed.get(row.red))),
       `Wrong count(s) for grouped values`)
     assert(
-      result.data.every(row => (row.red_maximum === GroupRedMaxRed.get(row.red))),
+      result.data.every(row => (row.red_maximum === fixture.GroupRedMaxRed.get(row.red))),
       `Wrong maximum(s) for grouped values`)
     done()
   })

@@ -12,7 +12,7 @@ const fixture = require('./fixture')
 
 describe('build dataframe operations', () => {
   it('builds drop columns transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.drop(['personal'])
     const result = transform.run(runner, new DataFrame(fixture.names))
     const expected = fixture.names.map(row => ({family: row.family}))
@@ -22,7 +22,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds filter transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const expr = new Value.column('right')
     const transform = new Transform.filter(expr)
     const result = transform.run(runner, new DataFrame(fixture.bool))
@@ -34,7 +34,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds group data transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.groupBy(['left'])
     const result = transform.run(runner, new DataFrame(fixture.number))
     const groups = new Set(result.data.map(row => row[DataFrame.GROUPCOL]))
@@ -46,7 +46,7 @@ describe('build dataframe operations', () => {
   it('builds join transform', (done) => {
     const leftData = new DataFrame([{leftName: 7, value: 'leftVal'}])
     const rightData = new DataFrame([{rightName: 7, value: 'rightVal'}])
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     runner.setResult('leftTable', leftData)
     runner.setResult('rightTable', rightData)
     const transform = new Transform.join('leftTable', 'leftName', 'rightTable', 'rightName')
@@ -59,7 +59,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds mutate transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const mutater = new Value.text('stuff')
     const transform = new Transform.mutate('value', mutater)
     const result = transform.run(runner, new DataFrame(fixture.names))
@@ -71,7 +71,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds notify transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.notify('answer')
     const input = new DataFrame(fixture.names)
     const result = transform.run(runner, input)
@@ -83,18 +83,19 @@ describe('build dataframe operations', () => {
   })
 
   it('builds read data transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
-    const transform = new Transform.read('names.csv')
+    const runner = new Environment()
+    const transform = new Transform.data('colors')
     const result = transform.run(runner, null)
     assert(result instanceof DataFrame,
            `Expected dataframe`)
-    assert(result.equal(new DataFrame(fixture.names)),
+    const direct = new DataFrame(fixture.Colors)
+    assert(result.equal(direct),
            `Expected names dataset`)
     done()
   })
 
   it('builds select transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.select(['personal'])
     const result = transform.run(runner, new DataFrame(fixture.names))
     const expected = fixture.names.map(row => ({personal: row.personal}))
@@ -104,7 +105,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds sort transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.sort(['left'], true)
     const result = transform.run(runner, new DataFrame(fixture.string))
     const actual = result.data.map(row => row.left)
@@ -116,7 +117,7 @@ describe('build dataframe operations', () => {
 
   it('builds summarize transform', (done) => {
     const df = new DataFrame([{left: 3}])
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.summarize('maximum', 'left')
     const result = transform.run(runner, df)
     assert.deepEqual(result.data,
@@ -126,7 +127,7 @@ describe('build dataframe operations', () => {
   })
 
   it('build ungroup transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.ungroup()
     const input = [{a: 1}, {a: 2}]
     input.forEach(row => {row[DataFrame.GROUPCOL] = 1})
@@ -137,7 +138,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds unique values transform', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.unique(['a'])
     const input = [{a: 1}, {a: 1}, {a: 2}, {a: 1}]
     const result = transform.run(runner, new DataFrame(input))
@@ -149,7 +150,7 @@ describe('build dataframe operations', () => {
 
 describe('build plots', () => {
   it('creates a bar plot', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.bar('left', 'right')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'bar',
@@ -164,7 +165,7 @@ describe('build plots', () => {
   })
 
   it('creates a box plot', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.box('left', 'right')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark.type, 'boxplot',
@@ -179,7 +180,7 @@ describe('build plots', () => {
   })
 
   it('creates a dot plot', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.dot('left')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark.type, 'circle',
@@ -194,7 +195,7 @@ describe('build plots', () => {
   })
 
   it('creates a histogram', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.histogram('left', 7)
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'bar',
@@ -209,7 +210,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot without a color', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.scatter('left', 'right', null)
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'point',
@@ -226,7 +227,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot with a color', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.scatter('left', 'right', 'right')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'point',
@@ -281,14 +282,14 @@ describe('build plots', () => {
 
 describe('build statistics', () => {
   it('runs one-sided two-sample t-test', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.ttest_one('blue', 0.0)
     const result = transform.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs a paired two-sided t-test', (done) => {
-    const runner = new Environment(fixture.ReadLocalData)
+    const runner = new Environment()
     const transform = new Transform.ttest_two('blue', 'green')
     const result = transform.run(runner, new DataFrame(fixture.Colors))
     done()
@@ -380,15 +381,15 @@ describe('transform equality tests', () => {
     done()
   })
 
-  it('compares read', (done) => {
-    const read_a = new Transform.read('/A')
-    const read_b = new Transform.read('/B')
-    assert(read_a.equal(read_a),
+  it('compares data loading transforms', (done) => {
+    const data_a = new Transform.data('A')
+    const data_b = new Transform.data('B')
+    assert(data_a.equal(data_a),
            `Same should match`)
-    assert(!read_a.equal(read_b),
+    assert(!data_a.equal(data_b),
            `Names should matter`)
     const groupBy = new Transform.groupBy(['left'])
-    assert(!read_a.equal(groupBy),
+    assert(!data_a.equal(groupBy),
            `Different transforms should not equal`)
     done()
   })

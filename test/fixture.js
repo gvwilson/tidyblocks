@@ -28,11 +28,11 @@ class MockTransform extends Transform.base {
 }
 
 /**
- * Override browser-based method for getting data.
+ * Alternative to browser-based method for getting data.
  * @param {string} path Local path to dataset.
  * @returns Table to turn into dataframe.
  */
-const ReadLocalData = (path) => {
+const readLocalData = (path) => {
   util.check(path && (typeof path === 'string'),
              `Path must be non-empty string`)
   path = `${process.cwd()}/${LOCAL_DATA_DIR}/${path}`
@@ -82,7 +82,7 @@ const concertStr = concert.toISOString()
 module.exports = {
   DOM,
   MockTransform,
-  ReadLocalData,
+  readLocalData,
   concert,
   concertStr,
   bool: [
@@ -120,19 +120,7 @@ module.exports = {
     {num: -1, date: new Date(), str: "abc", bool: true},
     {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
   ],
-  Colors: [
-    {name: 'black', red: 0, green: 0, blue: 0},
-    {name: 'red', red: 255, green: 0, blue: 0},
-    {name: 'maroon', red: 128, green: 0, blue: 0},
-    {name: 'lime', red: 0, green: 255, blue: 0},
-    {name: 'green', red: 0, green: 128, blue: 0},
-    {name: 'blue', red: 0, green: 0, blue: 255},
-    {name: 'navy', red: 0, green: 0, blue: 128},
-    {name: 'yellow', red: 255, green: 255, blue: 0},
-    {name: 'fuchsia', red: 255, green: 0, blue: 255},
-    {name: 'aqua', red: 0, green: 255, blue: 255},
-    {name: 'white', red: 255, green: 255, blue: 255}
-  ],
+  Colors: require('../data/colors'),
   GroupRedCountRed: new Map([[0, 6], [128, 1], [255, 4]]),
   GroupRedMaxGreen: new Map([[0, 255], [128, 0], [255, 255]]),
   GroupRedMaxRed: new Map([[0, 0], [128, 128], [255, 255]]),

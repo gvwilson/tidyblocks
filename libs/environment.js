@@ -2,6 +2,11 @@
 
 const util = require('./util')
 
+// Require default datasets at the top level to ensure bundling picks them up.
+const COLORS = require('../data/colors'),
+      EARTHQUAKES = require('../data/earthquakes'),
+      PENGUINS = require('../data/penguins')
+
 /**
  * Runtime environment.
  */
@@ -9,10 +14,8 @@ class Environment {
   /**
    * Construct a new runtime environment.
    */
-  constructor (readData) {
-    util.check(typeof readData === 'function',
-               `Require function for reading data`)
-    this.readData = readData
+  constructor () {
+    this.data = this.loadDefaultDatasets()
     this.log = []
     this.errors = []
     this.results = new Map()
@@ -22,11 +25,26 @@ class Environment {
 
   /**
    * Get data given a path.
-   * @param {string} path Identifier for data.
-   * @returns Data table.
+   * @param {string} name Identifier for data.
+   * @returns Data table to be converted to dataframe.
    */
-  getData (path) {
-    return this.readData(path)
+  getData (name) {
+    util.check(this.data.has(name),
+               `Unknown dataset ${name}`)
+    return this.data.get(name)
+  }
+
+  /**
+   * Add a named dataset.
+   * @param {string} name Identifier for data.
+   * @param {Object[]} data Data table.
+   */
+  setData (name, data) {
+    util.check(name && (typeof name === 'string') && (name.length > 0),
+               `Require non-empty string name for data`)
+    util.check(Array.isArray(data),
+               `Require array of objects for data`)
+    this.data.set(name, data)
   }
 
   /**
@@ -81,6 +99,17 @@ class Environment {
    */
   appendError (message) {
     this.errors.push(message)
+  }
+
+  /**
+   * Load default datasets.
+   */
+  loadDefaultDatasets () {
+    const result = new Map()
+    result.set('colors', COLORS)
+    result.set('earthquakes', EARTHQUAKES)
+    result.set('penguins', PENGUINS)
+    return result
   }
 }
 
