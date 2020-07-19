@@ -51,8 +51,7 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 -   `libs/program.js`: programs made up of pipelines.
 
--   `libs/json2obj.js`: convert serialized JSON to programs, pipelines, stages, and expressions.
-    (These objects know how to convert themselves *to* JSON.)
+-   `libs/persist.js`: convert serialized JSON to programs, pipelines, stages, and expressions.
 
 -   `libs/environment.js`: the runtime environment for a program
     that stores datasets, records error messages, and so on.
@@ -114,8 +113,7 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
     Blockly requires code generators to return strings,
     so the code generation functions return stringified JSON rather than JSON objects.
 
-    -   *This JSON must match the JSON produced by the `.toJSON` methods in `libs/*.js`;
-        a future cleanup would be to unify these somehow to remove the duplication.*
+    -   This JSON must match the JSON consumed by `Restore` (`libs/persist.js`).
 
 -   The user can now drag blocks out to build a program.
     Only those blocks listed in the `xml` element with the ID `toolbox` in `index.html` are visible.
@@ -150,11 +148,11 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
         rather than running and raising errors.*
 
 -   The function `getProgram` (`index.js`) gets the stringified representation of the program,
-    then creates an instance of `JsonToObj` (`libs/json2obj.js`)
+    then creates an instance of `Restore` (`libs/persist.js`)
     and passes the JSON to its `.program` method
     to convert the JSON to runnable objects.
 
-    -   *`JsonToObject` assumes a program-to-pipeline-to-expression structure.
+    -   *`Restore` assumes a program-to-pipeline-to-expression structure.
         If TidyBlocks ever acquires C-blocks or other structures,
         this function will need to be revisited.*
 
