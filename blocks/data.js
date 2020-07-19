@@ -15,7 +15,7 @@ Blockly.defineBlocksWithJsonArray([
     type: 'data_earthquakes',
     message0: 'Earthquakes dataset',
     nextStatement: null,
-    style: 'data_blocks',
+    style: 'data_block',
     hat: 'cap',
     tooltip: 'earthquake data'
   },
@@ -24,14 +24,14 @@ Blockly.defineBlocksWithJsonArray([
     type: 'data_penguins',
     message0: 'Penguins dataset',
     nextStatement: null,
-    style: 'data_blocks',
+    style: 'data_block',
     hat: 'cap',
     tooltip: 'penguin data'
   },
   // Sequence
   {
     type: 'data_sequence',
-    message0: 'Sequence %1',
+    message0: 'Sequence %1 %2',
     args0: [
       {
         type: 'field_input',
@@ -45,7 +45,7 @@ Blockly.defineBlocksWithJsonArray([
       }
     ],
     nextStatement: null,
-    style: 'data_blocks',
+    style: 'data_block',
     hat: 'cap',
     tooltip: 'Generate a sequence 1..N',
     helpUrl: ''
@@ -55,26 +55,26 @@ Blockly.defineBlocksWithJsonArray([
     type: 'data_test',
     message0: 'Test values',
     nextStatement: null,
-    style: 'data_blocks',
+    style: 'data_block',
     hat: 'cap',
     tooltip: 'dataset with test values'
   },
   // User data
   {
-    type: 'data_local',
+    type: 'data_user',
     message0: 'User data %1',
     args0: [
       {
-        type: 'input_dummy',
-        name: 'INPUT'
+        type: 'field_input',
+        name: 'NAME',
+        text: 'name'
       }
     ],
     nextStatement: null,
-    style: 'data_blocks',
+    style: 'data_block',
     hat: 'cap',
-    tooltip: 'use a previously-loaded file',
-    helpUrl: '',
-    extensions: ['local_file_extension']
+    tooltip: 'use a previously-loaded dataset',
+    helpUrl: ''
   }
 ])
 
