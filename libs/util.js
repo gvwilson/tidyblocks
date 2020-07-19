@@ -55,6 +55,21 @@ const equal = (left, right) => {
 }
 
 /**
+ * Turn something into a date.
+ */
+const makeDate = (value) => {
+  if ((value === MISSING) || (value instanceof Date)) {
+    return value
+  }
+  check(typeof value === 'string',
+        `Cannot create date from ${value} of type ${typeof value}`)
+  value = new Date(value)
+  check(value.toString() !== 'Invalid Date',
+        `Cannot create date from ${value} of type ${typeof value}`)
+  return value
+}
+
+/**
  * Convert extraordinary values into our MISSING.
  * @param {value} Value to check (and convert).
  * @returns Safe value.
@@ -125,6 +140,7 @@ module.exports = {
   checkNumber,
   checkTypeEqual,
   equal,
+  makeDate,
   safeValue,
   csvToTable,
   MISSING

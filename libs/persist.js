@@ -8,9 +8,6 @@ const Op = require('./op')
 const Value = require('./value')
 
 class Restore {
-  constructor () {
-  }
-
   program (json) {
     util.check(Array.isArray(json) &&
                (json.length > 0) &&

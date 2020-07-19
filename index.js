@@ -4,7 +4,6 @@ const Blockly = require('blockly/blockly_compressed')
 
 const Restore = require('./libs/persist')
 const Env = require('./libs/env')
-const BrowserInterface = require('./libs/browser')
 
 // Must load this first to create Blockly.TidyBlocks
 require('./blocks/codegen')

@@ -37,11 +37,19 @@ describe('expression persistence', () => {
     done()
   })
   
-  it('restores a constant', (done) => {
+  it('restores a row number', (done) => {
+    const factory = new Restore()
+    assert.deepEqual(factory.expr([Value.FAMILY, 'rownum']),
+                     new Value.rownum(),
+                     `Row number`)
+    done()
+  })
+  
+  it('restores a number', (done) => {
     const factory = new Restore()
     assert.deepEqual(factory.expr([Value.FAMILY, 'number', 123]),
                      new Value.number(123),
-                     `Constant`)
+                     `Number`)
     done()
   })
 
@@ -50,6 +58,15 @@ describe('expression persistence', () => {
     assert.deepEqual(factory.expr([Value.FAMILY, 'column', 'blue']),
                      new Value.column('blue'),
                      `Column`)
+    done()
+  })
+
+  it('restores a datetime', (done) => {
+    const factory = new Restore()
+    const when = '1970-01-01'
+    assert.deepEqual(factory.expr([Value.FAMILY, 'datetime', when]),
+                     new Value.datetime(when),
+                     `Datetime`)
     done()
   })
 

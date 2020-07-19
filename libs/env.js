@@ -3,9 +3,9 @@
 const util = require('./util')
 
 // Require default datasets at the top level to ensure bundling picks them up.
-const COLORS = require('../data/colors'),
-      EARTHQUAKES = require('../data/earthquakes'),
-      PENGUINS = require('../data/penguins')
+const COLORS = require('../data/colors')
+const EARTHQUAKES = require('../data/earthquakes')
+const PENGUINS = require('../data/penguins')
 
 /**
  * Runtime environment.

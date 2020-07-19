@@ -44,16 +44,6 @@ class BrowserInterface extends UserInterface {
   }
 
   /**
-   * Build instance.
-   * @param {object} document The DOM document.
-   * @param {function} howToGetData How to read datasets.
-   * @param {function} howToShowPlot How to display a plot.
-   */
-  constructor (document, howToGetData, howToShowPlot) {
-    super(document, howToGetData, howToShowPlot)
-  }
-
-  /**
    * Show the specified tab.
    * @param {event} evt Browser event.
    * @param {string} tabName Name of the tab (must match an id in the page).

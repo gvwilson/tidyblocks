@@ -14,15 +14,6 @@ class ExprBase {
 }
 
 /**
- * Generic nullary expression.
- */
-class ExprNullary extends ExprBase {
-  constructor (family, kind) {
-    super(family, kind)
-  }
-}
-
-/**
  * Generic value expression.
  */
 class ExprValue extends ExprBase {
@@ -106,7 +97,6 @@ class ExprTernary extends ExprBase {
 
 module.exports = {
   ExprBase,
-  ExprNullary,
   ExprValue,
   ExprUnary,
   ExprBinary,

@@ -289,7 +289,7 @@ class DataFrame {
         result.push(Object.assign({}, row, filler))
       }
     }
-    
+
     return new DataFrame(result)
   }
 

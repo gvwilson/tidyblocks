@@ -276,7 +276,7 @@ class TransformSequence extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     const raw = Array.from(
-      {length:this.limit},
+      {length: this.limit},
       (v, k) => {
         const result = {}
         result[this.newName] = k + 1
