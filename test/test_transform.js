@@ -321,6 +321,19 @@ describe('build statistics', () => {
 })
 
 describe('transform equality tests', () => {
+  it('compares data loading transforms', (done) => {
+    const data_a = new Transform.data('A')
+    const data_b = new Transform.data('B')
+    assert(data_a.equal(data_a),
+           `Same should match`)
+    assert(!data_a.equal(data_b),
+           `Names should matter`)
+    const groupBy = new Transform.groupBy(['left'])
+    assert(!data_a.equal(groupBy),
+           `Different transforms should not equal`)
+    done()
+  })
+
   it('compares drop transforms', (done) => {
     const drop_left = new Transform.drop(['left'])
     const drop_right = new Transform.drop(['right'])
@@ -405,19 +418,6 @@ describe('transform equality tests', () => {
     done()
   })
 
-  it('compares data loading transforms', (done) => {
-    const data_a = new Transform.data('A')
-    const data_b = new Transform.data('B')
-    assert(data_a.equal(data_a),
-           `Same should match`)
-    assert(!data_a.equal(data_b),
-           `Names should matter`)
-    const groupBy = new Transform.groupBy(['left'])
-    assert(!data_a.equal(groupBy),
-           `Different transforms should not equal`)
-    done()
-  })
-
   it('compares select transforms', (done) => {
     const select_left = new Transform.select(['left'])
     const select_right = new Transform.select(['right'])
@@ -428,6 +428,17 @@ describe('transform equality tests', () => {
     const groupBy = new Transform.groupBy(['left'])
     assert(!select_left.equal(groupBy),
            `Different transforms should not equal`)
+    done()
+  })
+
+  it('compares sequence transforms', (done) => {
+    const left = new Transform.sequence('left', 3)
+    assert(left.equal(new Transform.sequence('left', 3)),
+           `Should match`)
+    assert(!left.equal(new Transform.sequence('right', 3)),
+           `Different names should not match`)
+    assert(!left.equal(new Transform.sequence('left', 5)),
+           `Different ranges should not match`)
     done()
   })
 

@@ -340,7 +340,7 @@ describe('expression code generation', () => {
 })
 
 describe('transform code generation', () => {
-  it('generates code for data loading', (done) => {
+  it('generates code for loading standard datasets', (done) => {
     for (let name of ['colors', 'earthquakes', 'penguins']) {
       const expected = [Transform.FAMILY, 'data', name]
       const w = workspace()
@@ -348,6 +348,17 @@ describe('transform code generation', () => {
       const actual = getCode(block)
       assert.deepEqual(expected, actual, `Mis-match`)
     }
+    done()
+  })
+
+  it('generates code for loading user datasets', (done) => {
+    const name = 'latest'
+    const expected = [Transform.FAMILY, 'data', name]
+    const w = workspace()
+    const block = w.newBlock(`data_user`)
+    block.setFieldValue(name, 'NAME')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
     done()
   })
 
