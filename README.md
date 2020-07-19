@@ -53,7 +53,7 @@ TidyBlocks uses Blockly for the user interface and Jekyll for the website as a w
 
 -   `libs/persist.js`: convert serialized JSON to programs, pipelines, stages, and expressions.
 
--   `libs/environment.js`: the runtime environment for a program
+-   `libs/env.js`: the runtime environment for a program
     that stores datasets, records error messages, and so on.
 
 -   `libs/ui.js` and `libs/browser.js`: handle interactions with the user.
@@ -177,12 +177,10 @@ and draws on the prototype in <https://github.com/gvwilson/tidyblocks/>
     *The program should notify users of pipelines that didn't run
     because their dependencies were never satisfied.*
 
--   To run, the program requires an `Environment` object (`libs/environment.js`).
-    This object stores programs' output,
+-   To run, the program requires an `Env` object (`libs/env.js`).
+    This object stores datasets that have been loaded by the user
+    along with programs' output,
     such as the plots, data tables, and error messages that pipelines produce.
-    -   `Environment`'s constructor requires a `readData` function.
-        In the browser, this reads an external file using `XMLHttpRequest`.
-        The tests in `test/*.js` provide a function that reads directly from disk instead.
 
 -   Programs create and manipulate `DataFrame` objects (`libs/dataframe.js`).
     A dataframe stores zero or more rows in the `.data` member variable.
