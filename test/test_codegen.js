@@ -305,10 +305,10 @@ describe('expression code generation', () => {
 
   it('generates code for datetime operations', (done) => {
     const expected = [Op.FAMILY, 'datetime', 'toMonth',
-                      [Value.FAMILY, 'datetime', fixture.concertStr]]
+                      [Value.FAMILY, 'datetime', fixture.CONCERT_STR]]
     const w = workspace()
     const arg = w.newBlock('value_datetime')
-    arg.setFieldValue(fixture.concertStr, 'DATE')
+    arg.setFieldValue(fixture.CONCERT_STR, 'DATE')
     const block = w.newBlock('op_datetime')
     block.setFieldValue('toMonth', 'TYPE')
     connect(block, 'VALUE', arg)

@@ -4,9 +4,9 @@ const assert = require('assert')
 
 const util = require('../libs/util')
 
-const csvTest = (fixture, expected, message) => {
-  fixture = fixture.join('\n')
-  const actual = util.csvToTable(fixture)
+const csvTest = (lines, expected, message) => {
+  const joined = lines.join('\n')
+  const actual = util.csvToTable(joined)
   assert.deepEqual(expected, actual, message)
 }
 

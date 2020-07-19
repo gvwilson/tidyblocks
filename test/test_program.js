@@ -9,16 +9,7 @@ const Env = require('../libs/env')
 const Pipeline = require('../libs/pipeline')
 const Program = require('../libs/program')
 
-const {
-  MockTransform,
-  Table,
-  Pass,
-  Head,
-  Middle,
-  Tail,
-  TailNotify,
-  Colors
-} = require('./fixture')
+const fixture = require('./fixture')
 
 describe('program utilities', () => {
   it('checks program equality', (done) => {
@@ -36,9 +27,9 @@ describe('program utilities', () => {
 describe('data management', () => {
   it('saves and recovers datasets', (done) => {
     const env = new Env()
-    env.setData('testing', Colors)
+    env.setData('testing', fixture.COLORS)
     const restored = env.getData('testing')
-    assert.deepEqual(Colors, restored,
+    assert.deepEqual(fixture.COLORS, restored,
                      `Expected to get same data back`)
     done()
   })
@@ -93,7 +84,7 @@ describe('executes program', () => {
 
   it('registers a pipeline that depends on nothing', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline(Middle)
+    const pipeline = new Pipeline(fixture.MIDDLE)
 
     program.register(pipeline)
     assert.equal(program.queue.length, 1,
@@ -108,7 +99,7 @@ describe('executes program', () => {
   it('registers a pipeline with dependencies', (done) => {
     const program = new Program()
     const requires = ['first', 'second']
-    const transform = new MockTransform('transform', Pass, requires, null, true, true)
+    const transform = new fixture.MockTransform('transform', fixture.pass, requires, null, true, true)
     const pipeline = new Pipeline(transform)
 
     program.register(pipeline)
@@ -123,7 +114,7 @@ describe('executes program', () => {
 
   it('makes something runnable when its single dependency resolves', (done) => {
     const program = new Program()
-    const transform = new MockTransform('transform', Pass, ['first'], null, true, true)
+    const transform = new fixture.MockTransform('transform', fixture.pass, ['first'], null, true, true)
     const second = new Pipeline(transform)
     const df = new DataFrame([])
 
@@ -148,7 +139,7 @@ describe('executes program', () => {
     const program = new Program()
     program.env = new Env()
     const requires = ['first', 'second', 'third']
-    const last = new MockTransform('last', Pass, requires, null, true, true)
+    const last = new fixture.MockTransform('last', fixture.pass, requires, null, true, true)
     const lastPipe = new Pipeline(last)
     const df = new DataFrame([])
 
@@ -177,10 +168,10 @@ describe('executes program', () => {
   it('only makes some things runnable', (done) => {
     const program = new Program()
     program.env = new Env()
-    const leftTransform = new MockTransform('left', Pass, ['something'], null, true, true)
+    const leftTransform = new fixture.MockTransform('left', fixture.pass, ['something'], null, true, true)
     const leftPipe = new Pipeline(leftTransform)
     const df = new DataFrame([])
-    const rightTransform = new MockTransform('right', Pass, ['else'], null, true, true)
+    const rightTransform = new fixture.MockTransform('right', fixture.pass, ['else'], null, true, true)
     const rightPipe = new Pipeline(rightTransform)
 
     program.register(leftPipe)
@@ -200,7 +191,7 @@ describe('executes program', () => {
 
   it('catches errors in pipelines', (done) => {
     const program = new Program()
-    const transform = new MockTransform('transform',
+    const transform = new fixture.MockTransform('transform',
                                 (runner, df) => util.fail('error message'),
                                 [], null, false, true)
     const failure = new Pipeline(transform)
@@ -217,7 +208,7 @@ describe('executes program', () => {
 
   it('runs a single pipeline with no dependencies that does not notify', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline(Head, Tail)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL)
     program.register(pipeline)
 
     const env = new Env()
@@ -229,63 +220,63 @@ describe('executes program', () => {
 
   it('runs a single pipeline with no dependencies that notifies', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline(Head, TailNotify)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     program.register(pipeline)
 
     const env = new Env()
     program.run(env)
-    assert(env.getResult('keyword').equal(Table),
+    assert(env.getResult('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
     done()
   })
 
   it('runs two independent pipelines in some order', (done) => {
     const program = new Program()
-    const tailLocal = new MockTransform('tailLocal', Pass, [], 'local', true, false)
-    const pipeLocal = new Pipeline(Head, tailLocal)
+    const tailLocal = new fixture.MockTransform('tailLocal', fixture.pass, [], 'local', true, false)
+    const pipeLocal = new Pipeline(fixture.HEAD, tailLocal)
     program.register(pipeLocal)
-    const pipeNotify = new Pipeline(Head, TailNotify)
+    const pipeNotify = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     program.register(pipeNotify)
 
     const env = new Env()
     program.run(env)
-    assert(env.getResult('keyword').equal(Table),
+    assert(env.getResult('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
-    assert(env.getResult('local').equal(Table),
+    assert(env.getResult('local').equal(fixture.TABLE),
            `Missing or incorrect table`)
     done()
   })
 
   it('runs pipelines that depend on each other', (done) => {
     const program = new Program()
-    const headRequire = new MockTransform('headRequire',
-                                      (runner, df) => Table,
+    const headRequire = new fixture.MockTransform('headRequire',
+                                      (runner, df) => fixture.TABLE,
                                       ['keyword'], null, false, true)
-    const tailLocal = new MockTransform('tailLocal', Pass,
+    const tailLocal = new fixture.MockTransform('tailLocal', fixture.pass,
                                     [], 'local', true, false)
-    const pipeNotify = new Pipeline(Head, TailNotify)
+    const pipeNotify = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     const pipeRequireLocal = new Pipeline(headRequire, tailLocal)
     program.register(pipeNotify)
     program.register(pipeRequireLocal)
 
     const env = new Env()
     program.run(env)
-    assert(env.getResult('keyword').equal(Table),
+    assert(env.getResult('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
-    assert(env.getResult('local').equal(Table),
+    assert(env.getResult('local').equal(fixture.TABLE),
            `Missing or incorrect table`)
     done()
   })
 
   it('handles a join correctly', (done) => {
     const program = new Program()
-    const tailAlpha = new MockTransform('tailAlpha', Pass, [], 'alpha', true, false)
-    const tailBeta = new MockTransform('tailBeta', Pass, [], 'beta', true, false)
+    const tailAlpha = new fixture.MockTransform('tailAlpha', fixture.pass, [], 'alpha', true, false)
+    const tailBeta = new fixture.MockTransform('tailBeta', fixture.pass, [], 'beta', true, false)
     const join = new Transform.join('alpha', 'left', 'beta', 'left')
 
-    program.register(new Pipeline(Head, tailAlpha))
-    program.register(new Pipeline(Head, tailBeta))
-    program.register(new Pipeline(join, TailNotify))
+    program.register(new Pipeline(fixture.HEAD, tailAlpha))
+    program.register(new Pipeline(fixture.HEAD, tailBeta))
+    program.register(new Pipeline(join, fixture.TAIL_NOTIFY))
 
     const env = new Env()
     program.run(env)

@@ -8,14 +8,7 @@ const Transform = require('../libs/transform')
 const Env = require('../libs/env')
 const Pipeline = require('../libs/pipeline')
 
-const {
-  Table,
-  Pass,
-  Head,
-  Middle,
-  Tail,
-  TailNotify
-} = require('./fixture')
+const fixture = require('./fixture')
 
 describe('executes pipelines', () => {
   it('can construct an empty pipeline', (done) => {
@@ -36,7 +29,7 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose first transform requires input', (done) => {
-    const pipeline = new Pipeline(Middle)
+    const pipeline = new Pipeline(fixture.MIDDLE)
     assert.throws(() => pipeline.run(new Env()),
                   Error,
                   `Should not execute pipeline requiring input`)
@@ -44,7 +37,7 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose later transforms require input', (done) => {
-    const pipeline = new Pipeline(Head, Middle, Head, Middle)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.HEAD, fixture.MIDDLE)
     assert.throws(() => pipeline.run(new Env()),
                   Error,
                   `Should not execute pipeline whose middle transforms require input`)
@@ -52,7 +45,7 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose early transforms do not produce output', (done) => {
-    const pipeline = new Pipeline(Head, Tail, Tail)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL, fixture.TAIL)
     assert.throws(() => pipeline.run(new Env()),
                   Error,
                   `Should not execute pipeline whose middle transform does not produce output`)
@@ -60,48 +53,48 @@ describe('executes pipelines', () => {
   })
 
   it('executes a single-transform pipeline without a tail', (done) => {
-    const pipeline = new Pipeline(Head)
+    const pipeline = new Pipeline(fixture.HEAD)
     const result = pipeline.run(new Env())
     assert.equal(result.name, null,
                  `Result should not be named`)
-    assert(result.data.equal(Table),
+    assert(result.data.equal(fixture.TABLE),
            `Result should contain unmodified table`)
     done()
   })
 
   it('executes a two-transform pipeline without a tail', (done) => {
-    const pipeline = new Pipeline(Head, Middle)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE)
     const result = pipeline.run(new Env())
     assert.equal(result.name, null,
                  `Result should not be named`)
-    assert(result.data.equal(Table),
+    assert(result.data.equal(fixture.TABLE),
            `Result should contain unmodified table`)
     done()
   })
 
   it('executes a three-transform pipeline with a tail', (done) => {
-    const pipeline = new Pipeline(Head, Middle, Tail)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.TAIL)
     const result = pipeline.run(new Env())
     assert.equal(result.name, null,
                  `Result should not be named`)
-    assert(result.data.equal(Table),
+    assert(result.data.equal(fixture.TABLE),
            `Result should contain unmodified table`)
     done()
   })
 
   it('executes a pipeline with notification', (done) => {
-    const pipeline = new Pipeline(Head, TailNotify)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     const result = pipeline.run(new Env())
     assert.equal(result.name, 'keyword',
                  `Result should include name`)
-    assert(result.data.equal(Table),
+    assert(result.data.equal(fixture.TABLE),
            `Result should contain unmodified table`)
     done()
   })
 
   it('logs execution', (done) => {
     const runner = new Env()
-    const pipeline = new Pipeline(Head, Middle, Tail)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.TAIL)
     const result = pipeline.run(runner)
     assert.deepEqual(runner.log, ['head', 'middle', 'tail'],
                      `Transforms not logged`)

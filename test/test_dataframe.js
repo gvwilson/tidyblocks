@@ -593,38 +593,38 @@ describe('summarize', () => {
   })
 
   it('can summarize a single grouped column', (done) => {
-    const df = new DataFrame(fixture.Colors).groupBy(['red'])
+    const df = new DataFrame(fixture.COLORS).groupBy(['red'])
     const result = df.summarize(new Summarize.count('red'))
     assert(
-      result.data.every(row => (row.red_count === fixture.GroupRedCountRed.get(row.red))),
+      result.data.every(row => (row.red_count === fixture.GROUP_RED_COUNT_RED.get(row.red))),
       `Wrong count(s) for grouped values`)
     done()
   })
 
   it('can summarize multiple grouped columns', (done) => {
-    const df = new DataFrame(fixture.Colors).groupBy(['red'])
+    const df = new DataFrame(fixture.COLORS).groupBy(['red'])
     const result = df
           .summarize(new Summarize.count('red'))
           .summarize(new Summarize.maximum('green'))
     assert(
-      result.data.every(row => (row.red_count === fixture.GroupRedCountRed.get(row.red))),
+      result.data.every(row => (row.red_count === fixture.GROUP_RED_COUNT_RED.get(row.red))),
       `Wrong count(s) for grouped values`)
     assert(
-      result.data.every(row => (row.green_maximum === fixture.GroupRedMaxGreen.get(row.red))),
+      result.data.every(row => (row.green_maximum === fixture.GROUP_RED_MAX_GREEN.get(row.red))),
       `Wrong maximum(s) for grouped values`)
     done()
   })
 
   it('can summarize the same grouped column multiple times', (done) => {
-    const df = new DataFrame(fixture.Colors).groupBy(['red'])
+    const df = new DataFrame(fixture.COLORS).groupBy(['red'])
     const result = df
           .summarize(new Summarize.count('red'))
           .summarize(new Summarize.maximum('red'))
     assert(
-      result.data.every(row => (row.red_count === fixture.GroupRedCountRed.get(row.red))),
+      result.data.every(row => (row.red_count === fixture.GROUP_RED_COUNT_RED.get(row.red))),
       `Wrong count(s) for grouped values`)
     assert(
-      result.data.every(row => (row.red_maximum === fixture.GroupRedMaxRed.get(row.red))),
+      result.data.every(row => (row.red_maximum === fixture.GROUP_RED_MAX_RED.get(row.red))),
       `Wrong maximum(s) for grouped values`)
     done()
   })

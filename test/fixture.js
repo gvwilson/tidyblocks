@@ -8,11 +8,6 @@ const Transform = require('../libs/transform')
 const DataFrame = require('../libs/dataframe')
 
 /**
- * Where to read data when testing.
- */
-const LOCAL_DATA_DIR = 'data'
-
-/**
  * Testing replacement for a transform (easier constructor).
  */
 class MockTransform extends Transform.base {
@@ -26,33 +21,17 @@ class MockTransform extends Transform.base {
   }
 }
 
-/**
- * Alternative to browser-based method for getting data.
- * @param {string} path Local path to dataset.
- * @returns Table to turn into dataframe.
- */
-const readLocalData = (path) => {
-  util.check(path && (typeof path === 'string'),
-             `Path must be non-empty string`)
-  path = `${process.cwd()}/${LOCAL_DATA_DIR}/${path}`
-  const text = fs.readFileSync(path, 'utf-8')
-  return util.csvToTable(text)
-}
-
 /*
  * Some fixtures for testing.
  */
 
-const Table = new DataFrame([{left: 1, right: 10},
+const pass = (runner, df) => df
+
+const TABLE = new DataFrame([{left: 1, right: 10},
                              {left: 2, right: 20}])
 
-const Pass = (runner, df) => df
-const Head = new MockTransform('head', (runner, df) => Table,
-                           [], null, false, true)
-const Middle = new MockTransform('middle', Pass, [], null, true, true)
-const Tail = new MockTransform('tail', Pass, [], null, true, false)
-const TailNotify = new MockTransform('tailNotify', Pass, [], 'keyword', true, false)
-
+const HEAD = new MockTransform('head', (runner, df) => TABLE,
+                               [], null, false, true)
 /*
  * Some support for testing DOM.
  */
@@ -73,18 +52,21 @@ const makeRow = (html) => {
 }
 
 /*
+ * Date testing.
+ */
+const CONCERT = new Date(1983, 11, 2, 7, 55, 19, 0)
+const CONCERT_STR = CONCERT.toISOString()
+
+/*
  * A bag full of exports.
  */
 
-const concert = new Date(1983, 11, 2, 7, 55, 19, 0)
-const concertStr = concert.toISOString()
 module.exports = {
-  DOM,
   MockTransform,
-  readLocalData,
-  concert,
-  concertStr,
-  bool: [
+  DOM,
+  CONCERT,
+  CONCERT_STR,
+  BOOL: [
     {left: true, right: true},
     {left: true, right: false},
     {left: false, right: true},
@@ -93,7 +75,7 @@ module.exports = {
     {left: false, right: util.MISSING},
     {left: util.MISSING, right: util.MISSING}
   ],
-  number: [
+  NUMBER: [
     {left: 2, right: 2},
     {left: 5, right: 2},
     {left: 2, right: 0},
@@ -101,7 +83,7 @@ module.exports = {
     {left: 4, right: util.MISSING},
     {left: util.MISSING, right: util.MISSING}
   ],
-  string: [
+  STRING: [
     {left: 'pqr', right: 'pqr'},
     {left: 'abc', right: 'def'},
     {left: 'def', right: 'abc'},
@@ -110,25 +92,25 @@ module.exports = {
     {left: 'abc', right: util.MISSING},
     {left: util.MISSING, right: util.MISSING}
   ],
-  names: [
+  NAMES: [
     {personal: 'William', family: 'Dyer'},
     {personal: 'Francesca', family: 'Pabodie'},
     {personal: 'Meyer', family: 'Meyer'}
   ],
-  mixed: [
+  MIXED: [
     {num: -1, date: new Date(), str: "abc", bool: true},
     {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
   ],
-  Colors: require('../data/colors'),
-  GroupRedCountRed: new Map([[0, 6], [128, 1], [255, 4]]),
-  GroupRedMaxGreen: new Map([[0, 255], [128, 0], [255, 255]]),
-  GroupRedMaxRed: new Map([[0, 0], [128, 128], [255, 255]]),
-  Table,
-  Pass,
-  Head,
-  Middle,
-  Tail,
-  TailNotify,
+  COLORS: require('../data/colors'),
+  GROUP_RED_COUNT_RED: new Map([[0, 6], [128, 1], [255, 4]]),
+  GROUP_RED_MAX_GREEN: new Map([[0, 255], [128, 0], [255, 255]]),
+  GROUP_RED_MAX_RED: new Map([[0, 0], [128, 128], [255, 255]]),
+  TABLE,
+  HEAD,
+  MIDDLE: new MockTransform('middle', pass, [], null, true, true),
+  TAIL: new MockTransform('tail', pass, [], null, true, false),
+  TAIL_NOTIFY: new MockTransform('tailNotify', pass, [], 'keyword', true, false),
   makeNode,
-  makeRow
+  makeRow,
+  pass
 }

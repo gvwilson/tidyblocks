@@ -150,8 +150,8 @@ describe('expression persistence', () => {
   })
 
   it('restores datetime operations', (done) => {
-    const childObj = new Value.datetime(fixture.concert)
-    const childJSON = [Value.FAMILY, 'datetime', fixture.concertStr]
+    const childObj = new Value.datetime(fixture.CONCERT)
+    const childJSON = [Value.FAMILY, 'datetime', fixture.CONCERT_STR]
     const allChecks = [
       ['toYear', Op.toYear],
       ['toMonth', Op.toMonth],
