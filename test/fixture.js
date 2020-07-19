@@ -1,7 +1,6 @@
 'use strict'
 
 const fs = require('fs')
-const {JSDOM} = require('jsdom')
 
 const util = require('../libs/util')
 const Transform = require('../libs/transform')
@@ -33,25 +32,6 @@ const TABLE = new DataFrame([{left: 1, right: 10},
 const HEAD = new MockTransform('head', (runner, df) => TABLE,
                                [], null, false, true)
 /*
- * Some support for testing DOM.
- */
-const DOM = new JSDOM(`<body></body>`)
-const BODY = DOM.window.document.querySelector('body')
-
-const makeNode = (html) => {
-  BODY.innerHTML = '<div/>'
-  BODY.firstChild.innerHTML = html
-  return BODY.firstChild.firstChild
-}
-
-const makeRow = (html) => {
-  BODY.innerHTML = '<table><tbody></tbody></table>'
-  const body = BODY.querySelector('tbody')
-  body.innerHTML = html
-  return body.firstChild
-}
-
-/*
  * Date testing.
  */
 const CONCERT = new Date(1983, 11, 2, 7, 55, 19, 0)
@@ -63,7 +43,6 @@ const CONCERT_STR = CONCERT.toISOString()
 
 module.exports = {
   MockTransform,
-  DOM,
   CONCERT,
   CONCERT_STR,
   BOOL: [
@@ -102,15 +81,10 @@ module.exports = {
     {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
   ],
   COLORS: require('../data/colors'),
-  GROUP_RED_COUNT_RED: new Map([[0, 6], [128, 1], [255, 4]]),
-  GROUP_RED_MAX_GREEN: new Map([[0, 255], [128, 0], [255, 255]]),
-  GROUP_RED_MAX_RED: new Map([[0, 0], [128, 128], [255, 255]]),
   TABLE,
   HEAD,
   MIDDLE: new MockTransform('middle', pass, [], null, true, true),
   TAIL: new MockTransform('tail', pass, [], null, true, false),
   TAIL_NOTIFY: new MockTransform('tailNotify', pass, [], 'keyword', true, false),
-  makeNode,
-  makeRow,
   pass
 }

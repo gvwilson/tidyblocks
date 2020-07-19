@@ -9,14 +9,18 @@ const Summarize = require('../libs/summarize')
 const DataFrame = require('../libs/dataframe')
 
 const fixture = require('./fixture')
-const ZeroRows = []
-const OneRow = [{ones: 1, tens: 10}]
-const OneRowBig = [{ones: 9, tens: 90}]
-const TwoRows = [{ones: 1, tens: 10},
-                 {ones: 2, tens: 20}]
-const ThreeRows = [{ones: 1, tens: 10},
-                   {ones: 2, tens: 20},
-                   {ones: 3, tens: 30}]
+
+const ZERO_ROWS = [],
+      ONE_ROW = [{ones: 1, tens: 10}],
+      ONE_ROW_BIG = [{ones: 9, tens: 90}],
+      TWO_ROWS = [{ones: 1, tens: 10},
+                  {ones: 2, tens: 20}],
+      THREE_ROWS = [{ones: 1, tens: 10},
+                    {ones: 2, tens: 20},
+                    {ones: 3, tens: 30}],
+      GROUP_RED_COUNT_RED = new Map([[0, 6], [128, 1], [255, 4]]),
+      GROUP_RED_MAX_GREEN = new Map([[0, 255], [128, 0], [255, 255]]),
+      GROUP_RED_MAX_RED = new Map([[0, 0], [128, 128], [255, 255]])
 
 describe('dataframe construction', () => {
   it('will not create a dataframe from invalid values', (done) => {
@@ -42,8 +46,8 @@ describe('dataframe construction', () => {
   })
 
   it('can create a dataframe with one row', (done) => {
-    const df = new DataFrame(OneRow)
-    assert.deepEqual(df.data, OneRow,
+    const df = new DataFrame(ONE_ROW)
+    assert.deepEqual(df.data, ONE_ROW,
                      `Wrong value(s) in row`)
     assert(df.hasColumns(['ones', 'tens']),
            `Wrong value(s) in column names`)
@@ -51,8 +55,8 @@ describe('dataframe construction', () => {
   })
 
   it('can create a dataframe with multiple rows', (done) => {
-    const df = new DataFrame(ThreeRows)
-    assert.deepEqual(df.data, ThreeRows,
+    const df = new DataFrame(THREE_ROWS)
+    assert.deepEqual(df.data, THREE_ROWS,
                      `Wrong value(s) in row`)
     assert(df.hasColumns(['ones', 'tens'], true),
            `Wrong value(s) in column names`)
@@ -99,7 +103,7 @@ describe('dataframe construction', () => {
 
 describe('dataframe equality', () => {
   it('only checks dataframes', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.equal(new Date()),
                   Error,
                   `Must check against dataframes`)
@@ -141,8 +145,8 @@ describe('dataframe equality', () => {
   })
 
   it('thinks frames with the same columns and rows are equal', (done) => {
-    const left = new DataFrame(ThreeRows)
-    const right = new DataFrame(ThreeRows)
+    const left = new DataFrame(THREE_ROWS)
+    const right = new DataFrame(THREE_ROWS)
     assert(left.equal(right),
            `Expected equal frames to be equal`)
     done()
@@ -160,16 +164,16 @@ describe('dataframe equality', () => {
   })
 
   it('thinks frames with reversed rows are equal', (done) => {
-    const left = new DataFrame(ThreeRows)
-    const right = new DataFrame(ThreeRows.slice().reverse())
+    const left = new DataFrame(THREE_ROWS)
+    const right = new DataFrame(THREE_ROWS.slice().reverse())
     assert(left.equal(right),
            `Expected frames to be equal despite reordering`)
     done()
   })
 
   it ('thinks frames with mis-matched values are unequal', (done) => {
-    const left = new DataFrame(ThreeRows)
-    const right = new DataFrame(ThreeRows.slice())
+    const left = new DataFrame(THREE_ROWS)
+    const right = new DataFrame(THREE_ROWS.slice())
     right.data[0] = {...right.data[0], ones: -1}
     assert(!left.equal(right),
            `Expected frames with unequal values to be unequal`)
@@ -191,7 +195,7 @@ describe('dataframe equality', () => {
 
 describe('check columns', () => {
   it('checks column subsets', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert(df.hasColumns(['ones']),
            `Expected to find some columns`)
     assert(df.hasColumns(['ones', 'tens']),
@@ -200,21 +204,21 @@ describe('check columns', () => {
   })
 
   it('fails when checking for missing columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert(!df.hasColumns(['nope']),
            `Should not find nonexistent column`)
     done()
   })
 
   it('fails when looking for subset but required to match all', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert(!df.hasColumns(['ones'], true),
            `Should fail to match subset of columns when expected to match all`)
     done()
   })
 
   it('fails when looking for a mix of columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert(!df.hasColumns(['ones', 'nope']),
            `Should fail to match mix of present and missing columns`)
     done()
@@ -223,7 +227,7 @@ describe('check columns', () => {
 
 describe('drop and select', () => {
   it('drops columns, leaving columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.drop(['ones'])
     assert(result.equal(new DataFrame([{tens: 10}, {tens: 20}])),
            `Wrong values survived dropping`)
@@ -231,7 +235,7 @@ describe('drop and select', () => {
   })
 
   it('drops all columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.drop(['ones', 'tens'])
     assert.equal(result.data.length, 0,
                  `Nothing should survive dropping all columns`)
@@ -241,9 +245,9 @@ describe('drop and select', () => {
   })
 
   it('drops no columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.drop([])
-    assert.deepEqual(result.data, TwoRows,
+    assert.deepEqual(result.data, TWO_ROWS,
                      `All rows should survive dropping no columns`)
     assert(result.hasColumns(['ones', 'tens'], true),
            `All columns should survive dropping no columns`)
@@ -251,7 +255,7 @@ describe('drop and select', () => {
   })
 
   it('selects columns, leaving columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.select(['ones'])
     assert(result.equal(new DataFrame([{ones: 1}, {ones: 2}])),
            `Wrong values survived selecting`)
@@ -259,9 +263,9 @@ describe('drop and select', () => {
   })
 
   it('selects all columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.select(['tens', 'ones'])
-    assert(result.equal(new DataFrame(TwoRows.slice())),
+    assert(result.equal(new DataFrame(TWO_ROWS.slice())),
            `Something failed to survive selecting all`)
     assert(result.hasColumns(['tens', 'ones'], true),
            `Wrong columns survived selecting all`)
@@ -269,7 +273,7 @@ describe('drop and select', () => {
   })
 
   it('checks column names when dropping', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.drop(['nope']),
                   Error,
                   `Expected error when dropping non-existent column`)
@@ -277,7 +281,7 @@ describe('drop and select', () => {
   })
 
   it('checks column names when selecting', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.select(['nope']),
                   Error,
                   `Expected error when selecting non-existent column`)
@@ -288,16 +292,16 @@ describe('drop and select', () => {
 describe('filter', () => {
   it('keeps all rows', (done) => {
     const expr = new Value.logical(true)
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.filter(expr)
-    assert(result.equal(new DataFrame(TwoRows.slice())),
+    assert(result.equal(new DataFrame(TWO_ROWS.slice())),
            `Should keep all rows when keeping all rows`)
     done()
   })
 
   it('discards all rows', (done) => {
     const expr = new Value.logical(false)
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.filter(expr)
     assert(result.equal(new DataFrame([], ['ones', 'tens'])),
            `Should have no rows when discarding all`)
@@ -307,9 +311,9 @@ describe('filter', () => {
   it('discards some rows', (done) => {
     const expr = new Op.lessEqual(new Value.column('tens'),
                                     new Value.number(20))
-    const df = new DataFrame(ThreeRows)
+    const df = new DataFrame(THREE_ROWS)
     const result = df.filter(expr)
-    assert(result.equal(new DataFrame(TwoRows.slice())),
+    assert(result.equal(new DataFrame(TWO_ROWS.slice())),
            `Should have two rows when filtering some`)
     assert(result.hasColumns(['ones', 'tens'], true),
            `Should not change columns when filtering some`)
@@ -319,7 +323,7 @@ describe('filter', () => {
 
 describe('group and ungroup', () => {
   it('refuses to group with illegal parameters', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.groupBy([]),
                   Error,
                   'should not be able to group by no columns')
@@ -333,7 +337,7 @@ describe('group and ungroup', () => {
   })
 
   it('creates one group for each row when values are unique', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.groupBy(['ones'])
     assert(result.equal(new DataFrame([{ones: 1, tens: 10, '_group_': 1},
                                        {ones: 2, tens: 20, '_group_': 2}])),
@@ -379,7 +383,7 @@ describe('group and ungroup', () => {
   })
 
   it('refuses to ungroup data that is not grouped', (done) => {
-    const df = new DataFrame(ThreeRows)
+    const df = new DataFrame(THREE_ROWS)
     assert.throws(()=> df.ungroup(),
                   Error,
                   `Should not be able to ungroup data that is not grouped`)
@@ -387,7 +391,7 @@ describe('group and ungroup', () => {
   })
 
   it('removes the grouping column from grouped data', (done) => {
-    const data = ThreeRows.map(row => ({...row}))
+    const data = THREE_ROWS.map(row => ({...row}))
     data.forEach(row => {
       row[DataFrame.GROUPCOL] = 1
     })
@@ -403,7 +407,7 @@ describe('group and ungroup', () => {
 
 describe('mutate', () => {
   it('requires a new column name', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const expr = new Value.number(99)
     assert.throws(() => df.mutate('', expr),
                   Error,
@@ -412,7 +416,7 @@ describe('mutate', () => {
   })
 
   it('only allows legal column names', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const expr = new Value.number(99)
     assert.throws(() => df.mutate(' with spaces ', expr),
                   Error,
@@ -430,7 +434,7 @@ describe('mutate', () => {
   })
 
   it('creates an entirely new column', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const expr = new Value.number(99)
     const result = df.mutate('col', expr)
     assert(result.equal(new DataFrame([{ones: 1, tens: 10, col: 99},
@@ -440,7 +444,7 @@ describe('mutate', () => {
   })
 
   it('replaces an existing column', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const expr = new Value.number(99)
     const result = df.mutate('ones', expr)
     assert(result.equal(new DataFrame([{ones: 99, tens: 10},
@@ -452,7 +456,7 @@ describe('mutate', () => {
 
 describe('sort', () => {
   it('requires a sorting column name', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.sort([]),
                   Error,
                   `Expected error when sorting without column names`)
@@ -460,7 +464,7 @@ describe('sort', () => {
   })
 
   it('requires known column names', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.sort(['nope']),
                   Error,
                   `Expected error when sorting with missing column names`)
@@ -476,18 +480,18 @@ describe('sort', () => {
   })
 
   it('sorts by a single key', (done) => {
-    const data = TwoRows.slice().reverse()
+    const data = TWO_ROWS.slice().reverse()
     const df = new DataFrame(data)
     const result = df.sort(['ones'])
-    assert.deepEqual(result.data, TwoRows,
+    assert.deepEqual(result.data, TWO_ROWS,
                      `Wrong result for sorting with a single key`)
     done()
   })
 
   it('sorts by a single key in reverse order', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.sort(['ones'], true)
-    const expected = TwoRows.slice().reverse()
+    const expected = TWO_ROWS.slice().reverse()
     assert.deepEqual(result.data, expected,
                      `Wrong result for sorting in reverse`)
     done()
@@ -530,7 +534,7 @@ describe('sort', () => {
 
 describe('summarize', () => {
   it('requires a summarizer', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.summarize(null),
                   Error,
                  `Require a summarizer`)
@@ -548,7 +552,7 @@ describe('summarize', () => {
   })
 
   it('require columns to exist', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.summarize(new Summarize.count('nope')),
                   Error,
                   `Expected error with nonexistent column name`)
@@ -556,7 +560,7 @@ describe('summarize', () => {
   })
 
   it('can summarize a single ungrouped column', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.summarize(new Summarize.count('ones'))
     assert(result.equal(new DataFrame([{ones: 1, tens: 10,
                                         ones_count: 2},
@@ -567,7 +571,7 @@ describe('summarize', () => {
   })
 
   it('can summarize multiple ungrouped columns', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df
           .summarize(new Summarize.count('ones'))
           .summarize(new Summarize.maximum('tens'))
@@ -580,7 +584,7 @@ describe('summarize', () => {
   })
 
   it('can summarize the same ungrouped column multiple times', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df
           .summarize(new Summarize.minimum('tens'))
           .summarize(new Summarize.maximum('tens'))
@@ -596,7 +600,7 @@ describe('summarize', () => {
     const df = new DataFrame(fixture.COLORS).groupBy(['red'])
     const result = df.summarize(new Summarize.count('red'))
     assert(
-      result.data.every(row => (row.red_count === fixture.GROUP_RED_COUNT_RED.get(row.red))),
+      result.data.every(row => (row.red_count === GROUP_RED_COUNT_RED.get(row.red))),
       `Wrong count(s) for grouped values`)
     done()
   })
@@ -607,10 +611,10 @@ describe('summarize', () => {
           .summarize(new Summarize.count('red'))
           .summarize(new Summarize.maximum('green'))
     assert(
-      result.data.every(row => (row.red_count === fixture.GROUP_RED_COUNT_RED.get(row.red))),
+      result.data.every(row => (row.red_count === GROUP_RED_COUNT_RED.get(row.red))),
       `Wrong count(s) for grouped values`)
     assert(
-      result.data.every(row => (row.green_maximum === fixture.GROUP_RED_MAX_GREEN.get(row.red))),
+      result.data.every(row => (row.green_maximum === GROUP_RED_MAX_GREEN.get(row.red))),
       `Wrong maximum(s) for grouped values`)
     done()
   })
@@ -621,10 +625,10 @@ describe('summarize', () => {
           .summarize(new Summarize.count('red'))
           .summarize(new Summarize.maximum('red'))
     assert(
-      result.data.every(row => (row.red_count === fixture.GROUP_RED_COUNT_RED.get(row.red))),
+      result.data.every(row => (row.red_count === GROUP_RED_COUNT_RED.get(row.red))),
       `Wrong count(s) for grouped values`)
     assert(
-      result.data.every(row => (row.red_maximum === fixture.GROUP_RED_MAX_RED.get(row.red))),
+      result.data.every(row => (row.red_maximum === GROUP_RED_MAX_RED.get(row.red))),
       `Wrong maximum(s) for grouped values`)
     done()
   })
@@ -632,7 +636,7 @@ describe('summarize', () => {
 
 describe('unique', () => {
   it('requires column names for uniqueness test', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.unique([]),
                   Error,
                   `Expected error when no column names provided`)
@@ -640,7 +644,7 @@ describe('unique', () => {
   })
 
   it('requires existing column names for uniqueness test', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     assert.throws(() => df.unique(['nope']),
                   Error,
                   `Expected error when nonexistent column names provided`)
@@ -656,18 +660,18 @@ describe('unique', () => {
   })
 
   it('keeps all rows when all rows are unique', (done) => {
-    const df = new DataFrame(TwoRows)
+    const df = new DataFrame(TWO_ROWS)
     const result = df.unique(['ones'])
-    assert(result.equal(new DataFrame(TwoRows.slice())),
+    assert(result.equal(new DataFrame(TWO_ROWS.slice())),
            `Expected all rows to be kept`)
     done()
   })
 
   it('discards rows when there are duplicates', (done) => {
-    const data = TwoRows.concat(TwoRows)
+    const data = TWO_ROWS.concat(TWO_ROWS)
     const df = new DataFrame(data)
     const result = df.unique(['ones'])
-    assert(result.equal(new DataFrame(TwoRows.slice())),
+    assert(result.equal(new DataFrame(TWO_ROWS.slice())),
            `Expected duplicates to be removed`)
     done()
   })
@@ -686,8 +690,8 @@ describe('unique', () => {
 
 describe('join', () => {
   it('requires a valid name for the left table', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(TwoRows)
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
     assert.throws(() => left.join('1number', 'ones', right, 'right', 'ones'),
                   Error,
                   `Should not be able to use invalid left table name`)
@@ -695,8 +699,8 @@ describe('join', () => {
   })
 
   it('requires a valid name for the left column', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(TwoRows)
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
     assert.throws(() => left.join('left', 'nope', right, 'right', 'ones'),
                   Error,
                   `Should not be able to use missing left column name`)
@@ -704,7 +708,7 @@ describe('join', () => {
   })
 
   it('requires a valid dataframe for the right table', (done) => {
-    const left = new DataFrame(OneRow)
+    const left = new DataFrame(ONE_ROW)
     const right = new Date()
     assert.throws(() => left.join('left', 'ones', right, 'right', 'ones'),
                   Error,
@@ -713,8 +717,8 @@ describe('join', () => {
   })
 
   it('requires a valid name for the right table', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(TwoRows)
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
     assert.throws(() => left.join('left', 'ones', right, '[!3', 'ones'),
                   Error,
                   `Should not be able to use invalid right table name`)
@@ -722,8 +726,8 @@ describe('join', () => {
   })
 
   it('requires a valid name for the right column', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(TwoRows)
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
     assert.throws(() => left.join('left', 'ones', right, 'right', '   '),
                   Error,
                   `Should not be able to us invalid right column name`)
@@ -731,8 +735,8 @@ describe('join', () => {
   })
 
   it('handles an empty table on the left', (done) => {
-    const left = new DataFrame(ZeroRows, ['ones', 'tens'])
-    const right = new DataFrame(OneRow)
+    const left = new DataFrame(ZERO_ROWS, ['ones', 'tens'])
+    const right = new DataFrame(ONE_ROW)
     const result = left.join('left', 'ones', right, 'right', 'ones')
     assert.deepEqual(result.data, [],
                      `Expected empty data`)
@@ -743,8 +747,8 @@ describe('join', () => {
   })
 
   it('handles an empty table on the right', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(ZeroRows, ['ones', 'tens'])
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(ZERO_ROWS, ['ones', 'tens'])
     const result = left.join('left', 'ones', right, 'right', 'ones')
     assert.deepEqual(result.data, [],
                      `Expected empty data`)
@@ -755,8 +759,8 @@ describe('join', () => {
   })
 
   it('produces an empty table when there is no overlap', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(OneRowBig)
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(ONE_ROW_BIG)
     const result = left.join('left', 'tens', right, 'right', 'tens')
     assert.deepEqual(result.data, [],
                      `Expected empty data`)
@@ -767,8 +771,8 @@ describe('join', () => {
   })
 
   it('produces single joined rows', (done) => {
-    const left = new DataFrame(OneRow)
-    const right = new DataFrame(ThreeRows)
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(THREE_ROWS)
     const result = left.join('left', 'ones', right, 'right', 'ones')
     assert(result.equal(new DataFrame([{_join_: 1, left_tens: 10, right_tens: 10}])),
            `Wrong resulting data`)
@@ -776,8 +780,8 @@ describe('join', () => {
   })
 
   it('produces multiple joined rows', (done) => {
-    const left = new DataFrame(TwoRows)
-    const right = new DataFrame(TwoRows)
+    const left = new DataFrame(TWO_ROWS)
+    const right = new DataFrame(TWO_ROWS)
     const result = left.join('left', 'tens', right, 'right', 'tens')
     const expected = [
       {_join_: 10, left_ones: 1, right_ones: 1},
@@ -789,7 +793,7 @@ describe('join', () => {
   })
 
   it('does many-to-many matches', (done) => {
-    const left = new DataFrame(TwoRows)
+    const left = new DataFrame(TWO_ROWS)
     const right = new DataFrame([
       {ones: 1, hundreds: 100},
       {ones: 1, hundreds: 200},
