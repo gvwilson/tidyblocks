@@ -469,16 +469,6 @@ describe('transform code generation', () => {
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
   })
-
-  it('generates code for notify', (done) => {
-    const expected = [Transform.FAMILY, 'notify', 'stuff']
-    const w = workspace()
-    const block = w.newBlock('combine_notify')
-    block.setFieldValue('stuff', 'NAME')
-    const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
-    done()
-  })
 })
 
 describe('plot code generation', () => {
@@ -554,8 +544,45 @@ describe('stats code generation', () => {
     const expected = [Transform.FAMILY, 'ttest_two', 'red', 'green']
     const w = workspace()
     const block = w.newBlock('stats_ttest_two')
-    block.setFieldValue('red', 'LEFT_COLUMN')
-    block.setFieldValue('green', 'RIGHT_COLUMN')
+    block.setFieldValue('red', 'LABEL_COLUMN')
+    block.setFieldValue('green', 'VALUE_COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+})
+
+describe('combiner code generation', () => {
+  it('generates code for glue', (done) => {
+    const expected = [Transform.FAMILY, 'glue', 'alpha', 'beta', 'L']
+    const w = workspace()
+    const block = w.newBlock('combine_glue')
+    block.setFieldValue('alpha', 'LEFT_TABLE')
+    block.setFieldValue('beta', 'RIGHT_TABLE')
+    block.setFieldValue('L', 'COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for join', (done) => {
+    const expected = [Transform.FAMILY, 'join', 'alpha', 'A', 'beta', 'B']
+    const w = workspace()
+    const block = w.newBlock('combine_join')
+    block.setFieldValue('alpha', 'LEFT_TABLE')
+    block.setFieldValue('A', 'LEFT_COLUMN')
+    block.setFieldValue('beta', 'RIGHT_TABLE')
+    block.setFieldValue('B', 'RIGHT_COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for notify', (done) => {
+    const expected = [Transform.FAMILY, 'notify', 'stuff']
+    const w = workspace()
+    const block = w.newBlock('combine_notify')
+    block.setFieldValue('stuff', 'NAME')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()

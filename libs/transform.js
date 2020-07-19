@@ -556,21 +556,29 @@ class TransformTTestOneSample extends TransformBase {
 /**
  * Paired two-sided t-test.
  * @param {number} significance Significance tested for.
- * @param {string} leftCol The column to get one set of values from.
- * @param {string} rightCol The column to get the other set of values from.
+ * @param {string} labelCol The column to get labels from.
+ * @param {string} valueCol The column to get the values from.
  */
 class TransformTTestPaired extends TransformBase {
-  constructor (leftCol, rightCol) {
+  constructor (labelCol, valueCol) {
     super('ttest_two', [], null, true, false)
-    this.leftCol = leftCol
-    this.rightCol = rightCol
+    this.labelCol = labelCol
+    this.valueCol = valueCol
   }
 
   run (runner, df) {
     runner.appendLog(this.name)
-    const left = df.data.map(row => row[this.leftCol])
-    const right = df.data.map(row => row[this.rightCol])
-    const pValue = stats.tTestTwoSample(left, right, 0)
+    const known = new Set(df.data.map(row => row[this.labelCol]))
+    util.check(known.size === 2,
+               `Must have exactly two labels for data`)
+    const [leftVal, rightVal] = Array.from(known)
+    const leftVals = df.data
+          .filter(row => (row[this.labelCol] === leftVal))
+          .map(row => row[this.valueCol])
+    const rightVals = df.data
+          .filter(row => (row[this.labelCol] === rightVal))
+          .map(row => row[this.valueCol])
+    const pValue = stats.tTestTwoSample(leftVals, rightVals, 0)
     runner.setStats(pValue)
     return df
   }

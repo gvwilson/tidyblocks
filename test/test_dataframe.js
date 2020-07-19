@@ -688,6 +688,97 @@ describe('unique', () => {
   })
 })
 
+describe('glue', () => {
+  it('requires a valid name for the left table', (done) => {
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
+    assert.throws(() => left.glue('1number', right, 'right', 'labels'),
+                  Error,
+                  `Should not be able to use invalid left table name`)
+    done()
+  })
+
+  it('requires a valid dataframe for the right table', (done) => {
+    const left = new DataFrame(ONE_ROW)
+    const right = new Date()
+    assert.throws(() => left.glue('left', right, 'right', 'labels'),
+                  Error,
+                  `Should not be able to glue with non-table`)
+    done()
+  })
+
+  it('requires a valid name for the right table', (done) => {
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
+    assert.throws(() => left.glue('left', right, '[!3', 'labels'),
+                  Error,
+                  `Should not be able to use invalid right table name`)
+    done()
+  })
+
+  it('requires a valid name for the label column', (done) => {
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(TWO_ROWS)
+    assert.throws(() => left.glue('left', right, 'right', '   '),
+                  Error,
+                  `Should not be able to us invalid label column name`)
+    done()
+  })
+
+  it('requires matching names', (done) => {
+    const left = new DataFrame([{alpha: 1}])
+    const right = new DataFrame([{beta: 1}])
+    assert.throws(() => left.glue('left', right, 'right', 'label'),
+                  Error,
+                  `Should not be able to glue mis-matched column names`)
+    done()
+  })
+
+  it('does not join subsets of columns', (done) => {
+    const left = new DataFrame([{alpha: 1}])
+    const right = new DataFrame([{alpha: 2, beta: 1}])
+    assert.throws(() => left.glue('left', right, 'right', 'label'),
+                  Error,
+                  `Should not be able to glue subset of column names`)
+    done()
+  })
+
+  it('glues an empty table on the left', (done) => {
+    const left = new DataFrame(ZERO_ROWS, ['ones', 'tens'])
+    const right = new DataFrame(ONE_ROW)
+    const result = left.glue('left', right, 'right', 'labels')
+    assert.deepEqual(result.columns, new Set(['ones', 'tens', 'labels']),
+                     `Wrong columns in result`)
+    assert.equal(result.data.length, right.data.length,
+                 `Wrong number of rows in result`)
+    done()
+  })
+
+  it('glues an empty table on the right', (done) => {
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(ZERO_ROWS, ['ones', 'tens'])
+    const result = left.glue('left', right, 'right', 'labels')
+    assert.deepEqual(result.columns, new Set(['ones', 'tens', 'labels']),
+                     `Wrong columns in result`)
+    assert.equal(result.data.length, left.data.length,
+                 `Wrong number of rows in result`)
+    done()
+  })
+
+  it('glues non-empty tables', (done) => {
+    const left = new DataFrame(ONE_ROW)
+    const right = new DataFrame(ONE_ROW_BIG)
+    const result = left.glue('left', right, 'right', 'labels')
+    const expected = new DataFrame([
+      {ones: 1, tens: 10, labels: 'left'},
+      {ones: 9, tens: 90, labels: 'right'}
+    ])
+    assert(result.equal(expected),
+           `Wrong values in glued result`)
+    done()
+  })
+})
+
 describe('join', () => {
   it('requires a valid name for the left table', (done) => {
     const left = new DataFrame(ONE_ROW)
@@ -734,7 +825,7 @@ describe('join', () => {
     done()
   })
 
-  it('handles an empty table on the left', (done) => {
+  it('joins an empty table on the left', (done) => {
     const left = new DataFrame(ZERO_ROWS, ['ones', 'tens'])
     const right = new DataFrame(ONE_ROW)
     const result = left.join('left', 'ones', right, 'right', 'ones')
@@ -746,7 +837,7 @@ describe('join', () => {
     done()
   })
 
-  it('handles an empty table on the right', (done) => {
+  it('joins an empty table on the right', (done) => {
     const left = new DataFrame(ONE_ROW)
     const right = new DataFrame(ZERO_ROWS, ['ones', 'tens'])
     const result = left.join('left', 'ones', right, 'right', 'ones')

@@ -313,9 +313,16 @@ describe('build statistics', () => {
   })
 
   it('runs a paired two-sided t-test', (done) => {
+    const paired = [
+      {left: 'a', right: 1},
+      {left: 'a', right: 2},
+      {left: 'b', right: 1},
+      {left: 'b', right: 2},
+      {left: 'b', right: 3}
+    ]
     const runner = new Env()
-    const transform = new Transform.ttest_two('blue', 'green')
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
+    const transform = new Transform.ttest_two('left', 'right')
+    const result = transform.run(runner, new DataFrame(paired))
     done()
   })
 })

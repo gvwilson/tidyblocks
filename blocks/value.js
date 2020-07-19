@@ -194,9 +194,8 @@ Blockly.TidyBlocks['value_datetime'] = (block) => {
 // Logical
 Blockly.TidyBlocks['value_logical'] = (block) => {
   const value = block.getFieldValue('VALUE')
-  const order = Blockly.TidyBlocks.ORDER_NONE
   const code = `["@value", "logical", ${value}]`
-  return [code, order]
+  return [code, Blockly.TidyBlocks.ORDER_NONE]
 }
 
 // Number

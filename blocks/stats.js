@@ -31,16 +31,16 @@ Blockly.defineBlocksWithJsonArray([
     type: 'stats_ttest_two',
     message0: 'Two-sample t-test',
     args0: [],
-    message1: 'column %1 column %2',
+    message1: 'labels %1 values %2',
     args1: [
       {
         type: 'field_input',
-        name: 'LEFT_COLUMN',
+        name: 'LABEL_COLUMN',
         text: 'column'
       },
       {
         type: 'field_input',
-        name: 'RIGHT_COLUMN',
+        name: 'VALUE_COLUMN',
         text: 'column'
       }
     ],
@@ -65,7 +65,7 @@ Blockly.TidyBlocks['stats_ttest_one'] = (block) => {
 //
 Blockly.TidyBlocks['stats_ttest_two'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const left = block.getFieldValue('LEFT_COLUMN')
-  const right = block.getFieldValue('RIGHT_COLUMN')
-  return `["@transform", "ttest_two", "${left}", "${right}"]`
+  const labels = block.getFieldValue('LABEL_COLUMN')
+  const values = block.getFieldValue('VALUE_COLUMN')
+  return `["@transform", "ttest_two", "${labels}", "${values}"]`
 }

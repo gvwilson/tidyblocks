@@ -257,6 +257,43 @@ class DataFrame {
   // ------------------------------------------------------------------------------
 
   /**
+   * Glue two tables together.
+   * @param {string} thisName Name to use for this table in result.
+   * @param {string} other Other table to join to.
+   * @param {string} otherName Name to use for other table in result.
+   * @param {string} labelCol Name of column to put labels in.
+   * @returns A new dataframe.
+   */
+  glue (thisName, other, otherName, labelCol) {
+    util.check(thisName.match(DataFrame.TABLE_NAME),
+               `Cannot use ${thisName} as table name`)
+    util.check(other instanceof DataFrame,
+               `Other table must be a dataframe`)
+    util.check(otherName.match(DataFrame.TABLE_NAME),
+               `Cannot use ${otherName} as table name`)
+    util.check(labelCol.match(DataFrame.COLUMN_NAME),
+               `Illegal column name for label column`)
+    util.check(!this.hasColumns([labelCol]),
+               `Cannot overwrite ${labelCol} column`)
+    util.check(this.columns.length === other.columns.length,
+               `Tables have different widths`)
+    const otherCols = new Set(other.columns)
+    util.check(Array.from(this.columns).every(c => otherCols.has(c)),
+               `Column names are not the same`)
+
+    const result = []
+    for (let [label, table] of [[thisName, this], [otherName, other]]) {
+      const filler = {}
+      filler[labelCol] = label
+      for (let row of table.data) {
+        result.push(Object.assign({}, row, filler))
+      }
+    }
+    
+    return new DataFrame(result)
+  }
+
+  /**
    * Join this dataframe with another on equality between values in specified columns.
    * @param {string} thisName Name to use for this table in result.
    * @param {string} thisCol Name of column in this table.
