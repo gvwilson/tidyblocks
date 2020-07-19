@@ -61,6 +61,4 @@ class Pipeline {
 }
 Pipeline.FAMILY = '@pipeline'
 
-module.exports = {
-  Pipeline
-}
+module.exports = Pipeline

@@ -1,9 +1,9 @@
 'use strict'
 
 const util = require('./util')
-const {DataFrame} = require('./dataframe')
-const {Environment} = require('./environment')
-const {JsonToObj} = require('./json2obj')
+const DataFrame = require('./dataframe')
+const Environment = require('./environment')
+const Restore = require('./persist')
 
 /**
  * Generic user interface.
@@ -55,7 +55,7 @@ class UserInterface {
 
   loadProgram (name, text) {
     const json = JSON.parse(text)
-    this.program = (new JsonToObj()).program(json)
+    this.program = (new Restore()).program(json)
     this.displayProgram(json)
   }
 
@@ -161,14 +161,9 @@ class UserInterface {
   displayProgram (json) {
     if (json) {
       this.displayLog([`<pre>${JSON.stringify(json, null, 1)}</pre>`])
-      // FIXME
-      // const factory = new JsonToHtml()
-      // this.displayInArea('programArea', factory.program(json))
     }
     else {
       this.displayLog(['clear program'])
-      // FIXME
-      // this.displayInArea('programArea', this.makeEmptyProgram())
     }
   }
 
@@ -248,6 +243,4 @@ UserInterface.FULL_PLOT_SIZE = {
  */
 UserInterface.PRECISION = 6
 
-module.exports = {
-  UserInterface
-}
+module.exports = UserInterface

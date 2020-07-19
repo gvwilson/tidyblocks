@@ -4,7 +4,7 @@ const stats = require('simple-statistics')
 
 const util = require('./util')
 const {ExprBase} = require('./expr')
-const {DataFrame} = require('./dataframe')
+const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
 
 const FAMILY = '@transform'

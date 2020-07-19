@@ -3,7 +3,7 @@
 const vegaEmbed = require('vega-embed')
 
 const util = require('./util')
-const {UserInterface} = require('./ui')
+const UserInterface = require('./ui')
 
 /**
  * Browser-based interface.
@@ -163,6 +163,4 @@ class BrowserInterface extends UserInterface {
   }
 }
 
-module.exports = {
-  BrowserInterface
-}
+module.exports = BrowserInterface

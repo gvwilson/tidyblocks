@@ -1,9 +1,9 @@
 'use strict'
 
 const util = require('./util')
-const {DataFrame} = require('./dataframe')
-const {Environment} = require('./environment')
-const {Pipeline} = require('./pipeline')
+const DataFrame = require('./dataframe')
+const Environment = require('./environment')
+const Pipeline = require('./pipeline')
 
 /**
  * Manage an entire program.
@@ -100,6 +100,4 @@ class Program {
  */
 Program.FAMILY = '@program'
 
-module.exports = {
-  Program
-}
+module.exports = Program

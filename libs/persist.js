@@ -1,13 +1,13 @@
 'use strict'
 
 const util = require('./util')
-const {Program} = require('./program')
-const {Pipeline} = require('./pipeline')
+const Program = require('./program')
+const Pipeline = require('./pipeline')
 const Transform = require('./transform')
 const Op = require('./op')
 const Value = require('./value')
 
-class JsonToObj {
+class Restore {
   constructor () {
   }
 
@@ -81,4 +81,4 @@ class JsonToObj {
   }
 }
 
-module.exports = {JsonToObj}
+module.exports = Restore

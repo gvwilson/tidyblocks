@@ -2,11 +2,11 @@
 
 const assert = require('assert')
 const util = require('../libs/util')
-const {DataFrame} = require('../libs/dataframe')
+const DataFrame = require('../libs/dataframe')
 const Value = require('../libs/value')
 const Summarize = require('../libs/summarize')
 const Transform = require('../libs/transform')
-const {Environment} = require('../libs/environment')
+const Environment = require('../libs/environment')
 
 const fixture = require('./fixture')
 

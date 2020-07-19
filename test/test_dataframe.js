@@ -6,7 +6,7 @@ const util = require('../libs/util')
 const Value = require('../libs/value')
 const Op = require('../libs/op')
 const Summarize = require('../libs/summarize')
-const {DataFrame} = require('../libs/dataframe')
+const DataFrame = require('../libs/dataframe')
 
 const ZeroRows = []
 const OneRow = [{ones: 1, tens: 10}]

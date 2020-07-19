@@ -3,10 +3,10 @@
 const assert = require('assert')
 
 const util = require('../libs/util')
-const {DataFrame} = require('../libs/dataframe')
-const {Transform} = require('../libs/transform')
-const {Environment} = require('../libs/environment')
-const {Pipeline} = require('../libs/pipeline')
+const DataFrame = require('../libs/dataframe')
+const Transform = require('../libs/transform')
+const Environment = require('../libs/environment')
+const Pipeline = require('../libs/pipeline')
 
 const {
   ReadLocalData,

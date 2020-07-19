@@ -486,6 +486,4 @@ DataFrame.JOINCOL = '_join_'
  */
 DataFrame.SPECIAL_NAMES = new Set([DataFrame.GROUPCOL, DataFrame.JOINCOL])
 
-module.exports = {
-  DataFrame
-}
+module.exports = DataFrame

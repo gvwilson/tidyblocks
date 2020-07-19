@@ -1,17 +1,19 @@
 'use strict'
 
 const Blockly = require('blockly/blockly_compressed')
-require('./blocks/codegen')
 
-const {JsonToObj} = require('./libs/json2obj')
-const {Environment} = require('./libs/environment')
-const {BrowserInterface} = require('./libs/browser')
+const Restore = require('./libs/persist')
+const Environment = require('./libs/environment')
+const BrowserInterface = require('./libs/browser')
+
+// Must load this first to create Blockly.TidyBlocks
+require('./blocks/codegen')
 const {
   createTheme,
   createValidators
 } = require('./blocks/util')
 
-// Load for their side effects (block definitions).
+// Load block files for their side effects (block definitions).
 require('./blocks/combine')
 require('./blocks/data')
 require('./blocks/op')
@@ -49,7 +51,7 @@ const getCode = () => {
 const getProgram = () => {
   const code = getCode()
   const json = JSON.parse(code)
-  const converter = new JsonToObj()
+  const converter = new Restore()
   return converter.program(json)
 }
 
