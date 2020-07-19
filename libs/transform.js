@@ -589,6 +589,7 @@ module.exports = {
   mutate: TransformMutate,
   notify: TransformNotify,
   select: TransformSelect,
+  sequence: TransformSequence,
   sort: TransformSort,
   summarize: TransformSummarize,
   ungroup: TransformUngroup,

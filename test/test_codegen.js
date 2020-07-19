@@ -408,6 +408,17 @@ describe('transform code generation', () => {
     done()
   })
 
+  it('generates code for sequence', (done) => {
+    const expected = [Transform.FAMILY, 'sequence', 'name', 3]
+    const w = workspace()
+    const block = w.newBlock('data_sequence')
+    block.setFieldValue('name', 'COLUMN')
+    block.setFieldValue(3, 'VALUE')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for sort', (done) => {
     const expected = [Transform.FAMILY, 'sort', ['pink', 'orange'], false]
     const w = workspace()

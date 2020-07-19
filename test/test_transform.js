@@ -117,6 +117,17 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds sequence transform', (done) => {
+    const length = 3
+    const runner = new Environment()
+    const transform = new Transform.sequence('nums', length)
+    const result = transform.run(runner, null)
+    const expected = Array.from({length}, (v, k) => ({nums: k+1}))
+    assert(result.equal(new DataFrame(expected)),
+           `Did not get expected result`)
+    done()
+  })
+
   it('builds sort transform', (done) => {
     const runner = new Environment()
     const transform = new Transform.sort(['left'], true)
