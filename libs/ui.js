@@ -2,7 +2,7 @@
 
 const util = require('./util')
 const DataFrame = require('./dataframe')
-const Environment = require('./environment')
+const Env = require('./env')
 const Restore = require('./persist')
 
 /**
@@ -18,7 +18,7 @@ class UserInterface {
     this.howToGetData = howToGetData
     this.howToShowPlot = howToShowPlot
     this.document = document
-    this.env = new Environment()
+    this.env = new Env()
     this.data = new Map()
     this.program = null
     this.redisplay()
@@ -176,7 +176,7 @@ class UserInterface {
       this.displayError([`No program available`])
       return
     }
-    this.env = new Environment()
+    this.env = new Env()
     this.program.run(this.env)
     this.displayLog(this.env.log)
     this.displayError(this.env.errors)

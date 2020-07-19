@@ -10,7 +10,7 @@ const COLORS = require('../data/colors'),
 /**
  * Runtime environment.
  */
-class Environment {
+class Env {
   /**
    * Construct a new runtime environment.
    */
@@ -113,4 +113,4 @@ class Environment {
   }
 }
 
-module.exports = Environment
+module.exports = Env

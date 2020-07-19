@@ -6,7 +6,7 @@ const DataFrame = require('../libs/dataframe')
 const Value = require('../libs/value')
 const Summarize = require('../libs/summarize')
 const Transform = require('../libs/transform')
-const Environment = require('../libs/environment')
+const Env = require('../libs/env')
 
 const fixture = require('./fixture')
 
@@ -15,7 +15,7 @@ describe('build dataframe operations', () => {
     for (let name of ['colors', 'earthquakes', 'penguins']) {
       const raw = require(`../data/${name}`)
       const expected = new DataFrame(raw)
-      const runner = new Environment()
+      const runner = new Env()
       const transform = new Transform.data(name)
       const actual = transform.run(runner, null)
       assert(actual.equal(expected),
@@ -25,7 +25,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds drop columns transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.drop(['personal'])
     const result = transform.run(runner, new DataFrame(fixture.names))
     const expected = fixture.names.map(row => ({family: row.family}))
@@ -35,7 +35,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds filter transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const expr = new Value.column('right')
     const transform = new Transform.filter(expr)
     const result = transform.run(runner, new DataFrame(fixture.bool))
@@ -47,7 +47,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds group data transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.groupBy(['left'])
     const result = transform.run(runner, new DataFrame(fixture.number))
     const groups = new Set(result.data.map(row => row[DataFrame.GROUPCOL]))
@@ -59,7 +59,7 @@ describe('build dataframe operations', () => {
   it('builds join transform', (done) => {
     const leftData = new DataFrame([{leftName: 7, value: 'leftVal'}])
     const rightData = new DataFrame([{rightName: 7, value: 'rightVal'}])
-    const runner = new Environment()
+    const runner = new Env()
     runner.setResult('leftTable', leftData)
     runner.setResult('rightTable', rightData)
     const transform = new Transform.join('leftTable', 'leftName', 'rightTable', 'rightName')
@@ -72,7 +72,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds mutate transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const mutater = new Value.text('stuff')
     const transform = new Transform.mutate('value', mutater)
     const result = transform.run(runner, new DataFrame(fixture.names))
@@ -84,7 +84,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds notify transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.notify('answer')
     const input = new DataFrame(fixture.names)
     const result = transform.run(runner, input)
@@ -96,7 +96,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds read data transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.data('colors')
     const result = transform.run(runner, null)
     assert(result instanceof DataFrame,
@@ -108,7 +108,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds select transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.select(['personal'])
     const result = transform.run(runner, new DataFrame(fixture.names))
     const expected = fixture.names.map(row => ({personal: row.personal}))
@@ -119,7 +119,7 @@ describe('build dataframe operations', () => {
 
   it('builds sequence transform', (done) => {
     const length = 3
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.sequence('nums', length)
     const result = transform.run(runner, null)
     const expected = Array.from({length}, (v, k) => ({nums: k+1}))
@@ -129,7 +129,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds sort transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.sort(['left'], true)
     const result = transform.run(runner, new DataFrame(fixture.string))
     const actual = result.data.map(row => row.left)
@@ -141,7 +141,7 @@ describe('build dataframe operations', () => {
 
   it('builds summarize transform', (done) => {
     const df = new DataFrame([{left: 3}])
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.summarize('maximum', 'left')
     const result = transform.run(runner, df)
     assert.deepEqual(result.data,
@@ -151,7 +151,7 @@ describe('build dataframe operations', () => {
   })
 
   it('build ungroup transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.ungroup()
     const input = [{a: 1}, {a: 2}]
     input.forEach(row => {row[DataFrame.GROUPCOL] = 1})
@@ -162,7 +162,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds unique values transform', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.unique(['a'])
     const input = [{a: 1}, {a: 1}, {a: 2}, {a: 1}]
     const result = transform.run(runner, new DataFrame(input))
@@ -174,7 +174,7 @@ describe('build dataframe operations', () => {
 
 describe('build plots', () => {
   it('creates a bar plot', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.bar('left', 'right')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'bar',
@@ -189,7 +189,7 @@ describe('build plots', () => {
   })
 
   it('creates a box plot', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.box('left', 'right')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark.type, 'boxplot',
@@ -204,7 +204,7 @@ describe('build plots', () => {
   })
 
   it('creates a dot plot', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.dot('left')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark.type, 'circle',
@@ -219,7 +219,7 @@ describe('build plots', () => {
   })
 
   it('creates a histogram', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.histogram('left', 7)
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'bar',
@@ -234,7 +234,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot without a color', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.scatter('left', 'right', null)
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'point',
@@ -251,7 +251,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot with a color', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.scatter('left', 'right', 'right')
     const result = transform.run(runner, new DataFrame(fixture.number))
     assert.equal(runner.plot.mark, 'point',
@@ -306,14 +306,14 @@ describe('build plots', () => {
 
 describe('build statistics', () => {
   it('runs one-sided two-sample t-test', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.ttest_one('blue', 0.0)
     const result = transform.run(runner, new DataFrame(fixture.Colors))
     done()
   })
 
   it('runs a paired two-sided t-test', (done) => {
-    const runner = new Environment()
+    const runner = new Env()
     const transform = new Transform.ttest_two('blue', 'green')
     const result = transform.run(runner, new DataFrame(fixture.Colors))
     done()

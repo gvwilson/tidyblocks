@@ -35,7 +35,7 @@ class Pipeline {
 
   /**
    * Run this pipeline.
-   * @param {Environment} env The runtime environment.
+   * @param {Env} env The runtime environment.
    * @returns The result of the final transform.
    */
   run (env) {

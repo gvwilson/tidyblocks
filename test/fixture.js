@@ -6,7 +6,6 @@ const {JSDOM} = require('jsdom')
 const util = require('../libs/util')
 const Transform = require('../libs/transform')
 const DataFrame = require('../libs/dataframe')
-const Environment = require('../libs/environment')
 
 /**
  * Where to read data when testing.

@@ -2,7 +2,7 @@
 
 const util = require('./util')
 const DataFrame = require('./dataframe')
-const Environment = require('./environment')
+const Env = require('./env')
 const Pipeline = require('./pipeline')
 
 /**
@@ -43,7 +43,7 @@ class Program {
                `Cannot notify with empty name`)
     util.check(data instanceof DataFrame,
                `Data must be a dataframe`)
-    util.check(this.env instanceof Environment,
+    util.check(this.env instanceof Env,
                `Program must have non-null environment when notifying`)
     this.env.setResult(name, data)
     const toRemove = []
