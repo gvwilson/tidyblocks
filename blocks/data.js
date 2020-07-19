@@ -50,15 +50,6 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: 'Generate a sequence 1..N',
     helpUrl: ''
   },
-  // Test data
-  {
-    type: 'data_test',
-    message0: 'Test values',
-    nextStatement: null,
-    style: 'data_block',
-    hat: 'cap',
-    tooltip: 'dataset with test values'
-  },
   // User data
   {
     type: 'data_user',
@@ -98,11 +89,6 @@ Blockly.TidyBlocks['data_sequence'] = (block) => {
   const column = block.getFieldValue('COLUMN')
   const value = block.getFieldValue('VALUE')
   return `["@transform", "sequence", "${column}", ${value}]`
-}
-
-// Test data
-Blockly.TidyBlocks['data_test'] = (block) => {
-  return `["@transform", "data", "test"]`
 }
 
 // User data
