@@ -35,7 +35,7 @@ class ExprValue extends ExprBase {
 class ExprUnary extends ExprBase {
   constructor (family, kind, arg) {
     util.check(arg instanceof ExprBase,
-              `Require expression as child`)
+               `Require expression as child`)
     super(family, kind)
     this.arg = arg
   }
@@ -53,9 +53,9 @@ class ExprUnary extends ExprBase {
 class ExprBinary extends ExprBase {
   constructor (family, kind, left, right) {
     util.check(left instanceof ExprBase,
-              `Require expression as left child`)
+               `Require expression as left child`)
     util.check(right instanceof ExprBase,
-              `Require expression as right child`)
+               `Require expression as right child`)
     super(family, kind)
     this.left = left
     this.right = right
@@ -77,9 +77,9 @@ class ExprTernary extends ExprBase {
     util.check(left instanceof ExprBase,
                `Require expression as left child`)
     util.check(middle instanceof ExprBase,
-              `Require expression as middle child`)
+               `Require expression as middle child`)
     util.check(right instanceof ExprBase,
-              `Require expression as right child`)
+               `Require expression as right child`)
     super(family, kind)
     this.left = left
     this.middle = middle

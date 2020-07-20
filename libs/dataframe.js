@@ -98,11 +98,11 @@ class DataFrame {
    */
   groupBy (columns) {
     util.check(columns.length > 0,
-                `empty column name(s) for grouping`)
+               `empty column name(s) for grouping`)
     util.check(this.hasColumns(columns),
-                `unknown column(s) ${columns} in groupBy`)
+               `unknown column(s) ${columns} in groupBy`)
     util.check(columns.length === (new Set(columns)).size,
-                `duplicate column(s) in [${columns}] in groupBy`)
+               `duplicate column(s) in [${columns}] in groupBy`)
     const seen = new Map()
     let nextGroupId = 1
     const groupedData = this.data.map((row, i) => {
@@ -173,9 +173,9 @@ class DataFrame {
    */
   sort (columns, reverse = false) {
     util.check(columns.length > 0,
-                `no columns specified for sort`)
+               `no columns specified for sort`)
     util.check(this.hasColumns(columns),
-                `unknown column(s) [${columns}] in sort`)
+               `unknown column(s) [${columns}] in sort`)
     const result = [...this.data]
     result.sort((left, right) => {
       return columns.reduce((soFar, col) => {
@@ -225,7 +225,7 @@ class DataFrame {
    */
   ungroup () {
     util.check(this.hasColumns([DataFrame.GROUPCOL]),
-                `cannot ungroup data that is not grouped`)
+               `cannot ungroup data that is not grouped`)
     const newData = this.data.map(row => {
       row = {...row}
       delete row[DataFrame.GROUPCOL]
@@ -243,9 +243,9 @@ class DataFrame {
    */
   unique (columns) {
     util.check(columns.length > 0,
-                `no columns specified for select`)
+               `no columns specified for select`)
     util.check(this.hasColumns(columns),
-                `unknown column(s) [${columns}] in select`)
+               `unknown column(s) [${columns}] in select`)
     const seen = new Map()
     const newData = []
     this.data.forEach((row, i) => this._findUnique(seen, newData, row, i, columns))

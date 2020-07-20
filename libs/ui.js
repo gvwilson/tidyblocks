@@ -98,8 +98,8 @@ class UserInterface {
     // Show all available datasets, potentially selecting one.
     const desired = name || selector.value
     const makeSelected = (key) => ((key === desired) ? 'selected="selected"' : '')
-    selector.innerHTML =
-      Array.from(available.keys())
+    selector.innerHTML = Array
+      .from(available.keys())
       .map(key => `<option value="${key}"${makeSelected(key)}>${key}</option>`)
       .join('')
 

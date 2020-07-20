@@ -575,7 +575,8 @@ class TransformTTestPaired extends TransformBase {
     const leftVals = df.data
           .filter(row => (row[this.labelCol] === leftVal))
           .map(row => row[this.valueCol])
-    const rightVals = df.data
+    const rightVals = df
+          .data
           .filter(row => (row[this.labelCol] === rightVal))
           .map(row => row[this.valueCol])
     const pValue = stats.tTestTwoSample(leftVals, rightVals, 0)

@@ -12,7 +12,7 @@ class Restore {
     util.check(Array.isArray(json) &&
                (json.length > 0) &&
                (json[0] === Program.FAMILY),
-              `Expected array with program kind`)
+               `Expected array with program kind`)
     const pipelines = json.slice(1).map(blob => this.pipeline(blob))
     return new Program(...pipelines)
   }
@@ -21,7 +21,7 @@ class Restore {
     util.check(Array.isArray(json) &&
                (json.length > 1) &&
                (json[0] === Pipeline.FAMILY),
-              `Expected array with pipeline element`)
+               `Expected array with pipeline element`)
     const transforms = json.slice(1).map(blob => this.transform(blob))
     return new Pipeline(...transforms)
   }
