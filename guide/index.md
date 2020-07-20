@@ -1,5 +1,5 @@
 ---
-permalink: "/docs/"
+permalink: /guide/
 root: true
 ---
 
@@ -11,9 +11,7 @@ or visit [our GitHub repository]({{site.repo}}).
   <img width="90%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
 </div>
 
-This work is made freely available under the [MIT License]({{ '/license/' | relative_url }}).
+This work is made freely available under the [Hippocratic License]({{ '/license/' | relative_url }}).
 Contributions of all kinds are welcome:
 please see [our contributors' guide]({{ '/contributing/' | relative_url }}) to get started,
 and please note that all contributors are required to abide by our [Code of Conduct]({{ '/conduct/' | relative_url }}).
-
-[![Build Status](https://travis-ci.org/tidyblocks/tidyblocks.svg?branch=master)](https://travis-ci.org/tidyblocks/tidyblocks)
