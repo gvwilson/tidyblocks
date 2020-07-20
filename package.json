@@ -30,7 +30,7 @@
     "babelify": "^10.0.0",
     "blockly": "^3.20200625.2",
     "browserify": "^16.5.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.5.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-promise": "^4.2.1",
