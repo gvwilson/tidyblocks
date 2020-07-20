@@ -66,3 +66,31 @@
     -   name: sex
         type: text
         contains: sex
+
+-   name: police-killings.csv
+    description: People killed by the police in the United States 2013-2020
+    source: https://mappingpoliceviolence.org/
+    columns: 7
+    rows: 8264
+    fields:
+    -   name: Name
+        type: text
+        contains: Victim's name.
+    -   name: Age
+        type: number (years)
+        contains: Victim's age.
+    -   name: Gender
+        type: text
+        contains: Victim's gender.
+    -   name: Race
+        type: text
+        contains: Victim's race (US census category)
+    -   name: Date
+        type: text (ISO date)
+        contains: Date of killing.
+    -   name: City
+        type: text
+        contains: City where killing occurred.
+    -   name: State
+        type: text
+        contains: 2-letter abbreviation for state where killing occurred.
