@@ -1,0 +1,68 @@
+-   name: colors.csv
+    description: Red-green-blue values of standard HTML colors.
+    source: https://www.w3schools.com/colors/colors_names.asp
+    columns: 4
+    rows: 11
+    fields:
+    -   name: name
+        type: text
+        contains: standard color name
+    -   name: red
+        type: number, 0-255
+        contains: color component value
+    -   name: green
+        type: number, 0-255
+        contains: color component value
+    -   name: blue
+        type: number, 0-255
+        contains: color component value
+
+-   name: earthquakes.csv
+    description: Subset of the US Geological Survey data on Earthquakes in 2016
+    source: https://www.kaggle.com/usgs/earthquake-database
+    columns: 5
+    rows: 798
+    fields:
+    -   name: Time
+        type: datetime
+        contains: time of earthquake
+    -   name: Latitude
+        type: number (degrees)
+        contains: latitude
+    -   name: Longitude
+        type: number (degrees)
+        contains: longitude
+    -   name: Depth_Km
+        type: number (km)
+        contains: depth
+    -   name: Magnitude
+        type: number (Richter)
+        contains: size of the earthquake
+
+-   name: penguins.csv
+    description: Measurements of penguins from Palmer Station in Antarctica.
+    source: https://github.com/allisonhorst/palmerpenguins
+    columns: 7
+    rows: 344
+    fields:
+    -   name: species
+        type: text
+        contains: type of penguin
+    -   name: island
+        type: text
+        contains: where penguin was found
+    -   name: bill_length_mm
+        type: number (mm)
+        contains: length of bill
+    -   name: bill_depth_mm
+        type: number (mm)
+        contains: depth of bill
+    -   name: flipper_length_mm
+        type: number (mm)
+        contains: length of flippers
+    -   name: body_mass_g
+        type: number (g)
+        contains: mass
+    -   name: sex
+        type: text
+        contains: sex
