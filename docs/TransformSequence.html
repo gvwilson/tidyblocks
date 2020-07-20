@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: TransformJoin</title>
+    <title>JSDoc: Class: TransformSequence</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: TransformJoin</h1>
+    <h1 class="page-title">Class: TransformSequence</h1>
 
     
 
@@ -28,9 +28,9 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>TransformJoin<span class="signature">(leftName, leftCol, rightName, rightCol)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>TransformSequence<span class="signature">(newName, limit)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description">Join values.</div>
+            <div class="class-description">Create a numerical sequence.</div>
         
     
 </header>
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="TransformJoin"><span class="type-signature"></span>new TransformJoin<span class="signature">(leftName, leftCol, rightName, rightCol)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="TransformSequence"><span class="type-signature"></span>new TransformSequence<span class="signature">(newName, limit)</span><span class="type-signature"></span></h4>
     
 
     
@@ -85,7 +85,7 @@
 
         <tr>
             
-                <td class="name"><code>leftName</code></td>
+                <td class="name"><code>newName</code></td>
             
 
             <td class="type">
@@ -101,20 +101,20 @@
 
             
 
-            <td class="description last">Name of left table to wait for.</td>
+            <td class="description last">New column's name.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>leftCol</code></td>
+                <td class="name"><code>limit</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -124,53 +124,7 @@
 
             
 
-            <td class="description last">Name of column in left table.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rightName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Name of right table to wait for.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rightCol</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Name of column in right table.</td>
+            <td class="description last">How many to create.</td>
         </tr>
 
     
@@ -211,7 +165,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="transform.js.html">transform.js</a>, <a href="transform.js.html#line156">line 156</a>
+        <a href="transform.js.html">transform.js</a>, <a href="transform.js.html#line262">line 262</a>
     </li></ul></dd>
     
 

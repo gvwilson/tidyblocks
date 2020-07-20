@@ -14,8 +14,12 @@ kramdown:
   toc_levels: "2"
 exclude:
 - README.md
+- blocks
 - coverage
+- fixtures
+- libs
 - node_modules
+- old-*.*
 - package-lock.json
 - package.json
 - test

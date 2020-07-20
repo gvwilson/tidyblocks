@@ -65,11 +65,7 @@ We will review these as quickly as we can (typically within 2-3 days).</p>
 <ul>
 <li>
 <p><code>npm run build</code>: regenerate <code>tidyblocks.min.js</code>, then open <code>index.html</code> to see it.
-This is currently broken.</p>
-</li>
-<li>
-<p><code>npm run jeff</code>: regenerates <code>jeff.min.js</code> for testing, then open <code>jeff.html</code> to see it.
-Drag out a few blocks, then open the console and run <code>jeff.getCode()</code> to see the JSON for the blocks.</p>
+Drag out a few blocks, then open the console and run <code>tidyblocks.getCode()</code> to see the JSON for the blocks.</p>
 </li>
 <li>
 <p><code>npm run coverage</code>: run tests and report code coverage (open <code>coverage/index.html</code> to see results).</p>
@@ -115,11 +111,10 @@ These use expressions, summarizers, and statistical tests.</p>
 <p><code>libs/program.js</code>: programs made up of pipelines.</p>
 </li>
 <li>
-<p><code>libs/json2obj.js</code>: convert serialized JSON to programs, pipelines, stages, and expressions.
-(These objects know how to convert themselves <em>to</em> JSON.)</p>
+<p><code>libs/persist.js</code>: convert serialized JSON to programs, pipelines, stages, and expressions.</p>
 </li>
 <li>
-<p><code>libs/environment.js</code>: the runtime environment for a program
+<p><code>libs/env.js</code>: the runtime environment for a program
 that stores datasets, records error messages, and so on.</p>
 </li>
 <li>
@@ -128,21 +123,19 @@ that stores datasets, records error messages, and so on.</p>
 </li>
 <li>
 <p><code>blocks/*.js</code>: implementation of blocks.</p>
+<ul>
+<li><code>blocks/codegen.js</code>: code generator.</li>
+<li><code>blocks/util.js</code>: utilities.</li>
+</ul>
 </li>
 </ul>
 <h3>Other Files</h3>
 <ul>
 <li>
-<p><code>index.html</code>: user interface page.</p>
+<p><code>index.html</code>: interface page.</p>
 </li>
 <li>
-<p><code>index.js</code>: gathers contents of <code>libs/*.js</code> for bundling to create <code>tidyblocks.min.js</code>.</p>
-</li>
-<li>
-<p><code>jeff.html</code>: testing interface page.</p>
-</li>
-<li>
-<p><code>jeff.js</code>: gathers blocks for bundling to create <code>jeff.min.js</code> for testing.</p>
+<p><code>index.js</code>: gathers blocks for bundling to create <code>tidyblocks.min.js</code> for testing.</p>
 </li>
 <li>
 <p><code>test/test_*.js</code>: unit tests.</p>
@@ -175,18 +168,18 @@ Regenerate using <code>npm run fixtures</code> after any change to JSON serializ
 </li>
 </ul>
 <h2>How It Works</h2>
-<p>This section describes the implementation in <code>jeff.html</code> and <code>jeff.js</code>,
+<p>This section describes the implementation in <code>index.html</code> and <code>index.js</code>,
 which replaces the half-finished one in <code>index.html</code> and <code>index.js</code>
 and draws on the prototype in <a href="https:%5C/%5C/github.com/gvwilson/tidyblocks/">https://github.com/gvwilson/tidyblocks/</a>
 (which is online at <a href="http:%5C/%5C/tidyblocks.tech">http://tidyblocks.tech</a>).</p>
 <ul>
 <li>
-<p>On launch, <code>jeff.html</code> loads <code>jeff.min.js</code> with the namespace <code>jeff</code>
-and then calls <code>jeff.setup</code>.</p>
+<p>On launch, <code>index.html</code> loads <code>tidyblocks.min.js</code> with the namespace <code>tidyblocks</code>
+and then calls <code>tidyblocks.setup</code>.</p>
 </li>
 <li>
-<p>As <code>jeff.min.js</code> is loaded,
-the code in <code>jeff.js</code> loads <code>blocks/*.js</code>
+<p>As <code>tidyblocks.min.js</code> is loaded,
+the code in <code>index.js</code> loads <code>blocks/*.js</code>
 to register blocks with Blockly.
 When <code>setup</code> is called,
 it creates input validators for those blocks
@@ -200,24 +193,24 @@ and then creates a code generation function for each of those blocks.
 Blockly requires code generators to return strings,
 so the code generation functions return stringified JSON rather than JSON objects.</p>
 <ul>
-<li><em>This JSON must match the JSON produced by the <code>.toJSON</code> methods in <code>libs/*.js</code>;
-a future cleanup would be to unify these somehow to remove the duplication.</em></li>
+<li>This JSON must match the JSON consumed by <code>Restore</code> (<code>libs/persist.js</code>).</li>
 </ul>
 </li>
 <li>
 <p>The user can now drag blocks out to build a program.
-Only those blocks listed in the <code>xml</code> element with the ID <code>toolbox</code> in <code>jeff.html</code> are visible.</p>
+Only those blocks listed in the <code>xml</code> element with the ID <code>toolbox</code> in <code>index.html</code> are visible.</p>
 </li>
 <li>
-<p>The function <code>getCode</code> (<code>jeff.js</code>) builds a JSON representation of the current program.
-(This has to be run in the JavaScript console right now, but will be connected to a button in the UI.)</p>
+<p>The function <code>getCode</code> (<code>index.js</code>) builds a JSON representation of the current program.
+(This has to be run in the JavaScript console right now, but will be connected to a button in the UI.)
+It relies on <code>Blockly.TidyBlocks.workspaceToCode</code> (<code>blocks/codegen.js</code>):</p>
 <ol>
 <li>Get the top block of each stack in the workspace.</li>
 <li>Ignore any that aren't hat blocks (i.e., top-of-stack blocks).</li>
 <li>Build a list of the top-level blocks in this stack.</li>
 <li>Ask each to generate its stringified JSON.
 <ul>
-<li>If the result of <code>Blockly.JavaScript.blockToCode</code> is an array,
+<li>If the result of <code>Blockly.TidyBlocks.blockToCode</code> is an array,
 the first element contains the JSON
 and the second contains a precedence indicator,
 so extract the first part.</li>
@@ -245,12 +238,12 @@ rather than running and raising errors.</em></li>
 </ul>
 </li>
 <li>
-<p>The function <code>getProgram</code> (<code>jeff.js</code>) gets the stringified representation of the program,
-then creates an instance of <code>JsonToObj</code> (<code>libs/json2obj.js</code>)
+<p>The function <code>getProgram</code> (<code>index.js</code>) gets the stringified representation of the program,
+then creates an instance of <code>Restore</code> (<code>libs/persist.js</code>)
 and passes the JSON to its <code>.program</code> method
 to convert the JSON to runnable objects.</p>
 <ul>
-<li><em><code>JsonToObject</code> assumes a program-to-pipeline-to-expression structure.
+<li><em><code>Restore</code> assumes a program-to-pipeline-to-expression structure.
 If TidyBlocks ever acquires C-blocks or other structures,
 this function will need to be revisited.</em></li>
 </ul>
@@ -261,7 +254,7 @@ this function will need to be revisited.</em></li>
 <li><code>Program</code> (<code>libs/program.js</code>)</li>
 <li><code>Pipeline</code> (<code>libs/pipeline.js</code>)</li>
 <li>Subclasses of <code>TransformBase</code> (<code>libs/transform.js</code>)</li>
-<li>Subclasses of <code>ExprBase</code> (<code>libs/operation.js</code> and <code>libs/value.js</code>)</li>
+<li>Subclasses of <code>ExprBase</code> (<code>libs/op.js</code> and <code>libs/value.js</code>)</li>
 </ul>
 </li>
 <li>
@@ -283,14 +276,10 @@ because their dependencies were never satisfied.</em></li>
 </ul>
 </li>
 <li>
-<p>To run, the program requires an <code>Environment</code> object (<code>libs/environment.js</code>).
-This object stores programs' output,
+<p>To run, the program requires an <code>Env</code> object (<code>libs/env.js</code>).
+This object stores datasets that have been loaded by the user
+along with programs' output,
 such as the plots, data tables, and error messages that pipelines produce.</p>
-<ul>
-<li><code>Environment</code>'s constructor requires a <code>readData</code> function.
-In the browser, this reads an external file using <code>XMLHttpRequest</code>.
-The tests in <code>test/*.js</code> provide a function that reads directly from disk instead.</li>
-</ul>
 </li>
 <li>
 <p>Programs create and manipulate <code>DataFrame</code> objects (<code>libs/dataframe.js</code>).
@@ -325,7 +314,7 @@ These objects are used by the <code>TransformSummarize</code> block (<code>libs/
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BrowserInterface.html">BrowserInterface</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Environment.html">Environment</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="ExprValue.html">ExprValue</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNegationBase.html">OpNegationBase</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToString.html">OpToString</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformMutate.html">TransformMutate</a></li><li><a href="TransformNotify.html">TransformNotify</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformRead.html">TransformRead</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BrowserInterface.html">BrowserInterface</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Env.html">Env</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="ExprValue.html">ExprValue</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNegationBase.html">OpNegationBase</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToString.html">OpToString</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformData.html">TransformData</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformMutate.html">TransformMutate</a></li><li><a href="TransformNotify.html">TransformNotify</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSequence.html">TransformSequence</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#makeDate">makeDate</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
 </nav>
 
 <br class="clear">
