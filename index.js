@@ -37,9 +37,19 @@ const getWorkspace = () => {
 }
 
 /**
+ * Get the XML representation of the workspace contents.
+ */
+const getXML = () => {
+  const workspace = getWorkspace()
+  const xml = Blockly.Xml.workspaceToDom(workspace)
+  const text = Blockly.Xml.domToText(xml)
+  return text
+}
+
+/**
  * Get the JSON string representation of the workspace contents.
  */
-const getCode = () => {
+const getJSON = () => {
   const workspace = getWorkspace()
   return Blockly.TidyBlocks.workspaceToCode(workspace)
 }
@@ -48,7 +58,7 @@ const getCode = () => {
  * Get the object representation of the current program.
  */
 const getProgram = () => {
-  const code = getCode()
+  const code = getJSON()
   const json = JSON.parse(code)
   const converter = new Restore()
   return converter.program(json)
@@ -99,7 +109,8 @@ const setup = (divId, toolboxId) => {
 module.exports = {
   Blockly,
   getWorkspace,
-  getCode,
+  getXML,
+  getJSON,
   getProgram,
   runProgram,
   setup

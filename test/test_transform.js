@@ -175,58 +175,58 @@ describe('build dataframe operations', () => {
 describe('build plots', () => {
   it('creates a bar plot', (done) => {
     const runner = new Env()
-    const transform = new Transform.bar('left', 'right')
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const transform = new Transform.bar('red', 'green')
+    const result = transform.run(runner, new DataFrame(fixture.COLORS))
     assert.equal(runner.plot.mark, 'bar',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.NUMBER,
+    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'left',
+    assert.equal(runner.plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'right',
+    assert.equal(runner.plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
     done()
   })
 
   it('creates a box plot', (done) => {
     const runner = new Env()
-    const transform = new Transform.box('left', 'right')
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const transform = new Transform.box('red', 'green')
+    const result = transform.run(runner, new DataFrame(fixture.COLORS))
     assert.equal(runner.plot.mark.type, 'boxplot',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.NUMBER,
+    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'left',
+    assert.equal(runner.plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'right',
+    assert.equal(runner.plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
     done()
   })
 
   it('creates a dot plot', (done) => {
     const runner = new Env()
-    const transform = new Transform.dot('left')
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const transform = new Transform.dot('red')
+    const result = transform.run(runner, new DataFrame(fixture.COLORS))
     assert.equal(runner.plot.mark.type, 'circle',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.NUMBER,
+    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'left',
+    assert.equal(runner.plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.deepEqual(runner.plot.transform[0].groupby, ['left'],
+    assert.deepEqual(runner.plot.transform[0].groupby, ['red'],
                      `Wrong transform`)
     done()
   })
 
   it('creates a histogram', (done) => {
     const runner = new Env()
-    const transform = new Transform.histogram('left', 7)
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const transform = new Transform.histogram('red', 7)
+    const result = transform.run(runner, new DataFrame(fixture.COLORS))
     assert.equal(runner.plot.mark, 'bar',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.NUMBER,
+    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'left',
+    assert.equal(runner.plot.encoding.x.field, 'red',
                  `Wrong X axis`)
     assert.equal(runner.plot.encoding.x.bin.maxbins, 7,
                  `Wrong number of bins`)
@@ -235,15 +235,15 @@ describe('build plots', () => {
 
   it('creates a scatter plot without a color', (done) => {
     const runner = new Env()
-    const transform = new Transform.scatter('left', 'right', null)
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const transform = new Transform.scatter('red', 'green', null)
+    const result = transform.run(runner, new DataFrame(fixture.COLORS))
     assert.equal(runner.plot.mark, 'point',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.NUMBER,
+    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'left',
+    assert.equal(runner.plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'right',
+    assert.equal(runner.plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
     assert(!('color' in runner.plot.encoding),
            `Should not have color`)
@@ -252,17 +252,17 @@ describe('build plots', () => {
 
   it('creates a scatter plot with a color', (done) => {
     const runner = new Env()
-    const transform = new Transform.scatter('left', 'right', 'right')
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const transform = new Transform.scatter('red', 'green', 'blue')
+    const result = transform.run(runner, new DataFrame(fixture.COLORS))
     assert.equal(runner.plot.mark, 'point',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.NUMBER,
+    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'left',
+    assert.equal(runner.plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'right',
+    assert.equal(runner.plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
-    assert.equal(runner.plot.encoding.color.field, 'right',
+    assert.equal(runner.plot.encoding.color.field, 'blue',
                  `Wrong color`)
     done()
   })
