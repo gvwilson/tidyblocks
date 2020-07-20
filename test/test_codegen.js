@@ -11,6 +11,7 @@ const Program = require('../libs/program')
 
 const fixture = require('./fixture')
 
+// Set up blocks
 const {
   createTheme,
   createValidators
