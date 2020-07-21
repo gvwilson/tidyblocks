@@ -31,7 +31,7 @@ module.exports = {
 
   entry: {
     tidyblocks: ['./index.js'],
-    style: ['./style/base.scss'],
+    style: ['./static/sass/base.scss'],
   },
   output: {
     library: 'tidyblocks',

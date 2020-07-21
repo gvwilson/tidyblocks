@@ -1,5 +1,5 @@
 ---
-permalink: "/license/"
+permalink: /license/
 title: "License"
 ---
 

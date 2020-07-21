@@ -32,14 +32,14 @@ const stats = require('simple-statistics')
 
 const util = require('./util')
 const {ExprBase} = require('./expr')
-const {DataFrame} = require('./dataframe')
+const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
 
 const FAMILY = '@transform'
 
 /**
  * Store information about a transform in a pipeline
- * Derived classes must provide `run(runner, dataframe)` and `toJSON()`.
+ * Derived classes must provide `run(runner, dataframe)`.
  */
 class TransformBase {
   /**
@@ -77,13 +77,35 @@ class TransformBase {
       (this.columns.length === other.columns.length) &amp;&amp;
       this.columns.every(x => other.columns.includes(x))
   }
-
-  toJSON (...extras) {
-    return [FAMILY, this.name, ...extras]
-  }
 }
 
 // ----------------------------------------------------------------------
+
+/**
+ * Get a dataset.
+ * @param {string} dataset Name of dataset.
+ */
+class TransformData extends TransformBase {
+  constructor (dataset) {
+    util.check(typeof dataset === 'string',
+               `Expected string`)
+    super('read', [], null, false, true)
+    this.dataset = dataset
+  }
+
+  equal (other) {
+    return super.equal(other) &amp;&amp;
+      (this.dataset === other.dataset)
+  }
+
+  run (runner, df) {
+    runner.appendLog(this.name)
+    util.check(df === null,
+               `Cannot provide input dataframe to reader`)
+    const dataTable = runner.getData(this.dataset)
+    return new DataFrame(dataTable)
+  }
+}
 
 /**
  * Drop columns.
@@ -103,10 +125,6 @@ class TransformDrop extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.drop(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 
@@ -131,10 +149,6 @@ class TransformFilter extends TransformBase {
     runner.appendLog(this.name)
     return df.filter(this.expr)
   }
-
-  toJSON () {
-    return super.toJSON(this.expr.toJSON())
-  }
 }
 
 /**
@@ -156,10 +170,6 @@ class TransformGroupBy extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.groupBy(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 
@@ -196,11 +206,6 @@ class TransformJoin extends TransformBase {
     return left.join(this.leftName, this.leftCol,
                      right, this.rightName, this.rightCol)
   }
-
-  toJSON () {
-    return super.toJSON(this.leftName, this.leftCol,
-                        this.rightName, this.rightCol)
-  }
 }
 
 /**
@@ -229,10 +234,6 @@ class TransformMutate extends TransformBase {
     runner.appendLog(this.name)
     return df.mutate(this.newName, this.expr)
   }
-
-  toJSON () {
-    return super.toJSON(this.newName, this.expr.toJSON())
-  }
 }
 
 /**
@@ -256,39 +257,6 @@ class TransformNotify extends TransformBase {
     runner.appendLog(this.name)
     return df
   }
-
-  toJSON () {
-    return super.toJSON(this.label)
-  }
-}
-
-/**
- * Read a dataset.
- * @param {string} path Path to data.
- */
-class TransformRead extends TransformBase {
-  constructor (path) {
-    util.check(typeof path === 'string',
-               `Expected string`)
-    super('read', [], null, false, true)
-    this.path = path
-  }
-
-  equal (other) {
-    return super.equal(other) &amp;&amp;
-      (this.path === other.path)
-  }
-
-  run (runner, df) {
-    runner.appendLog(this.name)
-    util.check(df === null,
-               `Cannot provide input dataframe to reader`)
-    return new DataFrame(runner.getData(this.path))
-  }
-
-  toJSON () {
-    return super.toJSON(this.path)
-  }
 }
 
 /**
@@ -311,9 +279,38 @@ class TransformSelect extends TransformBase {
     runner.appendLog(this.name)
     return df.select(this.columns)
   }
+}
 
-  toJSON () {
-    return super.toJSON(this.columns)
+/**
+ * Create a numerical sequence.
+ * @param {string} newName New column's name.
+ * @param {number} limit How many to create.
+ */
+class TransformSequence extends TransformBase {
+  constructor (newName, limit) {
+    util.check(typeof newName === 'string',
+               `Expected string as new name`)
+    super('sequence', [], null, true, true)
+    this.newName = newName
+    this.limit = limit
+  }
+
+  equal (other) {
+    return super.equal(other) &amp;&amp;
+      (this.newName === other.newName) &amp;&amp;
+      (this.limit === other.limit)
+  }
+
+  run (runner, df) {
+    runner.appendLog(this.name)
+    const raw = Array.from(
+      {length: this.limit},
+      (v, k) => {
+        const result = {}
+        result[this.newName] = k + 1
+        return result
+      })
+    return new DataFrame(raw)
   }
 }
 
@@ -340,10 +337,6 @@ class TransformSort extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.sort(this.columns, this.reverse)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns, this.reverse)
   }
 }
 
@@ -376,10 +369,6 @@ class TransformSummarize extends TransformBase {
     const summarizer = new Summarize[this.op](this.column)
     return df.summarize(summarizer)
   }
-
-  toJSON () {
-    return super.toJSON(this.op, this.column)
-  }
 }
 
 /**
@@ -393,10 +382,6 @@ class TransformUngroup extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.ungroup()
-  }
-
-  toJSON () {
-    return super.toJSON()
   }
 }
 
@@ -419,10 +404,6 @@ class TransformUnique extends TransformBase {
   run (runner, df) {
     runner.appendLog(this.name)
     return df.unique(this.columns)
-  }
-
-  toJSON () {
-    return super.toJSON(this.columns)
   }
 }
 
@@ -595,7 +576,7 @@ class TransformTTestOneSample extends TransformBase {
     runner.appendLog(this.name)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
-    runner.setStatistics(pValue)
+    runner.setStats(pValue)
     return df
   }
 }
@@ -603,22 +584,31 @@ class TransformTTestOneSample extends TransformBase {
 /**
  * Paired two-sided t-test.
  * @param {number} significance Significance tested for.
- * @param {string} leftCol The column to get one set of values from.
- * @param {string} rightCol The column to get the other set of values from.
+ * @param {string} labelCol The column to get labels from.
+ * @param {string} valueCol The column to get the values from.
  */
 class TransformTTestPaired extends TransformBase {
-  constructor (leftCol, rightCol) {
+  constructor (labelCol, valueCol) {
     super('ttest_two', [], null, true, false)
-    this.leftCol = leftCol
-    this.rightCol = rightCol
+    this.labelCol = labelCol
+    this.valueCol = valueCol
   }
 
   run (runner, df) {
     runner.appendLog(this.name)
-    const left = df.data.map(row => row[this.leftCol])
-    const right = df.data.map(row => row[this.rightCol])
-    const pValue = stats.tTestTwoSample(left, right, 0)
-    runner.setStatistics(pValue)
+    const known = new Set(df.data.map(row => row[this.labelCol]))
+    util.check(known.size === 2,
+               `Must have exactly two labels for data`)
+    const [leftVal, rightVal] = Array.from(known)
+    const leftVals = df.data
+          .filter(row => (row[this.labelCol] === leftVal))
+          .map(row => row[this.valueCol])
+    const rightVals = df
+          .data
+          .filter(row => (row[this.labelCol] === rightVal))
+          .map(row => row[this.valueCol])
+    const pValue = stats.tTestTwoSample(leftVals, rightVals, 0)
+    runner.setStats(pValue)
     return df
   }
 }
@@ -628,14 +618,15 @@ class TransformTTestPaired extends TransformBase {
 module.exports = {
   FAMILY: FAMILY,
   base: TransformBase,
+  data: TransformData,
   drop: TransformDrop,
   filter: TransformFilter,
   groupBy: TransformGroupBy,
   join: TransformJoin,
   mutate: TransformMutate,
   notify: TransformNotify,
-  read: TransformRead,
   select: TransformSelect,
+  sequence: TransformSequence,
   sort: TransformSort,
   summarize: TransformSummarize,
   ungroup: TransformUngroup,
@@ -658,7 +649,7 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BrowserInterface.html">BrowserInterface</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Environment.html">Environment</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="ExprValue.html">ExprValue</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNegationBase.html">OpNegationBase</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToString.html">OpToString</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformMutate.html">TransformMutate</a></li><li><a href="TransformNotify.html">TransformNotify</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformRead.html">TransformRead</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BrowserInterface.html">BrowserInterface</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Env.html">Env</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="ExprValue.html">ExprValue</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNegationBase.html">OpNegationBase</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToString.html">OpToString</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformData.html">TransformData</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformMutate.html">TransformMutate</a></li><li><a href="TransformNotify.html">TransformNotify</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSequence.html">TransformSequence</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#makeDate">makeDate</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
 </nav>
 
 <br class="clear">

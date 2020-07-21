@@ -5,7 +5,99 @@ import ReactBlocklyComponent from 'react-blockly';
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper.jsx';
 import ConfigFiles from './blocklyConfig.jsx';
 import ReactDataGrid from 'react-data-grid';
-import colorData from '../../data/earthquakes.js'
+
+// Temporary test data.
+import earthquakeData from '../../data/earthquakes.js'
+const boxPlotJson = {
+  "data": {
+    "values": [
+      {
+        "name": "black",
+        "red": 0,
+        "green": 0,
+        "blue": 0
+      },
+      {
+        "name": "red",
+        "red": 255,
+        "green": 0,
+        "blue": 0
+      },
+      {
+        "name": "maroon",
+        "red": 128,
+        "green": 0,
+        "blue": 0
+      },
+      {
+        "name": "lime",
+        "red": 0,
+        "green": 255,
+        "blue": 0
+      },
+      {
+        "name": "green",
+        "red": 0,
+        "green": 128,
+        "blue": 0
+      },
+      {
+        "name": "blue",
+        "red": 0,
+        "green": 0,
+        "blue": 255
+      },
+      {
+        "name": "navy",
+        "red": 0,
+        "green": 0,
+        "blue": 128
+      },
+      {
+        "name": "yellow",
+        "red": 255,
+        "green": 255,
+        "blue": 0
+      },
+      {
+        "name": "fuchsia",
+        "red": 255,
+        "green": 0,
+        "blue": 255
+      },
+      {
+        "name": "aqua",
+        "red": 0,
+        "green": 255,
+        "blue": 255
+      },
+      {
+        "name": "white",
+        "red": 255,
+        "green": 255,
+        "blue": 255
+      }
+    ]
+  },
+  "mark": {
+    "type": "boxplot",
+    "extent": 1.5
+  },
+  "encoding": {
+    "x": {
+      "field": "red",
+      "type": "ordinal"
+    },
+    "y": {
+      "field": "green",
+      "type": "quantitative"
+    }
+  },
+  "axisX": "red",
+  "axisY": "green",
+  "name": "box"
+}
+
 
 // Temporary test data for ReactDataGrid.
 const columns = [{ key: 'Time', name: 'Time', sortable: true, resizable: true},
@@ -14,7 +106,11 @@ const columns = [{ key: 'Time', name: 'Time', sortable: true, resizable: true},
   { key: 'Depth_Km', name: 'Depth_Km', sortable: true, resizable: true },
   { key: 'Magnitude', name: 'Magnitude', sortable: true, resizable: true }
 ];
-const initialRows = colorData
+const initialRows = earthquakeData
+
+// Size of standard plotting areas.
+const FULL_PLOT_SIZE = {width: 500, height: 300}
+const STATS_PLOT_SIZE = {width: 300, height: 150}
 
 // https://codesandbox.io/s/54pk3r46o4?from-embed=&file=/src/index.js
 // Create a table with sortable columns.
@@ -55,17 +151,20 @@ export class TidyBlocksApp extends React.Component{
       };
       this.paneResize = this.paneResize.bind(this);
       this.updatePlot = this.updatePlot.bind(this);
+    }
 
+    componentDidMount() {
+      this.updatePlot ()
     }
 
     paneResize(){
       this.blocklyRef.current.resize()
     }
 
-    updatePlot (spec) {
-      spec.width = FULL_PLOT_SIZE.width
-      spec.height = FULL_PLOT_SIZE.height
-      vegaEmbed('#plotOutput', spec, {})
+    updatePlot() {
+      boxPlotJson.width = FULL_PLOT_SIZE.width
+      boxPlotJson.height = FULL_PLOT_SIZE.height
+      vegaEmbed('#plotOutput', boxPlotJson, {})
     }
 
     render(){
@@ -90,7 +189,9 @@ export class TidyBlocksApp extends React.Component{
                 />
 
               </Pane>
-              <Pane className="bottomRightPane" initialSize="50%">This Pane has a minimum size of 200px. It's the bottom pane.</Pane>
+              <Pane className="bottomRightPane" initialSize="50%">
+                <div id="plotOutput"></div>
+              </Pane>
             </SplitPane>
 
           </SplitPane>

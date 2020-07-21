@@ -1,5 +1,6 @@
 *~
 .jekyll-cache
+.jekyll-metadata
 _site
 coverage
 *.min.js

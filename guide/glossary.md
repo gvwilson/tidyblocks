@@ -1,5 +1,5 @@
 ---
-permalink: /glossary/
+permalink: /guide/glossary/
 title: "Glossary"
 ---
 
