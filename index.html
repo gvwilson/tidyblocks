@@ -2,16 +2,17 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script src="./tidyblocks.min.js"></script>
+    <script src="./dist/tidyblocks.js"></script>
     <script>
       window.onload = () => {
         tidyblocks.setup('blocklyDiv', 'toolbox')
       }
     </script>
+
+    <link rel="stylesheet" href="./dist/css/base.min.css">
   </head>
   <body>
-    <h1>TidyBlocks</h1>
-    <div id="blocklyDiv" style="height: 480px; width: 800px;"></div>
+    <div id="root"></div>
     <xml id="toolbox" style="display: none">
       <category name="data" categorystyle="data">
         <block type="data_colors"></block>

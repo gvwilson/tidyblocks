@@ -4,6 +4,9 @@ const Blockly = require('blockly/blockly_compressed')
 
 const Restore = require('./libs/persist')
 const Env = require('./libs/env')
+const ReactDOM = require('react-dom');
+const React = require('react');
+const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 
 // Must load this first to create Blockly.TidyBlocks
 require('./blocks/codegen')
@@ -92,8 +95,18 @@ const setup = (divId, toolboxId) => {
   createValidators()
   const toolbox = document.getElementById(toolboxId)
   const settings = createSettings(toolbox)
-  TidyBlocksWorkspace = Blockly.inject(divId, settings)
-  return TidyBlocksWorkspace
+
+  // Get a string of the toolbox XML, this'll get parsed within the React app.
+  let s = new XMLSerializer();
+  let toolboxString = s.serializeToString(toolbox);
+
+  ReactDOM.render(
+    <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
+    document.getElementById('root')
+  );
+
+  // TidyBlocksWorkspace = Blockly.inject(divId, settings)
+  // return TidyBlocksWorkspace
 }
 
 module.exports = {
