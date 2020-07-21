@@ -1,4 +1,4 @@
-const INITIAL_XML = '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>';
+const INITIAL_XML = '<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'
 
 const INITIAL_TOOLBOX_XML = `
 <xml id="toolbox" style="display: none">
@@ -60,10 +60,9 @@ const INITIAL_TOOLBOX_XML = `
   </category>
 </xml>`
 
-
 const ConfigFiles = {
   INITIAL_XML,
   INITIAL_TOOLBOX_XML,
-};
+}
 
-export default ConfigFiles;
+export default ConfigFiles

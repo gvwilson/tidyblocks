@@ -107,16 +107,13 @@ const setup = (divId, toolboxId) => {
   const settings = createSettings(toolbox)
 
   // Get a string of the toolbox XML, this'll get parsed within the React app.
-  let s = new XMLSerializer();
-  let toolboxString = s.serializeToString(toolbox);
+  const s = new XMLSerializer()
+  const toolboxString = s.serializeToString(toolbox)
 
   ReactDOM.render(
     <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
     document.getElementById('root')
-  );
-
-  // TidyBlocksWorkspace = Blockly.inject(divId, settings)
-  // return TidyBlocksWorkspace
+  )
 }
 
 module.exports = {
