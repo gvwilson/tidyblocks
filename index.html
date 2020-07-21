@@ -2,11 +2,13 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>TidyBlocks</title>
     <link href="./static/trac.css" rel="stylesheet" type="text/css">
     <link href="./static/site.css" rel="stylesheet" type="text/css">
-    <script src="./tidyblocks.min.js"></script>
+    <link rel="stylesheet" href="./dist/css/base.min.css">
+
+    <script src="./dist/tidyblocks.js"></script>
     <script>
       window.onload = () => {
         tidyblocks.setup('blocklyDiv', 'toolbox')
@@ -14,14 +16,7 @@
     </script>
   </head>
   <body>
-    <p>
-      <strong>TidyBlocks</strong>
-      |
-      <a href="./guide/">Guide</a>
-      |
-      <a href="./license/">License</a>
-    </p>
-    <div id="blocklyDiv" style="height: 480px; width: 800px;"></div>
+    <div id="root"></div>
     <xml id="toolbox" style="display: none">
       <category name="data" categorystyle="data">
         <block type="data_colors"></block>
@@ -80,5 +75,11 @@
         <block type="combine_notify"></block>
       </category>
     </xml>
+
+    <!-- DataForge, Vega-Lite, and what-not -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+
   </body>
 </html>

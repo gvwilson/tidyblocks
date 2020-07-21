@@ -4,6 +4,9 @@ const Blockly = require('blockly/blockly_compressed')
 
 const Restore = require('./libs/persist')
 const Env = require('./libs/env')
+const ReactDOM = require('react-dom');
+const React = require('react');
+const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 
 // Must load this first to create Blockly.TidyBlocks
 require('./blocks/codegen')
@@ -37,9 +40,19 @@ const getWorkspace = () => {
 }
 
 /**
+ * Get the XML representation of the workspace contents.
+ */
+const getXML = () => {
+  const workspace = getWorkspace()
+  const xml = Blockly.Xml.workspaceToDom(workspace)
+  const text = Blockly.Xml.domToText(xml)
+  return text
+}
+
+/**
  * Get the JSON string representation of the workspace contents.
  */
-const getCode = () => {
+const getJSON = () => {
   const workspace = getWorkspace()
   return Blockly.TidyBlocks.workspaceToCode(workspace)
 }
@@ -48,7 +61,7 @@ const getCode = () => {
  * Get the object representation of the current program.
  */
 const getProgram = () => {
-  const code = getCode()
+  const code = getJSON()
   const json = JSON.parse(code)
   const converter = new Restore()
   return converter.program(json)
@@ -92,14 +105,25 @@ const setup = (divId, toolboxId) => {
   createValidators()
   const toolbox = document.getElementById(toolboxId)
   const settings = createSettings(toolbox)
-  TidyBlocksWorkspace = Blockly.inject(divId, settings)
-  return TidyBlocksWorkspace
+
+  // Get a string of the toolbox XML, this'll get parsed within the React app.
+  let s = new XMLSerializer();
+  let toolboxString = s.serializeToString(toolbox);
+
+  ReactDOM.render(
+    <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
+    document.getElementById('root')
+  );
+
+  // TidyBlocksWorkspace = Blockly.inject(divId, settings)
+  // return TidyBlocksWorkspace
 }
 
 module.exports = {
   Blockly,
   getWorkspace,
-  getCode,
+  getXML,
+  getJSON,
   getProgram,
   runProgram,
   setup
