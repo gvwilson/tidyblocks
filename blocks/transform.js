@@ -1,9 +1,6 @@
 const Blockly = require('blockly/blockly_compressed')
 
-const {
-  formatMultipleColumnNames,
-  valueToCode
-} = require('./util')
+const blocks = require('./blocks')
 
 Blockly.defineBlocksWithJsonArray([
   // Drop
@@ -205,38 +202,38 @@ Blockly.defineBlocksWithJsonArray([
 
 // Drop
 Blockly.TidyBlocks['transform_drop'] = (block) => {
-  const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+  const columns = blocks.formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "drop", ${columns}]`
 }
 
 // Filter
 Blockly.TidyBlocks['transform_filter'] = (block) => {
-  const expr = valueToCode(block, 'TEST', Blockly.TidyBlocks.ORDER_NONE)
+  const expr = blocks.valueToCode(block, 'TEST', Blockly.TidyBlocks.ORDER_NONE)
   return `["@transform", "filter", ${expr}]`
 }
 
 // Group
 Blockly.TidyBlocks['transform_groupBy'] = (block) => {
-  const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+  const columns = blocks.formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "groupBy", ${columns}]`
 }
 
 // Mutate
 Blockly.TidyBlocks['transform_mutate'] = (block) => {
   const column = block.getFieldValue('COLUMN')
-  const value = valueToCode(block, 'VALUE', Blockly.TidyBlocks.ORDER_NONE)
+  const value = blocks.valueToCode(block, 'VALUE', Blockly.TidyBlocks.ORDER_NONE)
   return `["@transform", "mutate", "${column}", ${value}]`
 }
 
 // Select
 Blockly.TidyBlocks['transform_select'] = (block) => {
-  const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+  const columns = blocks.formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "select", ${columns}]`
 }
 
 // Sort
 Blockly.TidyBlocks['transform_sort'] = (block) => {
-  const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+  const columns = blocks.formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
   return `["@transform", "sort", ${columns}, ${descending}]`
 }
@@ -255,6 +252,6 @@ Blockly.TidyBlocks['transform_ungroup'] = (block) => {
 
 // Unique
 Blockly.TidyBlocks['transform_unique'] = (block) => {
-  const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+  const columns = blocks.formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
   return `["@transform", "unique", ${columns}]`
 }

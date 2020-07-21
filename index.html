@@ -8,8 +8,9 @@
     <link href="./static/site.css" rel="stylesheet" type="text/css">
     <script src="./tidyblocks.min.js"></script>
     <script>
+      let ui = null
       window.onload = () => {
-        tidyblocks.setup('blocklyDiv', 'toolbox')
+        ui = tidyblocks.setup('blocklyDiv', 'toolbox')
       }
     </script>
   </head>

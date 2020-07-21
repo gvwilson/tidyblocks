@@ -1,6 +1,6 @@
 const Blockly = require('blockly/blockly_compressed')
 
-const {valueToCode} = require('./util')
+const blocks = require('./blocks')
 
 Blockly.defineBlocksWithJsonArray([
   // Binary arithmetic
@@ -247,8 +247,8 @@ Blockly.defineBlocksWithJsonArray([
 Blockly.TidyBlocks['op_arithmetic'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const left = valueToCode(block, 'LEFT', order)
-  const right = valueToCode(block, 'RIGHT', order)
+  const left = blocks.valueToCode(block, 'LEFT', order)
+  const right = blocks.valueToCode(block, 'RIGHT', order)
   const code = `["@op", "${op}", ${left}, ${right}]`
   return [code, order]
 }
@@ -256,7 +256,7 @@ Blockly.TidyBlocks['op_arithmetic'] = (block) => {
 // Arithmetic negation
 Blockly.TidyBlocks['op_negate'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const value = valueToCode(block, 'VALUE', order)
+  const value = blocks.valueToCode(block, 'VALUE', order)
   const code = `["@op", "negate", ${value}]`
   return [code, order]
 }
@@ -265,8 +265,8 @@ Blockly.TidyBlocks['op_negate'] = (block) => {
 Blockly.TidyBlocks['op_compare'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const left = valueToCode(block, 'LEFT', order)
-  const right = valueToCode(block, 'RIGHT', order)
+  const left = blocks.valueToCode(block, 'LEFT', order)
+  const right = blocks.valueToCode(block, 'RIGHT', order)
   const code = `["@op", "${op}", ${left}, ${right}]`
   return [code, order]
 }
@@ -275,8 +275,8 @@ Blockly.TidyBlocks['op_compare'] = (block) => {
 Blockly.TidyBlocks['op_logical'] = (block) => {
   const op = block.getFieldValue('OP')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const left = valueToCode(block, 'LEFT', order)
-  const right = valueToCode(block, 'RIGHT', order)
+  const left = blocks.valueToCode(block, 'LEFT', order)
+  const right = blocks.valueToCode(block, 'RIGHT', order)
   const code = `["@op", "${op}", ${left}, ${right}]`
   return [code, order]
 }
@@ -284,7 +284,7 @@ Blockly.TidyBlocks['op_logical'] = (block) => {
 // Logical negation
 Blockly.TidyBlocks['op_not'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const value = valueToCode(block, 'VALUE', order)
+  const value = blocks.valueToCode(block, 'VALUE', order)
   const code = `["@op", "not", ${value}]`
   return [code, order]
 }
@@ -293,7 +293,7 @@ Blockly.TidyBlocks['op_not'] = (block) => {
 Blockly.TidyBlocks['op_type'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const value = valueToCode(block, 'VALUE', order)
+  const value = blocks.valueToCode(block, 'VALUE', order)
   const code = `["@op", "${type}", ${value}]`
   return [code, order]
 }
@@ -302,7 +302,7 @@ Blockly.TidyBlocks['op_type'] = (block) => {
 Blockly.TidyBlocks['op_convert'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const value = valueToCode(block, 'VALUE', order)
+  const value = blocks.valueToCode(block, 'VALUE', order)
   const code = `["@op", "${type}", ${value}]`
   return [code, order]
 }
@@ -311,7 +311,7 @@ Blockly.TidyBlocks['op_convert'] = (block) => {
 Blockly.TidyBlocks['op_datetime'] = (block) => {
   const type = block.getFieldValue('TYPE')
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const value = valueToCode(block, 'VALUE', order)
+  const value = blocks.valueToCode(block, 'VALUE', order)
   const code = `["@op", "datetime", "${type}", ${value}]`
   return [code, order]
 }
@@ -319,9 +319,9 @@ Blockly.TidyBlocks['op_datetime'] = (block) => {
 // Conditional
 Blockly.TidyBlocks['op_conditional'] = (block) => {
   const order = Blockly.TidyBlocks.ORDER_NONE
-  const cond = valueToCode(block, 'COND', order)
-  const left = valueToCode(block, 'LEFT', order)
-  const right = valueToCode(block, 'RIGHT', order)
+  const cond = blocks.valueToCode(block, 'COND', order)
+  const left = blocks.valueToCode(block, 'LEFT', order)
+  const right = blocks.valueToCode(block, 'RIGHT', order)
   const code = `["@op", "ifElse", ${cond}, ${left}, ${right}]`
   return [code, order]
 }

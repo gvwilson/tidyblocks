@@ -9,16 +9,10 @@ const Transform = require('../libs/transform')
 const Pipeline = require('../libs/pipeline')
 const Program = require('../libs/program')
 
-const fixture = require('./fixture')
+const blocks = require('../blocks/blocks')
+blocks.createTheme()
+blocks.createValidators()
 
-const {
-  createTheme,
-  createValidators
-} = require('../blocks/util')
-createTheme()
-createValidators()
-
-require('../blocks/codegen')
 require('../blocks/combine')
 require('../blocks/data')
 require('../blocks/op')
@@ -26,6 +20,8 @@ require('../blocks/plot')
 require('../blocks/stats')
 require('../blocks/transform')
 require('../blocks/value')
+
+const fixture = require('./fixture')
 
 const workspace = () => {
   Blockly.Events.disable() // to stop it trying to create SVG
