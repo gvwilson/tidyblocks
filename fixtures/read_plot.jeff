@@ -1,15 +1,1 @@
-[
-  "@program",
-  [
-    "@pipeline",
-    [
-      "@transform",
-      "read",
-      "colors.csv"
-    ],
-    [
-      "@transform",
-      "scatter"
-    ]
-  ]
-]
+<xml xmlns="https://developers.google.com/blockly/xml"><block type="data_colors" id="z7dZvu,5X3B^((V]3O:N" x="16" y="10"><next><block type="plot_scatter" id="r9QRL_hkZGI?zb,{6S]5"><field name="X_AXIS">red</field><field name="Y_AXIS">green</field><field name="COLOR">blue</field></block></next></block></xml>

@@ -4,11 +4,11 @@
   "description": "TidyBlocks reimagined.",
   "main": "index.js",
   "scripts": {
-    "build": "browserify index.js -s tidyblocks -t [ babelify --presets [ @babel/preset-env ] ] > tidyblocks.min.js",
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js --watch",
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "data": "data/generate.js data/*.csv",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
-    "fixtures": "fixtures/generate.js fixtures",
     "lint": "eslint index.js libs/*.js",
     "test": "mocha"
   },
@@ -24,8 +24,6 @@
   "homepage": "https://github.com/gvwilson/briq#readme",
   "dependencies": {
     "@babel/compat-data": "^7.10.4",
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
     "assert": "^2.0.0",
     "babelify": "^10.0.0",
     "blockly": "^3.20200625.2",
@@ -42,9 +40,31 @@
     "papaparse": "^5.1.1",
     "pretty": "^2.0.0",
     "random": "^2.2.0",
+    "react": "^16.13.1",
+    "react-blockly": "^5.1.1",
+    "react-data-grid": "^6.1.0",
+    "react-dom": "^16.13.1",
+    "react-split-pane": "^0.1.91",
     "simple-statistics": "^7.1.0",
     "vega": "^5.13.0",
     "vega-embed": "^6.10.0",
     "vega-lite": "^4.13.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/register": "^7.10.5",
+    "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^3.6.0",
+    "file-loader": "^6.0.0",
+    "sass": "^1.26.10",
+    "sass-loader": "^9.0.2",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12"
   }
 }
