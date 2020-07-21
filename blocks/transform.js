@@ -1,3 +1,5 @@
+'use strict'
+
 const Blockly = require('blockly/blockly_compressed')
 
 const {

@@ -4,6 +4,7 @@ const assert = require('assert')
 
 const util = require('../libs/util')
 
+// Compare a list of strings to a table of objects.
 const csvTest = (lines, expected, message) => {
   const joined = lines.join('\n')
   const actual = util.csvToTable(joined)

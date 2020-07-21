@@ -1,3 +1,5 @@
+'use strict'
+
 const random = require('random')
 
 const util = require('./util')
