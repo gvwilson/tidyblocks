@@ -11,7 +11,7 @@ const FAMILY = '@transform'
 
 /**
  * Store information about a transform in a pipeline
- * Derived classes must provide `run(runner, dataframe)`.
+ * Derived classes must provide `run(env, dataframe)`.
  */
 class TransformBase {
   /**
@@ -70,12 +70,12 @@ class TransformData extends TransformBase {
       (this.dataset === other.dataset)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     util.check(df === null,
                `Cannot provide input dataframe to reader`)
-    const dataTable = runner.getData(this.dataset)
-    return new DataFrame(dataTable)
+    const loaded = env.getData(this.dataset)
+    return new DataFrame(loaded.data, loaded.columns)
   }
 }
 
@@ -94,8 +94,8 @@ class TransformDrop extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.drop(this.columns)
   }
 }
@@ -117,8 +117,8 @@ class TransformFilter extends TransformBase {
       this.expr.equal(other.expr)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.filter(this.expr)
   }
 }
@@ -139,8 +139,8 @@ class TransformGroupBy extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.groupBy(this.columns)
   }
 }
@@ -169,12 +169,12 @@ class TransformJoin extends TransformBase {
       (this.rightCol === other.rightCol)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     util.check(df === null,
                `Cannot provide input dataframe to join`)
-    const left = runner.getResult(this.leftName)
-    const right = runner.getResult(this.rightName)
+    const left = env.getData(this.leftName)
+    const right = env.getData(this.rightName)
     return left.join(this.leftName, this.leftCol,
                      right, this.rightName, this.rightCol)
   }
@@ -202,8 +202,8 @@ class TransformMutate extends TransformBase {
       (this.expr.equal(other.expr))
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.mutate(this.newName, this.expr)
   }
 }
@@ -225,8 +225,8 @@ class TransformNotify extends TransformBase {
       (this.label === other.label)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df
   }
 }
@@ -247,8 +247,8 @@ class TransformSelect extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.select(this.columns)
   }
 }
@@ -273,8 +273,8 @@ class TransformSequence extends TransformBase {
       (this.limit === other.limit)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     const raw = Array.from(
       {length: this.limit},
       (v, k) => {
@@ -306,8 +306,8 @@ class TransformSort extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.sort(this.columns, this.reverse)
   }
 }
@@ -336,8 +336,8 @@ class TransformSummarize extends TransformBase {
       (this.column === other.column)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     const summarizer = new Summarize[this.op](this.column)
     return df.summarize(summarizer)
   }
@@ -351,8 +351,8 @@ class TransformUngroup extends TransformBase {
     super('ungroup', [], null, true, true)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.ungroup()
   }
 }
@@ -373,8 +373,8 @@ class TransformUnique extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     return df.unique(this.columns)
   }
 }
@@ -385,15 +385,18 @@ class TransformUnique extends TransformBase {
  * Store information about a plotting transform.
  */
 class TransformPlot extends TransformBase {
-  constructor (name, spec, fillin) {
+  constructor (name, label, spec, fillin) {
+    util.check(label && (typeof label === 'string'),
+               `Must provide non-empty label`)
     super(name, [], null, true, false)
+    this.label = label
     this.spec = Object.assign({}, spec, fillin, {name})
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     this.spec.data.values = df.data
-    runner.setPlot(this.spec)
+    env.setPlot(this.label, this.spec)
   }
 }
 
@@ -403,7 +406,7 @@ class TransformPlot extends TransformBase {
  * @param {string} axisY Which column to use for the Y axis.
  */
 class TransformBar extends TransformPlot {
-  constructor (axisX, axisY) {
+  constructor (label, axisX, axisY) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
@@ -416,7 +419,7 @@ class TransformBar extends TransformPlot {
         tooltip: {field: axisY, type: 'quantitative'}
       }
     }
-    super('bar', spec, {axisX, axisY})
+    super('bar', label, spec, {axisX, axisY})
   }
 }
 
@@ -426,7 +429,7 @@ class TransformBar extends TransformPlot {
  * @param {string} axisY Which column to use for the Y axis.
  */
 class TransformBox extends TransformPlot {
-  constructor (axisX, axisY) {
+  constructor (label, axisX, axisY) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
@@ -438,7 +441,7 @@ class TransformBox extends TransformPlot {
         y: {field: axisY, type: 'quantitative'}
       }
     }
-    super('box', spec, {axisX, axisY})
+    super('box', label, spec, {axisX, axisY})
   }
 }
 
@@ -447,7 +450,7 @@ class TransformBox extends TransformPlot {
  * @param {string} axisX Which column to use for the X axis.
  */
 class TransformDot extends TransformPlot {
-  constructor (axisX) {
+  constructor (label, axisX) {
     util.check(axisX && (typeof axisX === 'string'),
                `Must provide non-empty string for axis`)
     const spec = {
@@ -467,7 +470,7 @@ class TransformDot extends TransformPlot {
         }
       }
     }
-    super('dot', spec, {axisX})
+    super('dot', label, spec, {axisX})
   }
 }
 
@@ -477,7 +480,7 @@ class TransformDot extends TransformPlot {
  * @param {number} bins How many bins to use.
  */
 class TransformHistogram extends TransformPlot {
-  constructor (column, bins) {
+  constructor (label, column, bins) {
     util.check(column && (typeof column === 'string') &&
                (typeof bins === 'number') && (bins > 0),
                `Invalid parameters for histogram`)
@@ -497,7 +500,7 @@ class TransformHistogram extends TransformPlot {
         tooltip: null
       }
     }
-    super('histogram', spec, {column, bins})
+    super('histogram', label, spec, {column, bins})
   }
 }
 
@@ -508,7 +511,7 @@ class TransformHistogram extends TransformPlot {
  * @param {string} color Which column to use for color (if any).
  */
 class TransformScatter extends TransformPlot {
-  constructor (axisX, axisY, color) {
+  constructor (label, axisX, axisY, color) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
@@ -526,7 +529,7 @@ class TransformScatter extends TransformPlot {
     if (color) {
       spec.encoding.color = {field: color, type: 'nominal'}
     }
-    super('scatter', spec, {axisX, axisY, color})
+    super('scatter', label, spec, {axisX, axisY, color})
   }
 }
 
@@ -538,17 +541,18 @@ class TransformScatter extends TransformPlot {
  * @param {number} mean Mean value tested for.
  */
 class TransformTTestOneSample extends TransformBase {
-  constructor (colName, mean) {
+  constructor (label, colName, mean) {
     super('ttest_one', [], null, true, false)
+    this.label = label
     this.colName = colName
     this.mean = mean
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
-    runner.setStats(pValue)
+    env.setStats(this.label, pValue)
     return df
   }
 }
@@ -560,14 +564,15 @@ class TransformTTestOneSample extends TransformBase {
  * @param {string} valueCol The column to get the values from.
  */
 class TransformTTestPaired extends TransformBase {
-  constructor (labelCol, valueCol) {
+  constructor (label, labelCol, valueCol) {
     super('ttest_two', [], null, true, false)
+    this.label = label
     this.labelCol = labelCol
     this.valueCol = valueCol
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog(this.name)
     const known = new Set(df.data.map(row => row[this.labelCol]))
     util.check(known.size === 2,
                `Must have exactly two labels for data`)
@@ -580,7 +585,7 @@ class TransformTTestPaired extends TransformBase {
           .filter(row => (row[this.labelCol] === rightVal))
           .map(row => row[this.valueCol])
     const pValue = stats.tTestTwoSample(leftVals, rightVals, 0)
-    runner.setStats(pValue)
+    env.setStats(this.label, pValue)
     return df
   }
 }

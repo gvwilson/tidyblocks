@@ -10,15 +10,7 @@ const Pipeline = require('../libs/pipeline')
 const Program = require('../libs/program')
 
 const blocks = require('../blocks/blocks')
-blocks.createTheme()
-blocks.createValidators()
-require('../blocks/combine')
-require('../blocks/data')
-require('../blocks/op')
-require('../blocks/plot')
-require('../blocks/stats')
-require('../blocks/transform')
-require('../blocks/value')
+blocks.createBlocks()
 
 const fixture = require('./fixture')
 
@@ -468,9 +460,10 @@ describe('transform code generation', () => {
 
 describe('plot code generation', () => {
   it('persists a bar plot', (done) => {
-    const expected = [Transform.FAMILY, 'bar', 'red', 'green']
+    const expected = [Transform.FAMILY, 'bar', 'figure_1', 'red', 'green']
     const w = workspace()
     const block = w.newBlock('plot_bar')
+    block.setFieldValue('figure_1', 'NAME')
     block.setFieldValue('red', 'X_AXIS')
     block.setFieldValue('green', 'Y_AXIS')
     const actual = getCode(block)
@@ -479,9 +472,10 @@ describe('plot code generation', () => {
   })
 
   it('persists a box plot', (done) => {
-    const expected = [Transform.FAMILY, 'box', 'red', 'green']
+    const expected = [Transform.FAMILY, 'box', 'figure_1', 'red', 'green']
     const w = workspace()
     const block = w.newBlock('plot_box')
+    block.setFieldValue('figure_1', 'NAME')
     block.setFieldValue('red', 'X_AXIS')
     block.setFieldValue('green', 'Y_AXIS')
     const actual = getCode(block)
@@ -490,9 +484,10 @@ describe('plot code generation', () => {
   })
 
   it('persists a dot plot', (done) => {
-    const expected = [Transform.FAMILY, 'dot', 'red']
+    const expected = [Transform.FAMILY, 'dot', 'figure_1', 'red']
     const w = workspace()
     const block = w.newBlock('plot_dot')
+    block.setFieldValue('figure_1', 'NAME')
     block.setFieldValue('red', 'X_AXIS')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
@@ -500,9 +495,10 @@ describe('plot code generation', () => {
   })
 
   it('persists a histogram plot', (done) => {
-    const expected = [Transform.FAMILY, 'histogram', 'red', 5]
+    const expected = [Transform.FAMILY, 'histogram', 'figure_1', 'red', 5]
     const w = workspace()
     const block = w.newBlock('plot_histogram')
+    block.setFieldValue('figure_1', 'NAME')
     block.setFieldValue('red', 'COLUMN')
     block.setFieldValue(5, 'BINS')
     const actual = getCode(block)
@@ -511,9 +507,10 @@ describe('plot code generation', () => {
   })
 
   it('persists a scatter plot', (done) => {
-    const expected = [Transform.FAMILY, 'scatter', 'red', 'green', 'blue']
+    const expected = [Transform.FAMILY, 'scatter', 'figure_1', 'red', 'green', 'blue']
     const w = workspace()
     const block = w.newBlock('plot_scatter')
+    block.setFieldValue('figure_1', 'NAME')
     block.setFieldValue('red', 'X_AXIS')
     block.setFieldValue('green', 'Y_AXIS')
     block.setFieldValue('blue', 'COLOR')
@@ -525,9 +522,10 @@ describe('plot code generation', () => {
 
 describe('stats code generation', () => {
   it('creates one-sample t test from blocks', (done) => {
-    const expected = [Transform.FAMILY, 'ttest_one', 'red', 3.5]
+    const expected = [Transform.FAMILY, 'ttest_one', 'result', 'red', 3.5]
     const w = workspace()
     const block = w.newBlock('stats_ttest_one')
+    block.setFieldValue('result', 'NAME')
     block.setFieldValue('red', 'COLUMN')
     block.setFieldValue(3.5, 'MEAN')
     const actual = getCode(block)
@@ -536,9 +534,10 @@ describe('stats code generation', () => {
   })
 
   it('creates two-sample t test from blocks', (done) => {
-    const expected = [Transform.FAMILY, 'ttest_two', 'red', 'green']
+    const expected = [Transform.FAMILY, 'ttest_two', 'result', 'red', 'green']
     const w = workspace()
     const block = w.newBlock('stats_ttest_two')
+    block.setFieldValue('result', 'NAME')
     block.setFieldValue('red', 'LABEL_COLUMN')
     block.setFieldValue('green', 'VALUE_COLUMN')
     const actual = getCode(block)

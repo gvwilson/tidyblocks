@@ -11,6 +11,8 @@ const Program = require('../libs/program')
 
 const fixture = require('./fixture')
 
+const INTERFACE = new fixture.TestInterface()
+
 describe('program utilities', () => {
   it('checks program equality', (done) => {
     const first = new Program(new Pipeline(new Transform.data('some')))
@@ -26,16 +28,16 @@ describe('program utilities', () => {
 
 describe('data management', () => {
   it('saves and recovers datasets', (done) => {
-    const env = new Env()
-    env.setData('testing', fixture.COLORS)
+    const env = new Env(INTERFACE.userData)
+    env.setResult('testing', new DataFrame(fixture.COLORS))
     const restored = env.getData('testing')
-    assert.deepEqual(fixture.COLORS, restored,
+    assert.deepEqual(new DataFrame(fixture.COLORS), restored,
                      `Expected to get same data back`)
     done()
   })
 
   it('only recovers datasets that exist', (done) => {
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     assert.throws(() => env.getData('nonexistent'),
                   Error,
                   `Expected error`)
@@ -49,7 +51,7 @@ describe('executes program', () => {
     assert.throws(() => program.notify('name', new DataFrame([])),
                   Error,
                   `Should require environment when doing notification`)
-    program.env = new Env()
+    program.env = new Env(INTERFACE.userData)
     assert.throws(() => program.notify('', new DataFrame([])),
                   Error,
                   `Should require notification name`)
@@ -62,10 +64,10 @@ describe('executes program', () => {
   it('can notify when nothing is waiting', (done) => {
     const program = new Program()
     const df = new DataFrame([])
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.env = env
     program.notify('name', df)
-    assert(df.equal(env.getResult('name')),
+    assert(df.equal(env.getData('name')),
            `Should be able to get data after notifying`)
     done()
   })
@@ -124,7 +126,7 @@ describe('executes program', () => {
     assert.equal(program.waiting.size, 1,
                  `Should have one non-runnable pipeline`)
 
-    program.env = new Env()
+    program.env = new Env(INTERFACE.userData)
     program.notify('first', df)
     assert.equal(program.waiting.size, 0,
                  `Waiting set should be empty`)
@@ -137,7 +139,7 @@ describe('executes program', () => {
 
   it('makes something runnable when its last dependency resolves', (done) => {
     const program = new Program()
-    program.env = new Env()
+    program.env = new Env(INTERFACE.userData)
     const requires = ['first', 'second', 'third']
     const last = new fixture.MockTransform('last', fixture.pass, requires, null, true, true)
     const lastPipe = new Pipeline(last)
@@ -167,7 +169,7 @@ describe('executes program', () => {
 
   it('only makes some things runnable', (done) => {
     const program = new Program()
-    program.env = new Env()
+    program.env = new Env(INTERFACE.userData)
     const leftTransform = new fixture.MockTransform('left', fixture.pass, ['something'], null, true, true)
     const leftPipe = new Pipeline(leftTransform)
     const df = new DataFrame([])
@@ -197,7 +199,7 @@ describe('executes program', () => {
     const failure = new Pipeline(transform)
     program.register(failure)
 
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.run(env)
     assert.equal(env.errors.length, 1,
                  `No saved error message`)
@@ -211,7 +213,7 @@ describe('executes program', () => {
     const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL)
     program.register(pipeline)
 
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.run(env)
     assert.equal(env.results.size, 0,
                  `Nothing should be registered`)
@@ -223,9 +225,9 @@ describe('executes program', () => {
     const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     program.register(pipeline)
 
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.run(env)
-    assert(env.getResult('keyword').equal(fixture.TABLE),
+    assert(env.getData('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
     done()
   })
@@ -238,11 +240,11 @@ describe('executes program', () => {
     const pipeNotify = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     program.register(pipeNotify)
 
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.run(env)
-    assert(env.getResult('keyword').equal(fixture.TABLE),
+    assert(env.getData('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
-    assert(env.getResult('local').equal(fixture.TABLE),
+    assert(env.getData('local').equal(fixture.TABLE),
            `Missing or incorrect table`)
     done()
   })
@@ -259,11 +261,11 @@ describe('executes program', () => {
     program.register(pipeNotify)
     program.register(pipeRequireLocal)
 
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.run(env)
-    assert(env.getResult('keyword').equal(fixture.TABLE),
+    assert(env.getData('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
-    assert(env.getResult('local').equal(fixture.TABLE),
+    assert(env.getData('local').equal(fixture.TABLE),
            `Missing or incorrect table`)
     done()
   })
@@ -278,7 +280,7 @@ describe('executes program', () => {
     program.register(new Pipeline(fixture.HEAD, tailBeta))
     program.register(new Pipeline(join, fixture.TAIL_NOTIFY))
 
-    const env = new Env()
+    const env = new Env(INTERFACE.userData)
     program.run(env)
     assert.deepEqual(env.errors, [],
                      `Should not have an error message`)
@@ -288,7 +290,7 @@ describe('executes program', () => {
     data[0][DataFrame.JOINCOL] = 1
     data[1][DataFrame.JOINCOL] = 2
     const expected = new DataFrame(data)
-    assert(env.getResult('keyword').equal(expected),
+    assert(env.getData('keyword').equal(expected),
            `Missing or incorrect result from join`)
 
     done()

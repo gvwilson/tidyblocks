@@ -1,46 +1,28 @@
 'use strict'
 
 const assert = require('assert')
-const Blockly = require('blockly/blockly_compressed')
-
-const Restore = require('./libs/persist')
-const Env = require('./libs/env')
 const ReactDOM = require('react-dom');
 const React = require('react');
+
+const blocks = require('./blocks/blocks')
+const UserInterface = require('./libs/gui')
 const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 
-// Must load 'blocks/util' here so that Blockly.TidyBlocks exists before the
-// code in './blocks/*' tries to define blocks.
-const blocks = require('./blocks/blocks')
-
-// Load block files for their side effects (block definitions).
-require('./blocks/combine')
-require('./blocks/data')
-require('./blocks/op')
-require('./blocks/plot')
-require('./blocks/stats')
-require('./blocks/transform')
-require('./blocks/value')
-
 /**
- * User interface mediator.
+ * Define the actual interface (using React). This is done here so that we don't
+ * need to support React in unit testing.
  */
-class UserInterface {
+class ReactInterface extends UserInterface {
   /**
    * Build user interface object.
-   * @param divId HTML ID of 'div' element containing workspace.
+   * @param rootId HTML ID of root element.
    * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
    */
-  constructor (divId, toolboxId) {
-    // Initialize blocks support.
-    blocks.createValidators()
-
-    // Create an empty program running environment. (A new environment is
-    // created for each run of the program.)
-    this.env = null
+  constructor (rootId, toolboxId) {
+    super()
 
     // Create the Blockly settings.
-    toolbox = document.getElementById(toolboxId)
+    const toolbox = document.getElementById(toolboxId)
     assert(toolbox,
            `No toolbox found with ID ${toolboxId}`)
     const settings = this._createSettings(toolbox)
@@ -52,7 +34,7 @@ class UserInterface {
     // Render React.
     ReactDOM.render(
       <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
-      document.getElementById('root')
+      document.getElementById(rootId)
     )
   }
 
@@ -65,42 +47,15 @@ class UserInterface {
   }
 
   /**
-   * Get the JSON string representation of the workspace contents.
-   */
-  getJSON () {
-    return Blockly.TidyBlocks.workspaceToCode(this.workspace)
-  }
-
-  /**
-   * Get the object representation of the current program.
-   */
-  getProgram () {
-    const code = this.getJSON()
-    const json = JSON.parse(code)
-    const converter = new Restore()
-    return converter.program(json)
-  }
-
-  /**
-   * Run the current program, leaving state in 'this.env'.
-   */
-  runProgram () {
-    const program = this.getProgram()
-    this.env = new Env()
-    program.run(this.env)
-  }
-
-  /**
    * Create the JSON settings used to initialize the workspace.  Requires the
    * DOM element containing the block definitions.
    * @param toolboxId XML element containing toolbox spec.
    * @returns JSON settings object.
    */
   _createSettings (toolbox) {
-    const theme = blocks.createTheme()
     return {
-      toolbox,
-      theme,
+      toolbox: toolbox,
+      theme: blocks.THEME,
       zoom: {
         controls: true,
         wheel: true,
@@ -116,9 +71,11 @@ class UserInterface {
 /**
  * Set up the workspace given the ID of the elements that will contain
  * the UI and of the element that contains the block specs.
+ * @param rootId HTML ID of root element.
+ * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
  */
-const setup = (divId, toolboxId) => {
-  return new UserInterface(divId, toolboxId)
+const setup = (rootId, toolboxId) => {
+  return new ReactInterface(rootId, toolboxId)
 }
 
 module.exports = {

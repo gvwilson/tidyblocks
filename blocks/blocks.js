@@ -2,6 +2,14 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const combine = require('./combine')
+const data = require('./data')
+const op = require('./op')
+const plot = require('./plot')
+const stats = require('./stats')
+const transform = require('./transform')
+const value = require('./value')
+
 // ----------------------------------------------------------------------
 // Creating and decorating the TidyBlocks object.
 // ----------------------------------------------------------------------
@@ -42,6 +50,73 @@ Blockly.TidyBlocks.workspaceToCode = (workspace) => {
 }
 
 // ----------------------------------------------------------------------
+// Block appearance and behavior.
+// ----------------------------------------------------------------------
+
+const COMBINE_COLOR = '#404040'
+const DATA_COLOR = '#FEBE4C'
+const OP_COLOR = '#F9B5B2'
+const PLOT_COLOR = '#A4C588'
+const STATS_COLOR = '#70A0C0'
+const TRANSFORM_COLOR = '#76AADB'
+const VALUE_COLOR = '#E7553C'
+
+/**
+ * Theme for all blocks.
+ */
+const THEME = Blockly.Theme.defineTheme('tidyblocks', {
+  base: Blockly.Themes.Classic,
+  blockStyles: {
+    combine_block: {
+      colourPrimary: COMBINE_COLOR,
+      colourSecondary: '#404040',
+      colourTertiary: '#A0A0A0',
+      hat: 'cap'
+    },
+    data_block: {
+      colourPrimary: DATA_COLOR,
+      colourSecondary: '#64C7FF',
+      colourTertiary: '#9B732F',
+      hat: 'cap'
+    },
+    op_block: {
+      colourPrimary: OP_COLOR,
+      colourSecondary: '#CD5C5C',
+      colourTertiary: '#CD5C5C'
+    },
+    plot_block: {
+      colourPrimary: PLOT_COLOR,
+      colourSecondary: '#64C7FF',
+      colourTertiary: '#586B4B'
+    },
+    stats_blocks: {
+      colourPrimary: STATS_COLOR,
+      colourSecondary: '#70A0C0',
+      colourTertiary: '#C070A0'
+    },
+    transform_block: {
+      colourPrimary: TRANSFORM_COLOR,
+      colourSecondary: '#3976AD',
+      colourTertiary: '#BF9000'
+    },
+    value_block: {
+      colourPrimary: VALUE_COLOR,
+      colourSecondary: '#64C7FF',
+      colourTertiary: '#760918'
+    }
+  },
+  categoryStyles: {
+    combine: {colour: COMBINE_COLOR},
+    data: {colour: DATA_COLOR},
+    op: {colour: OP_COLOR},
+    plot: {colour: PLOT_COLOR},
+    stats: {colour: STATS_COLOR},
+    transform: {colour: TRANSFORM_COLOR},
+    value: {colour: VALUE_COLOR}
+  }
+})
+
+// ----------------------------------------------------------------------
 // Validators for block fields.
 // ----------------------------------------------------------------------
 
@@ -79,7 +154,6 @@ const MULTI_COL_FIELDS = [
  * column names.
  */
 const createValidators = () => {
-
   // Create a function to match a pattern against a column name, returning the
   // stripped string value if the pattern matches or null if the match fails.
   const _create = (columnName, pattern) => {
@@ -136,105 +210,26 @@ const createValidators = () => {
   Blockly.Extensions.register('validate_DATE', validateDate('DATE'))
 }
 
-// ----------------------------------------------------------------------
-// Block appearance.
-// ----------------------------------------------------------------------
-
 /**
- * Theme for all blocks.
+ * Actual blocks. This function should only be run once, so we guard it to make
+ * it re-callable during testing.
  */
-const createTheme = () => {
-  const combine_color = '#404040',
-        data_color = '#FEBE4C',
-        op_color = '#F9B5B2',
-        plot_color = '#A4C588',
-        stats_color = '#70A0C0',
-        transform_color = '#76AADB',
-        value_color = '#E7553C'
-
-  return Blockly.Theme.defineTheme('tidyblocks', {
-    base: Blockly.Themes.Classic,
-    blockStyles: {
-      data_block: {
-        colourPrimary: data_color,
-        colourSecondary: '#64C7FF',
-        colourTertiary: '#9B732F',
-        hat: 'cap'
-      },
-      combine_block: {
-        colourPrimary: combine_color,
-        colourSecondary: '#404040',
-        colourTertiary: '#A0A0A0',
-        hat: 'cap'
-      },
-      op_block: {
-        colourPrimary: op_color,
-        colourSecondary: '#CD5C5C',
-        colourTertiary: '#CD5C5C'
-      },
-      plot_block: {
-        colourPrimary: plot_color,
-        colourSecondary: '#64C7FF',
-        colourTertiary: '#586B4B'
-      },
-      stats_blocks: {
-        colourPrimary: stats_color,
-        colourSecondary: '#70A0C0',
-        colourTertiary: '#C070A0'
-      },
-      transform_block: {
-        colourPrimary: transform_color,
-        colourSecondary: '#3976AD',
-        colourTertiary: '#BF9000'
-      },
-      value_block: {
-        colourPrimary: value_color,
-        colourSecondary: '#64C7FF',
-        colourTertiary: '#760918'
-      }
-    },
-    categoryStyles: {
-      combine: {colour: combine_color},
-      data: {colour: data_color},
-      op: {colour: op_color},
-      plot: {colour: plot_color},
-      stats: {colour: stats_color},
-      transform: {colour: transform_color},
-      value: {colour: value_color}
-    }
-  })
-}
-
-// ----------------------------------------------------------------------
-// Utilities.
-// ----------------------------------------------------------------------
-
-/**
- * Turn a string containing comma-separated column names into an array of
- * JavaScript strings.
- */
-const formatMultipleColumnNames = (raw) => {
-  const joined = raw
-        .split(',')
-        .map(c => c.trim())
-        .filter(c => (c.length > 0))
-        .map(c => `"${c}"`)
-        .join(', ')
-  return `[${joined}]`
-}
-
-/**
- * Get the value of a sub-block as text or an 'absent' placeholder if the
- * sub-block is missing.
- */
-const valueToCode = (block, label, order) => {
-  const raw = Blockly.TidyBlocks.valueToCode(block, label, order)
-  return raw ? raw : '["@value", "absent"]'
+let createBlocksHasRun = false
+const createBlocks = () => {
+  if (!createBlocksHasRun) {
+    createBlocksHasRun = true
+    createValidators()
+    combine.setup()
+    data.setup()
+    op.setup()
+    plot.setup()
+    stats.setup()
+    transform.setup()
+    value.setup()
+  }
 }
 
 module.exports = {
-  createValidators,
-  createTheme,
-  formatMultipleColumnNames,
-  valueToCode
+  THEME,
+  createBlocks
 }

@@ -312,47 +312,46 @@ describe('transform persistence', () => {
 
 describe('plot persistence', () => {
   it('restores bar from JSON', (done) => {
-    const axisX = 'age', axisY = 'height'
+    const label = 'label', axisX = 'age', axisY = 'height'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'bar', axisX, axisY]),
-                     new Transform.bar(axisX, axisY),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'bar', label, axisX, axisY]),
+                     new Transform.bar(label, axisX, axisY),
                      `bar`)
     done()
   })
 
   it('restores box from JSON', (done) => {
-    const axisX = 'age', axisY = 'height'
+    const label = 'Figure_1', axisX = 'age', axisY = 'height'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'box', axisX, axisY]),
-                     new Transform.box(axisX, axisY),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'box', label, axisX, axisY]),
+                     new Transform.box(label, axisX, axisY),
                      `box`)
     done()
   })
 
   it('restores dot from JSON', (done) => {
-    const axisX = 'age'
+    const label = 'MyFigure', axisX = 'age'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'dot', axisX]),
-                     new Transform.dot(axisX),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'dot', label, axisX]),
+                     new Transform.dot(label, axisX),
                      `dot`)
     done()
   })
 
   it('restores histogram from JSON', (done) => {
-    const column = 'age'
-    const bins = 17
+    const label = 'figure', column = 'age', bins = 17
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'histogram', column, bins]),
-                     new Transform.histogram(column, bins),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'histogram', label, column, bins]),
+                     new Transform.histogram(label, column, bins),
                      `histogram`)
     done()
   })
 
   it('restores scatter from JSON', (done) => {
-    const axisX = 'age', axisY = 'height', color = 'vermilion'
+    const label = 'final', axisX = 'age', axisY = 'height', color = 'vermilion'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'scatter', axisX, axisY, color]),
-                     new Transform.scatter(axisX, axisY, color),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'scatter', label, axisX, axisY, color]),
+                     new Transform.scatter(label, axisX, axisY, color),
                      `scatter`)
     done()
   })

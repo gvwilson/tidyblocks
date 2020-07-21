@@ -9,25 +9,23 @@ const Transform = require('../libs/transform')
 const Env = require('../libs/env')
 
 const fixture = require('./fixture')
+const INTERFACE = new fixture.TestInterface()
 
 describe('build dataframe operations', () => {
   it('builds data loading transform', (done) => {
-    for (let name of ['colors', 'earthquakes', 'penguins']) {
-      const raw = require(`../data/${name}`)
-      const expected = new DataFrame(raw)
-      const runner = new Env()
-      const transform = new Transform.data(name)
-      const actual = transform.run(runner, null)
-      assert(actual.equal(expected),
-             `Mis-match in dataframes`)
-    }
+    const expected = INTERFACE.userData.get('colors')
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.data('colors')
+    const actual = transform.run(env, null)
+    assert(actual.equal(expected),
+           `Mis-match in dataframes`)
     done()
   })
 
   it('builds drop columns transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.drop(['personal'])
-    const result = transform.run(runner, new DataFrame(fixture.NAMES))
+    const result = transform.run(env, new DataFrame(fixture.NAMES))
     const expected = fixture.NAMES.map(row => ({family: row.family}))
     assert(result.equal(new DataFrame(expected)),
            `Expected one column of data`)
@@ -35,10 +33,10 @@ describe('build dataframe operations', () => {
   })
 
   it('builds filter transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const expr = new Value.column('right')
     const transform = new Transform.filter(expr)
-    const result = transform.run(runner, new DataFrame(fixture.BOOL))
+    const result = transform.run(env, new DataFrame(fixture.BOOL))
     const expected = fixture.BOOL.filter(row => (row.right === true))
     assert(expected.length < fixture.BOOL.length, `No filtering?`)
     assert(result.equal(new DataFrame(expected)),
@@ -47,9 +45,9 @@ describe('build dataframe operations', () => {
   })
 
   it('builds group data transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.groupBy(['left'])
-    const result = transform.run(runner, new DataFrame(fixture.NUMBER))
+    const result = transform.run(env, new DataFrame(fixture.NUMBER))
     const groups = new Set(result.data.map(row => row[DataFrame.GROUPCOL]))
     assert.deepEqual(groups, new Set([1, 2, 3, 4]),
                      `Wrong number of groups`)
@@ -59,11 +57,11 @@ describe('build dataframe operations', () => {
   it('builds join transform', (done) => {
     const leftData = new DataFrame([{leftName: 7, value: 'leftVal'}])
     const rightData = new DataFrame([{rightName: 7, value: 'rightVal'}])
-    const runner = new Env()
-    runner.setResult('leftTable', leftData)
-    runner.setResult('rightTable', rightData)
+    const env = new Env(INTERFACE.userData)
+    env.setResult('leftTable', leftData)
+    env.setResult('rightTable', rightData)
     const transform = new Transform.join('leftTable', 'leftName', 'rightTable', 'rightName')
-    const result = transform.run(runner, null)
+    const result = transform.run(env, null)
     const row = {leftTable_value: 'leftVal', rightTable_value: 'rightVal'}
     row[DataFrame.JOINCOL] = 7
     assert(result.equal(new DataFrame([row])),
@@ -72,10 +70,10 @@ describe('build dataframe operations', () => {
   })
 
   it('builds mutate transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const mutater = new Value.text('stuff')
     const transform = new Transform.mutate('value', mutater)
-    const result = transform.run(runner, new DataFrame(fixture.NAMES))
+    const result = transform.run(env, new DataFrame(fixture.NAMES))
     assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),
                      `Wrong columns in result`)
     assert(result.data.every(row => (row.value === 'stuff')),
@@ -84,10 +82,10 @@ describe('build dataframe operations', () => {
   })
 
   it('builds notify transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.notify('answer')
     const input = new DataFrame(fixture.NAMES)
-    const result = transform.run(runner, input)
+    const result = transform.run(env, input)
     assert(result.equal(new DataFrame(fixture.NAMES)),
            `Should not modify data`)
     assert.equal(transform.produces, 'answer',
@@ -96,9 +94,9 @@ describe('build dataframe operations', () => {
   })
 
   it('builds read data transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.data('colors')
-    const result = transform.run(runner, null)
+    const result = transform.run(env, null)
     assert(result instanceof DataFrame,
            `Expected dataframe`)
     const direct = new DataFrame(fixture.COLORS)
@@ -108,9 +106,9 @@ describe('build dataframe operations', () => {
   })
 
   it('builds select transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.select(['personal'])
-    const result = transform.run(runner, new DataFrame(fixture.NAMES))
+    const result = transform.run(env, new DataFrame(fixture.NAMES))
     const expected = fixture.NAMES.map(row => ({personal: row.personal}))
     assert(result.equal(new DataFrame(expected)),
            `Expected one column of data`)
@@ -119,9 +117,9 @@ describe('build dataframe operations', () => {
 
   it('builds sequence transform', (done) => {
     const length = 3
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.sequence('nums', length)
-    const result = transform.run(runner, null)
+    const result = transform.run(env, null)
     const expected = Array.from({length}, (v, k) => ({nums: k+1}))
     assert(result.equal(new DataFrame(expected)),
            `Did not get expected result`)
@@ -129,9 +127,9 @@ describe('build dataframe operations', () => {
   })
 
   it('builds sort transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.sort(['left'], true)
-    const result = transform.run(runner, new DataFrame(fixture.STRING))
+    const result = transform.run(env, new DataFrame(fixture.STRING))
     const actual = result.data.map(row => row.left)
     const expected = ['pqr', 'def', 'abc', 'abc', 'abc', util.MISSING, util.MISSING]
     assert.deepEqual(actual, expected,
@@ -141,9 +139,9 @@ describe('build dataframe operations', () => {
 
   it('builds summarize transform', (done) => {
     const df = new DataFrame([{left: 3}])
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.summarize('maximum', 'left')
-    const result = transform.run(runner, df)
+    const result = transform.run(env, df)
     assert.deepEqual(result.data,
                      [{left: 3, left_maximum: 3}],
                      `Incorrect summary`)
@@ -151,21 +149,21 @@ describe('build dataframe operations', () => {
   })
 
   it('build ungroup transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.ungroup()
     const input = [{a: 1}, {a: 2}]
     input.forEach(row => {row[DataFrame.GROUPCOL] = 1})
-    const result = transform.run(runner, new DataFrame(input))
+    const result = transform.run(env, new DataFrame(input))
     assert(result.data.every(row => !(DataFrame.GROUPCOL in row)),
            `Expected grouping column to be removed`)
     done()
   })
 
   it('builds unique values transform', (done) => {
-    const runner = new Env()
+    const env = new Env(INTERFACE.userData)
     const transform = new Transform.unique(['a'])
     const input = [{a: 1}, {a: 1}, {a: 2}, {a: 1}]
-    const result = transform.run(runner, new DataFrame(input))
+    const result = transform.run(env, new DataFrame(input))
     assert(result.equal(new DataFrame([{a: 1}, {a: 2}])),
            `Wrong result`)
     done()
@@ -174,95 +172,101 @@ describe('build dataframe operations', () => {
 
 describe('build plots', () => {
   it('creates a bar plot', (done) => {
-    const runner = new Env()
-    const transform = new Transform.bar('red', 'green')
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
-    assert.equal(runner.plot.mark, 'bar',
-                 `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.bar('figure_1', 'red', 'green')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.mark, 'bar',
+                 `Wrong type of plot ${plot.mark}`)
+    assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'red',
+    assert.equal(plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'green',
+    assert.equal(plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
     done()
   })
 
   it('creates a box plot', (done) => {
-    const runner = new Env()
-    const transform = new Transform.box('red', 'green')
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
-    assert.equal(runner.plot.mark.type, 'boxplot',
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.box('figure_1', 'red', 'green')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.mark.type, 'boxplot',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
+    assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'red',
+    assert.equal(plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'green',
+    assert.equal(plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
     done()
   })
 
   it('creates a dot plot', (done) => {
-    const runner = new Env()
-    const transform = new Transform.dot('red')
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
-    assert.equal(runner.plot.mark.type, 'circle',
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.dot('figure_1', 'red')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.mark.type, 'circle',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
+    assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'red',
+    assert.equal(plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.deepEqual(runner.plot.transform[0].groupby, ['red'],
+    assert.deepEqual(plot.transform[0].groupby, ['red'],
                      `Wrong transform`)
     done()
   })
 
   it('creates a histogram', (done) => {
-    const runner = new Env()
-    const transform = new Transform.histogram('red', 7)
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
-    assert.equal(runner.plot.mark, 'bar',
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.histogram('figure_1', 'red', 7)
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.mark, 'bar',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
+    assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'red',
+    assert.equal(plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.x.bin.maxbins, 7,
+    assert.equal(plot.encoding.x.bin.maxbins, 7,
                  `Wrong number of bins`)
     done()
   })
 
   it('creates a scatter plot without a color', (done) => {
-    const runner = new Env()
-    const transform = new Transform.scatter('red', 'green', null)
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
-    assert.equal(runner.plot.mark, 'point',
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.scatter('figure_1', 'red', 'green', null)
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.mark, 'point',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
+    assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'red',
+    assert.equal(plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'green',
+    assert.equal(plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
-    assert(!('color' in runner.plot.encoding),
+    assert(!('color' in plot.encoding),
            `Should not have color`)
     done()
   })
 
   it('creates a scatter plot with a color', (done) => {
-    const runner = new Env()
-    const transform = new Transform.scatter('red', 'green', 'blue')
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
-    assert.equal(runner.plot.mark, 'point',
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.scatter('figure_1', 'red', 'green', 'blue')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.mark, 'point',
                  `Wrong type of plot`)
-    assert.deepEqual(runner.plot.data.values, fixture.COLORS,
+    assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(runner.plot.encoding.x.field, 'red',
+    assert.equal(plot.encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(runner.plot.encoding.y.field, 'green',
+    assert.equal(plot.encoding.y.field, 'green',
                  `Wrong Y axis`)
-    assert.equal(runner.plot.encoding.color.field, 'blue',
+    assert.equal(plot.encoding.color.field, 'blue',
                  `Wrong color`)
     done()
   })
@@ -306,9 +310,10 @@ describe('build plots', () => {
 
 describe('build statistics', () => {
   it('runs one-sided two-sample t-test', (done) => {
-    const runner = new Env()
-    const transform = new Transform.ttest_one('blue', 0.0)
-    const result = transform.run(runner, new DataFrame(fixture.COLORS))
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.ttest_one('result', 'blue', 0.0)
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const stats = env.getStats('result')
     done()
   })
 
@@ -320,9 +325,10 @@ describe('build statistics', () => {
       {left: 'b', right: 2},
       {left: 'b', right: 3}
     ]
-    const runner = new Env()
-    const transform = new Transform.ttest_two('left', 'right')
-    const result = transform.run(runner, new DataFrame(paired))
+    const env = new Env(INTERFACE.userData)
+    const transform = new Transform.ttest_two('result', 'left', 'right')
+    const result = transform.run(env, new DataFrame(paired))
+    const stats = env.getStats('result')
     done()
   })
 })

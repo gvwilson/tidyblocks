@@ -1,10 +1,12 @@
 'use strict'
 
 const fs = require('fs')
+const Blockly = require('blockly/blockly_compressed')
 
 const util = require('../libs/util')
 const Transform = require('../libs/transform')
 const DataFrame = require('../libs/dataframe')
+const UserInterface = require('../libs/gui')
 
 /**
  * Testing replacement for a transform (easier constructor).
@@ -17,6 +19,17 @@ class MockTransform extends Transform.base {
   run = (runner, df) => {
     runner.appendLog(this.name)
     return this.func(runner, df)
+  }
+}
+
+/**
+ * User interface for testing purposes.
+ */
+class TestInterface extends UserInterface {
+  constructor () {
+    super()
+    Blockly.Events.disable() // to stop it trying to create SVG
+    this.workspace = new Blockly.Workspace({})
   }
 }
 
@@ -86,5 +99,6 @@ module.exports = {
   MIDDLE: new MockTransform('middle', pass, [], null, true, true),
   TAIL: new MockTransform('tail', pass, [], null, true, false),
   TAIL_NOTIFY: new MockTransform('tailNotify', pass, [], 'keyword', true, false),
-  pass
+  pass,
+  TestInterface
 }
