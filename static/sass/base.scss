@@ -1,5 +1,8 @@
+@import 'menu';
+
+// Pane styling.
 .splitPaneWrapper{
-    height: 90% !important;
+  height: 90% !important;
 }
 
 .topRightPane{
@@ -12,6 +15,14 @@
   width: 100%;
   height: 100%;
   background: lightpink;
+}
+
+// React Data Grid Styling.
+.react-grid-Cell {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
 }
 
 .Resizer {

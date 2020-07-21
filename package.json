@@ -24,6 +24,9 @@
   "homepage": "https://github.com/gvwilson/briq#readme",
   "dependencies": {
     "@babel/compat-data": "^7.10.4",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/styles": "^4.10.0",
     "assert": "^2.0.0",
     "babelify": "^10.0.0",
     "blockly": "^3.20200625.2",
