@@ -1,3 +1,5 @@
+'use strict'
+
 const Blockly = require('blockly/blockly_compressed')
 
 Blockly.defineBlocksWithJsonArray([
@@ -95,7 +97,7 @@ Blockly.defineBlocksWithJsonArray([
   // Scatter plot
   {
     type: 'plot_scatter',
-    message0: 'Point %1 %2 %3',
+    message0: 'Scatter %1 %2 %3',
     args0: [
       {
         type: 'field_input',

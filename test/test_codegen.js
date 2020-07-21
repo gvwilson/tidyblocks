@@ -12,7 +12,6 @@ const Program = require('../libs/program')
 const blocks = require('../blocks/blocks')
 blocks.createTheme()
 blocks.createValidators()
-
 require('../blocks/combine')
 require('../blocks/data')
 require('../blocks/op')

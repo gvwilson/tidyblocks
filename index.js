@@ -5,6 +5,9 @@ const Blockly = require('blockly/blockly_compressed')
 
 const Restore = require('./libs/persist')
 const Env = require('./libs/env')
+const ReactDOM = require('react-dom');
+const React = require('react');
+const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 
 // Must load 'blocks/util' here so that Blockly.TidyBlocks exists before the
 // code in './blocks/*' tries to define blocks.
@@ -29,18 +32,42 @@ class UserInterface {
    * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
    */
   constructor (divId, toolboxId) {
+    // Initialize blocks support.
     blocks.createValidators()
-    const settings = this._createSettings(toolboxId)
-    this.workspace = Blockly.inject(divId, settings)
+
+    // Create an empty program running environment. (A new environment is
+    // created for each run of the program.)
     this.env = null
+
+    // Create the Blockly settings.
+    toolbox = document.getElementById(toolboxId)
+    assert(toolbox,
+           `No toolbox found with ID ${toolboxId}`)
+    const settings = this._createSettings(toolbox)
+
+    // Get a string of the toolbox XML, this'll get parsed within the React app.
+    const serializer = new XMLSerializer()
+    const toolboxString = serializer.serializeToString(toolbox)
+
+    // Render React.
+    ReactDOM.render(
+      <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
+      document.getElementById('root')
+    )
+  }
+
+  /**
+   * Get the XML representation of the workspace contents.
+   */
+  getXML () {
+    const xml = Blockly.Xml.workspaceToDom(this.workspace)
+    return Blockly.Xml.domToText(xml)
   }
 
   /**
    * Get the JSON string representation of the workspace contents.
    */
-  getCode () {
-    assert(this.workspace,
-           `Workspace has not been initialized`)
+  getJSON () {
     return Blockly.TidyBlocks.workspaceToCode(this.workspace)
   }
 
@@ -48,7 +75,7 @@ class UserInterface {
    * Get the object representation of the current program.
    */
   getProgram () {
-    const code = this.getCode()
+    const code = this.getJSON()
     const json = JSON.parse(code)
     const converter = new Restore()
     return converter.program(json)
@@ -66,13 +93,10 @@ class UserInterface {
   /**
    * Create the JSON settings used to initialize the workspace.  Requires the
    * DOM element containing the block definitions.
-   * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
+   * @param toolboxId XML element containing toolbox spec.
    * @returns JSON settings object.
    */
-  _createSettings (toolboxId) {
-    toolbox = document.getElementById(toolboxId)
-    assert(toolbox,
-           `No toolbox found with ID ${toolboxId}`)
+  _createSettings (toolbox) {
     const theme = blocks.createTheme()
     return {
       toolbox,
