@@ -32,10 +32,13 @@ class ReactInterface extends UserInterface {
     const toolboxString = serializer.serializeToString(toolbox)
 
     // Render React.
-    ReactDOM.render(
+    const tidyBlocksApp = ReactDOM.render(
       <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
       document.getElementById(rootId)
     )
+
+    // The workspace.
+    const workspace = tidyBlocksApp.getWorkspace()
   }
 
   /**
