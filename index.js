@@ -40,7 +40,7 @@ class UserInterface {
     this.env = null
 
     // Create the Blockly settings.
-    toolbox = document.getElementById(toolboxId)
+    const toolbox = document.getElementById(toolboxId)
     assert(toolbox,
            `No toolbox found with ID ${toolboxId}`)
     const settings = this._createSettings(toolbox)
@@ -50,10 +50,13 @@ class UserInterface {
     const toolboxString = serializer.serializeToString(toolbox)
 
     // Render React.
-    ReactDOM.render(
+    const tidyBlocksApp = ReactDOM.render(
       <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
       document.getElementById('root')
     )
+
+    // The workspace.
+    const workspace = tidyBlocksApp.getWorkspace()
   }
 
   /**

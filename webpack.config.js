@@ -7,7 +7,10 @@ module.exports = {
     rules: [
       {
         test: /\.m?(js|jsx)/,
-        exclude: /(node_modules|bower_components)/,
+
+        // react-data-grid uses ES2020, given current babel-loaders, this is
+        // the recommended way to include it. 
+        exclude: /node_modules[/\\](?!react-data-grid[/\\]lib)/,
         use: {
           loader: 'babel-loader',
           options: {

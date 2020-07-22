@@ -1,23 +1,96 @@
+@import 'menu';
+@import '../css/react-data-grid';
+
+body{
+  margin: 0px;
+}
+
+.sectionTitle{
+  font-size: 24px;
+  text-align: center;
+}
+
+.MuiDrawer-paper{
+  width: 400px;
+}
+// Pane styling.
 .splitPaneWrapper{
-    height: 90% !important;
+  margin-top: 7px;
+  height: 90% !important;
 }
 
 .topRightPane{
   width: 100%;
   height: 100%;
-  background: lightblue;
+  background: #fff;
 }
 
 .bottomRightPane{
   width: 100%;
   height: 100%;
-  background: lightpink;
+  background: #fff;
+  z-index: 3;
+}
+
+// Plot Styling.
+#plotOutput{
+  display: block;
+  margin-top: 30px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.plotWrapper{
+  margin: 15px;
+}
+
+.dataWrapper{
+  margin: 10px;
+}
+
+.relativeWrapper {
+  position: relative;
+}
+.absoluteWrapper {
+  position: absolute;
+  width: 100%;
+}
+
+.sourceSelect{
+  padding: 8px;
+  font-size: 18px;
+  font-family: "Roboto";
+  font-weight: 500;
+}
+
+.sourceSelectInner__control{
+  padding: 10px;
+}
+
+.react-grid-Container{
+  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Roboto";
+  font-weight: 300;
+}
+
+.react-grid-Cell {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+[data-type="Resizer"] {
+  z-index: 4 !important;
 }
 
 .Resizer {
   background: #000;
   opacity: 0.2;
-  z-index: 1;
+  z-index: 4;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
