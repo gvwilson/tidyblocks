@@ -14,8 +14,6 @@ import SaveIcon from '@material-ui/icons/Save'
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import PublishIcon from '@material-ui/icons/Publish'
 import TableChartIcon from '@material-ui/icons/TableChart'
-
-// Drawer imports.
 import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import Divider from '@material-ui/core/Divider'
@@ -87,7 +85,7 @@ const useStyles = makeStyles(() =>
   }),
 );
 
-// Top level menu bar for the page.
+// Defines the top level menu bar for the page.
 export function MenuBar() {
   const classes = useStyles();
   const theme = useTheme();
@@ -111,10 +109,10 @@ export function MenuBar() {
 
   function handleDrawerToggle() {
       setMobileOpen(!mobileOpen)
-    }
+  }
 
   return (
-    <>
+    <React.Fragment>
       <AppBar position="fixed">
         <Toolbar>
           <IconButton edge="start" onClick={handleDrawerToggle}
@@ -127,13 +125,11 @@ export function MenuBar() {
           <TidyBlocksMenuItem name="Run" icon={<PlayArrowIcon className="menuIcon" fontSize="large"/>}/>
           <TidyBlocksMenuItem name="Load Workspace" icon={<PublishIcon className="menuIcon" fontSize="large"/>}/>
           <TidyBlocksMenuItem name="Load CSV" icon={<TableChartIcon className="menuIcon" fontSize="large"/>}/>
-
           <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>} icon={<SaveIcon className="menuIcon" fontSize="large"/>}/>
         </Toolbar>
       </AppBar>
       <Toolbar />
       <nav className={classes.drawer}>
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
             variant="temporary"
@@ -144,7 +140,7 @@ export function MenuBar() {
               paper: classes.drawerPaper,
             }}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             }}
           >
             <IconButton onClick={handleDrawerToggle} className={classes.closeMenuButton}>
@@ -154,6 +150,6 @@ export function MenuBar() {
           </Drawer>
         </Hidden>
       </nav>
-    </>
+    </React.Fragment>
   );
 }
