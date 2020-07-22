@@ -3,6 +3,7 @@
 const assert = require('assert')
 const ReactDOM = require('react-dom');
 const React = require('react');
+const Blockly = require('blockly/blockly_compressed')
 
 const blocks = require('./blocks/blocks')
 const UserInterface = require('./libs/gui')
@@ -31,14 +32,14 @@ class ReactInterface extends UserInterface {
     const serializer = new XMLSerializer()
     const toolboxString = serializer.serializeToString(toolbox)
 
-    // Render React.
-    const tidyBlocksApp = ReactDOM.render(
+    // Render React, saving the React app.
+    this.app = ReactDOM.render(
       <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
       document.getElementById(rootId)
     )
 
     // The workspace.
-    const workspace = tidyBlocksApp.getWorkspace()
+    this.workspace = this.app.getWorkspace().state.workspace
   }
 
   /**

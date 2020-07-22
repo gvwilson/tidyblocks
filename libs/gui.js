@@ -1,6 +1,5 @@
 'use strict'
 
-const assert = require('assert')
 const Blockly = require('blockly/blockly_compressed')
 
 const DataFrame = require('./dataframe')
@@ -24,14 +23,17 @@ class UserInterface {
     // Initialize blocks support.
     blocks.createBlocks()
 
-    // Create an empty program running environment. (A new environment is
-    // created for each run of the program.)
-    this.env = null
-
     // Create storage for datasets loaded by the user. These are stored between
     // program runs.
     this.userData = new Map()
     this._loadDefaultDatasets()
+
+    // Create an empty workspace. Derived classes must fill this in.
+    this.workspace = null
+    
+    // Create an empty program running environment. (A new environment is
+    // created for each run of the program.)
+    this.env = null
   }
 
   /**
@@ -56,7 +58,7 @@ class UserInterface {
    */
   runProgram () {
     const program = this.getProgram()
-    this.env = new Env(this)
+    this.env = new Env(this.userData)
     program.run(this.env)
   }
 

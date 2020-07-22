@@ -10,6 +10,7 @@ const DataFrame = require('./dataframe')
 class Env {
   /**
    * Construct a new runtime environment.
+   * @param userData Map of datasets loaded by the user.
    */
   constructor (userData) {
     this.userData = userData
