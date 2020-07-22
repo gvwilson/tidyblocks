@@ -178,7 +178,6 @@ const TidyBlocksStatsTable = React.forwardRef((props, forwardedRef) => {
       if (this.props.tableHeight){
         tableHeight = this.props.tableHeight
       }
-      console.log(tableHeight)
       return (
         <DataGrid
           ref={forwardedRef}
@@ -190,7 +189,7 @@ const TidyBlocksStatsTable = React.forwardRef((props, forwardedRef) => {
           onGridSort={(sortColumn, sortDirection) =>
             this.sortRows(this.state.rows, sortColumn, sortDirection)
           }/>
-      );
+      )
     }
   }
   return (<TidyBlocksStatsTable tableHeight={props.tableHeight} />)

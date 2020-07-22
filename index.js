@@ -50,10 +50,13 @@ class UserInterface {
     const toolboxString = serializer.serializeToString(toolbox)
 
     // Render React.
-    ReactDOM.render(
+    const tidyBlocksApp = ReactDOM.render(
       <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
       document.getElementById('root')
     )
+
+    // The workspace.
+    const workspace = tidyBlocksApp.getWorkspace()
   }
 
   /**
