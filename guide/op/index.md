@@ -1,6 +1,23 @@
 ---
 permalink: /guide/op/
 title: "Operations"
+headings:
+- id: arithmetic
+  text: Arithmetic
+- id: arithmetic-negation
+  text: Arithmetic Negation
+- id: logical-operations
+  text: Logical Operations
+- id: logical-negation
+  text: Logical Negation
+- id: type-checking
+  text: Type Checking
+- id: type-conversion
+  text: Type Conversion
+- id: datetime-operations
+  text: Datetime Operations
+- id: conditional
+  text: Conditional
 ---
 
 ## Arithmetic

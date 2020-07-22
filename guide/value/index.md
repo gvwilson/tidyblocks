@@ -1,6 +1,25 @@
 ---
 permalink: /guide/value/
 title: "Values"
+headings:
+- id: column
+  text: Column
+- id: datetime
+  text: Datetime
+- id: logical
+  text: Logical
+- id: number
+  text: Number
+- id: text
+  text: Text
+- id: row-number
+  text: Row Number
+- id: exponential-random-value
+  text: Exponential Random Value
+- id: normal-random-variable
+  text: Normal Random Variable
+- id: uniform-random-variable
+  text: Uniform Random Variable
 ---
 
 ## Column

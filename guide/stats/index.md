@@ -1,6 +1,11 @@
 ---
 permalink: /guide/stats/
 title: "Statistics"
+headings:
+- id: one-sample-t-test
+  text: One-sample T Test
+- id: two-sample-t-test
+  text: Two-sample T Test
 ---
 
 ## One-sample T Test

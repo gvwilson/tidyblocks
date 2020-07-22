@@ -1,6 +1,17 @@
 ---
 permalink: /guide/plot/
 title: "Plots"
+headings:
+- id: bar
+  text: Bar
+- id: box
+  text: Box
+- id: dot
+  text: Dot
+- id: histogram
+  text: Histogram
+- id: scatter
+  text: Scatter
 ---
 
 ## Bar

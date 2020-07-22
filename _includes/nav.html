@@ -18,6 +18,15 @@
     <br/>
     - <a href="{{'/guide/combine' | relative_url}}">Combining</a>
   </p>
+  {% if page.headings %}
+  <hr/>
+  <p>
+  {% for heading in page.headings %}
+    - <a href="#{{heading.id}}">{{heading.text}}</a>
+    {% unless forloop.last %}<br/>{% endunless %}
+  {% endfor %}
+  </p>
+  {% endif %}
   <hr/>
   <p>
     <a href="{{ '/license/' | relative_url }}">License</a>

@@ -1,6 +1,25 @@
 ---
 permalink: /guide/transform/
 title: "Transforms"
+headings:
+- id: drop
+  text: Drop
+- id: filter
+  text: Filter
+- id: group-by
+  text: Group By
+- id: mutate
+  text: Mutate
+- id: select
+  text: Select
+- id: sort
+  text: Sort
+- id: summarize
+  text: Summarize
+- id: ungroup
+  text: Ungroup
+- id: unique
+  text: Unique
 ---
 
 ## Drop

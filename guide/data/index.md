@@ -1,6 +1,17 @@
 ---
 permalink: /guide/data/
 title: "Data"
+headings:
+- id: colors
+  text: Colors
+- id: earthquakes
+  text: Earthquakes
+- id: penguins
+  text: Penguins
+- id: sequence
+  text: Sequence
+- id: user-data
+  text: User Data
 ---
 
 ## Colors

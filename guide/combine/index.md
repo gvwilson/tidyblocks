@@ -1,6 +1,13 @@
 ---
 permalink: /guide/combine/
 title: "Combining"
+headings:
+- id: join
+  text: Join
+- id: glue
+  text: Glue
+- id: notify
+  text: Notify
 ---
 
 ## Join
