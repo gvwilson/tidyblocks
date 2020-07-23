@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
+import PropTypes from 'prop-types';
 import SplitPane from 'react-split-pane/lib/SplitPane'
 import Pane from 'react-split-pane/lib/Pane'
 import Resizer, { RESIZER_DEFAULT_CLASSNAME } from 'react-split-pane'
@@ -11,189 +12,69 @@ import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
 import {MenuBar} from './menuBar.jsx'
 import Select from 'react-select'
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PhoneIcon from '@material-ui/icons/Phone';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import HelpIcon from '@material-ui/icons/Help';
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
+import ThumbDown from '@material-ui/icons/ThumbDown';
+import ThumbUp from '@material-ui/icons/ThumbUp';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { withStyles } from '@material-ui/core/styles'
 
-// Temporary dummy options for selecting a dataset
-const data_options = [
-  { value: 'chocolate', label: 'Earthquake.csv' },
-  { value: 'strawberry', label: 'Something Else' },
-  { value: 'vanilla', label: 'And Another Thingy' }
-]
-
-const DataTabSelect = () => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner" options={data_options}
-    defaultValue={ data_options[0] }
+const DataTabSelect = ({options, onChange, value}) => (
+  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
+    options={options}
+    value={value}
+    onChange={(e) => onChange(e)}
   />
 )
 
-// Temporary dummy options for selecting a plot
-const plot_options = [
-  { value: 'chocolate', label: 'colours.csv' },
-  { value: 'strawberry', label: 'Something Else' },
-  { value: 'vanilla', label: 'And Another Thingy' }
-]
-
-const PlotTabSelect = () => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner" options={plot_options}
-    defaultValue={ plot_options[0] }
+const PlotTabSelect = ({options, onChange, value}) => (
+  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
+    options={options}
+    value={value}
+    onChange={(e) => onChange(e)}
   />
 )
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-// Temporary test data.
-import earthquakeData from '../../data/earthquakes.js'
-const boxPlotJson = {
-  "data": {
-    "values": [
-      {
-        "name": "black",
-        "red": 0,
-        "green": 0,
-        "blue": 0
-      },
-      {
-        "name": "red",
-        "red": 255,
-        "green": 0,
-        "blue": 0
-      },
-      {
-        "name": "maroon",
-        "red": 128,
-        "green": 0,
-        "blue": 0
-      },
-      {
-        "name": "lime",
-        "red": 0,
-        "green": 255,
-        "blue": 0
-      },
-      {
-        "name": "green",
-        "red": 0,
-        "green": 128,
-        "blue": 0
-      },
-      {
-        "name": "blue",
-        "red": 0,
-        "green": 0,
-        "blue": 255
-      },
-      {
-        "name": "navy",
-        "red": 0,
-        "green": 0,
-        "blue": 128
-      },
-      {
-        "name": "yellow",
-        "red": 255,
-        "green": 255,
-        "blue": 0
-      },
-      {
-        "name": "fuchsia",
-        "red": 255,
-        "green": 0,
-        "blue": 255
-      },
-      {
-        "name": "aqua",
-        "red": 0,
-        "green": 255,
-        "blue": 255
-      },
-      {
-        "name": "white",
-        "red": 255,
-        "green": 255,
-        "blue": 255
-      }
-    ]
-  },
-  "mark": {
-    "type": "boxplot",
-    "extent": 1.5
-  },
-  "encoding": {
-    "x": {
-      "field": "red",
-      "type": "ordinal"
-    },
-    "y": {
-      "field": "green",
-      "type": "quantitative"
-    }
-  },
-  "axisX": "red",
-  "axisY": "green",
-  "name": "box"
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-force-tabpanel-${index}`}
+      aria-labelledby={`scrollable-force-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography component={"div"}>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
 }
 
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
 
-// Temporary test data for ReactDataGrid.
-const columns = [{ key: 'Time', name: 'Time', sortable: true, resizable: true},
-  { key: 'Latitude', name: 'Latitude', sortable: true, resizable: true },
-  { key: 'Longitude', name: 'Longitude', sortable: true, resizable: true },
-  { key: 'Depth_Km', name: 'Depth_Km', sortable: true, resizable: true },
-  { key: 'Magnitude', name: 'Magnitude', sortable: true, resizable: true }
-];
-const initialRows = earthquakeData
-
-// Size of standard plotting areas.
-const FULL_PLOT_SIZE = {width: 500, height: 300}
-const STATS_PLOT_SIZE = {width: 300, height: 150}
-
-const TidyBlocksStatsTable = React.forwardRef((props, forwardedRef) => {
-  class TidyBlocksStatsTable extends React.Component{
-
-    constructor(props){
-      super(props);
-      this.state = {
-        rows: initialRows,
-      }
-      this.sortRows = this.sortRows.bind(this)
-    }
-
-    // Sorts the rows of the table when the column headings are clicked.
-    sortRows(initialRows, sortColumn, sortDirection){
-      const comparer = (a, b) => {
-        if (sortDirection === "ASC") {
-          return a[sortColumn] > b[sortColumn] ? 1 : -1;
-        } else if (sortDirection === "DESC") {
-          return a[sortColumn] < b[sortColumn] ? 1 : -1;
-        }
-      };
-      if (sortDirection === "NONE"){
-        this.setState({rows: initialRows});
-      } else{
-        this.setState({rows: [...this.state.rows].sort(comparer)});
-      }
-    }
-
-    render(){
-      const rowGetter = rowNumber => this.state.rows[rowNumber]
-      let tableHeight = '200px'
-      if (this.props.tableHeight){
-        tableHeight = this.props.tableHeight
-      }
-      return (
-        <DataGrid
-          ref={forwardedRef}
-          columns={columns}
-          rowGetter={rowNumber => this.state.rows[rowNumber]}
-          rowsCount={this.state.rows.length}
-          enableCellAutoFocus={false}
-          minHeight={tableHeight}
-          onGridSort={(sortColumn, sortDirection) =>
-            this.sortRows(this.state.rows, sortColumn, sortDirection)
-          }/>
-      )
-    }
-  }
-  return (<TidyBlocksStatsTable tableHeight={props.tableHeight} />)
-})
+function a11yProps(index) {
+  return {
+    id: `scrollable-force-tab-${index}`,
+    'aria-controls': `scrollable-force-tabpanel-${index}`,
+  };
+}
 
 // The main TidyBlocks App UI. Contains resizable panes for the Blockly section,
 // tabs for data display/plotting/logs.
@@ -207,11 +88,40 @@ export class TidyBlocksApp extends React.Component{
     this.state = {
       topRightPaneHeight: '200px',
       toolboxCategories: parseWorkspaceXml(this.props.toolbox),
+      tabValue: 0,
+      // The results returned from running the program. We store them in full
+      // in env for use during updates/changes, but may also use more specific
+      // helper variables for intermediate results.
+      env: null,
+      dataKeys: null,
+      data: null,
+      dataColumns: null,
+      dataOptions: [],
+      dataValue: null,
+      activeDataOption: null,
+
+      plotKeys: null,
+      plotData: null,
+      plotOptions: [],
+      plotValue: null,
+      activePlotOption: null,
+
+      stats: null,
+      statsKeys: null,
+      statsOptions: [],
+      statsValue: null,
+      activeStatsOption: null,
+
     };
     this.paneVerticalResize = this.paneVerticalResize.bind(this);
     this.paneHorizontalResize = this.paneHorizontalResize.bind(this);
     this.updatePlot = this.updatePlot.bind(this);
+    this.changePlot = this.changePlot.bind(this);
     this.updateTopRightPaneHeight = this.updateTopRightPaneHeight.bind(this);
+    this.runProgram = this.runProgram.bind(this);
+    this.changeData = this.changeData.bind(this);
+    this.handleTabChange = this.handleTabChange.bind(this);
+    this.sortRows = this.sortRows.bind(this);
 
   }
 
@@ -227,7 +137,9 @@ export class TidyBlocksApp extends React.Component{
 
   // Handles a change in the vertical divider postion.
   paneVerticalResize(){
-    this.dataGridRef.current.metricsUpdated()
+    if (this.dataGridRef.current){
+      this.dataGridRef.current.metricsUpdated()
+    }
     this.blocklyRef.current.resize()
     this.updatePlot()
   }
@@ -236,7 +148,7 @@ export class TidyBlocksApp extends React.Component{
   // update it's height.
   updateTopRightPaneHeight(){
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
-    const TOP_RIGHT_HEIGHT_OFFSET = 90
+    const TOP_RIGHT_HEIGHT_OFFSET = 130
     if (topRightPane){
       const topRightPaneHeight = (topRightPane.offsetHeight - TOP_RIGHT_HEIGHT_OFFSET).toString() + 'px'
       this.setState({topRightPaneHeight: topRightPaneHeight})
@@ -245,8 +157,33 @@ export class TidyBlocksApp extends React.Component{
 
   //Handles a change in the horizontal divider position.
   paneHorizontalResize(){
+
+    // Seems like sometimes the vertical pane get askew if we pull fast enough,
+    // so we'll update it for safety.
+    this.paneVerticalResize();
     this.updatePlot()
     this.updateTopRightPaneHeight()
+  }
+
+  // Sorting function for our react-data-grids.
+  sortRows(sortColumn, sortDirection){
+    console.log(sortColumn)
+    console.log(sortDirection)
+    const comparer = (a, b) => {
+      if (sortDirection === 'ASC') {
+          return (a[sortColumn]> b[sortColumn]) ? 1 : -1;
+        } else if (sortDirection === 'DESC') {
+          return (a[sortColumn]< b[sortColumn]) ? 1 : -1;
+        }
+    };
+
+    // Can access the initial data for 'None'. For now will just return the
+    // same data unchanged.
+    const rows = sortDirection === 'NONE' ? this.state.data : this.state.data.sort(comparer);
+
+    this.setState({data: rows});
+
+
   }
 
   // Updates the plot vega drawing.
@@ -258,18 +195,158 @@ export class TidyBlocksApp extends React.Component{
     // percentages.
     const bottomRightPane = ReactDOM.findDOMNode(this).querySelector('.bottomRightPane')
     const WIDTH_OFFSET = 120
-    const HEIGHT_OFFSET = 150
-    if (bottomRightPane){
-      boxPlotJson.width = bottomRightPane.offsetWidth - WIDTH_OFFSET
-      boxPlotJson.height = bottomRightPane.offsetHeight - HEIGHT_OFFSET
+    const HEIGHT_OFFSET = 120
+
+    if(this.state.plotData){
+      const plotData = this.state.plotData
+      if (bottomRightPane){
+        plotData.width = bottomRightPane.offsetWidth - WIDTH_OFFSET
+        plotData.height = bottomRightPane.offsetHeight - HEIGHT_OFFSET
+      }
+
+      vegaEmbed('#plotOutput', plotData, {})
     }
-    vegaEmbed('#plotOutput', boxPlotJson, {})
+  }
+
+  // Handles changing the displayed plot using the react-select dropdown.
+  changePlot(e){
+    console.log(e)
+    const activePlotOption = e
+    const plotData = this.state.env.plots.get(activePlotOption.value)
+    this.setState({activePlotOption: activePlotOption, plotData: plotData}, () => {
+      this.updatePlot()
+    })
+  }
+
+  changeData(e){
+    console.log(e)
+    const activeDataOption = e
+    let formattedColumns = []
+    const data = this.state.env.userData.get(activeDataOption.value)['data']
+    console.log("change")
+    console.log(data)
+    const dataColumns = this.state.env.userData.get(activeDataOption.value)['columns']
+    dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+
+    this.setState({activeDataOption: activeDataOption, data: data,
+      dataColumns: formattedColumns}, ()=>{
+        this.forceUpdate()
+      })
+  }
+
+  runProgram(){
+    ui.runProgram()
+    const env = ui.env
+    console.log(env)
+
+    // Updates Data Information.
+    const dataKeys = env.userData.keys()
+    let data = null
+    let dataColumns = null
+    let activeDataOption = null
+    let formattedColumns = []
+
+    if (this.state.activeDataOption) {
+      if (env.userData.has(this.state.activeDataOption.value)){
+        data = env.userData.get(this.state.activeDataOption.value)['data']
+        dataColumns = env.userData.get(this.state.activeDataOption.value)['columns']
+        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        activeDataOption = this.state.activeDataOption
+      }
+    } else {
+      let result = dataKeys.next()
+      if (!result.done){
+        activeDataOption = {'value': result.value, 'label': result.value}
+        console.log(env.userData.get(activeDataOption.value)['columns'])
+        data = env.userData.get(activeDataOption.value)['data']
+        dataColumns = env.userData.get(activeDataOption.value)['columns']
+        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      }
+    }
+    console.log("data")
+    console.log(data)
+    let dataOptions = []
+    for (let key of env.userData.keys()){
+      dataOptions.push({value: key, label: key})
+    }
+    console.log(data)
+
+    console.log(formattedColumns)
+    this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
+      activeDataOption: activeDataOption, dataOptions: dataOptions})
+
+    // Updates Plot Information.
+    const plotKeys = env.plots.keys()
+    let plotData = null
+    let activePlotOption = null
+
+    // If there's a current activePlotOption try to load it. Otherwise get the
+    // first plot provided by env.
+    if (this.state.activePlotOption) {
+      if (env.plots.has(this.state.activePlotOption.value)){
+        plotData = env.plots.get(this.state.activePlotOption.value)
+        activePlotOption = this.state.activePlotOption
+      }
+    } else {
+      let result = plotKeys.next()
+      if (!result.done){
+        activePlotOption = {'value': result.value, 'label': result.value}
+        plotData = env.plots.get(activePlotOption.value)
+      }
+    }
+
+    let plotOptions = []
+    for (let key of env.plots.keys()){
+      plotOptions.push({value: key, label: key})
+    }
+
+    this.setState({env: env, plotKeys:plotKeys, plotData: plotData,
+      activePlotOption: activePlotOption, plotOptions: plotOptions}, () => {
+      this.updatePlot()
+    })
+
+    // Updates Stats information. DISABLED PENDING FORMAT DISCUSSION.
+    // const statsKeys = env.stats.keys()
+    // let stats = null
+    // let statsColumns = null
+    // let activeStatsOption = null
+    // let formattedStatsColumns = []
+    //
+    // if (this.state.activeStatsOption) {
+    //   if (env.stats.has(this.state.activeStatsOption.value)){
+    //     stats = env.stats.get(this.state.activeStatsOption.value)['data']
+    //     statsColumns = env.stats.get(this.state.activeStatsOption.value)['columns']
+    //     statsColumns.forEach(c => formattedStatsColumns.push({key: c, name: c, sortable: true, resizable: true}))
+    //     activeStatsOption = this.state.activeStatsOption
+    //   }
+    // } else {
+    //   let result = statsKeys.next()
+    //   if (!result.done){
+    //     activeStatsOption = {'value': result.value, 'label': result.value}
+    //     stats = env.stats.get(activeStatsOption.value)['data']
+    //     statsColumns = env.stats.get(activeStatsOption.value)['columns']
+    //     statsColumns.forEach(c => formattedStatsColumns.push({key: c, name: c, sortable: true, resizable: true}))
+    //   }
+    // }
+    //
+    // let statsOptions = []
+    // for (let key of env.stats.keys()){
+    //   statsOptions.push({value: key, label: key})
+    // }
+    // this.setState({statsKeys:statsKeys, stats: stats, statsColumns: formattedStatsColumns,
+    //   activeStatsOption: activeStatsOption, statsOptions: statsOptions})
+    //
+  }
+
+  handleTabChange(event, newValue){
+    this.setState({tabValue: newValue})
   }
 
   render(){
+    const classes = withStyles(Tabs);
     return (
       <div >
-        <MenuBar/>
+        <MenuBar runProgram={this.runProgram}/>
         <SplitPane className="splitPaneWrapper"
           split="vertical"  primary="primary"
           onChange={this.paneVerticalResize}>
@@ -284,18 +361,61 @@ export class TidyBlocksApp extends React.Component{
           <SplitPane split="horizontal" minSize="100px"
             primary="secondary" onChange={this.paneHorizontalResize}>
             <Pane className="topRightPane" minSize="100px" initialSize="50%">
-            <div className="relativeWrapper">
-              <div className="absoluteWrapper">
-                <DataTabSelect />
-                <div className="dataWrapper">
-                  <TidyBlocksStatsTable ref={this.dataGridRef} tableHeight={this.state.topRightPaneHeight}/>
-                </div>
+              <div className={classes.root}>
+                <AppBar position="static" color="default" component={'span'}>
+                  <Tabs component={'span'}
+                    value={this.state.tabValue}
+                    onChange={this.handleTabChange}
+                    variant="scrollable"
+                    scrollButtons="on"
+                    indicatorColor="primary"
+                    textColor="primary"
+                    aria-label="scrollable force tabs example">
+                    <Tab label="Data" {...a11yProps(0)} />
+                    <Tab label="Stats" {...a11yProps(1)} />
+                    <Tab label="Console" {...a11yProps(2)} />
+                    <Tab label="Item Four" {...a11yProps(3)} />
+                  </Tabs>
+                </AppBar>
+                <TabPanel value={this.state.tabValue} index={0} component="div">
+                  <div className="relativeWrapper">
+                    <div className="absoluteWrapper">
+                      <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                      <div className="dataWrapper">
+                        {this.state.dataColumns &&
+                          <DataGrid
+                            columns={this.state.dataColumns}
+                            rowGetter={rowNumber => this.state.data[rowNumber]}
+                            rowsCount={this.state.data.length}
+                            enableCellAutoFocus={false}
+                            minHeight={this.state.topRightPaneHeight}
+                            onGridSort={this.sortRows}
+                            />
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel value={this.state.tabValue} index={1}>
+                  <div className="relativeWrapper">
+                    <div className="absoluteWrapper">
+                      <div className="dataWrapper">
+
+                      </div>
+                    </div>
+                  </div>
+                </TabPanel>
+                <TabPanel value={this.state.tabValue} index={2}>
+                  Item Three
+                </TabPanel>
+                <TabPanel value={this.state.tabValue} index={3}>
+                  Item Four
+                </TabPanel>
               </div>
-            </div>
             </Pane>
             <Pane ref={this.bottomRightPaneRef} id="bottomRightPane" className="bottomRightPane"
               minSize="100px" initialSize="50%">
-              <PlotTabSelect/>
+              <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
               <div className="plotWrapper">
                 <div id="plotOutput"></div>
               </div>
