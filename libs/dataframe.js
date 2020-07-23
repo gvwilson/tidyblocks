@@ -205,17 +205,17 @@ class DataFrame {
 
   /**
    * Summarize values (possibly grouped).
-   * @param {Summarizer} op What to do.
+   * @param {Summarizer} action What to do.
    * @returns A new dataframe.
    */
-  summarize (op) {
-    util.check(op instanceof Summarize.base,
+  summarize (action) {
+    util.check(action instanceof Summarize.base,
                `Operation must be summarizer object`)
-    util.check(this.hasColumns([op.column]),
+    util.check(this.hasColumns([action.column]),
                `unknown column in summarize`)
     const newData = this.data.map(row => { return {...row} })
-    const destCol = `${op.column}_${op.name}`
-    this._summarizeColumn(newData, op, destCol)
+    const destCol = `${action.column}_${action.species}`
+    this._summarizeColumn(newData, action, destCol)
     return new DataFrame(newData, [destCol])
   }
 
@@ -341,17 +341,17 @@ class DataFrame {
 
   /**
    * Test whether the dataframe has the specified columns.
-   * @param {string[]} names Names of column to check for.
+   * @param {string[]} colNames Names of column to check for.
    * @param {Boolean} exact Must column names match exactly?
    * @returns {Boolean} Are columns present?
    */
-  hasColumns (names, exact = false) {
-    util.check(Array.isArray(names),
+  hasColumns (colNames, exact = false) {
+    util.check(Array.isArray(colNames),
                `require array of names`)
-    if (exact && (names.length !== this.columns.size)) {
+    if (exact && (colNames.length !== this.columns.size)) {
       return false
     }
-    return names.every(n => (this.columns.has(n)))
+    return colNames.every(n => (this.columns.has(n)))
   }
 
   // ------------------------------------------------------------------------------
@@ -385,9 +385,9 @@ class DataFrame {
       return
     }
     const expected = new Set(Object.keys(values[0]))
-    expected.forEach(name => {
-      util.check(name.match(DataFrame.COLUMN_NAME) || DataFrame.SPECIAL_NAMES.has(name),
-                 `Column name "${name}" not allowed`)
+    expected.forEach(colName => {
+      util.check(colName.match(DataFrame.COLUMN_NAME) || DataFrame.SPECIAL_NAMES.has(colName),
+                 `Column name "${colName}" not allowed`)
     })
     values.forEach((row, index) => {
       const keys = Object.keys(row)
@@ -432,10 +432,10 @@ class DataFrame {
     // Construct.
     else {
       if (oldColumns) {
-        oldColumns.forEach(name => result.add(name))
+        oldColumns.forEach(colName => result.add(colName))
       }
       if ('add' in extras) {
-        extras.add.forEach(name => result.add(name))
+        extras.add.forEach(colName => result.add(colName))
       }
     }
 
@@ -473,7 +473,7 @@ class DataFrame {
   //
   // Summarize a single column in place.
   //
-  _summarizeColumn (data, op, destCol) {
+  _summarizeColumn (data, action, destCol) {
     // Divide values into groups.
     const groups = new Map()
     data.forEach(row => {
@@ -486,7 +486,7 @@ class DataFrame {
 
     // Summarize each group.
     for (let groupId of groups.keys()) {
-      const result = op.run(groups.get(groupId))
+      const result = action.run(groups.get(groupId))
       groups.set(groupId, result)
     }
 

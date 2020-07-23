@@ -12,12 +12,12 @@ const UserInterface = require('../libs/gui')
  * Testing replacement for a transform (easier constructor).
  */
 class MockTransform extends Transform.base {
-  constructor (name, func, requires, produces, input, output) {
-    super(name, requires, produces, input, output)
+  constructor (species, func, requires, produces, input, output) {
+    super(species, requires, produces, input, output)
     this.func = func
   }
   run = (runner, df) => {
-    runner.appendLog(this.name)
+    runner.appendLog(this.species)
     return this.func(runner, df)
   }
 }

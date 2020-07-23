@@ -15,8 +15,8 @@ const FAMILY = '@op'
  * Negations.
  */
 class OpNegationBase extends ExprUnary {
-  constructor (kind, arg) {
-    super(FAMILY, kind, arg)
+  constructor (species, arg) {
+    super(FAMILY, species, arg)
   }
 }
 
@@ -60,8 +60,8 @@ class OpNot extends OpNegationBase {
  * Unary type-checking expressions.
  */
 class OpTypecheckBase extends ExprUnary {
-  constructor (kind, arg) {
-    super(FAMILY, kind, arg)
+  constructor (species, arg) {
+    super(FAMILY, species, arg)
   }
 
   typeCheck (row, i, typeName) {
@@ -155,8 +155,8 @@ class OpIsText extends OpTypecheckBase {
  * Unary type conversion expressions.
  */
 class OpConvertBase extends ExprUnary {
-  constructor (kind, arg) {
-    super(FAMILY, kind, arg)
+  constructor (species, arg) {
+    super(FAMILY, species, arg)
   }
 }
 
@@ -257,8 +257,8 @@ class OpToString extends OpConvertBase {
  * Unary datetime expressions.
  */
 class OpDatetimeBase extends ExprUnary {
-  constructor (kind, arg) {
-    super(FAMILY, kind, arg)
+  constructor (species, arg) {
+    super(FAMILY, species, arg)
   }
 
   dateValue (row, i, func) {
@@ -267,7 +267,7 @@ class OpDatetimeBase extends ExprUnary {
       return util.MISSING
     }
     util.check(value instanceof Date,
-               `Require date for ${this.kind}`)
+               `Require date for ${this.species}`)
     return func(value)
   }
 }
@@ -383,17 +383,17 @@ class OpToSeconds extends OpDatetimeBase {
  * Binary arithmetic expressions.
  */
 class OpArithmeticBase extends ExprBinary {
-  constructor (kind, left, right) {
-    super(FAMILY, kind, left, right)
+  constructor (species, left, right) {
+    super(FAMILY, species, left, right)
   }
 
   arithmetic (row, i, func) {
     const left = this.left.run(row, i)
     util.checkNumber(left,
-                     `Require number for ${this.kind}`)
+                     `Require number for ${this.species}`)
     const right = this.right.run(row, i)
     util.checkNumber(right,
-                     `Require number for ${this.kind}`)
+                     `Require number for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
       ? util.MISSING
       : util.safeValue(func(left, right))
@@ -502,15 +502,15 @@ class OpSubtract extends OpArithmeticBase {
  * Binary comparison expressions.
  */
 class OpCompareBase extends ExprBinary {
-  constructor (kind, left, right) {
-    super(FAMILY, kind, left, right)
+  constructor (species, left, right) {
+    super(FAMILY, species, left, right)
   }
 
   comparison (row, i, func) {
     const left = this.left.run(row, i)
     const right = this.right.run(row, i)
     util.checkTypeEqual(left, right,
-                        `Require equal types for ${this.kind}`)
+                        `Require equal types for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
       ? util.MISSING
       : func(left, right)
@@ -619,8 +619,8 @@ class OpNotEqual extends OpCompareBase {
  * Binary logical expressions.
  */
 class OpLogicalBase extends ExprBinary {
-  constructor (kind, left, right) {
-    super(FAMILY, kind, left, right)
+  constructor (species, left, right) {
+    super(FAMILY, species, left, right)
   }
 }
 

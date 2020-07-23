@@ -561,7 +561,8 @@ describe('summarize', () => {
 
   it('can summarize a single ungrouped column', (done) => {
     const df = new DataFrame(TWO_ROWS)
-    const result = df.summarize(new Summarize.count('ones'))
+    const summarizer = new Summarize.count('ones')
+    const result = df.summarize(summarizer)
     assert(result.equal(new DataFrame([{ones: 1, tens: 10,
                                         ones_count: 2},
                                        {ones: 2, tens: 20,
