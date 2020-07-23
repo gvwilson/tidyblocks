@@ -86,9 +86,11 @@ export class TidyBlocksApp extends React.Component{
     this.dataGridRef = React.createRef();
 
     this.state = {
-      topRightPaneHeight: '200px',
+      topRightPaneHeight: 200,
+
       toolboxCategories: parseWorkspaceXml(this.props.toolbox),
       tabValue: 0,
+      tabValueBottom: 0,
       // The results returned from running the program. We store them in full
       // in env for use during updates/changes, but may also use more specific
       // helper variables for intermediate results.
@@ -148,9 +150,9 @@ export class TidyBlocksApp extends React.Component{
   // update it's height.
   updateTopRightPaneHeight(){
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
-    const TOP_RIGHT_HEIGHT_OFFSET = 130
+    const TOP_RIGHT_HEIGHT_OFFSET = 150
     if (topRightPane){
-      const topRightPaneHeight = (topRightPane.offsetHeight - TOP_RIGHT_HEIGHT_OFFSET).toString() + 'px'
+      const topRightPaneHeight = (topRightPane.offsetHeight - TOP_RIGHT_HEIGHT_OFFSET)
       this.setState({topRightPaneHeight: topRightPaneHeight})
     }
   }
@@ -195,7 +197,7 @@ export class TidyBlocksApp extends React.Component{
     // percentages.
     const bottomRightPane = ReactDOM.findDOMNode(this).querySelector('.bottomRightPane')
     const WIDTH_OFFSET = 120
-    const HEIGHT_OFFSET = 120
+    const HEIGHT_OFFSET = 175
 
     if(this.state.plotData){
       const plotData = this.state.plotData
@@ -229,9 +231,7 @@ export class TidyBlocksApp extends React.Component{
     dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
 
     this.setState({activeDataOption: activeDataOption, data: data,
-      dataColumns: formattedColumns}, ()=>{
-        this.forceUpdate()
-      })
+      dataColumns: formattedColumns})
   }
 
   runProgram(){
@@ -378,23 +378,22 @@ export class TidyBlocksApp extends React.Component{
                   </Tabs>
                 </AppBar>
                 <TabPanel value={this.state.tabValue} index={0} component="div">
-                  <div className="relativeWrapper">
-                    <div className="absoluteWrapper">
                       <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
-                      <div className="dataWrapper">
-                        {this.state.dataColumns &&
-                          <DataGrid
-                            columns={this.state.dataColumns}
-                            rowGetter={rowNumber => this.state.data[rowNumber]}
-                            rowsCount={this.state.data.length}
-                            enableCellAutoFocus={false}
-                            minHeight={this.state.topRightPaneHeight}
-                            onGridSort={this.sortRows}
-                            />
-                        }
+                      <div className="relativeWrapper">
+                        <div className="">
+                          <div className="dataWrapper">
+                            {this.state.dataColumns &&
+                              <DataGrid
+                                columns={this.state.dataColumns}
+                                rows={this.state.data}
+                                enableCellAutoFocus={false}
+                                height={this.state.topRightPaneHeight}
+                                onGridSort={this.sortRows}
+                                />
+                            }
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
                 </TabPanel>
                 <TabPanel value={this.state.tabValue} index={1}>
                   <div className="relativeWrapper">
@@ -415,9 +414,25 @@ export class TidyBlocksApp extends React.Component{
             </Pane>
             <Pane ref={this.bottomRightPaneRef} id="bottomRightPane" className="bottomRightPane"
               minSize="100px" initialSize="50%">
-              <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
-              <div className="plotWrapper">
-                <div id="plotOutput"></div>
+              <div className={classes.root}>
+                <AppBar position="static" color="default" component={'span'}>
+                  <Tabs component={'span'}
+                    value={this.state.tabValueBottom}
+                    onChange={this.handleTabChange}
+                    variant="scrollable"
+                    scrollButtons="on"
+                    indicatorColor="primary"
+                    textColor="primary"
+                    aria-label="scrollable force tabs example">
+                    <Tab label="Plot" {...a11yProps(0)} />
+                  </Tabs>
+                </AppBar>
+                <TabPanel value={this.state.tabValueBottom} index={0} component="div">
+                  <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
+                  <div className="plotWrapper">
+                    <div id="plotOutput"></div>
+                  </div>
+                </TabPanel>
               </div>
             </Pane>
           </SplitPane>

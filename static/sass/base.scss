@@ -67,22 +67,6 @@ body{
   padding: 3px;
 }
 
-.react-grid-Container{
-  width: 100%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  font-family: "Roboto";
-  font-weight: 300;
-}
-
-.react-grid-Cell {
-  -webkit-user-select: text;
-  -moz-user-select: text;
-  -ms-user-select: text;
-  user-select: text;
-}
-
 [data-type="Resizer"] {
   z-index: 4 !important;
 }
