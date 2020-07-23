@@ -9,6 +9,14 @@
     When she isn't debugging or blogging, 
     she's somewhere climbing large mountains. 
 
+- name: "Justin Singh"
+  github: "DarkMetroid"
+  avatar: "singh-justin.png"
+  bio: >
+    Justin is a freelance developer who largely works in web development.
+    He's interested in anything that makes the web a bit weirder,
+    and if he isn't reading is probably playing around with WebGL.
+
 - name: "Greg Wilson"
   github: "gvwilson"
   link: "http://third-bit.com"
