@@ -15,11 +15,11 @@ headings:
 - id: row-number
   text: Row Number
 - id: exponential-random-value
-  text: Exponential Random Value
+  text: Exponential
 - id: normal-random-variable
-  text: Normal Random Variable
+  text: Normal
 - id: uniform-random-variable
-  text: Uniform Random Variable
+  text: Uniform
 ---
 
 ## Column
@@ -68,22 +68,30 @@ any single or double quotes provided will be included in the text.
 
 <img class="block" src="{{page.permalink | append: 'rownum.png' | relative_url}}" alt="row number block"/>
 
-FIXME
+Generate the row number, starting from 1.
 
 ## Exponential Random Value
 
 <img class="block" src="{{page.permalink | append: 'exponential.png' | relative_url}}" alt="exponential random value block"/>
 
-FIXME
+Generate a random value from the exponential distribution with the rate parameter &lambda;.
+
+- **rate**: the rate parameter.
 
 ## Normal Random Variable
 
 <img class="block" src="{{page.permalink | append: 'normal.png' | relative_url}}" alt="normal random value block"/>
 
-FIXME
+Generate a random value from the normal distribution with mean &mu; and standard deviation &sigma;.
+
+-  **mean**: the center of the distribution.
+-  **std dev**: the spread of the distribution.
 
 ## Uniform Random Variable
 
 <img class="block" src="{{page.permalink | append: 'uniform.png' | relative_url}}" alt="uniform random value block"/>
 
-FIXME
+Generate a random value from the uniform distribution across the given range.
+
+-  **low**: the low end of the range.
+-  **high**: the high end of the range.

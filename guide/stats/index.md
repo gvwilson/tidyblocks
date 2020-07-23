@@ -1,14 +1,7 @@
 ---
 permalink: /guide/stats/
 title: "Statistics"
-headings:
-- id: one-sample-t-test
-  text: One-sample T Test
-- id: two-sample-t-test
-  text: Two-sample T Test
 ---
-
-## One-sample T Test
 
 <img class="block" src="{{page.permalink | append: 'ttest_one.png' | relative_url}}" alt="ttest_one block"/>
 
@@ -17,8 +10,6 @@ Run a one-sample t-test.
 - **column**: The column containing the values of interest.
 - **mean**: The mean to test against.
 - **significance**: The significance threshold.
-
-## Two-sample T Test
 
 <img class="block" src="{{page.permalink | append: 'ttest_two.png' | relative_url}}" alt="ttest_two block"/>
 

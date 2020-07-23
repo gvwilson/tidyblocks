@@ -29,6 +29,7 @@ const setup = () => {
       ],
       inputsInline: false,
       previousStatement: null,
+      nextStatement: null,
       style: 'stats_blocks',
       tooltip: 'perform one-sample two-sided t-test',
       helpUrl: ''
@@ -59,6 +60,7 @@ const setup = () => {
       ],
       inputsInline: false,
       previousStatement: null,
+      nextStatement: null,
       style: 'stats_blocks',
       tooltip: 'perform two-sample two-sided t-test',
       helpUrl: ''

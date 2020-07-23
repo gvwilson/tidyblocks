@@ -84,6 +84,7 @@ const setup = () => {
         }
       ],
       previousStatement: null,
+      nextStatement: null,
       style: 'combine_block',
       tooltip: 'signal that a table is available',
       helpUrl: '',

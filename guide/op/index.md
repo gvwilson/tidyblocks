@@ -4,18 +4,12 @@ title: "Operations"
 headings:
 - id: arithmetic
   text: Arithmetic
-- id: arithmetic-negation
-  text: Arithmetic Negation
-- id: logical-operations
-  text: Logical Operations
-- id: logical-negation
-  text: Logical Negation
-- id: type-checking
-  text: Type Checking
-- id: type-conversion
-  text: Type Conversion
-- id: datetime-operations
-  text: Datetime Operations
+- id: logical
+  text: Logical
+- id: types
+  text: Types
+- id: dates-times
+  text: Dates/Times
 - id: conditional
   text: Conditional
 ---
@@ -31,15 +25,13 @@ It accepts numbers, column names, and nested operation blocks.
 - *drop down*: Select addition, subtraction, multiplication, division, remainder, or exponentiation.
 - *right space*: The right-hand side of the operation.
 
-## Arithmetic Negation
-
 <img class="block" src="{{page.permalink | append: 'negate.png' | relative_url}}" alt="negate block"/>
 
 Negate a number.
 
 - *space*: The value to negate.
 
-## Logical Operations
+## Logical
 
 <img class="block" src="{{page.permalink | append: 'logical_op.png' | relative_url}}" alt="logical operation block"/>
 
@@ -55,15 +47,13 @@ Note that logical AND is only true if *both* sides are true,
 while logical OR is true if *either or both* sides are true:
 it is not either-or-both rather than one-or-the-other.
 
-## Logical Negation
-
 <img class="block" src="{{page.permalink | append: 'not.png' | relative_url}}" alt="not block"/>
 
 Produce `true` if the value is `false` or `false` if the value is `true`.
 
 - *space*: The value to invert.
 
-## Type Checking
+## Types
 
 <img class="block" src="{{page.permalink | append: 'type_check.png' | relative_url}}" alt="type checking block"/>
 
@@ -72,8 +62,6 @@ Check if a value is of a particular type.
 - *space*: The value to check.
 - *drop down*: Select the type to convert for.
 
-## Type Conversion
-
 <img class="block" src="{{page.permalink | append: 'type_convert.png' | relative_url}}" alt="type conversion block"/>
 
 Convert a value from one type to another.
@@ -81,7 +69,7 @@ Convert a value from one type to another.
 - *space*: The value to convert.
 - *drop down*: Select the type to convert to.
 
-## Datetime Operations
+## Dates/Times
 
 <img class="block" src="{{page.permalink | append: 'datetime_op.png' | relative_url}}" alt="datetime operation block"/>
 

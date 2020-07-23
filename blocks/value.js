@@ -118,7 +118,7 @@ const setup = () => {
         {
           type: 'field_input',
           name: 'RATE',
-          text: '0'
+          text: '1.0'
         }
       ],
       output: 'Number',

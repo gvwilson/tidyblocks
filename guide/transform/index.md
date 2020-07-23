@@ -94,8 +94,11 @@ Sort the rows in a table according to the values in one or more columns.
 Summarize the values in one or more columns.
 If the data has been [grouped](../transform/#group),
 one summary row is created for each group.
+The summary values are put in a new column <code><em>op</em>\_<em>col</em></code>,
+e.g., <code>mean\_age</code>.
 
-FIXME
+-   *drop down*: which summarization operation to use.
+-   **column**: which column to summarize.
 
 ## Ungroup
 
