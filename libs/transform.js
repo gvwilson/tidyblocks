@@ -71,7 +71,7 @@ class TransformData extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.name}`)
+    env.appendLog('log', `${this.species} ${this.name}`)
     util.check(df === null,
                `Cannot provide input dataframe to reader`)
     const loaded = env.getData(this.name)
@@ -95,7 +95,7 @@ class TransformDrop extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.columns.join(', ')}`)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.drop(this.columns)
   }
 }
@@ -118,7 +118,7 @@ class TransformFilter extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.species)
+    env.appendLog('log', this.species)
     return df.filter(this.expr)
   }
 }
@@ -140,7 +140,7 @@ class TransformGroupBy extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.columns.join(', ')}`)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.groupBy(this.columns)
   }
 }
@@ -170,7 +170,7 @@ class TransformJoin extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.species)
+    env.appendLog('log', this.species)
     util.check(df === null,
                `Cannot provide input dataframe to join`)
     const left = env.getData(this.leftName)
@@ -203,7 +203,7 @@ class TransformMutate extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.newName}`)
+    env.appendLog('log', `${this.species} ${this.newName}`)
     return df.mutate(this.newName, this.expr)
   }
 }
@@ -226,7 +226,7 @@ class TransformNotify extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.label}`)
+    env.appendLog('log', `${this.species} ${this.label}`)
     return df
   }
 }
@@ -248,7 +248,7 @@ class TransformSelect extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.columns.join(', ')}`)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.select(this.columns)
   }
 }
@@ -274,7 +274,7 @@ class TransformSequence extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.newName} ${this.limit}`)
+    env.appendLog('log', `${this.species} ${this.newName} ${this.limit}`)
     const raw = Array.from(
       {length: this.limit},
       (v, k) => {
@@ -307,7 +307,7 @@ class TransformSort extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.columns.join(', ')} ${this.reverse}`)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')} ${this.reverse}`)
     return df.sort(this.columns, this.reverse)
   }
 }
@@ -337,9 +337,8 @@ class TransformSummarize extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.action} ${this.column}`)
-    const summarizer = new Summarize[this.action](this.column)
-    return df.summarize(summarizer)
+    env.appendLog('log', `${this.species} ${this.action} ${this.column}`)
+    return df.summarize(new Summarize[this.action](this.column))
   }
 }
 
@@ -352,7 +351,7 @@ class TransformUngroup extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species}`)
+    env.appendLog('log', `${this.species}`)
     return df.ungroup()
   }
 }
@@ -374,7 +373,7 @@ class TransformUnique extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.columns.join(', ')}`)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.unique(this.columns)
   }
 }
@@ -394,7 +393,7 @@ class TransformPlot extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.label}`)
+    env.appendLog('log', `${this.species} ${this.label}`)
     this.spec.data.values = df.data
     env.setPlot(this.label, this.spec)
   }
@@ -549,7 +548,7 @@ class TransformTTestOneSample extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.label}`)
+    env.appendLog('log', `${this.species} ${this.label}`)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
     env.setStats(this.label, pValue)
@@ -572,7 +571,7 @@ class TransformTTestPaired extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(`${this.species} ${this.label}`)
+    env.appendLog('log', `${this.species} ${this.label}`)
     const known = new Set(df.data.map(row => row[this.labelCol]))
     util.check(known.size === 2,
                `Must have exactly two labels for data`)

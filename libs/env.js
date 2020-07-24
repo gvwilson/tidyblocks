@@ -18,7 +18,6 @@ class Env {
     this.plots = new Map()
     this.stats = new Map()
     this.log = []
-    this.errors = []
   }
 
   /**
@@ -105,18 +104,13 @@ class Env {
 
   /**
    * Append a message to the runtime log.
+   * @param {string} level One of 'log' or 'error'.
    * @param {string} message To save.
    */
-  appendLog (message) {
-    this.log.push(message)
-  }
-
-  /**
-   * Append a message to the error log.
-   * @param {string} message To save.
-   */
-  appendError (message) {
-    this.errors.push(message)
+  appendLog (level, message) {
+    util.check(level && (typeof level === 'string') && ['log', 'error'].includes(level),
+               `Expected either "log" or "error" for level, not "${level}"`)
+    this.log.push([level, message])
   }
 }
 

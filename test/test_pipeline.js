@@ -98,7 +98,7 @@ describe('executes pipelines', () => {
     const env = new Env(INTERFACE.userData)
     const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.TAIL)
     const result = pipeline.run(env)
-    assert.deepEqual(env.log, ['head', 'middle', 'tail'],
+    assert.deepEqual(env.log, [['log', 'head'], ['log', 'middle'], ['log', 'tail']],
                      `Transforms not logged`)
     done()
   })

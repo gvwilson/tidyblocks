@@ -90,7 +90,7 @@ class Program {
       }
     }
     catch (err) {
-      this.env.appendError(`${err.message}: ${err.stack}`)
+      this.env.appendLog('error', `${err.message}: ${err.stack}`)
     }
   }
 }

@@ -17,7 +17,7 @@ class MockTransform extends Transform.base {
     this.func = func
   }
   run = (runner, df) => {
-    runner.appendLog(this.species)
+    runner.appendLog('log', this.species)
     return this.func(runner, df)
   }
 }
