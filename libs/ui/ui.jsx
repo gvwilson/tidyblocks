@@ -246,7 +246,12 @@ export class TidyBlocksApp extends React.Component{
     const env = TidyBlocksUI.env
     console.log(env)
 
-    // Updates Data Information.
+    this.updateDataInformation(env)
+    this.updatePlotInformation(env)
+    this.updateStatsInformation(env)
+  }
+
+  updateDataInformation (env) {
     const dataKeys = env.userData.keys()
     let data = null
     let dataColumns = null
@@ -281,8 +286,9 @@ export class TidyBlocksApp extends React.Component{
     console.log(formattedColumns)
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
       activeDataOption: activeDataOption, dataOptions: dataOptions})
+  }
 
-    // Updates Plot Information.
+  updatePlotInformation (env) {
     const plotKeys = env.plots.keys()
     let plotData = null
     let activePlotOption = null
@@ -311,7 +317,9 @@ export class TidyBlocksApp extends React.Component{
       activePlotOption: activePlotOption, plotOptions: plotOptions}, () => {
       this.updatePlot()
     })
+  }
 
+  updateStatsInformation (env) {
     // Updates Stats information. DISABLED PENDING FORMAT DISCUSSION.
     // const statsKeys = env.stats.keys()
     // let stats = null
@@ -342,7 +350,6 @@ export class TidyBlocksApp extends React.Component{
     // }
     // this.setState({statsKeys:statsKeys, stats: stats, statsColumns: formattedStatsColumns,
     //   activeStatsOption: activeStatsOption, statsOptions: statsOptions})
-    //
   }
 
   handleTabChange (event, newValue) {
