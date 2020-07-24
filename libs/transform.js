@@ -71,7 +71,7 @@ class TransformData extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     util.check(df === null,
                `Cannot provide input dataframe to reader`)
     const loaded = env.getData(this.dataset)
@@ -95,7 +95,7 @@ class TransformDrop extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.drop(this.columns)
   }
 }
@@ -118,7 +118,7 @@ class TransformFilter extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.filter(this.expr)
   }
 }
@@ -140,7 +140,7 @@ class TransformGroupBy extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.groupBy(this.columns)
   }
 }
@@ -170,7 +170,7 @@ class TransformJoin extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     util.check(df === null,
                `Cannot provide input dataframe to join`)
     const left = env.getData(this.leftName)
@@ -203,7 +203,7 @@ class TransformMutate extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.mutate(this.newName, this.expr)
   }
 }
@@ -226,7 +226,7 @@ class TransformNotify extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df
   }
 }
@@ -248,7 +248,7 @@ class TransformSelect extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.select(this.columns)
   }
 }
@@ -274,7 +274,7 @@ class TransformSequence extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     const raw = Array.from(
       {length: this.limit},
       (v, k) => {
@@ -307,7 +307,7 @@ class TransformSort extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.sort(this.columns, this.reverse)
   }
 }
@@ -337,7 +337,7 @@ class TransformSummarize extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     const summarizer = new Summarize[this.op](this.column)
     return df.summarize(summarizer)
   }
@@ -352,7 +352,7 @@ class TransformUngroup extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.ungroup()
   }
 }
@@ -374,7 +374,7 @@ class TransformUnique extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     return df.unique(this.columns)
   }
 }
@@ -394,7 +394,7 @@ class TransformPlot extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     this.spec.data.values = df.data
     env.setPlot(this.label, this.spec)
   }
@@ -549,7 +549,7 @@ class TransformTTestOneSample extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
     env.setStats(this.label, pValue)
@@ -572,7 +572,7 @@ class TransformTTestPaired extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog(this.name)
+    env.appendLog('log', this.name)
     const known = new Set(df.data.map(row => row[this.labelCol]))
     util.check(known.size === 2,
                `Must have exactly two labels for data`)

@@ -22,6 +22,17 @@ const check = (condition, message) => {
 }
 
 /**
+ * Print warning message if condition fails but otherwise do nothing.
+ * @param {Boolean} condition Condition that must be true.
+ * @param {string} message What to say if it isn't.
+ */
+const warn = (condition, message) => {
+  if (!condition) {
+    console.warn(message)
+  }
+}
+
+/**
  * Check that a value is numeric.
  * @param {whatever} value What to check.
  */
