@@ -61,7 +61,7 @@ class Restore {
     util.check((json.length > 1) &&
                (json[0] === Op.FAMILY) &&
                (json[1] in Op),
-               `Require indicator of known operation kind`)
+               `Require indicator of known operation kind ${JSON.stringify(json)}`)
     const kind = json[1]
     const args = json.slice(2).map(p => this.expr(p))
     return new Op[kind](...args)
@@ -71,7 +71,7 @@ class Restore {
     util.check((json.length > 1) &&
                (json[0] === Value.FAMILY) &&
                (json[1] in Value),
-               `Require indicator of known value kind`)
+               `Require indicator of known value kind ${JSON.stringify(json)}`)
     const kind = json[1]
     const args = json.slice(2).map(p => this.expr(p))
     return new Value[kind](...args)

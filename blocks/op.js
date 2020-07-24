@@ -23,11 +23,11 @@ const setup = () => {
           name: 'OP',
           options: [
             ['+', 'add'],
-            ['-', 'sub'],
-            ['\u00D7', 'mul'],
-            ['\u00F7', 'div'],
-            ['%', 'mod'],
-            ['^', 'exp']
+            ['-', 'subtract'],
+            ['\u00D7', 'multiply'],
+            ['\u00F7', 'divide'],
+            ['%', 'remainder'],
+            ['^', 'power']
           ]
         },
         {
@@ -72,12 +72,12 @@ const setup = () => {
           type: 'field_dropdown',
           name: 'OP',
           options: [
-            ['=', 'eq'],
-            ['\u2260', 'neq'],
-            ['\u200F<', 'lt'],
-            ['\u200F\u2264', 'leq'],
-            ['\u200F>', 'gt'],
-            ['\u200F\u2265', 'geq']
+            ['=', 'equal'],
+            ['\u2260', 'notEqual'],
+            ['\u200F<', 'less'],
+            ['\u200F\u2264', 'lessEqual'],
+            ['\u200F>', 'greater'],
+            ['\u200F\u2265', 'greaterEqual']
           ]
         },
         {

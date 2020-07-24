@@ -187,7 +187,7 @@ describe('expression code generation', () => {
   })
 
   it('generates code for binary arithmetic', (done) => {
-    const expected = [Op.FAMILY, 'exp',
+    const expected = [Op.FAMILY, 'power',
                       [Value.FAMILY, 'number', 1],
                       [Value.FAMILY, 'number', 2]]
     const w = workspace()
@@ -196,7 +196,7 @@ describe('expression code generation', () => {
     const right = w.newBlock('value_number')
     right.setFieldValue(2, 'VALUE')
     const block = w.newBlock('op_arithmetic')
-    block.setFieldValue('exp', 'OP')
+    block.setFieldValue('power', 'OP')
     connect(block, 'LEFT', left)
     connect(block, 'RIGHT', right)
     const actual = getCode(block)
@@ -217,7 +217,7 @@ describe('expression code generation', () => {
   })
 
   it('generates code for comparisons', (done) => {
-    const expected = [Op.FAMILY, 'leq',
+    const expected = [Op.FAMILY, 'lessEqual',
                       [Value.FAMILY, 'number', 1],
                       [Value.FAMILY, 'number', 2]]
     const w = workspace()
@@ -226,7 +226,7 @@ describe('expression code generation', () => {
     const right = w.newBlock('value_number')
     right.setFieldValue(2, 'VALUE')
     const block = w.newBlock('op_compare')
-    block.setFieldValue('leq', 'OP')
+    block.setFieldValue('lessEqual', 'OP')
     connect(block, 'LEFT', left)
     connect(block, 'RIGHT', right)
     const actual = getCode(block)
