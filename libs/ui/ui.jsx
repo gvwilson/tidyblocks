@@ -129,6 +129,7 @@ export class TidyBlocksApp extends React.Component{
       statsValue: null,
       activeStatsOption: null,
 
+      logMessages: null
     }
     this.paneVerticalResize = this.paneVerticalResize.bind(this)
     this.paneHorizontalResize = this.paneHorizontalResize.bind(this)
@@ -139,7 +140,7 @@ export class TidyBlocksApp extends React.Component{
     this.changeData = this.changeData.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this)
     this.sortRows = this.sortRows.bind(this)
-
+    this.updateLogMessages = this.updateLogMessages.bind(this)
   }
 
   componentDidMount () {
@@ -244,6 +245,10 @@ export class TidyBlocksApp extends React.Component{
       dataColumns: formattedColumns})
   }
 
+  updateLogMessages (env) {
+    this.setState({logMessages: env.log})
+  }
+
   runProgram () {
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
@@ -252,6 +257,7 @@ export class TidyBlocksApp extends React.Component{
     this.updateDataInformation(env)
     this.updatePlotInformation(env)
     this.updateStatsInformation(env)
+    this.updateLogMessages(env)
   }
 
   updateDataInformation (env) {
@@ -361,6 +367,10 @@ export class TidyBlocksApp extends React.Component{
 
   render () {
     const classes = withStyles(Tabs)
+    const logMessages = this.state.logMessages
+          ? this.state.logMessages.map((msg, i) => <li><code>{msg[0]}: {msg[1]}</code></li>) // FIXME: should give each a key
+          : <li>No messages</li>
+    const logMessageList = <ul>{logMessages}</ul>
     return (
       <div >
         <MenuBar runProgram={this.runProgram}/>
@@ -415,12 +425,12 @@ export class TidyBlocksApp extends React.Component{
                   <div className="relativeWrapper">
                     <div className="absoluteWrapper">
                       <div className="dataWrapper">
-
                       </div>
                     </div>
                   </div>
                 </TabPanel>
                 <TabPanel value={this.state.tabValue} index={2}>
+                  {logMessages}
                 </TabPanel>
               </div>
             </Pane>
