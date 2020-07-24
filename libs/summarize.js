@@ -8,14 +8,14 @@ const util = require('./util')
 class SummarizeBase {
   /**
    * Construct.
-   * @param {string} name Name of summarization function.
+   * @param {string} species Name of summarization function.
    * @param {string} column Which column to summarize.
    */
-  constructor (name, column) {
-    util.check(name && (typeof name === 'string') &&
+  constructor (species, column) {
+    util.check(species && (typeof species === 'string') &&
                column && (typeof column === 'string'),
-               `Require non-empty strings as name and column`)
-    this.name = name
+               `Require non-empty strings as species and column`)
+    this.species = species
     this.column = column
   }
 

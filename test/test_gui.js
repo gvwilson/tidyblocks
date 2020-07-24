@@ -41,7 +41,7 @@ describe('creates the interface object', () => {
     const block = gui.workspace.newBlock('data_colors')
     block.hat = 'cap'
     gui.runProgram()
-    assert.deepEqual(gui.env.log, ['read'],
+    assert.deepEqual(gui.env.log, ['read colors'],
                      `Program did not run as expected`)
     done()
   })
