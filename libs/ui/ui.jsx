@@ -12,7 +12,6 @@ import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
 import {MenuBar} from './menuBar.jsx'
 import Select from 'react-select'
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -25,7 +24,30 @@ import ThumbDown from '@material-ui/icons/ThumbDown';
 import ThumbUp from '@material-ui/icons/ThumbUp';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, makeStyles, useStyles, styled } from '@material-ui/core/styles'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+const tabHeight = '34px' // default: '48px'
+
+const theme = createMuiTheme({
+  overrides: {
+    MuiTabs: {
+      root: {
+        minHeight: tabHeight,
+        height: tabHeight
+      },
+    },
+    MuiTab: {
+      root: {
+        minHeight: tabHeight,
+        height: tabHeight
+      },
+      wrapper: {
+        fontSize: '12px'
+      }
+    },
+  },
+});
 
 const DataTabSelect = ({options, onChange, value}) => (
   <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
@@ -45,7 +67,6 @@ const PlotTabSelect = ({options, onChange, value}) => (
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -150,7 +171,7 @@ export class TidyBlocksApp extends React.Component{
   // update it's height.
   updateTopRightPaneHeight(){
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
-    const TOP_RIGHT_HEIGHT_OFFSET = 150
+    const TOP_RIGHT_HEIGHT_OFFSET = 120
     if (topRightPane){
       const topRightPaneHeight = (topRightPane.offsetHeight - TOP_RIGHT_HEIGHT_OFFSET)
       this.setState({topRightPaneHeight: topRightPaneHeight})
@@ -197,7 +218,7 @@ export class TidyBlocksApp extends React.Component{
     // percentages.
     const bottomRightPane = ReactDOM.findDOMNode(this).querySelector('.bottomRightPane')
     const WIDTH_OFFSET = 120
-    const HEIGHT_OFFSET = 175
+    const HEIGHT_OFFSET = 150
 
     if(this.state.plotData){
       const plotData = this.state.plotData
@@ -263,15 +284,10 @@ export class TidyBlocksApp extends React.Component{
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       }
     }
-    console.log("data")
-    console.log(data)
     let dataOptions = []
     for (let key of env.userData.keys()){
       dataOptions.push({value: key, label: key})
     }
-    console.log(data)
-
-    console.log(formattedColumns)
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
       activeDataOption: activeDataOption, dataOptions: dataOptions})
 
@@ -344,99 +360,106 @@ export class TidyBlocksApp extends React.Component{
 
   render(){
     const classes = withStyles(Tabs);
+    const tabClasses = withStyles(Tab);
+
     return (
       <div >
-        <MenuBar runProgram={this.runProgram}/>
-        <SplitPane className="splitPaneWrapper"
-          split="vertical"  primary="primary"
-          onChange={this.paneVerticalResize}>
-          <Pane minSize="200px">
-            <ReactBlocklyComponent.BlocklyEditor
-              ref={this.blocklyRef}
-              toolboxCategories={this.state.toolboxCategories}
-              workspaceConfiguration={this.props.settings}
-              wrapperDivClassName="fill-height"
-            />
-          </Pane>
-          <SplitPane split="horizontal" minSize="100px"
-            primary="secondary" onChange={this.paneHorizontalResize}>
-            <Pane className="topRightPane" minSize="100px" initialSize="50%">
-              <div className={classes.root}>
-                <AppBar position="static" color="default" component={'span'}>
-                  <Tabs component={'span'}
-                    value={this.state.tabValue}
-                    onChange={this.handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="on"
-                    indicatorColor="primary"
-                    textColor="primary"
-                    aria-label="scrollable force tabs example">
-                    <Tab label="Data" {...a11yProps(0)} />
-                    <Tab label="Stats" {...a11yProps(1)} />
-                    <Tab label="Console" {...a11yProps(2)} />
-                    <Tab label="Item Four" {...a11yProps(3)} />
-                  </Tabs>
-                </AppBar>
-                <TabPanel value={this.state.tabValue} index={0} component="div">
-                      <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
-                      <div className="relativeWrapper">
-                        <div className="">
-                          <div className="dataWrapper">
-                            {this.state.dataColumns &&
-                              <DataGrid
-                                columns={this.state.dataColumns}
-                                rows={this.state.data}
-                                enableCellAutoFocus={false}
-                                height={this.state.topRightPaneHeight}
-                                onGridSort={this.sortRows}
-                                />
-                            }
+        <MuiThemeProvider theme={theme}>
+          <MenuBar runProgram={this.runProgram}/>
+          <SplitPane className="splitPaneWrapper"
+            split="vertical"  primary="secondary"
+            onChange={this.paneVerticalResize}>
+            <Pane minSize="200px">
+              <ReactBlocklyComponent.BlocklyEditor
+                ref={this.blocklyRef}
+                toolboxCategories={this.state.toolboxCategories}
+                workspaceConfiguration={this.props.settings}
+                wrapperDivClassName="fill-height"
+              />
+            </Pane>
+            <SplitPane split="horizontal" minSize="100px"
+              primary="secondary" onChange={this.paneHorizontalResize}>
+              <Pane className="topRightPane" minSize="100px" initialSize="50%">
+                <div className={classes.root}>
+                  <AppBar position="static" color="default" component={'span'}>
+                    <Tabs component={'span'}
+                      value={this.state.tabValue}
+                      onChange={this.handleTabChange}
+                      variant="scrollable"
+                      scrollButtons="on"
+                      indicatorColor="primary"
+                      textColor="primary"
+                      >
+                      <Tab
+                        label="Data" {...a11yProps(0)}/>
+                      <Tab
+                        label="Stats" {...a11yProps(1)}/>
+                      <Tab
+                        label="Console" {...a11yProps(2)}/>
+                      <Tab
+                        label="Item Four" {...a11yProps(3)}/>
+                    </Tabs>
+                  </AppBar>
+                  <TabPanel value={this.state.tabValue} index={0} component="div">
+                        <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                        <div className="relativeWrapper">
+                          <div className="">
+                            <div className="dataWrapper">
+                              {this.state.dataColumns &&
+                                <DataGrid
+                                  columns={this.state.dataColumns}
+                                  rows={this.state.data}
+                                  enableCellAutoFocus={false}
+                                  height={this.state.topRightPaneHeight}
+                                  onGridSort={this.sortRows}
+                                  />
+                              }
+                            </div>
                           </div>
                         </div>
-                      </div>
-                </TabPanel>
-                <TabPanel value={this.state.tabValue} index={1}>
-                  <div className="relativeWrapper">
-                    <div className="absoluteWrapper">
-                      <div className="dataWrapper">
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={1}>
+                    <div className="relativeWrapper">
+                      <div className="absoluteWrapper">
+                        <div className="dataWrapper">
 
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </TabPanel>
-                <TabPanel value={this.state.tabValue} index={2}>
-                  Item Three
-                </TabPanel>
-                <TabPanel value={this.state.tabValue} index={3}>
-                  Item Four
-                </TabPanel>
-              </div>
-            </Pane>
-            <Pane ref={this.bottomRightPaneRef} id="bottomRightPane" className="bottomRightPane"
-              minSize="100px" initialSize="50%">
-              <div className={classes.root}>
-                <AppBar position="static" color="default" component={'span'}>
-                  <Tabs component={'span'}
-                    value={this.state.tabValueBottom}
-                    onChange={this.handleTabChange}
-                    variant="scrollable"
-                    scrollButtons="on"
-                    indicatorColor="primary"
-                    textColor="primary"
-                    aria-label="scrollable force tabs example">
-                    <Tab label="Plot" {...a11yProps(0)} />
-                  </Tabs>
-                </AppBar>
-                <TabPanel value={this.state.tabValueBottom} index={0} component="div">
-                  <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
-                  <div className="plotWrapper">
-                    <div id="plotOutput"></div>
-                  </div>
-                </TabPanel>
-              </div>
-            </Pane>
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={2}>
+                    Item Three
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={3}>
+                    Item Four
+                  </TabPanel>
+                </div>
+              </Pane>
+              <Pane ref={this.bottomRightPaneRef} id="bottomRightPane" className="bottomRightPane"
+                minSize="100px" initialSize="50%">
+                <div className={classes.root}>
+                  <AppBar position="static" color="default" component={'span'}>
+                    <Tabs component={'span'}
+                      value={this.state.tabValueBottom}
+                      onChange={this.handleTabChange}
+                      variant="scrollable"
+                      scrollButtons="on"
+                      indicatorColor="primary"
+                      textColor="primary">
+                      <Tab label="Plot" {...a11yProps(0)} />
+                    </Tabs>
+                  </AppBar>
+                  <TabPanel value={this.state.tabValueBottom} index={0} component="div">
+                    <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
+                    <div className="plotWrapper">
+                      <div id="plotOutput"></div>
+                    </div>
+                  </TabPanel>
+                </div>
+              </Pane>
+            </SplitPane>
           </SplitPane>
-        </SplitPane>
+        </MuiThemeProvider>
       </div>
     )
   }
