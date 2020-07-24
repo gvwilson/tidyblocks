@@ -1,30 +1,30 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 import SplitPane from 'react-split-pane/lib/SplitPane'
 import Pane from 'react-split-pane/lib/Pane'
 import Resizer, { RESIZER_DEFAULT_CLASSNAME } from 'react-split-pane'
 import ReactBlocklyComponent from 'react-blockly'
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper.jsx'
-import DataGrid from 'react-data-grid';
+import DataGrid from 'react-data-grid'
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
 import {MenuBar} from './menuBar.jsx'
 import Select from 'react-select'
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import ThumbDown from '@material-ui/icons/ThumbDown';
-import ThumbUp from '@material-ui/icons/ThumbUp';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import PhoneIcon from '@material-ui/icons/Phone'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import PersonPinIcon from '@material-ui/icons/PersonPin'
+import HelpIcon from '@material-ui/icons/Help'
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket'
+import ThumbDown from '@material-ui/icons/ThumbDown'
+import ThumbUp from '@material-ui/icons/ThumbUp'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
 import { withStyles } from '@material-ui/core/styles'
 
 const DataTabSelect = ({options, onChange, value}) => (
@@ -43,8 +43,8 @@ const PlotTabSelect = ({options, onChange, value}) => (
   />
 )
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+const TabPanel = (props) => {
+  const { children, value, index, ...other } = props
 
   return (
     <div
@@ -60,35 +60,47 @@ function TabPanel(props) {
         </Box>
       )}
     </div>
-  );
+  )
 }
 
 TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
-};
+}
 
-function a11yProps(index) {
+const a11yProps = (index) => {
   return {
     id: `scrollable-force-tab-${index}`,
     'aria-controls': `scrollable-force-tabpanel-${index}`,
-  };
+  }
+}
+
+const createToolboxCategories = (props) => {
+  const categories = parseWorkspaceXml(props.toolbox)
+  const styles = props.settings.theme.categoryStyles
+  categories.forEach(c => {
+    const name = c.name
+    if (styles[name]) {
+      c.colour = styles[name].colour
+    }
+  })
+  return categories
 }
 
 // The main TidyBlocks App UI. Contains resizable panes for the Blockly section,
 // tabs for data display/plotting/logs.
 export class TidyBlocksApp extends React.Component{
-  constructor(props){
-    super(props);
-    this.blocklyRef = React.createRef();
-    this.bottomRightPaneRef = React.createRef();
-    this.dataGridRef = React.createRef();
+  constructor (props) {
+    super(props)
+    this.blocklyRef = React.createRef()
+    this.bottomRightPaneRef = React.createRef()
+    this.dataGridRef = React.createRef()
 
     this.state = {
       topRightPaneHeight: 200,
 
-      toolboxCategories: parseWorkspaceXml(this.props.toolbox),
+      toolboxCategories: createToolboxCategories(this.props),
       tabValue: 0,
       tabValueBottom: 0,
       // The results returned from running the program. We store them in full
@@ -114,31 +126,31 @@ export class TidyBlocksApp extends React.Component{
       statsValue: null,
       activeStatsOption: null,
 
-    };
-    this.paneVerticalResize = this.paneVerticalResize.bind(this);
-    this.paneHorizontalResize = this.paneHorizontalResize.bind(this);
-    this.updatePlot = this.updatePlot.bind(this);
-    this.changePlot = this.changePlot.bind(this);
-    this.updateTopRightPaneHeight = this.updateTopRightPaneHeight.bind(this);
-    this.runProgram = this.runProgram.bind(this);
-    this.changeData = this.changeData.bind(this);
-    this.handleTabChange = this.handleTabChange.bind(this);
-    this.sortRows = this.sortRows.bind(this);
+    }
+    this.paneVerticalResize = this.paneVerticalResize.bind(this)
+    this.paneHorizontalResize = this.paneHorizontalResize.bind(this)
+    this.updatePlot = this.updatePlot.bind(this)
+    this.changePlot = this.changePlot.bind(this)
+    this.updateTopRightPaneHeight = this.updateTopRightPaneHeight.bind(this)
+    this.runProgram = this.runProgram.bind(this)
+    this.changeData = this.changeData.bind(this)
+    this.handleTabChange = this.handleTabChange.bind(this)
+    this.sortRows = this.sortRows.bind(this)
 
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.updatePlot ()
     this.updateTopRightPaneHeight()
   }
 
   // Returns the workspace for use by our JavaScript code.
-  getWorkspace(){
+  getWorkspace () {
     return this.blocklyRef.current.workspace
   }
 
   // Handles a change in the vertical divider postion.
-  paneVerticalResize(){
+  paneVerticalResize () {
     if (this.dataGridRef.current){
       this.dataGridRef.current.metricsUpdated()
     }
@@ -148,7 +160,7 @@ export class TidyBlocksApp extends React.Component{
 
   // Updates the height of the topRightPane. This allows our ReactDataGrid to
   // update it's height.
-  updateTopRightPaneHeight(){
+  updateTopRightPaneHeight () {
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
     const TOP_RIGHT_HEIGHT_OFFSET = 150
     if (topRightPane){
@@ -158,11 +170,10 @@ export class TidyBlocksApp extends React.Component{
   }
 
   //Handles a change in the horizontal divider position.
-  paneHorizontalResize(){
-
+  paneHorizontalResize () {
     // Seems like sometimes the vertical pane get askew if we pull fast enough,
     // so we'll update it for safety.
-    this.paneVerticalResize();
+    this.paneVerticalResize()
     this.updatePlot()
     this.updateTopRightPaneHeight()
   }
@@ -173,24 +184,20 @@ export class TidyBlocksApp extends React.Component{
     console.log(sortDirection)
     const comparer = (a, b) => {
       if (sortDirection === 'ASC') {
-          return (a[sortColumn]> b[sortColumn]) ? 1 : -1;
-        } else if (sortDirection === 'DESC') {
-          return (a[sortColumn]< b[sortColumn]) ? 1 : -1;
-        }
-    };
+        return (a[sortColumn]> b[sortColumn]) ? 1 : -1
+      } else if (sortDirection === 'DESC') {
+        return (a[sortColumn]< b[sortColumn]) ? 1 : -1
+      }
+    }
 
     // Can access the initial data for 'None'. For now will just return the
     // same data unchanged.
-    const rows = sortDirection === 'NONE' ? this.state.data : this.state.data.sort(comparer);
-
-    this.setState({data: rows});
-
-
+    const rows = sortDirection === 'NONE' ? this.state.data : this.state.data.sort(comparer)
+    this.setState({data: rows})
   }
 
   // Updates the plot vega drawing.
-  updatePlot() {
-
+  updatePlot () {
     // Would be nice to use a ref instead of querying the DOM directly. Panes
     // don't seem to give an offsetWidth though. The alternative would involve
     // computing window sizes (on pane drag or window resize) from
@@ -199,9 +206,9 @@ export class TidyBlocksApp extends React.Component{
     const WIDTH_OFFSET = 120
     const HEIGHT_OFFSET = 175
 
-    if(this.state.plotData){
+    if (this.state.plotData) {
       const plotData = this.state.plotData
-      if (bottomRightPane){
+      if (bottomRightPane) {
         plotData.width = bottomRightPane.offsetWidth - WIDTH_OFFSET
         plotData.height = bottomRightPane.offsetHeight - HEIGHT_OFFSET
       }
@@ -211,7 +218,7 @@ export class TidyBlocksApp extends React.Component{
   }
 
   // Handles changing the displayed plot using the react-select dropdown.
-  changePlot(e){
+  changePlot (e) {
     console.log(e)
     const activePlotOption = e
     const plotData = this.state.env.plots.get(activePlotOption.value)
@@ -220,7 +227,7 @@ export class TidyBlocksApp extends React.Component{
     })
   }
 
-  changeData(e){
+  changeData (e) {
     console.log(e)
     const activeDataOption = e
     let formattedColumns = []
@@ -234,7 +241,7 @@ export class TidyBlocksApp extends React.Component{
       dataColumns: formattedColumns})
   }
 
-  runProgram(){
+  runProgram () {
     ui.runProgram()
     const env = ui.env
     console.log(env)
@@ -338,12 +345,12 @@ export class TidyBlocksApp extends React.Component{
     //
   }
 
-  handleTabChange(event, newValue){
+  handleTabChange (event, newValue) {
     this.setState({tabValue: newValue})
   }
 
-  render(){
-    const classes = withStyles(Tabs);
+  render () {
+    const classes = withStyles(Tabs)
     return (
       <div >
         <MenuBar runProgram={this.runProgram}/>
