@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
-import { createStyles, withStyles, withTheme } from '@material-ui/core/styles'
+import { createStyles, withStyles, makeStyles, withTheme } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -43,12 +43,29 @@ function SaveMenuItems(){
   )
 }
 
+const useStyles = makeStyles({
+  root: {
+    fontSize: '20px',
+
+  },
+  label: {
+    fontSize: '12px',
+  },
+});
+
 function TidyBlocksButtonItem({name, icon, handleClick}) {
+  const classes = useStyles();
+
   return (
     <div>
-      <Button className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
-        {icon}
-        {name}
+      <Button
+        classes={{
+          root: classes.root, // class name, e.g. `classes-nesting-root-x`
+          label: classes.label, // class name, e.g. `classes-nesting-label-x`
+        }}
+        className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
+          {icon}
+          {name}
       </Button>
     </div>
   )
@@ -63,14 +80,20 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
   }
 
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
+  const classes = useStyles();
 
   return (
     <div>
-      <Button className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
-        {icon}
-        {name}
+      <Button
+        classes={{
+          root: classes.root, // class name, e.g. `classes-nesting-root-x`
+          label: classes.label, // class name, e.g. `classes-nesting-label-x`
+        }}
+        aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
+          {icon}
+          {name}
       </Button>
       {menuItems &&
         <Menu
@@ -143,10 +166,10 @@ export class MenuBar extends React.Component{
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon className="menuIcon" fontSize="large"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksButtonItem name="Load Workspace" icon={<PublishIcon className="menuIcon" fontSize="large"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksButtonItem name="Load CSV" icon={<TableChartIcon className="menuIcon" fontSize="large"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksMenuItem name="Save..." menuItems={<SaveMenuItems/>} icon={<SaveIcon className="menuIcon" fontSize="large"/>}/>
+              <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon className="menuIcon" fontSize="18"/>} handleClick={this.props.runProgram}/>
+              <TidyBlocksButtonItem name="Load Workspace" icon={<PublishIcon className="menuIcon" fontSize="18"/>} handleClick={this.props.runProgram}/>
+              <TidyBlocksButtonItem name="Load CSV" icon={<TableChartIcon className="menuIcon" fontSize="18"/>} handleClick={this.props.runProgram}/>
+              <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>} icon={<SaveIcon className="menuIcon" fontSize="18"/>}/>
           </Toolbar>
         </AppBar>
         <Toolbar />
