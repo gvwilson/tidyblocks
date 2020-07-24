@@ -23,16 +23,16 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Hidden from '@material-ui/core/Hidden';
-import CloseIcon from '@material-ui/icons/Close';
+import CssBaseline from '@material-ui/core/CssBaseline'
+import Hidden from '@material-ui/core/Hidden'
+import CloseIcon from '@material-ui/icons/Close'
 
 // Menu Items to display for the Save button.
 function SaveMenuItems(){
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <React.Fragment>
@@ -51,20 +51,20 @@ function TidyBlocksButtonItem({name, icon, handleClick}) {
         {name}
       </Button>
     </div>
-  );
+  )
 }
 
 // Create a Menu Item for the top TidyBlocks bar.
 function TidyBlocksMenuItem({name, icon, menuItems}) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl)
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   return (
     <div>
@@ -84,13 +84,13 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
       }
 
     </div>
-  );
+  )
 }
 
 // Defines the top level menu bar for the page.
 export class MenuBar extends React.Component{
   constructor(props){
-    super(props);
+    super(props)
     this.state = {
       mobileOpen: false,
     }
@@ -103,15 +103,15 @@ export class MenuBar extends React.Component{
     console.log(this.state.mobileOpen)
 
     const mobileOpen = this.state.mobileOpen
-    this.setState({mobileOpen: !mobileOpen});
+    this.setState({mobileOpen: !mobileOpen})
     // setMobileOpen(!mobileOpen)
   }
 
   render(){
-    const classes = withStyles(MenuBar);
-    const theme = withTheme(MenuBar);
+    const classes = withStyles(MenuBar)
+    const theme = withTheme(MenuBar)
 
-    // const [mobileOpen, setMobileOpen] = React.useState(false);
+    // const [mobileOpen, setMobileOpen] = React.useState(false)
     const drawer = (
       <div>
       <List>
@@ -127,7 +127,7 @@ export class MenuBar extends React.Component{
         </ListItem>
       </List>
       </div>
-    );
+    )
 
 
     return (
@@ -146,7 +146,7 @@ export class MenuBar extends React.Component{
               <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon className="menuIcon" fontSize="large"/>} handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load Workspace" icon={<PublishIcon className="menuIcon" fontSize="large"/>} handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load CSV" icon={<TableChartIcon className="menuIcon" fontSize="large"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>} icon={<SaveIcon className="menuIcon" fontSize="large"/>}/>
+              <TidyBlocksMenuItem name="Save..." menuItems={<SaveMenuItems/>} icon={<SaveIcon className="menuIcon" fontSize="large"/>}/>
           </Toolbar>
         </AppBar>
         <Toolbar />
@@ -172,6 +172,6 @@ export class MenuBar extends React.Component{
           </Hidden>
         </nav>
       </React.Fragment>
-    );
+    )
   }
 }
