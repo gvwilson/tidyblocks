@@ -1,4 +1,3 @@
-
 .MuiBox-root{
   padding: 5px !important;
 }
@@ -17,4 +16,9 @@
 
 .tbToolbar{
   min-height: 40px !important;
+}
+
+li.tbError {
+  font-weight: bold;
+  font-style: italic;
 }

@@ -35,7 +35,6 @@ class ReactInterface extends UserInterface {
 
     // Create an environment so that the React app can get at the pre-loaded datasets.
     const env = new Env(this.userData)
-    console.log('IN ReactInterface CONSTRUCTOR', env)
 
     // Render React, saving the React app.
     this.app = ReactDOM.render(

@@ -385,9 +385,13 @@ export class TidyBlocksApp extends React.Component{
   render(){
     const classes = withStyles(Tabs);
     const tabClasses = withStyles(Tab);
-    const logMessages = this.state.logMessages
-          ? this.state.logMessages.map((msg, i) => <li><code>{msg[0]}: {msg[1]}</code></li>) // FIXME: should give each a key
-          : <li>No messages</li>
+    const logMessages = (!this.state.logMessages)
+          ? <li className="tbLog" key="message-0">No messages</li>
+          : this.state.logMessages.map((msg, i) => {
+              const key = `message-${i}`
+              const cls = (msg[0] === 'log') ? 'tbLog' : 'tbError'
+              return (<li className={cls} key={key}><code>{msg[1]}</code></li>)
+            })
     const logMessageList = <ul>{logMessages}</ul>
 
     return (
@@ -454,7 +458,7 @@ export class TidyBlocksApp extends React.Component{
                     </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={2}>
-                    {logMessages}
+                    {logMessageList}
                   </TabPanel>
                 </div>
               </Pane>
