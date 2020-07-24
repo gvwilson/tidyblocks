@@ -381,7 +381,6 @@ export class TidyBlocksApp extends React.Component{
                     <Tab label="Data" {...a11yProps(0)} />
                     <Tab label="Stats" {...a11yProps(1)} />
                     <Tab label="Console" {...a11yProps(2)} />
-                    <Tab label="Item Four" {...a11yProps(3)} />
                   </Tabs>
                 </AppBar>
                 <TabPanel value={this.state.tabValue} index={0} component="div">
@@ -412,10 +411,6 @@ export class TidyBlocksApp extends React.Component{
                   </div>
                 </TabPanel>
                 <TabPanel value={this.state.tabValue} index={2}>
-                  Item Three
-                </TabPanel>
-                <TabPanel value={this.state.tabValue} index={3}>
-                  Item Four
                 </TabPanel>
               </div>
             </Pane>
