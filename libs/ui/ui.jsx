@@ -97,6 +97,9 @@ export class TidyBlocksApp extends React.Component{
     this.bottomRightPaneRef = React.createRef()
     this.dataGridRef = React.createRef()
 
+    // Get the initial environment so that we can pre-populate the datasets.
+    const initialEnv = props.initialEnv
+
     this.state = {
       topRightPaneHeight: 200,
 

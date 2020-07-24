@@ -6,6 +6,7 @@ const React = require('react');
 const Blockly = require('blockly/blockly_compressed')
 
 const blocks = require('./blocks/blocks')
+const Env = require('./libs/env')
 const UserInterface = require('./libs/gui')
 const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 
@@ -32,9 +33,12 @@ class ReactInterface extends UserInterface {
     const serializer = new XMLSerializer()
     const toolboxString = serializer.serializeToString(toolbox)
 
+    // Create an environment so that the React app can get at the pre-loaded datasets.
+    const env = new Env(this)
+
     // Render React, saving the React app.
     this.app = ReactDOM.render(
-      <TidyBlocksApp settings={settings} toolbox={toolboxString}/>,
+      <TidyBlocksApp settings={settings} toolbox={toolboxString} initialEnv={env}/>,
       document.getElementById(rootId)
     )
 
