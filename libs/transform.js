@@ -15,19 +15,19 @@ const FAMILY = '@transform'
  */
 class TransformBase {
   /**
-   * @param {string} name What this transform is called.
+   * @param {string} species What this transform is called.
    * @param {string[]} requires What datasets are required before this can run?
    * @param {string} produces What dataset does this transform produce?
    * @param {Boolean} input Does this transform require input?
    * @param {Boolean} output Does this transform produce input?
    */
-  constructor (name, requires, produces, input, output) {
-    util.check(name && (typeof name === 'string') &&
+  constructor (species, requires, produces, input, output) {
+    util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')) &&
                ((produces === null) || (typeof produces === 'string')),
                `Bad parameters to constructor`)
-    this.name = name
+    this.species = species
     this.requires = requires
     this.produces = produces
     this.input = input
@@ -36,7 +36,7 @@ class TransformBase {
 
   equal (other) {
     return (other instanceof TransformBase) &&
-      (this.name === other.name)
+      (this.species === other.species)
   }
 
   equalColumns (other) {
@@ -45,7 +45,7 @@ class TransformBase {
     util.check('columns' in other,
                `Other object must have columns`)
     return (other instanceof TransformBase) &&
-      (this.name === other.name) &&
+      (this.species === other.species) &&
       (this.columns.length === other.columns.length) &&
       this.columns.every(x => other.columns.includes(x))
   }
@@ -55,26 +55,26 @@ class TransformBase {
 
 /**
  * Get a dataset.
- * @param {string} dataset Name of dataset.
+ * @param {string} name Name of dataset.
  */
 class TransformData extends TransformBase {
-  constructor (dataset) {
-    util.check(typeof dataset === 'string',
+  constructor (name) {
+    util.check(typeof name === 'string',
                `Expected string`)
     super('read', [], null, false, true)
-    this.dataset = dataset
+    this.name = name
   }
 
   equal (other) {
     return super.equal(other) &&
-      (this.dataset === other.dataset)
+      (this.name === other.name)
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.name}`)
     util.check(df === null,
                `Cannot provide input dataframe to reader`)
-    const loaded = env.getData(this.dataset)
+    const loaded = env.getData(this.name)
     return new DataFrame(loaded.data, loaded.columns)
   }
 }
@@ -95,7 +95,7 @@ class TransformDrop extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.drop(this.columns)
   }
 }
@@ -118,7 +118,7 @@ class TransformFilter extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', this.species)
     return df.filter(this.expr)
   }
 }
@@ -140,7 +140,7 @@ class TransformGroupBy extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.groupBy(this.columns)
   }
 }
@@ -170,7 +170,7 @@ class TransformJoin extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', this.species)
     util.check(df === null,
                `Cannot provide input dataframe to join`)
     const left = env.getData(this.leftName)
@@ -203,7 +203,7 @@ class TransformMutate extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.newName}`)
     return df.mutate(this.newName, this.expr)
   }
 }
@@ -226,7 +226,7 @@ class TransformNotify extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.label}`)
     return df
   }
 }
@@ -248,7 +248,7 @@ class TransformSelect extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.select(this.columns)
   }
 }
@@ -274,7 +274,7 @@ class TransformSequence extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.newName} ${this.limit}`)
     const raw = Array.from(
       {length: this.limit},
       (v, k) => {
@@ -307,39 +307,38 @@ class TransformSort extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')} ${this.reverse}`)
     return df.sort(this.columns, this.reverse)
   }
 }
 
 /**
  * Summarize data.
- * @param {string} op Name of operation.
+ * @param {string} action Name of operation.
  * @param {string} column Column to summarize.
  */
 class TransformSummarize extends TransformBase {
-  constructor (op, column) {
-    util.check(typeof op === 'string',
-               `Expected string as op`)
-    util.check(op in Summarize,
-               `Unknown summarization operation ${op}`)
+  constructor (action, column) {
+    util.check(typeof action === 'string',
+               `Expected string as action`)
+    util.check(action in Summarize,
+               `Unknown summarization operation ${action}`)
     util.check(typeof column === 'string',
                `Expected string as column name`)
     super('summarize', [], null, true, true)
-    this.op = op
+    this.action = action
     this.column = column
   }
 
   equal (other) {
     return super.equal(other) &&
-      (this.op === other.op) &&
+      (this.action === other.action) &&
       (this.column === other.column)
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
-    const summarizer = new Summarize[this.op](this.column)
-    return df.summarize(summarizer)
+    env.appendLog('log', `${this.species} ${this.action} ${this.column}`)
+    return df.summarize(new Summarize[this.action](this.column))
   }
 }
 
@@ -352,7 +351,7 @@ class TransformUngroup extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species}`)
     return df.ungroup()
   }
 }
@@ -374,7 +373,7 @@ class TransformUnique extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.unique(this.columns)
   }
 }
@@ -394,7 +393,7 @@ class TransformPlot extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.label}`)
     this.spec.data.values = df.data
     env.setPlot(this.label, this.spec)
   }
@@ -549,7 +548,7 @@ class TransformTTestOneSample extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.label}`)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
     env.setStats(this.label, pValue)
@@ -572,7 +571,7 @@ class TransformTTestPaired extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.name)
+    env.appendLog('log', `${this.species} ${this.label}`)
     const known = new Set(df.data.map(row => row[this.labelCol]))
     util.check(known.size === 2,
                `Must have exactly two labels for data`)

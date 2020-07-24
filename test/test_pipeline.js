@@ -87,7 +87,7 @@ describe('executes pipelines', () => {
   it('executes a pipeline with notification', (done) => {
     const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
     const result = pipeline.run(new Env(INTERFACE.userData))
-    assert.equal(result.name, 'keyword',
+    assert.equal(result.label, 'keyword',
                  `Result should include name`)
     assert(result.data.equal(fixture.TABLE),
            `Result should contain unmodified table`)
@@ -95,10 +95,10 @@ describe('executes pipelines', () => {
   })
 
   it('logs execution', (done) => {
-    const runner = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE.userData)
     const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.TAIL)
-    const result = pipeline.run(runner)
-    assert.deepEqual(runner.log, ['head', 'middle', 'tail'],
+    const result = pipeline.run(env)
+    assert.deepEqual(env.log, [['log', 'head'], ['log', 'middle'], ['log', 'tail']],
                      `Transforms not logged`)
     done()
   })

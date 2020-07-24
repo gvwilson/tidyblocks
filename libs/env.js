@@ -5,7 +5,7 @@ const DataFrame = require('./dataframe')
 
 /**
  * Runtime environment.
- * @param userData Datasets loaded by the user (keyed by name).
+ * @param userData Datasets loaded by the user (keyed by label).
  */
 class Env {
   /**
@@ -21,85 +21,85 @@ class Env {
   }
 
   /**
-   * Get a dataset by name. This checks the results first, then the userData.
-   * @param {string} name Identifier for data.
+   * Get a dataset by label. This checks the results first, then the userData.
+   * @param {string} label Identifier for data.
    * @returns Data table to be converted to dataframe.
    */
-  getData (name) {
-    util.check(name && (typeof name === 'string'),
-               `Require non-empty string as dataset name`)
-    if (this.results.has(name)) {
-      return this.results.get(name)
+  getData (label) {
+    util.check(label && (typeof label === 'string'),
+               `Require non-empty string as dataset label`)
+    if (this.results.has(label)) {
+      return this.results.get(label)
     }
-    if (this.userData.has(name)) {
-      return this.userData.get(name)
+    if (this.userData.has(label)) {
+      return this.userData.get(label)
     }
-    util.fail(`Dataset ${name} not known`)
+    util.fail(`Dataset ${label} not known`)
   }
 
   /**
    * Add a named dataset to results.
-   * @param {string} name Identifier for data.
+   * @param {string} label Identifier for data.
    * @param {Object[]} data Data table.
    */
-  setResult (name, data) {
-    util.check(name && (typeof name === 'string') && (name.length > 0),
-               `Require non-empty string name for result`)
+  setResult (label, data) {
+    util.check(label && (typeof label === 'string') && (label.length > 0),
+               `Require non-empty string label for result`)
     util.check(data instanceof DataFrame,
                `Require dataframe for data`)
-    util.check(!this.results.has(name),
-               `Result with name ${name} already exists`)
-    this.results.set(name, data)
+    util.check(!this.results.has(label),
+               `Result with label ${label} already exists`)
+    this.results.set(label, data)
   }
 
   /**
    * Get a Vega-Lite plot spec.
-   * @param name Name of plot result to get.
+   * @param label Name of plot result to get.
    */
-  getPlot (name) {
-    util.check(name && (typeof name === 'string'),
-               `Require non-empty string as plot name`)
-    util.check(this.plots.has(name),
-               `Unknown plot name ${name}`)
-    return this.plots.get(name)
+  getPlot (label) {
+    util.check(label && (typeof label === 'string'),
+               `Require non-empty string as plot label`)
+    util.check(this.plots.has(label),
+               `Unknown plot label ${label}`)
+    return this.plots.get(label)
   }
   
   /**
    * Store a Vega-Lite plot spec.
-   * @param name Name of result.
+   * @param label Name of result.
    * @param {Object} spec Vega-Lite plot spec.
    */
-  setPlot (name, spec) {
-    util.check(name && (typeof name === 'string'),
-               `Require non-empty string as plot name`)
-    util.check(!this.plots.has(name),
-               `Duplicate plot name ${name}`)
-    this.plots.set(name, spec)
+  setPlot (label, spec) {
+    util.check(label && (typeof label === 'string'),
+               `Require non-empty string as plot label`)
+    util.check(!this.plots.has(label),
+               `Duplicate plot label ${label}`)
+    this.plots.set(label, spec)
   }
 
   /**
    * Get a statistical result.
-   * @param name Name of result to get.
+   * @param label Name of result to get.
    */
-  getStats (name) {
-    util.check(name && (typeof name === 'string'),
-               `Require non-empty string as statistics name`)
-    util.check(this.stats.has(name),
-               `Unknown stats name ${name}`)
-    return this.stats.get(name)
+  getStats (label) {
+    util.check(label && (typeof label === 'string'),
+               `Require non-empty string as statistics label`)
+    util.check(this.stats.has(label),
+               `Unknown stats label ${label}`)
+    return this.stats.get(label)
   }
   
   /**
    * Store a statistical result.
-   * @param name Name of result to get.
+   * @param label Name of result to get.
    * @param {Object} result Result to store.
    */
-  setStats (name, spec) {
-    util.check(name && (typeof name === 'string'),
-               `Require non-empty string as stats name`)
-    util.check(!this.stats.has(name),
-               `Duplicate stats name ${name}`)
-    this.stats.set(name, spec)
+  setStats (label, spec) {
+    util.check(label && (typeof label === 'string'),
+               `Require non-empty string as stats label`)
+    util.check(!this.stats.has(label),
+               `Duplicate stats label ${label}`)
+    this.stats.set(label, spec)
   }
 
   /**
@@ -108,8 +108,8 @@ class Env {
    * @param {string} message To save.
    */
   appendLog (level, message) {
-    util.warn(level && (typeof level === 'string') && (level in ['log', 'error']),
-              `Expected either "log" or "error" for level, not "${level}"`)
+    util.check(level && (typeof level === 'string') && ['log', 'error'].includes(level),
+               `Expected either "log" or "error" for level, not "${level}"`)
     this.log.push([level, message])
   }
 }

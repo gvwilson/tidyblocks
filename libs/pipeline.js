@@ -56,7 +56,10 @@ class Pipeline {
     }
 
     const last = this.transforms.slice(-1)[0]
-    return {name: last.produces, data: data}
+    return {
+      label: last.produces,
+      data: data
+    }
   }
 }
 Pipeline.FAMILY = '@pipeline'

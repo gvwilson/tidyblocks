@@ -201,9 +201,13 @@ describe('executes program', () => {
 
     const env = new Env(INTERFACE.userData)
     program.run(env)
-    assert.equal(env.errors.length, 1,
-                 `No saved error message`)
-    assert(env.errors[0].startsWith('error message'),
+    assert.equal(env.log.length, 2,
+                 `No saved messages`)
+    assert(env.log[0][0] === 'log',
+           `First message should be log message`)
+    assert(env.log[1][0] === 'error',
+           `Second message should be log message`)
+    assert(env.log[1][1].startsWith('error message'),
            `Error message incorrectly formatted`)
     done()
   })
@@ -282,8 +286,8 @@ describe('executes program', () => {
 
     const env = new Env(INTERFACE.userData)
     program.run(env)
-    assert.deepEqual(env.errors, [],
-                     `Should not have an error message`)
+    assert.equal(env.log.length, 6,
+                 `Should have run 6 stages`)
 
     const data = [{alpha_right: 10, beta_right: 10 },
                   {alpha_right: 20, beta_right: 20 }]
