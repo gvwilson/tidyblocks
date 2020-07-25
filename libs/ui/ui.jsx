@@ -12,20 +12,21 @@ import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
 import {MenuBar} from './menuBar.jsx'
 import Select from 'react-select'
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import ThumbDown from '@material-ui/icons/ThumbDown';
-import ThumbUp from '@material-ui/icons/ThumbUp';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
+import AppBar from '@material-ui/core/AppBar'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
+import PhoneIcon from '@material-ui/icons/Phone'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import PersonPinIcon from '@material-ui/icons/PersonPin'
+import HelpIcon from '@material-ui/icons/Help'
+import ShoppingBasket from '@material-ui/icons/ShoppingBasket'
+import ThumbDown from '@material-ui/icons/ThumbDown'
+import ThumbUp from '@material-ui/icons/ThumbUp'
+import Typography from '@material-ui/core/Typography'
+import Box from '@material-ui/core/Box'
 import { withStyles, makeStyles, useStyles, styled } from '@material-ui/core/styles'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import Blockly from 'blockly/blockly_compressed'
 
 const tabHeight = '34px' // default: '48px'
 
@@ -47,7 +48,7 @@ const theme = createMuiTheme({
       }
     },
   },
-});
+})
 
 const DataTabSelect = ({options, onChange, value}) => (
   <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
@@ -213,8 +214,6 @@ export class TidyBlocksApp extends React.Component{
 
   // Sorting function for our react-data-grids.
   sortRows(sortColumn, sortDirection){
-    console.log(sortColumn)
-    console.log(sortDirection)
     const comparer = (a, b) => {
       if (sortDirection === 'ASC') {
         return (a[sortColumn]> b[sortColumn]) ? 1 : -1
@@ -252,7 +251,6 @@ export class TidyBlocksApp extends React.Component{
 
   // Handles changing the displayed plot using the react-select dropdown.
   changePlot (e) {
-    console.log(e)
     const activePlotOption = e
     const plotData = this.state.env.plots.get(activePlotOption.value)
     this.setState({activePlotOption: activePlotOption, plotData: plotData}, () => {
@@ -261,12 +259,9 @@ export class TidyBlocksApp extends React.Component{
   }
 
   changeData (e) {
-    console.log(e)
     const activeDataOption = e
     let formattedColumns = []
     const data = this.state.env.userData.get(activeDataOption.value)['data']
-    console.log("change")
-    console.log(data)
     const dataColumns = this.state.env.userData.get(activeDataOption.value)['columns']
     dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
 
@@ -306,7 +301,6 @@ export class TidyBlocksApp extends React.Component{
       let result = dataKeys.next()
       if (!result.done){
         activeDataOption = {'value': result.value, 'label': result.value}
-        console.log(env.userData.get(activeDataOption.value)['columns'])
         data = env.userData.get(activeDataOption.value)['data']
         dataColumns = env.userData.get(activeDataOption.value)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
@@ -389,32 +383,34 @@ export class TidyBlocksApp extends React.Component{
   }
 
   // Calls the file upload input.
-  loadWorkspaceClick(){
-    this.refs.workspaceFileUploader.click();
+  loadWorkspaceClick () {
+    this.refs.workspaceFileUploader.click()
   }
 
   // Updates the workspace after a file has been uploaded.
-  loadWorkspace(){
+  loadWorkspace () {
     const text = this.refs.workspaceFileUploader.files[0].text().then((text) => {
-      console.log(text)
+      const xml = Blockly.Xml.textToDom(text)
+      const workspace = this.getWorkspace().state.workspace
+      Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, workspace)
     })
   }
 
   // Calls the file upload input.
-  loadCsvClick(){
-    this.refs.csvFileUploader.click();
+  loadCsvClick () {
+    this.refs.csvFileUploader.click()
   }
 
   // Processes and loads the csv after the file has been uploaded
-  loadCsv(){
+  loadCsv () {
     const text = this.refs.csvFileUploader.files[0].text().then((text) => {
       console.log(text)
     })
   }
 
-  render(){
-    const classes = withStyles(Tabs);
-    const tabClasses = withStyles(Tab);
+  render () {
+    const classes = withStyles(Tabs)
+    const tabClasses = withStyles(Tab)
     const logMessages = (!this.state.logMessages)
           ? <li className="tbLog" key="message-0">No messages</li>
           : this.state.logMessages.map((msg, i) => {
