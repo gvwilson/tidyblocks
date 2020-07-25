@@ -118,6 +118,8 @@ export class TidyBlocksApp extends React.Component{
     this.blocklyRef = React.createRef()
     this.bottomRightPaneRef = React.createRef()
     this.dataGridRef = React.createRef()
+    this.workspaceFileUploader = React.createRef()
+    this.csvFileUploader = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -159,6 +161,10 @@ export class TidyBlocksApp extends React.Component{
     this.changePlot = this.changePlot.bind(this)
     this.updateTopRightPaneHeight = this.updateTopRightPaneHeight.bind(this)
     this.runProgram = this.runProgram.bind(this)
+    this.loadWorkspaceClick = this.loadWorkspaceClick.bind(this)
+    this.loadWorkspace = this.loadWorkspace.bind(this)
+    this.loadCsvClick = this.loadCsvClick.bind(this)
+    this.loadCsv = this.loadCsv.bind(this)
     this.changeData = this.changeData.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this)
     this.sortRows = this.sortRows.bind(this)
@@ -382,6 +388,30 @@ export class TidyBlocksApp extends React.Component{
     this.setState({tabValue: newValue})
   }
 
+  // Calls the file upload input.
+  loadWorkspaceClick(){
+    this.refs.workspaceFileUploader.click();
+  }
+
+  // Updates the workspace after a file has been uploaded.
+  loadWorkspace(){
+    const text = this.refs.workspaceFileUploader.files[0].text().then((text) => {
+      console.log(text)
+    })
+  }
+
+  // Calls the file upload input.
+  loadCsvClick(){
+    this.refs.csvFileUploader.click();
+  }
+
+  // Processes and loads the csv after the file has been uploaded
+  loadCsv(){
+    const text = this.refs.csvFileUploader.files[0].text().then((text) => {
+      console.log(text)
+    })
+  }
+
   render(){
     const classes = withStyles(Tabs);
     const tabClasses = withStyles(Tab);
@@ -397,7 +427,15 @@ export class TidyBlocksApp extends React.Component{
     return (
       <div >
         <MuiThemeProvider theme={theme}>
-          <MenuBar runProgram={this.runProgram}/>
+          <MenuBar runProgram={this.runProgram}
+            loadCsvClick={this.loadCsvClick}
+            loadWorkspaceClick={this.loadWorkspaceClick}/>
+          <input type="file" id="workspaceFile" ref="workspaceFileUploader"
+            onChange={this.loadWorkspace}
+            style={{display: "none"}}/>
+          <input type="file" id="csvFile" ref="csvFileUploader"
+            onChange={this.loadCsv}
+            style={{display: "none"}}/>
           <SplitPane className="splitPaneWrapper"
             split="vertical"  primary="secondary"
             onChange={this.paneVerticalResize}>
