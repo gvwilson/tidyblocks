@@ -23,7 +23,7 @@ const setup = () => {
           type: 'field_input',
           name: 'COLUMN',
           text: 'label'
-        },
+        }
       ],
       inputsInline: false,
       nextStatement: null,
@@ -94,7 +94,6 @@ const setup = () => {
 
   // Glue
   Blockly.TidyBlocks['combine_glue'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
     const leftTable = block.getFieldValue('LEFT_TABLE')
     const rightTable = block.getFieldValue('RIGHT_TABLE')
     const labels = block.getFieldValue('COLUMN')
@@ -103,7 +102,6 @@ const setup = () => {
 
   // Join
   Blockly.TidyBlocks['combine_join'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
     const leftTable = block.getFieldValue('LEFT_TABLE')
     const leftColumn = block.getFieldValue('LEFT_COLUMN')
     const rightTable = block.getFieldValue('RIGHT_TABLE')

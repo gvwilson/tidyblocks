@@ -3,7 +3,6 @@
 const Blockly = require('blockly/blockly_compressed')
 
 const setup = () => {
-
   Blockly.defineBlocksWithJsonArray([
     // Bar plot
     {
@@ -34,7 +33,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
-    
+
     // Box plot
     {
       type: 'plot_box',
@@ -64,7 +63,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
-    
+
     // Dot plot
     {
       type: 'plot_dot',
@@ -76,9 +75,9 @@ const setup = () => {
           text: 'name'
         },
         {
-          type: "field_input",
-          name: "X_AXIS",
-          text: "X_axis"
+          type: 'field_input',
+          name: 'X_AXIS',
+          text: 'X_axis'
         }
       ],
       inputsInline: true,
@@ -89,7 +88,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS']
     },
-    
+
     // Histogram plot
     {
       type: 'plot_histogram',
@@ -119,7 +118,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_COLUMN']
     },
-    
+
     // Scatter plot
     {
       type: 'plot_scatter',
@@ -159,24 +158,24 @@ const setup = () => {
   // Bar plot
   Blockly.TidyBlocks['plot_bar'] = (block) => {
     const name = block.getFieldValue('NAME')
-    const x_axis = block.getFieldValue('X_AXIS')
-    const y_axis = block.getFieldValue('Y_AXIS')
-    return `["@transform", "bar", "${name}", "${x_axis}", "${y_axis}"]`
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
+    return `["@transform", "bar", "${name}", "${xAxis}", "${yAxis}"]`
   }
 
   // Box plot
   Blockly.TidyBlocks['plot_box'] = (block) => {
     const name = block.getFieldValue('NAME')
-    const x_axis = block.getFieldValue('X_AXIS')
-    const y_axis = block.getFieldValue('Y_AXIS')
-    return `["@transform", "box", "${name}", "${x_axis}", "${y_axis}"]`
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
+    return `["@transform", "box", "${name}", "${xAxis}", "${yAxis}"]`
   }
 
   // Dot plot
   Blockly.TidyBlocks['plot_dot'] = (block) => {
     const name = block.getFieldValue('NAME')
-    const x_axis = block.getFieldValue('X_AXIS')
-    return `["@transform", "dot", "${name}", "${x_axis}"]`
+    const xAxis = block.getFieldValue('X_AXIS')
+    return `["@transform", "dot", "${name}", "${xAxis}"]`
   }
 
   // Histogram plot
@@ -190,10 +189,10 @@ const setup = () => {
   // Scatter plot
   Blockly.TidyBlocks['plot_scatter'] = (block) => {
     const name = block.getFieldValue('NAME')
-    const x_axis = block.getFieldValue('X_AXIS')
-    const y_axis = block.getFieldValue('Y_AXIS')
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
     const color = block.getFieldValue('COLOR')
-    return `["@transform", "scatter", "${name}", "${x_axis}", "${y_axis}", "${color}"]`
+    return `["@transform", "scatter", "${name}", "${xAxis}", "${yAxis}", "${color}"]`
   }
 }
 

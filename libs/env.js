@@ -64,7 +64,7 @@ class Env {
                `Unknown plot label ${label}`)
     return this.plots.get(label)
   }
-  
+
   /**
    * Store a Vega-Lite plot spec.
    * @param label Name of result.
@@ -89,7 +89,7 @@ class Env {
                `Unknown stats label ${label}`)
     return this.stats.get(label)
   }
-  
+
   /**
    * Store a statistical result.
    * @param label Name of result to get.
