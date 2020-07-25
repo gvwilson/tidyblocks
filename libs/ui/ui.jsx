@@ -27,6 +27,8 @@ import Box from '@material-ui/core/Box'
 import { withStyles, makeStyles, useStyles, styled } from '@material-ui/core/styles'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Blockly from 'blockly/blockly_compressed'
+import {csvToTable} from '../util'
+import DataFrame from '../dataframe'
 
 const tabHeight = '34px' // default: '48px'
 
@@ -68,7 +70,6 @@ const PlotTabSelect = ({options, onChange, value}) => (
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props
-
   return (
     <div
       role="tabpanel"
@@ -113,7 +114,7 @@ const createToolboxCategories = (props) => {
 
 // The main TidyBlocks App UI. Contains resizable panes for the Blockly section,
 // tabs for data display/plotting/logs.
-export class TidyBlocksApp extends React.Component{
+export class TidyBlocksApp extends React.Component {
   constructor (props) {
     super(props)
     this.blocklyRef = React.createRef()
@@ -127,7 +128,6 @@ export class TidyBlocksApp extends React.Component{
 
     this.state = {
       topRightPaneHeight: 200,
-
       toolboxCategories: createToolboxCategories(this.props),
       tabValue: 0,
       tabValueBottom: 0,
@@ -261,8 +261,8 @@ export class TidyBlocksApp extends React.Component{
   changeData (e) {
     const activeDataOption = e
     let formattedColumns = []
-    const data = this.state.env.userData.get(activeDataOption.value)['data']
-    const dataColumns = this.state.env.userData.get(activeDataOption.value)['columns']
+    const data = this.state.env.ui.userData.get(activeDataOption.value)['data']
+    const dataColumns = this.state.env.ui.userData.get(activeDataOption.value)['columns']
     dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
 
     this.setState({activeDataOption: activeDataOption, data: data,
@@ -276,7 +276,6 @@ export class TidyBlocksApp extends React.Component{
   runProgram () {
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
-
     this.updateDataInformation(env)
     this.updatePlotInformation(env)
     this.updateStatsInformation(env)
@@ -284,16 +283,16 @@ export class TidyBlocksApp extends React.Component{
   }
 
   updateDataInformation (env) {
-    const dataKeys = env.userData.keys()
+    const dataKeys = env.ui.userData.keys()
     let data = null
     let dataColumns = null
     let activeDataOption = null
     let formattedColumns = []
 
     if (this.state.activeDataOption) {
-      if (env.userData.has(this.state.activeDataOption.value)){
-        data = env.userData.get(this.state.activeDataOption.value)['data']
-        dataColumns = env.userData.get(this.state.activeDataOption.value)['columns']
+      if (env.ui.userData.has(this.state.activeDataOption.value)){
+        data = env.ui.userData.get(this.state.activeDataOption.value)['data']
+        dataColumns = env.ui.userData.get(this.state.activeDataOption.value)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
         activeDataOption = this.state.activeDataOption
       }
@@ -301,13 +300,13 @@ export class TidyBlocksApp extends React.Component{
       let result = dataKeys.next()
       if (!result.done){
         activeDataOption = {'value': result.value, 'label': result.value}
-        data = env.userData.get(activeDataOption.value)['data']
-        dataColumns = env.userData.get(activeDataOption.value)['columns']
+        data = env.ui.userData.get(activeDataOption.value)['data']
+        dataColumns = env.ui.userData.get(activeDataOption.value)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       }
     }
     let dataOptions = []
-    for (let key of env.userData.keys()){
+    for (let key of env.ui.userData.keys()){
       dataOptions.push({value: key, label: key})
     }
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
@@ -403,8 +402,13 @@ export class TidyBlocksApp extends React.Component{
 
   // Processes and loads the csv after the file has been uploaded
   loadCsv () {
-    const text = this.refs.csvFileUploader.files[0].text().then((text) => {
-      console.log(text)
+    const file = this.refs.csvFileUploader.files[0]
+    const name = file.name
+    file.text().then((text) => {
+      const label = name.replace('.csv', '')
+      const workspace = this.getWorkspace().state.workspace
+      const df = new DataFrame(csvToTable(text))
+      this.state.env.ui.userData.set(label, df)
     })
   }
 
@@ -465,28 +469,27 @@ export class TidyBlocksApp extends React.Component{
                     </Tabs>
                   </AppBar>
                   <TabPanel value={this.state.tabValue} index={0} component="div">
-                        <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
-                        <div className="relativeWrapper">
-                          <div className="">
-                            <div className="dataWrapper">
-                              {this.state.dataColumns &&
-                                <DataGrid
-                                  columns={this.state.dataColumns}
-                                  rows={this.state.data}
-                                  enableCellAutoFocus={false}
-                                  height={this.state.topRightPaneHeight}
-                                  onGridSort={this.sortRows}
-                                  />
-                              }
-                            </div>
-                          </div>
+                    <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                    <div className="relativeWrapper">
+                      <div className="">
+                        <div className="dataWrapper">
+                          {this.state.dataColumns &&
+                            <DataGrid
+                              columns={this.state.dataColumns}
+                              rows={this.state.data}
+                              enableCellAutoFocus={false}
+                              height={this.state.topRightPaneHeight}
+                              onGridSort={this.sortRows}
+                              />
+                          }
                         </div>
+                      </div>
+                    </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={1}>
                     <div className="relativeWrapper">
                       <div className="absoluteWrapper">
                         <div className="dataWrapper">
-
                         </div>
                       </div>
                     </div>

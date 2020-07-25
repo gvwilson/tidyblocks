@@ -67,6 +67,64 @@
         type: text
         contains: sex
 
+-   name: pockets.csv
+    description: Pocket dimensions on women's and men's jeans
+    source: https://github.com/the-pudding/data/tree/master/pockets
+    columns: 15
+    rows: 80
+    fields:
+    -   name: brand
+        type: text
+        contains: The full brand name.
+    -   name: style
+        type: text
+        contains: The cut of each pair of jeans.
+    -   name: menWomen 
+        type: text
+        contains: Whether the jeans were listed as "men's" or "women's". 
+    -   name: name 
+        type: text
+        contains: The name of the specific style of measured pair of jeans as indicated by the tag. (e.g., Fave Super Skinny Jean). 
+    -   name: brandSize 
+        type: text
+        contains: The size of jeans measured.
+    -   name: waistSize 
+        type: number
+        contains: The waistband size (in inches) of each measured pair as reported on the brand's website. 
+    -   name: fabric 
+        type: text
+        contains: The comma-separated fabric combination as indicated by the tag on the jeans.
+    -   name: price 
+        type: number
+        contains: The price in US dollars of each pair of jeans.
+    -   name: maxHeightFront 
+        type: number
+        contains: The height (in cm) of the front pocket from the top of the highest rivet to the lowest point of the pocket.
+    -   name: minHeightFront 
+        type: number
+        contains: The height (in cm) of the front pocket from the top of the highest rivet to the lowest point of the pocket.
+    -   name: rivetHeightFront 
+        type: number
+        contains: The distance (in cm) between the top of the highest rivet to the lowest rivet. 
+    -   name: maxWidthFront 
+        type: number
+        contains: The width (in cm) from the widest point of the front pocket.
+    -   name: minWidthFront 
+        type: number
+        contains: The width (in cm) from the highest rivet to the right or non-zipper side of the pocket. 
+    -   name: maxHeightBack 
+        type: number
+        contains: The height (in cm) from the deepest point of the back pocket to the top of the pocket.
+    -   name: minHeightBack 
+        type: number
+        contains: The height (in cm) from the shallowest point of the back pocket to the top of the pocket. 
+    -   name: maxWidthBack 
+        type: number
+        contains: The width of the pocket at the very top.
+    -   name: minWidthBack 
+        type: number
+        contains: The width of the pocket at its narrowest.
+
 -   name: police-killings.csv
     description: People killed by the police in the United States 2013-2020
     source: https://mappingpoliceviolence.org/

@@ -12,8 +12,8 @@ class Env {
    * Construct a new runtime environment.
    * @param userData Map of datasets loaded by the user.
    */
-  constructor (userData) {
-    this.userData = userData
+  constructor (ui) {
+    this.ui = ui
     this.results = new Map()
     this.plots = new Map()
     this.stats = new Map()
@@ -21,7 +21,8 @@ class Env {
   }
 
   /**
-   * Get a dataset by label. This checks the results first, then the userData.
+   * Get a dataset by label. This checks the results first, then the user data
+   * stored in the UI.
    * @param {string} label Identifier for data.
    * @returns Data table to be converted to dataframe.
    */
@@ -31,8 +32,8 @@ class Env {
     if (this.results.has(label)) {
       return this.results.get(label)
     }
-    if (this.userData.has(label)) {
-      return this.userData.get(label)
+    if (this.ui.userData.has(label)) {
+      return this.ui.userData.get(label)
     }
     util.fail(`Dataset ${label} not known`)
   }

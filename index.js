@@ -33,8 +33,10 @@ class ReactInterface extends UserInterface {
     const serializer = new XMLSerializer()
     const toolboxString = serializer.serializeToString(toolbox)
 
-    // Create an environment so that the React app can get at the pre-loaded datasets.
-    const env = new Env(this.userData)
+    // Create an environment so that the React app can get at the pre-loaded
+    // datasets.  Make sure the environment points back at the UI object so that
+    // we can get at datasets.
+    const env = new Env(this)
 
     // Render React, saving the React app.
     this.app = ReactDOM.render(
