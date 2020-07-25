@@ -91,6 +91,25 @@ const setup = () => {
       extensions: ['validate_COLUMN']
     },
 
+    // Report
+    {
+      type: 'transform_report',
+      message0: 'Report %1',
+      args0: [
+        {
+          type: 'field_input',
+          name: 'NAME',
+          text: 'name'
+        }
+      ],
+      previousStatement: null,
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: 'report a result',
+      helpUrl: '',
+      extensions: ['validate_NAME']
+    },
+
     // Select
     {
       type: 'transform_select',
@@ -229,6 +248,12 @@ const setup = () => {
     const column = block.getFieldValue('COLUMN')
     const value = valueToCode(block, 'VALUE', Blockly.TidyBlocks.ORDER_NONE)
     return `["@transform", "mutate", "${column}", ${value}]`
+  }
+
+  // Report
+  Blockly.TidyBlocks['transform_report'] = (block) => {
+    const name = block.getFieldValue('NAME')
+    return `["@transform", "report", "${name}"]`
   }
 
   // Select

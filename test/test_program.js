@@ -224,9 +224,9 @@ describe('executes program', () => {
     done()
   })
 
-  it('runs a single pipeline with no dependencies that notifies', (done) => {
+  it('runs a single pipeline with no dependencies that reports', (done) => {
     const program = new Program()
-    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_REPORT)
     program.register(pipeline)
 
     const env = new Env(INTERFACE)
@@ -241,8 +241,8 @@ describe('executes program', () => {
     const tailLocal = new fixture.MockTransform('tailLocal', fixture.pass, [], 'local', true, false)
     const pipeLocal = new Pipeline(fixture.HEAD, tailLocal)
     program.register(pipeLocal)
-    const pipeNotify = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
-    program.register(pipeNotify)
+    const pipeReport = new Pipeline(fixture.HEAD, fixture.TAIL_REPORT)
+    program.register(pipeReport)
 
     const env = new Env(INTERFACE)
     program.run(env)
@@ -260,9 +260,9 @@ describe('executes program', () => {
                                       ['keyword'], null, false, true)
     const tailLocal = new fixture.MockTransform('tailLocal', fixture.pass,
                                     [], 'local', true, false)
-    const pipeNotify = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
+    const pipeReport = new Pipeline(fixture.HEAD, fixture.TAIL_REPORT)
     const pipeRequireLocal = new Pipeline(headRequire, tailLocal)
-    program.register(pipeNotify)
+    program.register(pipeReport)
     program.register(pipeRequireLocal)
 
     const env = new Env(INTERFACE)
@@ -282,7 +282,7 @@ describe('executes program', () => {
 
     program.register(new Pipeline(fixture.HEAD, tailAlpha))
     program.register(new Pipeline(fixture.HEAD, tailBeta))
-    program.register(new Pipeline(join, fixture.TAIL_NOTIFY))
+    program.register(new Pipeline(join, fixture.TAIL_REPORT))
 
     const env = new Env(INTERFACE)
     program.run(env)

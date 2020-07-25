@@ -572,10 +572,10 @@ describe('combiner code generation', () => {
     done()
   })
 
-  it('generates code for notify', (done) => {
-    const expected = [Transform.FAMILY, 'notify', 'stuff']
+  it('generates code for report', (done) => {
+    const expected = [Transform.FAMILY, 'report', 'stuff']
     const w = workspace()
-    const block = w.newBlock('combine_notify')
+    const block = w.newBlock('transform_report')
     block.setFieldValue('stuff', 'NAME')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)

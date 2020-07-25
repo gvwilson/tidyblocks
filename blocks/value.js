@@ -113,7 +113,7 @@ const setup = () => {
     // Exponential random variable
     {
       type: 'value_exponential',
-      message0: 'Exponential rate \u03BB %1',
+      message0: 'Exponential \u03BB %1',
       args0: [
         {
           type: 'field_input',
@@ -131,7 +131,7 @@ const setup = () => {
     // Normal random variable
     {
       type: 'value_normal',
-      message0: 'Normal mean \u03BC %1 std dev \u03C3 %2',
+      message0: 'Normal \u03BC %1 \u03C3 %2',
       args0: [
         {
           type: 'field_input',
@@ -154,7 +154,7 @@ const setup = () => {
     // Uniform random variable
     {
       type: 'value_uniform',
-      message0: 'Uniform low \u03B1 %1 high \u03B2 %2',
+      message0: 'Uniform \u03B1 %1 \u03B2 %2',
       args0: [
         {
           type: 'field_input',

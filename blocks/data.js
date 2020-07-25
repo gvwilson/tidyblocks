@@ -7,7 +7,7 @@ const setup = () => {
     // Colors
     {
       type: 'data_colors',
-      message0: 'Colors dataset',
+      message0: 'Colors',
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
@@ -16,7 +16,7 @@ const setup = () => {
     // Earthquakes
     {
       type: 'data_earthquakes',
-      message0: 'Earthquakes dataset',
+      message0: 'Earthquakes',
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
@@ -25,7 +25,7 @@ const setup = () => {
     // Penguins
     {
       type: 'data_penguins',
-      message0: 'Penguins dataset',
+      message0: 'Penguins',
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
@@ -39,7 +39,7 @@ const setup = () => {
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: 'new_column'
+          text: 'name'
         },
         {
           type: 'field_number',
@@ -67,7 +67,7 @@ const setup = () => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: 'use a previously-loaded dataset',
+      tooltip: 'use previously-loaded data',
       helpUrl: ''
     }
   ])

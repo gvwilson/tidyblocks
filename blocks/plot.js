@@ -37,7 +37,7 @@ const setup = () => {
     // Box plot
     {
       type: 'plot_box',
-      message0: 'Box plot %1 %2 %3',
+      message0: 'Box %1 %2 %3',
       args0: [
         {
           type: 'field_input',
@@ -67,7 +67,7 @@ const setup = () => {
     // Dot plot
     {
       type: 'plot_dot',
-      message0: 'Dot plot %1 %2',
+      message0: 'Dot %1 %2',
       args0: [
         {
           type: 'field_input',
