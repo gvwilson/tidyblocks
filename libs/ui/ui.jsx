@@ -131,7 +131,7 @@ export class TidyBlocksApp extends React.Component{
       // The results returned from running the program. We store them in full
       // in env for use during updates/changes, but may also use more specific
       // helper variables for intermediate results.
-      env: null,
+      env: initialEnv,
       dataKeys: null,
       data: null,
       dataColumns: null,
@@ -166,6 +166,7 @@ export class TidyBlocksApp extends React.Component{
   }
 
   componentDidMount () {
+    this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
   }
@@ -274,7 +275,6 @@ export class TidyBlocksApp extends React.Component{
   runProgram () {
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
-    console.log(env)
 
     this.updateDataInformation(env)
     this.updatePlotInformation(env)
