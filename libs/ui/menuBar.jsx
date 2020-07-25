@@ -166,10 +166,16 @@ export class MenuBar extends React.Component{
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon className="menuIcon" fontSize="18"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksButtonItem name="Load Workspace" icon={<PublishIcon className="menuIcon" fontSize="18"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksButtonItem name="Load CSV" icon={<TableChartIcon className="menuIcon" fontSize="18"/>} handleClick={this.props.runProgram}/>
-              <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>} icon={<SaveIcon className="menuIcon" fontSize="18"/>}/>
+              <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon
+                className="menuIcon" />} handleClick={this.props.runProgram}/>
+              <TidyBlocksButtonItem name="Load Workspace"
+                icon={<PublishIcon className="menuIcon" />} 
+                handleClick={this.props.loadWorkspaceClick}/>
+              <TidyBlocksButtonItem name="Load CSV"
+                icon={<TableChartIcon className="menuIcon" />}
+                handleClick={this.props.loadCsvClick}/>
+              <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>}
+                icon={<SaveIcon className="menuIcon" />}/>
           </Toolbar>
         </AppBar>
         <Toolbar />
