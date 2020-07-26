@@ -14,7 +14,7 @@ const setup = () => {
       helpUrl: '',
       tooltip: 'represent a hole'
     },
-    
+
     // Column name
     {
       type: 'value_column',
@@ -30,7 +30,7 @@ const setup = () => {
       tooltip: 'get the value of a column',
       extensions: ['validate_COLUMN']
     },
-    
+
     // Datetime
     {
       type: 'value_datetime',
@@ -46,7 +46,7 @@ const setup = () => {
       tooltip: 'constant date/time',
       extensions: ['validate_DATE']
     },
-    
+
     // Logical
     {
       type: 'value_logical',
@@ -66,7 +66,7 @@ const setup = () => {
       style: 'value_block',
       tooltip: 'logical constant'
     },
-    
+
     // Number
     {
       type: 'value_number',
@@ -81,7 +81,7 @@ const setup = () => {
       style: 'value_block',
       tooltip: 'constant number'
     },
-    
+
     // Text
     {
       type: 'value_text',
@@ -98,7 +98,7 @@ const setup = () => {
       helpUrl: '',
       tooltip: 'constant text'
     },
-    
+
     // Row number
     {
       type: 'value_rownum',
@@ -109,7 +109,7 @@ const setup = () => {
       helpUrl: '',
       tooltip: 'row number'
     },
-    
+
     // Exponential random variable
     {
       type: 'value_exponential',
@@ -127,7 +127,7 @@ const setup = () => {
       tooltip: 'exponential random value',
       extensions: ['validate_RATE']
     },
-    
+
     // Normal random variable
     {
       type: 'value_normal',
@@ -150,7 +150,7 @@ const setup = () => {
       tooltip: 'normal random value',
       extensions: ['validate_STDDEV']
     },
-    
+
     // Uniform random variable
     {
       type: 'value_uniform',

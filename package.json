@@ -9,7 +9,7 @@
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "data": "data/generate.js data/*.csv",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
-    "lint": "eslint index.js libs/*.js",
+    "lint": "eslint index.js libs/*.js blocks/*.js",
     "test": "mocha"
   },
   "repository": {

@@ -34,7 +34,7 @@ const setup = () => {
       tooltip: 'perform one-sample two-sided t-test',
       helpUrl: ''
     },
-    
+
     // Two-sample two-sided t-test
     {
       type: 'stats_ttest_two',
@@ -69,7 +69,6 @@ const setup = () => {
 
   // One-sample two-sided t-test.
   Blockly.TidyBlocks['stats_ttest_one'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
     const name = block.getFieldValue('NAME')
     const column = block.getFieldValue('COLUMN')
     const mean = block.getFieldValue('MEAN')
@@ -78,7 +77,6 @@ const setup = () => {
 
   // Create a paired two-sided t-test.
   Blockly.TidyBlocks['stats_ttest_two'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
     const name = block.getFieldValue('NAME')
     const labels = block.getFieldValue('LABEL_COLUMN')
     const values = block.getFieldValue('VALUE_COLUMN')

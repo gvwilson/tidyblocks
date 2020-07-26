@@ -3,7 +3,6 @@
 const Blockly = require('blockly/blockly_compressed')
 
 const setup = () => {
-
   Blockly.defineBlocksWithJsonArray([
     // Colors
     {

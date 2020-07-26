@@ -30,7 +30,7 @@ class UserInterface {
 
     // Create an empty workspace. Derived classes must fill this in.
     this.workspace = null
-    
+
     // Create an empty program running environment. (A new environment is
     // created for each run of the program.)
     this.env = null

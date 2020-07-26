@@ -8,7 +8,6 @@ const {
 } = require('./helpers')
 
 const setup = () => {
-
   Blockly.defineBlocksWithJsonArray([
     // Drop
     {
@@ -29,7 +28,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
-    
+
     // Filter
     {
       type: 'transform_filter',
@@ -47,7 +46,7 @@ const setup = () => {
       tooltip: 'filter rows by condition',
       helpUrl: ''
     },
-    
+
     // Group
     {
       type: 'transform_groupBy',
@@ -67,7 +66,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
-    
+
     // Mutate
     {
       type: 'transform_mutate',
@@ -91,7 +90,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_COLUMN']
     },
-    
+
     // Select
     {
       type: 'transform_select',
@@ -111,32 +110,32 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
-    
+
     // Sort
     {
-      type: "transform_sort",
-      message0: "Sort %1 descending %2",
+      type: 'transform_sort',
+      message0: 'Sort %1 descending %2',
       args0: [
         {
-          type: "field_input",
-          name: "MULTIPLE_COLUMNS",
-          text: "column, column"
+          type: 'field_input',
+          name: 'MULTIPLE_COLUMNS',
+          text: 'column, column'
         },
         {
-          type: "field_checkbox",
-          name: "DESCENDING",
+          type: 'field_checkbox',
+          name: 'DESCENDING',
           checked: false
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
-      style: "transform_block",
+      style: 'transform_block',
       extensions: ['validate_MULTIPLE_COLUMNS'],
-      tooltip: "",
-      helpUrl: ""
+      tooltip: '',
+      helpUrl: ''
     },
-    
+
     // Summarize
     {
       type: 'transform_summarize',
@@ -172,7 +171,7 @@ const setup = () => {
       helpUrl: '',
       extensions: ['validate_COLUMN']
     },
-    
+
     // Ungroup
     {
       type: 'transform_ungroup',
@@ -185,7 +184,7 @@ const setup = () => {
       tooltip: 'remove grouping',
       helpUrl: ''
     },
-    
+
     // Unique
     {
       type: 'transform_unique',

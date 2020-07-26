@@ -7,7 +7,6 @@ const {
 } = require('./helpers')
 
 const setup = () => {
-
   Blockly.defineBlocksWithJsonArray([
     // Binary arithmetic
     {
@@ -41,7 +40,7 @@ const setup = () => {
       tooltip: 'do arithmetic',
       helpUrl: ''
     },
-    
+
     // Arithmetic negation
     {
       type: 'op_negate',
@@ -58,7 +57,7 @@ const setup = () => {
       tooltip: 'negate a numeric column',
       helpUrl: ''
     },
-    
+
     // Comparisons
     {
       type: 'op_compare',
@@ -91,7 +90,7 @@ const setup = () => {
       tooltip: 'compare two columns',
       helpUrl: ''
     },
-    
+
     // Binary logical operations
     {
       type: 'op_logical',
@@ -120,7 +119,7 @@ const setup = () => {
       tooltip: 'combine logical values of two columns',
       helpUrl: ''
     },
-    
+
     // Logical negation
     {
       type: 'op_not',
@@ -137,7 +136,7 @@ const setup = () => {
       tooltip: 'negate a logical column',
       helpUrl: ''
     },
-    
+
     // Type checking
     {
       type: 'op_type',
@@ -165,7 +164,7 @@ const setup = () => {
       tooltip: 'check the type of a value',
       helpUrl: ''
     },
-    
+
     // Type conversion
     {
       type: 'op_convert',
@@ -192,7 +191,7 @@ const setup = () => {
       tooltip: 'change the datatype of a value',
       helpUrl: ''
     },
-    
+
     // Datetime conversions
     {
       type: 'op_datetime',
@@ -222,7 +221,7 @@ const setup = () => {
       tooltip: 'change the datatype of a value',
       helpUrl: ''
     },
-    
+
     // Conditional
     {
       type: 'op_conditional',
