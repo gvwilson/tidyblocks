@@ -58,7 +58,7 @@ class UserInterface {
    */
   runProgram () {
     const program = this.getProgram()
-    this.env = new Env(this.userData)
+    this.env = new Env(this)
     program.run(this.env)
   }
 

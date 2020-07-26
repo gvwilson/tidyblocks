@@ -14,7 +14,7 @@ const INTERFACE = new fixture.TestInterface()
 describe('build dataframe operations', () => {
   it('builds data loading transform', (done) => {
     const expected = INTERFACE.userData.get('colors')
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.data('colors')
     const actual = transform.run(env, null)
     assert(actual.equal(expected),
@@ -23,7 +23,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds drop columns transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.drop(['personal'])
     const result = transform.run(env, new DataFrame(fixture.NAMES))
     const expected = fixture.NAMES.map(row => ({family: row.family}))
@@ -33,7 +33,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds filter transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const expr = new Value.column('right')
     const transform = new Transform.filter(expr)
     const result = transform.run(env, new DataFrame(fixture.BOOL))
@@ -45,7 +45,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds group data transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.groupBy(['left'])
     const result = transform.run(env, new DataFrame(fixture.NUMBER))
     const groups = new Set(result.data.map(row => row[DataFrame.GROUPCOL]))
@@ -57,7 +57,7 @@ describe('build dataframe operations', () => {
   it('builds join transform', (done) => {
     const leftData = new DataFrame([{leftName: 7, value: 'leftVal'}])
     const rightData = new DataFrame([{rightName: 7, value: 'rightVal'}])
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     env.setResult('leftTable', leftData)
     env.setResult('rightTable', rightData)
     const transform = new Transform.join('leftTable', 'leftName', 'rightTable', 'rightName')
@@ -70,7 +70,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds mutate transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const mutater = new Value.text('stuff')
     const transform = new Transform.mutate('value', mutater)
     const result = transform.run(env, new DataFrame(fixture.NAMES))
@@ -82,7 +82,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds notify transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.notify('answer')
     const input = new DataFrame(fixture.NAMES)
     const result = transform.run(env, input)
@@ -94,7 +94,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds read data transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.data('colors')
     const result = transform.run(env, null)
     assert(result instanceof DataFrame,
@@ -106,7 +106,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds select transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.select(['personal'])
     const result = transform.run(env, new DataFrame(fixture.NAMES))
     const expected = fixture.NAMES.map(row => ({personal: row.personal}))
@@ -117,7 +117,7 @@ describe('build dataframe operations', () => {
 
   it('builds sequence transform', (done) => {
     const length = 3
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.sequence('nums', length)
     const result = transform.run(env, null)
     const expected = Array.from({length}, (v, k) => ({nums: k+1}))
@@ -127,7 +127,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds sort transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.sort(['left'], true)
     const result = transform.run(env, new DataFrame(fixture.STRING))
     const actual = result.data.map(row => row.left)
@@ -139,7 +139,7 @@ describe('build dataframe operations', () => {
 
   it('builds summarize transform', (done) => {
     const df = new DataFrame([{left: 3}])
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.summarize('maximum', 'left')
     const result = transform.run(env, df)
     assert.deepEqual(result.data,
@@ -149,7 +149,7 @@ describe('build dataframe operations', () => {
   })
 
   it('build ungroup transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.ungroup()
     const input = [{a: 1}, {a: 2}]
     input.forEach(row => {row[DataFrame.GROUPCOL] = 1})
@@ -160,7 +160,7 @@ describe('build dataframe operations', () => {
   })
 
   it('builds unique values transform', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.unique(['a'])
     const input = [{a: 1}, {a: 1}, {a: 2}, {a: 1}]
     const result = transform.run(env, new DataFrame(input))
@@ -172,7 +172,7 @@ describe('build dataframe operations', () => {
 
 describe('build plots', () => {
   it('creates a bar plot', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.bar('figure_1', 'red', 'green')
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
@@ -188,7 +188,7 @@ describe('build plots', () => {
   })
 
   it('creates a box plot', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.box('figure_1', 'red', 'green')
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
@@ -204,7 +204,7 @@ describe('build plots', () => {
   })
 
   it('creates a dot plot', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.dot('figure_1', 'red')
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
@@ -220,7 +220,7 @@ describe('build plots', () => {
   })
 
   it('creates a histogram', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.histogram('figure_1', 'red', 7)
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
@@ -236,7 +236,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot without a color', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.scatter('figure_1', 'red', 'green', null)
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
@@ -254,7 +254,7 @@ describe('build plots', () => {
   })
 
   it('creates a scatter plot with a color', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.scatter('figure_1', 'red', 'green', 'blue')
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
@@ -310,7 +310,7 @@ describe('build plots', () => {
 
 describe('build statistics', () => {
   it('runs one-sided two-sample t-test', (done) => {
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.ttest_one('result', 'blue', 0.0)
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const stats = env.getStats('result')
@@ -325,7 +325,7 @@ describe('build statistics', () => {
       {left: 'b', right: 2},
       {left: 'b', right: 3}
     ]
-    const env = new Env(INTERFACE.userData)
+    const env = new Env(INTERFACE)
     const transform = new Transform.ttest_two('result', 'left', 'right')
     const result = transform.run(env, new DataFrame(paired))
     const stats = env.getStats('result')
