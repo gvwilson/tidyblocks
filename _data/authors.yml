@@ -1,4 +1,5 @@
-- name: "Maya Gans"
+- slug: gans-maya
+  name: "Maya Gans"
   github: "MayaGans"
   link: "https://maya.rbind.io/"
   avatar: "gans-maya.png"
@@ -9,7 +10,8 @@
     When she isn't debugging or blogging, 
     she's somewhere climbing large mountains. 
 
-- name: "Justin Singh"
+- slug: singh-justin
+  name: "Justin Singh"
   github: "DarkMetroid"
   avatar: "singh-justin.png"
   bio: >
@@ -17,7 +19,8 @@
     He's interested in anything that makes the web a bit weirder,
     and if he isn't reading is probably playing around with WebGL.
 
-- name: "Greg Wilson"
+- slug: wilson-greg
+  name: "Greg Wilson"
   github: "gvwilson"
   link: "http://third-bit.com"
   avatar: "wilson-greg.png"
