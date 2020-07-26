@@ -404,11 +404,14 @@ export class TidyBlocksApp extends React.Component {
   loadCsv () {
     const file = this.refs.csvFileUploader.files[0]
     const name = file.name
-    file.text().then((text) => {
+    file.text().then(text => {
       const label = name.replace('.csv', '')
       const workspace = this.getWorkspace().state.workspace
       const df = new DataFrame(csvToTable(text))
       this.state.env.ui.userData.set(label, df)
+      this.setState({env: this.state.env}, () => {
+        this.updateDataInformation(this.state.env);
+      })
     })
   }
 
