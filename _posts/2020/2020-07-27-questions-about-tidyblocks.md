@@ -52,7 +52,7 @@ How can I contribute?
     -   If *you are a user experience designer*
         we would be grateful for comments and suggestions on our current UI.
         We would be just as grateful for help with *accessibility*,
-        though this may require work on Blockly itself.
+        though this may require work on [Blockly toolkit](https://developers.google.com/blockly/) itself.
     -   If *you teach introductory statistics or data science*,
         please give us examples of problems that TidyBlocks can't handle and tell us how it should.
     -   If *you are fluent in a language other than English*,
