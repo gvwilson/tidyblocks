@@ -84,8 +84,8 @@ describe('executes pipelines', () => {
     done()
   })
 
-  it('executes a pipeline with notification', (done) => {
-    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_NOTIFY)
+  it('executes a pipeline ending with a report', (done) => {
+    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_REPORT)
     const result = pipeline.run(new Env(INTERFACE))
     assert.equal(result.label, 'keyword',
                  `Result should include name`)

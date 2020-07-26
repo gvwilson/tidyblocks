@@ -209,14 +209,14 @@ class TransformMutate extends TransformBase {
 }
 
 /**
- * Notify that a result is available.
- * @param {string} label Name to use for notification.
+ * Report that a result is available.
+ * @param {string} label Name to use for reported value.
  */
-class TransformNotify extends TransformBase {
+class TransformReport extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
                `Expected string`)
-    super('notify', [], label, true, false)
+    super('report', [], label, true, false)
     this.label = label
   }
 
@@ -600,7 +600,7 @@ module.exports = {
   groupBy: TransformGroupBy,
   join: TransformJoin,
   mutate: TransformMutate,
-  notify: TransformNotify,
+  report: TransformReport,
   select: TransformSelect,
   sequence: TransformSequence,
   sort: TransformSort,

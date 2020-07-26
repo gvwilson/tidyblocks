@@ -98,7 +98,7 @@ module.exports = {
   HEAD,
   MIDDLE: new MockTransform('middle', pass, [], null, true, true),
   TAIL: new MockTransform('tail', pass, [], null, true, false),
-  TAIL_NOTIFY: new MockTransform('tailNotify', pass, [], 'keyword', true, false),
+  TAIL_REPORT: new MockTransform('tailReport', pass, [], 'keyword', true, false),
   pass,
   TestInterface
 }

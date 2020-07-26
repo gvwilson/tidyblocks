@@ -81,9 +81,9 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('builds notify transform', (done) => {
+  it('builds report transform', (done) => {
     const env = new Env(INTERFACE)
-    const transform = new Transform.notify('answer')
+    const transform = new Transform.report('answer')
     const input = new DataFrame(fixture.NAMES)
     const result = transform.run(env, input)
     assert(result.equal(new DataFrame(fixture.NAMES)),
@@ -418,15 +418,15 @@ describe('transform equality tests', () => {
     done()
   })
 
-  it('compares notify', (done) => {
-    const notify_a = new Transform.notify('a')
-    const notify_b = new Transform.notify('b')
-    assert(notify_a.equal(notify_a),
+  it('compares report', (done) => {
+    const report_a = new Transform.report('a')
+    const report_b = new Transform.report('b')
+    assert(report_a.equal(report_a),
            `Same should match`)
-    assert(!notify_a.equal(notify_b),
+    assert(!report_a.equal(report_b),
            `Names should matter`)
     const groupBy = new Transform.groupBy(['left'])
-    assert(!notify_a.equal(groupBy),
+    assert(!report_a.equal(groupBy),
            `Different transforms should not equal`)
     done()
   })
@@ -486,8 +486,8 @@ describe('transform equality tests', () => {
     const u2 = new Transform.ungroup()
     assert(u1.equal(u2),
            `All ungroup transforms should be equal`)
-    const notify = new Transform.notify('name')
-    assert(!notify.equal(u1),
+    const report = new Transform.report('name')
+    assert(!report.equal(u1),
            `Different transforms should not equal`)
     done()
   })

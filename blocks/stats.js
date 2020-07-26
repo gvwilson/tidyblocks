@@ -9,7 +9,7 @@ const setup = () => {
       type: 'stats_ttest_one',
       message0: 'One-sample t-test',
       args0: [],
-      message1: 'label %1 column %2 mean \u03BC %3',
+      message1: 'name %1 column %2 mean \u03BC %3',
       args1: [
         {
           type: 'field_input',
@@ -40,7 +40,7 @@ const setup = () => {
       type: 'stats_ttest_two',
       message0: 'Two-sample t-test',
       args0: [],
-      message1: 'label %1 labels %2 values %3',
+      message1: 'name %1 labels %2 values %3',
       args1: [
         {
           type: 'field_input',

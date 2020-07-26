@@ -247,12 +247,12 @@ describe('transform persistence', () => {
     done()
   })
 
-  it('restores notify from JSON', (done) => {
-    const label = 'notification'
+  it('restores report from JSON', (done) => {
+    const label = 'result_name'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'notify', label]),
-                     new Transform.notify(label),
-                     `notify`)
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'report', label]),
+                     new Transform.report(label),
+                     `report`)
     done()
   })
 
@@ -261,7 +261,7 @@ describe('transform persistence', () => {
     const factory = new Restore()
     assert.deepEqual(factory.transform([Transform.FAMILY, 'data', dataset]),
                      new Transform.data(dataset),
-                     `notify`)
+                     `data loader`)
     done()
   })
 
