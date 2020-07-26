@@ -1,5 +1,5 @@
 ---
-permalink: /guide/stats/
+permalink: /guide/en/stats/
 title: "Statistics"
 ---
 

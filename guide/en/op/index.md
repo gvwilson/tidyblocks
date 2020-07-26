@@ -1,5 +1,5 @@
 ---
-permalink: /guide/op/
+permalink: /guide/en/op/
 title: "Operations"
 headings:
 - id: arithmetic
