@@ -1,5 +1,5 @@
 ---
-permalink: /guide/combine/
+permalink: /guide/en/combine/
 title: "Combining"
 headings:
 - id: join

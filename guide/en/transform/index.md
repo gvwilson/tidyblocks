@@ -1,5 +1,5 @@
 ---
-permalink: /guide/transform/
+permalink: /guide/en/transform/
 title: "Transforms"
 headings:
 - id: drop

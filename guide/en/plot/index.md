@@ -1,5 +1,5 @@
 ---
-permalink: /guide/plot/
+permalink: /guide/en/plot/
 title: "Plots"
 headings:
 - id: bar

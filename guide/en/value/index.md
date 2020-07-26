@@ -1,5 +1,5 @@
 ---
-permalink: /guide/value/
+permalink: /guide/en/value/
 title: "Values"
 headings:
 - id: column

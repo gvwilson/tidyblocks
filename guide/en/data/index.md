@@ -1,5 +1,5 @@
 ---
-permalink: /guide/data/
+permalink: /guide/en/data/
 title: "Data"
 headings:
 - id: colors
