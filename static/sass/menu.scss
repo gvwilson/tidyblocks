@@ -1,0 +1,26 @@
+.menuIcon{
+  color: #fff;
+  display: block;
+}
+
+.tbMenuButton {
+  color: #fff;
+  padding: 10px;
+  flex-direction: column
+}
+
+.MuiButton-label{
+  flex-direction: column;
+  font-size: 14px;
+}
+.MuiButton-root{
+  color: inherit !important;
+}
+
+.MuiIconButton-label {
+  flex-direction: inherit
+}
+
+.toolBarButtons{
+  margin-left: 'auto';
+}
