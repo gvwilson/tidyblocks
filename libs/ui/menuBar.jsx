@@ -26,6 +26,7 @@ import MailIcon from '@material-ui/icons/Mail'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Hidden from '@material-ui/core/Hidden'
 import CloseIcon from '@material-ui/icons/Close'
+import Tooltip from '@material-ui/core/Tooltip';
 
 // Menu Items to display for the Save button.
 function SaveMenuItems(){
@@ -46,7 +47,6 @@ function SaveMenuItems(){
 const useStyles = makeStyles({
   root: {
     fontSize: '20px',
-
   },
   label: {
     fontSize: '12px',
@@ -58,6 +58,7 @@ function TidyBlocksButtonItem({name, icon, handleClick}) {
 
   return (
     <div>
+      <Tooltip title={name}>
       <Button
         classes={{
           root: classes.root, // class name, e.g. `classes-nesting-root-x`
@@ -65,8 +66,8 @@ function TidyBlocksButtonItem({name, icon, handleClick}) {
         }}
         className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
-          {name}
       </Button>
+      </Tooltip>
     </div>
   )
 }
@@ -86,6 +87,7 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
 
   return (
     <div>
+      <Tooltip title={name}>
       <Button
         classes={{
           root: classes.root, // class name, e.g. `classes-nesting-root-x`
@@ -93,8 +95,8 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
         }}
         aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
-          {name}
       </Button>
+      </Tooltip>
       {menuItems &&
         <Menu
           id="fade-menu"

@@ -33,6 +33,25 @@ import DataFrame from '../dataframe'
 const tabHeight = '34px' // default: '48px'
 
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      // light: will be calculated from palette.primary.main,
+      main: '#1C313A',
+      light: '#455a64',
+      dark: '#000914',
+      // dark: will be calculated from palette.primary.main,
+      // contrastText: will be calculated to contrast with palette.primary.main
+      contrastText: "#ffffff"
+    },
+    secondary: {
+      light: '#2b313a',
+      main: '#000914',
+      dark: '#000000',
+      // dark: will be calculated from palette.secondary.main,
+      contrastText: '#ffffff',
+    },
+    // error: will use the default color
+  },
   overrides: {
     MuiTabs: {
       root: {
@@ -49,6 +68,16 @@ const theme = createMuiTheme({
         fontSize: '12px'
       }
     },
+  },
+  props: {
+    // Name of the component ⚛️
+    MuiButtonBase: {
+      // The properties to apply
+      disableRipple: true, // No more ripple, on the whole application 💣!
+    },
+  },
+  indicator: {
+    backgroundColor: '#1890ff',
   },
 })
 
