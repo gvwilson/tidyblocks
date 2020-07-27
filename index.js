@@ -18,20 +18,12 @@ class ReactInterface extends UserInterface {
   /**
    * Build user interface object.
    * @param rootId HTML ID of root element.
-   * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
    */
-  constructor (rootId, toolboxId) {
+  constructor (rootId) {
     super()
 
     // Create the Blockly settings.
-    const toolbox = document.getElementById(toolboxId)
-    assert(toolbox,
-           `No toolbox found with ID ${toolboxId}`)
-    const settings = this._createSettings(toolbox)
-
-    // Get a string of the toolbox XML, this'll get parsed within the React app.
-    const serializer = new XMLSerializer()
-    const toolboxString = serializer.serializeToString(toolbox)
+    const settings = this._createSettings()
 
     // Create an environment so that the React app can get at the pre-loaded
     // datasets.  Make sure the environment points back at the UI object so that
@@ -40,7 +32,7 @@ class ReactInterface extends UserInterface {
 
     // Render React, saving the React app.
     this.app = ReactDOM.render(
-      <TidyBlocksApp settings={settings} toolbox={toolboxString} initialEnv={env}/>,
+      <TidyBlocksApp settings={settings} toolbox={blocks.XML_CONFIG} initialEnv={env}/>,
       document.getElementById(rootId)
     )
 
@@ -62,9 +54,8 @@ class ReactInterface extends UserInterface {
    * @param toolboxId XML element containing toolbox spec.
    * @returns JSON settings object.
    */
-  _createSettings (toolbox) {
+  _createSettings () {
     return {
-      toolbox: toolbox,
       theme: blocks.THEME,
       zoom: {
         controls: true,
