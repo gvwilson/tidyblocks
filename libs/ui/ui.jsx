@@ -52,6 +52,9 @@ const theme = createMuiTheme({
       root: {
         minHeight: tabHeight,
         height: tabHeight
+      },
+      indicator: {
+        backgroundColor: "#b1b4b5"
       }
     },
     MuiTab: {
@@ -68,10 +71,7 @@ const theme = createMuiTheme({
     MuiButtonBase: {
       disableRipple: true,
     },
-  },
-  indicator: {
-    backgroundColor: '#9fa9b3',
-  },
+  }
 })
 
 const DataTabSelect = ({options, onChange, value}) => (
