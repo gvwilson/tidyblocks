@@ -54,7 +54,9 @@ const theme = createMuiTheme({
         height: tabHeight
       },
       indicator: {
-        backgroundColor: "#b1b4b5"
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: '#b1b4b5'
       }
     },
     MuiTab: {
