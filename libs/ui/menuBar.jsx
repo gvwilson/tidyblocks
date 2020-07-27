@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import HelpIcon from '@material-ui/icons/Help';
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Fade from '@material-ui/core/Fade'
@@ -26,6 +27,7 @@ import MailIcon from '@material-ui/icons/Mail'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Hidden from '@material-ui/core/Hidden'
 import CloseIcon from '@material-ui/icons/Close'
+import Tooltip from '@material-ui/core/Tooltip';
 
 // Menu Items to display for the Save button.
 function SaveMenuItems(){
@@ -43,10 +45,24 @@ function SaveMenuItems(){
   )
 }
 
+function HelpMenuItems(){
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  return (
+    <React.Fragment>
+      <MenuItem onClick={handleClose}>Guide</MenuItem>
+      <MenuItem onClick={handleClose}>License</MenuItem>
+      <MenuItem onClick={handleClose}>About</MenuItem>
+    </React.Fragment>
+  )
+}
+
 const useStyles = makeStyles({
   root: {
     fontSize: '20px',
-
   },
   label: {
     fontSize: '12px',
@@ -58,15 +74,16 @@ function TidyBlocksButtonItem({name, icon, handleClick}) {
 
   return (
     <div>
-      <Button
+      <Tooltip title={name}>
+      <IconButton
         classes={{
           root: classes.root, // class name, e.g. `classes-nesting-root-x`
           label: classes.label, // class name, e.g. `classes-nesting-label-x`
         }}
         className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
-          {name}
-      </Button>
+      </IconButton>
+      </Tooltip>
     </div>
   )
 }
@@ -86,15 +103,16 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
 
   return (
     <div>
-      <Button
+      <Tooltip title={name}>
+      <IconButton
         classes={{
           root: classes.root, // class name, e.g. `classes-nesting-root-x`
           label: classes.label, // class name, e.g. `classes-nesting-label-x`
         }}
         aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
-          {name}
-      </Button>
+      </IconButton>
+      </Tooltip>
       {menuItems &&
         <Menu
           id="fade-menu"
@@ -105,7 +123,6 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
           { menuItems }
         </Menu>
       }
-
     </div>
   )
 }
@@ -117,57 +134,24 @@ export class MenuBar extends React.Component{
     this.state = {
       mobileOpen: false,
     }
-
-    this.handleDrawerToggle = this.handleDrawerToggle.bind(this)
-  }
-
-  handleDrawerToggle() {
-    console.log("here")
-    console.log(this.state.mobileOpen)
-
-    const mobileOpen = this.state.mobileOpen
-    this.setState({mobileOpen: !mobileOpen})
-    // setMobileOpen(!mobileOpen)
   }
 
   render(){
     const classes = withStyles(MenuBar)
     const theme = withTheme(MenuBar)
 
-    // const [mobileOpen, setMobileOpen] = React.useState(false)
-    const drawer = (
-      <div>
-      <List>
-        <p> Todo: Icons/prettify</p>
-        <ListItem button>
-          <ListItemText primary="Guide" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="License" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="About" />
-        </ListItem>
-      </List>
-      </div>
-    )
-
-
     return (
       <React.Fragment>
         <AppBar position="fixed">
           <Toolbar>
-            <IconButton edge="start" onClick={this.handleDrawerToggle}
-              className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
             <Box display='flex' flexGrow={1}>
             <Typography variant="h6" className={classes.title}>
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon
-                className="menuIcon" />} handleClick={this.props.runProgram}/>
+              <TidyBlocksButtonItem name="Run" 
+                icon={<PlayArrowIcon className="menuIcon"/>} 
+                handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load Workspace"
                 icon={<PublishIcon className="menuIcon" />} 
                 handleClick={this.props.loadWorkspaceClick}/>
@@ -176,30 +160,11 @@ export class MenuBar extends React.Component{
                 handleClick={this.props.loadCsvClick}/>
               <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>}
                 icon={<SaveIcon className="menuIcon" />}/>
+              <TidyBlocksMenuItem edge="start" name="Help" menuItems={<HelpMenuItems/>}
+                icon={<HelpIcon className="menuIcon" />}/>
           </Toolbar>
         </AppBar>
         <Toolbar />
-        <nav className={classes.drawer}>
-          <Hidden smUp implementation="css">
-            <Drawer
-              variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true,
-              }}
-            >
-              <IconButton onClick={this.handleDrawerToggle} className={classes.closeMenuButton}>
-                <CloseIcon/>
-              </IconButton>
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
       </React.Fragment>
     )
   }

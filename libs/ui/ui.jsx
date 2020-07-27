@@ -25,12 +25,31 @@ import 'm-react-splitters/lib/splitters.css'
 const tabHeight = '34px' // default: '48px'
 
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#1C313A',
+      light: '#455a64',
+      dark: '#000914',
+      contrastText: "#ffffff"
+    },
+    secondary: {
+      light: '#2b313a',
+      main: '#000914',
+      dark: '#000000',
+      contrastText: '#ffffff',
+    },
+  },
   overrides: {
     MuiTabs: {
       root: {
         minHeight: tabHeight,
         height: tabHeight
       },
+      indicator: {
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: '#b1b4b5'
+      }
     },
     MuiTab: {
       root: {
@@ -42,6 +61,11 @@ const theme = createMuiTheme({
       }
     },
   },
+  props: {
+    MuiButtonBase: {
+      disableRipple: true,
+    },
+  }
 })
 
 const DataTabSelect = ({options, onChange, value}) => (
