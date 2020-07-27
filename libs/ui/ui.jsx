@@ -35,22 +35,17 @@ const tabHeight = '34px' // default: '48px'
 const theme = createMuiTheme({
   palette: {
     primary: {
-      // light: will be calculated from palette.primary.main,
       main: '#1C313A',
       light: '#455a64',
       dark: '#000914',
-      // dark: will be calculated from palette.primary.main,
-      // contrastText: will be calculated to contrast with palette.primary.main
       contrastText: "#ffffff"
     },
     secondary: {
       light: '#2b313a',
       main: '#000914',
       dark: '#000000',
-      // dark: will be calculated from palette.secondary.main,
       contrastText: '#ffffff',
     },
-    // error: will use the default color
   },
   overrides: {
     MuiTabs: {
@@ -77,7 +72,7 @@ const theme = createMuiTheme({
     },
   },
   indicator: {
-    backgroundColor: '#1890ff',
+    backgroundColor: '#9fa9b3',
   },
 })
 
