@@ -75,14 +75,14 @@ function TidyBlocksButtonItem({name, icon, handleClick}) {
   return (
     <div>
       <Tooltip title={name}>
-      <Button
+      <IconButton
         classes={{
           root: classes.root, // class name, e.g. `classes-nesting-root-x`
           label: classes.label, // class name, e.g. `classes-nesting-label-x`
         }}
         className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
-      </Button>
+      </IconButton>
       </Tooltip>
     </div>
   )
@@ -104,14 +104,14 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
   return (
     <div>
       <Tooltip title={name}>
-      <Button
+      <IconButton
         classes={{
           root: classes.root, // class name, e.g. `classes-nesting-root-x`
           label: classes.label, // class name, e.g. `classes-nesting-label-x`
         }}
         aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
-      </Button>
+      </IconButton>
       </Tooltip>
       {menuItems &&
         <Menu
@@ -123,7 +123,6 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
           { menuItems }
         </Menu>
       }
-
     </div>
   )
 }
@@ -135,41 +134,11 @@ export class MenuBar extends React.Component{
     this.state = {
       mobileOpen: false,
     }
-
-    this.handleDrawerToggle = this.handleDrawerToggle.bind(this)
-  }
-
-  handleDrawerToggle() {
-    console.log("here")
-    console.log(this.state.mobileOpen)
-
-    const mobileOpen = this.state.mobileOpen
-    this.setState({mobileOpen: !mobileOpen})
-    // setMobileOpen(!mobileOpen)
   }
 
   render(){
     const classes = withStyles(MenuBar)
     const theme = withTheme(MenuBar)
-
-    // const [mobileOpen, setMobileOpen] = React.useState(false)
-    const drawer = (
-      <div>
-      <List>
-        <p> Todo: Icons/prettify</p>
-        <ListItem button>
-          <ListItemText primary="Guide" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="License" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="About" />
-        </ListItem>
-      </List>
-      </div>
-    )
-
 
     return (
       <React.Fragment>
@@ -180,8 +149,9 @@ export class MenuBar extends React.Component{
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run" icon={<PlayArrowIcon
-                className="menuIcon" />} handleClick={this.props.runProgram}/>
+              <TidyBlocksButtonItem name="Run" 
+                icon={<PlayArrowIcon className="menuIcon"/>} 
+                handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load Workspace"
                 icon={<PublishIcon className="menuIcon" />} 
                 handleClick={this.props.loadWorkspaceClick}/>
