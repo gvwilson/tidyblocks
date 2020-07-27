@@ -1,9 +1,6 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import SplitPane from 'react-split-pane/lib/SplitPane'
-import Pane from 'react-split-pane/lib/Pane'
-import Resizer, { RESIZER_DEFAULT_CLASSNAME } from 'react-split-pane'
 import ReactBlocklyComponent from 'react-blockly'
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper.jsx'
 import DataGrid from 'react-data-grid'
@@ -15,13 +12,6 @@ import Select from 'react-select'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import PhoneIcon from '@material-ui/icons/Phone'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import PersonPinIcon from '@material-ui/icons/PersonPin'
-import HelpIcon from '@material-ui/icons/Help'
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket'
-import ThumbDown from '@material-ui/icons/ThumbDown'
-import ThumbUp from '@material-ui/icons/ThumbUp'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { withStyles, makeStyles, useStyles, styled } from '@material-ui/core/styles'
@@ -29,6 +19,8 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Blockly from 'blockly/blockly_compressed'
 import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
+import Splitter from 'm-react-splitters'
+import 'm-react-splitters/lib/splitters.css'
 
 const tabHeight = '34px' // default: '48px'
 
@@ -156,6 +148,7 @@ export class TidyBlocksApp extends React.Component {
 
       logMessages: null
     }
+    this.resize = this.resize.bind(this)
     this.paneVerticalResize = this.paneVerticalResize.bind(this)
     this.paneHorizontalResize = this.paneHorizontalResize.bind(this)
     this.updatePlot = this.updatePlot.bind(this)
@@ -173,9 +166,16 @@ export class TidyBlocksApp extends React.Component {
   }
 
   componentDidMount () {
+    window.addEventListener('resize', this.resize)
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
+  }
+
+  // Updates elements as the window size changes.
+  resize(){
+    this.paneVerticalResize()
+    this.paneHorizontalResize()
   }
 
   // Returns the workspace for use by our JavaScript code.
@@ -207,7 +207,7 @@ export class TidyBlocksApp extends React.Component {
   paneHorizontalResize () {
     // Seems like sometimes the vertical pane get askew if we pull fast enough,
     // so we'll update it for safety.
-    this.paneVerticalResize()
+    // this.paneVerticalResize()
     this.updatePlot()
     this.updateTopRightPaneHeight()
   }
@@ -428,7 +428,7 @@ export class TidyBlocksApp extends React.Component {
     const logMessageList = <ul>{logMessages}</ul>
 
     return (
-      <div >
+      <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
@@ -439,93 +439,104 @@ export class TidyBlocksApp extends React.Component {
           <input type="file" id="csvFile" ref="csvFileUploader"
             onChange={this.loadCsv}
             style={{display: "none"}}/>
-          <SplitPane className="splitPaneWrapper"
-            split="vertical"  primary="secondary"
-            onChange={this.paneVerticalResize}>
-            <Pane minSize="200px">
-              <ReactBlocklyComponent.BlocklyEditor
-                ref={this.blocklyRef}
-                toolboxCategories={this.state.toolboxCategories}
-                workspaceConfiguration={this.props.settings}
-                wrapperDivClassName="fill-height"
-              />
-            </Pane>
-            <SplitPane split="horizontal" minSize="100px"
-              primary="secondary" onChange={this.paneHorizontalResize}>
-              <Pane className="topRightPane" minSize="100px" initialSize="50%">
-                <div className={classes.root}>
-                  <AppBar position="static" color="default" component={'span'}>
-                    <Tabs component={'span'}
-                      value={this.state.tabValue}
-                      onChange={this.handleTabChange}
-                      variant="scrollable"
-                      scrollButtons="on"
-                      indicatorColor="primary"
-                      textColor="primary"
-                      >
-                      <Tab
-                        label="Data" {...a11yProps(0)}/>
-                      <Tab
-                        label="Stats" {...a11yProps(1)}/>
-                      <Tab
-                        label="Console" {...a11yProps(2)}/>
-                    </Tabs>
-                  </AppBar>
-                  <TabPanel value={this.state.tabValue} index={0} component="div">
-                    <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
-                    <div className="relativeWrapper">
-                      <div className="">
-                        <div className="dataWrapper">
-                          {this.state.dataColumns &&
-                            <DataGrid
-                              columns={this.state.dataColumns}
-                              rows={this.state.data}
-                              enableCellAutoFocus={false}
-                              height={this.state.topRightPaneHeight}
-                              onGridSort={this.sortRows}
-                              />
-                          }
+            <Splitter
+              postPoned={false}
+              position="vertical"
+              primaryPaneMaxWidth="90%"
+              primaryPaneMinWidth="20px"
+              primaryPaneWidth="50%"
+              dispatchResize={true}
+              >
+              <div>
+                <ReactBlocklyComponent.BlocklyEditor
+                  ref={this.blocklyRef}
+                  toolboxCategories={this.state.toolboxCategories}
+                  workspaceConfiguration={this.props.settings}
+                  wrapperDivClassName="fill-height"
+                />
+              </div>
+              <Splitter
+                postPoned={false}
+                position="horizontal"
+                primaryPaneMaxHeight="90%"
+                primaryPaneMinHeight={"20px"}
+                primaryPaneHeight="50%"
+                secondaryPaneClassName="splitterBottomPane"
+                dispatchResize={true}>
+                <div className="topRightPane">
+                  <div className={classes.root}>
+                    <AppBar position="static" color="default" component={'span'}>
+                      <Tabs component={'span'}
+                        value={this.state.tabValue}
+                        onChange={this.handleTabChange}
+                        variant="scrollable"
+                        scrollButtons="on"
+                        indicatorColor="primary"
+                        textColor="primary"
+                        >
+                        <Tab
+                          label="Data" {...a11yProps(0)}/>
+                        <Tab
+                          label="Stats" {...a11yProps(1)}/>
+                        <Tab
+                          label="Console" {...a11yProps(2)}/>
+                      </Tabs>
+                    </AppBar>
+                    <TabPanel value={this.state.tabValue} index={0} component="div">
+                      <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                      <div className="relativeWrapper">
+                        <div className="">
+                          <div className="dataWrapper">
+                            {this.state.dataColumns &&
+                              <DataGrid
+                                columns={this.state.dataColumns}
+                                rows={this.state.data}
+                                enableCellAutoFocus={false}
+                                height={this.state.topRightPaneHeight}
+                                onGridSort={this.sortRows}
+                                />
+                            }
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value={this.state.tabValue} index={1}>
-                    <div className="relativeWrapper">
-                      <div className="absoluteWrapper">
-                        <div className="dataWrapper">
+                    </TabPanel>
+                    <TabPanel value={this.state.tabValue} index={1}>
+                      <div className="relativeWrapper">
+                        <div className="absoluteWrapper">
+                          <div className="dataWrapper">
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value={this.state.tabValue} index={2}>
-                    {logMessageList}
-                  </TabPanel>
+                    </TabPanel>
+                    <TabPanel value={this.state.tabValue} index={2}>
+                      {logMessageList}
+                    </TabPanel>
+                  </div>
                 </div>
-              </Pane>
-              <Pane ref={this.bottomRightPaneRef} id="bottomRightPane" className="bottomRightPane"
-                minSize="100px" initialSize="50%">
-                <div className={classes.root}>
-                  <AppBar position="static" color="default" component={'span'}>
-                    <Tabs component={'span'}
-                      value={this.state.tabValueBottom}
-                      onChange={this.handleTabChange}
-                      variant="scrollable"
-                      scrollButtons="on"
-                      indicatorColor="primary"
-                      textColor="primary">
-                      <Tab label="Plot" {...a11yProps(0)} />
-                    </Tabs>
-                  </AppBar>
-                  <TabPanel value={this.state.tabValueBottom} index={0} component="div">
-                    <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
-                    <div className="plotWrapper">
-                      <div id="plotOutput"></div>
-                    </div>
-                  </TabPanel>
+                <div ref={this.bottomRightPaneRef} id="bottomRightPane" style={{ flex: "none" }}
+                  className="bottomRightPane">
+                  <div className={classes.root}>
+                    <AppBar position="static" color="default" component={'span'}>
+                      <Tabs component={'span'}
+                        value={this.state.tabValueBottom}
+                        onChange={this.handleTabChange}
+                        variant="scrollable"
+                        scrollButtons="on"
+                        indicatorColor="primary"
+                        textColor="primary">
+                        <Tab label="Plot" {...a11yProps(0)} />
+                      </Tabs>
+                    </AppBar>
+                    <TabPanel value={this.state.tabValueBottom} index={0} component="div">
+                      <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
+                      <div className="plotWrapper">
+                        <div id="plotOutput"></div>
+                      </div>
+                    </TabPanel>
+                  </div>
                 </div>
-              </Pane>
-            </SplitPane>
-          </SplitPane>
+            </Splitter>
+          </Splitter>
         </MuiThemeProvider>
       </div>
     )
