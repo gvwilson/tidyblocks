@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button'
 import Box from '@material-ui/core/Box'
 import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
+import HelpIcon from '@material-ui/icons/Help';
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Fade from '@material-ui/core/Fade'
@@ -40,6 +41,21 @@ function SaveMenuItems(){
       <MenuItem onClick={handleClose}>Save Workspace</MenuItem>
       <MenuItem onClick={handleClose}>Save Data</MenuItem>
       <MenuItem onClick={handleClose}>Save Plot</MenuItem>
+    </React.Fragment>
+  )
+}
+
+function HelpMenuItems(){
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  return (
+    <React.Fragment>
+      <MenuItem onClick={handleClose}>Guide</MenuItem>
+      <MenuItem onClick={handleClose}>License</MenuItem>
+      <MenuItem onClick={handleClose}>About</MenuItem>
     </React.Fragment>
   )
 }
@@ -159,10 +175,6 @@ export class MenuBar extends React.Component{
       <React.Fragment>
         <AppBar position="fixed">
           <Toolbar>
-            <IconButton edge="start" onClick={this.handleDrawerToggle}
-              className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
             <Box display='flex' flexGrow={1}>
             <Typography variant="h6" className={classes.title}>
               TidyBlocks
@@ -178,30 +190,11 @@ export class MenuBar extends React.Component{
                 handleClick={this.props.loadCsvClick}/>
               <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>}
                 icon={<SaveIcon className="menuIcon" />}/>
+              <TidyBlocksMenuItem edge="start" name="Help" menuItems={<HelpMenuItems/>}
+                icon={<HelpIcon className="menuIcon" />}/>
           </Toolbar>
         </AppBar>
         <Toolbar />
-        <nav className={classes.drawer}>
-          <Hidden smUp implementation="css">
-            <Drawer
-              variant="temporary"
-              anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-              open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
-              ModalProps={{
-                keepMounted: true,
-              }}
-            >
-              <IconButton onClick={this.handleDrawerToggle} className={classes.closeMenuButton}>
-                <CloseIcon/>
-              </IconButton>
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
       </React.Fragment>
     )
   }
