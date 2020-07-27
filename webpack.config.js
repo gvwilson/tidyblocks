@@ -9,7 +9,7 @@ module.exports = {
         test: /\.m?(js|jsx)/,
 
         // react-data-grid uses ES2020, given current babel-loaders, this is
-        // the recommended way to include it. 
+        // the recommended way to include it.
         exclude: /node_modules[/\\](?!react-data-grid[/\\]lib)/,
         use: {
           loader: 'babel-loader',
@@ -17,6 +17,21 @@ module.exports = {
             presets: ["@babel/preset-env", "@babel/preset-react"],
           },
         },
+      },
+      {
+        test: /\.css$/i,
+        exclude: /\.lazy\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.lazy\.css$/i,
+        use: [
+          {
+            loader: 'style-loader',
+            options: { injectType: 'lazySingletonStyleTag' },
+          },
+          'css-loader',
+        ],
       },
       {
           test: /\.scss$/,
