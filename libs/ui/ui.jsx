@@ -19,8 +19,8 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Blockly from 'blockly/blockly_compressed'
 import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
-import Splitter from 'm-react-splitters';
-import 'm-react-splitters/lib/splitters.css';
+import Splitter from 'm-react-splitters'
+import 'm-react-splitters/lib/splitters.css'
 
 const tabHeight = '34px' // default: '48px'
 
