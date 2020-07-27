@@ -110,7 +110,7 @@ export class TidyBlocksApp extends React.Component {
   constructor (props) {
     super(props)
     this.blocklyRef = React.createRef()
-    this.bottomRightPaneRef = React.createRef()
+    this.plotOutputRef = React.createRef()
     this.dataGridRef = React.createRef()
     this.workspaceFileUploader = React.createRef()
     this.csvFileUploader = React.createRef()
@@ -119,6 +119,7 @@ export class TidyBlocksApp extends React.Component {
     const initialEnv = props.initialEnv
 
     this.state = {
+      isDraggingPane: false,
       topRightPaneHeight: 200,
       toolboxCategories: createToolboxCategories(this.props),
       tabValue: 0,
@@ -148,12 +149,9 @@ export class TidyBlocksApp extends React.Component {
 
       logMessages: null
     }
-    this.resize = this.resize.bind(this)
     this.paneVerticalResize = this.paneVerticalResize.bind(this)
-    this.paneHorizontalResize = this.paneHorizontalResize.bind(this)
     this.updatePlot = this.updatePlot.bind(this)
     this.changePlot = this.changePlot.bind(this)
-    this.updateTopRightPaneHeight = this.updateTopRightPaneHeight.bind(this)
     this.runProgram = this.runProgram.bind(this)
     this.loadWorkspaceClick = this.loadWorkspaceClick.bind(this)
     this.loadWorkspace = this.loadWorkspace.bind(this)
@@ -166,16 +164,24 @@ export class TidyBlocksApp extends React.Component {
   }
 
   componentDidMount () {
-    window.addEventListener('resize', this.resize)
+    window.addEventListener('resize', this.paneVerticalResize)
+
+    // Listeners to resize during a pane drag. Note: The postPoned prop for
+    // the Splitters doesn't currently handle this accurately on React 16.13
+    ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mousedown', () => {
+      this.setState({isDraggingPane: true})
+    })
+    ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mouseup', () => {
+      this.setState({isDraggingPane: false})
+    })
+    ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mousemove', () => {
+      if (this.state.isDraggingPane){
+        this.paneVerticalResize()
+      }
+    })
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
-  }
-
-  // Updates elements as the window size changes.
-  resize(){
-    this.paneVerticalResize()
-    this.paneHorizontalResize()
   }
 
   // Returns the workspace for use by our JavaScript code.
@@ -185,9 +191,6 @@ export class TidyBlocksApp extends React.Component {
 
   // Handles a change in the vertical divider postion.
   paneVerticalResize () {
-    if (this.dataGridRef.current){
-      this.dataGridRef.current.metricsUpdated()
-    }
     this.blocklyRef.current.resize()
     this.updatePlot()
   }
@@ -196,20 +199,11 @@ export class TidyBlocksApp extends React.Component {
   // update it's height.
   updateTopRightPaneHeight () {
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
-    const TOP_RIGHT_HEIGHT_OFFSET = 120
+    const TOP_RIGHT_HEIGHT_OFFSET = 110
     if (topRightPane){
       const topRightPaneHeight = (topRightPane.offsetHeight - TOP_RIGHT_HEIGHT_OFFSET)
       this.setState({topRightPaneHeight: topRightPaneHeight})
     }
-  }
-
-  //Handles a change in the horizontal divider position.
-  paneHorizontalResize () {
-    // Seems like sometimes the vertical pane get askew if we pull fast enough,
-    // so we'll update it for safety.
-    // this.paneVerticalResize()
-    this.updatePlot()
-    this.updateTopRightPaneHeight()
   }
 
   // Sorting function for our react-data-grids.
@@ -234,18 +228,21 @@ export class TidyBlocksApp extends React.Component {
     // don't seem to give an offsetWidth though. The alternative would involve
     // computing window sizes (on pane drag or window resize) from
     // percentages.
-    const bottomRightPane = ReactDOM.findDOMNode(this).querySelector('.bottomRightPane')
+    const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
     const WIDTH_OFFSET = 120
     const HEIGHT_OFFSET = 150
 
     if (this.state.plotData) {
       const plotData = this.state.plotData
-      if (bottomRightPane) {
-        plotData.width = bottomRightPane.offsetWidth - WIDTH_OFFSET
-        plotData.height = bottomRightPane.offsetHeight - HEIGHT_OFFSET
-      }
 
-      vegaEmbed('#plotOutput', plotData, {})
+      //Only redraw if the pane is visible.
+      if (this.plotOutputRef.current) {
+        if (topRightPane) {
+          plotData.width = topRightPane.offsetWidth - WIDTH_OFFSET
+          plotData.height = topRightPane.offsetHeight - HEIGHT_OFFSET
+        }
+        vegaEmbed('#plotOutput', plotData, {})
+      }
     }
   }
 
@@ -378,7 +375,12 @@ export class TidyBlocksApp extends React.Component {
   }
 
   handleTabChange (event, newValue) {
-    this.setState({tabValue: newValue})
+    const PLOT_TAB_INDEX = 2
+    this.setState({tabValue: newValue}, () => {
+      if (newValue == PLOT_TAB_INDEX){
+        this.updatePlot();
+      }
+    })
   }
 
   // Calls the file upload input.
@@ -440,6 +442,7 @@ export class TidyBlocksApp extends React.Component {
             onChange={this.loadCsv}
             style={{display: "none"}}/>
             <Splitter
+              key="vertical-split"
               postPoned={false}
               position="vertical"
               primaryPaneMaxWidth="90%"
@@ -455,87 +458,61 @@ export class TidyBlocksApp extends React.Component {
                   wrapperDivClassName="fill-height"
                 />
               </div>
-              <Splitter
-                postPoned={false}
-                position="horizontal"
-                primaryPaneMaxHeight="90%"
-                primaryPaneMinHeight={"20px"}
-                primaryPaneHeight="50%"
-                secondaryPaneClassName="splitterBottomPane"
-                dispatchResize={true}>
-                <div className="topRightPane">
-                  <div className={classes.root}>
-                    <AppBar position="static" color="default" component={'span'}>
-                      <Tabs component={'span'}
-                        value={this.state.tabValue}
-                        onChange={this.handleTabChange}
-                        variant="scrollable"
-                        scrollButtons="on"
-                        indicatorColor="primary"
-                        textColor="primary"
-                        >
-                        <Tab
-                          label="Data" {...a11yProps(0)}/>
-                        <Tab
-                          label="Stats" {...a11yProps(1)}/>
-                        <Tab
-                          label="Console" {...a11yProps(2)}/>
-                      </Tabs>
-                    </AppBar>
-                    <TabPanel value={this.state.tabValue} index={0} component="div">
-                      <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
-                      <div className="relativeWrapper">
-                        <div className="">
-                          <div className="dataWrapper">
-                            {this.state.dataColumns &&
-                              <DataGrid
-                                columns={this.state.dataColumns}
-                                rows={this.state.data}
-                                enableCellAutoFocus={false}
-                                height={this.state.topRightPaneHeight}
-                                onGridSort={this.sortRows}
-                                />
-                            }
-                          </div>
+              <div className="topRightPane">
+                <div className={classes.root}>
+                  <AppBar position="static" color="default" component={'span'}>
+                    <Tabs component={'span'}
+                      value={this.state.tabValue}
+                      onChange={this.handleTabChange}
+                      variant="scrollable"
+                      scrollButtons="on"
+                      indicatorColor="primary"
+                      textColor="primary"
+                      >
+                      <Tab label="Data" {...a11yProps(0)}/>
+                      <Tab label="Stats" {...a11yProps(1)}/>
+                      <Tab label="Plot" {...a11yProps(2)} />
+                      <Tab label="Console" {...a11yProps(3)}/>
+                    </Tabs>
+                  </AppBar>
+                  <TabPanel value={this.state.tabValue} index={0} component="div">
+                    <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                    <div className="relativeWrapper">
+                      <div className="">
+                        <div className="dataWrapper">
+                          {this.state.dataColumns &&
+                            <DataGrid
+                              ref={this.dataGridRef}
+                              columns={this.state.dataColumns}
+                              rows={this.state.data}
+                              enableCellAutoFocus={false}
+                              height={this.state.topRightPaneHeight}
+                              onGridSort={this.sortRows}
+                              />
+                          }
                         </div>
                       </div>
-                    </TabPanel>
-                    <TabPanel value={this.state.tabValue} index={1}>
-                      <div className="relativeWrapper">
-                        <div className="absoluteWrapper">
-                          <div className="dataWrapper">
-                          </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={1}>
+                    <div className="relativeWrapper">
+                      <div className="absoluteWrapper">
+                        <div className="dataWrapper">
                         </div>
                       </div>
-                    </TabPanel>
-                    <TabPanel value={this.state.tabValue} index={2}>
-                      {logMessageList}
-                    </TabPanel>
-                  </div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={2} component="div">
+                    <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
+                    <div className="plotWrapper">
+                      <div id="plotOutput" ref={this.plotOutputRef}></div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={3}>
+                    {logMessageList}
+                  </TabPanel>
                 </div>
-                <div ref={this.bottomRightPaneRef} id="bottomRightPane" style={{ flex: "none" }}
-                  className="bottomRightPane">
-                  <div className={classes.root}>
-                    <AppBar position="static" color="default" component={'span'}>
-                      <Tabs component={'span'}
-                        value={this.state.tabValueBottom}
-                        onChange={this.handleTabChange}
-                        variant="scrollable"
-                        scrollButtons="on"
-                        indicatorColor="primary"
-                        textColor="primary">
-                        <Tab label="Plot" {...a11yProps(0)} />
-                      </Tabs>
-                    </AppBar>
-                    <TabPanel value={this.state.tabValueBottom} index={0} component="div">
-                      <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
-                      <div className="plotWrapper">
-                        <div id="plotOutput"></div>
-                      </div>
-                    </TabPanel>
-                  </div>
-                </div>
-            </Splitter>
+              </div>
           </Splitter>
         </MuiThemeProvider>
       </div>
