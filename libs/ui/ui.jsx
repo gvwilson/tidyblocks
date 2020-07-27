@@ -208,7 +208,6 @@ export class TidyBlocksApp extends React.Component {
     // Seems like sometimes the vertical pane get askew if we pull fast enough,
     // so we'll update it for safety.
     // this.paneVerticalResize()
-    console.log("well")
     this.updatePlot()
     this.updateTopRightPaneHeight()
   }
