@@ -2,6 +2,11 @@
 @import '../css/react-data-grid';
 @import 'material-ui-custom';
 
+// Imports for jekyll documentation/blog pages (not used directly on the core
+// Tidyblocks app.
+@import 'jekyll-site';
+@import 'jekyll-trac';
+
 body{
   margin: 0px;
 }
