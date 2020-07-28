@@ -35,17 +35,13 @@ class Program {
   /**
    * Notify the manager that a named pipeline has finished running.
    * This enqueues pipeline functions to run if their dependencies are satisfied.
-   * @param {string} label Name of the pipeline that just completed.
-   * @param {Object} data The DataFrame produced by the pipeline.
+   * @param {string} label Name of the result that was just produced.
    */
-  notify (label, data) {
+  notify (label) {
     util.check(label && (typeof label === 'string'),
                `Cannot notify with empty label`)
-    util.check(data instanceof DataFrame,
-               `Data must be a dataframe`)
     util.check(this.env instanceof Env,
                `Program must have non-null environment when notifying`)
-    this.env.setResult(label, data)
     const toRemove = []
     this.waiting.forEach((dependencies, pipeline) => {
       dependencies.delete(label)
@@ -75,17 +71,21 @@ class Program {
   }
 
   /**
-   * Run all pipelines in an order that respects dependencies within an environment.
-   * This depends on `notify` to add pipelines to the queue.
+   * Run all pipelines in an order that respects dependencies within an
+   * environment.  This depends on `notify` to add pipelines to the queue.
    */
   run (env) {
     this.env = env
+    const seen = new Set()
     try {
       while (this.queue.length > 0) {
         const pipeline = this.queue.shift()
-        const {label, data} = pipeline.run(this.env)
-        if (label) {
-          this.notify(label, data)
+        pipeline.run(this.env)
+        for (let label of this.env.results.keys()) {
+          if (!seen.has(label)) {
+            seen.add(label)
+            this.notify(label)
+          }
         }
       }
     }
