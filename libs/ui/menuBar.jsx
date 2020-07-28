@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
-import { createStyles, withStyles, makeStyles, withTheme } from '@material-ui/core/styles'
+import { createStyles, makeStyles} from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -28,58 +28,57 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Hidden from '@material-ui/core/Hidden'
 import CloseIcon from '@material-ui/icons/Close'
 import Tooltip from '@material-ui/core/Tooltip';
+import Link from '@material-ui/core/Link';
 
 // Menu Items to display for the Save button.
-function SaveMenuItems(){
-
-  const handleClose = () => {
-    setAnchorEl(null)
+class SaveMenuItems extends React.Component{
+  constructor(props){
+    super(props)
   }
 
-  return (
-    <React.Fragment>
-      <MenuItem onClick={handleClose}>Save Workspace</MenuItem>
-      <MenuItem onClick={handleClose}>Save Data</MenuItem>
-      <MenuItem onClick={handleClose}>Save Plot</MenuItem>
-    </React.Fragment>
-  )
+  render(){
+    return (
+      <React.Fragment>
+        <Link id="downloadWorkspace">
+          <MenuItem onClick={this.props.saveWorkspace}>
+              Save Workspace
+          </MenuItem>
+        </Link>
+        <Link id="downloadData">
+          <MenuItem onClick={this.props.saveData}>Save Data</MenuItem>
+        </Link>
+      </React.Fragment>
+    )
+  }
 }
 
-function HelpMenuItems(){
-
-  const handleClose = () => {
-    setAnchorEl(null)
+class HelpMenuItems extends React.Component{
+  constructor(props){
+    super(props)
   }
 
-  return (
-    <React.Fragment>
-      <MenuItem onClick={handleClose}>Guide</MenuItem>
-      <MenuItem onClick={handleClose}>License</MenuItem>
-      <MenuItem onClick={handleClose}>About</MenuItem>
-    </React.Fragment>
-  )
+  render(){
+    return (
+      <React.Fragment>
+        <Link target="_blank" href="./guide">
+          <MenuItem>Guide</MenuItem>
+        </Link>
+        <Link target="_blank" href="./license">
+          <MenuItem>License</MenuItem>
+        </Link>
+        <Link target="_blank" href="./blog">
+          <MenuItem>Blog</MenuItem>
+        </Link>
+      </React.Fragment>
+    )
+  }
 }
-
-const useStyles = makeStyles({
-  root: {
-    fontSize: '20px',
-  },
-  label: {
-    fontSize: '12px',
-  },
-});
 
 function TidyBlocksButtonItem({name, icon, handleClick}) {
-  const classes = useStyles();
-
   return (
     <div>
       <Tooltip title={name}>
       <IconButton
-        classes={{
-          root: classes.root, // class name, e.g. `classes-nesting-root-x`
-          label: classes.label, // class name, e.g. `classes-nesting-label-x`
-        }}
         className="tbMenuButton" aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
       </IconButton>
@@ -99,16 +98,11 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const classes = useStyles();
 
   return (
     <div>
       <Tooltip title={name}>
       <IconButton
-        classes={{
-          root: classes.root, // class name, e.g. `classes-nesting-root-x`
-          label: classes.label, // class name, e.g. `classes-nesting-label-x`
-        }}
         aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
           {icon}
       </IconButton>
@@ -137,35 +131,35 @@ export class MenuBar extends React.Component{
   }
 
   render(){
-    const classes = withStyles(MenuBar)
-    const theme = withTheme(MenuBar)
-
     return (
-      <React.Fragment>
+      <div>
         <AppBar position="fixed">
           <Toolbar>
             <Box display='flex' flexGrow={1}>
-            <Typography variant="h6" className={classes.title}>
+            <Typography variant="h6">
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run" 
-                icon={<PlayArrowIcon className="menuIcon"/>} 
+              <TidyBlocksButtonItem name="Run"
+                icon={<PlayArrowIcon className="menuIcon"/>}
                 handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load Workspace"
-                icon={<PublishIcon className="menuIcon" />} 
+                icon={<PublishIcon className="menuIcon" />}
                 handleClick={this.props.loadWorkspaceClick}/>
               <TidyBlocksButtonItem name="Load CSV"
                 icon={<TableChartIcon className="menuIcon" />}
                 handleClick={this.props.loadCsvClick}/>
-              <TidyBlocksMenuItem name="Save" menuItems={<SaveMenuItems/>}
+              <TidyBlocksMenuItem name="Save"
+                menuItems={<SaveMenuItems
+                  saveWorkspace={this.props.saveWorkspace}
+                  saveData={this.props.saveData}/>}
                 icon={<SaveIcon className="menuIcon" />}/>
               <TidyBlocksMenuItem edge="start" name="Help" menuItems={<HelpMenuItems/>}
                 icon={<HelpIcon className="menuIcon" />}/>
           </Toolbar>
         </AppBar>
         <Toolbar />
-      </React.Fragment>
+      </div>
     )
   }
 }

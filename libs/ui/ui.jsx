@@ -194,6 +194,8 @@ export class TidyBlocksApp extends React.Component {
     this.handleTabChange = this.handleTabChange.bind(this)
     this.sortRows = this.sortRows.bind(this)
     this.updateLogMessages = this.updateLogMessages.bind(this)
+    this.saveWorkspace = this.saveWorkspace.bind(this)
+    this.saveData = this.saveData.bind(this)
   }
 
   componentDidMount () {
@@ -421,6 +423,34 @@ export class TidyBlocksApp extends React.Component {
     })
   }
 
+  // Saves the currently displayed data table to a file.
+  saveData(){
+    var fields = Object.keys(this.state.data[0])
+    var replacer = function(key, value) { return value === null ? '' : value }
+    var csv = this.state.data.map(function(row){
+      return fields.map(function(fieldName){
+        return JSON.stringify(row[fieldName], replacer)
+      }).join(',')
+    })
+    csv.unshift(fields.join(',')) // add header column
+    csv = csv.join('\r\n');
+    var filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv';
+    var link = document.getElementById('downloadData')
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+    link.setAttribute('download', filename);
+  }
+
+  // Saves the current Blockly workspace to a file.
+  saveWorkspace(){
+    const filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt'
+    const workspace = this.getWorkspace().state.workspace
+    const xml = Blockly.Xml.workspaceToDom(workspace)
+    const text = Blockly.Xml.domToText(xml)
+    const link = document.getElementById('downloadWorkspace')
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+    link.setAttribute('download', filename)
+  }
+
   // Calls the file upload input.
   loadWorkspaceClick () {
     this.refs.workspaceFileUploader.click()
@@ -472,7 +502,9 @@ export class TidyBlocksApp extends React.Component {
         <MuiThemeProvider theme={theme}>
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
-            loadWorkspaceClick={this.loadWorkspaceClick}/>
+            loadWorkspaceClick={this.loadWorkspaceClick}
+            saveWorkspace={this.saveWorkspace}
+            saveData={this.saveData}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
             style={{display: "none"}}/>
