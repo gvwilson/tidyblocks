@@ -86,10 +86,15 @@ describe('build dataframe operations', () => {
     const transform = new Transform.report('answer')
     const input = new DataFrame(fixture.NAMES)
     const result = transform.run(env, input)
-    assert(result.equal(new DataFrame(fixture.NAMES)),
+    const expected = new DataFrame(fixture.NAMES)
+    assert(result instanceof DataFrame,
+           `Expected DataFrame as result`)
+    assert(result.equal(expected),
            `Should not modify data`)
-    assert.equal(transform.produces, 'answer',
-                 `Wrong name`)
+    assert(env.results.has('answer'),
+           `Should have an answer recorded`)
+    assert(env.results.get('answer').equal(expected),
+           `Wrong result recorded`)
     done()
   })
 

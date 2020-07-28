@@ -444,14 +444,14 @@ export class TidyBlocksApp extends React.Component {
   render () {
     const classes = withStyles(Tabs)
     const tabClasses = withStyles(Tab)
-    const logMessages = (!this.state.logMessages)
-          ? <li className="tbLog" key="message-0">No messages</li>
-          : this.state.logMessages.map((msg, i) => {
-              const key = `message-${i}`
-              const cls = (msg[0] === 'log') ? 'tbLog' : 'tbError'
-              return (<li className={cls} key={key}><code>{msg[1]}</code></li>)
-            })
-    const logMessageList = <ul>{logMessages}</ul>
+    const logMessages = (!this.state.logMessages) ?
+          <li className="tb-log" key="message-0">No messages</li> :
+          this.state.logMessages.map((msg, i) => {
+            const key = `message-${i}`
+            const cls = `tb-${msg[0]}`
+            return (<li className={cls} key={key}><code>{msg[1]}</code></li>)
+          })
+    const logMessageList = <ul className="tb-messages">{logMessages}</ul>
 
     return (
       <div className="splitPaneWrapper">
