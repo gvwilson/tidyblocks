@@ -122,7 +122,7 @@ const setup = () => {
     // Scatter plot
     {
       type: 'plot_scatter',
-      message0: 'Scatter %1 %2 %3 %4',
+      message0: 'Scatter %1 %2 %3 %4 Add Line? %5',
       args0: [
         {
           type: 'field_input',
@@ -143,6 +143,11 @@ const setup = () => {
           type: 'field_input',
           name: 'COLOR',
           text: 'color'
+        },
+        {
+          type: "field_checkbox",
+          name: "REGRESSION",
+          checked: false
         }
       ],
       inputsInline: true,
