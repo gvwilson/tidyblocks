@@ -76,6 +76,14 @@ const DataTabSelect = ({options, onChange, value}) => (
   />
 )
 
+const StatsTabSelect = ({options, onChange, value}) => (
+  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
+    options={options}
+    value={value}
+    onChange={(e) => onChange(e)}
+  />
+)
+
 const PlotTabSelect = ({options, onChange, value}) => (
   <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
     options={options}
@@ -182,9 +190,12 @@ export class TidyBlocksApp extends React.Component {
     this.loadCsvClick = this.loadCsvClick.bind(this)
     this.loadCsv = this.loadCsv.bind(this)
     this.changeData = this.changeData.bind(this)
+    this.changeStats = this.changeStats.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this)
     this.sortRows = this.sortRows.bind(this)
     this.updateLogMessages = this.updateLogMessages.bind(this)
+    this.saveWorkspace = this.saveWorkspace.bind(this)
+    this.saveData = this.saveData.bind(this)
   }
 
   componentDidMount () {
@@ -290,6 +301,13 @@ export class TidyBlocksApp extends React.Component {
       dataColumns: formattedColumns})
   }
 
+  changeStats (e) {
+    const activeStatsOption = e
+    let formattedColumns = []
+    const stats = [{'name': activeStatsOption.value, 'result': this.state.env.stats.get(activeStatsOption.value)}]
+    this.setState({activeStatsOption: activeStatsOption, stats: stats})
+  }
+
   updateLogMessages (env) {
     this.setState({logMessages: env.log})
   }
@@ -365,37 +383,35 @@ export class TidyBlocksApp extends React.Component {
     })
   }
 
+  // Updates Stats information.
   updateStatsInformation (env) {
-    // Updates Stats information. DISABLED PENDING FORMAT DISCUSSION.
-    // const statsKeys = env.stats.keys()
-    // let stats = null
-    // let statsColumns = null
-    // let activeStatsOption = null
-    // let formattedStatsColumns = []
-    //
-    // if (this.state.activeStatsOption) {
-    //   if (env.stats.has(this.state.activeStatsOption.value)){
-    //     stats = env.stats.get(this.state.activeStatsOption.value)['data']
-    //     statsColumns = env.stats.get(this.state.activeStatsOption.value)['columns']
-    //     statsColumns.forEach(c => formattedStatsColumns.push({key: c, name: c, sortable: true, resizable: true}))
-    //     activeStatsOption = this.state.activeStatsOption
-    //   }
-    // } else {
-    //   let result = statsKeys.next()
-    //   if (!result.done){
-    //     activeStatsOption = {'value': result.value, 'label': result.value}
-    //     stats = env.stats.get(activeStatsOption.value)['data']
-    //     statsColumns = env.stats.get(activeStatsOption.value)['columns']
-    //     statsColumns.forEach(c => formattedStatsColumns.push({key: c, name: c, sortable: true, resizable: true}))
-    //   }
-    // }
-    //
-    // let statsOptions = []
-    // for (let key of env.stats.keys()){
-    //   statsOptions.push({value: key, label: key})
-    // }
-    // this.setState({statsKeys:statsKeys, stats: stats, statsColumns: formattedStatsColumns,
-    //   activeStatsOption: activeStatsOption, statsOptions: statsOptions})
+    const statsKeys = env.stats.keys()
+    let stats = null
+    let statsColumns = null
+    let activeStatsOption = null
+    let STATS_COLUMNS = [{key: "name", name: "name", sortable: true, resizable: true},
+      {key: "result", name: "result", sortable: true, resizable: true}]
+
+    if (this.state.activeStatsOption) {
+      if (env.stats.has(this.state.activeStatsOption.value)){
+        stats = [{'name': this.state.activeStatsOption.value,
+          'result': env.stats.get(this.state.activeStatsOption.value)}]
+        activeStatsOption = this.state.activeStatsOption
+      }
+    } else {
+      let result = statsKeys.next()
+      if (!result.done){
+        activeStatsOption = {'value': result.value, 'label': result.value}
+        stats = [{'name': result.value, 'result': env.stats.get(activeStatsOption.value)}]
+      }
+    }
+
+    let statsOptions = []
+    for (let key of env.stats.keys()){
+      statsOptions.push({value: key, label: key})
+    }
+    this.setState({statsKeys:statsKeys, stats: stats, statsColumns: STATS_COLUMNS,
+      activeStatsOption: activeStatsOption, statsOptions: statsOptions})
   }
 
   handleTabChange (event, newValue) {
@@ -405,6 +421,34 @@ export class TidyBlocksApp extends React.Component {
         this.updatePlot();
       }
     })
+  }
+
+  // Saves the currently displayed data table to a file.
+  saveData(){
+    var fields = Object.keys(this.state.data[0])
+    var replacer = function(key, value) { return value === null ? '' : value }
+    var csv = this.state.data.map(function(row){
+      return fields.map(function(fieldName){
+        return JSON.stringify(row[fieldName], replacer)
+      }).join(',')
+    })
+    csv.unshift(fields.join(',')) // add header column
+    csv = csv.join('\r\n');
+    var filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv';
+    var link = document.getElementById('downloadData')
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
+    link.setAttribute('download', filename);
+  }
+
+  // Saves the current Blockly workspace to a file.
+  saveWorkspace(){
+    const filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt'
+    const workspace = this.getWorkspace().state.workspace
+    const xml = Blockly.Xml.workspaceToDom(workspace)
+    const text = Blockly.Xml.domToText(xml)
+    const link = document.getElementById('downloadWorkspace')
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+    link.setAttribute('download', filename)
   }
 
   // Calls the file upload input.
@@ -458,7 +502,9 @@ export class TidyBlocksApp extends React.Component {
         <MuiThemeProvider theme={theme}>
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
-            loadWorkspaceClick={this.loadWorkspaceClick}/>
+            loadWorkspaceClick={this.loadWorkspaceClick}
+            saveWorkspace={this.saveWorkspace}
+            saveData={this.saveData}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
             style={{display: "none"}}/>
@@ -519,9 +565,19 @@ export class TidyBlocksApp extends React.Component {
                     </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={1}>
+                    <StatsTabSelect options={this.state.statsOptions} onChange={this.changeStats} value={this.state.activeStatsOption}/>
                     <div className="relativeWrapper">
                       <div className="absoluteWrapper">
                         <div className="dataWrapper">
+                          {this.state.stats &&
+                            <DataGrid
+                              columns={this.state.statsColumns}
+                              rows={this.state.stats}
+                              enableCellAutoFocus={false}
+                              height={this.state.topRightPaneHeight}
+                              onGridSort={this.sortRows}
+                              />
+                          }
                         </div>
                       </div>
                     </div>
