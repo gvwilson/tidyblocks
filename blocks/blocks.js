@@ -57,7 +57,7 @@ const COMBINE_COLOR = '#404040'
 const DATA_COLOR = '#FEBE4C'
 const OP_COLOR = '#F9B5B2'
 const PLOT_COLOR = '#A4C588'
-const STATS_COLOR = '#70A0C0'
+const STATS_COLOR = '#BA93DB'
 const TRANSFORM_COLOR = '#76AADB'
 const VALUE_COLOR = '#E7553C'
 
@@ -91,8 +91,8 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
     },
     stats_blocks: {
       colourPrimary: STATS_COLOR,
-      colourSecondary: '#70A0C0',
-      colourTertiary: '#C070A0'
+      colourSecondary: '#7D3BB3',
+      colourTertiary: '#EFDBFF'
     },
     transform_block: {
       colourPrimary: TRANSFORM_COLOR,
