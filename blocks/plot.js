@@ -197,7 +197,8 @@ const setup = () => {
     const xAxis = block.getFieldValue('X_AXIS')
     const yAxis = block.getFieldValue('Y_AXIS')
     const color = block.getFieldValue('COLOR')
-    return `["@transform", "scatter", "${name}", "${xAxis}", "${yAxis}", "${color}"]`
+    const lm = block.getFieldValue('REGRESSION')
+    return `["@transform", "scatter", "${name}", "${xAxis}", "${yAxis}", "${color}", "${lm}"]`
   }
 }
 

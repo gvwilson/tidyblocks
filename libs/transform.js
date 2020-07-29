@@ -508,9 +508,10 @@ class TransformHistogram extends TransformPlot {
  * @param {string} axisX Which column to use for the X axis.
  * @param {string} axisY Which column to use for the Y axis.
  * @param {string} color Which column to use for color (if any).
+ * @param {string} lm Add linear regression to plot
  */
 class TransformScatter extends TransformPlot {
-  constructor (label, axisX, axisY, color) {
+  constructor (label, axisX, axisY, color, lm) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
@@ -519,16 +520,20 @@ class TransformScatter extends TransformPlot {
                `Must provide null or non-empty string for color`)
     const spec = {
       data: {values: null},
-      mark: 'point',
-      encoding: {
-        x: {field: axisX, type: 'quantitative'},
-        y: {field: axisY, type: 'quantitative'}
-      }
+        mark: 'point',
+        encoding: {
+          x: {field: axisX, type: 'quantitative'},
+          y: {field: axisY, type: 'quantitative'}
+        }
     }
     if (color) {
       spec.encoding.color = {field: color, type: 'nominal'}
     }
-    super('scatter', label, spec, {axisX, axisY, color})
+    if (lm === "TRUE") {
+      console.log("true")
+      // https://vega.github.io/editor/#/edited
+    }
+    super('scatter', label, spec, {axisX, axisY, color, lm})
   }
 }
 
