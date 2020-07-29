@@ -1,6 +1,7 @@
 @import 'menu';
 @import '../css/react-data-grid';
 @import 'material-ui-custom';
+@import 'colours';
 
 // Imports for jekyll documentation/blog pages (not used directly on the core
 // Tidyblocks app.
@@ -64,6 +65,7 @@ body {
 }
 
 .sourceSelect {
+  width: 100%;
   padding: 2px;
   font-size: 14px;
   font-family: "Roboto";
