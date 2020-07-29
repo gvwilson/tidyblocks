@@ -21,6 +21,9 @@ import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
 import Splitter from 'm-react-splitters'
 import 'm-react-splitters/lib/splitters.css'
+import Tooltip from '@material-ui/core/Tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 
 const tabHeight = '34px' // default: '48px'
 
@@ -136,6 +139,37 @@ const createToolboxCategories = (props) => {
   return categories
 }
 
+function TabHeader (props) {
+  return(
+    <Grid container alignContent="center" alignItems="center" spacing={0}>
+      <Grid item xs={7}>
+        <Grid container spacing={0}>
+          {props.selectDropdown}
+        </Grid>
+      </Grid>
+      <Grid item xs={5}>
+        <Grid container justify="flex-end" spacing={1}>
+          <Tooltip title={"Minimize Panel"}>
+            <Grid item className="resizeIconGrid" onClick={props.minimizePanel}>
+              <FontAwesomeIcon className="resizeIcon"icon={faWindowMinimize} />
+            </Grid>
+          </Tooltip>
+          <Tooltip title={"Maximize Panel"}>
+            <Grid item className="resizeIconGrid" onClick={props.maximizePanel}>
+              <FontAwesomeIcon className="resizeIcon"icon={faWindowMaximize} />
+            </Grid>
+          </Tooltip>
+          <Tooltip title={"Restore Panel"}>
+            <Grid item className="resizeIconGrid" onClick={props.restorePanel}>
+              <FontAwesomeIcon className="resizeIcon"icon={faWindowRestore} />
+            </Grid>
+          </Tooltip>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
+}
+
 // The main TidyBlocks App UI. Contains resizable panes for the Blockly section,
 // tabs for data display/plotting/logs.
 export class TidyBlocksApp extends React.Component {
@@ -196,6 +230,9 @@ export class TidyBlocksApp extends React.Component {
     this.updateLogMessages = this.updateLogMessages.bind(this)
     this.saveWorkspace = this.saveWorkspace.bind(this)
     this.saveData = this.saveData.bind(this)
+    this.maximizePanel = this.maximizePanel.bind(this)
+    this.minimizePanel = this.minimizePanel.bind(this)
+    this.restorePanel = this.restorePanel.bind(this)
   }
 
   componentDidMount () {
@@ -230,6 +267,40 @@ export class TidyBlocksApp extends React.Component {
     this.updatePlot()
   }
 
+  // Maximizes the size of the right panel.
+  maximizePanel () {
+    const primaryPane = ReactDOM.findDOMNode(this).querySelector('.primary')
+    // The pane splitter will automatically adjust to it's minimum, setting to
+    // 0% ensures we hit that.
+    primaryPane.style['width'] = "0%"
+    this.paneVerticalResize()
+    // To force react-data-grid to scale.
+    window.dispatchEvent(new Event('resize'))
+
+  }
+
+  // Minimizes the size of the right panel.
+  minimizePanel () {
+    const primaryPane = ReactDOM.findDOMNode(this).querySelector('.primary')
+    // The pane splitter will automatically adjust to it's max, setting to
+    // 100% ensures we hit that.
+    primaryPane.style['width'] = "100%"
+    this.paneVerticalResize()
+    // To force react-data-grid to scale.
+    window.dispatchEvent(new Event('resize'))
+
+  }
+
+  // Restores both panels to their default positions.
+  restorePanel () {
+    const primaryPane = ReactDOM.findDOMNode(this).querySelector('.primary')
+    primaryPane.style['width'] = "50%"
+    this.paneVerticalResize()
+    // To force react-data-grid to scale.
+    window.dispatchEvent(new Event('resize'))
+  }
+
+
   // Updates the height of the topRightPane. This allows our ReactDataGrid to
   // update it's height.
   updateTopRightPaneHeight () {
@@ -242,7 +313,7 @@ export class TidyBlocksApp extends React.Component {
   }
 
   // Sorting function for our react-data-grids.
-  sortRows(sortColumn, sortDirection){
+  sortRows (sortColumn, sortDirection) {
     const comparer = (a, b) => {
       if (sortDirection === 'ASC') {
         return (a[sortColumn]> b[sortColumn]) ? 1 : -1
@@ -418,7 +489,7 @@ export class TidyBlocksApp extends React.Component {
     const PLOT_TAB_INDEX = 2
     this.setState({tabValue: newValue}, () => {
       if (newValue == PLOT_TAB_INDEX){
-        this.updatePlot();
+        this.updatePlot()
       }
     })
   }
@@ -433,11 +504,11 @@ export class TidyBlocksApp extends React.Component {
       }).join(',')
     })
     csv.unshift(fields.join(',')) // add header column
-    csv = csv.join('\r\n');
-    var filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv';
+    csv = csv.join('\r\n')
+    var filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv'
     var link = document.getElementById('downloadData')
-    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
-    link.setAttribute('download', filename);
+    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv))
+    link.setAttribute('download', filename)
   }
 
   // Saves the current Blockly workspace to a file.
@@ -480,7 +551,7 @@ export class TidyBlocksApp extends React.Component {
       const df = new DataFrame(csvToTable(text))
       this.state.env.ui.userData.set(label, df)
       this.setState({env: this.state.env}, () => {
-        this.updateDataInformation(this.state.env);
+        this.updateDataInformation(this.state.env)
       })
     })
   }
@@ -496,6 +567,12 @@ export class TidyBlocksApp extends React.Component {
             return (<li className={cls} key={key}><code>{msg[1]}</code></li>)
           })
     const logMessageList = <ul className="tb-messages">{logMessages}</ul>
+    const dataDropdown = <DataTabSelect options={this.state.dataOptions}
+      onChange={this.changeData} value={this.state.activeDataOption}/>
+    const statsDropdown = <StatsTabSelect options={this.state.statsOptions}
+      onChange={this.changeStats} value={this.state.activeStatsOption}/>
+    const plotDropdown = <PlotTabSelect options={this.state.plotOptions}
+      onChange={this.changePlot} value={this.state.activePlotOption}/>
 
     return (
       <div className="splitPaneWrapper">
@@ -515,7 +592,7 @@ export class TidyBlocksApp extends React.Component {
               key="vertical-split"
               postPoned={false}
               position="vertical"
-              primaryPaneMaxWidth="90%"
+              secondaryPaneMinWidth="250px%"
               primaryPaneMinWidth="20px"
               primaryPaneWidth="50%"
               dispatchResize={true}
@@ -546,7 +623,10 @@ export class TidyBlocksApp extends React.Component {
                     </Tabs>
                   </AppBar>
                   <TabPanel value={this.state.tabValue} index={0} component="div">
-                    <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      selectDropdown={dataDropdown}/>
                     <div className="relativeWrapper">
                       <div className="">
                         <div className="dataWrapper">
@@ -565,7 +645,10 @@ export class TidyBlocksApp extends React.Component {
                     </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={1}>
-                    <StatsTabSelect options={this.state.statsOptions} onChange={this.changeStats} value={this.state.activeStatsOption}/>
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      selectDropdown={statsDropdown}/>
                     <div className="relativeWrapper">
                       <div className="absoluteWrapper">
                         <div className="dataWrapper">
@@ -583,12 +666,19 @@ export class TidyBlocksApp extends React.Component {
                     </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={2} component="div">
-                    <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      selectDropdown={plotDropdown}/>
                     <div className="plotWrapper">
                       <div id="plotOutput" ref={this.plotOutputRef}></div>
                     </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={3}>
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      />
                     {logMessageList}
                   </TabPanel>
                 </div>
