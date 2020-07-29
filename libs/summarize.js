@@ -1,6 +1,7 @@
 'use strict'
 
 const util = require('./util')
+const stats = require('simple-statistics')
 
 /**
  * Represent summarization as object.
@@ -19,16 +20,13 @@ class SummarizeBase {
     this.column = column
   }
 
-  /**
-   * Calculate variance of an array of values.
-   * @param {number[]} values To be computed with.
-   * @returns Variance.
-   */
-  _variance (values) {
-    const mean = values.reduce((total, val) => total + val, 0) / values.length
-    const diffSq = values.map(val => (val - mean) ** 2)
-    const result = diffSq.reduce((total, val) => total + val, 0) / diffSq.length
-    return result
+  run (rows, func) {
+    util.check(typeof func === 'function',
+               `Must provide callable function`)
+    if (rows.length === 0) {
+      return util.MISSING
+    }
+    return func(rows.map(row => row[this.column]))
   }
 }
 
@@ -41,12 +39,7 @@ class SummarizeAll extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    return rows.reduce((soFar, row) => {
-      return (soFar && row[this.column]) ? true : false
-    }, true)
+    return super.run(rows, (values) => values.every(x => x))
   }
 }
 
@@ -59,12 +52,7 @@ class SummarizeAny extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    return rows.reduce((soFar, row) => {
-      return (soFar || row[this.column]) ? true : false
-    }, false)
+    return super.run(rows, (values) => values.some(x => x))
   }
 }
 
@@ -90,12 +78,7 @@ class SummarizeMaximum extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    return rows.reduce((soFar, row) => {
-      return (row[this.column] > soFar) ? row[this.column] : soFar
-    }, rows[0][this.column])
+    return super.run(rows, stats.max)
   }
 }
 
@@ -108,12 +91,7 @@ class SummarizeMean extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    return rows.reduce((total, row) => {
-      return total + row[this.column]
-    }, 0) / rows.length
+    return super.run(rows, stats.mean)
   }
 }
 
@@ -126,20 +104,7 @@ class SummarizeMedian extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    const temp = [...rows]
-    temp.sort((left, right) => {
-      if (left[this.column] < right[this.column]) {
-        return -1
-      }
-      else if (left[this.column] > right[this.column]) {
-        return 1
-      }
-      return 0
-    })
-    return temp[Math.floor(rows.length / 2)][this.column]
+    return super.run(rows, stats.median)
   }
 }
 
@@ -152,12 +117,7 @@ class SummarizeMinimum extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    return rows.reduce((soFar, row) => {
-      return (row[this.column] < soFar) ? row[this.column] : soFar
-    }, rows[0][this.column])
+    return super.run(rows, stats.min)
   }
 }
 
@@ -170,11 +130,7 @@ class SummarizeStdDev extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    const values = rows.map(row => row[this.column])
-    return Math.sqrt(this._variance(values))
+    return super.run(rows, stats.standardDeviation)
   }
 }
 
@@ -186,13 +142,12 @@ class SummarizeSum extends SummarizeBase {
     super('sum', column)
   }
 
+  static Sum (values) {
+    return values.reduce((total, v) => total + v, 0)
+  }
+
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    return rows.reduce((total, row) => {
-      return total + row[this.column]
-    }, 0)
+    return super.run(rows, SummarizeSum.Sum)
   }
 }
 
@@ -205,11 +160,7 @@ class SummarizeVariance extends SummarizeBase {
   }
 
   run (rows) {
-    if (rows.length === 0) {
-      return util.MISSING
-    }
-    const values = rows.map(row => row[this.column])
-    return this._variance(values)
+    return super.run(rows, stats.variance)
   }
 }
 
