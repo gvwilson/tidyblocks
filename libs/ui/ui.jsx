@@ -21,7 +21,7 @@ import DataFrame from '../dataframe'
 import Splitter from 'm-react-splitters'
 import 'm-react-splitters/lib/splitters.css'
 import {MenuBar} from './menuBar.jsx'
-import {SaveCsvFormDialog} from './csvDialog.jsx'
+import {SaveCsvFormDialog, SaveWorkspaceFormDialog} from './csvDialog.jsx'
 
 const tabHeight = '34px' // default: '48px'
 
@@ -147,7 +147,8 @@ export class TidyBlocksApp extends React.Component {
     this.dataGridRef = React.createRef()
     this.workspaceFileUploader = React.createRef()
     this.csvFileUploader = React.createRef()
-    this.csvNameDialog = React.createRef()
+    this.saveCsvNameDialog = React.createRef()
+    this.saveWorkspaceDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -427,18 +428,12 @@ export class TidyBlocksApp extends React.Component {
 
   // Saves the currently displayed data table to a file.
   saveData(){
-    this.csvNameDialog.current.handleClickOpen()
+    this.saveCsvNameDialog.current.handleClickOpen()
   }
 
   // Saves the current Blockly workspace to a file.
   saveWorkspace(){
-    const filename = 'Workspace_' + new Date().toLocaleDateString() + '.jeff'
-    const workspace = this.getWorkspace().state.workspace
-    const xml = Blockly.Xml.workspaceToDom(workspace)
-    const text = Blockly.Xml.domToText(xml)
-    const link = document.getElementById('downloadWorkspace')
-    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
-    link.setAttribute('download', filename)
+    this.saveWorkspaceDialog.current.handleClickOpen()
   }
 
   // Calls the file upload input.
@@ -490,7 +485,10 @@ export class TidyBlocksApp extends React.Component {
     return (
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
-          <SaveCsvFormDialog ref={this.csvNameDialog} data={this.state.data}/>
+          <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
+          { this.blocklyRef.current &&
+            <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
+          }
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}
