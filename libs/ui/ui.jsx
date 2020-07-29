@@ -7,7 +7,6 @@ import DataGrid from 'react-data-grid'
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
-import {MenuBar} from './menuBar.jsx'
 import Select from 'react-select'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
@@ -21,6 +20,8 @@ import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
 import Splitter from 'm-react-splitters'
 import 'm-react-splitters/lib/splitters.css'
+import {MenuBar} from './menuBar.jsx'
+import {SaveCsvFormDialog} from './csvDialog.jsx'
 
 const tabHeight = '34px' // default: '48px'
 
@@ -146,6 +147,7 @@ export class TidyBlocksApp extends React.Component {
     this.dataGridRef = React.createRef()
     this.workspaceFileUploader = React.createRef()
     this.csvFileUploader = React.createRef()
+    this.csvNameDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -425,24 +427,12 @@ export class TidyBlocksApp extends React.Component {
 
   // Saves the currently displayed data table to a file.
   saveData(){
-    var fields = Object.keys(this.state.data[0])
-    var replacer = function(key, value) { return value === null ? '' : value }
-    var csv = this.state.data.map(function(row){
-      return fields.map(function(fieldName){
-        return JSON.stringify(row[fieldName], replacer)
-      }).join(',')
-    })
-    csv.unshift(fields.join(',')) // add header column
-    csv = csv.join('\r\n');
-    var filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv';
-    var link = document.getElementById('downloadData')
-    link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv));
-    link.setAttribute('download', filename);
+    this.csvNameDialog.current.handleClickOpen()
   }
 
   // Saves the current Blockly workspace to a file.
   saveWorkspace(){
-    const filename = 'Workspace_' + new Date().toLocaleDateString() + '.txt'
+    const filename = 'Workspace_' + new Date().toLocaleDateString() + '.jeff'
     const workspace = this.getWorkspace().state.workspace
     const xml = Blockly.Xml.workspaceToDom(workspace)
     const text = Blockly.Xml.domToText(xml)
@@ -500,6 +490,7 @@ export class TidyBlocksApp extends React.Component {
     return (
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
+          <SaveCsvFormDialog ref={this.csvNameDialog} data={this.state.data}/>
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}

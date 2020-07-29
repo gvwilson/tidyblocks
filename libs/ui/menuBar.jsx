@@ -34,18 +34,25 @@ import Link from '@material-ui/core/Link';
 class SaveMenuItems extends React.Component{
   constructor(props){
     super(props)
+    this.handleClick = this.handleClick.bind(this)
   }
 
-  render(){
+  handleClick (buttonCallback) {
+    this.props.onClose()
+    buttonCallback()
+  }
+
+  render () {
     return (
       <React.Fragment>
         <Link id="downloadWorkspace">
-          <MenuItem onClick={this.props.saveWorkspace}>
-              Save Workspace
+          <MenuItem onClick={() => this.handleClick(this.props.saveWorkspace)}>
+            Save Workspace
           </MenuItem>
         </Link>
-        <Link id="downloadData">
-          <MenuItem onClick={this.props.saveData}>Save Data</MenuItem>
+        <Link>
+          <MenuItem onClick={() => this.handleClick(this.props.saveData)}>
+            Save Data</MenuItem>
         </Link>
       </React.Fragment>
     )
@@ -57,16 +64,16 @@ class HelpMenuItems extends React.Component{
     super(props)
   }
 
-  render(){
+  render () {
     return (
       <React.Fragment>
-        <Link target="_blank" href="./guide">
+        <Link target="_blank" href="./guide" onClick={this.props.onClose}>
           <MenuItem>Guide</MenuItem>
         </Link>
-        <Link target="_blank" href="./license">
+        <Link target="_blank" href="./license" onClick={this.props.onClose}>
           <MenuItem>License</MenuItem>
         </Link>
-        <Link target="_blank" href="./blog">
+        <Link target="_blank" href="./blog" onClick={this.props.onClose}>
           <MenuItem>Blog</MenuItem>
         </Link>
       </React.Fragment>
@@ -87,8 +94,19 @@ function TidyBlocksButtonItem({name, icon, handleClick}) {
   )
 }
 
-// Create a Menu Item for the top TidyBlocks bar.
-function TidyBlocksMenuItem({name, icon, menuItems}) {
+function MenuItemsButton ({name, icon, handleClick}) {
+  return (
+    <Tooltip title={name}>
+    <IconButton
+      aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
+        {icon}
+    </IconButton>
+    </Tooltip>
+  )
+}
+
+// Create the Save items for the top TidyBlocks bar.
+function TidyBlocksSaveMenuItems({name, icon, menuItems, saveWorkspace, saveData}) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -101,25 +119,49 @@ function TidyBlocksMenuItem({name, icon, menuItems}) {
 
   return (
     <div>
-      <Tooltip title={name}>
-      <IconButton
-        aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
-          {icon}
-      </IconButton>
-      </Tooltip>
-      {menuItems &&
-        <Menu
-          id="fade-menu"
-          anchorEl={anchorEl}
-          open={open}
+      <MenuItemsButton name={name} icon={icon} handleClick={handleClick}/>
+      <Menu
+        id="fade-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Fade}>
+        <SaveMenuItems
           onClose={handleClose}
-          TransitionComponent={Fade}>
-          { menuItems }
-        </Menu>
-      }
+          saveWorkspace={saveWorkspace}
+          saveData={saveData}/>
+      </Menu>
     </div>
   )
 }
+
+// Create the Help Items for the top TidyBlocks bar.
+function TidyBlocksHelpMenuItems({name, icon, menuItems}) {
+  const [anchorEl, setAnchorEl] = React.useState(null)
+  const open = Boolean(anchorEl)
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <MenuItemsButton name={name} icon={icon} handleClick={handleClick}/>
+      <Menu
+        id="fade-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Fade}>
+        <HelpMenuItems onClose={handleClose}/>
+      </Menu>
+    </div>
+  )
+}
+
 
 // Defines the top level menu bar for the page.
 export class MenuBar extends React.Component{
@@ -130,7 +172,9 @@ export class MenuBar extends React.Component{
     }
   }
 
-  render(){
+  render () {
+    const filename = 'TbDataFrame_' + new Date().toLocaleDateString() + '.csv';
+
     return (
       <div>
         <AppBar position="fixed">
@@ -149,12 +193,11 @@ export class MenuBar extends React.Component{
               <TidyBlocksButtonItem name="Load CSV"
                 icon={<TableChartIcon className="menuIcon" />}
                 handleClick={this.props.loadCsvClick}/>
-              <TidyBlocksMenuItem name="Save"
-                menuItems={<SaveMenuItems
-                  saveWorkspace={this.props.saveWorkspace}
-                  saveData={this.props.saveData}/>}
+              <TidyBlocksSaveMenuItems name="Save"
+                saveWorkspace={this.props.saveWorkspace}
+                saveData={this.props.saveData}
                 icon={<SaveIcon className="menuIcon" />}/>
-              <TidyBlocksMenuItem edge="start" name="Help" menuItems={<HelpMenuItems/>}
+              <TidyBlocksHelpMenuItems edge="start" name="Help"
                 icon={<HelpIcon className="menuIcon" />}/>
           </Toolbar>
         </AppBar>
