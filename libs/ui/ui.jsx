@@ -181,6 +181,7 @@ export class TidyBlocksApp extends React.Component {
       toolboxCategories: createToolboxCategories(this.props),
       tabValue: 0,
       tabValueBottom: 0,
+      zoom: '1.00',
       // The results returned from running the program. We store them in full
       // in env for use during updates/changes, but may also use more specific
       // helper variables for intermediate results.
@@ -225,6 +226,7 @@ export class TidyBlocksApp extends React.Component {
     this.maximizePanel = this.maximizePanel.bind(this)
     this.minimizePanel = this.minimizePanel.bind(this)
     this.restorePanel = this.restorePanel.bind(this)
+    this.updateZoom = this.updateZoom.bind(this)
   }
 
   componentDidMount () {
@@ -241,6 +243,16 @@ export class TidyBlocksApp extends React.Component {
       if (this.state.isDraggingPane){
         this.paneVerticalResize()
       }
+    })
+    // Update the zoom display after touch/gesture events while on the blockly panel.
+    ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('touchend', () => {
+      this.updateZoom()
+    })
+    ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('wheel', () => {
+      this.updateZoom()
+    })
+    ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('gestureend', () => {
+      this.updateZoom()
     })
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
@@ -384,7 +396,12 @@ export class TidyBlocksApp extends React.Component {
     this.setState({logMessages: env.log})
   }
 
+  updateZoom () {
+    this.setState({zoom: this.blocklyRef.current.workspace.state.workspace.scale.toFixed(2)})
+  }
+
   runProgram () {
+    console.log(this.blocklyRef.current.workspace.state.workspace.scale)
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
     this.updateDataInformation(env)
@@ -601,12 +618,16 @@ export class TidyBlocksApp extends React.Component {
               primaryPaneWidth="50%"
               dispatchResize={true}
               >
-              <div>
+              <div className="blocklyWrapper" onClick={this.updateZoom}>
+                {this.blocklyRef.current &&
+                  <div className="zoomLevel">Zoom: {this.state.zoom}x</div>
+                }
                 <ReactBlocklyComponent.BlocklyEditor
                   ref={this.blocklyRef}
                   toolboxCategories={this.state.toolboxCategories}
                   workspaceConfiguration={this.props.settings}
                   wrapperDivClassName="fill-height"
+                  workspaceDidChange={this.updateZoom}
                 />
               </div>
               <div className="topRightPane">

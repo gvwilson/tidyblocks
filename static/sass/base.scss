@@ -34,6 +34,20 @@ body {
   background: #fff;
 }
 
+.blocklyWrapper{
+  position: relative;
+}
+
+.zoomLevel{
+  position: absolute;
+  bottom: 240px;
+  right: 30px;
+  z-index: 5;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  color: #9d9d9d;
+}
+
 .splitterBottomPane {
   z-index: 3;
 }
@@ -68,7 +82,7 @@ body {
   width: 100%;
   padding: 2px;
   font-size: 14px;
-  font-family: "Roboto";
+  font-family: 'Roboto', sans-serif;
   font-weight: 500;
 }
 
