@@ -68,6 +68,12 @@ const theme = createMuiTheme({
         fontSize: '12px'
       }
     },
+    MuiPaper: {
+      root: {
+        backgroundColor: '#f5f5f5',
+        padding: '0px'
+      }
+    }
   },
   props: {
     MuiButtonBase: {
@@ -122,6 +128,7 @@ const createToolboxCategories = (props) => {
 
 function TabHeader (props) {
   return(
+    <Paper>
     <Grid container alignContent="center" alignItems="center" spacing={0}>
       <Grid item xs={7}>
         <Grid container spacing={0}>
@@ -148,6 +155,7 @@ function TabHeader (props) {
         </Grid>
       </Grid>
     </Grid>
+    </Paper>
   )
 }
 
@@ -619,7 +627,8 @@ export class TidyBlocksApp extends React.Component {
                     </Tabs>
                   </AppBar>
                   <TabPanel value={this.state.tabValue} index={0} component="div">
-                    <TabHeader maximizePanel={this.maximizePanel}
+                    <TabHeader
+                      maximizePanel={this.maximizePanel}
                       minimizePanel={this.minimizePanel}
                       restorePanel={this.restorePanel}
                       selectDropdown={dataDropdown}/>
