@@ -5,13 +5,13 @@ const assert = require('assert')
 const util = require('../libs/util')
 const Summarize = require('../libs/summarize')
 
-const twoRows = [{ones: 1, tens: 10},
-                 {ones: 2, tens: 20}]
-const threeRows = [{ones: 3},
-                   {ones: 2},
-                   {ones: 2},
-                   {ones: 2},
-                   {ones: 1}]
+const TWO_ROWS = [{ones: 1, tens: 10},
+                  {ones: 2, tens: 20}]
+const THREE_ROWS = [{ones: 3},
+                    {ones: 2},
+                    {ones: 2},
+                    {ones: 2},
+                    {ones: 1}]
 
 describe('all', () => {
   it('requires a column name for all', (done) => {
@@ -77,7 +77,7 @@ describe('count', () => {
 
   it('counts non-empty tables', (done) => {
     const op = new Summarize.count('whatever')
-    assert.equal(op.run(twoRows), 2,
+    assert.equal(op.run(TWO_ROWS), 2,
                  `Expected two rows`)
     done()
   })
@@ -100,7 +100,7 @@ describe('maximum', () => {
 
   it('finds maximum of non-empty tables', (done) => {
     const op = new Summarize.maximum('ones')
-    assert.equal(op.run(twoRows), 2,
+    assert.equal(op.run(TWO_ROWS), 2,
                  `Wrong value`)
     done()
   })
@@ -123,7 +123,7 @@ describe('mean', () => {
 
   it('finds mean of non-empty tables', (done) => {
     const op = new Summarize.mean('ones')
-    assert.equal(op.run(twoRows), 1.5,
+    assert.equal(op.run(TWO_ROWS), 1.5,
                  `Wrong value`)
     done()
   })
@@ -146,14 +146,14 @@ describe('median', () => {
 
   it('finds median of non-empty tables', (done) => {
     const op = new Summarize.median('ones')
-    assert.equal(op.run(twoRows), 2,
+    assert.equal(op.run(TWO_ROWS), 1.5,
                  `Wrong value`)
     done()
   })
 
   it('finds median of odd-sized tables', (done) => {
     const op = new Summarize.median('ones')
-    assert.equal(op.run(threeRows), 2,
+    assert.equal(op.run(THREE_ROWS), 2,
                  `Wrong value`)
     done()
   })
@@ -176,13 +176,13 @@ describe('minimum', () => {
 
   it('finds minimum of non-empty tables', (done) => {
     const op = new Summarize.minimum('ones')
-    assert.equal(op.run(twoRows), 1,
+    assert.equal(op.run(TWO_ROWS), 1,
                  `Wrong value`)
     done()
   })
 
   it('finds minimum of non-empty tables in reverse', (done) => {
-    const temp = twoRows.slice().reverse()
+    const temp = TWO_ROWS.slice().reverse()
     const op = new Summarize.minimum('ones')
     assert.equal(op.run(temp), 1,
                  `Wrong value`)
@@ -207,7 +207,7 @@ describe('standard deviation', () => {
 
   it('finds standard deviation of non-empty tables', (done) => {
     const op = new Summarize.stdDev('ones')
-    assert.equal(op.run(twoRows), 0.5,
+    assert.equal(op.run(TWO_ROWS), 0.5,
                  `Wrong value`)
     done()
   })
@@ -230,7 +230,7 @@ describe('sum', () => {
 
   it('finds sum of non-empty tables', (done) => {
     const op = new Summarize.sum('ones')
-    assert.equal(op.run(twoRows), 3,
+    assert.equal(op.run(TWO_ROWS), 3,
                  `Wrong value`)
     done()
   })
@@ -253,7 +253,7 @@ describe('variance', () => {
 
   it('finds variance of non-empty tables', (done) => {
     const op = new Summarize.variance('ones')
-    assert.equal(op.run(twoRows), 0.25,
+    assert.equal(op.run(TWO_ROWS), 0.25,
                  `Wrong value`)
     done()
   })
