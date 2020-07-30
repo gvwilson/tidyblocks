@@ -3,6 +3,8 @@
 const util = require('./util')
 const DataFrame = require('./dataframe')
 
+const LOG_LEVELS = new Set(['log', 'warn', 'error'])
+
 /**
  * Runtime environment.
  * @param userData Datasets loaded by the user (keyed by label).
@@ -48,8 +50,9 @@ class Env {
                `Require non-empty string label for result`)
     util.check(data instanceof DataFrame,
                `Require dataframe for data`)
-    util.check(!this.results.has(label),
-               `Result with label ${label} already exists`)
+    if (this.results.has(label)) {
+      this.appendLog('warn', `Result with label ${label} already exists`)
+    }
     this.results.set(label, data)
   }
 
@@ -73,8 +76,9 @@ class Env {
   setPlot (label, spec) {
     util.check(label && (typeof label === 'string'),
                `Require non-empty string as plot label`)
-    util.check(!this.plots.has(label),
-               `Duplicate plot label ${label}`)
+    if (this.plots.has(label)) {
+      this.appendLog('warn', `Plot with label ${label} already exists`)
+    }
     this.plots.set(label, spec)
   }
 
@@ -93,14 +97,15 @@ class Env {
   /**
    * Store a statistical result.
    * @param label Name of result to get.
-   * @param {Object} result Result to store.
+   * @param {Object} stats Result to store.
    */
-  setStats (label, spec) {
+  setStats (label, stats) {
     util.check(label && (typeof label === 'string'),
                `Require non-empty string as stats label`)
-    util.check(!this.stats.has(label),
-               `Duplicate stats label ${label}`)
-    this.stats.set(label, spec)
+    if (this.stats.has(label)) {
+      this.appendLog('warn', `Statistics with label ${label} already exists`)
+    }
+    this.stats.set(label, stats)
   }
 
   /**
@@ -109,8 +114,8 @@ class Env {
    * @param {string} message To save.
    */
   appendLog (level, message) {
-    util.check(level && (typeof level === 'string') && ['log', 'error'].includes(level),
-               `Expected either "log" or "error" for level, not "${level}"`)
+    util.check(level && (typeof level === 'string') && LOG_LEVELS.has(level),
+               `Invalid or unknown log level "${level}"`)
     this.log.push([level, message])
   }
 }

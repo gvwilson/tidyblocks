@@ -47,59 +47,84 @@ describe('executes pipelines', () => {
   })
 
   it('refuses to execute a pipeline whose early transforms do not produce output', (done) => {
-    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL, fixture.TAIL)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.NO_OUTPUT, fixture.REPORT)
     assert.throws(() => pipeline.run(new Env(INTERFACE)),
                   Error,
                   `Should not execute pipeline whose middle transform does not produce output`)
     done()
   })
 
-  it('executes a single-transform pipeline without a tail', (done) => {
+  it('executes a single-transform pipeline without a report', (done) => {
     const pipeline = new Pipeline(fixture.HEAD)
-    const result = pipeline.run(new Env(INTERFACE))
-    assert.equal(result.name, null,
-                 `Result should not be named`)
-    assert(result.data.equal(fixture.TABLE),
-           `Result should contain unmodified table`)
+    const env = new Env(INTERFACE)
+    pipeline.run(env)
+    assert.equal(env.results.size, 0,
+                 `No results should be registered`)
     done()
   })
 
-  it('executes a two-transform pipeline without a tail', (done) => {
+  it('executes a two-transform pipeline without a report', (done) => {
     const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE)
-    const result = pipeline.run(new Env(INTERFACE))
-    assert.equal(result.name, null,
-                 `Result should not be named`)
-    assert(result.data.equal(fixture.TABLE),
-           `Result should contain unmodified table`)
+    const env = new Env(INTERFACE)
+    pipeline.run(env)
+    assert.equal(env.results.size, 0,
+                 `No results should be registered`)
     done()
   })
 
-  it('executes a three-transform pipeline with a tail', (done) => {
-    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.TAIL)
-    const result = pipeline.run(new Env(INTERFACE))
-    assert.equal(result.name, null,
-                 `Result should not be named`)
-    assert(result.data.equal(fixture.TABLE),
-           `Result should contain unmodified table`)
-    done()
-  })
-
-  it('executes a pipeline ending with a report', (done) => {
-    const pipeline = new Pipeline(fixture.HEAD, fixture.TAIL_REPORT)
-    const result = pipeline.run(new Env(INTERFACE))
-    assert.equal(result.label, 'keyword',
-                 `Result should include name`)
-    assert(result.data.equal(fixture.TABLE),
-           `Result should contain unmodified table`)
+  it('executes a three-transform pipeline with a report', (done) => {
+    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.REPORT)
+    const env = new Env(INTERFACE)
+    pipeline.run(env)
+    assert.equal(env.results.size, 1,
+                 `Expected a single result`)
+    assert(env.results.has('keyword'),
+           `Expected a result`)
+    assert.deepEqual(env.results.get('keyword'), fixture.TABLE,
+                     `Result should contain unmodified table`)
     done()
   })
 
   it('logs execution', (done) => {
     const env = new Env(INTERFACE)
-    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.TAIL)
-    const result = pipeline.run(env)
-    assert.deepEqual(env.log, [['log', 'head'], ['log', 'middle'], ['log', 'tail']],
+    const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE, fixture.REPORT)
+    pipeline.run(env)
+    assert.deepEqual(env.log, [['log', 'head'], ['log', 'middle'], ['log', 'report keyword']],
                      `Transforms not logged`)
+    done()
+  })
+
+  it('complains about multiple results with the same name', (done) => {
+    const env = new Env(INTERFACE)
+    const pipeline = new Pipeline(fixture.HEAD, fixture.REPORT, fixture.REPORT)
+    pipeline.run(env)
+    assert.deepEqual(env.log[env.log.length - 1],
+                     ['warn', 'Result with label keyword already exists'],
+                     `Expected a warning`)
+    done()
+  })
+
+  it('complains about multiple plots with the same name', (done) => {
+    const env = new Env(INTERFACE)
+    const first = new Transform.bar('figure_1', 'left', 'right')
+    const second = new Transform.bar('figure_1', 'left', 'right')
+    const pipeline = new Pipeline(fixture.HEAD, first, second)
+    pipeline.run(env)
+    assert.deepEqual(env.log[env.log.length - 1],
+                     ['warn', 'Plot with label figure_1 already exists'],
+                     `Expected a warning`)
+    done()
+  })
+
+  it('complains about multiple statistical results with the same name', (done) => {
+    const env = new Env(INTERFACE)
+    const first = new Transform.ttest_one('result', 'left', 0)
+    const second = new Transform.ttest_one('result', 'right', 0)
+    const pipeline = new Pipeline(fixture.HEAD, first, second)
+    pipeline.run(env)
+    assert.deepEqual(env.log[env.log.length - 1],
+                     ['warn', 'Statistics with label result already exists'],
+                     `Expected a warning`)
     done()
   })
 })
