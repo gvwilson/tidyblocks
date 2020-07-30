@@ -175,3 +175,78 @@ export class SaveWorkspaceFormDialog extends React.Component{
     )
   }
 }
+
+export class SaveSvgFormDialog extends React.Component{
+  constructor(props) {
+    super(props)
+    const dateObj = new Date()
+    const month = dateObj.getUTCMonth() + 1
+    const day = dateObj.getUTCDate()
+    const year = dateObj.getUTCFullYear()
+    const filename = 'svg_' + year + '_' + month + '_' + day + '.svg'
+
+    this.state = {
+      open: false,
+      filename: filename,
+      linkId: 'downloadSvg',
+      title: 'Save Svg',
+      contentText: 'Enter the name for your svg file.'
+    }
+    this.handleClickOpen = this.handleClickOpen.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.handleDownload = this.handleDownload.bind(this)
+    this.handleFilenameChange = this.handleFilenameChange.bind(this)
+  }
+
+  handleClickOpen () {
+    this.setState({open: true})
+  }
+
+  handleClose () {
+    this.setState({open: false})
+  }
+
+  handleFilenameChange (evt) {
+    const value = evt.target.value
+    this.setState({ filename: value })
+  }
+
+  handleDownload (workspace){
+    const canvas = workspace.svgBlockCanvas_.cloneNode(true)
+    canvas.removeAttribute("transform");
+    let themeCss = document.getElementById("blockly-renderer-style-geras-tidyblocks").innerHTML
+    // Theme name isn't inserted on our pulled svg so we remove it.
+    themeCss = themeCss.replace(/.geras-renderer.tidyblocks-theme/g, '')
+    // Default blockly css.
+    let blocklyCss = document.getElementById("blockly-common-style").innerHTML
+    const css = `<defs><style type="text/css">` + themeCss + blocklyCss + `</style></defs>`
+    const bboxElement = document.getElementsByClassName("blocklyBlockCanvas")[0];
+    const bbox = bboxElement.getBBox();
+    const content = new XMLSerializer().serializeToString(canvas);
+    const xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${
+      bbox.width}" height="${bbox.height}" viewBox=" ${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">${
+      css}">${content}</svg>`
+    const blob = new Blob([xml])
+    const link = document.getElementById('downloadSvg')
+    link.setAttribute('href', URL.createObjectURL(blob))
+    link.setAttribute('download', this.state.filename)
+    this.handleClose()
+  }
+
+  render () {
+    return (
+      <div>
+        <SaveDialog
+          open={this.state.open}
+          title={this.state.title}
+          handleClose={this.handleClose}
+          handleDownload={this.handleDownload}
+          handleFilenameChange={this.handleFilenameChange}
+          contentText={this.state.contentText}
+          linkId={this.state.linkId}
+          filename={this.state.filename}
+          data={this.props.data}/>
+      </div>
+    )
+  }
+}
