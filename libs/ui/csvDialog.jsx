@@ -12,7 +12,7 @@ import Blockly from 'blockly/blockly_compressed'
 function SaveDialog (props) {
   return (
     <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Save Data</DialogTitle>
+      <DialogTitle id="form-dialog-title">{props.title}</DialogTitle>
       <DialogContent>
         <DialogContentText>
           {props.contentText}
@@ -56,6 +56,7 @@ export class SaveCsvFormDialog extends React.Component{
       open: false,
       filename: filename,
       linkId: 'downloadData',
+      title: 'Save CSV Data',
       contentText: 'Enter the name for your data file.'
     }
     this.handleClickOpen = this.handleClickOpen.bind(this)
@@ -98,6 +99,7 @@ export class SaveCsvFormDialog extends React.Component{
       <div>
         <SaveDialog
           open={this.state.open}
+          title={this.state.title}
           handleClose={this.handleClose}
           handleDownload={this.handleDownload}
           handleFilenameChange={this.handleFilenameChange}
@@ -123,6 +125,7 @@ export class SaveWorkspaceFormDialog extends React.Component{
       open: false,
       filename: filename,
       linkId: 'downloadWorkspace',
+      title: 'Save Workspace',
       contentText: 'Enter the name for your workspace file.'
     }
     this.handleClickOpen = this.handleClickOpen.bind(this)
@@ -158,6 +161,7 @@ export class SaveWorkspaceFormDialog extends React.Component{
       <div>
         <SaveDialog
           open={this.state.open}
+          title={this.state.title}
           handleClose={this.handleClose}
           handleDownload={this.handleDownload}
           handleFilenameChange={this.handleFilenameChange}
