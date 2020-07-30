@@ -350,15 +350,15 @@ export class TidyBlocksApp extends React.Component {
     // Swap the stored data depending on whether we're showing userData or
     // results.
     if (activeDataOption.type == DATA_USER){
-      const data = this.state.env.ui.userData.get(activeDataOption.value)['data']
-      const dataColumns = this.state.env.ui.userData.get(activeDataOption.value)['columns']
+      const data = this.state.env.ui.userData.get(activeDataOption.label)['data']
+      const dataColumns = this.state.env.ui.userData.get(activeDataOption.label)['columns']
       dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       this.setState({activeDataOption: activeDataOption, data: data,
         dataColumns: formattedColumns})
 
     } else if (activeDataOption.type == DATA_REPORT){
-      const data = this.state.env.results.get(activeDataOption.value)['data']
-      const dataColumns = this.state.env.results.get(activeDataOption.value)['columns']
+      const data = this.state.env.results.get(activeDataOption.label)['data']
+      const dataColumns = this.state.env.results.get(activeDataOption.label)['columns']
       dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       this.setState({activeDataOption: activeDataOption, data: data,
         dataColumns: formattedColumns})
@@ -403,30 +403,30 @@ export class TidyBlocksApp extends React.Component {
       // Swap the stored data depending on whether we're showing userData or
       // results.
       if (this.state.activeDataOption.type == DATA_USER){
-        data = env.ui.userData.get(this.state.activeDataOption.value)['data']
-        dataColumns = env.ui.userData.get(this.state.activeDataOption.value)['columns']
+        data = env.ui.userData.get(this.state.activeDataOption.label)['data']
+        dataColumns = env.ui.userData.get(this.state.activeDataOption.label)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       } else if (this.state.activeDataOption.type == DATA_REPORT){
-        data = env.results.get(this.state.activeDataOption.value)['data']
-        dataColumns = env.results.get(this.state.activeDataOption.value)['columns']
+        data = env.results.get(this.state.activeDataOption.label)['data']
+        dataColumns = env.results.get(this.state.activeDataOption.label)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       }
       activeDataOption = this.state.activeDataOption
     } else {
       let result = dataKeys.next()
       if (!result.done){
-        activeDataOption = {value: result.value, type: DATA_USER, label: result.value}
-        data = env.ui.userData.get(activeDataOption.value)['data']
-        dataColumns = env.ui.userData.get(activeDataOption.value)['columns']
+        activeDataOption = {value: DATA_USER + '_' + result.value, type: DATA_USER, label: result.value}
+        data = env.ui.userData.get(activeDataOption.label)['data']
+        dataColumns = env.ui.userData.get(activeDataOption.label)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       }
     }
     let dataOptions = []
     for (let key of env.ui.userData.keys()){
-      dataOptions.push({value: key, type: DATA_USER, label: key})
+      dataOptions.push({value: DATA_USER + '_' + key, type: DATA_USER, label: key})
     }
     for (let key of env.results.keys()){
-      dataOptions.push({value: key, type: DATA_REPORT, label: key})
+      dataOptions.push({value: DATA_REPORT + '_' + key, type: DATA_REPORT, label: key})
     }
 
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
