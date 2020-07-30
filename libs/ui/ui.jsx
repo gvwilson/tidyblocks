@@ -401,7 +401,6 @@ export class TidyBlocksApp extends React.Component {
   }
 
   runProgram () {
-    console.log(this.blocklyRef.current.workspace.state.workspace.scale)
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
     this.updateDataInformation(env)

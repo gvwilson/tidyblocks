@@ -50,7 +50,7 @@ class OpNot extends OpNegationBase {
 
   run (row, i) {
     const value = this.arg.run(row, i)
-    return (value === util.MISSING) ? util.MISSING : ((!value) ? true : false)
+    return (value === util.MISSING) ? util.MISSING : !util.makeBoolean(value)
   }
 }
 
@@ -172,9 +172,7 @@ class OpToLogical extends OpConvertBase {
 
   run (row, i) {
     const value = this.arg.run(row, i)
-    return (value === util.MISSING)
-      ? util.MISSING
-      : (value ? true : false)
+    return (value === util.MISSING) ? util.MISSING : util.makeBoolean(value)
   }
 }
 

@@ -145,8 +145,8 @@ const setup = () => {
           text: 'color'
         },
         {
-          type: "field_checkbox",
-          name: "REGRESSION",
+          type: 'field_checkbox',
+          name: 'REGRESSION',
           checked: false
         }
       ],

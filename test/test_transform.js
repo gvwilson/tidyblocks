@@ -245,15 +245,15 @@ describe('build plots', () => {
     const transform = new Transform.scatter('figure_1', 'red', 'green', null)
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
-    assert.equal(plot.mark, 'point',
-                 `Wrong type of plot`)
     assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(plot.encoding.x.field, 'red',
+    assert.equal(plot.layer[0].mark.type, 'point',
+                 `Wrong type of plot`)
+    assert.equal(plot.layer[0].encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(plot.encoding.y.field, 'green',
+    assert.equal(plot.layer[0].encoding.y.field, 'green',
                  `Wrong Y axis`)
-    assert(!('color' in plot.encoding),
+    assert(!('color' in plot.layer[0].encoding),
            `Should not have color`)
     done()
   })
@@ -263,15 +263,15 @@ describe('build plots', () => {
     const transform = new Transform.scatter('figure_1', 'red', 'green', 'blue')
     const result = transform.run(env, new DataFrame(fixture.COLORS))
     const plot = env.getPlot('figure_1')
-    assert.equal(plot.mark, 'point',
-                 `Wrong type of plot`)
     assert.deepEqual(plot.data.values, fixture.COLORS,
                      `Wrong data in plot`)
-    assert.equal(plot.encoding.x.field, 'red',
+    assert.equal(plot.layer[0].mark.type, 'point',
+                 `Wrong type of plot`)
+    assert.equal(plot.layer[0].encoding.x.field, 'red',
                  `Wrong X axis`)
-    assert.equal(plot.encoding.y.field, 'green',
+    assert.equal(plot.layer[0].encoding.y.field, 'green',
                  `Wrong Y axis`)
-    assert.equal(plot.encoding.color.field, 'blue',
+    assert.equal(plot.layer[0].encoding.color.field, 'blue',
                  `Wrong color`)
     done()
   })
