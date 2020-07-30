@@ -510,7 +510,6 @@ class TransformHistogram extends TransformPlot {
  */
 class TransformScatter extends TransformPlot {
   constructor(label, axisX, axisY, color, lm) {
-
     util.check(axisX && (typeof axisX === 'string') &&
       axisY && (typeof axisY === 'string'),
       `Must provide non-empty strings for axes`)
@@ -530,7 +529,7 @@ class TransformScatter extends TransformPlot {
         }
       ]
     }
-    if (lm === "TRUE") {
+    if (lm) {
       spec.layer[1] = {
         mark: { type: "line", color: "firebrick" },
         transform: [{ regression: axisY, on: axisX }],
@@ -542,7 +541,7 @@ class TransformScatter extends TransformPlot {
       spec.layer[2] = {
           transform: [ 
             { regression: axisY, on: axisX, params: true },
-            {calculate: "'R²: '+format(datum.rSquared, '.2f')", as: "R2"}
+            { calculate: "'R²: '+format(datum.rSquared, '.2f')", as: "R2"}
           ],
           mark: { type: "text", color: "firebrick", x: "width", align: "right", y: -5 },
           encoding: { text: {type: "nominal", field: "R2"}  }
@@ -551,7 +550,7 @@ class TransformScatter extends TransformPlot {
     if (color) {
       spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
-    super('scatter', label, spec, { axisX, axisY, color, lm })
+    super('scatter', label, spec, { axisX, axisY, color, lm})
   }
 }
 
