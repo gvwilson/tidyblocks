@@ -92,6 +92,7 @@ export class SaveCsvFormDialog extends React.Component{
     let link = document.getElementById('downloadData')
     link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv))
     link.setAttribute('download', filename)
+    this.handleClose()
   }
 
   render () {
@@ -154,6 +155,7 @@ export class SaveWorkspaceFormDialog extends React.Component{
     const link = document.getElementById('downloadWorkspace')
     link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
     link.setAttribute('download', this.state.filename)
+    this.handleClose()
   }
 
   render () {
