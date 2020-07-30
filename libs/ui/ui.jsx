@@ -23,7 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 import { MenuBar } from './menuBar.jsx'
-import { SaveCsvFormDialog, SaveWorkspaceFormDialog } from './csvDialog.jsx'
+import { SaveCsvFormDialog, SaveWorkspaceFormDialog, SaveSvgFormDialog } from './saveDialog.jsx'
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 
 const TAB_HEIGHT = '34px'
@@ -163,6 +163,7 @@ export class TidyBlocksApp extends React.Component {
     this.csvFileUploader = React.createRef()
     this.saveCsvNameDialog = React.createRef()
     this.saveWorkspaceDialog = React.createRef()
+    this.saveSvgDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -215,6 +216,7 @@ export class TidyBlocksApp extends React.Component {
     this.updateLogMessages = this.updateLogMessages.bind(this)
     this.saveWorkspace = this.saveWorkspace.bind(this)
     this.saveData = this.saveData.bind(this)
+    this.saveSvg = this.saveSvg.bind(this)
     this.maximizePanel = this.maximizePanel.bind(this)
     this.minimizePanel = this.minimizePanel.bind(this)
     this.restorePanel = this.restorePanel.bind(this)
@@ -393,7 +395,6 @@ export class TidyBlocksApp extends React.Component {
   }
 
   runProgram () {
-    console.log(this.blocklyRef.current.workspace.state.workspace.scale)
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
     this.updateDataInformation(env)
@@ -531,6 +532,12 @@ export class TidyBlocksApp extends React.Component {
     this.saveWorkspaceDialog.current.handleClickOpen()
   }
 
+  // Saves the svg on the Blockly workspace to a file.
+  saveSvg(){
+    this.saveSvgDialog.current.handleClickOpen()
+  }
+
+
   // Calls the file upload input.
   loadWorkspaceClick () {
     this.refs.workspaceFileUploader.click()
@@ -588,13 +595,18 @@ export class TidyBlocksApp extends React.Component {
         <MuiThemeProvider theme={theme}>
           <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
           { this.blocklyRef.current &&
-            <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
+            <>
+              <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
+              <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
+            </>
           }
+
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}
             saveWorkspace={this.saveWorkspace}
-            saveData={this.saveData}/>
+            saveData={this.saveData}
+            saveSvg={this.saveSvg}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
             style={{display: "none"}}/>
