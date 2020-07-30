@@ -542,7 +542,15 @@ class TransformScatter extends TransformPlot {
           y: { field: axisY, type: "quantitative" }
         }
       }
-    }
+      spec.layer[2] = {
+          transform: [ 
+            { regression: axisY, on: axisX, params: true },
+            {calculate: "'R²: '+format(datum.rSquared, '.2f')", as: "R2"}
+          ],
+          mark: { type: "text", color: "firebrick", x: "width", align: "right", y: -5 },
+          encoding: { text: {type: "nominal", field: "R2"}  }
+        }
+      }
     if (color) {
       spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
