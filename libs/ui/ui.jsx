@@ -7,7 +7,6 @@ import DataGrid from 'react-data-grid'
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
-import Select from 'react-select'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
@@ -23,10 +22,14 @@ import 'm-react-splitters/lib/splitters.css'
 import Tooltip from '@material-ui/core/Tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
-import {MenuBar} from './menuBar.jsx'
-import {SaveCsvFormDialog, SaveWorkspaceFormDialog} from './csvDialog.jsx'
+import { MenuBar } from './menuBar.jsx'
+import { SaveCsvFormDialog, SaveWorkspaceFormDialog } from './csvDialog.jsx'
+import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 
-const tabHeight = '34px' // default: '48px'
+const TAB_HEIGHT = '34px'
+const TAB_WIDTH = '130px'
+const DATA_USER = 'user'
+const DATA_REPORT = 'results'
 
 const theme = createMuiTheme({
   palette: {
@@ -46,8 +49,8 @@ const theme = createMuiTheme({
   overrides: {
     MuiTabs: {
       root: {
-        minHeight: tabHeight,
-        height: tabHeight
+        minHeight: TAB_HEIGHT,
+        height: TAB_HEIGHT
       },
       indicator: {
         display: 'flex',
@@ -57,8 +60,9 @@ const theme = createMuiTheme({
     },
     MuiTab: {
       root: {
-        minHeight: tabHeight,
-        height: tabHeight
+        minHeight: TAB_HEIGHT,
+        height: TAB_HEIGHT,
+        minWidth: TAB_WIDTH + " !important",
       },
       wrapper: {
         fontSize: '12px'
@@ -71,30 +75,6 @@ const theme = createMuiTheme({
     },
   }
 })
-
-const DataTabSelect = ({options, onChange, value}) => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
-    options={options}
-    value={value}
-    onChange={(e) => onChange(e)}
-  />
-)
-
-const StatsTabSelect = ({options, onChange, value}) => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
-    options={options}
-    value={value}
-    onChange={(e) => onChange(e)}
-  />
-)
-
-const PlotTabSelect = ({options, onChange, value}) => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
-    options={options}
-    value={value}
-    onChange={(e) => onChange(e)}
-  />
-)
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props
@@ -218,6 +198,7 @@ export class TidyBlocksApp extends React.Component {
 
       logMessages: null
     }
+
     this.paneVerticalResize = this.paneVerticalResize.bind(this)
     this.updatePlot = this.updatePlot.bind(this)
     this.changePlot = this.changePlot.bind(this)
@@ -240,7 +221,6 @@ export class TidyBlocksApp extends React.Component {
 
   componentDidMount () {
     window.addEventListener('resize', this.paneVerticalResize)
-
     // Listeners to resize during a pane drag. Note: The postPoned prop for
     // the Splitters doesn't currently handle this accurately on React 16.13
     ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mousedown', () => {
@@ -367,12 +347,22 @@ export class TidyBlocksApp extends React.Component {
   changeData (e) {
     const activeDataOption = e
     let formattedColumns = []
-    const data = this.state.env.ui.userData.get(activeDataOption.value)['data']
-    const dataColumns = this.state.env.ui.userData.get(activeDataOption.value)['columns']
-    dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+    // Swap the stored data depending on whether we're showing userData or
+    // results.
+    if (activeDataOption.type == DATA_USER){
+      const data = this.state.env.ui.userData.get(activeDataOption.label)['data']
+      const dataColumns = this.state.env.ui.userData.get(activeDataOption.label)['columns']
+      dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      this.setState({activeDataOption: activeDataOption, data: data,
+        dataColumns: formattedColumns})
 
-    this.setState({activeDataOption: activeDataOption, data: data,
-      dataColumns: formattedColumns})
+    } else if (activeDataOption.type == DATA_REPORT){
+      const data = this.state.env.results.get(activeDataOption.label)['data']
+      const dataColumns = this.state.env.results.get(activeDataOption.label)['columns']
+      dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      this.setState({activeDataOption: activeDataOption, data: data,
+        dataColumns: formattedColumns})
+    }
   }
 
   changeStats (e) {
@@ -401,27 +391,44 @@ export class TidyBlocksApp extends React.Component {
     let dataColumns = null
     let activeDataOption = null
     let formattedColumns = []
-
+    // If the active data option no longer exists remove it. This happens
+    // when the currently displayed table has been deleted or renamed.
     if (this.state.activeDataOption) {
-      if (env.ui.userData.has(this.state.activeDataOption.value)){
-        data = env.ui.userData.get(this.state.activeDataOption.value)['data']
-        dataColumns = env.ui.userData.get(this.state.activeDataOption.value)['columns']
-        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-        activeDataOption = this.state.activeDataOption
+      if (!(env.ui.userData.has(this.state.activeDataOption.value)
+        || env.results.has(this.state.activeDataOption.value))){
+        this.state.activeDataOption = null
       }
+    }
+    if (this.state.activeDataOption) {
+      // Swap the stored data depending on whether we're showing userData or
+      // results.
+      if (this.state.activeDataOption.type == DATA_USER){
+        data = env.ui.userData.get(this.state.activeDataOption.label)['data']
+        dataColumns = env.ui.userData.get(this.state.activeDataOption.label)['columns']
+        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      } else if (this.state.activeDataOption.type == DATA_REPORT){
+        data = env.results.get(this.state.activeDataOption.label)['data']
+        dataColumns = env.results.get(this.state.activeDataOption.label)['columns']
+        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      }
+      activeDataOption = this.state.activeDataOption
     } else {
       let result = dataKeys.next()
       if (!result.done){
-        activeDataOption = {'value': result.value, 'label': result.value}
-        data = env.ui.userData.get(activeDataOption.value)['data']
-        dataColumns = env.ui.userData.get(activeDataOption.value)['columns']
+        activeDataOption = {value: DATA_USER + '_' + result.value, type: DATA_USER, label: result.value}
+        data = env.ui.userData.get(activeDataOption.label)['data']
+        dataColumns = env.ui.userData.get(activeDataOption.label)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       }
     }
     let dataOptions = []
     for (let key of env.ui.userData.keys()){
-      dataOptions.push({value: key, label: key})
+      dataOptions.push({value: DATA_USER + '_' + key, type: DATA_USER, label: key})
     }
+    for (let key of env.results.keys()){
+      dataOptions.push({value: DATA_REPORT + '_' + key, type: DATA_REPORT, label: key})
+    }
+
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
       activeDataOption: activeDataOption, dataOptions: dataOptions})
   }
