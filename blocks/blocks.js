@@ -196,17 +196,14 @@ const createValidators = () => {
   }
 
   // Create a color validator which accepts a pattern
-  // but can also be an empty string
+  // This can either be a column like _create or " "
   const validateColor = (columnName, pattern) => {
     return function () {
       const field = this.getField(columnName)
       field.setValidator((newValue) => {
-        if (newValue.match(pattern)) {
-          return newValue.trim() // strip leading and trailing spaces
-        } else if (newValue.match('')) {
-          return ''
-        }
-          return null // fails validation
+        if (newValue.match(pattern)) return newValue.trim()
+        else if (newValue.match('')) return ''
+        else return null
       })
     }
   }
