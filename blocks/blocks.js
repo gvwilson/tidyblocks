@@ -201,7 +201,7 @@ const createValidators = () => {
     return function () {
       const field = this.getField(columnName)
       field.setValidator((newValue) => {
-        if (newValue.match(pattern) || " ") {
+        if (newValue.match(pattern) || ' ') {
           return newValue.trim() // strip leading and trailing spaces
         }
         return null // fails validation
