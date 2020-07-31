@@ -126,7 +126,6 @@ const MATCH_COL_NAME = /^ *[_A-Za-z][_A-Za-z0-9]* *$/
 
 // Validate fields in blocks that take a single column name.
 const SINGLE_COL_FIELDS = [
-  'COLOR',
   'COLUMN',
   'FORMAT',
   'GROUPS',
@@ -196,6 +195,20 @@ const createValidators = () => {
     }
   }
 
+  // Create a color validator
+  // This can either be a column or " "
+  const validateColor = (columnName, pattern) => {
+    return function () {
+      const field = this.getField(columnName)
+      field.setValidator((newValue) => {
+        if (newValue.match(pattern) || " ") {
+          return newValue.trim() // strip leading and trailing spaces
+        }
+        return null // fails validation
+      })
+    }
+  }
+
   SINGLE_COL_FIELDS.forEach(col => {
     Blockly.Extensions.register(`validate_${col}`, _create(col, MATCH_COL_NAME))
   })
@@ -208,6 +221,7 @@ const createValidators = () => {
   Blockly.Extensions.register('validate_STDDEV', _createNonNeg('STDDEV'))
 
   Blockly.Extensions.register('validate_DATE', validateDate('DATE'))
+  Blockly.Extensions.register('validate_COLOR', validateColor('COLOR'))
 }
 
 /**

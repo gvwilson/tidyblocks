@@ -547,7 +547,7 @@ class TransformScatter extends TransformPlot {
         encoding: {text: {type: 'nominal', field: 'R2'}}
       }
     }
-    if (color) {
+    if (color !== " ") {
       spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
     super('scatter', label, spec, {axisX, axisY, color, lm})
