@@ -410,7 +410,7 @@ class TransformBar extends TransformPlot {
                `Must provide non-empty strings for axes`)
     const spec = {
       data: {values: null},
-      autosize: "fit",
+      autosize: 'fit',
       mark: 'bar',
       encoding: {
         x: {field: axisX, type: 'ordinal'},
@@ -434,7 +434,7 @@ class TransformBox extends TransformPlot {
                `Must provide non-empty strings for axes`)
     const spec = {
       data: {values: null},
-      autosize: "fit",
+      autosize: 'fit',
       mark: {type: 'boxplot', extent: 1.5},
       encoding: {
         x: {field: axisX, type: 'ordinal'},
@@ -455,7 +455,7 @@ class TransformDot extends TransformPlot {
                `Must provide non-empty string for axis`)
     const spec = {
       data: {values: null},
-      autosize: "fit",
+      autosize: 'fit',
       mark: {type: 'circle', opacity: 1},
       transform: [{
         window: [{op: 'rank', as: 'id'}],
@@ -487,7 +487,7 @@ class TransformHistogram extends TransformPlot {
                `Invalid parameters for histogram`)
     const spec = {
       data: {values: null},
-      autosize: "fit",
+      autosize: 'fit',
       mark: 'bar',
       encoding: {
         x: {
@@ -523,7 +523,7 @@ class TransformScatter extends TransformPlot {
 
     const spec = {
       data: {values: null},
-      autosize: "fit",
+      autosize: 'fit',
       layer: [
         {
           mark: {type: 'point', filled: true},
@@ -552,7 +552,7 @@ class TransformScatter extends TransformPlot {
         encoding: {text: {type: 'nominal', field: 'R2'}}
       }
     }
-    if (color !== " ") {
+    if (color !== ' ') {
       spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
     super('scatter', label, spec, {axisX, axisY, color, lm})
