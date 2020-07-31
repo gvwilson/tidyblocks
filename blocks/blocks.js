@@ -195,16 +195,18 @@ const createValidators = () => {
     }
   }
 
-  // Create a color validator
-  // This can either be a column or " "
+  // Create a color validator which accepts a pattern
+  // but can also be an empty string
   const validateColor = (columnName, pattern) => {
     return function () {
       const field = this.getField(columnName)
       field.setValidator((newValue) => {
-        if (newValue.match(pattern) || ' ') {
+        if (newValue.match(pattern)) {
           return newValue.trim() // strip leading and trailing spaces
+        } else if (newValue.match('')) {
+          return ''
         }
-        return null // fails validation
+          return null // fails validation
       })
     }
   }
@@ -217,11 +219,12 @@ const createValidators = () => {
     Blockly.Extensions.register(`validate_${col}`, _create(col, MATCH_MULTI_COL_NAMES))
   })
 
+  Blockly.Extensions.register('validate_COLOR', validateColor('COLOR', MATCH_COL_NAME))
+
   Blockly.Extensions.register('validate_RATE', _createNonNeg('RATE'))
   Blockly.Extensions.register('validate_STDDEV', _createNonNeg('STDDEV'))
 
   Blockly.Extensions.register('validate_DATE', validateDate('DATE'))
-  Blockly.Extensions.register('validate_COLOR', validateColor('COLOR'))
 }
 
 /**
