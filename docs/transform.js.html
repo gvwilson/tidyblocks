@@ -39,32 +39,29 @@ const FAMILY = '@transform'
 
 /**
  * Store information about a transform in a pipeline
- * Derived classes must provide `run(runner, dataframe)`.
+ * Derived classes must provide `run(env, dataframe)`.
  */
 class TransformBase {
   /**
-   * @param {string} name What this transform is called.
+   * @param {string} species What this transform is called.
    * @param {string[]} requires What datasets are required before this can run?
-   * @param {string} produces What dataset does this transform produce?
    * @param {Boolean} input Does this transform require input?
-   * @param {Boolean} output Does this transform produce input?
+   * @param {Boolean} output Does this transform produce output?
    */
-  constructor (name, requires, produces, input, output) {
-    util.check(name &amp;&amp; (typeof name === 'string') &amp;&amp;
+  constructor (species, requires, input, output) {
+    util.check(species &amp;&amp; (typeof species === 'string') &amp;&amp;
                Array.isArray(requires) &amp;&amp;
-               requires.every(x => (typeof x === 'string')) &amp;&amp;
-               ((produces === null) || (typeof produces === 'string')),
+               requires.every(x => (typeof x === 'string')),
                `Bad parameters to constructor`)
-    this.name = name
+    this.species = species
     this.requires = requires
-    this.produces = produces
     this.input = input
     this.output = output
   }
 
   equal (other) {
     return (other instanceof TransformBase) &amp;&amp;
-      (this.name === other.name)
+      (this.species === other.species)
   }
 
   equalColumns (other) {
@@ -73,7 +70,7 @@ class TransformBase {
     util.check('columns' in other,
                `Other object must have columns`)
     return (other instanceof TransformBase) &amp;&amp;
-      (this.name === other.name) &amp;&amp;
+      (this.species === other.species) &amp;&amp;
       (this.columns.length === other.columns.length) &amp;&amp;
       this.columns.every(x => other.columns.includes(x))
   }
@@ -83,27 +80,27 @@ class TransformBase {
 
 /**
  * Get a dataset.
- * @param {string} dataset Name of dataset.
+ * @param {string} name Name of dataset.
  */
 class TransformData extends TransformBase {
-  constructor (dataset) {
-    util.check(typeof dataset === 'string',
+  constructor (name) {
+    util.check(typeof name === 'string',
                `Expected string`)
-    super('read', [], null, false, true)
-    this.dataset = dataset
+    super('read', [], false, true)
+    this.name = name
   }
 
   equal (other) {
     return super.equal(other) &amp;&amp;
-      (this.dataset === other.dataset)
+      (this.name === other.name)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.name}`)
     util.check(df === null,
                `Cannot provide input dataframe to reader`)
-    const dataTable = runner.getData(this.dataset)
-    return new DataFrame(dataTable)
+    const loaded = env.getData(this.name)
+    return new DataFrame(loaded.data, loaded.columns)
   }
 }
 
@@ -114,7 +111,7 @@ class TransformDrop extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('drop', [], null, true, true)
+    super('drop', [], true, true)
     this.columns = columns
   }
 
@@ -122,8 +119,8 @@ class TransformDrop extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.drop(this.columns)
   }
 }
@@ -136,7 +133,7 @@ class TransformFilter extends TransformBase {
   constructor (expr) {
     util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super('filter', [], null, true, true)
+    super('filter', [], true, true)
     this.expr = expr
   }
 
@@ -145,8 +142,8 @@ class TransformFilter extends TransformBase {
       this.expr.equal(other.expr)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', this.species)
     return df.filter(this.expr)
   }
 }
@@ -159,7 +156,7 @@ class TransformGroupBy extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('groupBy', [], null, true, true)
+    super('groupBy', [], true, true)
     this.columns = columns
   }
 
@@ -167,8 +164,8 @@ class TransformGroupBy extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.groupBy(this.columns)
   }
 }
@@ -182,7 +179,7 @@ class TransformGroupBy extends TransformBase {
  */
 class TransformJoin extends TransformBase {
   constructor (leftName, leftCol, rightName, rightCol) {
-    super('join', [leftName, rightName], null, false, true)
+    super('join', [leftName, rightName], false, true)
     this.leftName = leftName
     this.leftCol = leftCol
     this.rightName = rightName
@@ -197,12 +194,12 @@ class TransformJoin extends TransformBase {
       (this.rightCol === other.rightCol)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', this.species)
     util.check(df === null,
                `Cannot provide input dataframe to join`)
-    const left = runner.getResult(this.leftName)
-    const right = runner.getResult(this.rightName)
+    const left = env.getData(this.leftName)
+    const right = env.getData(this.rightName)
     return left.join(this.leftName, this.leftCol,
                      right, this.rightName, this.rightCol)
   }
@@ -219,7 +216,7 @@ class TransformMutate extends TransformBase {
                `Expected string as new name`)
     util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super('mutate', [], null, true, true)
+    super('mutate', [], true, true)
     this.newName = newName
     this.expr = expr
   }
@@ -230,21 +227,21 @@ class TransformMutate extends TransformBase {
       (this.expr.equal(other.expr))
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.newName}`)
     return df.mutate(this.newName, this.expr)
   }
 }
 
 /**
- * Notify that a result is available.
- * @param {string} label Name to use for notification.
+ * Report that a result is available.
+ * @param {string} label Name to use for reported value.
  */
-class TransformNotify extends TransformBase {
+class TransformReport extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
                `Expected string`)
-    super('notify', [], label, true, false)
+    super('report', [], true, true)
     this.label = label
   }
 
@@ -253,8 +250,9 @@ class TransformNotify extends TransformBase {
       (this.label === other.label)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
+    env.setResult(this.label, df)
     return df
   }
 }
@@ -267,7 +265,7 @@ class TransformSelect extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('select', [], null, true, true)
+    super('select', [], true, true)
     this.columns = columns
   }
 
@@ -275,8 +273,8 @@ class TransformSelect extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.select(this.columns)
   }
 }
@@ -290,7 +288,7 @@ class TransformSequence extends TransformBase {
   constructor (newName, limit) {
     util.check(typeof newName === 'string',
                `Expected string as new name`)
-    super('sequence', [], null, true, true)
+    super('sequence', [], true, true)
     this.newName = newName
     this.limit = limit
   }
@@ -301,8 +299,8 @@ class TransformSequence extends TransformBase {
       (this.limit === other.limit)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.newName} ${this.limit}`)
     const raw = Array.from(
       {length: this.limit},
       (v, k) => {
@@ -325,7 +323,7 @@ class TransformSort extends TransformBase {
                `Expected array of columns`)
     util.check(typeof reverse === 'boolean',
                `Expected Boolean`)
-    super('sort', [], null, true, true)
+    super('sort', [], true, true)
     this.columns = columns
     this.reverse = reverse
   }
@@ -334,40 +332,39 @@ class TransformSort extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')} ${this.reverse}`)
     return df.sort(this.columns, this.reverse)
   }
 }
 
 /**
  * Summarize data.
- * @param {string} op Name of operation.
+ * @param {string} action Name of operation.
  * @param {string} column Column to summarize.
  */
 class TransformSummarize extends TransformBase {
-  constructor (op, column) {
-    util.check(typeof op === 'string',
-               `Expected string as op`)
-    util.check(op in Summarize,
-               `Unknown summarization operation ${op}`)
+  constructor (action, column) {
+    util.check(typeof action === 'string',
+               `Expected string as action`)
+    util.check(action in Summarize,
+               `Unknown summarization operation ${action}`)
     util.check(typeof column === 'string',
                `Expected string as column name`)
-    super('summarize', [], null, true, true)
-    this.op = op
+    super('summarize', [], true, true)
+    this.action = action
     this.column = column
   }
 
   equal (other) {
     return super.equal(other) &amp;&amp;
-      (this.op === other.op) &amp;&amp;
+      (this.action === other.action) &amp;&amp;
       (this.column === other.column)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
-    const summarizer = new Summarize[this.op](this.column)
-    return df.summarize(summarizer)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.action} ${this.column}`)
+    return df.summarize(new Summarize[this.action](this.column))
   }
 }
 
@@ -376,11 +373,11 @@ class TransformSummarize extends TransformBase {
  */
 class TransformUngroup extends TransformBase {
   constructor () {
-    super('ungroup', [], null, true, true)
+    super('ungroup', [], true, true)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species}`)
     return df.ungroup()
   }
 }
@@ -393,7 +390,7 @@ class TransformUnique extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('unique', [], null, true, true)
+    super('unique', [], true, true)
     this.columns = columns
   }
 
@@ -401,8 +398,8 @@ class TransformUnique extends TransformBase {
     return this.equalColumns(other)
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.columns.join(', ')}`)
     return df.unique(this.columns)
   }
 }
@@ -413,15 +410,19 @@ class TransformUnique extends TransformBase {
  * Store information about a plotting transform.
  */
 class TransformPlot extends TransformBase {
-  constructor (name, spec, fillin) {
-    super(name, [], null, true, false)
+  constructor (name, label, spec, fillin) {
+    util.check(label &amp;&amp; (typeof label === 'string'),
+               `Must provide non-empty label`)
+    super(name, [], true, true)
+    this.label = label
     this.spec = Object.assign({}, spec, fillin, {name})
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
     this.spec.data.values = df.data
-    runner.setPlot(this.spec)
+    env.setPlot(this.label, this.spec)
+    return df
   }
 }
 
@@ -431,7 +432,7 @@ class TransformPlot extends TransformBase {
  * @param {string} axisY Which column to use for the Y axis.
  */
 class TransformBar extends TransformPlot {
-  constructor (axisX, axisY) {
+  constructor (label, axisX, axisY) {
     util.check(axisX &amp;&amp; (typeof axisX === 'string') &amp;&amp;
                axisY &amp;&amp; (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
@@ -444,7 +445,7 @@ class TransformBar extends TransformPlot {
         tooltip: {field: axisY, type: 'quantitative'}
       }
     }
-    super('bar', spec, {axisX, axisY})
+    super('bar', label, spec, {axisX, axisY})
   }
 }
 
@@ -454,7 +455,7 @@ class TransformBar extends TransformPlot {
  * @param {string} axisY Which column to use for the Y axis.
  */
 class TransformBox extends TransformPlot {
-  constructor (axisX, axisY) {
+  constructor (label, axisX, axisY) {
     util.check(axisX &amp;&amp; (typeof axisX === 'string') &amp;&amp;
                axisY &amp;&amp; (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
@@ -466,7 +467,7 @@ class TransformBox extends TransformPlot {
         y: {field: axisY, type: 'quantitative'}
       }
     }
-    super('box', spec, {axisX, axisY})
+    super('box', label, spec, {axisX, axisY})
   }
 }
 
@@ -475,7 +476,7 @@ class TransformBox extends TransformPlot {
  * @param {string} axisX Which column to use for the X axis.
  */
 class TransformDot extends TransformPlot {
-  constructor (axisX) {
+  constructor (label, axisX) {
     util.check(axisX &amp;&amp; (typeof axisX === 'string'),
                `Must provide non-empty string for axis`)
     const spec = {
@@ -495,7 +496,7 @@ class TransformDot extends TransformPlot {
         }
       }
     }
-    super('dot', spec, {axisX})
+    super('dot', label, spec, {axisX})
   }
 }
 
@@ -505,7 +506,7 @@ class TransformDot extends TransformPlot {
  * @param {number} bins How many bins to use.
  */
 class TransformHistogram extends TransformPlot {
-  constructor (column, bins) {
+  constructor (label, column, bins) {
     util.check(column &amp;&amp; (typeof column === 'string') &amp;&amp;
                (typeof bins === 'number') &amp;&amp; (bins > 0),
                `Invalid parameters for histogram`)
@@ -525,7 +526,7 @@ class TransformHistogram extends TransformPlot {
         tooltip: null
       }
     }
-    super('histogram', spec, {column, bins})
+    super('histogram', label, spec, {column, bins})
   }
 }
 
@@ -536,25 +537,48 @@ class TransformHistogram extends TransformPlot {
  * @param {string} color Which column to use for color (if any).
  */
 class TransformScatter extends TransformPlot {
-  constructor (axisX, axisY, color) {
+  constructor (label, axisX, axisY, color, lm) {
     util.check(axisX &amp;&amp; (typeof axisX === 'string') &amp;&amp;
                axisY &amp;&amp; (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
     util.check((color === null) ||
                ((typeof color === 'string') &amp;&amp; color),
                `Must provide null or non-empty string for color`)
+
     const spec = {
       data: {values: null},
-      mark: 'point',
-      encoding: {
-        x: {field: axisX, type: 'quantitative'},
-        y: {field: axisY, type: 'quantitative'}
+      layer: [
+        {
+          mark: {type: 'point', filled: true},
+          encoding: {
+            x: {field: axisX, type: 'quantitative'},
+            y: {field: axisY, type: 'quantitative'}
+          }
+        }
+      ]
+    }
+    if (lm) {
+      spec.layer[1] = {
+        mark: {type: 'line', color: 'firebrick'},
+        transform: [{regression: axisY, on: axisX}],
+        encoding: {
+          x: {field: axisX, type: 'quantitative'},
+          y: {field: axisY, type: 'quantitative'}
+        }
+      }
+      spec.layer[2] = {
+        transform: [
+          {regression: axisY, on: axisX, params: true},
+          {calculate: '"R²: "+format(datum.rSquared, ".2f")', as: 'R2'}
+        ],
+        mark: {type: 'text', color: 'firebrick', x: 'width', align: 'right', y: -5},
+        encoding: {text: {type: 'nominal', field: 'R2'}}
       }
     }
     if (color) {
-      spec.encoding.color = {field: color, type: 'nominal'}
+      spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
-    super('scatter', spec, {axisX, axisY, color})
+    super('scatter', label, spec, {axisX, axisY, color, lm})
   }
 }
 
@@ -566,17 +590,18 @@ class TransformScatter extends TransformPlot {
  * @param {number} mean Mean value tested for.
  */
 class TransformTTestOneSample extends TransformBase {
-  constructor (colName, mean) {
-    super('ttest_one', [], null, true, false)
+  constructor (label, colName, mean) {
+    super('ttest_one', [], true, true)
+    this.label = label
     this.colName = colName
     this.mean = mean
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
     const samples = df.data.map(row => row[this.colName])
     const pValue = stats.tTest(samples, this.mean)
-    runner.setStats(pValue)
+    env.setStats(this.label, pValue)
     return df
   }
 }
@@ -588,14 +613,15 @@ class TransformTTestOneSample extends TransformBase {
  * @param {string} valueCol The column to get the values from.
  */
 class TransformTTestPaired extends TransformBase {
-  constructor (labelCol, valueCol) {
-    super('ttest_two', [], null, true, false)
+  constructor (label, labelCol, valueCol) {
+    super('ttest_two', [], true, true)
+    this.label = label
     this.labelCol = labelCol
     this.valueCol = valueCol
   }
 
-  run (runner, df) {
-    runner.appendLog(this.name)
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
     const known = new Set(df.data.map(row => row[this.labelCol]))
     util.check(known.size === 2,
                `Must have exactly two labels for data`)
@@ -608,7 +634,7 @@ class TransformTTestPaired extends TransformBase {
           .filter(row => (row[this.labelCol] === rightVal))
           .map(row => row[this.valueCol])
     const pValue = stats.tTestTwoSample(leftVals, rightVals, 0)
-    runner.setStats(pValue)
+    env.setStats(this.label, pValue)
     return df
   }
 }
@@ -624,7 +650,7 @@ module.exports = {
   groupBy: TransformGroupBy,
   join: TransformJoin,
   mutate: TransformMutate,
-  notify: TransformNotify,
+  report: TransformReport,
   select: TransformSelect,
   sequence: TransformSequence,
   sort: TransformSort,
@@ -649,7 +675,7 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BrowserInterface.html">BrowserInterface</a></li><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Env.html">Env</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="ExprValue.html">ExprValue</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNegationBase.html">OpNegationBase</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToString.html">OpToString</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformData.html">TransformData</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformMutate.html">TransformMutate</a></li><li><a href="TransformNotify.html">TransformNotify</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSequence.html">TransformSequence</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#makeDate">makeDate</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Env.html">Env</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="ExprValue.html">ExprValue</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNegationBase.html">OpNegationBase</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToString.html">OpToString</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformData.html">TransformData</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformMutate.html">TransformMutate</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformReport.html">TransformReport</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSequence.html">TransformSequence</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#FAMILY">FAMILY</a></li><li><a href="global.html#makeBoolean">makeBoolean</a></li><li><a href="global.html#makeDate">makeDate</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
 </nav>
 
 <br class="clear">

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: OpToMinutes</title>
+    <title>JSDoc: Source: gui.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,196 +17,93 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: OpToMinutes</h1>
+    <h1 class="page-title">Source: gui.js</h1>
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>OpToMinutes<span class="signature">(arg)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">Extract minutes from date.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="OpToMinutes"><span class="type-signature"></span>new OpToMinutes<span class="signature">(arg)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>arg</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">expr</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">How to get the value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="op.js.html">op.js</a>, <a href="op.js.html#line354">line 354</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    Minutes.
-</div>
-
-
-
-    
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const Blockly = require('blockly/blockly_compressed')
+
+const DataFrame = require('./dataframe')
+const Restore = require('./persist')
+const Env = require('./env')
+const blocks = require('../blocks/blocks')
+
+// Require default datasets at the top level to ensure bundling picks them up.
+const COLORS = require('../data/colors')
+const EARTHQUAKES = require('../data/earthquakes')
+const PENGUINS = require('../data/penguins')
+
+/**
+ * User interface mediator.
+ */
+class UserInterface {
+  /**
+   * Build user interface object.
+   */
+  constructor () {
+    // Initialize blocks support.
+    blocks.createBlocks()
+
+    // Create storage for datasets loaded by the user. These are stored between
+    // program runs.
+    this.userData = new Map()
+    this._loadDefaultDatasets()
+
+    // Create an empty workspace. Derived classes must fill this in.
+    this.workspace = null
+
+    // Create an empty program running environment. (A new environment is
+    // created for each run of the program.)
+    this.env = null
+  }
+
+  /**
+   * Get the JSON string representation of the workspace contents.
+   */
+  getJSON () {
+    return Blockly.TidyBlocks.workspaceToCode(this.workspace)
+  }
+
+  /**
+   * Get the object representation of the current program.
+   */
+  getProgram () {
+    const code = this.getJSON()
+    const json = JSON.parse(code)
+    const converter = new Restore()
+    return converter.program(json)
+  }
+
+  /**
+   * Run the current program, leaving state in 'this.env'.
+   */
+  runProgram () {
+    const program = this.getProgram()
+    this.env = new Env(this)
+    program.run(this.env)
+  }
+
+  /**
+   * Load default datasets.
+   */
+  _loadDefaultDatasets () {
+    this.userData.set('colors', new DataFrame(COLORS))
+    this.userData.set('earthquakes', new DataFrame(EARTHQUAKES))
+    this.userData.set('penguins', new DataFrame(PENGUINS))
+  }
+}
+
+module.exports = UserInterface
+</code></pre>
+        </article>
+    </section>
 
 
 

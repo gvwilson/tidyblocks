@@ -3,7 +3,13 @@
 const papaparse = require('papaparse')
 
 /**
- * Unilaterally fail (used to mark unimplemented functions).
+ * Value to indicate missing data.
+ */
+const MISSING = null
+
+/**
+ * Unilaterally fail: used to mark unimplemented functions and in cases where
+ * `check` won't fit.
  * @param {string} message What to report.
  */
 const fail = (message) => {
@@ -11,7 +17,8 @@ const fail = (message) => {
 }
 
 /**
- * Raise exception if a condition doesn't hold.
+ * Raise exception if a condition doesn't hold. This ensures that everything
+ * raises `Error`.
  * @param {Boolean} condition Condition that must be true.
  * @param {string} message What to say if it isn't.
  */
@@ -22,18 +29,17 @@ const check = (condition, message) => {
 }
 
 /**
- * Check that a value is numeric.
+ * Check that a value is MISSING or numeric.
  * @param {whatever} value What to check.
  */
 const checkNumber = (value) => {
   check((value === MISSING) ||
         (typeof value === 'number'),
         `Value ${value} is not missing or a number`)
-  return value
 }
 
 /**
- * Check that the types of two values are the same.
+ * Check that the types of two values are the same (handling MISSING).
  * @param {whatever} left One of the values.
  * @param {whatever} right The other value.
  */
@@ -45,9 +51,15 @@ const checkTypeEqual = (left, right) => {
 }
 
 /**
- * Our own equality test because dates are special.
+ * Implementing equality test that handles dates correctly.
+ * @param left One side of test.
+ * @param right Other side of test.
+ * @returns Boolean.
  */
 const equal = (left, right) => {
+  if ((left === MISSING) && (right === MISSING)) {
+    return true
+  }
   if ((left instanceof Date) && (right instanceof Date)) {
     return left.getTime() === right.getTime()
   }
@@ -55,7 +67,9 @@ const equal = (left, right) => {
 }
 
 /**
- * Turn something into a Boolean.
+ * Convert a value into a strict Boolean (exactly `true` or `false`).
+ * @param value What to convert.
+ * @returns Either `true` or `false`.
  */
 const makeBoolean = (value) => {
   if (value) {
@@ -65,7 +79,10 @@ const makeBoolean = (value) => {
 }
 
 /**
- * Turn something into a date.
+ * Turn something into a date. MISSING and actual dates are returned as-is,
+ * strings are converted if they can be, and everything else fails.
+ * @param value What to try to convert.
+ * @returns Date.
  */
 const makeDate = (value) => {
   if ((value === MISSING) || (value instanceof Date)) {
@@ -80,8 +97,8 @@ const makeDate = (value) => {
 }
 
 /**
- * Convert extraordinary values into our MISSING.
- * @param {value} Value to check (and convert).
+ * Convert extraordinary numerical values into our MISSING.
+ * @param {value} Value to check and convert.
  * @returns Safe value.
  */
 const safeValue = (value) => {
@@ -89,12 +106,17 @@ const safeValue = (value) => {
 }
 
 /**
- * Convert CSV-formatted text to array of objects with uniform keys.
+ * Convert CSV-formatted text to array of objects with uniform keys. The first
+ * row must contain valid headers; null and the string 'NA' are converted to
+ * MISSING. Other values (numeric, date, logical) are *not* inferred, but must
+ * be converted explicitly.
  * @param {string} text Text to parse.
  * @returns Array of objects.
  */
 const csvToTable = (text) => {
-  const seen = new Map() // used across all calls to transformHeader
+  const seen = new Map() // Headers (used across all calls to transformHeader)
+
+  // Header transformation function required by PapaParse.
   const transformHeader = (name) => {
     // Simple character fixes.
     name = name
@@ -139,12 +161,8 @@ const csvToTable = (text) => {
   return result.data
 }
 
-/**
- * Value to indicate missing data.
- */
-const MISSING = null
-
 module.exports = {
+  MISSING,
   fail,
   check,
   checkNumber,
@@ -153,6 +171,5 @@ module.exports = {
   makeBoolean,
   makeDate,
   safeValue,
-  csvToTable,
-  MISSING
+  csvToTable
 }
