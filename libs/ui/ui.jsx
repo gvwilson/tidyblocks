@@ -20,6 +20,7 @@ import DataFrame from '../dataframe'
 import Splitter from 'm-react-splitters'
 import 'm-react-splitters/lib/splitters.css'
 import Tooltip from '@material-ui/core/Tooltip'
+import Badge from '@material-ui/core/Badge'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 import { MenuBar } from './menuBar.jsx'
@@ -181,6 +182,20 @@ export class TidyBlocksApp extends React.Component {
       topRightPaneHeight: 200,
       toolboxCategories: createToolboxCategories(this.props),
       tabValue: 0,
+      tabUpdated: {
+        'data': false,
+        'stats': false,
+        'plot': false,
+        'console': false
+      },
+      DATA_TAB_INDEX: 0,
+      STATS_TAB_INDEX: 1,
+      PLOT_TAB_INDEX: 2,
+      CONSOLE_TAB_INDEX: 3,
+      CONSOLE_SUCCESS: 'CONSOLE_SUCCESS',
+      CONSOLE_WARNING: 'CONSOLE_WARNING',
+      CONSOLE_ERROR: 'CONSOLE_ERROR',
+
       tabValueBottom: 0,
       zoom: '1.00',
       // The results returned from running the program. We store them in full
@@ -395,7 +410,22 @@ export class TidyBlocksApp extends React.Component {
   }
 
   updateLogMessages (env) {
-    this.setState({logMessages: env.log})
+    let tabUpdated = this.state.tabUpdated
+    tabUpdated.console = false
+    if (env.log.length > 0 && this.state.tabValue != this.state.CONSOLE_TAB_INDEX){
+      for (let index in env.log){
+        if (env.log[index][0] == 'error'){
+          tabUpdated.console = this.state.CONSOLE_ERROR
+          break
+        } else if (env.log[index][0] == 'warn'){
+          tabUpdated.console = this.state.CONSOLE_WARNING
+        }
+      }
+      if (tabUpdated.console == false){
+        tabUpdated.console = this.state.CONSOLE_SUCCESS
+      }
+    }
+    this.setState({logMessages: env.log, tabUpdated: tabUpdated})
   }
 
   updateZoom () {
@@ -420,8 +450,8 @@ export class TidyBlocksApp extends React.Component {
     // If the active data option no longer exists remove it. This happens
     // when the currently displayed table has been deleted or renamed.
     if (this.state.activeDataOption) {
-      if (!(env.ui.userData.has(this.state.activeDataOption.value)
-        || env.results.has(this.state.activeDataOption.value))){
+      if (!(env.ui.userData.has(this.state.activeDataOption.label)
+        || env.results.has(this.state.activeDataOption.label))){
         this.state.activeDataOption = null
       }
     }
@@ -454,9 +484,14 @@ export class TidyBlocksApp extends React.Component {
     for (let key of env.results.keys()){
       dataOptions.push({value: DATA_REPORT + '_' + key, type: DATA_REPORT, label: key})
     }
-
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (data && data != this.state.data && this.state.tabValue != this.state.DATA_TAB_INDEX){
+      tabUpdated.data = true
+    }
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
-      activeDataOption: activeDataOption, dataOptions: dataOptions})
+      activeDataOption: activeDataOption, dataOptions: dataOptions,
+      tabUpdated: tabUpdated})
   }
 
   updatePlotInformation (env) {
@@ -483,9 +518,14 @@ export class TidyBlocksApp extends React.Component {
     for (let key of env.plots.keys()){
       plotOptions.push({value: key, label: key})
     }
-
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (plotData && plotData != this.state.plotData && this.state.tabValue != this.state.PLOT_TAB_INDEX){
+      tabUpdated.plot = true
+    }
     this.setState({env: env, plotKeys:plotKeys, plotData: plotData,
-      activePlotOption: activePlotOption, plotOptions: plotOptions}, () => {
+      activePlotOption: activePlotOption, plotOptions: plotOptions,
+      tabUpdated: tabUpdated}, () => {
       this.updatePlot()
     })
   }
@@ -517,14 +557,34 @@ export class TidyBlocksApp extends React.Component {
     for (let key of env.stats.keys()){
       statsOptions.push({value: key, label: key})
     }
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (stats && stats != this.state.stats && this.state.tabValue != this.state.STATS_TAB_INDEX){
+      tabUpdated.stats = true
+    }
     this.setState({statsKeys:statsKeys, stats: stats, statsColumns: STATS_COLUMNS,
       activeStatsOption: activeStatsOption, statsOptions: statsOptions})
   }
 
   handleTabChange (event, newValue) {
-    const PLOT_TAB_INDEX = 2
-    this.setState({tabValue: newValue}, () => {
-      if (newValue == PLOT_TAB_INDEX){
+    // Turn off tab indicators on the newly clicked tab.
+    let tabUpdated = this.state.tabUpdated
+    switch(newValue) {
+      case this.state.DATA_TAB_INDEX:
+        tabUpdated.data = false
+        break
+      case this.state.STATS_TAB_INDEX:
+        tabUpdated.stats = false
+        break
+      case this.state.PLOT_TAB_INDEX:
+        tabUpdated.plot = false
+        break
+      case this.state.CONSOLE_TAB_INDEX:
+        tabUpdated.console = false
+        break
+    }
+    this.setState({tabValue: newValue, tabUpdated: tabUpdated}, () => {
+      if (newValue == this.state.PLOT_TAB_INDEX){
         this.updatePlot()
       }
     })
@@ -653,10 +713,48 @@ export class TidyBlocksApp extends React.Component {
                       indicatorColor="primary"
                       textColor="primary"
                       >
-                      <Tab label="Data" {...a11yProps(0)}/>
-                      <Tab label="Stats" {...a11yProps(1)}/>
-                      <Tab label="Plot" {...a11yProps(2)} />
-                      <Tab label="Console" {...a11yProps(3)}/>
+                      <Tab {...a11yProps(this.state.DATA_TAB_INDEX)}
+                        label={
+                          <p>
+                            Data
+                            {this.state.tabUpdated.data &&
+                              <span className="dotIndicator defaultDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
+                      <Tab {...a11yProps(this.state.STATS_TAB_INDEX)}
+                        label={
+                          <p>
+                            Stats
+                            {this.state.tabUpdated.stats &&
+                              <span className="dotIndicator defaultDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
+                      <Tab {...a11yProps(this.state.PLOT_TAB_INDEX)}
+                        label={
+                          <p>
+                            Plot
+                            {this.state.tabUpdated.plot &&
+                              <span className="dotIndicator defaultDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
+                      <Tab {...a11yProps(3)}
+                        label={
+                          <p>
+                            Console
+                            {this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_ERROR &&
+                              <span class="dotIndicator errorDotIndicator"></span>
+                            }
+                            { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_SUCCESS &&
+                              <span class="dotIndicator successDotIndicator"></span>
+                            }
+                            { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_WARNING &&
+                              <span class="dotIndicator warningDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
                     </Tabs>
                   </AppBar>
                   <TabPanel value={this.state.tabValue} index={0} component="div">
