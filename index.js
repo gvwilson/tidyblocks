@@ -1,8 +1,7 @@
 'use strict'
 
-const assert = require('assert')
-const ReactDOM = require('react-dom')
 const React = require('react')
+const ReactDOM = require('react-dom')
 const Blockly = require('blockly/blockly_compressed')
 
 const blocks = require('./blocks/blocks')

@@ -507,7 +507,7 @@ describe('plot code generation', () => {
   })
 
   it('persists a scatter plot', (done) => {
-    const expected = [Transform.FAMILY, 'scatter', 'figure_1', 'red', 'green', 'blue']
+    const expected = [Transform.FAMILY, 'scatter', 'figure_1', 'red', 'green', 'blue', false]
     const w = workspace()
     const block = w.newBlock('plot_scatter')
     block.setFieldValue('figure_1', 'NAME')

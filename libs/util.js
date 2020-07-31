@@ -55,6 +55,16 @@ const equal = (left, right) => {
 }
 
 /**
+ * Turn something into a Boolean.
+ */
+const makeBoolean = (value) => {
+  if (value) {
+    return true
+  }
+  return false
+}
+
+/**
  * Turn something into a date.
  */
 const makeDate = (value) => {
@@ -140,6 +150,7 @@ module.exports = {
   checkNumber,
   checkTypeEqual,
   equal,
+  makeBoolean,
   makeDate,
   safeValue,
   csvToTable,
