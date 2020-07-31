@@ -9,7 +9,7 @@ const {
 } = require('./expr')
 
 /**
- * Label used to identify this family of objects for persistence.
+ * Indicate that persisted JSON is a value.
  */
 const FAMILY = '@value'
 

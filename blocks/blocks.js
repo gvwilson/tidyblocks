@@ -255,10 +255,10 @@ const XML_CONFIG = `<xml id="toolbox" style="display: none">
     <block type="data_user"></block>
   </category>
   <category name="transform" categorystyle="transform">
+    <block type="transform_create"></block>
     <block type="transform_drop"></block>
     <block type="transform_filter"></block>
     <block type="transform_groupBy"></block>
-    <block type="transform_mutate"></block>
     <block type="transform_report"></block>
     <block type="transform_select"></block>
     <block type="transform_sort"></block>

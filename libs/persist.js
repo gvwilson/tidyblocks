@@ -7,7 +7,15 @@ const Transform = require('./transform')
 const Op = require('./op')
 const Value = require('./value')
 
+/**
+ * Restore runnable program objects from JSON.
+ */
 class Restore {
+  /**
+   * Restore a `Program` from JSON.
+   * @params json The JSON containing the program description `['@program', ...pipelines...]`.
+   * @returns A new instance of `Program`.
+   */
   program (json) {
     util.check(Array.isArray(json) &&
                (json.length > 0) &&
@@ -17,6 +25,11 @@ class Restore {
     return new Program(...pipelines)
   }
 
+  /**
+   * Restore a `Pipeline` from JSON.
+   * @params json The JSON containing the pipeline description `['@pipeline', ...transforms...]`.
+   * @returns A new instance of `Pipeline`.
+   */
   pipeline (json) {
     util.check(Array.isArray(json) &&
                (json.length > 1) &&
@@ -26,6 +39,14 @@ class Restore {
     return new Pipeline(...transforms)
   }
 
+  /**
+   * Restore a transform from JSON.
+   * @params json The JSON containing the transform description `['@transform',
+   * 'species', ...expressions...]`. The `species` must match one of the names
+   * exported from `transform.js` and map to a class derived from
+   * `TransformBase`.
+   * @returns A new instance of the class identified by `species`.
+   */
   transform (json) {
     util.check(Array.isArray(json) &&
                (json.length > 1) &&
@@ -37,6 +58,14 @@ class Restore {
     return new Transform[kind](...args)
   }
 
+  /**
+   * Restore an expression from JSON.
+   * @params json The JSON containing the expression description. This must be
+   * either an operation or a value, each of which is handled by its own method.
+   * `TransformBase`.
+   * @returns A new instance of the class identified by the first element of the
+   * JSON.
+   */
   expr (json) {
     // Values, empty arrays, and unmarked arrays are themselves.
     if (!Array.isArray(json) ||
@@ -57,6 +86,13 @@ class Restore {
     util.fail(`Unknown expression type "${kind}"`)
   }
 
+  /**
+   * Restore an operation from JSON.
+   * @params json The JSON containing the operation description `['@op',
+   * 'species', ...expressions...]`. The `species` must match one of the names
+   * exported from `op.js` and map to a class derived from `ExprBase`.
+   * @returns A new instance of the class identified by `species`.
+   */
   op (json) {
     util.check((json.length > 1) &&
                (json[0] === Op.FAMILY) &&
@@ -67,6 +103,13 @@ class Restore {
     return new Op[kind](...args)
   }
 
+  /**
+   * Restore a value from JSON.
+   * @params json The JSON containing the operation description `['@value',
+   * 'species', ...expressions...]`. The `species` must match one of the names
+   * exported from `value.js` and map to a class derived from `ExprBase`.
+   * @returns A new instance of the class identified by `species`.
+   */
   value (json) {
     util.check((json.length > 1) &&
                (json[0] === Value.FAMILY) &&

@@ -67,18 +67,6 @@ const equal = (left, right) => {
 }
 
 /**
- * Convert a value into a strict Boolean (exactly `true` or `false`).
- * @param value What to convert.
- * @returns Either `true` or `false`.
- */
-const makeBoolean = (value) => {
-  if (value) {
-    return true
-  }
-  return false
-}
-
-/**
  * Turn something into a date. MISSING and actual dates are returned as-is,
  * strings are converted if they can be, and everything else fails.
  * @param value What to try to convert.
@@ -88,12 +76,49 @@ const makeDate = (value) => {
   if ((value === MISSING) || (value instanceof Date)) {
     return value
   }
+  if (typeof value === 'number') {
+    return new Date(value)
+  }
   check(typeof value === 'string',
         `Cannot create date from ${value} of type ${typeof value}`)
   value = new Date(value)
   check(value.toString() !== 'Invalid Date',
         `Cannot create date from ${value} of type ${typeof value}`)
   return value
+}
+
+/**
+ * Convert a value into a strict Boolean (exactly `true` or `false`).
+ * @param value What to convert.
+ * @returns Either `true` or `false`.
+ */
+const makeLogical = (value) => {
+  if (value) {
+    return true
+  }
+  return false
+}
+
+/**
+ * Convert a value into a number.
+ */
+const makeNumber = (value) => {
+  if (value === MISSING) {
+    return MISSING
+  }
+  if (typeof value === 'number') {
+    return value
+  }
+  if (typeof value === 'boolean') {
+    return value ? 1 : 0
+  }
+  if (value instanceof Date) {
+    return value.getTime()
+  }
+  check(typeof value === 'string',
+        `Cannot convert "${value}" to number`)
+  value = parseFloat(value)
+  return Number.isNaN(value) ? MISSING : value
 }
 
 /**
@@ -168,8 +193,9 @@ module.exports = {
   checkNumber,
   checkTypeEqual,
   equal,
-  makeBoolean,
   makeDate,
+  makeLogical,
+  makeNumber,
   safeValue,
   csvToTable
 }

@@ -338,6 +338,20 @@ describe('transform code generation', () => {
     done()
   })
 
+  it('generates code for create', (done) => {
+    const expected = [Transform.FAMILY, 'create', 'fresh',
+                      [Value.FAMILY, 'logical', true]]
+    const w = workspace()
+    const arg = w.newBlock('value_logical')
+    arg.setFieldValue('true', 'VALUE')
+    const block = w.newBlock('transform_create')
+    block.setFieldValue('fresh', 'COLUMN')
+    connect(block, 'VALUE', arg)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for loading user datasets', (done) => {
     const name = 'latest'
     const expected = [Transform.FAMILY, 'data', name]
@@ -377,20 +391,6 @@ describe('transform code generation', () => {
     const w = workspace()
     const block = w.newBlock('transform_groupBy')
     block.setFieldValue('left, right', 'MULTIPLE_COLUMNS')
-    const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
-    done()
-  })
-
-  it('generates code for mutate', (done) => {
-    const expected = [Transform.FAMILY, 'mutate', 'fresh',
-                      [Value.FAMILY, 'logical', true]]
-    const w = workspace()
-    const arg = w.newBlock('value_logical')
-    arg.setFieldValue('true', 'VALUE')
-    const block = w.newBlock('transform_mutate')
-    block.setFieldValue('fresh', 'COLUMN')
-    connect(block, 'VALUE', arg)
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()

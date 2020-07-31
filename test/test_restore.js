@@ -154,7 +154,7 @@ describe('expression persistence', () => {
       ['toLogical', Op.toLogical],
       ['toDatetime', Op.toDatetime],
       ['toNumber', Op.toNumber],
-      ['toString', Op.toString]
+      ['toText', Op.toText]
     ]
     for (const [name, func] of allChecks) {
       const factory = new Restore()
@@ -236,14 +236,14 @@ describe('transform persistence', () => {
     done()
   })
 
-  it('restores mutate from JSON', (done) => {
+  it('restores create from JSON', (done) => {
     const newName = 'finished'
     const factory = new Restore()
-    const json = [Transform.FAMILY, 'mutate', newName,
+    const json = [Transform.FAMILY, 'create', newName,
                   [Value.FAMILY, 'logical', true]]
     assert.deepEqual(factory.transform(json),
-                     new Transform.mutate(newName, new Value.logical(true)),
-                     `mutate`)
+                     new Transform.create(newName, new Value.logical(true)),
+                     `create`)
     done()
   })
 

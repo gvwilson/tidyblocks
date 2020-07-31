@@ -225,6 +225,55 @@ describe('check columns', () => {
   })
 })
 
+describe('create', () => {
+  it('requires a new column name', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    const expr = new Value.number(99)
+    assert.throws(() => df.create('', expr),
+                  Error,
+                  `Expected error with empty new column name`)
+    done()
+  })
+
+  it('only allows legal column names', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    const expr = new Value.number(99)
+    assert.throws(() => df.create(' with spaces ', expr),
+                  Error,
+                  `Expected error with illegal column name`)
+    done()
+  })
+
+  it('creates an empty dataframe', (done) => {
+    const df = new DataFrame([])
+    const expr = new Value.number(99)
+    const result = df.create('col', expr)
+    assert.deepEqual(result.data, [],
+                     `Expected empty dataframe`)
+    done()
+  })
+
+  it('creates an entirely new column', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    const expr = new Value.number(99)
+    const result = df.create('col', expr)
+    assert(result.equal(new DataFrame([{ones: 1, tens: 10, col: 99},
+                                       {ones: 2, tens: 20, col: 99}])),
+           `Wrong result for create`)
+    done()
+  })
+
+  it('replaces an existing column', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    const expr = new Value.number(99)
+    const result = df.create('ones', expr)
+    assert(result.equal(new DataFrame([{ones: 99, tens: 10},
+                                       {ones: 99, tens: 20}])),
+           `Wrong result for create`)
+    done()
+  })
+})
+
 describe('drop and select', () => {
   it('drops columns, leaving columns', (done) => {
     const df = new DataFrame(TWO_ROWS)
@@ -401,55 +450,6 @@ describe('group and ungroup', () => {
            `Group column should not be in data`)
     assert(!result.hasColumns([DataFrame.GROUPCOL]),
            `Expected grouping column to be removed`)
-    done()
-  })
-})
-
-describe('mutate', () => {
-  it('requires a new column name', (done) => {
-    const df = new DataFrame(TWO_ROWS)
-    const expr = new Value.number(99)
-    assert.throws(() => df.mutate('', expr),
-                  Error,
-                  `Expected error with empty new column name`)
-    done()
-  })
-
-  it('only allows legal column names', (done) => {
-    const df = new DataFrame(TWO_ROWS)
-    const expr = new Value.number(99)
-    assert.throws(() => df.mutate(' with spaces ', expr),
-                  Error,
-                  `Expected error with illegal column name`)
-    done()
-  })
-
-  it('mutates an empty dataframe', (done) => {
-    const df = new DataFrame([])
-    const expr = new Value.number(99)
-    const result = df.mutate('col', expr)
-    assert.deepEqual(result.data, [],
-                     `Expected empty dataframe`)
-    done()
-  })
-
-  it('creates an entirely new column', (done) => {
-    const df = new DataFrame(TWO_ROWS)
-    const expr = new Value.number(99)
-    const result = df.mutate('col', expr)
-    assert(result.equal(new DataFrame([{ones: 1, tens: 10, col: 99},
-                                       {ones: 2, tens: 20, col: 99}])),
-           `Wrong result for mutate`)
-    done()
-  })
-
-  it('replaces an existing column', (done) => {
-    const df = new DataFrame(TWO_ROWS)
-    const expr = new Value.number(99)
-    const result = df.mutate('ones', expr)
-    assert(result.equal(new DataFrame([{ones: 99, tens: 10},
-                                       {ones: 99, tens: 20}])),
-           `Wrong result for mutate`)
     done()
   })
 })

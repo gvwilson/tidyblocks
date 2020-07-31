@@ -46,15 +46,14 @@ describe('data management', () => {
 })
 
 describe('executes program', () => {
-  it('requires a name and some data when notifying', (done) => {
+  it('requires a non-empty label when notifying', (done) => {
     const program = new Program()
-    assert.throws(() => program.notify('name'),
+    assert.throws(() => program.notify(0),
                   Error,
-                  `Should require environment when doing notification`)
-    program.env = new Env(INTERFACE)
+                  `Should require string when doing notification`)
     assert.throws(() => program.notify(''),
                   Error,
-                  `Should require notification name`)
+                  `Should require non-empty label when notifying`)
     done()
   })
 
