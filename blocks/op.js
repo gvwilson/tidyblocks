@@ -3,6 +3,7 @@
 const Blockly = require('blockly/blockly_compressed')
 
 const {
+  ORDER_NONE,
   valueToCode
 } = require('./helpers')
 
@@ -251,84 +252,75 @@ const setup = () => {
   // Binary arithmetic
   Blockly.TidyBlocks['op_arithmetic'] = (block) => {
     const op = block.getFieldValue('OP')
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const left = valueToCode(block, 'LEFT', order)
-    const right = valueToCode(block, 'RIGHT', order)
+    const left = valueToCode(block, 'LEFT')
+    const right = valueToCode(block, 'RIGHT')
     const code = `["@op", "${op}", ${left}, ${right}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Arithmetic negation
   Blockly.TidyBlocks['op_negate'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const value = valueToCode(block, 'VALUE', order)
+    const value = valueToCode(block, 'VALUE')
     const code = `["@op", "negate", ${value}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Comparisons
   Blockly.TidyBlocks['op_compare'] = (block) => {
     const op = block.getFieldValue('OP')
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const left = valueToCode(block, 'LEFT', order)
-    const right = valueToCode(block, 'RIGHT', order)
+    const left = valueToCode(block, 'LEFT')
+    const right = valueToCode(block, 'RIGHT')
     const code = `["@op", "${op}", ${left}, ${right}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Binary logical operations
   Blockly.TidyBlocks['op_logical'] = (block) => {
     const op = block.getFieldValue('OP')
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const left = valueToCode(block, 'LEFT', order)
-    const right = valueToCode(block, 'RIGHT', order)
+    const left = valueToCode(block, 'LEFT')
+    const right = valueToCode(block, 'RIGHT')
     const code = `["@op", "${op}", ${left}, ${right}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Logical negation
   Blockly.TidyBlocks['op_not'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const value = valueToCode(block, 'VALUE', order)
+    const value = valueToCode(block, 'VALUE')
     const code = `["@op", "not", ${value}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Type checking
   Blockly.TidyBlocks['op_type'] = (block) => {
     const type = block.getFieldValue('TYPE')
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const value = valueToCode(block, 'VALUE', order)
+    const value = valueToCode(block, 'VALUE')
     const code = `["@op", "${type}", ${value}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Type conversion
   Blockly.TidyBlocks['op_convert'] = (block) => {
     const type = block.getFieldValue('TYPE')
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const value = valueToCode(block, 'VALUE', order)
+    const value = valueToCode(block, 'VALUE')
     const code = `["@op", "${type}", ${value}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Datetime conversions
   Blockly.TidyBlocks['op_datetime'] = (block) => {
     const type = block.getFieldValue('TYPE')
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const value = valueToCode(block, 'VALUE', order)
+    const value = valueToCode(block, 'VALUE')
     const code = `["@op", "datetime", "${type}", ${value}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 
   // Conditional
   Blockly.TidyBlocks['op_conditional'] = (block) => {
-    const order = Blockly.TidyBlocks.ORDER_NONE
-    const cond = valueToCode(block, 'COND', order)
-    const left = valueToCode(block, 'LEFT', order)
-    const right = valueToCode(block, 'RIGHT', order)
+    const cond = valueToCode(block, 'COND')
+    const left = valueToCode(block, 'LEFT')
+    const right = valueToCode(block, 'RIGHT')
     const code = `["@op", "ifElse", ${cond}, ${left}, ${right}]`
-    return [code, order]
+    return [code, ORDER_NONE]
   }
 }
 

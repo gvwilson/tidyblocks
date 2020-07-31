@@ -2,6 +2,11 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {ORDER_NONE} = require('./helpers')
+
+/**
+ * Define value blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
     // Absent value
@@ -177,55 +182,55 @@ const setup = () => {
   // Absent value
   Blockly.TidyBlocks['value_absent'] = (block) => {
     const code = `["@value", "absent"]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Column name
   Blockly.TidyBlocks['value_column'] = (block) => {
     const column = block.getFieldValue('COLUMN')
     const code = `["@value", "column", "${column}"]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Datetime
   Blockly.TidyBlocks['value_datetime'] = (block) => {
     const value = block.getFieldValue('DATE')
     const code = `["@value", "datetime", "${value}"]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Logical
   Blockly.TidyBlocks['value_logical'] = (block) => {
     const value = block.getFieldValue('VALUE')
     const code = `["@value", "logical", ${value}]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Number
   Blockly.TidyBlocks['value_number'] = (block) => {
     const value = parseFloat(block.getFieldValue('VALUE'))
     const code = `["@value", "number", ${value}]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Text
   Blockly.TidyBlocks['value_text'] = (block) => {
     const value = block.getFieldValue('VALUE')
     const code = `["@value", "text", "${value}"]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Row number
   Blockly.TidyBlocks['value_rownum'] = (block) => {
     const code = `["@value", "rownum"]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Exponential random variable
   Blockly.TidyBlocks['value_exponential'] = (block) => {
     const rate = parseFloat(block.getFieldValue('RATE'))
     const code = `["@value", "exponential", ${rate}]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Normal random variable
@@ -233,7 +238,7 @@ const setup = () => {
     const mean = parseFloat(block.getFieldValue('MEAN'))
     const variance = parseFloat(block.getFieldValue('STDDEV'))
     const code = `["@value", "normal", ${mean}, ${variance}]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 
   // Uniform random variable
@@ -241,7 +246,7 @@ const setup = () => {
     const low = parseFloat(block.getFieldValue('LOW'))
     const high = parseFloat(block.getFieldValue('HIGH'))
     const code = `["@value", "uniform", ${low}, ${high}]`
-    return [code, Blockly.TidyBlocks.ORDER_NONE]
+    return [code, ORDER_NONE]
   }
 }
 

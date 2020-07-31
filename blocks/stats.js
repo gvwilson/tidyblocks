@@ -2,6 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+/**
+ * Define statistics blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
     // One-sample two-sided t-test

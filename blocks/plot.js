@@ -2,6 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+/**
+ * Define plotting blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
     // Bar plot
