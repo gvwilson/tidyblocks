@@ -56,6 +56,10 @@ class Pipeline {
     }
   }
 }
+
+/**
+ * Indicate that persisted JSON is a pipeline.
+ */
 Pipeline.FAMILY = '@pipeline'
 
 module.exports = Pipeline

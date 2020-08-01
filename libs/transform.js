@@ -7,6 +7,9 @@ const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
 
+/**
+ * Indicate that persisted JSON is a transform.
+ */
 const FAMILY = '@transform'
 
 /**
@@ -49,6 +52,34 @@ class TransformBase {
 }
 
 // ----------------------------------------------------------------------
+
+/**
+ * Create a new column.
+ * @param {string} newName New column's name.
+ * @param {function} expr How to create new values.
+ */
+class TransformCreate extends TransformBase {
+  constructor (newName, expr) {
+    util.check(typeof newName === 'string',
+               `Expected string as new name`)
+    util.check(expr instanceof ExprBase,
+               `Expected expression`)
+    super('create', [], true, true)
+    this.newName = newName
+    this.expr = expr
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.newName === other.newName) &&
+      (this.expr.equal(other.expr))
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.newName}`)
+    return df.create(this.newName, this.expr)
+  }
+}
 
 /**
  * Get a dataset.
@@ -174,34 +205,6 @@ class TransformJoin extends TransformBase {
     const right = env.getData(this.rightName)
     return left.join(this.leftName, this.leftCol,
                      right, this.rightName, this.rightCol)
-  }
-}
-
-/**
- * Create new columns.
- * @param {string} newName New column's name.
- * @param {function} expr Create new values.
- */
-class TransformMutate extends TransformBase {
-  constructor (newName, expr) {
-    util.check(typeof newName === 'string',
-               `Expected string as new name`)
-    util.check(expr instanceof ExprBase,
-               `Expected expression`)
-    super('mutate', [], true, true)
-    this.newName = newName
-    this.expr = expr
-  }
-
-  equal (other) {
-    return super.equal(other) &&
-      (this.newName === other.newName) &&
-      (this.expr.equal(other.expr))
-  }
-
-  run (env, df) {
-    env.appendLog('log', `${this.species} ${this.newName}`)
-    return df.mutate(this.newName, this.expr)
   }
 }
 
@@ -616,12 +619,12 @@ class TransformTTestPaired extends TransformBase {
 module.exports = {
   FAMILY: FAMILY,
   base: TransformBase,
+  create: TransformCreate,
   data: TransformData,
   drop: TransformDrop,
   filter: TransformFilter,
   groupBy: TransformGroupBy,
   join: TransformJoin,
-  mutate: TransformMutate,
   report: TransformReport,
   select: TransformSelect,
   sequence: TransformSequence,

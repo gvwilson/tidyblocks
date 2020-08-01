@@ -2,6 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+/**
+ * Define data blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
     // Colors

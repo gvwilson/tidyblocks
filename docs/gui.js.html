@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ValueText</title>
+    <title>JSDoc: Source: gui.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,354 +17,94 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ValueText</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2><span class="attribs"><span class="type-signature"></span></span>ValueText<span class="signature">(value)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">A constant text value.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="ValueText"><span class="type-signature"></span>new ValueText<span class="signature">(value)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Construct.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">`MISSING` or a numeric value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="value.js.html">value.js</a>, <a href="value.js.html#line171">line 171</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(row, i)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Produce the constant text value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>row</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>i</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row number.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="value.js.html">value.js</a>, <a href="value.js.html#line183">line 183</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The constant text value.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">Source: gui.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const Blockly = require('blockly/blockly_compressed')
+
+const DataFrame = require('./dataframe')
+const Restore = require('./persist')
+const Env = require('./env')
+const blocks = require('../blocks/blocks')
+
+// Load default datasets here rather than inside a function to ensure that
+// bundling picks them up.
+const COLORS = require('../data/colors')
+const EARTHQUAKES = require('../data/earthquakes')
+const PENGUINS = require('../data/penguins')
+
+/**
+ * User interface mediator.
+ */
+class UserInterface {
+  /**
+   * Build user interface object.
+   */
+  constructor () {
+    // Initialize blocks support.
+    blocks.createBlocks()
+
+    // Create storage for datasets loaded by the user. These are stored between
+    // program runs.
+    this.userData = new Map()
+    this._loadDefaultDatasets()
+
+    // Create an empty workspace. Derived classes must fill this in.
+    this.workspace = null
+
+    // Create an empty program running environment. (A new environment is
+    // created for each run of the program.)
+    this.env = null
+  }
+
+  /**
+   * Get the JSON string representation of the workspace contents.
+   */
+  getJSON () {
+    return Blockly.TidyBlocks.workspaceToCode(this.workspace)
+  }
+
+  /**
+   * Get the object representation of the current program.
+   */
+  getProgram () {
+    const code = this.getJSON()
+    const json = JSON.parse(code)
+    const converter = new Restore()
+    return converter.program(json)
+  }
+
+  /**
+   * Run the current program, leaving state in 'this.env'.
+   */
+  runProgram () {
+    const program = this.getProgram()
+    this.env = new Env(this)
+    program.run(this.env)
+  }
+
+  /**
+   * Load default datasets.
+   */
+  _loadDefaultDatasets () {
+    this.userData.set('colors', new DataFrame(COLORS))
+    this.userData.set('earthquakes', new DataFrame(EARTHQUAKES))
+    this.userData.set('penguins', new DataFrame(PENGUINS))
+  }
+}
+
+module.exports = UserInterface
+</code></pre>
+        </article>
+    </section>
 
 
 

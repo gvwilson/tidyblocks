@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: ValueText</title>
+    <title>JSDoc: Source: persist.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,354 +17,142 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: ValueText</h1>
-
-    
-
-
-
-
-<section>
-
-<header>
-    
-        <h2><span class="attribs"><span class="type-signature"></span></span>ValueText<span class="signature">(value)</span><span class="type-signature"></span></h2>
-        
-            <div class="class-description">A constant text value.</div>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-    <h2>Constructor</h2>
-    
-
-    
-    <h4 class="name" id="ValueText"><span class="type-signature"></span>new ValueText<span class="signature">(value)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Construct.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>value</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">`MISSING` or a numeric value.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="value.js.html">value.js</a>, <a href="value.js.html#line171">line 171</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(row, i)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Produce the constant text value.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>row</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>i</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The row number.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="value.js.html">value.js</a>, <a href="value.js.html#line183">line 183</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    The constant text value.
-</div>
-
-
-
-    
-
-
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 class="page-title">Source: persist.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const util = require('./util')
+const Program = require('./program')
+const Pipeline = require('./pipeline')
+const Transform = require('./transform')
+const Op = require('./op')
+const Value = require('./value')
+
+/**
+ * Restore runnable program objects from JSON.
+ */
+class Restore {
+  /**
+   * Restore a `Program` from JSON.
+   * @params json The JSON containing the program description `['@program', ...pipelines...]`.
+   * @returns A new instance of `Program`.
+   */
+  program (json) {
+    util.check(Array.isArray(json) &amp;&amp;
+               (json.length > 0) &amp;&amp;
+               (json[0] === Program.FAMILY),
+               `Expected array with program kind`)
+    const pipelines = json.slice(1).map(blob => this.pipeline(blob))
+    return new Program(...pipelines)
+  }
+
+  /**
+   * Restore a `Pipeline` from JSON.
+   * @params json The JSON containing the pipeline description `['@pipeline', ...transforms...]`.
+   * @returns A new instance of `Pipeline`.
+   */
+  pipeline (json) {
+    util.check(Array.isArray(json) &amp;&amp;
+               (json.length > 1) &amp;&amp;
+               (json[0] === Pipeline.FAMILY),
+               `Expected array with pipeline element`)
+    const transforms = json.slice(1).map(blob => this.transform(blob))
+    return new Pipeline(...transforms)
+  }
+
+  /**
+   * Restore a transform from JSON.
+   * @params json The JSON containing the transform description `['@transform',
+   * 'species', ...expressions...]`. The `species` must match one of the names
+   * exported from `transform.js` and map to a class derived from
+   * `TransformBase`.
+   * @returns A new instance of the class identified by `species`.
+   */
+  transform (json) {
+    util.check(Array.isArray(json) &amp;&amp;
+               (json.length > 1) &amp;&amp;
+               (json[0] === Transform.FAMILY) &amp;&amp;
+               (json[1] in Transform),
+               `Unknown transform kind "${json[1]}"`)
+    const kind = json[1]
+    const args = json.slice(2).map(p => this.expr(p))
+    return new Transform[kind](...args)
+  }
+
+  /**
+   * Restore an expression from JSON.
+   * @params json The JSON containing the expression description. This must be
+   * either an operation or a value, each of which is handled by its own method.
+   * `TransformBase`.
+   * @returns A new instance of the class identified by the first element of the
+   * JSON.
+   */
+  expr (json) {
+    // Values, empty arrays, and unmarked arrays are themselves.
+    if (!Array.isArray(json) ||
+        (json.length === 0) ||
+        (typeof json[0] !== 'string') ||
+        (json[0].length === 0) ||
+        (json[0][0] !== '@')) {
+      return json
+    }
+    // Dispatch by kind.
+    const kind = json[0]
+    if (kind === '@op') {
+      return this.op(json)
+    }
+    if (kind === '@value') {
+      return this.value(json)
+    }
+    util.fail(`Unknown expression type "${kind}"`)
+  }
+
+  /**
+   * Restore an operation from JSON.
+   * @params json The JSON containing the operation description `['@op',
+   * 'species', ...expressions...]`. The `species` must match one of the names
+   * exported from `op.js` and map to a class derived from `ExprBase`.
+   * @returns A new instance of the class identified by `species`.
+   */
+  op (json) {
+    util.check((json.length > 1) &amp;&amp;
+               (json[0] === Op.FAMILY) &amp;&amp;
+               (json[1] in Op),
+               `Require indicator of known operation kind ${JSON.stringify(json)}`)
+    const kind = json[1]
+    const args = json.slice(2).map(p => this.expr(p))
+    return new Op[kind](...args)
+  }
+
+  /**
+   * Restore a value from JSON.
+   * @params json The JSON containing the operation description `['@value',
+   * 'species', ...expressions...]`. The `species` must match one of the names
+   * exported from `value.js` and map to a class derived from `ExprBase`.
+   * @returns A new instance of the class identified by `species`.
+   */
+  value (json) {
+    util.check((json.length > 1) &amp;&amp;
+               (json[0] === Value.FAMILY) &amp;&amp;
+               (json[1] in Value),
+               `Require indicator of known value kind ${JSON.stringify(json)}`)
+    const kind = json[1]
+    const args = json.slice(2).map(p => this.expr(p))
+    return new Value[kind](...args)
+  }
+}
+
+module.exports = Restore
+</code></pre>
+        </article>
+    </section>
 
 
 
