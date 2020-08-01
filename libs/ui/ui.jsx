@@ -21,7 +21,7 @@ import Splitter from 'm-react-splitters'
 import 'm-react-splitters/lib/splitters.css'
 import Tooltip from '@material-ui/core/Tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
+import { faWindowMaximize, faWindowMinimize, faWindowRestore, faChartBar, faTable } from '@fortawesome/free-solid-svg-icons'
 import { MenuBar } from './menuBar.jsx'
 import { SaveCsvFormDialog, SaveWorkspaceFormDialog, SaveSvgFormDialog } from './saveDialog.jsx'
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
@@ -784,21 +784,30 @@ export class TidyBlocksApp extends React.Component {
                       minimizePanel={this.minimizePanel}
                       restorePanel={this.restorePanel}
                       selectDropdown={statsDropdown}/>
-                    <div className="relativeWrapper">
-                      <div className="absoluteWrapper">
-                        <div className="dataWrapper">
-                          {this.state.stats &&
-                            <DataGrid
-                              columns={this.state.statsColumns}
-                              rows={this.state.stats}
-                              enableCellAutoFocus={false}
-                              height={this.state.topRightPaneHeight}
-                              onGridSort={this.sortRows}
-                              />
-                          }
+                      {this.state.stats ?
+                        <div className="relativeWrapper">
+                          <div className="absoluteWrapper">
+                            <div className="dataWrapper">
+                              <DataGrid
+                                columns={this.state.statsColumns}
+                                rows={this.state.stats}
+                                enableCellAutoFocus={false}
+                                height={this.state.topRightPaneHeight}
+                                onGridSort={this.sortRows}
+                                />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
+                      :
+                        <div className="relativeWrapper">
+                          <div className="emptyPanelWrapper">
+                            <FontAwesomeIcon className="panelIcon"icon={faTable} />
+                            <p className="emptyPanelText">You aren't currently displaying any stats.</p>
+                            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                            </p>
+                          </div>
+                        </div>
+                      }
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={2} component="div">
                     <TabHeader maximizePanel={this.maximizePanel}
@@ -806,6 +815,16 @@ export class TidyBlocksApp extends React.Component {
                       restorePanel={this.restorePanel}
                       selectDropdown={plotDropdown}/>
                     <div className="plotWrapper">
+                      { !this.state.plotData &&
+                        <div className="relativeWrapper">
+                          <div className="emptyPanelWrapper">
+                            <FontAwesomeIcon className="panelIcon"icon={faChartBar} />
+                            <p className="emptyPanelText">You aren't currently displaying any plots.</p>
+                            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                            </p>
+                          </div>
+                        </div>
+                      }
                       <div id="plotOutput" ref={this.plotOutputRef}></div>
                     </div>
                   </TabPanel>
