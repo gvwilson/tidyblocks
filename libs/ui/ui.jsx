@@ -744,13 +744,13 @@ export class TidyBlocksApp extends React.Component {
                           <p>
                             Console
                             {this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_ERROR &&
-                              <span class="dotIndicator errorDotIndicator"></span>
+                              <span className="dotIndicator errorDotIndicator"></span>
                             }
                             { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_SUCCESS &&
-                              <span class="dotIndicator successDotIndicator"></span>
+                              <span className="dotIndicator successDotIndicator"></span>
                             }
                             { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_WARNING &&
-                              <span class="dotIndicator warningDotIndicator"></span>
+                              <span className="dotIndicator warningDotIndicator"></span>
                             }
                           </p>
                         }/>
