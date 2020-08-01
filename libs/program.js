@@ -77,6 +77,7 @@ class Program {
     this.env = env
     const seen = new Set()
     try {
+      // Run until queue is empty.
       while (this.queue.length > 0) {
         const pipeline = this.queue.shift()
         pipeline.run(this.env)
@@ -86,6 +87,14 @@ class Program {
             this.notify(label)
           }
         }
+      }
+      // Report how many things were not run.
+      if (this.waiting.size > 0) {
+        const unseen = new Set()
+        this.waiting.forEach((value, keySet) => {
+          keySet.forEach(key => unseen.add(key))
+        })
+        env.appendLog('warn', `${this.waiting.size} pipelines waiting on ${Array.from(unseen).join(', ')}`)
       }
     }
     catch (err) {

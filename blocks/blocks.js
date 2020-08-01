@@ -30,23 +30,24 @@ Blockly.TidyBlocks.ORDER_NONE = 0
  * @returns The JSON representation of the program.
  */
 Blockly.TidyBlocks.workspaceToCode = (workspace) => {
-  const pipelines = workspace
-        .getTopBlocks()
-        .filter(block => (block.hat === 'cap'))
-        .map(top => {
-          const blocks = []
-          let curr = top
-          while (curr && (curr instanceof Blockly.Block)) {
-            blocks.push(curr)
-            curr = curr.getNextBlock()
-          }
-          const transforms =
-                blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
-          transforms.unshift('"@pipeline"')
-          return `[${transforms}]`
-        })
+  const allTopBlocks = workspace.getTopBlocks()
+  const cappedBlocks = allTopBlocks.filter(block => (block.hat === 'cap'))
+  const strayCount = allTopBlocks.length - cappedBlocks.length
+  const pipelines = cappedBlocks.map(top => {
+    const blocks = []
+    let curr = top
+    while (curr && (curr instanceof Blockly.Block)) {
+      blocks.push(curr)
+      curr = curr.getNextBlock()
+    }
+    const transforms =
+          blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
+    transforms.unshift('"@pipeline"')
+    return `[${transforms}]`
+  })
   pipelines.unshift('"@program"')
-  return `[${pipelines}]`
+  const code = `[${pipelines}]`
+  return {code, strayCount}
 }
 
 // ----------------------------------------------------------------------

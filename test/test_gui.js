@@ -18,21 +18,10 @@ describe('creates the interface object', () => {
     const gui = new TestInterface()
     const block = gui.workspace.newBlock('data_colors')
     block.hat = 'cap'
-    const actual = JSON.parse(gui.getJSON())
+    const actual = gui.getJSON()
     const expected = ['@program', ['@pipeline', ['@transform', 'data', 'colors']]]
     assert.deepEqual(actual, expected,
                      `Did not generate JSON correctly`)
-    done()
-  })
-
-  it('generates a program in the GUI', (done) => {
-    const gui = new TestInterface()
-    const block = gui.workspace.newBlock('data_colors')
-    block.hat = 'cap'
-    const actual = gui.getProgram()
-    const expected = new Program(new Pipeline(new Transform.data('colors')))
-    assert.deepEqual(actual, expected,
-                     `Did not generate program correctly`)
     done()
   })
 
