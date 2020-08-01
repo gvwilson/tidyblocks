@@ -29,7 +29,7 @@ Blockly.TidyBlocks.workspaceToCode = (workspace) => {
   const allTopBlocks = workspace.getTopBlocks()
   const cappedBlocks = allTopBlocks.filter(block => (block.hat === 'cap'))
   const strayCount = allTopBlocks.length - cappedBlocks.length
-  const pipelines = allTopBlocks.map(top => _makePipeline(top))
+  const pipelines = cappedBlocks.map(top => _makePipeline(top))
   pipelines.unshift('"@program"')
   const code = `[${pipelines}]`
   return {code, strayCount}

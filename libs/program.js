@@ -98,10 +98,10 @@ class Program {
       // Report how many things were not run.
       if (this.waiting.size > 0) {
         const unseen = new Set()
-        this.waiting.forEach((value, keySet) => {
-          keySet.forEach(key => unseen.add(key))
+        this.waiting.forEach(keySet => {
+          Array.from(keySet).forEach(key => unseen.add(key))
         })
-        env.appendLog('warn', `${this.waiting.size} pipelines waiting on ${Array.from(unseen).join(', ')}`)
+        env.appendLog('warn', `${this.waiting.size} pipeline(s) left waiting on ${Array.from(unseen).join(', ')}`)
       }
     }
     catch (err) {

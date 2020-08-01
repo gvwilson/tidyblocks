@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const Blockly = require('blockly/blockly_compressed.js')
 
 const util = require('../libs/util')
 const DataFrame = require('../libs/dataframe')
@@ -8,6 +9,7 @@ const Transform = require('../libs/transform')
 const Env = require('../libs/env')
 const Pipeline = require('../libs/pipeline')
 const Program = require('../libs/program')
+const Restore = require('../libs/persist')
 
 const fixture = require('./fixture')
 
@@ -283,6 +285,22 @@ describe('executes program', () => {
     assert(env.getData('keyword').equal(expected),
            `Missing or incorrect result from join`)
 
+    done()
+  })
+})
+
+describe('checks programs for unrunnables', () => {
+  it('reports unrunnable pipelines', (done) => {
+    const json = [Program.FAMILY,
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'glue', 'alpha', 'beta', 'label']]]
+    const factory = new Restore()
+    const program = factory.program(json)
+    const env = new Env(INTERFACE)
+    program.run(env)
+    assert.deepEqual(env.log,
+                     [[ 'warn', '1 pipeline(s) left waiting on alpha, beta' ]],
+                    `Did not get expected log message`)
     done()
   })
 })

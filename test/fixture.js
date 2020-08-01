@@ -8,6 +8,33 @@ const Transform = require('../libs/transform')
 const DataFrame = require('../libs/dataframe')
 const UserInterface = require('../libs/gui')
 
+// Define all of our blocks.
+const blocks = require('../blocks/blocks')
+blocks.createBlocks()
+
+/**
+ * Create a workspace for block generation.
+ */
+const workspace = () => {
+  Blockly.Events.disable() // to stop it trying to create SVG
+  return new Blockly.Workspace({})
+}
+
+/**
+ * Make `lower` a sub-block in the named `field` of `upper`.
+ */
+const addSubBlock = (upper, field, lower) => {
+    const connection = upper.getInput(field).connection
+    connection.connect(lower.outputConnection)
+}
+
+/**
+ * Stack `upper` on top of `lower`.
+ */
+const stackBlocks = (upper, lower) => {
+  upper.nextConnection.connect(lower.previousConnection)
+}
+
 /**
  * Testing replacement for a transform (easier constructor).
  */
@@ -53,6 +80,9 @@ const CONCERT_STR = CONCERT.toISOString()
  */
 
 module.exports = {
+  workspace,
+  addSubBlock,
+  stackBlocks,
   MockTransform,
   CONCERT,
   CONCERT_STR,

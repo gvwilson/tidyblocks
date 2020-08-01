@@ -22,6 +22,18 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds create transform', (done) => {
+    const env = new Env(INTERFACE)
+    const creator = new Value.text('stuff')
+    const transform = new Transform.create('value', creator)
+    const result = transform.run(env, new DataFrame(fixture.NAMES))
+    assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),
+                     `Wrong columns in result`)
+    assert(result.data.every(row => (row.value === 'stuff')),
+           `Wrong values in result`)
+    done()
+  })
+
   it('builds drop columns transform', (done) => {
     const env = new Env(INTERFACE)
     const transform = new Transform.drop(['personal'])
@@ -41,6 +53,21 @@ describe('build dataframe operations', () => {
     assert(expected.length < fixture.BOOL.length, `No filtering?`)
     assert(result.equal(new DataFrame(expected)),
            `Expected only a few rows`)
+    done()
+  })
+
+  it('builds glue transform', (done) => {
+    const leftData = new DataFrame([{value: 7}])
+    const rightData = new DataFrame([{value: 99}])
+    const env = new Env(INTERFACE)
+    env.setResult('leftTable', leftData)
+    env.setResult('rightTable', rightData)
+    const transform = new Transform.glue('leftTable', 'rightTable', 'labels')
+    const result = transform.run(env, null)
+    const expected = [{value: 7, labels: 'leftTable'},
+                      {value: 99, labels: 'rightTable'}]
+    assert(result.equal(new DataFrame(expected)),
+           `Did not get expected result`)
     done()
   })
 
@@ -66,18 +93,6 @@ describe('build dataframe operations', () => {
     row[DataFrame.JOINCOL] = 7
     assert(result.equal(new DataFrame([row])),
            `Wrong joined dataframe`)
-    done()
-  })
-
-  it('builds create transform', (done) => {
-    const env = new Env(INTERFACE)
-    const creator = new Value.text('stuff')
-    const transform = new Transform.create('value', creator)
-    const result = transform.run(env, new DataFrame(fixture.NAMES))
-    assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),
-                     `Wrong columns in result`)
-    assert(result.data.every(row => (row.value === 'stuff')),
-           `Wrong values in result`)
     done()
   })
 
@@ -352,6 +367,22 @@ describe('transform equality tests', () => {
     done()
   })
 
+  it('compares creates', (done) => {
+    const create_true = new Transform.create('name', new Value.logical(true))
+    const create_false = new Transform.create('name', new Value.logical(false))
+    assert(create_true.equal(create_true),
+           `Same should equal`)
+    assert(!create_false.equal(create_true),
+           `Different should not equal`)
+    const create_true_other = new Transform.create('other', new Value.logical(true))
+    assert(!create_true.equal(create_true_other),
+           `Names should matter`)
+    const groupBy = new Transform.groupBy(['left'])
+    assert(!create_true.equal(groupBy),
+           `Different transforms should not equal`)
+    done()
+  })
+
   it('compares drop transforms', (done) => {
     const drop_left = new Transform.drop(['left'])
     const drop_right = new Transform.drop(['right'])
@@ -375,6 +406,19 @@ describe('transform equality tests', () => {
     const groupBy = new Transform.groupBy(['left'])
     assert(!filter_true.equal(groupBy),
            `Different transforms should not equal`)
+    done()
+  })
+
+  it('compares glue', (done) => {
+    const glue_a = new Transform.glue('a', 'b', 'label')
+    assert(glue_a.equal(new Transform.glue('a', 'b', 'label')),
+           `Same should equal`)
+    assert(!glue_a.equal(new Transform.glue('b', 'a', 'label')),
+           `Different should not equal`)
+    assert(!glue_a.equal(new Transform.glue('a', 'b', 'whatever')),
+           `Different should not equal`)
+    assert(!glue_a.equal(new Transform.drop(['a', 'b', 'label'])),
+           `Different should not equal`)
     done()
   })
 
@@ -403,22 +447,6 @@ describe('transform equality tests', () => {
            `Order should matter`)
     const groupBy = new Transform.groupBy(['left'])
     assert(!join_a_b.equal(groupBy),
-           `Different transforms should not equal`)
-    done()
-  })
-
-  it('compares creates', (done) => {
-    const create_true = new Transform.create('name', new Value.logical(true))
-    const create_false = new Transform.create('name', new Value.logical(false))
-    assert(create_true.equal(create_true),
-           `Same should equal`)
-    assert(!create_false.equal(create_true),
-           `Different should not equal`)
-    const create_true_other = new Transform.create('other', new Value.logical(true))
-    assert(!create_true.equal(create_true_other),
-           `Names should matter`)
-    const groupBy = new Transform.groupBy(['left'])
-    assert(!create_true.equal(groupBy),
            `Different transforms should not equal`)
     done()
   })
