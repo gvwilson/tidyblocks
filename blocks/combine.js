@@ -2,6 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+/**
+ * Define combining blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
     // Glue

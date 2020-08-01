@@ -372,12 +372,12 @@ describe('type conversions', () => {
       [new Value.text('abc'), Op.toNumber, util.MISSING],
       [new Value.text('678'), Op.toNumber, 678],
       [new Value.datetime(new Date(0)), Op.toNumber, 0],
-      [new Value.text(util.MISSING), Op.toString, util.MISSING],
-      [new Value.logical(false), Op.toString, 'false'],
-      [new Value.logical(true), Op.toString, 'true'],
-      [new Value.number(-123), Op.toString, '-123'],
-      [new Value.text('abc'), Op.toString, 'abc'],
-      [new Value.datetime(new Date(0)), Op.toString,
+      [new Value.text(util.MISSING), Op.toText, util.MISSING],
+      [new Value.logical(false), Op.toText, 'false'],
+      [new Value.logical(true), Op.toText, 'true'],
+      [new Value.number(-123), Op.toText, '-123'],
+      [new Value.text('abc'), Op.toText, 'abc'],
+      [new Value.datetime(new Date(0)), Op.toText,
        'Wed Dec 31 1969 19:00:00 GMT-0500 (Eastern Standard Time)']
     ]
     for (const [value, convert, expected] of checks) {
@@ -390,21 +390,21 @@ describe('type conversions', () => {
   })
 
   it('converts non-datetimes correctly', (done) => {
-    const checks = [new Value.logical(util.MISSING),
-                    new Value.text(''),
+    const checks = [new Value.text(''),
                     new Value.text('abc')]
     for (const input of checks) {
       const op = new Op.toDatetime(input)
-      const actual = op.run({}, 0)
-      assert.equal(actual, util.MISSING,
-                   `Wrong result for converting "${input}": got "${actual}"`)
+      assert.throws(() => op.run({}, 0),
+                    Error,
+                    `Should not be able to convert "${input}"`)
     }
     done()
   })
 
   it('converts valid datetimes correctly', (done) => {
-    const checks = [[new Value.text('1983-12-02'), new Date('1983-12-02')],
-                    [new Value.number(123), new Date(123)]
+    const checks = [
+      [new Value.text('1983-12-02'), new Date('1983-12-02')],
+      [new Value.number(123), new Date(123)]
     ]
     for (const [expr, expected] of checks) {
       const op = new Op.toDatetime(expr)
@@ -414,6 +414,10 @@ describe('type conversions', () => {
       assert.equal(actual.getTime(), expected.getTime(),
                    `Wrong result for ${expected}`)
     }
+    const op = new Op.toDatetime(new Value.number(util.MISSING))
+    const actual = op.run({}, 0)
+    assert.equal(actual, util.MISSING,
+                 `Should have MISSING`)
     done()
   })
 })

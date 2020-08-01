@@ -69,10 +69,10 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('builds mutate transform', (done) => {
+  it('builds create transform', (done) => {
     const env = new Env(INTERFACE)
-    const mutater = new Value.text('stuff')
-    const transform = new Transform.mutate('value', mutater)
+    const creator = new Value.text('stuff')
+    const transform = new Transform.create('value', creator)
     const result = transform.run(env, new DataFrame(fixture.NAMES))
     assert.deepEqual(result.columns, new Set(['personal', 'family', 'value']),
                      `Wrong columns in result`)
@@ -407,18 +407,18 @@ describe('transform equality tests', () => {
     done()
   })
 
-  it('compares mutates', (done) => {
-    const mutate_true = new Transform.mutate('name', new Value.logical(true))
-    const mutate_false = new Transform.mutate('name', new Value.logical(false))
-    assert(mutate_true.equal(mutate_true),
+  it('compares creates', (done) => {
+    const create_true = new Transform.create('name', new Value.logical(true))
+    const create_false = new Transform.create('name', new Value.logical(false))
+    assert(create_true.equal(create_true),
            `Same should equal`)
-    assert(!mutate_false.equal(mutate_true),
+    assert(!create_false.equal(create_true),
            `Different should not equal`)
-    const mutate_true_other = new Transform.mutate('other', new Value.logical(true))
-    assert(!mutate_true.equal(mutate_true_other),
+    const create_true_other = new Transform.create('other', new Value.logical(true))
+    assert(!create_true.equal(create_true_other),
            `Names should matter`)
     const groupBy = new Transform.groupBy(['left'])
-    assert(!mutate_true.equal(groupBy),
+    assert(!create_true.equal(groupBy),
            `Different transforms should not equal`)
     done()
   })

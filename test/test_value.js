@@ -38,9 +38,6 @@ describe('get values', () => {
   })
 
   it('only creates datetimes from legal values', (done) => {
-    assert.throws(() => new Value.datetime(123),
-                  Error,
-                  `Should not be able to create datetime from number`)
     assert.throws(() => new Value.datetime([]),
                   Error,
                   `Should not be able to create datetime from array`)

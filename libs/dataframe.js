@@ -5,13 +5,18 @@ const {ExprBase} = require('./expr')
 const Summarize = require('./summarize')
 
 /**
- * Store a dataframe.
+ * Store a dataframe. The frame is represented as an array of 0 or more rows,
+ * each of which is an object with exactly the same keys. The type of data
+ * associated with each key must be consistent for all rows. The column names
+ * are stored as well to handle the case where filtering reduces the dataframe
+ * to zero rows: it was confusing to have all the columns suddenly disappear.
  */
 class DataFrame {
   /**
    * Construct a new dataframe.
    * @param {Object[]} values The dataframe's values (aliased, not copied).
-   * @param {string[]} oldColumns The names of columns (used when making an empty dataframe).
+   * @param {string[]} oldColumns The names of columns (aliased, not copied). If
+   * `null` is provided, the column names are taken from the first row's keys.
    */
   constructor (values, oldColumns = null) {
     this._checkData(values)
@@ -22,7 +27,7 @@ class DataFrame {
   /**
    * Check if two dataframes are equal (used primarily in testing).
    * @param {Object} other The other dataframe.
-   * @returns A Boolean result.
+   * @returns Equality.
    */
   equal (other) {
     util.check(other instanceof DataFrame,
@@ -62,14 +67,36 @@ class DataFrame {
 
   // ------------------------------------------------------------------------------
   // Table transformations invoked by blocks.
-  // Rely on operation functions provided by blocks, which take a row and a row
-  // number as parameters and return a value for further processing.
   // ------------------------------------------------------------------------------
 
   /**
-   * Drop columns.
-   * @param {string[]} columns The names of the columns to discard.
+   * Create a new column using values from existing columns.
+   * @param {string} newName New column's name. (If column already exists, it is replaced.)
+   * @param {ExprBase} expr The expression object that calculates new values.
    * @returns A new dataframe.
+   */
+  create (newName, expr) {
+    util.check(newName,
+               `empty new column name for create`)
+    util.check(newName.match(DataFrame.COLUMN_NAME),
+               `illegal new name for column`)
+    util.check(expr instanceof ExprBase,
+               `new value expression is not an expression object`)
+    const newData = this.data.map((row, i) => {
+      const newRow = {...row}
+      newRow[newName] = expr.run(row, i)
+      return newRow
+    })
+    const newColumns = this._makeColumns(newData, this.columns,
+                                         {add: [newName]})
+    return new DataFrame(newData, newColumns)
+  }
+
+  /**
+   * Drop columns.
+   * @param {string[]} columns The names of the columns to discard (which must
+   * be present).
+   * @returns A new dataframe that doesn't have those columns.
    */
   drop (columns) {
     util.check(this.hasColumns(columns),
@@ -92,9 +119,11 @@ class DataFrame {
   }
 
   /**
-   * Group by the values in a column, storing the result in a new grouping column.
+   * Group by the values in a column, storing the group ID in a new column with
+   * a special name. Values can be grouped by values in multiple columns; to
+   * create sub-groups, group by GROUPCOL and other columns to replace GROUPCOL.
    * @param {string[]} columns The columns that determine groups.
-   * @returns A new dataframe.
+   * @returns A new dataframe with a group column.
    */
   groupBy (columns) {
     util.check(columns.length > 0,
@@ -103,43 +132,10 @@ class DataFrame {
                `unknown column(s) ${columns} in groupBy`)
     util.check(columns.length === (new Set(columns)).size,
                `duplicate column(s) in [${columns}] in groupBy`)
-    const seen = new Map()
-    let nextGroupId = 1
-    const groupedData = this.data.map((row, i) => {
-      const thisGroupId = this._makeGroupId(seen, row, i, columns, nextGroupId)
-      if (thisGroupId === nextGroupId) {
-        nextGroupId += 1
-      }
-      const newRow = {...row}
-      newRow[DataFrame.GROUPCOL] = thisGroupId
-      return newRow
-    })
+    const groupedData = this._makeGroupedData(columns)
     const newColumns = this._makeColumns(groupedData, this.columns,
                                          {add: [DataFrame.GROUPCOL]})
     return new DataFrame(groupedData, newColumns)
-  }
-
-  /**
-   * Create a new column using values from existing columns.
-   * @param {string} newName New column's name. (If column already exists, it is replaced.)
-   * @param {ExprBase} expr The expression object that calculates new values.
-   * @returns A new dataframe.
-   */
-  mutate (newName, expr) {
-    util.check(newName,
-               `empty new column name for mutate`)
-    util.check(newName.match(DataFrame.COLUMN_NAME),
-               `illegal new name for column`)
-    util.check(expr instanceof ExprBase,
-               `new value expression is not an expression object`)
-    const newData = this.data.map((row, i) => {
-      const newRow = {...row}
-      newRow[newName] = expr.run(row, i)
-      return newRow
-    })
-    const newColumns = this._makeColumns(newData, this.columns,
-                                         {add: [newName]})
-    return new DataFrame(newData, newColumns)
   }
 
   /**
@@ -205,7 +201,7 @@ class DataFrame {
 
   /**
    * Summarize values (possibly grouped).
-   * @param {Summarizer} action What to do.
+   * @param {Summarizer} action What summarization to use.
    * @returns A new dataframe.
    */
   summarize (action) {
@@ -257,7 +253,9 @@ class DataFrame {
   // ------------------------------------------------------------------------------
 
   /**
-   * Glue two tables together.
+   * Glue two dataframes together by concatenating rows. The dataframes must
+   * have exactly the same columns. A new column is created to identify which of
+   * the original tables each row came from.
    * @param {string} thisName Name to use for this table in result.
    * @param {string} other Other table to join to.
    * @param {string} otherName Name to use for other table in result.
@@ -335,8 +333,7 @@ class DataFrame {
   }
 
   // ------------------------------------------------------------------------------
-  // Utility functions that are called from the outside (e.g., for testing or
-  // to convert datatypes).
+  // Utility functions that are called from outside the class.
   // ------------------------------------------------------------------------------
 
   /**
@@ -354,6 +351,8 @@ class DataFrame {
     return colNames.every(n => (this.columns.has(n)))
   }
 
+  // ------------------------------------------------------------------------------
+  // Utility functions that are only used internally.
   // ------------------------------------------------------------------------------
 
   //
@@ -440,6 +439,24 @@ class DataFrame {
     }
 
     return result
+  }
+
+  //
+  // Put data in groups.
+  //
+  _makeGroupedData (columns) {
+    const seen = new Map()
+    let nextGroupId = 1
+    const groupedData = this.data.map((row, i) => {
+      const thisGroupId = this._makeGroupId(seen, row, i, columns, nextGroupId)
+      if (thisGroupId === nextGroupId) {
+        nextGroupId += 1
+      }
+      const newRow = {...row}
+      newRow[DataFrame.GROUPCOL] = thisGroupId
+      return newRow
+    })
+    return groupedData
   }
 
   //

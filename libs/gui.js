@@ -7,7 +7,8 @@ const Restore = require('./persist')
 const Env = require('./env')
 const blocks = require('../blocks/blocks')
 
-// Require default datasets at the top level to ensure bundling picks them up.
+// Load default datasets here rather than inside a function to ensure that
+// bundling picks them up.
 const COLORS = require('../data/colors')
 const EARTHQUAKES = require('../data/earthquakes')
 const PENGUINS = require('../data/penguins')
