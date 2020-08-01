@@ -50,11 +50,11 @@ class MockTransform extends Transform.base {
 }
 
 /**
- * User interface for testing purposes.
+ * User interface for testing purposes. Uses 'en' as a language unless told otherwise.
  */
 class TestInterface extends UserInterface {
-  constructor () {
-    super()
+  constructor (language = 'en') {
+    super(language)
     Blockly.Events.disable() // to stop it trying to create SVG
     this.workspace = new Blockly.Workspace({})
   }

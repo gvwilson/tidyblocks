@@ -8,7 +8,7 @@ const {
 } = require('./helpers')
 
 /**
- * Helper function to Turn a string containing comma-separated column names into
+ * Helper function to turn a string containing comma-separated column names into
  * an array of JavaScript strings.
  */
 const _formatMultiColNames = (raw) => {
@@ -22,19 +22,122 @@ const _formatMultiColNames = (raw) => {
 }
 
 /**
- * Define transform blocks.
+ * Lookup table for message strings.
  */
-const setup = () => {
+const MSG = {
+  multiple_columns: {
+    en: 'column, column'
+  },
+  create: {
+    message0: {
+      en: 'Create %1 %2'
+    },
+    args0_text: {
+      en: 'new_column'
+    },
+    tooltip: {
+      en: 'create new column from existing columns'
+    }
+  },
+  drop: {
+    message0: {
+      en: 'Drop %1'
+    },
+    args0_tooltip: {
+      en: 'drop columns by name'
+    }
+  },
+  filter: {
+    message0: {
+      en: 'Filter %1'
+    },
+    args0_name: {
+      en: 'TEST'
+    },
+    tooltip: {
+      en: 'filter rows by condition'
+    }
+  },
+  groupby: {
+    message0: {
+      en: 'Group by %1'
+    },
+    tooltip: {
+      en: 'group data by values in columns'
+    }
+  },
+  report: {
+    message0: {
+      en: 'Report %1'
+    },
+    args0_text: {
+      en: 'name'
+    },
+    tooltip: {
+      en: 'report a result'
+    }
+  },
+  select: {
+    message0: {
+      en: 'Select %1'
+    },
+    tooltip: {
+      en: 'select columns by name'
+    }
+  },
+  sort: {
+    message0: {
+      en: 'Sort %1 descending %2'
+    },
+    tooltip: {
+      en: 'sort table by multiple columns'
+    }
+  },
+  summarize: {
+    message0: {
+      en: 'Summarize %1 %2'
+    },
+    args0_text: {
+      en: 'column'
+    },
+    tooltip: {
+      en: 'summarize values in  column'
+    }
+  },
+  ungroup: {
+    message0: {
+      en: 'Ungroup'
+    },
+    tooltip: {
+      en: 'remove grouping'
+    }
+  },
+  unique: {
+    message0: {
+      en: 'Unique %1'
+    },
+    tooltip: {
+      en: 'select rows with unique values'
+    }
+  }
+}
+
+/**
+ * Define transform blocks.
+ * @param {string} language Two-letter language code to use for string lookups.
+ */
+const setup = (language) => {
+  console.log('SETUP WITH LANGUAGE', language)
   Blockly.defineBlocksWithJsonArray([
     // Create
     {
       type: 'transform_create',
-      message0: 'Create %1 %2',
+      message0: MSG.create.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: 'new_column'
+          text: MSG.create.args0_text[language]
         },
         {
           type: 'input_value',
@@ -45,7 +148,7 @@ const setup = () => {
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'create new column from existing columns',
+      tooltip: MSG.create.tooltip[language],
       helpUrl: '',
       extensions: ['validate_COLUMN']
     },
@@ -53,19 +156,19 @@ const setup = () => {
     // Drop
     {
       type: 'transform_drop',
-      message0: 'Drop %1',
+      message0: MSG.drop.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: 'column, column'
+          text: MSG.multiple_columns[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'drop columns by name',
+      tooltip: MSG.drop.args0_tooltip[language],
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
@@ -73,37 +176,37 @@ const setup = () => {
     // Filter
     {
       type: 'transform_filter',
-      message0: 'Filter %1',
+      message0: MSG.filter.message0[language],
       args0: [
         {
           type: 'input_value',
-          name: 'TEST'
+          name: MSG.filter.args0_name[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'filter rows by condition',
+      tooltip: MSG.filter.tooltip[language],
       helpUrl: ''
     },
 
     // Group
     {
       type: 'transform_groupBy',
-      message0: 'Group by %1',
+      message0: MSG.groupby.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: 'column, column'
+          text: MSG.multiple_columns[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'group data by values in columns',
+      tooltip: MSG.groupby.tooltip[language],
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
@@ -111,18 +214,18 @@ const setup = () => {
     // Report
     {
       type: 'transform_report',
-      message0: 'Report %1',
+      message0: MSG.report.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.report.args0_text[language]
         }
       ],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'report a result',
+      tooltip: MSG.report.tooltip[language],
       helpUrl: '',
       extensions: ['validate_NAME']
     },
@@ -130,19 +233,19 @@ const setup = () => {
     // Select
     {
       type: 'transform_select',
-      message0: 'Select %1',
+      message0: MSG.select.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: 'column, column'
+          text: MSG.multiple_columns[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'select columns by name',
+      tooltip: MSG.select.tooltip[language],
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
@@ -150,12 +253,12 @@ const setup = () => {
     // Sort
     {
       type: 'transform_sort',
-      message0: 'Sort %1 descending %2',
+      message0: MSG.sort.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: 'column, column'
+          text: MSG.multiple_columns[language]
         },
         {
           type: 'field_checkbox',
@@ -168,14 +271,14 @@ const setup = () => {
       nextStatement: null,
       style: 'transform_block',
       extensions: ['validate_MULTIPLE_COLUMNS'],
-      tooltip: '',
+      tooltip: MSG.sort.tooltip[language],
       helpUrl: ''
     },
 
     // Summarize
     {
       type: 'transform_summarize',
-      message0: 'Summarize %1 %2',
+      message0: MSG.summarize.message0[language],
       args0: [
         {
           type: 'field_dropdown',
@@ -196,14 +299,14 @@ const setup = () => {
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: 'column'
+          text: MSG.summarize.args0_text[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'summarize values in  column',
+      tooltip: MSG.summarize.tooltip[language],
       helpUrl: '',
       extensions: ['validate_COLUMN']
     },
@@ -211,32 +314,32 @@ const setup = () => {
     // Ungroup
     {
       type: 'transform_ungroup',
-      message0: 'Ungroup',
+      message0: MSG.ungroup.message0[language],
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'remove grouping',
+      tooltip: MSG.ungroup.tooltip[language],
       helpUrl: ''
     },
 
     // Unique
     {
       type: 'transform_unique',
-      message0: 'Unique %1',
+      message0: MSG.unique.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: 'column, column'
+          text: MSG.multiple_columns[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: 'select rows with unique values',
+      tooltip: MSG.unique.tooltip,
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     }

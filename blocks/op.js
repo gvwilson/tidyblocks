@@ -7,7 +7,77 @@ const {
   valueToCode
 } = require('./helpers')
 
-const setup = () => {
+/**
+ * Lookup table for message strings.
+ */
+const MSG = {
+  arithmetic: {
+    tooltip: {
+      en: 'do arithmetic'
+    }
+  },
+  negate: {
+    tooltip: {
+      en: 'negate a numeric column'
+    }
+  },
+  compare: {
+    tooltip: {
+      en: 'compare two columns'
+    }
+  },
+  logical: {
+    tooltip: {
+      en: 'combine logical values of two columns'
+    }
+  },
+  not: {
+    message0: {
+      en: 'not %1'
+    },
+    tooltip: {
+      en: 'negate a logical column'
+    }
+  },
+  type: {
+    message0: {
+      en: '%1 is %2 ?'
+    },
+    tooltip: {
+      en: 'check the type of a value'
+    }
+  },
+  convert: {
+    message0: {
+      en: '%1 to %2'
+    },
+    tooltip: {
+      en: 'change the datatype of a value'
+    }
+  },
+  datetime: {
+    message0: {
+      en: 'get %1 from %2'
+    },
+    tooltip: {
+      en: 'change the datatype of a value'
+    }
+  },
+  conditional: {
+    message0: {
+      en: 'If %1 then %2 else %3'
+    },
+    tooltip: {
+      en: 'select value based on condition'
+    }
+  }
+}
+
+/**
+ * Define operation blocks.
+ * @param {string} language Two-letter language code to use for string lookups.
+ */
+const setup = (language) => {
   Blockly.defineBlocksWithJsonArray([
     // Binary arithmetic
     {
@@ -38,7 +108,7 @@ const setup = () => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: 'do arithmetic',
+      tooltip: MSG.arithmetic.tooltip[language],
       helpUrl: ''
     },
 
@@ -55,7 +125,7 @@ const setup = () => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: 'negate a numeric column',
+      tooltip: MSG.negate.tooltip[language],
       helpUrl: ''
     },
 
@@ -88,7 +158,7 @@ const setup = () => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: 'compare two columns',
+      tooltip: MSG.compare.tooltip[language],
       helpUrl: ''
     },
 
@@ -117,14 +187,14 @@ const setup = () => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: 'combine logical values of two columns',
+      tooltip: MSG.logical.tooltip[language],
       helpUrl: ''
     },
 
     // Logical negation
     {
       type: 'op_not',
-      message0: 'not %1',
+      message0: MSG.not.message0[language],
       args0: [
         {
           type: 'input_value',
@@ -134,14 +204,14 @@ const setup = () => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: 'negate a logical column',
+      tooltip: MSG.not.tooltip[language],
       helpUrl: ''
     },
 
     // Type checking
     {
       type: 'op_type',
-      message0: '%1 is %2 ?',
+      message0: MSG.type.message0[language],
       args0: [
         {
           type: 'input_value',
@@ -162,14 +232,14 @@ const setup = () => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: 'check the type of a value',
+      tooltip: MSG.type.tooltip[language],
       helpUrl: ''
     },
 
     // Type conversion
     {
       type: 'op_convert',
-      message0: '%1 to %2',
+      message0: MSG.convert.message0[language],
       args0: [
         {
           type: 'input_value',
@@ -189,14 +259,14 @@ const setup = () => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: 'change the datatype of a value',
+      tooltip: MSG.convert.tooltip[language],
       helpUrl: ''
     },
 
     // Datetime conversions
     {
       type: 'op_datetime',
-      message0: 'get %1 from %2',
+      message0: MSG.datetime.message0[language],
       args0: [
         {
           type: 'field_dropdown',
@@ -219,14 +289,14 @@ const setup = () => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: 'change the datatype of a value',
+      tooltip: MSG.datetime.tooltip[language],
       helpUrl: ''
     },
 
     // Conditional
     {
       type: 'op_conditional',
-      message0: 'If %1 then %2 else %3',
+      message0: MSG.conditional.message0[language],
       args0: [
         {
           type: 'input_value',
@@ -244,7 +314,7 @@ const setup = () => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: 'select value based on condition',
+      tooltip: MSG.conditional.tooltip[language],
       helpUrl: ''
     }
   ])

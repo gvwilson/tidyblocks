@@ -3,46 +3,99 @@
 const Blockly = require('blockly/blockly_compressed')
 
 /**
- * Define data blocks.
+ * Lookup table for message strings.
  */
-const setup = () => {
+const MSG = {
+  colors: {
+    message0: {
+      en: 'Colors'
+    },
+    tooltip: {
+      en: 'eleven colors'
+    }
+  },
+  earthquakes: {
+    message0: {
+      en: 'Earthquakes'
+    },
+    tooltip: {
+      en: 'earthquake data'
+    }
+  },
+  penguins: {
+    message0: {
+      en: 'Penguins'
+    },
+    tooltip: {
+      en: 'penguin data'
+    }
+  },
+  sequence: {
+    message0: {
+      en: 'Sequence %1 %2'
+    },
+    args0_text: {
+      en: 'name'
+    },
+    tooltip: {
+      en: 'Generate a sequence 1..N'
+    }
+  },
+  data_user: {
+    message0: {
+      en: 'User data %1'
+    },
+    args0_text: {
+      en: 'name'
+    },
+    tooltip: {
+      en: 'use previously-loaded data'
+    }
+  }
+}
+
+/**
+ * Define data blocks.
+ * @param {string} language Two-letter language code to use for string lookups.
+ */
+const setup = (language) => {
   Blockly.defineBlocksWithJsonArray([
     // Colors
     {
       type: 'data_colors',
-      message0: 'Colors',
+      message0: MSG.colors.message0[language],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: 'eleven colors'
+      tooltip: MSG.colors.tooltip[language]
     },
     // Earthquakes
     {
       type: 'data_earthquakes',
-      message0: 'Earthquakes',
+      message0: MSG.earthquakes.message0[language],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: 'earthquake data'
+      tooltip: MSG.earthquakes.tooltip[language]
     },
     // Penguins
     {
       type: 'data_penguins',
-      message0: 'Penguins',
+      message0: MSG.penguins.message0[language],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: 'penguin data'
+      tooltip: MSG.penguins.tooltip[language]
     },
     // Sequence
     {
       type: 'data_sequence',
-      message0: 'Sequence %1 %2',
+      message0: MSG.sequence.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: 'name'
+          text: MSG.sequence.args0_text[language]
         },
         {
           type: 'field_number',
@@ -53,24 +106,24 @@ const setup = () => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: 'Generate a sequence 1..N',
+      tooltip: MSG.sequence.tooltip[language],
       helpUrl: ''
     },
     // User data
     {
       type: 'data_user',
-      message0: 'User data %1',
+      message0: MSG.data_user.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.data_user.args0_text[language]
         }
       ],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: 'use previously-loaded data',
+      tooltip: MSG.data_user.tooltip[language],
       helpUrl: ''
     }
   ])
