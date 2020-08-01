@@ -3,7 +3,7 @@ permalink: /license/
 title: "License"
 ---
 
-Copyright © 2020 Greg Wilson, Maya Gans
+Copyright © 2020 Maya Gans, Justin Singh, Greg Wilson
 
 Hippocratic License Version 2.0.  
 

@@ -35,8 +35,8 @@ class Pipeline {
 
   /**
    * Run this pipeline.
-   * @param {Env} env The runtime environment.
-   * @returns The result of the final transform.
+   * @param {Env} env The runtime environment. This is filled with results,
+   * statistics, and plots as a side effect of running certain blocks.
    */
   run (env) {
     util.check(Array.isArray(this.transforms) &&
@@ -54,14 +54,12 @@ class Pipeline {
     for (const transform of this.transforms) {
       data = transform.run(env, data)
     }
-
-    const last = this.transforms.slice(-1)[0]
-    return {
-      label: last.produces,
-      data: data
-    }
   }
 }
+
+/**
+ * Indicate that persisted JSON is a pipeline.
+ */
 Pipeline.FAMILY = '@pipeline'
 
 module.exports = Pipeline

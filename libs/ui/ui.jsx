@@ -1,27 +1,15 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import SplitPane from 'react-split-pane/lib/SplitPane'
-import Pane from 'react-split-pane/lib/Pane'
-import Resizer, { RESIZER_DEFAULT_CLASSNAME } from 'react-split-pane'
 import ReactBlocklyComponent from 'react-blockly'
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper.jsx'
 import DataGrid from 'react-data-grid'
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
-import {MenuBar} from './menuBar.jsx'
-import Select from 'react-select'
 import AppBar from '@material-ui/core/AppBar'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import PhoneIcon from '@material-ui/icons/Phone'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import PersonPinIcon from '@material-ui/icons/PersonPin'
-import HelpIcon from '@material-ui/icons/Help'
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket'
-import ThumbDown from '@material-ui/icons/ThumbDown'
-import ThumbUp from '@material-ui/icons/ThumbUp'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { withStyles, makeStyles, useStyles, styled } from '@material-ui/core/styles'
@@ -29,44 +17,70 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Blockly from 'blockly/blockly_compressed'
 import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
+import Splitter from 'm-react-splitters'
+import 'm-react-splitters/lib/splitters.css'
+import Tooltip from '@material-ui/core/Tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWindowMaximize, faWindowMinimize, faWindowRestore } from '@fortawesome/free-solid-svg-icons'
+import { MenuBar } from './menuBar.jsx'
+import { SaveCsvFormDialog, SaveWorkspaceFormDialog, SaveSvgFormDialog } from './saveDialog.jsx'
+import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 
-const tabHeight = '34px' // default: '48px'
+const TAB_HEIGHT = '34px'
+const TAB_WIDTH = '130px'
+const DATA_USER = 'user'
+const DATA_REPORT = 'results'
 
 const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: '#1C313A',
+      light: '#455a64',
+      dark: '#000914',
+      contrastText: "#ffffff"
+    },
+    secondary: {
+      light: '#2b313a',
+      main: '#000914',
+      dark: '#000000',
+      contrastText: '#ffffff',
+    },
+  },
   overrides: {
     MuiTabs: {
       root: {
-        minHeight: tabHeight,
-        height: tabHeight
+        minHeight: TAB_HEIGHT,
+        height: TAB_HEIGHT
       },
+      indicator: {
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: '#b1b4b5'
+      }
     },
     MuiTab: {
       root: {
-        minHeight: tabHeight,
-        height: tabHeight
+        minHeight: TAB_HEIGHT,
+        height: TAB_HEIGHT,
+        minWidth: TAB_WIDTH + " !important",
       },
       wrapper: {
         fontSize: '12px'
       }
     },
+    MuiPaper: {
+      root: {
+        backgroundColor: '#f5f5f5',
+        padding: '0px'
+      }
+    }
   },
+  props: {
+    MuiButtonBase: {
+      disableRipple: true,
+    },
+  }
 })
-
-const DataTabSelect = ({options, onChange, value}) => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
-    options={options}
-    value={value}
-    onChange={(e) => onChange(e)}
-  />
-)
-
-const PlotTabSelect = ({options, onChange, value}) => (
-  <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
-    options={options}
-    value={value}
-    onChange={(e) => onChange(e)}
-  />
-)
 
 const TabPanel = (props) => {
   const { children, value, index, ...other } = props
@@ -112,25 +126,77 @@ const createToolboxCategories = (props) => {
   return categories
 }
 
+function TabHeader (props) {
+  return(
+    <Paper>
+    <Grid container alignContent="center" alignItems="center" spacing={0}>
+      <Grid item xs={7}>
+        <Grid container spacing={0}>
+          {props.selectDropdown}
+        </Grid>
+      </Grid>
+      <Grid item xs={5}>
+        <Grid container justify="flex-end" spacing={1}>
+          <Tooltip title={"Minimize Panel"}>
+            <Grid item className="resizeIconGrid" onClick={props.minimizePanel}>
+              <FontAwesomeIcon className="resizeIcon"icon={faWindowMinimize} />
+            </Grid>
+          </Tooltip>
+          <Tooltip title={"Maximize Panel"}>
+            <Grid item className="resizeIconGrid" onClick={props.maximizePanel}>
+              <FontAwesomeIcon className="resizeIcon"icon={faWindowMaximize} />
+            </Grid>
+          </Tooltip>
+          <Tooltip title={"Restore Panel"}>
+            <Grid item className="resizeIconGrid" onClick={props.restorePanel}>
+              <FontAwesomeIcon className="resizeIcon"icon={faWindowRestore} />
+            </Grid>
+          </Tooltip>
+        </Grid>
+      </Grid>
+    </Grid>
+    </Paper>
+  )
+}
+
 // The main TidyBlocks App UI. Contains resizable panes for the Blockly section,
 // tabs for data display/plotting/logs.
 export class TidyBlocksApp extends React.Component {
   constructor (props) {
     super(props)
     this.blocklyRef = React.createRef()
-    this.bottomRightPaneRef = React.createRef()
+    this.plotOutputRef = React.createRef()
     this.dataGridRef = React.createRef()
     this.workspaceFileUploader = React.createRef()
     this.csvFileUploader = React.createRef()
+    this.saveCsvNameDialog = React.createRef()
+    this.saveWorkspaceDialog = React.createRef()
+    this.saveSvgDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
 
     this.state = {
+      isDraggingPane: false,
       topRightPaneHeight: 200,
       toolboxCategories: createToolboxCategories(this.props),
       tabValue: 0,
+      tabUpdated: {
+        'data': false,
+        'stats': false,
+        'plot': false,
+        'console': false
+      },
+      DATA_TAB_INDEX: 0,
+      STATS_TAB_INDEX: 1,
+      PLOT_TAB_INDEX: 2,
+      CONSOLE_TAB_INDEX: 3,
+      CONSOLE_SUCCESS: 'CONSOLE_SUCCESS',
+      CONSOLE_WARNING: 'CONSOLE_WARNING',
+      CONSOLE_ERROR: 'CONSOLE_ERROR',
+
       tabValueBottom: 0,
+      zoom: '1.00',
       // The results returned from running the program. We store them in full
       // in env for use during updates/changes, but may also use more specific
       // helper variables for intermediate results.
@@ -156,23 +222,54 @@ export class TidyBlocksApp extends React.Component {
 
       logMessages: null
     }
+
     this.paneVerticalResize = this.paneVerticalResize.bind(this)
-    this.paneHorizontalResize = this.paneHorizontalResize.bind(this)
     this.updatePlot = this.updatePlot.bind(this)
     this.changePlot = this.changePlot.bind(this)
-    this.updateTopRightPaneHeight = this.updateTopRightPaneHeight.bind(this)
     this.runProgram = this.runProgram.bind(this)
     this.loadWorkspaceClick = this.loadWorkspaceClick.bind(this)
     this.loadWorkspace = this.loadWorkspace.bind(this)
     this.loadCsvClick = this.loadCsvClick.bind(this)
     this.loadCsv = this.loadCsv.bind(this)
     this.changeData = this.changeData.bind(this)
+    this.changeStats = this.changeStats.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this)
     this.sortRows = this.sortRows.bind(this)
     this.updateLogMessages = this.updateLogMessages.bind(this)
+    this.saveWorkspace = this.saveWorkspace.bind(this)
+    this.saveData = this.saveData.bind(this)
+    this.saveSvg = this.saveSvg.bind(this)
+    this.maximizePanel = this.maximizePanel.bind(this)
+    this.minimizePanel = this.minimizePanel.bind(this)
+    this.restorePanel = this.restorePanel.bind(this)
+    this.updateZoom = this.updateZoom.bind(this)
   }
 
   componentDidMount () {
+    window.addEventListener('resize', this.paneVerticalResize)
+    // Listeners to resize during a pane drag. Note: The postPoned prop for
+    // the Splitters doesn't currently handle this accurately on React 16.13
+    ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mousedown', () => {
+      this.setState({isDraggingPane: true})
+    })
+    ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mouseup', () => {
+      this.setState({isDraggingPane: false})
+    })
+    ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mousemove', () => {
+      if (this.state.isDraggingPane){
+        this.paneVerticalResize()
+      }
+    })
+    // Update the zoom display after touch/gesture events while on the blockly panel.
+    ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('touchend', () => {
+      this.updateZoom()
+    })
+    ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('wheel', () => {
+      this.updateZoom()
+    })
+    ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('gestureend', () => {
+      this.updateZoom()
+    })
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
@@ -185,35 +282,57 @@ export class TidyBlocksApp extends React.Component {
 
   // Handles a change in the vertical divider postion.
   paneVerticalResize () {
-    if (this.dataGridRef.current){
-      this.dataGridRef.current.metricsUpdated()
-    }
     this.blocklyRef.current.resize()
     this.updatePlot()
   }
+
+  // Maximizes the size of the right panel.
+  maximizePanel () {
+    const primaryPane = ReactDOM.findDOMNode(this).querySelector('.primary')
+    // The pane splitter will automatically adjust to it's minimum, setting to
+    // 0% ensures we hit that.
+    primaryPane.style['width'] = "0%"
+    this.paneVerticalResize()
+    // To force react-data-grid to scale.
+    window.dispatchEvent(new Event('resize'))
+
+  }
+
+  // Minimizes the size of the right panel.
+  minimizePanel () {
+    const primaryPane = ReactDOM.findDOMNode(this).querySelector('.primary')
+    // The pane splitter will automatically adjust to it's max, setting to
+    // 100% ensures we hit that.
+    primaryPane.style['width'] = "100%"
+    this.paneVerticalResize()
+    // To force react-data-grid to scale.
+    window.dispatchEvent(new Event('resize'))
+
+  }
+
+  // Restores both panels to their default positions.
+  restorePanel () {
+    const primaryPane = ReactDOM.findDOMNode(this).querySelector('.primary')
+    primaryPane.style['width'] = "50%"
+    this.paneVerticalResize()
+    // To force react-data-grid to scale.
+    window.dispatchEvent(new Event('resize'))
+  }
+
 
   // Updates the height of the topRightPane. This allows our ReactDataGrid to
   // update it's height.
   updateTopRightPaneHeight () {
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
-    const TOP_RIGHT_HEIGHT_OFFSET = 120
+    const TOP_RIGHT_HEIGHT_OFFSET = 110
     if (topRightPane){
       const topRightPaneHeight = (topRightPane.offsetHeight - TOP_RIGHT_HEIGHT_OFFSET)
       this.setState({topRightPaneHeight: topRightPaneHeight})
     }
   }
 
-  //Handles a change in the horizontal divider position.
-  paneHorizontalResize () {
-    // Seems like sometimes the vertical pane get askew if we pull fast enough,
-    // so we'll update it for safety.
-    this.paneVerticalResize()
-    this.updatePlot()
-    this.updateTopRightPaneHeight()
-  }
-
   // Sorting function for our react-data-grids.
-  sortRows(sortColumn, sortDirection){
+  sortRows (sortColumn, sortDirection) {
     const comparer = (a, b) => {
       if (sortDirection === 'ASC') {
         return (a[sortColumn]> b[sortColumn]) ? 1 : -1
@@ -234,18 +353,21 @@ export class TidyBlocksApp extends React.Component {
     // don't seem to give an offsetWidth though. The alternative would involve
     // computing window sizes (on pane drag or window resize) from
     // percentages.
-    const bottomRightPane = ReactDOM.findDOMNode(this).querySelector('.bottomRightPane')
+    const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
     const WIDTH_OFFSET = 120
     const HEIGHT_OFFSET = 150
 
     if (this.state.plotData) {
       const plotData = this.state.plotData
-      if (bottomRightPane) {
-        plotData.width = bottomRightPane.offsetWidth - WIDTH_OFFSET
-        plotData.height = bottomRightPane.offsetHeight - HEIGHT_OFFSET
-      }
 
-      vegaEmbed('#plotOutput', plotData, {})
+      //Only redraw if the pane is visible.
+      if (this.plotOutputRef.current) {
+        if (topRightPane) {
+          plotData.width = topRightPane.offsetWidth - WIDTH_OFFSET
+          plotData.height = topRightPane.offsetHeight - HEIGHT_OFFSET
+        }
+        vegaEmbed('#plotOutput', plotData, {})
+      }
     }
   }
 
@@ -261,16 +383,52 @@ export class TidyBlocksApp extends React.Component {
   changeData (e) {
     const activeDataOption = e
     let formattedColumns = []
-    const data = this.state.env.ui.userData.get(activeDataOption.value)['data']
-    const dataColumns = this.state.env.ui.userData.get(activeDataOption.value)['columns']
-    dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+    // Swap the stored data depending on whether we're showing userData or
+    // results.
+    if (activeDataOption.type == DATA_USER){
+      const data = this.state.env.ui.userData.get(activeDataOption.label)['data']
+      const dataColumns = this.state.env.ui.userData.get(activeDataOption.label)['columns']
+      dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      this.setState({activeDataOption: activeDataOption, data: data,
+        dataColumns: formattedColumns})
 
-    this.setState({activeDataOption: activeDataOption, data: data,
-      dataColumns: formattedColumns})
+    } else if (activeDataOption.type == DATA_REPORT){
+      const data = this.state.env.results.get(activeDataOption.label)['data']
+      const dataColumns = this.state.env.results.get(activeDataOption.label)['columns']
+      dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      this.setState({activeDataOption: activeDataOption, data: data,
+        dataColumns: formattedColumns})
+    }
+  }
+
+  changeStats (e) {
+    const activeStatsOption = e
+    let formattedColumns = []
+    const stats = [{'name': activeStatsOption.value, 'result': this.state.env.stats.get(activeStatsOption.value)}]
+    this.setState({activeStatsOption: activeStatsOption, stats: stats})
   }
 
   updateLogMessages (env) {
-    this.setState({logMessages: env.log})
+    let tabUpdated = this.state.tabUpdated
+    tabUpdated.console = false
+    if (env.log.length > 0 && this.state.tabValue != this.state.CONSOLE_TAB_INDEX){
+      for (let index in env.log){
+        if (env.log[index][0] == 'error'){
+          tabUpdated.console = this.state.CONSOLE_ERROR
+          break
+        } else if (env.log[index][0] == 'warn'){
+          tabUpdated.console = this.state.CONSOLE_WARNING
+        }
+      }
+      if (tabUpdated.console == false){
+        tabUpdated.console = this.state.CONSOLE_SUCCESS
+      }
+    }
+    this.setState({logMessages: env.log, tabUpdated: tabUpdated})
+  }
+
+  updateZoom () {
+    this.setState({zoom: this.blocklyRef.current.workspace.state.workspace.scale.toFixed(2)})
   }
 
   runProgram () {
@@ -288,29 +446,51 @@ export class TidyBlocksApp extends React.Component {
     let dataColumns = null
     let activeDataOption = null
     let formattedColumns = []
-
+    // If the active data option no longer exists remove it. This happens
+    // when the currently displayed table has been deleted or renamed.
     if (this.state.activeDataOption) {
-      if (env.ui.userData.has(this.state.activeDataOption.value)){
-        data = env.ui.userData.get(this.state.activeDataOption.value)['data']
-        dataColumns = env.ui.userData.get(this.state.activeDataOption.value)['columns']
-        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-        activeDataOption = this.state.activeDataOption
+      if (!(env.ui.userData.has(this.state.activeDataOption.label)
+        || env.results.has(this.state.activeDataOption.label))){
+        this.state.activeDataOption = null
       }
+    }
+    if (this.state.activeDataOption) {
+      // Swap the stored data depending on whether we're showing userData or
+      // results.
+      if (this.state.activeDataOption.type == DATA_USER){
+        data = env.ui.userData.get(this.state.activeDataOption.label)['data']
+        dataColumns = env.ui.userData.get(this.state.activeDataOption.label)['columns']
+        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      } else if (this.state.activeDataOption.type == DATA_REPORT){
+        data = env.results.get(this.state.activeDataOption.label)['data']
+        dataColumns = env.results.get(this.state.activeDataOption.label)['columns']
+        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      }
+      activeDataOption = this.state.activeDataOption
     } else {
       let result = dataKeys.next()
       if (!result.done){
-        activeDataOption = {'value': result.value, 'label': result.value}
-        data = env.ui.userData.get(activeDataOption.value)['data']
-        dataColumns = env.ui.userData.get(activeDataOption.value)['columns']
+        activeDataOption = {value: DATA_USER + '_' + result.value, type: DATA_USER, label: result.value}
+        data = env.ui.userData.get(activeDataOption.label)['data']
+        dataColumns = env.ui.userData.get(activeDataOption.label)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       }
     }
     let dataOptions = []
     for (let key of env.ui.userData.keys()){
-      dataOptions.push({value: key, label: key})
+      dataOptions.push({value: DATA_USER + '_' + key, type: DATA_USER, label: key})
+    }
+    for (let key of env.results.keys()){
+      dataOptions.push({value: DATA_REPORT + '_' + key, type: DATA_REPORT, label: key})
+    }
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (data && data != this.state.data && this.state.tabValue != this.state.DATA_TAB_INDEX){
+      tabUpdated.data = true
     }
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
-      activeDataOption: activeDataOption, dataOptions: dataOptions})
+      activeDataOption: activeDataOption, dataOptions: dataOptions,
+      tabUpdated: tabUpdated})
   }
 
   updatePlotInformation (env) {
@@ -337,49 +517,93 @@ export class TidyBlocksApp extends React.Component {
     for (let key of env.plots.keys()){
       plotOptions.push({value: key, label: key})
     }
-
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (plotData && plotData != this.state.plotData && this.state.tabValue != this.state.PLOT_TAB_INDEX){
+      tabUpdated.plot = true
+    }
     this.setState({env: env, plotKeys:plotKeys, plotData: plotData,
-      activePlotOption: activePlotOption, plotOptions: plotOptions}, () => {
+      activePlotOption: activePlotOption, plotOptions: plotOptions,
+      tabUpdated: tabUpdated}, () => {
       this.updatePlot()
     })
   }
 
+  // Updates Stats information.
   updateStatsInformation (env) {
-    // Updates Stats information. DISABLED PENDING FORMAT DISCUSSION.
-    // const statsKeys = env.stats.keys()
-    // let stats = null
-    // let statsColumns = null
-    // let activeStatsOption = null
-    // let formattedStatsColumns = []
-    //
-    // if (this.state.activeStatsOption) {
-    //   if (env.stats.has(this.state.activeStatsOption.value)){
-    //     stats = env.stats.get(this.state.activeStatsOption.value)['data']
-    //     statsColumns = env.stats.get(this.state.activeStatsOption.value)['columns']
-    //     statsColumns.forEach(c => formattedStatsColumns.push({key: c, name: c, sortable: true, resizable: true}))
-    //     activeStatsOption = this.state.activeStatsOption
-    //   }
-    // } else {
-    //   let result = statsKeys.next()
-    //   if (!result.done){
-    //     activeStatsOption = {'value': result.value, 'label': result.value}
-    //     stats = env.stats.get(activeStatsOption.value)['data']
-    //     statsColumns = env.stats.get(activeStatsOption.value)['columns']
-    //     statsColumns.forEach(c => formattedStatsColumns.push({key: c, name: c, sortable: true, resizable: true}))
-    //   }
-    // }
-    //
-    // let statsOptions = []
-    // for (let key of env.stats.keys()){
-    //   statsOptions.push({value: key, label: key})
-    // }
-    // this.setState({statsKeys:statsKeys, stats: stats, statsColumns: formattedStatsColumns,
-    //   activeStatsOption: activeStatsOption, statsOptions: statsOptions})
+    const statsKeys = env.stats.keys()
+    let stats = null
+    let statsColumns = null
+    let activeStatsOption = null
+    let STATS_COLUMNS = [{key: "name", name: "name", sortable: true, resizable: true},
+      {key: "result", name: "result", sortable: true, resizable: true}]
+
+    if (this.state.activeStatsOption) {
+      if (env.stats.has(this.state.activeStatsOption.value)){
+        stats = [{'name': this.state.activeStatsOption.value,
+          'result': env.stats.get(this.state.activeStatsOption.value)}]
+        activeStatsOption = this.state.activeStatsOption
+      }
+    } else {
+      let result = statsKeys.next()
+      if (!result.done){
+        activeStatsOption = {'value': result.value, 'label': result.value}
+        stats = [{'name': result.value, 'result': env.stats.get(activeStatsOption.value)}]
+      }
+    }
+
+    let statsOptions = []
+    for (let key of env.stats.keys()){
+      statsOptions.push({value: key, label: key})
+    }
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (stats && stats != this.state.stats && this.state.tabValue != this.state.STATS_TAB_INDEX){
+      tabUpdated.stats = true
+    }
+    this.setState({statsKeys:statsKeys, stats: stats, statsColumns: STATS_COLUMNS,
+      activeStatsOption: activeStatsOption, statsOptions: statsOptions})
   }
 
   handleTabChange (event, newValue) {
-    this.setState({tabValue: newValue})
+    // Turn off tab indicators on the newly clicked tab.
+    let tabUpdated = this.state.tabUpdated
+    switch(newValue) {
+      case this.state.DATA_TAB_INDEX:
+        tabUpdated.data = false
+        break
+      case this.state.STATS_TAB_INDEX:
+        tabUpdated.stats = false
+        break
+      case this.state.PLOT_TAB_INDEX:
+        tabUpdated.plot = false
+        break
+      case this.state.CONSOLE_TAB_INDEX:
+        tabUpdated.console = false
+        break
+    }
+    this.setState({tabValue: newValue, tabUpdated: tabUpdated}, () => {
+      if (newValue == this.state.PLOT_TAB_INDEX){
+        this.updatePlot()
+      }
+    })
   }
+
+  // Saves the currently displayed data table to a file.
+  saveData(){
+    this.saveCsvNameDialog.current.handleClickOpen()
+  }
+
+  // Saves the current Blockly workspace to a file.
+  saveWorkspace(){
+    this.saveWorkspaceDialog.current.handleClickOpen()
+  }
+
+  // Saves the svg on the Blockly workspace to a file.
+  saveSvg(){
+    this.saveSvgDialog.current.handleClickOpen()
+  }
+
 
   // Calls the file upload input.
   loadWorkspaceClick () {
@@ -410,7 +634,7 @@ export class TidyBlocksApp extends React.Component {
       const df = new DataFrame(csvToTable(text))
       this.state.env.ui.userData.set(label, df)
       this.setState({env: this.state.env}, () => {
-        this.updateDataInformation(this.state.env);
+        this.updateDataInformation(this.state.env)
       })
     })
   }
@@ -418,41 +642,66 @@ export class TidyBlocksApp extends React.Component {
   render () {
     const classes = withStyles(Tabs)
     const tabClasses = withStyles(Tab)
-    const logMessages = (!this.state.logMessages)
-          ? <li className="tbLog" key="message-0">No messages</li>
-          : this.state.logMessages.map((msg, i) => {
-              const key = `message-${i}`
-              const cls = (msg[0] === 'log') ? 'tbLog' : 'tbError'
-              return (<li className={cls} key={key}><code>{msg[1]}</code></li>)
-            })
-    const logMessageList = <ul>{logMessages}</ul>
+    const logMessages = (!this.state.logMessages) ?
+          <li className="tb-log" key="message-0">No messages</li> :
+          this.state.logMessages.map((msg, i) => {
+            const key = `message-${i}`
+            const cls = `tb-${msg[0]}`
+            return (<li className={cls} key={key}><code>{msg[1]}</code></li>)
+          })
+    const logMessageList = <ul className="tb-messages">{logMessages}</ul>
+    const dataDropdown = <DataTabSelect options={this.state.dataOptions}
+      onChange={this.changeData} value={this.state.activeDataOption}/>
+    const statsDropdown = <StatsTabSelect options={this.state.statsOptions}
+      onChange={this.changeStats} value={this.state.activeStatsOption}/>
+    const plotDropdown = <PlotTabSelect options={this.state.plotOptions}
+      onChange={this.changePlot} value={this.state.activePlotOption}/>
 
     return (
-      <div >
+      <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
+          <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
+          { this.blocklyRef.current &&
+            <>
+              <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
+              <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
+            </>
+          }
+
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
-            loadWorkspaceClick={this.loadWorkspaceClick}/>
+            loadWorkspaceClick={this.loadWorkspaceClick}
+            saveWorkspace={this.saveWorkspace}
+            saveData={this.saveData}
+            saveSvg={this.saveSvg}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
             style={{display: "none"}}/>
           <input type="file" id="csvFile" ref="csvFileUploader"
             onChange={this.loadCsv}
             style={{display: "none"}}/>
-          <SplitPane className="splitPaneWrapper"
-            split="vertical"  primary="secondary"
-            onChange={this.paneVerticalResize}>
-            <Pane minSize="200px">
-              <ReactBlocklyComponent.BlocklyEditor
-                ref={this.blocklyRef}
-                toolboxCategories={this.state.toolboxCategories}
-                workspaceConfiguration={this.props.settings}
-                wrapperDivClassName="fill-height"
-              />
-            </Pane>
-            <SplitPane split="horizontal" minSize="100px"
-              primary="secondary" onChange={this.paneHorizontalResize}>
-              <Pane className="topRightPane" minSize="100px" initialSize="50%">
+            <Splitter
+              key="vertical-split"
+              postPoned={false}
+              position="vertical"
+              secondaryPaneMinWidth="250px%"
+              primaryPaneMinWidth="20px"
+              primaryPaneWidth="50%"
+              dispatchResize={true}
+              >
+              <div className="blocklyWrapper" onClick={this.updateZoom}>
+                {this.blocklyRef.current &&
+                  <div className="zoomLevel">Zoom: {this.state.zoom}x</div>
+                }
+                <ReactBlocklyComponent.BlocklyEditor
+                  ref={this.blocklyRef}
+                  toolboxCategories={this.state.toolboxCategories}
+                  workspaceConfiguration={this.props.settings}
+                  wrapperDivClassName="fill-height"
+                  workspaceDidChange={this.updateZoom}
+                />
+              </div>
+              <div className="topRightPane">
                 <div className={classes.root}>
                   <AppBar position="static" color="default" component={'span'}>
                     <Tabs component={'span'}
@@ -463,21 +712,62 @@ export class TidyBlocksApp extends React.Component {
                       indicatorColor="primary"
                       textColor="primary"
                       >
-                      <Tab
-                        label="Data" {...a11yProps(0)}/>
-                      <Tab
-                        label="Stats" {...a11yProps(1)}/>
-                      <Tab
-                        label="Console" {...a11yProps(2)}/>
+                      <Tab {...a11yProps(this.state.DATA_TAB_INDEX)}
+                        label={
+                          <p>
+                            Data
+                            {this.state.tabUpdated.data &&
+                              <span className="dotIndicator defaultDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
+                      <Tab {...a11yProps(this.state.STATS_TAB_INDEX)}
+                        label={
+                          <p>
+                            Stats
+                            {this.state.tabUpdated.stats &&
+                              <span className="dotIndicator defaultDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
+                      <Tab {...a11yProps(this.state.PLOT_TAB_INDEX)}
+                        label={
+                          <p>
+                            Plot
+                            {this.state.tabUpdated.plot &&
+                              <span className="dotIndicator defaultDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
+                      <Tab {...a11yProps(3)}
+                        label={
+                          <p>
+                            Console
+                            {this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_ERROR &&
+                              <span className="dotIndicator errorDotIndicator"></span>
+                            }
+                            { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_SUCCESS &&
+                              <span className="dotIndicator successDotIndicator"></span>
+                            }
+                            { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_WARNING &&
+                              <span className="dotIndicator warningDotIndicator"></span>
+                            }
+                          </p>
+                        }/>
                     </Tabs>
                   </AppBar>
                   <TabPanel value={this.state.tabValue} index={0} component="div">
-                    <DataTabSelect options={this.state.dataOptions} onChange={this.changeData} value={this.state.activeDataOption}/>
+                    <TabHeader
+                      maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      selectDropdown={dataDropdown}/>
                     <div className="relativeWrapper">
                       <div className="">
                         <div className="dataWrapper">
                           {this.state.dataColumns &&
                             <DataGrid
+                              ref={this.dataGridRef}
                               columns={this.state.dataColumns}
                               rows={this.state.data}
                               enableCellAutoFocus={false}
@@ -490,42 +780,45 @@ export class TidyBlocksApp extends React.Component {
                     </div>
                   </TabPanel>
                   <TabPanel value={this.state.tabValue} index={1}>
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      selectDropdown={statsDropdown}/>
                     <div className="relativeWrapper">
                       <div className="absoluteWrapper">
                         <div className="dataWrapper">
+                          {this.state.stats &&
+                            <DataGrid
+                              columns={this.state.statsColumns}
+                              rows={this.state.stats}
+                              enableCellAutoFocus={false}
+                              height={this.state.topRightPaneHeight}
+                              onGridSort={this.sortRows}
+                              />
+                          }
                         </div>
                       </div>
                     </div>
                   </TabPanel>
-                  <TabPanel value={this.state.tabValue} index={2}>
+                  <TabPanel value={this.state.tabValue} index={2} component="div">
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      selectDropdown={plotDropdown}/>
+                    <div className="plotWrapper">
+                      <div id="plotOutput" ref={this.plotOutputRef}></div>
+                    </div>
+                  </TabPanel>
+                  <TabPanel value={this.state.tabValue} index={3}>
+                    <TabHeader maximizePanel={this.maximizePanel}
+                      minimizePanel={this.minimizePanel}
+                      restorePanel={this.restorePanel}
+                      />
                     {logMessageList}
                   </TabPanel>
                 </div>
-              </Pane>
-              <Pane ref={this.bottomRightPaneRef} id="bottomRightPane" className="bottomRightPane"
-                minSize="100px" initialSize="50%">
-                <div className={classes.root}>
-                  <AppBar position="static" color="default" component={'span'}>
-                    <Tabs component={'span'}
-                      value={this.state.tabValueBottom}
-                      onChange={this.handleTabChange}
-                      variant="scrollable"
-                      scrollButtons="on"
-                      indicatorColor="primary"
-                      textColor="primary">
-                      <Tab label="Plot" {...a11yProps(0)} />
-                    </Tabs>
-                  </AppBar>
-                  <TabPanel value={this.state.tabValueBottom} index={0} component="div">
-                    <PlotTabSelect options={this.state.plotOptions} onChange={this.changePlot} value={this.state.activePlotOption}/>
-                    <div className="plotWrapper">
-                      <div id="plotOutput"></div>
-                    </div>
-                  </TabPanel>
-                </div>
-              </Pane>
-            </SplitPane>
-          </SplitPane>
+              </div>
+          </Splitter>
         </MuiThemeProvider>
       </div>
     )

@@ -2,6 +2,8 @@
 permalink: /guide/
 ---
 
+<h1>TidyBlocks</h1>
+
 <div align="center">
   <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
 </div>

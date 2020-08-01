@@ -7,6 +7,9 @@ const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
 
+/**
+ * Indicate that persisted JSON is a transform.
+ */
 const FAMILY = '@transform'
 
 /**
@@ -17,19 +20,16 @@ class TransformBase {
   /**
    * @param {string} species What this transform is called.
    * @param {string[]} requires What datasets are required before this can run?
-   * @param {string} produces What dataset does this transform produce?
    * @param {Boolean} input Does this transform require input?
-   * @param {Boolean} output Does this transform produce input?
+   * @param {Boolean} output Does this transform produce output?
    */
-  constructor (species, requires, produces, input, output) {
+  constructor (species, requires, input, output) {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
-               requires.every(x => (typeof x === 'string')) &&
-               ((produces === null) || (typeof produces === 'string')),
+               requires.every(x => (typeof x === 'string')),
                `Bad parameters to constructor`)
     this.species = species
     this.requires = requires
-    this.produces = produces
     this.input = input
     this.output = output
   }
@@ -54,6 +54,34 @@ class TransformBase {
 // ----------------------------------------------------------------------
 
 /**
+ * Create a new column.
+ * @param {string} newName New column's name.
+ * @param {function} expr How to create new values.
+ */
+class TransformCreate extends TransformBase {
+  constructor (newName, expr) {
+    util.check(typeof newName === 'string',
+               `Expected string as new name`)
+    util.check(expr instanceof ExprBase,
+               `Expected expression`)
+    super('create', [], true, true)
+    this.newName = newName
+    this.expr = expr
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.newName === other.newName) &&
+      (this.expr.equal(other.expr))
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.newName}`)
+    return df.create(this.newName, this.expr)
+  }
+}
+
+/**
  * Get a dataset.
  * @param {string} name Name of dataset.
  */
@@ -61,7 +89,7 @@ class TransformData extends TransformBase {
   constructor (name) {
     util.check(typeof name === 'string',
                `Expected string`)
-    super('read', [], null, false, true)
+    super('read', [], false, true)
     this.name = name
   }
 
@@ -86,7 +114,7 @@ class TransformDrop extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('drop', [], null, true, true)
+    super('drop', [], true, true)
     this.columns = columns
   }
 
@@ -108,7 +136,7 @@ class TransformFilter extends TransformBase {
   constructor (expr) {
     util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super('filter', [], null, true, true)
+    super('filter', [], true, true)
     this.expr = expr
   }
 
@@ -124,6 +152,37 @@ class TransformFilter extends TransformBase {
 }
 
 /**
+ * Glue two tables together.
+ * @param {string} leftName Name of left table to wait for.
+ * @param {string} rightName Name of right table to wait for.
+ * @param {string} label Name of column to use for labels.
+ */
+class TransformGlue extends TransformBase {
+  constructor (leftName, rightName, label) {
+    super('glue', [leftName, rightName], false, true)
+    this.leftName = leftName
+    this.rightName = rightName
+    this.label = label
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.leftName === other.leftName) &&
+      (this.rightName === other.rightName) &&
+      (this.label === other.label)
+  }
+
+  run (env, df) {
+    env.appendLog('log', this.species)
+    util.check(df === null,
+               `Cannot provide input dataframe to glue`)
+    const left = env.getData(this.leftName)
+    const right = env.getData(this.rightName)
+    return left.glue(this.leftName, right, this.rightName, this.label)
+  }
+}
+
+/**
  * Group values.
  * @param {string[]} columns The columns that determine groups.
  */
@@ -131,7 +190,7 @@ class TransformGroupBy extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('groupBy', [], null, true, true)
+    super('groupBy', [], true, true)
     this.columns = columns
   }
 
@@ -154,7 +213,7 @@ class TransformGroupBy extends TransformBase {
  */
 class TransformJoin extends TransformBase {
   constructor (leftName, leftCol, rightName, rightCol) {
-    super('join', [leftName, rightName], null, false, true)
+    super('join', [leftName, rightName], false, true)
     this.leftName = leftName
     this.leftCol = leftCol
     this.rightName = rightName
@@ -181,34 +240,6 @@ class TransformJoin extends TransformBase {
 }
 
 /**
- * Create new columns.
- * @param {string} newName New column's name.
- * @param {function} expr Create new values.
- */
-class TransformMutate extends TransformBase {
-  constructor (newName, expr) {
-    util.check(typeof newName === 'string',
-               `Expected string as new name`)
-    util.check(expr instanceof ExprBase,
-               `Expected expression`)
-    super('mutate', [], null, true, true)
-    this.newName = newName
-    this.expr = expr
-  }
-
-  equal (other) {
-    return super.equal(other) &&
-      (this.newName === other.newName) &&
-      (this.expr.equal(other.expr))
-  }
-
-  run (env, df) {
-    env.appendLog('log', `${this.species} ${this.newName}`)
-    return df.mutate(this.newName, this.expr)
-  }
-}
-
-/**
  * Report that a result is available.
  * @param {string} label Name to use for reported value.
  */
@@ -216,7 +247,7 @@ class TransformReport extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
                `Expected string`)
-    super('report', [], label, true, false)
+    super('report', [], true, true)
     this.label = label
   }
 
@@ -227,6 +258,7 @@ class TransformReport extends TransformBase {
 
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.label}`)
+    env.setResult(this.label, df)
     return df
   }
 }
@@ -239,7 +271,7 @@ class TransformSelect extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('select', [], null, true, true)
+    super('select', [], true, true)
     this.columns = columns
   }
 
@@ -262,7 +294,7 @@ class TransformSequence extends TransformBase {
   constructor (newName, limit) {
     util.check(typeof newName === 'string',
                `Expected string as new name`)
-    super('sequence', [], null, true, true)
+    super('sequence', [], true, true)
     this.newName = newName
     this.limit = limit
   }
@@ -297,7 +329,7 @@ class TransformSort extends TransformBase {
                `Expected array of columns`)
     util.check(typeof reverse === 'boolean',
                `Expected Boolean`)
-    super('sort', [], null, true, true)
+    super('sort', [], true, true)
     this.columns = columns
     this.reverse = reverse
   }
@@ -325,7 +357,7 @@ class TransformSummarize extends TransformBase {
                `Unknown summarization operation ${action}`)
     util.check(typeof column === 'string',
                `Expected string as column name`)
-    super('summarize', [], null, true, true)
+    super('summarize', [], true, true)
     this.action = action
     this.column = column
   }
@@ -347,7 +379,7 @@ class TransformSummarize extends TransformBase {
  */
 class TransformUngroup extends TransformBase {
   constructor () {
-    super('ungroup', [], null, true, true)
+    super('ungroup', [], true, true)
   }
 
   run (env, df) {
@@ -364,7 +396,7 @@ class TransformUnique extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('unique', [], null, true, true)
+    super('unique', [], true, true)
     this.columns = columns
   }
 
@@ -387,7 +419,7 @@ class TransformPlot extends TransformBase {
   constructor (name, label, spec, fillin) {
     util.check(label && (typeof label === 'string'),
                `Must provide non-empty label`)
-    super(name, [], null, true, false)
+    super(name, [], true, true)
     this.label = label
     this.spec = Object.assign({}, spec, fillin, {name})
   }
@@ -396,6 +428,7 @@ class TransformPlot extends TransformBase {
     env.appendLog('log', `${this.species} ${this.label}`)
     this.spec.data.values = df.data
     env.setPlot(this.label, this.spec)
+    return df
   }
 }
 
@@ -510,25 +543,48 @@ class TransformHistogram extends TransformPlot {
  * @param {string} color Which column to use for color (if any).
  */
 class TransformScatter extends TransformPlot {
-  constructor (label, axisX, axisY, color) {
+  constructor (label, axisX, axisY, color, lm) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
     util.check((color === null) ||
                ((typeof color === 'string') && color),
                `Must provide null or non-empty string for color`)
+
     const spec = {
       data: {values: null},
-      mark: 'point',
-      encoding: {
-        x: {field: axisX, type: 'quantitative'},
-        y: {field: axisY, type: 'quantitative'}
+      layer: [
+        {
+          mark: {type: 'point', filled: true},
+          encoding: {
+            x: {field: axisX, type: 'quantitative'},
+            y: {field: axisY, type: 'quantitative'}
+          }
+        }
+      ]
+    }
+    if (lm) {
+      spec.layer[1] = {
+        mark: {type: 'line', color: 'firebrick'},
+        transform: [{regression: axisY, on: axisX}],
+        encoding: {
+          x: {field: axisX, type: 'quantitative'},
+          y: {field: axisY, type: 'quantitative'}
+        }
+      }
+      spec.layer[2] = {
+        transform: [
+          {regression: axisY, on: axisX, params: true},
+          {calculate: '"R²: "+format(datum.rSquared, ".2f")', as: 'R2'}
+        ],
+        mark: {type: 'text', color: 'firebrick', x: 'width', align: 'right', y: -5},
+        encoding: {text: {type: 'nominal', field: 'R2'}}
       }
     }
     if (color) {
-      spec.encoding.color = {field: color, type: 'nominal'}
+      spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
-    super('scatter', label, spec, {axisX, axisY, color})
+    super('scatter', label, spec, {axisX, axisY, color, lm})
   }
 }
 
@@ -541,7 +597,7 @@ class TransformScatter extends TransformPlot {
  */
 class TransformTTestOneSample extends TransformBase {
   constructor (label, colName, mean) {
-    super('ttest_one', [], null, true, false)
+    super('ttest_one', [], true, true)
     this.label = label
     this.colName = colName
     this.mean = mean
@@ -564,7 +620,7 @@ class TransformTTestOneSample extends TransformBase {
  */
 class TransformTTestPaired extends TransformBase {
   constructor (label, labelCol, valueCol) {
-    super('ttest_two', [], null, true, false)
+    super('ttest_two', [], true, true)
     this.label = label
     this.labelCol = labelCol
     this.valueCol = valueCol
@@ -594,12 +650,13 @@ class TransformTTestPaired extends TransformBase {
 module.exports = {
   FAMILY: FAMILY,
   base: TransformBase,
+  create: TransformCreate,
   data: TransformData,
   drop: TransformDrop,
   filter: TransformFilter,
+  glue: TransformGlue,
   groupBy: TransformGroupBy,
   join: TransformJoin,
-  mutate: TransformMutate,
   report: TransformReport,
   select: TransformSelect,
   sequence: TransformSequence,

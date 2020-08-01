@@ -8,7 +8,8 @@ aggregation
 :   A synonym for [summarize](#summarize).
 
 Boolean
-:   Either true or false (the name comes from the mathematician George Boole).
+:   A [logical](#logical) value that is either `true` or `false`.
+    The name comes from the mathematician George Boole.
 
 column
 :   Every column of a [table](#table) contains zero or more rows
@@ -47,7 +48,7 @@ group ID
     TidyBlocks automatically stores group IDs in a column called `_group_`.
 
 logical
-:   A synonym for [Boolean](#boolean).
+:   A value that is either `true` or `false`.
 
 missing value
 :   A hole in a dataset.
@@ -56,8 +57,8 @@ missing value
     but TidyBlocks treats them the same way.
 
 NA
-:   A missing value:
-    the abbreviation is short for "not available".
+:   A missing value.
+    (The abbreviation is short for "not available".)
 
 NaN
 :   Short for "Not a Number",
@@ -89,6 +90,10 @@ summarize
 table
 :   A set of [rows](#row) and [columns](#column) making up a single dataset.
     Most blocks in TidyBlocks create a new table from an existing one.
+
+text
+:   Data consisting of letters, digits, punctuation, spaces, and other characters.
+    The text `"123"` looks the same as the number 123, but is a different kind of value.
 
 timestamp
 :   A unique moment in time.

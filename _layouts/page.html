@@ -4,10 +4,9 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{this_title}}</title>
-    <link href="{{ '/static/trac.css' | relative_url }}" rel="stylesheet" type="text/css">
-    <link href="{{ '/static/site.css' | relative_url }}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ '/dist/css/base.min.css' | relative_url }}" type="text/css">
   </head>
-  <body>
+  <body class="jekyllBody">
     {% include nav.html %}
     <main>
     <h1>{{this_title}}</h1>

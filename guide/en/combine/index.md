@@ -6,13 +6,11 @@ headings:
   text: Join
 - id: glue
   text: Glue
-- id: notify
-  text: Notify
 ---
 
 ## Join
 
-<img class="block" src="{{page.permalink | append: 'join.png' | relative_url}}" alt="join block"/>
+<img class="block" src="{{page.permalink | append: 'join.svg' | relative_url}}" alt="join block"/>
 
 Join two tables by matching values in column X of table A
 to the values in column Y of table B.
@@ -45,14 +43,14 @@ then the final table contains rows for the matches 1 and 3:
 The new column <code>\_join\_</code> contains the values that matched,
 while the other columns appear as <code><em>table</em>\_<em>column</em></code>.
 
-- **left_table**: The name used to identify a table in a [notify](../combine/#notify) block.
+- **left_table**: The name used to identify a table in a [report](../transform/#report) block.
 - **left_column**: The column to join on from that table.
-- **right_table**: The name used to identify a table in a [notify](../combine/#notify) block.
+- **right_table**: The name used to identify a table in a [report](../transform/#report) block.
 - **right_column**: The column to join on from that table.
 
 ## Glue
 
-<img class="block" src="{{page.permalink | append: 'glue.png' | relative_url}}" alt="glue block"/>
+<img class="block" src="{{page.permalink | append: 'glue.svg' | relative_url}}" alt="glue block"/>
 
 Combine the rows of two tables to create a new table.
 The input tables must have the same number of columns,
@@ -83,17 +81,6 @@ then the final table contains:
 |   2 |   q2 |      B |
 |   3 |   q3 |      B |
 
-- **left_table**: The name used to identify a table in a [notify](../combine/#notify) block.
-- **right_table**: The name used to identify a table in a [notify](../combine/#notify) block.
+- **left_table**: The name used to identify a table in a [report](../combine/#report) block.
+- **right_table**: The name used to identify a table in a [report](../combine/#report) block.
 - **label**: The name of the column holding the row's source.
-
-## Notify
-
-<img class="block" src="{{page.permalink | append: 'notify.png' | relative_url}}" alt="notify block"/>
-
-This block must be the last in a stack.
-It notifies [join](../combine/#join) and [glue](../combine/#glue) blocks
-that data is ready to be combined.
-
-- **name**: The name used to identify the table.
-  Each notification must use a unique name.

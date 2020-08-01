@@ -3,7 +3,7 @@ permalink: /guide/en/stats/
 title: "Statistics"
 ---
 
-<img class="block" src="{{page.permalink | append: 'ttest_one.png' | relative_url}}" alt="ttest_one block"/>
+<img class="block" src="{{page.permalink | append: 'ttest_one.svg' | relative_url}}" alt="ttest_one block"/>
 
 Run a one-sample t-test.
 
@@ -11,7 +11,7 @@ Run a one-sample t-test.
 - **mean**: The mean to test against.
 - **significance**: The significance threshold.
 
-<img class="block" src="{{page.permalink | append: 'ttest_two.png' | relative_url}}" alt="ttest_two block"/>
+<img class="block" src="{{page.permalink | append: 'ttest_two.svg' | relative_url}}" alt="ttest_two block"/>
 
 Run a paired t-test.
 

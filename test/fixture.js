@@ -8,12 +8,39 @@ const Transform = require('../libs/transform')
 const DataFrame = require('../libs/dataframe')
 const UserInterface = require('../libs/gui')
 
+// Define all of our blocks.
+const blocks = require('../blocks/blocks')
+blocks.createBlocks()
+
+/**
+ * Create a workspace for block generation.
+ */
+const workspace = () => {
+  Blockly.Events.disable() // to stop it trying to create SVG
+  return new Blockly.Workspace({})
+}
+
+/**
+ * Make `lower` a sub-block in the named `field` of `upper`.
+ */
+const addSubBlock = (upper, field, lower) => {
+    const connection = upper.getInput(field).connection
+    connection.connect(lower.outputConnection)
+}
+
+/**
+ * Stack `upper` on top of `lower`.
+ */
+const stackBlocks = (upper, lower) => {
+  upper.nextConnection.connect(lower.previousConnection)
+}
+
 /**
  * Testing replacement for a transform (easier constructor).
  */
 class MockTransform extends Transform.base {
-  constructor (species, func, requires, produces, input, output) {
-    super(species, requires, produces, input, output)
+  constructor (species, func, requires, input, output) {
+    super(species, requires, input, output)
     this.func = func
   }
   run = (runner, df) => {
@@ -42,8 +69,6 @@ const pass = (runner, df) => df
 const TABLE = new DataFrame([{left: 1, right: 10},
                              {left: 2, right: 20}])
 
-const HEAD = new MockTransform('head', (runner, df) => TABLE,
-                               [], null, false, true)
 /*
  * Date testing.
  */
@@ -55,6 +80,9 @@ const CONCERT_STR = CONCERT.toISOString()
  */
 
 module.exports = {
+  workspace,
+  addSubBlock,
+  stackBlocks,
   MockTransform,
   CONCERT,
   CONCERT_STR,
@@ -95,10 +123,10 @@ module.exports = {
   ],
   COLORS: require('../data/colors'),
   TABLE,
-  HEAD,
-  MIDDLE: new MockTransform('middle', pass, [], null, true, true),
-  TAIL: new MockTransform('tail', pass, [], null, true, false),
-  TAIL_REPORT: new MockTransform('tailReport', pass, [], 'keyword', true, false),
+  HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, true),
+  MIDDLE: new MockTransform('middle', pass, [], true, true),
+  REPORT: new Transform.report('keyword'),
+  NO_OUTPUT: new MockTransform('no_output', pass, [], true, false),
   pass,
   TestInterface
 }

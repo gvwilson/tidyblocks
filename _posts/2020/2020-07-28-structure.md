@@ -24,8 +24,9 @@ and generates a plot:
         that holds the TidyBlocks user interface object.
     3.  The body of the page defines a `div` with the ID `"root"`.
         This is where the Blockly workspace is put.
-    4.  The body also contains a chunk of XML that specifies what blocks to make available (organized into categories).
-        Getting this out of `./index.html` and into code is [on our to-do list](https://github.com/tidyblocks/briq/issues/64).
+    4.  The XML defining which blocks to provide (and what categories to put them in)
+        used to be in `./index.html` but is now in `./blocks/blocks.js`.
+        We will talk about this and other architectural issues in an upcoming post.
 
 -   `./index.js` is where our JavaScript starts.
     It defines a class called `ReactInterface` that extends the generic `UserInterface` class

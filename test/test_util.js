@@ -41,6 +41,12 @@ describe('basic functionality', () => {
     done()
   })
 
+  it('checks that objects are correctly equal', (done) => {
+    assert(util.equal(util.MISSING, util.MISSING),
+           `Expected missing to be equal to missing`)
+    done()
+  })
+
   it('checks that types are util.MISSING or equal', (done) => {
     const firstDate = new Date('1983-12-02')
     util.checkTypeEqual(1, 2)

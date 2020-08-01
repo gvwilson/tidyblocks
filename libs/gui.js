@@ -7,7 +7,8 @@ const Restore = require('./persist')
 const Env = require('./env')
 const blocks = require('../blocks/blocks')
 
-// Require default datasets at the top level to ensure bundling picks them up.
+// Load default datasets here rather than inside a function to ensure that
+// bundling picks them up.
 const COLORS = require('../data/colors')
 const EARTHQUAKES = require('../data/earthquakes')
 const PENGUINS = require('../data/penguins')
@@ -37,28 +38,26 @@ class UserInterface {
   }
 
   /**
-   * Get the JSON string representation of the workspace contents.
+   * Get the JSON representation of the workspace contents. If an environment is
+   * present, log a count of stacks that were not runnable.
    */
   getJSON () {
-    return Blockly.TidyBlocks.workspaceToCode(this.workspace)
-  }
-
-  /**
-   * Get the object representation of the current program.
-   */
-  getProgram () {
-    const code = this.getJSON()
+    const {code, strayCount} = Blockly.TidyBlocks.workspaceToCode(this.workspace)
+    if ((strayCount > 0) && (this.env !== null)) {
+      this.env.appendLog('warn', `${strayCount} stray stacks found`)
+    }
     const json = JSON.parse(code)
-    const converter = new Restore()
-    return converter.program(json)
+    return json
   }
 
   /**
    * Run the current program, leaving state in 'this.env'.
    */
   runProgram () {
-    const program = this.getProgram()
-    this.env = new Env(this)
+    this.env = new Env(this) // Before getJSON so that method can log strays.
+    const json = this.getJSON()
+    const converter = new Restore()
+    const program = converter.program(json)
     program.run(this.env)
   }
 

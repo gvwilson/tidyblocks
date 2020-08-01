@@ -1,8 +1,7 @@
 'use strict'
 
-const assert = require('assert')
-const ReactDOM = require('react-dom')
 const React = require('react')
+const ReactDOM = require('react-dom')
 const Blockly = require('blockly/blockly_compressed')
 
 const blocks = require('./blocks/blocks')
@@ -11,45 +10,35 @@ const UserInterface = require('./libs/gui')
 const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 
 /**
- * Define the actual interface (using React). This is done here so that we don't
- * need to support React in unit testing.
+ * Define the bridge between React and the rest of our code. Encapsulating this
+ * here means that our tests don't have to depend on React.
  */
 class ReactInterface extends UserInterface {
   /**
    * Build user interface object.
-   * @param rootId HTML ID of root element.
-   * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
+   * @param {string} rootId HTML ID of root element.
    */
-  constructor (rootId, toolboxId) {
+  constructor (rootId) {
     super()
 
     // Create the Blockly settings.
-    const toolbox = document.getElementById(toolboxId)
-    assert(toolbox,
-           `No toolbox found with ID ${toolboxId}`)
-    const settings = this._createSettings(toolbox)
+    const settings = this._createSettings()
 
-    // Get a string of the toolbox XML, this'll get parsed within the React app.
-    const serializer = new XMLSerializer()
-    const toolboxString = serializer.serializeToString(toolbox)
-
-    // Create an environment so that the React app can get at the pre-loaded
-    // datasets.  Make sure the environment points back at the UI object so that
-    // we can get at datasets.
+    // Create an environment so the React app can get the pre-loaded datasets.
     const env = new Env(this)
 
-    // Render React, saving the React app.
-    this.app = ReactDOM.render(
-      <TidyBlocksApp settings={settings} toolbox={toolboxString} initialEnv={env}/>,
+    // Render React.
+    const app = ReactDOM.render(
+      <TidyBlocksApp settings={settings} toolbox={blocks.XML_CONFIG} initialEnv={env}/>,
       document.getElementById(rootId)
     )
 
-    // The workspace.
-    this.workspace = this.app.getWorkspace().state.workspace
+    // Save a reference to the workspace (needed in the parent class).
+    this.workspace = app.getWorkspace().state.workspace
   }
 
   /**
-   * Get the XML representation of the workspace contents.
+   * Get the XML representation of the workspace.
    */
   getXML () {
     const xml = Blockly.Xml.workspaceToDom(this.workspace)
@@ -57,14 +46,11 @@ class ReactInterface extends UserInterface {
   }
 
   /**
-   * Create the JSON settings used to initialize the workspace.  Requires the
-   * DOM element containing the block definitions.
-   * @param toolboxId XML element containing toolbox spec.
+   * Create the JSON settings used to initialize the workspace.
    * @returns JSON settings object.
    */
-  _createSettings (toolbox) {
+  _createSettings () {
     return {
-      toolbox: toolbox,
       theme: blocks.THEME,
       zoom: {
         controls: true,
@@ -79,13 +65,11 @@ class ReactInterface extends UserInterface {
 }
 
 /**
- * Set up the workspace given the ID of the elements that will contain
- * the UI and of the element that contains the block specs.
- * @param rootId HTML ID of root element.
- * @param toolboxId HTML ID of 'xml' element containing toolbox spec.
+ * Initialize the interface.
+ * @param rootId {string} HTML ID of element that will contain workspace.
  */
-const setup = (rootId, toolboxId) => {
-  return new ReactInterface(rootId, toolboxId)
+const setup = (rootId) => {
+  return new ReactInterface(rootId)
 }
 
 module.exports = {

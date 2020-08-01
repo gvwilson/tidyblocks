@@ -3,12 +3,53 @@
 const Blockly = require('blockly/blockly_compressed')
 
 const {
-  formatMultipleColumnNames,
+  ORDER_NONE,
   valueToCode
 } = require('./helpers')
 
+/**
+ * Helper function to Turn a string containing comma-separated column names into
+ * an array of JavaScript strings.
+ */
+const _formatMultiColNames = (raw) => {
+  const joined = raw
+        .split(',')
+        .map(c => c.trim())
+        .filter(c => (c.length > 0))
+        .map(c => `"${c}"`)
+        .join(', ')
+  return `[${joined}]`
+}
+
+/**
+ * Define transform blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
+    // Create
+    {
+      type: 'transform_create',
+      message0: 'Create %1 %2',
+      args0: [
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: 'new_column'
+        },
+        {
+          type: 'input_value',
+          name: 'VALUE'
+        }
+      ],
+      inputsInline: true,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: 'create new column from existing columns',
+      helpUrl: '',
+      extensions: ['validate_COLUMN']
+    },
+
     // Drop
     {
       type: 'transform_drop',
@@ -65,30 +106,6 @@ const setup = () => {
       tooltip: 'group data by values in columns',
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
-    },
-
-    // Mutate
-    {
-      type: 'transform_mutate',
-      message0: 'Mutate %1 %2',
-      args0: [
-        {
-          type: 'field_input',
-          name: 'COLUMN',
-          text: 'new_column'
-        },
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
-      inputsInline: true,
-      previousStatement: null,
-      nextStatement: null,
-      style: 'transform_block',
-      tooltip: 'create new column from existing columns',
-      helpUrl: '',
-      extensions: ['validate_COLUMN']
     },
 
     // Report
@@ -225,29 +242,29 @@ const setup = () => {
     }
   ])
 
+  // Create
+  Blockly.TidyBlocks['transform_create'] = (block) => {
+    const column = block.getFieldValue('COLUMN')
+    const value = valueToCode(block, 'VALUE')
+    return `["@transform", "create", "${column}", ${value}]`
+  }
+
   // Drop
   Blockly.TidyBlocks['transform_drop'] = (block) => {
-    const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "drop", ${columns}]`
   }
 
   // Filter
   Blockly.TidyBlocks['transform_filter'] = (block) => {
-    const expr = valueToCode(block, 'TEST', Blockly.TidyBlocks.ORDER_NONE)
+    const expr = valueToCode(block, 'TEST')
     return `["@transform", "filter", ${expr}]`
   }
 
   // Group
   Blockly.TidyBlocks['transform_groupBy'] = (block) => {
-    const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "groupBy", ${columns}]`
-  }
-
-  // Mutate
-  Blockly.TidyBlocks['transform_mutate'] = (block) => {
-    const column = block.getFieldValue('COLUMN')
-    const value = valueToCode(block, 'VALUE', Blockly.TidyBlocks.ORDER_NONE)
-    return `["@transform", "mutate", "${column}", ${value}]`
   }
 
   // Report
@@ -258,13 +275,13 @@ const setup = () => {
 
   // Select
   Blockly.TidyBlocks['transform_select'] = (block) => {
-    const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "select", ${columns}]`
   }
 
   // Sort
   Blockly.TidyBlocks['transform_sort'] = (block) => {
-    const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
     return `["@transform", "sort", ${columns}, ${descending}]`
   }
@@ -283,7 +300,7 @@ const setup = () => {
 
   // Unique
   Blockly.TidyBlocks['transform_unique'] = (block) => {
-    const columns = formatMultipleColumnNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "unique", ${columns}]`
   }
 }

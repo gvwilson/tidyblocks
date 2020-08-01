@@ -2,6 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+/**
+ * Define plotting blocks.
+ */
 const setup = () => {
   Blockly.defineBlocksWithJsonArray([
     // Bar plot
@@ -122,7 +125,7 @@ const setup = () => {
     // Scatter plot
     {
       type: 'plot_scatter',
-      message0: 'Scatter %1 %2 %3 %4',
+      message0: 'Scatter %1 %2 %3 %4 Add Line? %5',
       args0: [
         {
           type: 'field_input',
@@ -143,6 +146,11 @@ const setup = () => {
           type: 'field_input',
           name: 'COLOR',
           text: 'color'
+        },
+        {
+          type: 'field_checkbox',
+          name: 'REGRESSION',
+          checked: false
         }
       ],
       inputsInline: true,
@@ -192,7 +200,8 @@ const setup = () => {
     const xAxis = block.getFieldValue('X_AXIS')
     const yAxis = block.getFieldValue('Y_AXIS')
     const color = block.getFieldValue('COLOR')
-    return `["@transform", "scatter", "${name}", "${xAxis}", "${yAxis}", "${color}"]`
+    const lm = (block.getFieldValue('REGRESSION') === 'TRUE')
+    return `["@transform", "scatter", "${name}", "${xAxis}", "${yAxis}", "${color}", ${lm}]`
   }
 }
 

@@ -16,7 +16,7 @@ headings:
 
 ## Bar
 
-<img class="block" src="{{page.permalink | append: 'bar.png' | relative_url}}" alt="bar block"/>
+<img class="block" src="{{page.permalink | append: 'bar.svg' | relative_url}}" alt="bar block"/>
 
 The bar block makes the height of the bar proportional to the number of cases in each group.
 A bar chart uses height to represent a value, and so the base of the bar must always be shown to produce a valid visual comparison.
@@ -26,7 +26,7 @@ A bar chart uses height to represent a value, and so the base of the bar must al
 
 ## Box
 
-<img class="block" src="{{page.permalink | append: 'box.png' | relative_url}}" alt="box block"/>
+<img class="block" src="{{page.permalink | append: 'box.svg' | relative_url}}" alt="box block"/>
 
 The Tukey box plot block summarizes a distribution of quantitative values using a set of summary statistics.
 The middle tick in the box represents the median.
@@ -40,7 +40,7 @@ Any outlier points beyond the whisker are displayed using point marks.
 
 ## Dot
 
-<img class="block" src="{{page.permalink | append: 'dot.png' | relative_url}}" alt="dot block"/>
+<img class="block" src="{{page.permalink | append: 'dot.svg' | relative_url}}" alt="dot block"/>
 
 Display a dot plot.
 
@@ -48,7 +48,7 @@ Display a dot plot.
 
 ## Histogram
 
-<img class="block" src="{{page.permalink | append: 'histogram.png' | relative_url}}" alt="histogram block"/>
+<img class="block" src="{{page.permalink | append: 'histogram.svg' | relative_url}}" alt="histogram block"/>
 
 Visualise the distribution of a single continuous variable
 by dividing the X axis into bins
@@ -60,10 +60,11 @@ Histograms display the counts with bars.
 
 ## Scatter
 
-<img class="block" src="{{page.permalink | append: 'scatter.png' | relative_url}}" alt="scatter block"/>
+<img class="block" src="{{page.permalink | append: 'scatter.svg' | relative_url}}" alt="scatter block"/>
 
 Display a scatter plot.
 
 - **X_axis**: Which column to use for X coordinates.
 - **Y_axis**: Which column to use for Y coordinates.
 - **color**: Which column to use for colors (optional).
+- **Add line**: Show a linear regression line?

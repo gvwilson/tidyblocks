@@ -1,7 +1,6 @@
 'use strict'
 
 const util = require('./util')
-const DataFrame = require('./dataframe')
 const Env = require('./env')
 const Pipeline = require('./pipeline')
 
@@ -11,7 +10,13 @@ const Pipeline = require('./pipeline')
 class Program {
   /**
    * Create a runnable program with some pipelines.
-   * The environment is filled in when the program runs.
+   * - The environment `env` is filled in when the program runs.
+   * - The list of pipelines is copied from the input arguments.
+   * - The runnable queue contains pipelines that are runnable (have no
+   *   unresolved dependencies).
+   * - `waiting` maps sets of dependency names to runnable pipelines, and is
+   *   used to keep track of pipelines that are waiting for other things to
+   *   finish.
    */
   constructor (...pipelines) {
     this.env = null
@@ -23,7 +28,9 @@ class Program {
   }
 
   /**
-   * Check equality with another program (primarily for testing).
+   * Check equality with another program.
+   * @param {Program} other The thing to check against.
+   * @returns True or false.
    */
   equal (other) {
     util.check(other instanceof Program,
@@ -33,19 +40,14 @@ class Program {
   }
 
   /**
-   * Notify the manager that a named pipeline has finished running.
-   * This enqueues pipeline functions to run if their dependencies are satisfied.
-   * @param {string} label Name of the pipeline that just completed.
-   * @param {Object} data The DataFrame produced by the pipeline.
+   * Notify the program that a named result is now available.  This enqueues
+   * pipelines for running if all of their dependencies are now satisfied.
+   * @param {string} label Name of the result that was just produced.
    */
-  notify (label, data) {
+  notify (label) {
     util.check(label && (typeof label === 'string'),
                `Cannot notify with empty label`)
-    util.check(data instanceof DataFrame,
-               `Data must be a dataframe`)
-    util.check(this.env instanceof Env,
-               `Program must have non-null environment when notifying`)
-    this.env.setResult(label, data)
+    // Figure out what is now runnable.
     const toRemove = []
     this.waiting.forEach((dependencies, pipeline) => {
       dependencies.delete(label)
@@ -54,11 +56,14 @@ class Program {
         toRemove.push(pipeline)
       }
     })
+    // Delete things that are moving to the runnable queue _after_ the first
+    // `forEach` completes because we can't safely delete while iterating.
     toRemove.forEach(pipeline => this.waiting.delete(pipeline))
   }
 
   /**
-   * Register a new pipeline function with what it depends on and what it produces.
+   * Register a pipeline. If it doesn't depend on anything, add it to the run
+   * queue. If it has dependencies, add it to `waiting` instead.
    * @param {Pipeline} pipeline What to register.
    */
   register (pipeline) {
@@ -75,18 +80,28 @@ class Program {
   }
 
   /**
-   * Run all pipelines in an order that respects dependencies within an environment.
-   * This depends on `notify` to add pipelines to the queue.
+   * Run all pipelines in an order that respects dependencies.
+   * @param {Env} env The runtime environment of the program.
    */
   run (env) {
     this.env = env
     try {
+      // Run until queue is empty.
       while (this.queue.length > 0) {
         const pipeline = this.queue.shift()
-        const {label, data} = pipeline.run(this.env)
-        if (label) {
-          this.notify(label, data)
-        }
+        const previous = new Set(this.env.results.keys())
+        pipeline.run(this.env)
+        Array.from(this.env.results.keys())
+          .filter(key => !previous.has(key))
+          .forEach(key => this.notify(key))
+      }
+      // Report how many things were not run.
+      if (this.waiting.size > 0) {
+        const unseen = new Set()
+        this.waiting.forEach(keySet => {
+          Array.from(keySet).forEach(key => unseen.add(key))
+        })
+        env.appendLog('warn', `${this.waiting.size} pipeline(s) left waiting on ${Array.from(unseen).join(', ')}`)
       }
     }
     catch (err) {
@@ -96,7 +111,7 @@ class Program {
 }
 
 /**
- * Indicate that persisted JSON is program.
+ * Indicate that persisted JSON is a program.
  */
 Program.FAMILY = '@program'
 
