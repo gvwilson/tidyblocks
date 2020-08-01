@@ -225,7 +225,6 @@ class OpToDatetime extends OpConvertBase {
   run (row, i) {
     const value = this.arg.run(row, i)
     return util.makeDate(value)
-    return result
   }
 }
 
@@ -246,7 +245,6 @@ class OpToNumber extends OpConvertBase {
   run (row, i) {
     let value = this.arg.run(row, i)
     return util.makeNumber(value)
-    return value
   }
 }
 

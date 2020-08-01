@@ -26,12 +26,13 @@ Blockly.TidyBlocks = new Blockly.Generator('TidyBlocks')
  * @returns Stringified JSON representation of the workspace.
  */
 Blockly.TidyBlocks.workspaceToCode = (workspace) => {
-  const pipelines = workspace
-        .getTopBlocks()
-        .filter(block => (block.hat === 'cap'))
-        .map(top => _makePipeline(top))
+  const allTopBlocks = workspace.getTopBlocks()
+  const cappedBlocks = allTopBlocks.filter(block => (block.hat === 'cap'))
+  const strayCount = allTopBlocks.length - cappedBlocks.length
+  const pipelines = cappedBlocks.map(top => _makePipeline(top))
   pipelines.unshift('"@program"')
-  return `[${pipelines}]`
+  const code = `[${pipelines}]`
+  return {code, strayCount}
 }
 
 /**

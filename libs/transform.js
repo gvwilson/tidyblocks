@@ -152,6 +152,37 @@ class TransformFilter extends TransformBase {
 }
 
 /**
+ * Glue two tables together.
+ * @param {string} leftName Name of left table to wait for.
+ * @param {string} rightName Name of right table to wait for.
+ * @param {string} label Name of column to use for labels.
+ */
+class TransformGlue extends TransformBase {
+  constructor (leftName, rightName, label) {
+    super('glue', [leftName, rightName], false, true)
+    this.leftName = leftName
+    this.rightName = rightName
+    this.label = label
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.leftName === other.leftName) &&
+      (this.rightName === other.rightName) &&
+      (this.label === other.label)
+  }
+
+  run (env, df) {
+    env.appendLog('log', this.species)
+    util.check(df === null,
+               `Cannot provide input dataframe to glue`)
+    const left = env.getData(this.leftName)
+    const right = env.getData(this.rightName)
+    return left.glue(this.leftName, right, this.rightName, this.label)
+  }
+}
+
+/**
  * Group values.
  * @param {string[]} columns The columns that determine groups.
  */
@@ -623,6 +654,7 @@ module.exports = {
   data: TransformData,
   drop: TransformDrop,
   filter: TransformFilter,
+  glue: TransformGlue,
   groupBy: TransformGroupBy,
   join: TransformJoin,
   report: TransformReport,

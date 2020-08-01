@@ -86,6 +86,7 @@ class Program {
   run (env) {
     this.env = env
     try {
+      // Run until queue is empty.
       while (this.queue.length > 0) {
         const pipeline = this.queue.shift()
         const previous = new Set(this.env.results.keys())
@@ -93,6 +94,14 @@ class Program {
         Array.from(this.env.results.keys())
           .filter(key => !previous.has(key))
           .forEach(key => this.notify(key))
+      }
+      // Report how many things were not run.
+      if (this.waiting.size > 0) {
+        const unseen = new Set()
+        this.waiting.forEach(keySet => {
+          Array.from(keySet).forEach(key => unseen.add(key))
+        })
+        env.appendLog('warn', `${this.waiting.size} pipeline(s) left waiting on ${Array.from(unseen).join(', ')}`)
       }
     }
     catch (err) {
