@@ -2,6 +2,7 @@
 @import '../css/react-data-grid';
 @import 'material-ui-custom';
 @import 'colours';
+@import 'animate';
 
 // Imports for jekyll documentation/blog pages (not used directly on the core
 // Tidyblocks app.
@@ -49,7 +50,7 @@ body {
 }
 
 $dotDiameter: 4px;
-.dotIndicator{
+.dotPadding, .dotIndicator{
   display: inline-block;
   padding: $dotDiameter;
   margin-left: 10px;
@@ -73,7 +74,11 @@ $dotDiameter: 4px;
   background: $errorRed;
 }
 
-
+.tabWrapper{
+  div{
+    display: inline;
+  }
+}
 .splitterBottomPane {
   z-index: 3;
 }

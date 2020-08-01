@@ -1,9 +1,7 @@
 import ReactDOM from 'react-dom'
 import React, {useState} from 'react'
-import PropTypes from 'prop-types'
 import ReactBlocklyComponent from 'react-blockly'
 import parseWorkspaceXml from 'react-blockly/src/BlocklyHelper.jsx'
-import DataGrid from 'react-data-grid'
 import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
@@ -12,107 +10,24 @@ import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
-import { withStyles, makeStyles, useStyles, styled } from '@material-ui/core/styles'
+import { withStyles, makeStyles, useStyles,
+  styled } from '@material-ui/core/styles'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import Blockly from 'blockly/blockly_compressed'
-import {csvToTable} from '../util'
-import DataFrame from '../dataframe'
 import Splitter from 'm-react-splitters'
 import 'm-react-splitters/lib/splitters.css'
-import Tooltip from '@material-ui/core/Tooltip'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWindowMaximize, faWindowMinimize, faWindowRestore, faChartBar, faTable } from '@fortawesome/free-solid-svg-icons'
-import { MenuBar } from './menuBar.jsx'
-import { SaveCsvFormDialog, SaveWorkspaceFormDialog, SaveSvgFormDialog } from './saveDialog.jsx'
-import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 
-const TAB_HEIGHT = '34px'
-const TAB_WIDTH = '130px'
+import {csvToTable} from '../util'
+import DataFrame from '../dataframe'
+import { MenuBar } from './menuBar.jsx'
+import { SaveCsvFormDialog, SaveWorkspaceFormDialog,
+  SaveSvgFormDialog } from './saveDialog.jsx'
+import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
+import { TabSelectionBar, TabPanels } from './tabs.jsx'
+import { theme } from './theme.jsx'
+
 const DATA_USER = 'user'
 const DATA_REPORT = 'results'
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#1C313A',
-      light: '#455a64',
-      dark: '#000914',
-      contrastText: "#ffffff"
-    },
-    secondary: {
-      light: '#2b313a',
-      main: '#000914',
-      dark: '#000000',
-      contrastText: '#ffffff',
-    },
-  },
-  overrides: {
-    MuiTabs: {
-      root: {
-        minHeight: TAB_HEIGHT,
-        height: TAB_HEIGHT
-      },
-      indicator: {
-        display: 'flex',
-        justifyContent: 'center',
-        backgroundColor: '#b1b4b5'
-      }
-    },
-    MuiTab: {
-      root: {
-        minHeight: TAB_HEIGHT,
-        height: TAB_HEIGHT,
-        minWidth: TAB_WIDTH + " !important",
-      },
-      wrapper: {
-        fontSize: '12px'
-      }
-    },
-    MuiPaper: {
-      root: {
-        backgroundColor: '#f5f5f5',
-        padding: '0px'
-      }
-    }
-  },
-  props: {
-    MuiButtonBase: {
-      disableRipple: true,
-    },
-  }
-})
-
-const TabPanel = (props) => {
-  const { children, value, index, ...other } = props
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-force-tabpanel-${index}`}
-      aria-labelledby={`scrollable-force-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography component={"div"}>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  )
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-}
-
-const a11yProps = (index) => {
-  return {
-    id: `scrollable-force-tab-${index}`,
-    'aria-controls': `scrollable-force-tabpanel-${index}`,
-  }
-}
 
 const createToolboxCategories = (props) => {
   const categories = parseWorkspaceXml(props.toolbox)
@@ -124,39 +39,6 @@ const createToolboxCategories = (props) => {
     }
   })
   return categories
-}
-
-function TabHeader (props) {
-  return(
-    <Paper>
-    <Grid container alignContent="center" alignItems="center" spacing={0}>
-      <Grid item xs={7}>
-        <Grid container spacing={0}>
-          {props.selectDropdown}
-        </Grid>
-      </Grid>
-      <Grid item xs={5}>
-        <Grid container justify="flex-end" spacing={1}>
-          <Tooltip title={"Minimize Panel"}>
-            <Grid item className="resizeIconGrid" onClick={props.minimizePanel}>
-              <FontAwesomeIcon className="resizeIcon"icon={faWindowMinimize} />
-            </Grid>
-          </Tooltip>
-          <Tooltip title={"Maximize Panel"}>
-            <Grid item className="resizeIconGrid" onClick={props.maximizePanel}>
-              <FontAwesomeIcon className="resizeIcon"icon={faWindowMaximize} />
-            </Grid>
-          </Tooltip>
-          <Tooltip title={"Restore Panel"}>
-            <Grid item className="resizeIconGrid" onClick={props.restorePanel}>
-              <FontAwesomeIcon className="resizeIcon"icon={faWindowRestore} />
-            </Grid>
-          </Tooltip>
-        </Grid>
-      </Grid>
-    </Grid>
-    </Paper>
-  )
 }
 
 // The main TidyBlocks App UI. Contains resizable panes for the Blockly section,
@@ -656,6 +538,14 @@ export class TidyBlocksApp extends React.Component {
       onChange={this.changeStats} value={this.state.activeStatsOption}/>
     const plotDropdown = <PlotTabSelect options={this.state.plotOptions}
       onChange={this.changePlot} value={this.state.activePlotOption}/>
+    let consoleDotClass = "dotIndicator"
+    if (this.state.tabUpdated.console == this.state.CONSOLE_ERROR){
+      consoleDotClass = "dotIndicator errorDotIndicator"
+    } else if (this.state.tabUpdated.console == this.state.CONSOLE_WARNING){
+      consoleDotClass = "dotIndicator warningDotIndicator"
+    } else if (this.state.tabUpdated.console == this.state.CONSOLE_SUCCESS){
+      consoleDotClass = "dotIndicator successDotIndicator"
+    }
 
     return (
       <div className="splitPaneWrapper">
@@ -704,137 +594,34 @@ export class TidyBlocksApp extends React.Component {
               <div className="topRightPane">
                 <div className={classes.root}>
                   <AppBar position="static" color="default" component={'span'}>
-                    <Tabs component={'span'}
-                      value={this.state.tabValue}
-                      onChange={this.handleTabChange}
-                      variant="scrollable"
-                      scrollButtons="on"
-                      indicatorColor="primary"
-                      textColor="primary"
-                      >
-                      <Tab {...a11yProps(this.state.DATA_TAB_INDEX)}
-                        label={
-                          <p>
-                            Data
-                            {this.state.tabUpdated.data &&
-                              <span className="dotIndicator defaultDotIndicator"></span>
-                            }
-                          </p>
-                        }/>
-                      <Tab {...a11yProps(this.state.STATS_TAB_INDEX)}
-                        label={
-                          <p>
-                            Stats
-                            {this.state.tabUpdated.stats &&
-                              <span className="dotIndicator defaultDotIndicator"></span>
-                            }
-                          </p>
-                        }/>
-                      <Tab {...a11yProps(this.state.PLOT_TAB_INDEX)}
-                        label={
-                          <p>
-                            Plot
-                            {this.state.tabUpdated.plot &&
-                              <span className="dotIndicator defaultDotIndicator"></span>
-                            }
-                          </p>
-                        }/>
-                      <Tab {...a11yProps(3)}
-                        label={
-                          <p>
-                            Console
-                            {this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_ERROR &&
-                              <span className="dotIndicator errorDotIndicator"></span>
-                            }
-                            { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_SUCCESS &&
-                              <span className="dotIndicator successDotIndicator"></span>
-                            }
-                            { this.state.tabUpdated.console && this.state.tabUpdated.console == this.state.CONSOLE_WARNING &&
-                              <span className="dotIndicator warningDotIndicator"></span>
-                            }
-                          </p>
-                        }/>
-                    </Tabs>
+                    <TabSelectionBar
+                      tabValue={this.state.tabValue}
+                      handleTabChange={this.handleTabChange}
+                      dataIndex={this.state.DATA_TAB_INDEX}
+                      statsIndex={this.state.STATS_TAB_INDEX}
+                      plotIndex={this.state.PLOT_TAB_INDEX}
+                      tabUpdated={this.state.tabUpdated}
+                      consoleDotClass={consoleDotClass}/>
                   </AppBar>
-                  <TabPanel value={this.state.tabValue} index={0} component="div">
-                    <TabHeader
-                      maximizePanel={this.maximizePanel}
-                      minimizePanel={this.minimizePanel}
-                      restorePanel={this.restorePanel}
-                      selectDropdown={dataDropdown}/>
-                    <div className="relativeWrapper">
-                      <div className="">
-                        <div className="dataWrapper">
-                          {this.state.dataColumns &&
-                            <DataGrid
-                              ref={this.dataGridRef}
-                              columns={this.state.dataColumns}
-                              rows={this.state.data}
-                              enableCellAutoFocus={false}
-                              height={this.state.topRightPaneHeight}
-                              onGridSort={this.sortRows}
-                              />
-                          }
-                        </div>
-                      </div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value={this.state.tabValue} index={1}>
-                    <TabHeader maximizePanel={this.maximizePanel}
-                      minimizePanel={this.minimizePanel}
-                      restorePanel={this.restorePanel}
-                      selectDropdown={statsDropdown}/>
-                      {this.state.stats ?
-                        <div className="relativeWrapper">
-                          <div className="absoluteWrapper">
-                            <div className="dataWrapper">
-                              <DataGrid
-                                columns={this.state.statsColumns}
-                                rows={this.state.stats}
-                                enableCellAutoFocus={false}
-                                height={this.state.topRightPaneHeight}
-                                onGridSort={this.sortRows}
-                                />
-                            </div>
-                          </div>
-                        </div>
-                      :
-                        <div className="relativeWrapper">
-                          <div className="emptyPanelWrapper">
-                            <FontAwesomeIcon className="panelIcon"icon={faTable} />
-                            <p className="emptyPanelText">You aren't currently displaying any stats.</p>
-                            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
-                            </p>
-                          </div>
-                        </div>
-                      }
-                  </TabPanel>
-                  <TabPanel value={this.state.tabValue} index={2} component="div">
-                    <TabHeader maximizePanel={this.maximizePanel}
-                      minimizePanel={this.minimizePanel}
-                      restorePanel={this.restorePanel}
-                      selectDropdown={plotDropdown}/>
-                    <div className="plotWrapper">
-                      { !this.state.plotData &&
-                        <div className="relativeWrapper">
-                          <div className="emptyPanelWrapper">
-                            <FontAwesomeIcon className="panelIcon"icon={faChartBar} />
-                            <p className="emptyPanelText">You aren't currently displaying any plots.</p>
-                            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
-                            </p>
-                          </div>
-                        </div>
-                      }
-                      <div id="plotOutput" ref={this.plotOutputRef}></div>
-                    </div>
-                  </TabPanel>
-                  <TabPanel value={this.state.tabValue} index={3}>
-                    <TabHeader maximizePanel={this.maximizePanel}
-                      minimizePanel={this.minimizePanel}
-                      restorePanel={this.restorePanel}
-                      />
-                    {logMessageList}
-                  </TabPanel>
+                  <TabPanels
+                    tabValue={this.state.tabValue}
+                    minimizePanel={this.minimizePanel}
+                    restorePanel={this.restorePanel}
+                    maximizePanel={this.maximizePanel}
+                    dataDropdown={dataDropdown}
+                    statsDropdown={statsDropdown}
+                    plotDropdown={plotDropdown}
+                    plotOutputRef={this.plotOutputRef}
+                    logMessagesList={logMessageList}
+                    dataColumns={this.state.dataColumns}
+                    dataGridRef={this.dataGridRef}
+                    data={this.state.data}
+                    topRightPaneHeight={this.state.topRightPaneHeight}
+                    sortRows={this.state.sortRows}
+                    stats={this.state.stats}
+                    statsColumns={this.state.statsColumns}
+                    plotData={this.state.plotData}
+                  />
                 </div>
               </div>
           </Splitter>
