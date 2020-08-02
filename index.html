@@ -1,10 +1,16 @@
+---
+# We use jekyll to control whether to serve production files or not. These are
+# built and copied over to dist_production using Github Actions.
+layout: null
+---
+
 <html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>TidyBlocks</title>
-    {{% if jekyll.environment == "production" %}
+    {% if jekyll.environment == "production" %}
       <link rel="stylesheet" href="./dist_production/css/base.min.css">
       <script src="./dist_production/tidyblocks.js"></script>
     {% else %}
