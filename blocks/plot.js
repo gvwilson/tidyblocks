@@ -3,36 +3,98 @@
 const Blockly = require('blockly/blockly_compressed')
 
 /**
- * Define plotting blocks.
+ * Lookup table for message strings.
  */
-const setup = () => {
+const MSG = {
+  name: {
+    en: 'name'
+  },
+  x_axis: {
+    en: 'X axis'
+  },
+  y_axis: {
+    en: 'Y axis'
+  },
+  plot_bar: {
+    message0: {
+      en: 'Bar %1 %2 %3'
+    },
+    tooltip: {
+      en: 'create bar plot'
+    }
+  },
+  plot_box: {
+    message0: {
+      en: 'Box %1 %2 %3'
+    },
+    tooltip: {
+      en: 'create box plot'
+    }
+  },
+  plot_dot: {
+    message0: {
+      en: 'Dot %1 %2'
+    },
+    tooltip: {
+      en: 'create dot plot'
+    }
+  },
+  plot_histogram: {
+    message0: {
+      en: 'Histogram %1 %2 %3'
+    },
+    column: {
+      en: 'column'
+    },
+    tooltip: {
+      en: 'create histogram'
+    }
+  },
+  plot_scatter: {
+    message0: {
+      en: 'Scatter %1 %2 %3 %4 Add Line? %5'
+    },
+    color: {
+      en: 'color'
+    },
+    tooltip: {
+      en: 'create scatter plot'
+    }
+  }
+}
+
+/**
+ * Define plotting blocks.
+ * @param {string} language Two-letter language code to use for string lookups.
+ */
+const setup = (language) => {
   Blockly.defineBlocksWithJsonArray([
     // Bar plot
     {
       type: 'plot_bar',
-      message0: 'Bar %1 %2 %3',
+      message0: MSG.plot_bar.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.name[language]
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: 'X_axis'
+          text: MSG.x_axis[language]
         },
         {
           type: 'field_input',
           name: 'Y_AXIS',
-          text: 'Y_axis'
+          text: MSG.y_axis[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: 'create bar plot',
+      tooltip: MSG.plot_bar.tooltip[language],
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
@@ -40,29 +102,29 @@ const setup = () => {
     // Box plot
     {
       type: 'plot_box',
-      message0: 'Box %1 %2 %3',
+      message0: MSG.plot_box.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.name[language]
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: 'X_axis'
+          text: MSG.x_axis[language]
         },
         {
           type: 'field_input',
           name: 'Y_AXIS',
-          text: 'Y_axis'
+          text: MSG.y_axis[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: 'create box plot',
+      tooltip: MSG.plot_box.tooltip[language],
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
@@ -70,24 +132,24 @@ const setup = () => {
     // Dot plot
     {
       type: 'plot_dot',
-      message0: 'Dot %1 %2',
+      message0: MSG.plot_dot.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.name[language]
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: 'X_axis'
+          text: MSG.x_axis[language]
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: 'create dot plot',
+      tooltip: MSG.plot_dot.tooltip[language],
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS']
     },
@@ -95,17 +157,17 @@ const setup = () => {
     // Histogram plot
     {
       type: 'plot_histogram',
-      message0: 'Histogram %1 %2 %3',
+      message0: MSG.plot_histogram.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.name[language]
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: 'column'
+          text: MSG.plot_histogram.column[language]
         },
         {
           type: 'field_number',
@@ -117,7 +179,7 @@ const setup = () => {
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: 'create histogram',
+      tooltip: MSG.plot_histogram.tooltip[language],
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_COLUMN']
     },
@@ -125,27 +187,27 @@ const setup = () => {
     // Scatter plot
     {
       type: 'plot_scatter',
-      message0: 'Scatter %1 %2 %3 %4 Add Line? %5',
+      message0: MSG.plot_scatter.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: 'name'
+          text: MSG.name[language]
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: 'X_axis'
+          text: MSG.x_axis[language]
         },
         {
           type: 'field_input',
           name: 'Y_AXIS',
-          text: 'Y_axis'
+          text: MSG.y_axis[language]
         },
         {
           type: 'field_input',
           name: 'COLOR',
-          text: 'color'
+          text: MSG.plot_scatter.color[language]
         },
         {
           type: 'field_checkbox',
@@ -157,7 +219,7 @@ const setup = () => {
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: 'create scatter plot',
+      tooltip: MSG.plot_scatter.tooltip[language],
       helpUrl: '',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
     }

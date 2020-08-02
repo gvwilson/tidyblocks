@@ -3,75 +3,116 @@
 const Blockly = require('blockly/blockly_compressed')
 
 /**
- * Define combining blocks.
+ * Lookup table for message strings.
  */
-const setup = () => {
+const MSG = {
+  glue: {
+    message0: {
+      en: 'Glue left %1 right %2 labels %3'
+    },
+    table_name: {
+      en: 'name'
+    },
+    label: {
+      en: 'label'
+    },
+    tooltip: {
+      en: 'glue rows from two tables together'
+    }
+  },
+  join: {
+    message0: {
+      en: 'Join'
+    },
+    message1: {
+      en: 'left %1 %2'
+    },
+    message2: {
+      en: 'right %1 %2'
+    },
+    table: {
+      en: 'table'
+    },
+    column: {
+      en: 'column'
+    },
+    tooltip: {
+      en: 'join two tables by matching values'
+    }
+  }
+}
+
+/**
+ * Define combining blocks.
+ * @param {string} language Two-letter language code to use for string lookups.
+ */
+const setup = (language) => {
   Blockly.defineBlocksWithJsonArray([
     // Glue
     {
       type: 'combine_glue',
-      message0: 'Glue left %1 right %2 labels %3',
+      message0: MSG.glue.message0[language],
       args0: [
         {
           type: 'field_input',
           name: 'LEFT_TABLE',
-          text: 'name'
+          text: MSG.glue.table_name[language]
         },
         {
           type: 'field_input',
           name: 'RIGHT_TABLE',
-          text: 'name'
+          text: MSG.glue.table_name[language]
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: 'label'
+          text: MSG.glue.label[language]
         }
       ],
       inputsInline: false,
       nextStatement: null,
       style: 'combine_block',
       hat: 'cap',
-      tooltip: 'glue rows from two tables together',
+      tooltip: MSG.glue.tooltip[language],
       helpUrl: '',
       extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE', 'validate_COLUMN']
     },
     // Join
     {
       type: 'combine_join',
-      message0: 'Join',
+      message0: MSG.join.message0[language],
       args0: [],
-      message1: 'left %1 %2',
+      message1: MSG.join.message1[language],
       args1: [
         {
           type: 'field_input',
           name: 'LEFT_TABLE',
-          text: 'table'
+          text: MSG.join.table[language]
         },
         {
           type: 'field_input',
           name: 'LEFT_COLUMN',
-          text: 'column'
+          text: MSG.join.column[language]
         }
       ],
-      message2: 'right %1 %2',
+      message2: MSG.join.message2[language],
       args2: [
         {
           type: 'field_input',
           name: 'RIGHT_TABLE',
-          text: 'table'
+          text: MSG.join.table[language]
         },
         {
           type: 'field_input',
           name: 'RIGHT_COLUMN',
-          text: 'column'
+          text: MSG.join.column[language]
         }
       ],
       inputsInline: false,
       nextStatement: null,
       style: 'combine_block',
       hat: 'cap',
-      tooltip: 'join two tables by matching values',
+      tooltip: MSG.join.tooltip[language],
       helpUrl: '',
       extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
     }
