@@ -16,10 +16,11 @@ const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
 class ReactInterface extends UserInterface {
   /**
    * Build user interface object.
+   * @param {string} language What language to use for localizing blocks.
    * @param {string} rootId HTML ID of root element.
    */
-  constructor (rootId) {
-    super()
+  constructor (language, rootId) {
+    super(language)
 
     // Create the Blockly settings.
     const settings = this._createSettings()
@@ -66,10 +67,11 @@ class ReactInterface extends UserInterface {
 
 /**
  * Initialize the interface.
- * @param rootId {string} HTML ID of element that will contain workspace.
+ * @param {string} language What language to use for localizing blocks.
+ * @param {string} rootId HTML ID of element that will contain workspace.
  */
-const setup = (rootId) => {
-  return new ReactInterface(rootId)
+const setup = (language, rootId) => {
+  return new ReactInterface(language, rootId)
 }
 
 module.exports = {

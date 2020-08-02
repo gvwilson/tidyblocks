@@ -227,18 +227,19 @@ let _createBlocksHasRun = false
 
 /**
  * Create block validators and blocks.
+ * @param {string} language What language to use for string table lookups.
  */
-const createBlocks = () => {
+const createBlocks = (language = 'en') => {
   if (!_createBlocksHasRun) {
     _createBlocksHasRun = true
     _createValidators()
-    combine.setup()
-    data.setup()
-    op.setup()
-    plot.setup()
-    stats.setup()
-    transform.setup()
-    value.setup()
+    combine.setup(language)
+    data.setup(language)
+    op.setup(language)
+    plot.setup(language)
+    stats.setup(language)
+    transform.setup(language)
+    value.setup(language)
   }
 }
 

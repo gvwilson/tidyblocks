@@ -5,19 +5,100 @@ const Blockly = require('blockly/blockly_compressed')
 const {ORDER_NONE} = require('./helpers')
 
 /**
- * Define value blocks.
+ * Lookup table for message strings.
  */
-const setup = () => {
+const MSG = {
+  absent: {
+    message0: {
+      en: 'Absent'
+    },
+    tooltip: {
+      en: 'represent a hole'
+    }
+  },
+  column: {
+    column: {
+      en: 'column'
+    },
+    tooltip: {
+      en: 'get the value of a column'
+    }
+  },
+  datetime: {
+    text: {
+      en: 'YYYY-MM-DD'
+    },
+    tooltip: {
+      en: 'constant date/time'
+    }
+  },
+  logical: {
+    tooltip: {
+      en: 'logical constant'
+    }
+  },
+  number: {
+    tooltip: {
+      en: 'constant number'
+    }
+  },
+  text: {
+    text: {
+      en: 'text'
+    },
+    tooltip: {
+      en: 'constant text'
+    }
+  },
+  rownum: {
+    message0: {
+      en: 'Row number'
+    },
+    tooltip: {
+      en: 'row number'
+    }
+  },
+  exponential: {
+    message0: {
+      en: 'Exponential \u03BB %1'
+    },
+    tooltip: {
+      en: 'exponential random value'
+    }
+  },
+  normal: {
+    message0: {
+      en: 'Normal \u03BC %1 \u03C3 %2'
+    },
+    tooltip: {
+      en: 'normal random value'
+    }
+  },
+  uniform: {
+    message0: {
+      en: 'Uniform \u03B1 %1 \u03B2 %2'
+    },
+    tooltip: {
+      en: 'uniform random value'
+    }
+  }
+}
+
+/**
+ * Define value blocks.
+ * @param {string} language Two-letter language code to use for string lookups.
+ */
+const setup = (language) => {
   Blockly.defineBlocksWithJsonArray([
     // Absent value
     {
       type: 'value_absent',
-      message0: 'Absent',
+      message0: MSG.absent.message0[language],
       args0: [],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'represent a hole'
+      tooltip: MSG.absent.tooltip[language]
     },
 
     // Column name
@@ -27,12 +108,12 @@ const setup = () => {
       args0: [{
         type: 'field_input',
         name: 'COLUMN',
-        text: 'column'
+        text: MSG.column.column[language]
       }],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'get the value of a column',
+      tooltip: MSG.column.tooltip[language],
       extensions: ['validate_COLUMN']
     },
 
@@ -43,12 +124,12 @@ const setup = () => {
       args0: [{
         type: 'field_input',
         name: 'DATE',
-        text: 'YYYY-MM-DD'
+        text: MSG.datetime.text[language]
       }],
       output: 'DateTime',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'constant date/time',
+      tooltip: MSG.datetime.tooltip[language],
       extensions: ['validate_DATE']
     },
 
@@ -69,7 +150,7 @@ const setup = () => {
       output: 'Boolean',
       helpUrl: '',
       style: 'value_block',
-      tooltip: 'logical constant'
+      tooltip: MSG.logical.tooltip[language]
     },
 
     // Number
@@ -84,7 +165,7 @@ const setup = () => {
       output: 'Number',
       helpUrl: '',
       style: 'value_block',
-      tooltip: 'constant number'
+      tooltip: MSG.number.tooltip[language]
     },
 
     // Text
@@ -95,30 +176,30 @@ const setup = () => {
         {
           type: 'field_input',
           name: 'VALUE',
-          text: 'text'
+          text: MSG.text.text[language]
         }
       ],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'constant text'
+      tooltip: MSG.text.tooltip[language]
     },
 
     // Row number
     {
       type: 'value_rownum',
-      message0: 'Row number',
+      message0: MSG.rownum.message0[language],
       args0: [],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'row number'
+      tooltip: MSG.rownum.tooltip[language]
     },
 
     // Exponential random variable
     {
       type: 'value_exponential',
-      message0: 'Exponential \u03BB %1',
+      message0: MSG.exponential.message0[language],
       args0: [
         {
           type: 'field_input',
@@ -129,14 +210,14 @@ const setup = () => {
       output: 'Number',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'exponential random value',
+      tooltip: MSG.exponential.tooltip[language],
       extensions: ['validate_RATE']
     },
 
     // Normal random variable
     {
       type: 'value_normal',
-      message0: 'Normal \u03BC %1 \u03C3 %2',
+      message0: MSG.normal.message0[language],
       args0: [
         {
           type: 'field_input',
@@ -152,14 +233,14 @@ const setup = () => {
       output: 'Number',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'normal random value',
+      tooltip: MSG.normal.tooltip[language],
       extensions: ['validate_STDDEV']
     },
 
     // Uniform random variable
     {
       type: 'value_uniform',
-      message0: 'Uniform \u03B1 %1 \u03B2 %2',
+      message0: MSG.uniform.message0[language],
       args0: [
         {
           type: 'field_input',
@@ -175,7 +256,7 @@ const setup = () => {
       output: 'Number',
       style: 'value_block',
       helpUrl: '',
-      tooltip: 'uniform random value'
+      tooltip: MSG.uniform.tooltip[language]
     }
   ])
 

@@ -19,10 +19,11 @@ const PENGUINS = require('../data/penguins')
 class UserInterface {
   /**
    * Build user interface object.
+   * @param {string} language What language to use for localizing blocks.
    */
-  constructor () {
+  constructor (language) {
     // Initialize blocks support.
-    blocks.createBlocks()
+    blocks.createBlocks(language)
 
     // Create storage for datasets loaded by the user. These are stored between
     // program runs.
