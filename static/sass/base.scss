@@ -2,6 +2,8 @@
 @import '../css/react-data-grid';
 @import 'material-ui-custom';
 @import 'colours';
+@import 'animate';
+@import 'custom-animate';
 
 // Imports for jekyll documentation/blog pages (not used directly on the core
 // Tidyblocks app.
@@ -49,7 +51,7 @@ body {
 }
 
 $dotDiameter: 4px;
-.dotIndicator{
+.dotPadding, .dotIndicator{
   display: inline-block;
   padding: $dotDiameter;
   margin-left: 10px;
@@ -73,11 +75,50 @@ $dotDiameter: 4px;
   background: $errorRed;
 }
 
-
+.tabWrapper{
+  div{
+    display: inline;
+  }
+}
 .splitterBottomPane {
   z-index: 3;
 }
 
+.emptyPanelWrapper{
+    width: 75%;
+    height: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 35px;
+}
+
+.panelIcon{
+    font-size: 10em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: $fadedGrey;
+    margin-bottom: 25px;
+}
+
+.emptyPanelText{
+  font-size: 20px;
+  text-align: center;
+  color: $fadedGrey;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.guideLink{
+  color: $lightBlue;
+  text-decoration: none;
+}
+
+.guideLink:hover{
+  text-decoration: underline;
+}
 // Plot Styling.
 #plotOutput {
   display: block;
