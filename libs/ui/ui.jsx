@@ -125,6 +125,7 @@ export class TidyBlocksApp extends React.Component {
     this.minimizePanel = this.minimizePanel.bind(this)
     this.restorePanel = this.restorePanel.bind(this)
     this.updateZoom = this.updateZoom.bind(this)
+    this.workspaceChanged = this.workspaceChanged.bind(this)
   }
 
   componentDidMount () {
@@ -155,6 +156,7 @@ export class TidyBlocksApp extends React.Component {
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
+    this.workspaceChanged()
   }
 
   componentDidUpdate(prevProps, prevState){
@@ -324,6 +326,31 @@ export class TidyBlocksApp extends React.Component {
 
   updateZoom () {
     this.setState({zoom: this.blocklyRef.current.workspace.state.workspace.scale.toFixed(2)})
+  }
+
+  workspaceChanged () {
+    // Hide scrollbars if there are no blocks otherwise show them. Blockly
+    // doesn't reload it's settings when they're changed, so we need to
+    // manually toggle this.
+    const verticalScroll = ReactDOM.findDOMNode(this).querySelector('.blocklyScrollbarVertical')
+    const horizontalScroll = ReactDOM.findDOMNode(this).querySelector('.blocklyScrollbarHorizontal')
+    if (this.blocklyRef.current.workspace.state.workspace.topBlocks_.length == 0){
+      if (verticalScroll){
+        verticalScroll.style.visibility = "hidden"
+      }
+      if (horizontalScroll){
+        horizontalScroll.style.visibility = "hidden"
+      }
+    } else {
+      if (verticalScroll){
+        verticalScroll.style.visibility = "visible"
+      }
+      if (horizontalScroll){
+        horizontalScroll.style.visibility = "visible"
+      }
+    }
+
+    this.updateZoom()
   }
 
   runProgram () {
@@ -597,7 +624,7 @@ export class TidyBlocksApp extends React.Component {
                   toolboxCategories={this.state.toolboxCategories}
                   workspaceConfiguration={this.props.settings}
                   wrapperDivClassName="fill-height"
-                  workspaceDidChange={this.updateZoom}
+                  workspaceDidChange={this.workspaceChanged}
                 />
               </div>
               <div className="topRightPane">
