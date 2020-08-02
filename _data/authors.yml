@@ -1,0 +1,32 @@
+- slug: gans-maya
+  name: "Maya Gans"
+  github: "MayaGans"
+  link: "https://maya.rbind.io/"
+  avatar: "gans-maya.png"
+  bio: >
+    Maya is a freelance data scientist and front-end developer by way of quantitative biology. 
+    She has 4 years of experience programming in R, 
+    and her passion for data visualization brought her to the weird world of JavaScript. 
+    When she isn't debugging or blogging, 
+    she's somewhere climbing large mountains. 
+
+- slug: singh-justin
+  name: "Justin Singh"
+  github: "DarkMetroid"
+  avatar: "singh-justin.png"
+  bio: >
+    Justin is a freelance developer who largely works in web development.
+    He's interested in anything that makes the web a bit weirder,
+    and if he isn't reading is probably playing around with WebGL.
+
+- slug: wilson-greg
+  name: "Greg Wilson"
+  github: "gvwilson"
+  link: "http://third-bit.com"
+  avatar: "wilson-greg.png"
+  bio: >
+    Greg has worked for 35 years in both industry and academia,
+    and is the author or editor of several books on computing and two for children.
+    He was the co-founder of <a href="http://carpentries.org">Software Carpentry</a>,
+    a non-profit organization that teaches basic computing skills to researchers,
+    and is now part of the education team at <a href="http://rstudio.com">RStudio</a>.

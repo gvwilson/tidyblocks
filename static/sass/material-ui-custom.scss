@@ -1,0 +1,31 @@
+.MuiBox-root {
+  padding: 5px !important;
+}
+
+.MuiDrawer-paper {
+  width: 400px;
+}
+
+.MuiTypography-h6 {
+  font-size: 1.2rem !important;
+}
+
+.tbMenuButton {
+  font-size: 10px;
+}
+
+.tbToolbar {
+  min-height: 40px !important;
+}
+
+li.tb-log {
+}
+
+li.tb-warn {
+  font-style: italic;
+}
+
+li.tb-error {
+  font-weight: bold;
+  font-style: italic;
+}
