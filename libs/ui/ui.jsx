@@ -6,8 +6,6 @@ import Grid from "@material-ui/core/Grid"
 import Paper from '@material-ui/core/Paper'
 import Container from "@material-ui/core/Container"
 import AppBar from '@material-ui/core/AppBar'
-import Tabs from '@material-ui/core/Tabs'
-import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import Box from '@material-ui/core/Box'
 import { withStyles, makeStyles, useStyles,
@@ -89,6 +87,7 @@ export class TidyBlocksApp extends React.Component {
       dataOptions: [],
       dataValue: null,
       activeDataOption: null,
+      hideDataTable: false,
 
       plotKeys: null,
       plotData: null,
@@ -101,8 +100,9 @@ export class TidyBlocksApp extends React.Component {
       statsOptions: [],
       statsValue: null,
       activeStatsOption: null,
+      hideStatsTable: false,
 
-      logMessages: null
+      logMessages: null,
     }
 
     this.paneVerticalResize = this.paneVerticalResize.bind(this)
@@ -133,7 +133,7 @@ export class TidyBlocksApp extends React.Component {
     // the Splitters doesn't currently handle this accurately on React 16.13
     ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mousedown', () => {
       this.setState({isDraggingPane: true})
-    })
+    }, {passive: true})
     ReactDOM.findDOMNode(this).querySelector('.handle-bar').addEventListener('mouseup', () => {
       this.setState({isDraggingPane: false})
     })
@@ -145,16 +145,29 @@ export class TidyBlocksApp extends React.Component {
     // Update the zoom display after touch/gesture events while on the blockly panel.
     ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('touchend', () => {
       this.updateZoom()
-    })
+    }, {passive: true})
     ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('wheel', () => {
       this.updateZoom()
-    })
+    }, {passive: true})
     ReactDOM.findDOMNode(this).querySelector('.blocklyWrapper').addEventListener('gestureend', () => {
       this.updateZoom()
-    })
+    }, {passive: true})
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    // Toggle visibility to trigger fadeIn animations on react-data-grid.
+    if(this.state.data != prevState.data){
+      this.setState({hideDataTable: true}, () => {
+        this.setState({hideDataTable: false})
+      })
+    } else if(this.state.stats != prevState.stats){
+      this.setState({hideStatsTable: true}, () => {
+        this.setState({hideStatsTable: false})
+      })
+    }
   }
 
   // Returns the workspace for use by our JavaScript code.
@@ -522,8 +535,6 @@ export class TidyBlocksApp extends React.Component {
   }
 
   render () {
-    const classes = withStyles(Tabs)
-    const tabClasses = withStyles(Tab)
     const logMessages = (!this.state.logMessages) ?
           <li className="tb-log" key="message-0">No messages</li> :
           this.state.logMessages.map((msg, i) => {
@@ -538,15 +549,14 @@ export class TidyBlocksApp extends React.Component {
       onChange={this.changeStats} value={this.state.activeStatsOption}/>
     const plotDropdown = <PlotTabSelect options={this.state.plotOptions}
       onChange={this.changePlot} value={this.state.activePlotOption}/>
-    let consoleDotClass = "dotIndicator"
+    let consoleDotClass = "animated fadeIn dotIndicator"
     if (this.state.tabUpdated.console == this.state.CONSOLE_ERROR){
-      consoleDotClass = "dotIndicator errorDotIndicator"
+      consoleDotClass = "animated fadeIn dotIndicator errorDotIndicator"
     } else if (this.state.tabUpdated.console == this.state.CONSOLE_WARNING){
-      consoleDotClass = "dotIndicator warningDotIndicator"
+      consoleDotClass = "animated fadeIn dotIndicator warningDotIndicator"
     } else if (this.state.tabUpdated.console == this.state.CONSOLE_SUCCESS){
-      consoleDotClass = "dotIndicator successDotIndicator"
+      consoleDotClass = "animated fadeIn dotIndicator successDotIndicator"
     }
-
     return (
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
@@ -557,7 +567,6 @@ export class TidyBlocksApp extends React.Component {
               <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
             </>
           }
-
           <MenuBar runProgram={this.runProgram}
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}
@@ -592,37 +601,38 @@ export class TidyBlocksApp extends React.Component {
                 />
               </div>
               <div className="topRightPane">
-                <div className={classes.root}>
-                  <AppBar position="static" color="default" component={'span'}>
-                    <TabSelectionBar
-                      tabValue={this.state.tabValue}
-                      handleTabChange={this.handleTabChange}
-                      dataIndex={this.state.DATA_TAB_INDEX}
-                      statsIndex={this.state.STATS_TAB_INDEX}
-                      plotIndex={this.state.PLOT_TAB_INDEX}
-                      tabUpdated={this.state.tabUpdated}
-                      consoleDotClass={consoleDotClass}/>
-                  </AppBar>
-                  <TabPanels
+                <AppBar position="static" color="default" component={'span'}>
+                  <TabSelectionBar
                     tabValue={this.state.tabValue}
-                    minimizePanel={this.minimizePanel}
-                    restorePanel={this.restorePanel}
-                    maximizePanel={this.maximizePanel}
-                    dataDropdown={dataDropdown}
-                    statsDropdown={statsDropdown}
-                    plotDropdown={plotDropdown}
-                    plotOutputRef={this.plotOutputRef}
-                    logMessagesList={logMessageList}
-                    dataColumns={this.state.dataColumns}
-                    dataGridRef={this.dataGridRef}
-                    data={this.state.data}
-                    topRightPaneHeight={this.state.topRightPaneHeight}
-                    sortRows={this.state.sortRows}
-                    stats={this.state.stats}
-                    statsColumns={this.state.statsColumns}
-                    plotData={this.state.plotData}
-                  />
-                </div>
+                    handleTabChange={this.handleTabChange}
+                    dataIndex={this.state.DATA_TAB_INDEX}
+                    statsIndex={this.state.STATS_TAB_INDEX}
+                    plotIndex={this.state.PLOT_TAB_INDEX}
+                    tabUpdated={this.state.tabUpdated}
+                    consoleDotClass={consoleDotClass}/>
+                </AppBar>
+                <TabPanels
+                  tabValue={this.state.tabValue}
+                  minimizePanel={this.minimizePanel}
+                  restorePanel={this.restorePanel}
+                  maximizePanel={this.maximizePanel}
+                  dataDropdown={dataDropdown}
+                  statsDropdown={statsDropdown}
+                  plotDropdown={plotDropdown}
+                  plotOutputRef={this.plotOutputRef}
+                  logMessageList={logMessageList}
+                  dataColumns={this.state.dataColumns}
+                  dataGridRef={this.dataGridRef}
+                  data={this.state.data}
+                  topRightPaneHeight={this.state.topRightPaneHeight}
+                  sortRows={this.state.sortRows}
+                  stats={this.state.stats}
+                  statsColumns={this.state.statsColumns}
+                  plotData={this.state.plotData}
+                  isDraggingPane={this.state.isDraggingPane}
+                  hideDataTable={this.state.hideDataTable}
+                  hideStatsTable={this.state.hideStatsTable}
+                />
               </div>
           </Splitter>
         </MuiThemeProvider>

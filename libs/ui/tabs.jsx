@@ -167,14 +167,21 @@ export function TabPanels (props) {
           <div className="relativeWrapper">
             <div className="dataWrapper">
               {props.dataColumns &&
-                <DataGrid
-                  ref={props.dataGridRef}
-                  columns={props.dataColumns}
-                  rows={props.data}
-                  enableCellAutoFocus={false}
-                  height={props.topRightPaneHeight}
-                  onGridSort={props.sortRows}
-                  />
+                <Animated
+                  animationIn="fadeIn"
+                  animationOut="fadeOut"
+                  animationInDuration={800}
+                  animationOutDuration={800}
+                  isVisible={!props.hideDataTable}>
+                  <DataGrid
+                    ref={props.dataGridRef}
+                    columns={props.dataColumns}
+                    rows={props.data}
+                    enableCellAutoFocus={false}
+                    height={props.topRightPaneHeight}
+                    onGridSort={props.sortRows}
+                    />
+                </Animated>
               }
             </div>
           </div>
@@ -194,13 +201,20 @@ export function TabPanels (props) {
             <div className="relativeWrapper">
               <div className="absoluteWrapper">
                 <div className="dataWrapper">
-                  <DataGrid
-                    columns={props.statsColumns}
-                    rows={props.stats}
-                    enableCellAutoFocus={false}
-                    height={props.topRightPaneHeight}
-                    onGridSort={props.sortRows}
-                    />
+                  <Animated
+                    animationIn="fadeIn"
+                    animationOut="fadeOut"
+                    animationInDuration={800}
+                    animationOutDuration={800}
+                    isVisible={!props.hideStatsTable}>
+                    <DataGrid
+                      columns={props.statsColumns}
+                      rows={props.stats}
+                      enableCellAutoFocus={false}
+                      height={props.topRightPaneHeight}
+                      onGridSort={props.sortRows}
+                      />
+                  </Animated>
                 </div>
               </div>
             </div>
@@ -237,7 +251,7 @@ export function TabPanels (props) {
                 </div>
               </div>
             }
-            <div id="plotOutput"
+            <div id="plotOutput" className={props.isDraggingPane ? '' : "plotOutputFade"}
               ref={props.plotOutputRef}></div>
           </div>
         </Animated>
