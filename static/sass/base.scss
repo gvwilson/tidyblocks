@@ -1,0 +1,212 @@
+@import 'menu';
+@import '../css/react-data-grid';
+@import 'material-ui-custom';
+@import 'colours';
+@import 'animate';
+@import 'custom-animate';
+
+// Imports for jekyll documentation/blog pages (not used directly on the core
+// Tidyblocks app.
+@import 'jekyll-site';
+@import 'jekyll-trac';
+
+body {
+  margin: 0px;
+}
+
+.sectionTitle {
+  font-size: 24px;
+  text-align: center;
+}
+
+// Pane styling.
+.splitPaneWrapper {
+  height: 90%
+}
+
+.topRightPane {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+.bottomRightPane {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+}
+
+.blocklyWrapper{
+  position: relative;
+}
+
+.zoomLevel{
+  position: absolute;
+  bottom: 240px;
+  right: 30px;
+  z-index: 5;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  color: #9d9d9d;
+}
+
+$dotDiameter: 4px;
+.dotPadding, .dotIndicator{
+  display: inline-block;
+  padding: $dotDiameter;
+  margin-left: 10px;
+  margin-top: 2px;
+  border-radius:  5px;
+}
+
+.defaultDotIndicator{
+  background: $hoverBlue;
+}
+
+.successDotIndicator{
+  background: $successGreen;
+}
+
+.warningDotIndicator{
+  background: $warningYellow;
+}
+
+.errorDotIndicator{
+  background: $errorRed;
+}
+
+.tabWrapper{
+  div{
+    display: inline;
+  }
+}
+.splitterBottomPane {
+  z-index: 3;
+}
+
+.emptyPanelWrapper{
+    width: 75%;
+    height: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 35px;
+}
+
+.panelIcon{
+    font-size: 10em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    color: $fadedGrey;
+    margin-bottom: 25px;
+}
+
+.emptyPanelText{
+  font-size: 20px;
+  text-align: center;
+  color: $fadedGrey;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.guideLink{
+  color: $lightBlue;
+  text-decoration: none;
+}
+
+.guideLink:hover{
+  text-decoration: underline;
+}
+// Plot Styling.
+#plotOutput {
+  display: block;
+  margin-top: 5px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.plotWrapper {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.dataWrapper {
+  margin: 10px;
+}
+
+.relativeWrapper {
+  position: relative;
+}
+.absoluteWrapper {
+  position: absolute;
+  width: 100%;
+}
+
+.sourceSelect {
+  width: 100%;
+  padding: 2px;
+  font-size: 14px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.sourceSelectInner__control {
+  padding: 2px;
+}
+
+[data-type="Resizer"] {
+  z-index: 4 !important;
+}
+
+.Resizer {
+  background: #000;
+  opacity: 0.2;
+  z-index: 4;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding;
+  background-clip: padding-box;
+}
+
+.Resizer:hover {
+  -webkit-transition: all 2s ease;
+  transition: all 2s ease;
+}
+
+.Resizer.horizontal {
+  height: 11px;
+  margin: -5px 0;
+  border-top: 5px solid rgba(255, 255, 255, 0);
+  border-bottom: 5px solid rgba(255, 255, 255, 0);
+  cursor: row-resize;
+  width: 100%;
+}
+
+.Resizer.horizontal:hover {
+  border-top: 5px solid rgba(0, 0, 0, 0.5);
+  border-bottom: 5px solid rgba(0, 0, 0, 0.5);
+}
+
+.Resizer.vertical {
+  width: 11px;
+  margin: 0 -5px;
+  border-left: 5px solid rgba(255, 255, 255, 0);
+  border-right: 5px solid rgba(255, 255, 255, 0);
+  cursor: col-resize;
+}
+
+.Resizer.vertical:hover {
+  border-left: 5px solid rgba(0, 0, 0, 0.5);
+  border-right: 5px solid rgba(0, 0, 0, 0.5);
+}
+.Resizer.disabled {
+  cursor: not-allowed;
+}
+.Resizer.disabled:hover {
+  border-color: transparent;
+}

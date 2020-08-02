@@ -1,0 +1,17 @@
+.plotOutputFade canvas,
+.rdg .rdg-row,
+.rdg .rdg-header-row{
+  animation-name: fadeIn;
+  animation-duration: 1000ms;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

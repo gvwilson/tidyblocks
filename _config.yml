@@ -1,0 +1,44 @@
+# General.
+title: "TidyBlocks"
+year: 2020
+repo: "https://github.com/tidyblocks/briq"
+
+# GitHub
+repository: <USERNAME>/<PROJECT>
+
+# Layouts
+defaults:
+- scope:
+    path: ""
+  values:
+    layout: "page"
+- scope:
+    path: "_posts"
+  values:
+    layout: "post"
+
+# Parsing
+kramdown:
+  toc_levels: "2"
+
+# Files to ignore
+exclude:
+- README.md
+- blocks
+- coverage
+- fixtures
+- libs
+- node_modules
+- old-*.*
+- package-lock.json
+- package.json
+- test
+
+# Outputting
+permalink: /blog/:year/:month/:day/:title.html
+
+# Plugins
+plugins:
+- jekyll-gist
+- jekyll-feed
+- jekyll-include-cache
