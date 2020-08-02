@@ -268,9 +268,8 @@ describe('build plots', () => {
                  `Wrong X axis`)
     assert.equal(plot.layer[0].encoding.y.field, 'green',
                  `Wrong Y axis`)
-                 console.log()
-    assert(plot.layer[0].encoding.color.field === null,
-                 `Should not have color`)
+    assert(!('color' in plot.layer[0].encoding),
+           `Should not have color`)
     done()
   })
 
