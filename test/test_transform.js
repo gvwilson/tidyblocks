@@ -268,8 +268,9 @@ describe('build plots', () => {
                  `Wrong X axis`)
     assert.equal(plot.layer[0].encoding.y.field, 'green',
                  `Wrong Y axis`)
-    assert(!('color' in plot.layer[0].encoding),
-           `Should not have color`)
+                 console.log()
+    assert(plot.layer[0].encoding.color.field === null,
+                 `Should not have color`)
     done()
   })
 
@@ -288,6 +289,18 @@ describe('build plots', () => {
                  `Wrong Y axis`)
     assert.equal(plot.layer[0].encoding.color.field, 'blue',
                  `Wrong color`)
+    done()
+  })
+
+  it('creates a scatter plot with lm', (done) => {
+    const env = new Env(INTERFACE)
+    const transform = new Transform.scatter('figure_1', 'red', 'green', 'blue', 'TRUE')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.layer[1].transform[0].regression, 'green',
+                 `Wrong dependent variable lm`)
+    assert.equal(plot.layer[1].transform[0].on, 'red',
+                 `Wrong independent variable lm`)
     done()
   })
 
