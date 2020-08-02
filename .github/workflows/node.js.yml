@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [14.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -37,5 +37,6 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
+        destination_dir: dist
         enable_jekyll: true
         keep_files: true
