@@ -1,6 +1,5 @@
 ---
-# We use jekyll to control whether to serve production files or not. These are
-# built and copied over to dist_production using Github Actions.
+# Loads production files separately using jekyll.
 layout: null
 ---
 
@@ -17,7 +16,6 @@ layout: null
       <link rel="stylesheet" href="./dist/css/base.min.css">
       <script src="./dist/tidyblocks.js"></script>
     {% endif %}
-
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
     <script>
       let ui = null

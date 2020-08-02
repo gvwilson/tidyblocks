@@ -6,7 +6,6 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
-    "deploy": "webpack --config webpack.config.js && git push origin `git subtree split --prefix dist master`:gh-pages --force",
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "data": "data/generate.js data/*.csv",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
@@ -70,7 +69,6 @@
     "babel-preset-env": "^1.7.0",
     "css-loader": "^3.6.0",
     "file-loader": "^6.0.0",
-    "gh-pages": "^3.1.0",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
     "style-loader": "^1.2.1",
