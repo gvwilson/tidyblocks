@@ -1,0 +1,169 @@
+---
+title: "Creating a Block"
+author: "Maya Gans"
+---
+
+One of the intended learner personas for TidyBlocks is a high school AP statistics student.
+Currently we have 2 statistical blocks as a proof of concept that we can use a block based coding language
+to not only help AP statistics students learn stats, but to also teach fundamental programming skills.
+The thought being - why learn how to program a TI-84 when we can instead learn computer science!
+
+This is a developer tutorial, intented to walk you through creating your own statistical block.
+We love collaborators and welcome any PRs with new block ideas!
+
+# Creating a Statistics Block
+
+All TidyBlocks blocks have three parts:
+
+1. The block UI: what the block looks like and what fields it includes
+2. The generator code: how to extract what the user nests inside your block
+3. The transform code: the actual instrcutions of what to do with what the user supplied inside your block
+
+## Block UI
+
+Inside the `blocks` folder you'll find JavaScript files 
+with names corresponding to the names of the block categories.
+We'll be going into `stats.js`
+
+The function `Blockly.defineBlocksWithJsonArray` allows us to supply blockly
+arguments to create a block. Let's break down the t-test block to see this in action:
+
+```
+{
+      type: 'stats_ttest_one',
+      message0: MSG.stats_ttest_one.message0[language],
+      args0: [],
+      message1: MSG.stats_ttest_one.message1[language],
+      args1: [
+        {
+          type: 'field_input',
+          name: 'NAME',
+          text: MSG.stats_ttest_one.args1_name[language]
+        },
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: MSG.stats_ttest_one.args1_column[language]
+        },
+        {
+          type: 'field_number',
+          name: 'MEAN',
+          value: 0.0
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'stats_blocks',
+      tooltip: MSG.stats_ttest_one.tooltip[language],
+      helpUrl: ''
+    }
+```
+
+- `type`: this is the name of our block `stats_ttest_one`.
+This name is how we connect the block UI to the generator,
+and use this name to inform the workspace we want to include it 
+inside our stats blocks gallery.
+
+- `message`: here we include the text we want to see on the block, "One-sample t-test"
+
+- `args0`: by not including any arguments here, we skip a line between the block's name,
+and the block's inputs.
+
+- `message1`: like `message`, we're going to create what the block says, 
+and also include spaces with `n%`. By specificying: `'name %1 column %2 mean \u03BC %3',
+we're saying "name" [leave blank space], "column" [leave blank space], "mean mu" [leave blank space].
+
+- `args1`: this is where we specify the name and values that go into the [blank space]s.
+
+- `type`: the type of input, here we have "field_input" which is a text field, 
+"field_number" which will limit the user to a numeric value. 
+These are blockly arguments,
+ which contain many other other options that can be explored [here](),
+ or by looking at the source code of other TidyBlocks blocks.
+
+- `name`: the convention we use is the name of argument in ALLCAPS to get the user supplied value inside the generator.
+
+- `text`: the default text to display inside the field that the user will supply.
+Here we've chosen `name` as the default name for the statistical output, 
+and `column` for where the user should put the name of the column to perform the test on.
+
+- `value`: like the default text field, for a numeric input we supply a default value (`0`)
+
+- `inputsInline`: allows the user to drag in blocks for the supplied args.
+This is set to false but we encourage you to play and set this to true to see what the UI would look like!
+
+- `previousStatement`: this is also set to false because it would create a spot to connect a block 
+to the left of this one. 
+
+- `nextStatement`: just like `previousStatement` this would allow us to add a block 
+to the right of this one
+
+- `style`: each block family has a corresponding color palette that can be seen in `blocks.js`.
+Since this is a stats block we give it the `stats_block` style.
+
+- `tooltip`: this is the text to appear on hover, here we've written: `perform one-sample two-sided t-test`
+
+<div align="center">
+  <img style="max-width: 100%; width:700px;"
+    src="{{'/static/blog/2020/08-02/one-sample-ttest.png' | relative_url}}" alt="One Sample T-Test Block UI"/>
+</div>
+
+## Generator 
+
+Now we need to use blockly functions to extract what the user inputs inside the 3 specified fields:
+
+```
+  // One-sample two-sided t-test.
+  Blockly.TidyBlocks['stats_ttest_one'] = (block) => {
+    const name = block.getFieldValue('NAME')
+    const column = block.getFieldValue('COLUMN')
+    const mean = block.getFieldValue('MEAN')
+    return `["@transform", "ttest_one", "${name}", "${column}", ${mean}]`
+  }
+```
+
+`Blockly.TidyBlocks` is the method of generation, translating the blocks into our own 
+TidyBlocks language. After the block we've included it's name, tying it back to the specified UI.
+For `name`, `column`, and `mean` we use the function `block.getFieldValue('NAME_OF_FIELD')`
+to get the user supplied values. Lastly we return those input feilds preceeded with the name of the block,
+and `@transform` which is beyond the scope of this post. 
+
+## Transform
+
+By design, blockly's generator returns all values as strings.
+To help developers with translating the blockly strings to execuable code,
+we create a method and use this method to translate those values into an actual
+one sided t-test. I actually reccomend thinking about this code prior to the 
+block's UI and generators since you'll need to think about what values the user 
+needs to input given the block type. 
+
+```
+class TransformTTestOneSample extends TransformBase {
+  constructor (label, colName, mean) {
+    super('ttest_one', [], true, true)
+    this.label = label
+    this.colName = colName
+    this.mean = mean
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
+    const samples = df.data.map(row => row[this.colName])
+    const pValue = stats.tTest(samples, this.mean)
+    env.setStats(this.label, pValue)
+    return df
+  }
+}
+```
+The class `TransformTTestOneSample` takes on the three fields and uses the stats library
+to calculate the statistic given the supplied data higher in the pipeline. 
+I reccomend throwing in some `console.log()` statements and some basic familiarity with the 
+[`stdlib` library](https://stdlib.io/) to figure out what input fields you need, 
+and endless `console.log()` statmeents to ensure you're creating the output you expect!
+
+## Conclustion 
+
+And that's it! Digging under the hood to see how your block "knows" about prior blocks,
+or how TidyBlocks figures out what pipeline your block is a not mandatory for creating a block, 
+but if you're curious about that process we outline it in the repository's [README](https://github.com/tidyblocks/tidyblocks)
