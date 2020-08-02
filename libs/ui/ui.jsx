@@ -274,6 +274,7 @@ export class TidyBlocksApp extends React.Component {
     this.updateDataInformation (this.state.env)
     this.updatePlot ()
     this.updateTopRightPaneHeight()
+    this.workspaceChanged()
   }
 
   // Returns the workspace for use by our JavaScript code.
