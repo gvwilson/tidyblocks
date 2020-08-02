@@ -4,7 +4,11 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{page.title}}</title>
-    <link rel="stylesheet" href="{{ '/dist/css/base.min.css' | relative_url }}" type="text/css">
+    {% if jekyll.environment == "production" %}
+      <link rel="stylesheet" href="{{ '/dist_production/css/base.min.css' | relative_url }}" type="text/css">
+    {% else %}
+      <link rel="stylesheet" href="{{ '/dist/css/base.min.css' | relative_url }}" type="text/css">
+    {% endif %}
   </head>
   <body class="jekyllBody">
     {% include nav.html %}
