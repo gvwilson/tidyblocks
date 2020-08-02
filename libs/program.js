@@ -1,7 +1,6 @@
 'use strict'
 
 const util = require('./util')
-const Env = require('./env')
 const Pipeline = require('./pipeline')
 
 /**

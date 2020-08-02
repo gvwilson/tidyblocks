@@ -21,7 +21,7 @@ const MSG = {
     },
     tooltip: {
       en: 'perform one-sample two-sided t-test'
-    },
+    }
   },
   stats_ttest_two: {
     message0: {

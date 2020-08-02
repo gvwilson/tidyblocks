@@ -2,10 +2,7 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {
-  ORDER_NONE,
-  valueToCode
-} = require('./helpers')
+const {valueToCode} = require('./helpers')
 
 /**
  * Helper function to turn a string containing comma-separated column names into
@@ -13,11 +10,11 @@ const {
  */
 const _formatMultiColNames = (raw) => {
   const joined = raw
-        .split(',')
-        .map(c => c.trim())
-        .filter(c => (c.length > 0))
-        .map(c => `"${c}"`)
-        .join(', ')
+    .split(',')
+    .map(c => c.trim())
+    .filter(c => (c.length > 0))
+    .map(c => `"${c}"`)
+    .join(', ')
   return `[${joined}]`
 }
 

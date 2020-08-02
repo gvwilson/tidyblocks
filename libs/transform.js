@@ -637,12 +637,12 @@ class TransformTTestPaired extends TransformBase {
                `Must have exactly two labels for data`)
     const [leftVal, rightVal] = Array.from(known)
     const leftVals = df.data
-          .filter(row => (row[this.labelCol] === leftVal))
-          .map(row => row[this.valueCol])
+      .filter(row => (row[this.labelCol] === leftVal))
+      .map(row => row[this.valueCol])
     const rightVals = df
-          .data
-          .filter(row => (row[this.labelCol] === rightVal))
-          .map(row => row[this.valueCol])
+      .data
+      .filter(row => (row[this.labelCol] === rightVal))
+      .map(row => row[this.valueCol])
     const pValue = stats.tTestTwoSample(leftVals, rightVals, 0)
     env.setStats(this.label, pValue)
     return df

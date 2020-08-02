@@ -99,9 +99,11 @@ class OpTypecheckBase extends ExprUnary {
    */
   typeCheck (row, i, typeName) {
     const value = this.arg.run(row, i)
-    return (value === util.MISSING)
-      ? util.MISSING
-      : (typeof value === typeName)
+    if (value === util.MISSING) {
+      return util.MISSING
+    }
+    const actual = typeof value
+    return actual === typeName
   }
 }
 
