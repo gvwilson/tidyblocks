@@ -60,8 +60,7 @@ class ReactInterface extends UserInterface {
         maxScale: 3,
         minScale: 0.3,
         scaleSpeed: 1.2
-      },
-      renderer: 'thrasos'
+      }
     }
   }
 }

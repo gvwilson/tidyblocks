@@ -96,12 +96,12 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
     stats_blocks: {
       colourPrimary: STATS_COLOR,
       colourSecondary: '#7D3BB3',
-      colourTertiary: '#8c08bd'
+      colourTertiary: '#EFDBFF'
     },
     transform_block: {
       colourPrimary: TRANSFORM_COLOR,
       colourSecondary: '#3976AD',
-      colourTertiary: '#064b8a'
+      colourTertiary: '#BF9000'
     },
     value_block: {
       colourPrimary: VALUE_COLOR,
