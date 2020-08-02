@@ -551,9 +551,8 @@ class TransformScatter extends TransformPlot {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
-    util.check((color === null) ||
-               ((typeof color === 'string') && color),
-               `Must provide null or non-empty string for color`)
+    util.check((color === null) || (typeof color === 'string'),
+               `Must provide null or (empty) string for color`)
 
     const spec = {
       data: {values: null},
@@ -586,7 +585,7 @@ class TransformScatter extends TransformPlot {
         encoding: {text: {type: 'nominal', field: 'R2'}}
       }
     }
-    if (color !== ' ') {
+    if (color) {
       spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
     super('scatter', label, spec, {axisX, axisY, color, lm})

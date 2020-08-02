@@ -189,7 +189,7 @@ const _createNonNeg = (columnName) => {
 }
 
 // Helper function to create a date validator for a column.
-const validateDate = (columnName) => {
+const _validateDate = (columnName) => {
   return function () {
     const field = this.getField(columnName)
     field.setValidator((newValue) => {
@@ -206,7 +206,7 @@ const validateDate = (columnName) => {
  * Create a validator for a color column field. This can either be a column name
  * or an empty string (meaning "don't colorize").
  */
-const validateColor = (columnName, pattern) => {
+const _validateColor = (columnName, pattern) => {
   return function () {
     const field = this.getField(columnName)
     field.setValidator((newValue) => {
@@ -214,7 +214,7 @@ const validateColor = (columnName, pattern) => {
       if (newValue.match(pattern)) {
         return newValue.trim()
       }
-      // Is an empty string.
+      // Is a blank string.
       if (newValue.trim() === '') {
         return ''
       }
@@ -240,8 +240,8 @@ const _createValidators = () => {
     Blockly.Extensions.register(`validate_${name}`, _createNonNeg(name))
   })
 
-  Blockly.Extensions.register('validate_COLOR', validateColor('COLOR', MATCH_COL_NAME))
-  Blockly.Extensions.register('validate_DATE', validateDate('DATE'))
+  Blockly.Extensions.register('validate_COLOR', _validateColor('COLOR', MATCH_COL_NAME))
+  Blockly.Extensions.register('validate_DATE', _validateDate('DATE'))
 }
 
 // Guard to ensure that `createBlocks` is only run once during testing.

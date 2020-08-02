@@ -17,50 +17,6 @@ const getCode = (block) => {
   return JSON.parse(json)
 }
 
-describe('validators', () => {
-  it('rejects invalid single column names', (done) => {
-    const w = fixture.workspace()
-    const block = w.newBlock('value_column')
-    const oldValue = block.getFieldValue('COLUMN')
-    block.setFieldValue('$$$', 'COLUMN')
-    assert.equal(block.getFieldValue('COLUMN'), oldValue,
-                 `Validator should have prevented field change`)
-    done()
-  })
-
-  it('rejects invalid multi-column names', (done) => {
-    const w = fixture.workspace()
-    const block = w.newBlock('transform_select')
-    const oldValue = block.getFieldValue('MULTIPLE_COLUMNS')
-    block.setFieldValue('$$$', 'MULTIPLE_COLUMNS')
-    assert.equal(block.getFieldValue('MULTIPLE_COLUMNS'), oldValue,
-                 `Validator should have prevented field change`)
-    done()
-  })
-
-  it('rejects invalid dates', (done) => {
-    const w = fixture.workspace()
-    const block = w.newBlock('value_datetime')
-    block.setFieldValue('1970-01-01', 'DATE')
-    assert.equal(block.getFieldValue('DATE'), '1970-01-01',
-                 `Value not set`)
-    block.setFieldValue('abc', 'DATE')
-    assert.equal(block.getFieldValue('DATE'), '1970-01-01',
-                 `Value should not have changed`)
-    done()
-  })
-
-  it('requires numbers for exponential distributions', (done) => {
-    const w = fixture.workspace()
-    const block = w.newBlock('value_exponential')
-    const before = block.getFieldValue('RATE')
-    block.setFieldValue('$$$', 'RATE')
-    const after = block.getFieldValue('RATE')
-    assert.equal(before, after, `Value should not have changed`)
-    done()
-  })
-})
-
 describe('value code generation', () => {
   it('generates code for absent values', (done) => {
     const expected = [Value.FAMILY, 'absent']
