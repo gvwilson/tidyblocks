@@ -377,8 +377,7 @@ describe('type conversions', () => {
       [new Value.logical(true), Op.toText, 'true'],
       [new Value.number(-123), Op.toText, '-123'],
       [new Value.text('abc'), Op.toText, 'abc'],
-      [new Value.datetime(new Date(0)), Op.toText,
-       'Wed Dec 31 1969 19:00:00 GMT-0500 (Eastern Standard Time)']
+      [new Value.datetime(new Date(0)), Op.toText, `${new Date(0)}`]
     ]
     for (const [value, convert, expected] of checks) {
       const op = new convert(value)

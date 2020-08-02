@@ -291,6 +291,18 @@ describe('build plots', () => {
     done()
   })
 
+  it('creates a scatter plot with lm', (done) => {
+    const env = new Env(INTERFACE)
+    const transform = new Transform.scatter('figure_1', 'red', 'green', 'blue', 'TRUE')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const plot = env.getPlot('figure_1')
+    assert.equal(plot.layer[1].transform[0].regression, 'green',
+                 `Wrong dependent variable lm`)
+    assert.equal(plot.layer[1].transform[0].on, 'red',
+                 `Wrong independent variable lm`)
+    done()
+  })
+
   it('checks parameters for plots', (done) => {
     for (const [x, y] of [['left', null], [null, 'right'],
                           ['left', ''], ['', 'right'],

@@ -52,10 +52,7 @@ const MSG = {
   },
   plot_scatter: {
     message0: {
-      en: 'Scatter %1 %2 %3 %4 Add Line? %5'
-    },
-    color: {
-      en: 'color'
+      en: 'Scatter %1 %2 %3 Color %4 Add Line? %5'
     },
     tooltip: {
       en: 'create scatter plot'
@@ -207,7 +204,7 @@ const setup = (language) => {
         {
           type: 'field_input',
           name: 'COLOR',
-          text: MSG.plot_scatter.color[language]
+          text: ''
         },
         {
           type: 'field_checkbox',

@@ -444,6 +444,7 @@ class TransformBar extends TransformPlot {
                `Must provide non-empty strings for axes`)
     const spec = {
       data: {values: null},
+      autosize: 'fit',
       mark: 'bar',
       encoding: {
         x: {field: axisX, type: 'ordinal'},
@@ -467,6 +468,7 @@ class TransformBox extends TransformPlot {
                `Must provide non-empty strings for axes`)
     const spec = {
       data: {values: null},
+      autosize: 'fit',
       mark: {type: 'boxplot', extent: 1.5},
       encoding: {
         x: {field: axisX, type: 'ordinal'},
@@ -487,6 +489,7 @@ class TransformDot extends TransformPlot {
                `Must provide non-empty string for axis`)
     const spec = {
       data: {values: null},
+      autosize: 'fit',
       mark: {type: 'circle', opacity: 1},
       transform: [{
         window: [{op: 'rank', as: 'id'}],
@@ -518,6 +521,7 @@ class TransformHistogram extends TransformPlot {
                `Invalid parameters for histogram`)
     const spec = {
       data: {values: null},
+      autosize: 'fit',
       mark: 'bar',
       encoding: {
         x: {
@@ -547,12 +551,12 @@ class TransformScatter extends TransformPlot {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
                `Must provide non-empty strings for axes`)
-    util.check((color === null) ||
-               ((typeof color === 'string') && color),
-               `Must provide null or non-empty string for color`)
+    util.check((color === null) || (typeof color === 'string'),
+               `Must provide null or (empty) string for color`)
 
     const spec = {
       data: {values: null},
+      autosize: 'fit',
       layer: [
         {
           mark: {type: 'point', filled: true},
