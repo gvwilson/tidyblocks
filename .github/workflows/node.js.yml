@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [14.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -26,3 +26,22 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3.7.0-6
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        enable_jekyll: true
+      env:
+        JEKYLL_ENV: production
+
+    - name: Deploy Dist
+      uses: peaceiris/actions-gh-pages@v3.7.0-6
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        destination_dir: dist_production
+        enable_jekyll: true
+        keep_files: true
+      env:
+        JEKYLL_ENV: production
