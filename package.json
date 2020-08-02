@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js --watch",
+    "deploy": "webpack --config webpack.config.js && gh-pages -d dist",
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "data": "data/generate.js data/*.csv",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
