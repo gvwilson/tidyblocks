@@ -1,13 +1,13 @@
 'use strict'
 
-const React = require('react')
+const React = require('react') // eslint-disable-line no-unused-vars
 const ReactDOM = require('react-dom')
 const Blockly = require('blockly/blockly_compressed')
 
 const blocks = require('./blocks/blocks')
 const Env = require('./libs/env')
 const UserInterface = require('./libs/gui')
-const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp
+const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp // eslint-disable-line no-unused-vars
 
 /**
  * Define the bridge between React and the rest of our code. Encapsulating this
