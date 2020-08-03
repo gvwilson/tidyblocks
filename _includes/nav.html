@@ -3,7 +3,27 @@
     <a href="{{'/' | relative_url}}"><img src="{{'/static/logo.svg' | relative_url}}" alt="TidyBlocks logo" width="80%" /></a>
     <br/>
     <a href="{{'/' | relative_url}}">TidyBlocks</a>
-    <hr/>
+  </p>
+  <hr/>
+  <p>
+    <a href="mailto:{{site.email}}">Contact</a>
+    <br/>
+    <a href="{{ '/faq/' | relative_url }}">FAQ</a>
+    <br/>
+    <a href="{{ '/blog/' | relative_url }}">Blog</a>
+    <br/>
+    <a href="{{ '/license/' | relative_url }}">License</a>
+    <br/>
+    <a href="{{ '/conduct/' | relative_url }}">Code of Conduct</a>
+    <br/>
+    <a href="{{ '/authors/' | relative_url }}">Authors</a>
+    <br/>
+    <a href="{{ '/docs/' | relative_url }}">Source Docs</a>
+    <br/>
+    <a href="{{site.repo}}">Source</a></p>
+  </p>
+  <hr/>
+  <p>
     <a href="{{'/guide/' | relative_url}}">Guide</a>
     <br/>
     <img src="{{'/static/flags/united-kingdom.svg' | relative_url}}" height="15em"/> English
@@ -33,18 +53,4 @@
   {% endfor %}
   </p>
   {% endif %}
-  <hr/>
-  <p>
-    <a href="{{ '/blog/' | relative_url }}">Blog</a>
-    <br/>
-    <a href="{{ '/license/' | relative_url }}">License</a>
-    <br/>
-    <a href="{{ '/conduct/' | relative_url }}">Code of Conduct</a>
-    <br/>
-    <a href="{{ '/guide/authors/' | relative_url }}">Authors</a>
-    <br/>
-    <a href="{{ '/docs/' | relative_url }}">Source Docs</a>
-    <br/>
-    <a href="{{site.repo}}">Source</a></p>
-  </p>
 </nav>
