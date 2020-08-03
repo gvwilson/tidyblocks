@@ -2,9 +2,7 @@
 title: "TidyBlocks"
 year: 2020
 repo: "https://github.com/tidyblocks/briq"
-
-# GitHub
-repository: <USERNAME>/<PROJECT>
+email: info@tidyblocks.tech
 
 # Layouts
 defaults:
