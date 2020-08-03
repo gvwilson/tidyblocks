@@ -12,6 +12,7 @@ const blocks = require('../blocks/blocks')
 const COLORS = require('../data/colors')
 const EARTHQUAKES = require('../data/earthquakes')
 const PENGUINS = require('../data/penguins')
+const PHISH = require('../data/phish')
 
 /**
  * User interface mediator.
@@ -69,6 +70,7 @@ class UserInterface {
     this.userData.set('colors', new DataFrame(COLORS))
     this.userData.set('earthquakes', new DataFrame(EARTHQUAKES))
     this.userData.set('penguins', new DataFrame(PENGUINS))
+    this.userData.set('phish', new DataFrame(PHISH))
   }
 }
 

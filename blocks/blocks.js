@@ -275,6 +275,7 @@ const XML_CONFIG = `<xml id="toolbox" style="display: none">
     <block type="data_colors"></block>
     <block type="data_earthquakes"></block>
     <block type="data_penguins"></block>
+    <block type="data_phish"></block>
     <block type="data_sequence"></block>
     <block type="data_user"></block>
   </category>

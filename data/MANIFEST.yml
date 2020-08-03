@@ -67,6 +67,25 @@
         type: text
         contains: sex
 
+-   name: phish.csv
+    description: 13 Phish concerts performed at Madison Square Garden (The Bakers Dozen)
+    source: https://phish.net/
+    columns: 4
+    rows: 243
+    fields:
+    -   name: Set
+        type: text
+        contains: The concert is broken into sets with intermissions in between 
+    -   name: Song
+        type: text
+        contains: The name of the song played
+    -   name: Segue
+        type: text
+        contains: Transitions between songs are either none (,), a segue (>) or a seamless transition (->)
+    -   name: Date
+        type: datetime
+        contains: The date of the concert
+
 -   name: pockets.csv
     description: Pocket dimensions on women's and men's jeans
     source: https://github.com/the-pudding/data/tree/master/pockets
