@@ -33,7 +33,7 @@ capable of handling the kinds of questions that come up on the AP exam
 We also wanted to create something that would prepare users for full-strength data science tools
 in the way that Scratch prepares people for languages like Python and Java.
 
-[Maya Gans]({{'/guide/authors/#gans-maya' | relative_url}}) started work in May 2019 as an intern with [RStudio](http://rstudio.com).
+[Maya Gans]({{'/authors/#gans-maya' | relative_url}}) started work in May 2019 as an intern with [RStudio](http://rstudio.com).
 Over the next three months she built a fully-functional prototype
 using the same [Blockly toolkit](https://developers.google.com/blockly/) that underpins in Scratch.
 [She learned a lot in a hurry](https://education.rstudio.com/blog/2019/10/my-javascript-internship-at-rstudio/),
@@ -42,8 +42,8 @@ and wowed the crowd with [her demo at rstudio::conf 2020](https://resources.rstu
 Like most prototypes, though, that first version had a lot of [technical debt](https://en.wikipedia.org/wiki/Technical_debt).
 Blockly is a complex framework---in our opinion, more complex than it needs to be---and the code in Version 1 was very brittle as a result.
 To address this,
-[Greg Wilson]({{'/guide/authors/#wilson-greg' | relative_url}}) started rewriting TidyBlocks' internals in March 2020,
-and in July [Justin Singh]({{'/guide/authors/#singh-justin' | relative_url}}) began work on a modern user interface
+[Greg Wilson]({{'/authors/#wilson-greg' | relative_url}}) started rewriting TidyBlocks' internals in March 2020,
+and in July [Justin Singh]({{'/authors/#singh-justin' | relative_url}}) began work on a modern user interface
 using [React](https://reactjs.org/).
 
 And that brings us to where we are now.

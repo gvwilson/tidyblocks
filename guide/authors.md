@@ -1,5 +1,5 @@
 ---
-permalink: /guide/authors/
+permalink: /authors/
 title: "Authors"
 ---
 
