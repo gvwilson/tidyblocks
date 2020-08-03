@@ -30,16 +30,12 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
         enable_jekyll: true
-      env:
-        JEKYLL_ENV: production
-
+        exclude_assets: '.gitignore'
     - name: Deploy Dist
       uses: peaceiris/actions-gh-pages@v3.7.0-6
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
-        destination_dir: dist_production
+        destination_dir: dist
         enable_jekyll: true
         keep_files: true
-      env:
-        JEKYLL_ENV: production
