@@ -1,0 +1,16 @@
+import React from 'react';
+import EventBus from '../EventBus';
+import { CalculatedColumn, Position } from '../common/types';
+import { DataGridProps } from '../DataGrid';
+declare type SharedCanvasProps<R, SR> = Pick<DataGridProps<R, never, SR>, 'rows' | 'onCheckCellIsEditable' | 'onSelectedCellChange'> & Pick<Required<DataGridProps<R, never, SR>>, 'rowHeight' | 'enableCellAutoFocus' | 'enableCellCopyPaste' | 'enableCellDragAndDrop' | 'cellNavigationMode' | 'editorPortalTarget' | 'onRowsUpdate'>;
+export interface InteractionMasksProps<R, SR> extends SharedCanvasProps<R, SR> {
+    columns: readonly CalculatedColumn<R, SR>[];
+    gridRef: React.RefObject<HTMLDivElement>;
+    totalHeaderHeight: number;
+    scrollLeft: number;
+    scrollTop: number;
+    eventBus: EventBus;
+    scrollToCell: (cell: Position) => void;
+}
+export default function InteractionMasks<R, SR>({ columns, rows, rowHeight, eventBus, enableCellAutoFocus, enableCellCopyPaste, enableCellDragAndDrop, editorPortalTarget, cellNavigationMode, gridRef, totalHeaderHeight, scrollLeft, scrollTop, onSelectedCellChange, onCheckCellIsEditable, onRowsUpdate, scrollToCell }: InteractionMasksProps<R, SR>): JSX.Element;
+export {};

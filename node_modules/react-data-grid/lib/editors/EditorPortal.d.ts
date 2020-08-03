@@ -1,0 +1,7 @@
+import React from 'react';
+interface Props {
+    children: React.ReactNode;
+    target: Element;
+}
+export default function EditorPortal({ target, children }: Props): React.ReactPortal | null;
+export {};

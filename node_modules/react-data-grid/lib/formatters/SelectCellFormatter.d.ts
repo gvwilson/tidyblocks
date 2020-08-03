@@ -1,0 +1,6 @@
+export interface SelectCellFormatterProps {
+    value: boolean;
+    disabled?: boolean;
+    onChange: (value: boolean, isShiftClick: boolean) => void;
+}
+export declare function SelectCellFormatter({ value, disabled, onChange }: SelectCellFormatterProps): JSX.Element;

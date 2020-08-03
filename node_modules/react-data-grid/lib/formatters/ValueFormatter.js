@@ -1,0 +1,5 @@
+import React from 'react';
+export function ValueFormatter(props) {
+    return React.createElement(React.Fragment, null, props.row[props.column.key]);
+}
+//# sourceMappingURL=ValueFormatter.js.map

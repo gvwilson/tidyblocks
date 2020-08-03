@@ -1,0 +1,6 @@
+import React from 'react';
+export function SimpleCellFormatter({ row, column }) {
+    const value = row[column.key];
+    return React.createElement("span", { title: String(value) }, value);
+}
+//# sourceMappingURL=SimpleCellFormatter.js.map

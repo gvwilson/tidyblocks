@@ -1,0 +1,2 @@
+import { FormatterProps } from '../common/types';
+export declare function ValueFormatter<R, SR>(props: FormatterProps<R, SR>): JSX.Element;

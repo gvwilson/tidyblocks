@@ -1,0 +1,8 @@
+import { RowRendererProps } from './common/types';
+declare type SharedRowRendererProps<R, SR> = Pick<RowRendererProps<R, SR>, 'viewportColumns' | 'rowIdx' | 'lastFrozenColumnIndex'>;
+interface SummaryRowProps<R, SR> extends SharedRowRendererProps<R, SR> {
+    row: SR;
+    bottom: number;
+}
+declare const _default: <R, SR>(props: SummaryRowProps<R, SR>) => JSX.Element;
+export default _default;

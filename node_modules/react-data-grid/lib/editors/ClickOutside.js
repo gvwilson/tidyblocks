@@ -1,0 +1,24 @@
+import React, { useRef, useEffect } from 'react';
+export default function ClickOutside({ onClickOutside, children }) {
+    const isClickedInside = useRef(false);
+    useEffect(() => {
+        function handleDocumentClick() {
+            if (isClickedInside.current) {
+                isClickedInside.current = false;
+            }
+            else {
+                onClickOutside();
+            }
+        }
+        document.addEventListener('click', handleDocumentClick);
+        return () => {
+            document.removeEventListener('click', handleDocumentClick);
+        };
+    }, [onClickOutside]);
+    return React.cloneElement(React.Children.only(children), {
+        onClickCapture() {
+            isClickedInside.current = true;
+        }
+    });
+}
+//# sourceMappingURL=ClickOutside.js.map

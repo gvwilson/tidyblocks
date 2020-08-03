@@ -1,0 +1,2 @@
+import { Column } from './common/types';
+export declare const SelectColumn: Column<any, any>;

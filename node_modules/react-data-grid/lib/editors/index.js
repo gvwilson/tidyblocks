@@ -1,0 +1,2 @@
+export { default as SimpleTextEditor } from './SimpleTextEditor';
+//# sourceMappingURL=index.js.map
