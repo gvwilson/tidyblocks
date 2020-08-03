@@ -30,6 +30,14 @@ const MSG = {
       en: 'penguin data'
     }
   },
+  phish: {
+    message0: {
+      en: 'Phish'
+    },
+    tooltip: {
+      en: 'Phish concert data'
+    }
+  },
   sequence: {
     message0: {
       en: 'Sequence %1 %2'
@@ -87,6 +95,15 @@ const setup = (language) => {
       hat: 'cap',
       tooltip: MSG.penguins.tooltip[language]
     },
+    // Phish
+    {
+      type: 'data_phish',
+      message0: MSG.phish.message0[language],
+      nextStatement: null,
+      style: 'data_block',
+      hat: 'cap',
+      tooltip: MSG.phish.tooltip[language]
+    },
     // Sequence
     {
       type: 'data_sequence',
@@ -141,6 +158,11 @@ const setup = (language) => {
   // Penguins
   Blockly.TidyBlocks['data_penguins'] = (block) => {
     return `["@transform", "data", "penguins"]`
+  }
+
+  // Phish
+  Blockly.TidyBlocks['data_phish'] = (block) => {
+    return `["@transform", "data", "phish"]`
   }
 
   // Sequence
