@@ -7,7 +7,7 @@ const Blockly = require('blockly/blockly_compressed')
  */
 const MSG = {
   name: {
-    en: 'name'
+    en: 'name',
     es: 'nombre'
   },
   x_axis: {
@@ -15,70 +15,61 @@ const MSG = {
     es: 'eje X'
   },
   y_axis: {
-    en: 'Y axis'
+    en: 'Y axis',
     es: 'eje Y'
-
   },
   plot_bar: {
     message0: {
-      en: 'Bar %1 %2 %3'
+      en: 'Bar %1 %2 %3',
       es: 'Barras %1 %2 %3'
-
     },
     tooltip: {
-      en: 'create bar plot'
+      en: 'create bar plot',
       es: 'crear grafico barras'
-
-    }
+  }
   },
   plot_box: {
     message0: {
-      en: 'Box %1 %2 %3'
+      en: 'Box %1 %2 %3',
       es: 'Cajas %1 %2 %3'
-
     },
     tooltip: {
-      en: 'create box plot'
+      en: 'create box plot',
       es: 'crear grafico cajas'
-
     }
   },
   plot_dot: {
     message0: {
-      en: 'Dot %1 %2'
+      en: 'Dot %1 %2',
       es: 'Puntos %1 %2'
     },
     tooltip: {
-      en: 'create dot plot'
+      en: 'create dot plot',
       es: 'crear grafico puntos'
     }
   },
   plot_histogram: {
     message0: {
-      en: 'Histogram %1 %2 %3'
+      en: 'Histogram %1 %2 %3',
       es: 'Histograma %1 %2 %3'
-
     },
     column: {
-      en: 'column'
+      en: 'column',
       es: 'columna'
-
     },
     tooltip: {
-      en: 'create histogram'
+      en: 'create histogram',
       es: 'crear histograma'
     }
   },
   plot_scatter: {
     message0: {
-      en: 'Scatter %1 %2 %3 Color %4 Add Line? %5'
+      en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5'
-
     },
     tooltip: {
-      en: 'create scatter plot'
+      en: 'create scatter plot',
       en: 'crear grafico dispersion'
-
     }
   }
 }
