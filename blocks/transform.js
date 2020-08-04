@@ -23,98 +23,123 @@ const _formatMultiColNames = (raw) => {
  */
 const MSG = {
   multiple_columns: {
-    en: 'column, column'
+    en: 'column, column', 
+    es: 'columna, columna'
   },
   create: {
     message0: {
-      en: 'Create %1 %2'
+      en: 'Create %1 %2',
+      es: 'Crear %1 %2'
     },
     args0_text: {
-      en: 'new_column'
+      en: 'new_column',
+      es: 'nueva_columna'
     },
     tooltip: {
-      en: 'create new column from existing columns'
+      en: 'create new column from existing columns', 
+      es: 'crear nueva columna de las columnas existentes'
     }
   },
   drop: {
     message0: {
-      en: 'Drop %1'
+      en: 'Drop %1',
+      es: 'Excluir %1'
     },
     args0_tooltip: {
-      en: 'drop columns by name'
+      en: 'drop columns by name',
+      es: 'Excluir columnas por nombre'
     }
   },
   filter: {
     message0: {
-      en: 'Filter %1'
+      en: 'Filter %1', 
+      es: 'Filtrar %1
     },
     args0_name: {
-      en: 'TEST'
+      en: 'TEST', 
+      es: 'TEST'
     },
     tooltip: {
-      en: 'filter rows by condition'
+      en: 'filter rows by condition', 
+      es: 'filtrar filas por condicion'
     }
   },
   groupby: {
     message0: {
-      en: 'Group by %1'
+      en: 'Group by %1', 
+      es: 'Agrupar por %1'
     },
     tooltip: {
-      en: 'group data by values in columns'
+      en: 'group data by values in columns', 
+      es: 'agrupar datos por valores en columnas'
     }
   },
   report: {
     message0: {
-      en: 'Report %1'
+      en: 'Report %1',
+      es: 'Reporte %1'
     },
     args0_text: {
-      en: 'name'
+      en: 'name', 
+      es: 'nombre'
     },
     tooltip: {
-      en: 'report a result'
+      en: 'report a result', 
+      es: 'reporta un resultado'
     }
   },
   select: {
     message0: {
-      en: 'Select %1'
+      en: 'Select %1',
+      es: 'Selecciona %1'
     },
     tooltip: {
-      en: 'select columns by name'
+      en: 'select columns by name',
+      es: 'selecciona columnas por nombre'
     }
   },
   sort: {
     message0: {
-      en: 'Sort %1 descending %2'
+      en: 'Sort %1 descending %2',
+      es: 'Ordena %1 descendiente %2'
     },
     tooltip: {
-      en: 'sort table by multiple columns'
+      en: 'sort table by multiple columns',
+      es: 'ordena tabla por multiples columnas'
     }
   },
   summarize: {
     message0: {
-      en: 'Summarize %1 %2'
+      en: 'Summarize %1 %2',
+      es: 'Resumen %1 %2'
     },
     args0_text: {
-      en: 'column'
+      en: 'column', 
+      es: 'columna'
     },
     tooltip: {
-      en: 'summarize values in  column'
+      en: 'summarize values in  column',
+      es: 'Resume valores en columna'
     }
   },
   ungroup: {
     message0: {
-      en: 'Ungroup'
+      en: 'Ungroup',
+      es: 'Desagrupar'
     },
     tooltip: {
-      en: 'remove grouping'
+      en: 'remove grouping', 
+      es: 'quita agrupamiento'
     }
   },
   unique: {
     message0: {
-      en: 'Unique %1'
+      en: 'Unique %1', 
+      es: 'Unico %1'
     },
     tooltip: {
-      en: 'select rows with unique values'
+      en: 'select rows with unique values', 
+      es: 'selecciona filas con valores unicos'
     }
   }
 }
