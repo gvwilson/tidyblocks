@@ -545,7 +545,6 @@ export class TidyBlocksApp extends React.Component {
 
   // Calls the file upload input.
   loadCsvClick () {
-    // this.refs.csvFileUploader.click()
     this.loadCsvDialog.current.handleClickOpen()
   }
 

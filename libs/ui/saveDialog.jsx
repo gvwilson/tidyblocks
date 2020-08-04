@@ -283,25 +283,6 @@ export class LoadCsvDialog extends React.Component{
   localFileUpload (fileUploadRef){
     fileUploadRef.click()
     this.handleClose()
-    // const canvas = workspace.svgBlockCanvas_.cloneNode(true)
-    // canvas.removeAttribute("transform");
-    // let themeCss = document.getElementById("blockly-renderer-style-geras-tidyblocks").innerHTML
-    // // Theme name isn't inserted on our pulled svg so we remove it.
-    // themeCss = themeCss.replace(/.geras-renderer.tidyblocks-theme/g, '')
-    // // Default blockly css.
-    // let blocklyCss = document.getElementById("blockly-common-style").innerHTML
-    // const css = `<defs><style type="text/css">` + themeCss + blocklyCss + `</style></defs>`
-    // const bboxElement = document.getElementsByClassName("blocklyBlockCanvas")[0];
-    // const bbox = bboxElement.getBBox();
-    // const content = new XMLSerializer().serializeToString(canvas);
-    // const xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${
-    //   bbox.width}" height="${bbox.height}" viewBox=" ${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">${
-    //   css}">${content}</svg>`
-    // const blob = new Blob([xml])
-    // const link = document.getElementById('downloadSvg')
-    // link.setAttribute('href', URL.createObjectURL(blob))
-    // link.setAttribute('download', this.state.filename)
-    // this.handleClose()
   }
 
   render () {
