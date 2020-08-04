@@ -72,7 +72,7 @@ const MSG = {
   plot_scatter: {
     message0: {
       en: 'Scatter %1 %2 %3 Color %4 Add Line? %5'
-            es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5'
+      es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5'
 
     },
     tooltip: {
