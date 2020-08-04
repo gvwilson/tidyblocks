@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <html>
   <head>
     <meta charset="utf-8">
@@ -10,7 +13,17 @@
     <script>
       let ui = null
       window.onload = () => {
-        TidyBlocksUI = tidyblocks.setup('en', 'root')
+        // Remove the Jekyll front matter if it's there. Used to develop locally
+        // without running Jekyll.
+        if (document.body.childNodes[0].data.includes('layout: null')){
+          document.body.childNodes[0].remove()
+        }
+        
+        let langCode = "{{ site.lang }}"
+        if (langCode.length > 2){
+          langCode = 'en'
+        }
+        TidyBlocksUI = tidyblocks.setup(langCode, 'root')
       }
     </script>
   </head>

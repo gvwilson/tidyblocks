@@ -3,6 +3,8 @@ title: "TidyBlocks"
 year: 2020
 repo: "https://github.com/tidyblocks/tidyblocks"
 email: info@tidyblocks.tech
+languages: ["en", "es"]
+default_locale_in_subfolder: true
 
 # Layouts
 defaults:
@@ -40,3 +42,4 @@ plugins:
 - jekyll-gist
 - jekyll-feed
 - jekyll-include-cache
+- jekyll-multiple-languages-plugin
