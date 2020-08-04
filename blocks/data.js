@@ -8,56 +8,70 @@ const Blockly = require('blockly/blockly_compressed')
 const MSG = {
   colors: {
     message0: {
-      en: 'Colors'
+      en: 'Colors',
+      es: 'Colores'
     },
     tooltip: {
-      en: 'eleven colors'
+      en: 'eleven colors',
+      es: 'once colores'
     }
   },
   earthquakes: {
     message0: {
-      en: 'Earthquakes'
+      en: 'Earthquakes',
+      es: 'Terremotos'
     },
     tooltip: {
-      en: 'earthquake data'
+      en: 'earthquake data', 
+      es: 'datos de terremotos'
     }
   },
   penguins: {
     message0: {
-      en: 'Penguins'
+      en: 'Penguins', 
+      es: 'Pingüinos'
     },
     tooltip: {
-      en: 'penguin data'
+      en: 'penguin data',
+      es: 'datos de pingüinos'
     }
   },
   phish: {
     message0: {
-      en: 'Phish'
+      en: 'Phish', 
+      es: 'Phish'
     },
     tooltip: {
-      en: 'Phish concert data'
+      en: 'Phish concert data',
+      es: 'datos de conciertos Phish'
     }
   },
   sequence: {
     message0: {
-      en: 'Sequence %1 %2'
+      en: 'Sequence %1 %2',
+      es: 'Sequencia %1 %2'
     },
     args0_text: {
-      en: 'name'
+      en: 'name', 
+      es: 'nombre'
     },
     tooltip: {
-      en: 'Generate a sequence 1..N'
+      en: 'Generate a sequence 1..N',
+      es: 'Generar una sequencia 1..N'
     }
   },
   data_user: {
     message0: {
-      en: 'User data %1'
+      en: 'User data %1', 
+      es: 'Datos de usuario %1'
     },
     args0_text: {
-      en: 'name'
+      en: 'name',
+      es: 'nombre'
     },
     tooltip: {
-      en: 'use previously-loaded data'
+      en: 'use previously-loaded data', 
+      es: 'usa datos previamente cargados'
     }
   }
 }
