@@ -223,3 +223,11 @@ $dotDiameter: 4px;
 .Resizer.disabled:hover {
   border-color: transparent;
 }
+
+// React-Data-Grid tables
+.rdg{
+  .rdg-header-row{
+    background: $lightBlue;
+    color: #fff;
+  }
+}

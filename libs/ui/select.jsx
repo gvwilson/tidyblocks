@@ -33,25 +33,6 @@ const Menu = props => {
 
 const DATA_USER_COLOUR = '#7f99ba'
 const DATA_REPORT_COLOUR = '#c2a129'
-const colourStyles = {
-  control: styles => ({ ...styles, backgroundColor: 'white' }),
-  option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-    const dotColor = data.type == 'user' ? DATA_USER_COLOUR : DATA_REPORT_COLOUR
-    return {
-      ...styles,
-      color: !isSelected
-        ? data.type == 'user'
-          ? '#222'
-          : '#000'
-        : '#fff',
-      ...dot(dotColor)
-    }
-  },
-  input: styles => ({ ...styles, ...dot() }),
-  placeholder: styles => ({ ...styles, ...dot() }),
-  singleValue: (styles, { data }) => ({ ...styles, ...dot(data.type == 'user' ? DATA_USER_COLOUR : DATA_REPORT_COLOUR) }),
-};
-
 const colourStylesMultiDot = {
   control: styles => ({ ...styles, backgroundColor: 'white' }),
   option: (styles, { data, isDisabled, isFocused, isSelected }) => {
