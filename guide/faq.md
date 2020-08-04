@@ -3,6 +3,32 @@ permalink: /faq/
 title: "FAQ"
 ---
 
+Who is TidyBlocks for?
+:   Our primary audience is students in middle school and high school (ages 10-18)
+    who are learning how to use and interpret data.
+    We hope that older learners,
+    such as students doing introductory statistics at the college level,
+    will also find it useful.
+
+Why blocks?
+:   For several reasons:
+    1.  Many studies have shown that block-based programming is more accessible to novices than text-based programming.
+    2.  If school-age users have done any programming before, they have probably used [Scratch](http://scratch.mit.edu),
+        so the block interface will already be familiar to them.
+    3.  Just as importantly, the interface will already be familiar to their teachers.
+
+Can TidyBlocks do [thing]?
+:   The answer is either "no" or "not yet":
+    1.  TidyBlocks is never going to be an industrial-strength data analysis tool,
+        any more than [Scratch](http://scratch.mit.edu) is meant to replace languages like Java.
+        They are both [balance bikes](https://en.wikipedia.org/wiki/Balance_bicycle)
+        designed to help people master key concepts before moving on to other tools.
+    2.  That said,
+        we need to add more blocks to handle the kinds of questions that come up in high school statistics courses.
+        Suggestions are very welcome,
+        as are examples and help with implementation.
+        Please [contact us](mailto:{{site.email}}) if you would like to contribute.
+
 Is TidyBlocks an RStudio product?
 :   No.
     The first version was developed by [Maya Gans]({{'/authors/#gans-maya' | relative_url }}) while she was a summer intern,
