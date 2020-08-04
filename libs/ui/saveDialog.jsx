@@ -264,6 +264,7 @@ export class LoadCsvDialog extends React.Component{
     this.handleClickOpen = this.handleClickOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.localFileUpload = this.localFileUpload.bind(this)
+    this.urlLoad = this.urlLoad.bind(this)
     this.handleUrlChange = this.handleUrlChange.bind(this)
   }
 
@@ -282,6 +283,11 @@ export class LoadCsvDialog extends React.Component{
 
   localFileUpload (fileUploadRef){
     fileUploadRef.click()
+    this.handleClose()
+  }
+
+  urlLoad(){
+    this.props.loadCsvUrl(this.state.url)
     this.handleClose()
   }
 
@@ -317,7 +323,7 @@ export class LoadCsvDialog extends React.Component{
             fullWidth
           />
           <a className={"uploadBtn"}
-            onClick={(e) => this.props.loadCsvUrl(this.state.url)} >
+            onClick={this.urlLoad} >
             <FontAwesomeIcon className="dialogBtnIcon"icon={faCloudUploadAlt} />
             Load Url
           </a>
