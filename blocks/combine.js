@@ -8,36 +8,46 @@ const Blockly = require('blockly/blockly_compressed')
 const MSG = {
   glue: {
     message0: {
-      en: 'Glue left %1 right %2 labels %3'
+      en: 'Glue left %1 right %2 labels %3',
+      es: 'Pegar izquierda %1 derecha %2 etiquetas %3'
     },
     table_name: {
-      en: 'name'
+      en: 'name',
+      es: 'nombre'
     },
     label: {
-      en: 'label'
+      en: 'label',
+      es: 'etiqueta'
     },
     tooltip: {
-      en: 'glue rows from two tables together'
+      en: 'glue rows from two tables together',
+      es: 'pegar juntas filas de dos tablas'
     }
   },
   join: {
     message0: {
-      en: 'Join'
+      en: 'Join',
+      es: 'Unir'
     },
     message1: {
-      en: 'left %1 %2'
+      en: 'left %1 %2',
+      es: 'izquierda  %1 %2'
     },
     message2: {
-      en: 'right %1 %2'
+      en: 'right %1 %2',
+      es: 'derecha %1 %2'
     },
     table: {
-      en: 'table'
+      en: 'table',
+      es: 'tabla'
     },
     column: {
-      en: 'column'
+      en: 'column',
+      es: 'columna'
     },
     tooltip: {
-      en: 'join two tables by matching values'
+      en: 'join two tables by matching values',
+      es: 'unir dos tables emparenjando valores'
     }
   }
 }
