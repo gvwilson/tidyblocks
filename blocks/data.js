@@ -67,11 +67,11 @@ const MSG = {
     },
     args0_text: {
       en: 'name',
-      en: 'nombre',
+      es: 'nombre'
     },
     tooltip: {
       en: 'use previously-loaded data', 
-      en: 'usa datos previamente cargados'
+      es: 'usa datos previamente cargados'
     }
   }
 }
