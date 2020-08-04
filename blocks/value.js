@@ -10,76 +10,94 @@ const {ORDER_NONE} = require('./helpers')
 const MSG = {
   absent: {
     message0: {
-      en: 'Absent'
+      en: 'Absent', 
+      es: 'Ausente'
     },
     tooltip: {
-      en: 'represent a hole'
+      en: 'represent a hole', 
+      es: 'representa un agujero'
     }
   },
   column: {
     column: {
-      en: 'column'
+      en: 'column', 
+      es: 'columna'
     },
     tooltip: {
-      en: 'get the value of a column'
+      en: 'get the value of a column',
+      es: 'obten el valor de una columna'
     }
   },
   datetime: {
     text: {
-      en: 'YYYY-MM-DD'
+      en: 'YYYY-MM-DD',
+      es: 'AAAA-MM-DD' 
     },
     tooltip: {
-      en: 'constant date/time'
+      en: 'constant date/time',
+      es: 'constante fecha/tiempo'
     }
   },
   logical: {
     tooltip: {
-      en: 'logical constant'
+      en: 'logical constant', 
+      es: 'constante logica'
     }
   },
   number: {
     tooltip: {
-      en: 'constant number'
+      en: 'constant number',
+      es: 'numbero constante'
     }
   },
   text: {
     text: {
-      en: 'text'
+      en: 'text',
+      es: 'texto'
     },
     tooltip: {
-      en: 'constant text'
+      en: 'constant text', 
+      es: 'texto constante'
     }
   },
   rownum: {
     message0: {
-      en: 'Row number'
+      en: 'Row number',
+      es: 'Numero de fila'
     },
     tooltip: {
-      en: 'row number'
+      en: 'row number',
+      es: 'numero de fila'
     }
   },
   exponential: {
     message0: {
-      en: 'Exponential \u03BB %1'
+      en: 'Exponential \u03BB %1',
+      es: 'Exponencial \u03BB %1'
     },
     tooltip: {
-      en: 'exponential random value'
+      en: 'exponential random value',
+      es: 'valor aleatorio exponencial'
     }
   },
   normal: {
     message0: {
-      en: 'Normal \u03BC %1 \u03C3 %2'
+      en: 'Normal \u03BC %1 \u03C3 %2',
+      es: 'Normal \u03BC %1 \u03C3 %2'
     },
     tooltip: {
-      en: 'normal random value'
+      en: 'normal random value',
+      es: 'valor aleatorio normal'
     }
   },
   uniform: {
     message0: {
-      en: 'Uniform \u03B1 %1 \u03B2 %2'
+      en: 'Uniform \u03B1 %1 \u03B2 %2', 
+      es: 'Uniforme \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
-      en: 'uniform random value'
+      en: 'uniform random value', 
+      es: 'valor aleatorio uniforme'
     }
   }
 }
