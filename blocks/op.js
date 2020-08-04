@@ -13,62 +13,76 @@ const {
 const MSG = {
   arithmetic: {
     tooltip: {
-      en: 'do arithmetic'
+      en: 'do arithmetic', 
+      es: 'haz la aritmética'
     }
   },
   negate: {
     tooltip: {
-      en: 'negate a numeric column'
+      en: 'negate a numeric column', 
+      es: 'excluye una columna numerica'
     }
   },
   compare: {
     tooltip: {
-      en: 'compare two columns'
+      en: 'compare two columns',
+      es: 'compara dos columnas'
     }
   },
   logical: {
     tooltip: {
-      en: 'combine logical values of two columns'
+      en: 'combine logical values of two columns',
+      es: 'combina los valores logicos de dos columnas'
     }
   },
   not: {
     message0: {
-      en: 'not %1'
+      en: 'not %1', 
+      es: 'no %1'
     },
     tooltip: {
-      en: 'negate a logical column'
+      en: 'negate a logical column', 
+      es: 'excluye una columna numerica'
     }
   },
   type: {
     message0: {
-      en: '%1 is %2 ?'
+      en: '%1 is %2 ?', 
+      es: '¿Es %1 %2 ?'
     },
     tooltip: {
-      en: 'check the type of a value'
+      en: 'check the type of a value', 
+      es: 'comprueba el tipo de valor'
     }
   },
   convert: {
     message0: {
-      en: '%1 to %2'
+      en: '%1 to %2', 
+      es: '%1 a %2'
     },
     tooltip: {
-      en: 'change the datatype of a value'
+      en: 'change the datatype of a value', 
+      es: 'cambia el tipo de dato del valor'
     }
   },
   datetime: {
     message0: {
-      en: 'get %1 from %2'
+      en: 'get %1 from %2', 
+      es: 'obten %1 de %2'
     },
     tooltip: {
-      en: 'change the datatype of a value'
+      en: 'change the datatype of a value',
+      es: 'cambia el tipo de dato del valor'
     }
   },
   conditional: {
     message0: {
-      en: 'If %1 then %2 else %3'
+      en: 'If %1 then %2 else %3',
+      es: 'Si %1 entonces %2 sino %3'
     },
     tooltip: {
-      en: 'select value based on condition'
+      en: 'select value based on condition', 
+      es: 'selecciona el valor basandote en la condicion'
     }
   }
 }
