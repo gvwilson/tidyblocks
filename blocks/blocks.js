@@ -119,9 +119,9 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
     value: {colour: VALUE_COLOR}
   },
   componentStyles: {
-    toolboxBackgroundColour: '#455a64',
-    toolboxForegroundColour: '#fff',
-    flyoutBackgroundColour: '#ced7db',
+    toolboxBackgroundColour: '#e9eff2',
+    toolboxForegroundColour: '#1C313A',
+    flyoutBackgroundColour: '#F9F9F9',
   }
 })
 
