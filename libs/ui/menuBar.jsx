@@ -189,9 +189,6 @@ export class MenuBar extends React.Component{
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run"
-                icon={<PlayArrowIcon className="menuIcon"/>}
-                handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load Workspace"
                 icon={<PublishIcon className="menuIcon" />}
                 handleClick={this.props.loadWorkspaceClick}/>
