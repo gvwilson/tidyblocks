@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/data/
+permalink: /en/data/
 title: "Data"
+language: en
 headings:
 - id: colors
   text: Colors

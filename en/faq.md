@@ -1,6 +1,7 @@
 ---
-permalink: /faq/
+permalink: /en/faq/
 title: "FAQ"
+language: en
 ---
 
 Who is TidyBlocks for?

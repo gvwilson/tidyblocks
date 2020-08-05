@@ -1,56 +1,21 @@
-<nav>
-  <p>
-    <a href="{{'/' | relative_url}}"><img src="{{'/static/logo.svg' | relative_url}}" alt="TidyBlocks logo" width="80%" /></a>
-    <br/>
-    <a href="{{'/' | relative_url}}">TidyBlocks</a>
-  </p>
-  <hr/>
-  <p>
-    <a href="mailto:{{site.email}}">Contact</a>
-    <br/>
-    <a href="{{ '/faq/' | relative_url }}">FAQ</a>
-    <br/>
-    <a href="{{ '/blog/' | relative_url }}">Blog</a>
-    <br/>
-    <a href="{{ '/license/' | relative_url }}">License</a>
-    <br/>
-    <a href="{{ '/conduct/' | relative_url }}">Code of Conduct</a>
-    <br/>
-    <a href="{{ '/authors/' | relative_url }}">Authors</a>
-    <br/>
-    <a href="{{ '/docs/' | relative_url }}">Source Docs</a>
-    <br/>
-    <a href="{{site.repo}}">Source</a></p>
-  </p>
-  <hr/>
-  <p>
-    <a href="{{'/guide/' | relative_url}}">Guide</a>
-    <br/>
-    <img src="{{'/static/flags/united-kingdom.svg' | relative_url}}" height="15em"/> English
-    <br/>
-    - <a href="{{'/guide/en/data' | relative_url}}">Data</a>
-    <br/>
-    - <a href="{{'/guide/en/transform' | relative_url}}">Transforms</a>
-    <br/>
-    - <a href="{{'/guide/en/plot' | relative_url}}">Plots</a>
-    <br/>
-    - <a href="{{'/guide/en/stats' | relative_url}}">Statistics</a>
-    <br/>
-    - <a href="{{'/guide/en/op' | relative_url}}">Operations</a>
-    <br/>
-    - <a href="{{'/guide/en/value' | relative_url}}">Values</a>
-    <br/>
-    - <a href="{{'/guide/en/combine' | relative_url}}">Combining</a>
-    <br/>
-    - <a href="{{ '/guide/en/glossary/' | relative_url }}">Glossary</a>
-  </p>
-  {% if page.headings %}
-  <hr/>
-  <p>
-  {% for heading in page.headings %}
-    - <a href="#{{heading.id}}">{{heading.text}}</a>
-    {% unless forloop.last %}<br/>{% endunless %}
-  {% endfor %}
-  </p>
-  {% endif %}
-</nav>
+<p>
+  <a href="{{'/' | relative_url}}"><img src="{{'/static/logo.svg' | relative_url}}" alt="TidyBlocks logo" width="80%" /></a>
+  <br/>
+  <a href="{{'/' | relative_url}}">TidyBlocks</a>
+</p>
+<hr/>
+<p>
+  <a href="mailto:{{site.email}}">Contact</a>
+  <br/>
+  <a href="{{ '/blog/' | relative_url }}">Blog</a>
+  <br/>
+  <a href="{{ '/license/' | relative_url }}">License</a>
+  <br/>
+  <a href="{{ '/conduct/' | relative_url }}">Code of Conduct</a>
+  <br/>
+  <a href="{{ '/authors/' | relative_url }}">Authors</a>
+  <br/>
+  <a href="{{ '/docs/' | relative_url }}">Source Docs</a>
+  <br/>
+  <a href="{{site.repo}}">Source</a></p>
+</p>

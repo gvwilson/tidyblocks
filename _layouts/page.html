@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{this_title}}</title>
     <link rel="stylesheet" href="{{ '/dist/css/base.min.css' | relative_url }}" type="text/css">
-
   </head>
   <body class="jekyllBody">
-    {% include nav.html %}
+    <nav>
+      {% include nav.html %}
+      <hr/>
+      {% include languages.html %}
+      <hr/>
+      {% include guide.html %}
+    </nav>
     <main>
     <h1>{{this_title}}</h1>
 {{content}}

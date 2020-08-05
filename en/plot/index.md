@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/plot/
+permalink: /en/plot/
 title: "Plots"
+language: en
 headings:
 - id: bar
   text: Bar
