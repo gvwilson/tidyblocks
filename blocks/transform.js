@@ -149,7 +149,6 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
-  console.log('SETUP WITH LANGUAGE', language)
   Blockly.defineBlocksWithJsonArray([
     // Create
     {
