@@ -19,7 +19,7 @@ import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
 import { MenuBar } from './menuBar.jsx'
 import { SaveCsvFormDialog, SaveWorkspaceFormDialog,
-  SaveSvgFormDialog } from './saveDialog.jsx'
+  SaveSvgFormDialog, LoadCsvDialog } from './saveDialog.jsx'
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 import { TabSelectionBar, TabPanels } from './tabs.jsx'
 import { theme } from './theme.jsx'
@@ -52,6 +52,7 @@ export class TidyBlocksApp extends React.Component {
     this.saveCsvNameDialog = React.createRef()
     this.saveWorkspaceDialog = React.createRef()
     this.saveSvgDialog = React.createRef()
+    this.loadCsvDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -113,6 +114,7 @@ export class TidyBlocksApp extends React.Component {
     this.loadWorkspace = this.loadWorkspace.bind(this)
     this.loadCsvClick = this.loadCsvClick.bind(this)
     this.loadCsv = this.loadCsv.bind(this)
+    this.loadCsvUrl = this.loadCsvUrl.bind(this)
     this.changeData = this.changeData.bind(this)
     this.changeStats = this.changeStats.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this)
@@ -543,7 +545,7 @@ export class TidyBlocksApp extends React.Component {
 
   // Calls the file upload input.
   loadCsvClick () {
-    this.refs.csvFileUploader.click()
+    this.loadCsvDialog.current.handleClickOpen()
   }
 
   // Processes and loads the csv after the file has been uploaded
@@ -558,6 +560,20 @@ export class TidyBlocksApp extends React.Component {
       this.setState({env: this.state.env}, () => {
         this.updateDataInformation(this.state.env)
       })
+    })
+  }
+
+  // Loads a csv file from a URL
+  loadCsvUrl(url){
+    // Get the end of the url, removing the extension (if it's there)
+    const formattedUrl = url.replace(/#[^#]+$/, "").replace(/\?[^\?]+$/, "").replace(/\/$/, "");
+    const label = formattedUrl.substr(formattedUrl.lastIndexOf("/") + 1).replace('.csv', '')
+    fetch(url, {mode:'cors'}).then(response => response.text()).then(text => {
+      const workspace = this.getWorkspace().state.workspace
+      const df = new DataFrame(csvToTable(text))
+      this.state.env.ui.userData.set(label, df)
+      this.setState({env: this.state.env}, () => {
+        this.updateDataInformation(this.state.env)})
     })
   }
 
@@ -587,6 +603,7 @@ export class TidyBlocksApp extends React.Component {
     return (
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
+          <LoadCsvDialog ref={this.loadCsvDialog} fileUploadRef={this.refs.csvFileUploader} loadCsvUrl={this.loadCsvUrl}/>
           <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
           { this.blocklyRef.current &&
             <>
