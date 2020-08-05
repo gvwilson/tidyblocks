@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/glossary/
+permalink: /en/glossary/
 title: "Glossary"
+language: en
 ---
 
 {:auto_ids}

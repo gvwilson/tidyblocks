@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/op/
+permalink: /en/op/
 title: "Operations"
+language: en
 headings:
 - id: arithmetic
   text: Arithmetic

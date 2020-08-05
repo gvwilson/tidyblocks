@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/stats/
+permalink: /en/stats/
 title: "Statistics"
+language: en
 ---
 
 <img class="block" src="{{page.permalink | append: 'ttest_one.svg' | relative_url}}" alt="ttest_one block"/>

@@ -1,14 +1,14 @@
 ---
-permalink: /guide/
+permalink: /en/guide/
+layout: page
+language: en
 ---
 
-<h1>TidyBlocks</h1>
+<h1><a href="../index.html">TidyBlocks</a></h1>
 
 <div align="center">
   <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
 </div>
-
-<h2><img src="{{'/static/flags/united-kingdom.svg' | relative_url}}" height="20em"/> English</h2>
 
 A blocks-based tool for tidy data manipulation and analysis.
 Please see <https://tidyblocks.tech> for a free online version
