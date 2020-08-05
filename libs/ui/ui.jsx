@@ -568,13 +568,12 @@ export class TidyBlocksApp extends React.Component {
     // Get the end of the url, removing the extension (if it's there)
     const formattedUrl = url.replace(/#[^#]+$/, "").replace(/\?[^\?]+$/, "").replace(/\/$/, "");
     const label = formattedUrl.substr(formattedUrl.lastIndexOf("/") + 1).replace('.csv', '')
-    fetch(url, {mode:'cors'}).then(response => {
+    fetch(url, {mode:'cors'}).then(response => response.text()).then(text => {
       const workspace = this.getWorkspace().state.workspace
-      const df = new DataFrame(csvToTable(response.text()))
+      const df = new DataFrame(csvToTable(text))
       this.state.env.ui.userData.set(label, df)
       this.setState({env: this.state.env}, () => {
-        this.updateDataInformation(this.state.env)
-      })
+        this.updateDataInformation(this.state.env)})
     })
   }
 
