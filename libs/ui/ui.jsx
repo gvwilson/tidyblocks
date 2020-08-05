@@ -594,7 +594,7 @@ export class TidyBlocksApp extends React.Component {
               <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
             </>
           }
-          <MenuBar runProgram={this.runProgram}
+          <MenuBar 
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}
             saveWorkspace={this.saveWorkspace}
@@ -626,6 +626,7 @@ export class TidyBlocksApp extends React.Component {
                   wrapperDivClassName="fill-height"
                   workspaceDidChange={this.workspaceChanged}
                 />
+                <a className="runBtn" onClick={this.runProgram}> Run </a>
               </div>
               <div className="topRightPane">
                 <AppBar position="static" color="default" component={'span'}>
