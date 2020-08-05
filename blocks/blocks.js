@@ -312,6 +312,7 @@ const XML_CONFIG = `<xml id="toolbox" style="display: none">
     <block type="op_convert"></block>
     <block type="op_datetime"></block>
     <block type="op_conditional"></block>
+    <block type="op_abs"></block>
   </category>
   <category name="value" categorystyle="value">
     <block type="value_column"></block>
