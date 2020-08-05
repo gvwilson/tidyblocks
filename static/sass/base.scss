@@ -10,8 +10,9 @@
 @import 'jekyll-site';
 @import 'jekyll-trac';
 
-body {
+html, body, #root {
   margin: 0px;
+  height: 100%;
 }
 
 .sectionTitle {
@@ -21,7 +22,49 @@ body {
 
 // Pane styling.
 .splitPaneWrapper {
-  height: 90%
+  // Deduct menu bar height
+  height: calc(100vh - 64px);
+}
+
+.blocklyToolboxDiv{
+  padding-top: 5px;
+}
+
+.blocklyTreeLabel{
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+$runDiameter: 60px;
+.runBtn{
+  z-index: 3;
+  width: $runDiameter;
+  height: $runDiameter;
+  line-height: $runDiameter;
+  position: absolute;
+  top: 20;
+  right: 20;
+  background: #a3b8c7;
+  box-shadow: 0 2px 5px #ced7db;
+  transition: background-color .1s;
+  color: #fff;
+  border-radius: 200px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+.runBtn:hover{
+  background: #8195a3;
+  box-shadow: 0 2px 5px $lightBlue;
 }
 
 .topRightPane {
