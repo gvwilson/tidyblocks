@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{page.title}}</title>
+    <title>{{this_title}}</title>
     <link rel="stylesheet" href="{{ '/dist/css/base.min.css' | relative_url }}" type="text/css">
   </head>
   <body class="jekyllBody">
@@ -13,9 +13,8 @@
       {% include languages.html %}
     </nav>
     <main>
-      <h1>{{page.title}}</h1>
-      {{content}}
-      <p align="right"><em>— {{page.author}} / {{page.date | date: "%Y-%m-%d"}}</em></p>
+    <h1>{{this_title}}</h1>
+{{content}}
       {% include footer.html %}
     </main>
   </body>

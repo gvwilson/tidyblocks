@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/value/
+permalink: /en/value/
 title: "Values"
+language: en
 headings:
 - id: column
   text: Column

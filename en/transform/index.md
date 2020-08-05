@@ -1,6 +1,7 @@
 ---
-permalink: /guide/en/transform/
+permalink: /en/transform/
 title: "Transforms"
+language: en
 headings:
 - id: create
   text: Create
