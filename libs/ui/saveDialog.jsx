@@ -8,6 +8,8 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Link from '@material-ui/core/Link'
 import Blockly from 'blockly/blockly_compressed'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileUpload, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
 
 function SaveDialog (props) {
   return (
@@ -247,6 +249,91 @@ export class SaveSvgFormDialog extends React.Component{
           filename={this.state.filename}
           data={this.props.data}/>
       </div>
+    )
+  }
+}
+
+export class LoadCsvDialog extends React.Component{
+  constructor(props) {
+    super(props)
+    this.state = {
+      open: false,
+      url: '',
+
+    }
+    this.handleClickOpen = this.handleClickOpen.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.localFileUpload = this.localFileUpload.bind(this)
+    this.urlLoad = this.urlLoad.bind(this)
+    this.handleUrlChange = this.handleUrlChange.bind(this)
+  }
+
+  handleClickOpen () {
+    this.setState({open: true})
+  }
+
+  handleClose () {
+    this.setState({open: false})
+  }
+
+  handleUrlChange (evt) {
+    const value = evt.target.value
+    this.setState({ url: value })
+  }
+
+  localFileUpload (fileUploadRef){
+    fileUploadRef.click()
+    this.handleClose()
+  }
+
+  urlLoad(){
+    this.props.loadCsvUrl(this.state.url)
+    this.handleClose()
+  }
+
+  render () {
+    return (
+      <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Load CSV</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Load a file from your local machine
+          </DialogContentText>
+
+            <a className={"uploadBtn"}
+              onClick={(e) => this.localFileUpload(this.props.fileUploadRef)} >
+              <FontAwesomeIcon className="dialogBtnIcon"icon={faFileUpload} />
+              Select a File
+            </a>
+
+        </DialogContent>
+        <DialogContent>
+          <DialogContentText >
+            or upload from a URL
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="url"
+            placeholder="http://website.com/csvFile.csv"
+            label="Url"
+            type="text"
+            value={this.state.url}
+            onChange={(evt) => this.handleUrlChange(evt)}
+            fullWidth
+          />
+          <a className={"uploadBtn"}
+            onClick={this.urlLoad} >
+            <FontAwesomeIcon className="dialogBtnIcon"icon={faCloudUploadAlt} />
+            Load Url
+          </a>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     )
   }
 }
