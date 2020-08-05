@@ -10,15 +10,6 @@ const UserInterface = require('./libs/gui')
 const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp // eslint-disable-line no-unused-vars
 
 /**
- * Supported languages.
- */
-const LANGUAGES = {
-  en: 'English',
-  es: 'Español'
-}
-const LANGUAGE_DEFAULT = 'en'
-
-/**
  * Define the bridge between React and the rest of our code. Encapsulating this
  * here means that our tests don't have to depend on React.
  */
@@ -73,31 +64,6 @@ class ReactInterface extends UserInterface {
       renderer: 'thrasos'
     }
   }
-}
-
-/**
- * Figure out what language we're to use.
- * 1. If the URL is https://tidyblocks.tech/kl/, use Kalaallisut.
- * 2. If the URL is https://tidyblocks.tech?lang=kl, use Kalaallisut.
- * 3. Otherwise, use English (default).
- * This allows us to test languages by loading 'index.html' and then editing the
- * URL to add '?lang=kl'.
- * @param {string} pathname The path portion of the page URL.
- * @param {URLSearchParams} urlParams Query parameters of URL.
- * @returns Two-letter language code.
- */
-const getLanguage = (pathname, urlParams) => {
-  let language = LANGUAGE_DEFAULT
-  if (pathname.match('^/../')) {
-    language = pathname.split('/')[1]
-  }
-  else if (urlParams.has('lang')) {
-    language = urlParams.get('lang')
-  }
-  if (!(language in LANGUAGES)) {
-    language = LANGUAGE_DEFAULT
-  }
-  return language
 }
 
 /**
