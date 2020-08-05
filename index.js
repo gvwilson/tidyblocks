@@ -76,6 +76,5 @@ const setup = (language, rootId) => {
 }
 
 module.exports = {
-  getLanguage,
   setup
 }

@@ -15,6 +15,8 @@ layout: plain
   </a>
 </h2>
 
+<p>A blocks-based tool for tidy data manipulation and analysis.</p>
+
 <h2>
   <a href="./es/index.html">
     <img src="{{'/static/flags/spain.svg' | relative_url}}" height="20em"/> Español
