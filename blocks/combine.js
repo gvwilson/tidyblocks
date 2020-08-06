@@ -9,45 +9,55 @@ const MSG = {
   glue: {
     message0: {
       en: 'Glue left %1 right %2 labels %3',
-      es: 'Pegar izquierda %1 derecha %2 etiquetas %3'
+      es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
+      ar: ''
     },
     table_name: {
       en: 'name',
-      es: 'nombre'
+      es: 'nombre',
+      ar: ''
     },
     label: {
       en: 'label',
-      es: 'etiqueta'
+      es: 'etiqueta',
+      ar: ''
     },
     tooltip: {
       en: 'glue rows from two tables together',
-      es: 'pegar juntas filas de dos tablas'
+      es: 'pegar juntas filas de dos tablas',
+      ar: ''
     }
   },
   join: {
     message0: {
       en: 'Join',
-      es: 'Unir'
+      es: 'Unir',
+      ar: ''
     },
     message1: {
       en: 'left %1 %2',
-      es: 'izquierda  %1 %2'
+      es: 'izquierda  %1 %2',
+      ar: ''
     },
     message2: {
       en: 'right %1 %2',
-      es: 'derecha %1 %2'
+      es: 'derecha %1 %2',
+      ar: ''
     },
     table: {
       en: 'table',
-      es: 'tabla'
+      es: 'tabla',
+      ar: ''
     },
     column: {
       en: 'column',
-      es: 'columna'
+      es: 'columna',
+      ar: ''
     },
     tooltip: {
       en: 'join two tables by matching values',
-      es: 'unir dos tables emparenjando valores'
+      es: 'unir dos tables emparenjando valores',
+      ar: ''
     }
   }
 }
