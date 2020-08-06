@@ -10,68 +10,82 @@ const {Messages} = require('./helpers')
 const MESSAGES = {
   name: {
     en: 'name',
-    es: 'nombre'
+    es: 'nombre',
+    ar: 'ﻹسم'
   },
   x_axis: {
     en: 'X axis',
-    es: 'eje X'
+    es: 'eje X',
+    ar: 'المحور الأفقي'
   },
   y_axis: {
     en: 'Y axis',
-    es: 'eje Y'
+    es: 'eje Y',
+    ar: 'المحور الرأسي'    
   },
   plot_bar: {
     message0: {
       en: 'Bar %1 %2 %3',
-      es: 'Barras %1 %2 %3'
+      es: 'Barras %1 %2 %3',
+      ar: 'الأعمده ١٪ ٢٪ ٣٪'
     },
     tooltip: {
       en: 'create bar plot',
-      es: 'crear grafico barras'
+      es: 'crear grafico barras',
+      ar: 'إنشاء رسم الأعمده البيانيه'
     }
   },
   plot_box: {
     message0: {
       en: 'Box %1 %2 %3',
-      es: 'Cajas %1 %2 %3'
+      es: 'Cajas %1 %2 %3',
+      ar: 'الصندوق ١٪ ٢٪ ٣٪'
     },
     tooltip: {
       en: 'create box plot',
-      es: 'crear grafico cajas'
+      es: 'crear grafico cajas',
+      ar: 'إنشاء مخطط الصندوق ذو العارضتين'
     }
   },
   plot_dot: {
     message0: {
       en: 'Dot %1 %2',
-      es: 'Puntos %1 %2'
+      es: 'Puntos %1 %2',
+      ar: 'النقطه ١٪ ٢٪'
     },
     tooltip: {
       en: 'create dot plot',
-      es: 'crear grafico puntos'
+      es: 'crear grafico puntos',
+      ar: 'إنشاء المخطط النقطي'
     }
   },
   plot_histogram: {
     message0: {
       en: 'Histogram %1 %2 %3',
-      es: 'Histograma %1 %2 %3'
+      es: 'Histograma %1 %2 %3',
+      ar: 'المدرج التكراري'
     },
     column: {
       en: 'column',
-      es: 'columna'
+      es: 'columna',
+      ar: '١٪ ٢٪'
     },
     tooltip: {
       en: 'create histogram',
-      es: 'crear histograma'
+      es: 'crear histograma',
+      ar: 'إنشاء المدرج التكراري'
     }
   },
   plot_scatter: {
     message0: {
       en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
-      es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5'
+      es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
+      ar: 'التشتت ١٪ ٢٪ ٣٪ اللون ٤٪ إضافه خط؟٥٪'
     },
     tooltip: {
       en: 'create scatter plot',
-      en: 'crear grafico dispersion'
+      en: 'crear grafico dispersion',
+      ar: 'إنشاء مخطط الإنتشار'
     }
   }
 }
