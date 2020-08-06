@@ -51,6 +51,33 @@ class OpNegate extends OpNegationBase {
 }
 
 /**
+ * Absolute Value.
+ */
+class OpAbs extends ExprUnary {
+  /**
+   * Constructor.
+   * @param {expr} arg How to get the value.
+   * @returns The absolute value.
+   */
+  constructor (arg) {
+    super(FAMILY, 'abs', arg)
+  }
+
+  /**
+   * Operate on a single row.
+   * @param {object} row The row to operate on.
+   * @param {number} i The row's index.
+   * @return The negation of the value returned by the sub-expression.
+   */
+  run (row, i) {
+    const value = this.arg.run(row, i)
+    util.checkNumber(value,
+                     `Require number for ${this.name}`)
+    return (value === util.MISSING) ? util.MISSING : util.safeValue(Math.abs(value))
+  }
+}
+
+/**
  * Logical negation.
  */
 class OpNot extends OpNegationBase {
@@ -737,6 +764,7 @@ module.exports = {
   lessEqual: OpLessEqual,
   multiply: OpMultiply,
   negate: OpNegate,
+  abs: OpAbs,
   not: OpNot,
   notEqual: OpNotEqual,
   or: OpOr,

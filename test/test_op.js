@@ -65,6 +65,15 @@ describe('arithmetic operations', () => {
     done()
   })
 
+  it('absolute', (done) => {
+    const expected = [2, 2, 0, 3, util.MISSING, util.MISSING]
+    const op = new Op.abs(getRight)
+    const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) for negate`)
+    done()
+  })
+
   it('remainders', (done) => {
     const expected = [0, 1, util.MISSING, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.remainder(getLeft, getRight)
