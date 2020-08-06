@@ -97,7 +97,7 @@ module.exports = {
   ],
   NUMBER: [
     {left: 2, right: 2},
-    {left: 5, right: 2},
+    {left: 5, right: -2},
     {left: 2, right: 0},
     {left: util.MISSING, right: 3},
     {left: 4, right: util.MISSING},

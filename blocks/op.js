@@ -25,7 +25,8 @@ const MSG = {
   },
   abs: {
     tooltip: {
-      en: 'non-negative value of a numeric column',
+      en: 'absolute value of a numeric column',
+      es: 'FIXME'
     }
   },
   compare: {

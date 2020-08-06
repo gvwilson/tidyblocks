@@ -21,7 +21,7 @@ const threeDates = [
 
 describe('arithmetic operations', () => {
   it('adds', (done) => {
-    const expected = [4, 7, 2, util.MISSING, util.MISSING, util.MISSING]
+    const expected = [4, 3, 2, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.add(getLeft, getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
@@ -30,7 +30,7 @@ describe('arithmetic operations', () => {
   })
 
   it('divides', (done) => {
-    const expected = [1.0, 2.5, util.MISSING, util.MISSING, util.MISSING, util.MISSING]
+    const expected = [1.0, -2.5, util.MISSING, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.divide(getLeft, getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
@@ -39,7 +39,7 @@ describe('arithmetic operations', () => {
   })
 
   it('exponentiates', (done) => {
-    const expected = [4, 25, 1, util.MISSING, util.MISSING, util.MISSING]
+    const expected = [4, 0.04, 1, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.power(getLeft, getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
@@ -48,7 +48,7 @@ describe('arithmetic operations', () => {
   })
 
   it('multiplies', (done) => {
-    const expected = [4, 10, 0, util.MISSING, util.MISSING, util.MISSING]
+    const expected = [4, -10, 0, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.multiply(getLeft, getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
@@ -57,7 +57,7 @@ describe('arithmetic operations', () => {
   })
 
   it('negates', (done) => {
-    const expected = [-2, -2, 0, -3, util.MISSING, util.MISSING]
+    const expected = [-2, 2, 0, -3, util.MISSING, util.MISSING]
     const op = new Op.negate(getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
@@ -65,12 +65,12 @@ describe('arithmetic operations', () => {
     done()
   })
 
-  it('absolute', (done) => {
+  it('absolute value', (done) => {
     const expected = [2, 2, 0, 3, util.MISSING, util.MISSING]
     const op = new Op.abs(getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
-                     `Wrong value(s) for negate`)
+                     `Wrong value(s) for absolute value`)
     done()
   })
 
@@ -84,7 +84,7 @@ describe('arithmetic operations', () => {
   })
 
   it('subtracts', (done) => {
-    const expected = [0, 3, 2, util.MISSING, util.MISSING, util.MISSING]
+    const expected = [0, 7, 2, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.subtract(getLeft, getRight)
     const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
     assert.deepEqual(expected, actual,
