@@ -270,74 +270,103 @@ const createBlocks = (language = 'en') => {
   }
 }
 
+// ----------------------------------------------------------------------
+// Toolbox configuration.
+// ----------------------------------------------------------------------
+
+const MSG = {
+  combine: {
+    en: 'combine'
+  },
+  data: {
+    en: 'data'
+  },
+  op: {
+    en: 'op'
+  },
+  plot: {
+    en: 'plot'
+  },
+  stats: {
+    en: 'stats'
+  },
+  transform: {
+    en: 'transform'
+  },
+  value: {
+    en: 'value'
+  }
+}
+
 /**
- * Configuration of blocks. This is here instead of in the HTML page in order to
- * avoid confusing React (which otherwise complains about `xml` being an unknown
- * UI component).
+ * Create XML configuration for toolbox, internationalizing the category names.
+ * @param {string} language Waht language to use for the string lookup table.
  */
-const XML_CONFIG = `<xml id="toolbox" style="display: none">
-  <category name="data" categorystyle="data">
-    <block type="data_colors"></block>
-    <block type="data_earthquakes"></block>
-    <block type="data_penguins"></block>
-    <block type="data_phish"></block>
-    <block type="data_sequence"></block>
-    <block type="data_user"></block>
-  </category>
-  <category name="transform" categorystyle="transform">
-    <block type="transform_create"></block>
-    <block type="transform_drop"></block>
-    <block type="transform_filter"></block>
-    <block type="transform_groupBy"></block>
-    <block type="transform_report"></block>
-    <block type="transform_select"></block>
-    <block type="transform_sort"></block>
-    <block type="transform_summarize"></block>
-    <block type="transform_ungroup"></block>
-    <block type="transform_unique"></block>
-  </category>
-  <category name="plot" categorystyle="plot">
-    <block type="plot_bar"></block>
-    <block type="plot_box"></block>
-    <block type="plot_dot"></block>
-    <block type="plot_histogram"></block>
-    <block type="plot_scatter"></block>
-  </category>
-  <category name="stats" categorystyle="stats">
-    <block type="stats_ttest_one"></block>
-    <block type="stats_ttest_two"></block>
-  </category>
-  <category name="op" categorystyle="op">
-    <block type="op_arithmetic"></block>
-    <block type="op_negate"></block>
-    <block type="op_compare"></block>
-    <block type="op_logical"></block>
-    <block type="op_not"></block>
-    <block type="op_type"></block>
-    <block type="op_convert"></block>
-    <block type="op_datetime"></block>
-    <block type="op_conditional"></block>
-    <block type="op_abs"></block>
-  </category>
-  <category name="value" categorystyle="value">
-    <block type="value_column"></block>
-    <block type="value_datetime"></block>
-    <block type="value_logical"></block>
-    <block type="value_number"></block>
-    <block type="value_text"></block>
-    <block type="value_rownum"></block>
-    <block type="value_exponential"></block>
-    <block type="value_normal"></block>
-    <block type="value_uniform"></block>
-  </category>
-  <category name="combine" categorystyle="combine">
-    <block type="combine_glue"></block>
-    <block type="combine_join"></block>
-  </category>
-</xml>`
+const createXmlConfig = (language = 'en') => {
+  return `<xml id="toolbox" style="display: none">
+    <category name="${MSG.data[language]}" categorystyle="data">
+      <block type="data_colors"></block>
+      <block type="data_earthquakes"></block>
+      <block type="data_penguins"></block>
+      <block type="data_phish"></block>
+      <block type="data_sequence"></block>
+      <block type="data_user"></block>
+    </category>
+    <category name="${MSG.transform[language]}" categorystyle="transform">
+      <block type="transform_create"></block>
+      <block type="transform_drop"></block>
+      <block type="transform_filter"></block>
+      <block type="transform_groupBy"></block>
+      <block type="transform_report"></block>
+      <block type="transform_select"></block>
+      <block type="transform_sort"></block>
+      <block type="transform_summarize"></block>
+      <block type="transform_ungroup"></block>
+      <block type="transform_unique"></block>
+    </category>
+    <category name="${MSG.plot[language]}" categorystyle="plot">
+      <block type="plot_bar"></block>
+      <block type="plot_box"></block>
+      <block type="plot_dot"></block>
+      <block type="plot_histogram"></block>
+      <block type="plot_scatter"></block>
+    </category>
+    <category name="${MSG.stats[language]}" categorystyle="stats">
+      <block type="stats_ttest_one"></block>
+      <block type="stats_ttest_two"></block>
+    </category>
+    <category name="${MSG.op[language]}" categorystyle="op">
+      <block type="op_arithmetic"></block>
+      <block type="op_negate"></block>
+      <block type="op_compare"></block>
+      <block type="op_logical"></block>
+      <block type="op_not"></block>
+      <block type="op_type"></block>
+      <block type="op_convert"></block>
+      <block type="op_datetime"></block>
+      <block type="op_conditional"></block>
+      <block type="op_abs"></block>
+    </category>
+    <category name="${MSG.value[language]}" categorystyle="value">
+      <block type="value_column"></block>
+      <block type="value_datetime"></block>
+      <block type="value_logical"></block>
+      <block type="value_number"></block>
+      <block type="value_text"></block>
+      <block type="value_rownum"></block>
+      <block type="value_exponential"></block>
+      <block type="value_normal"></block>
+      <block type="value_uniform"></block>
+    </category>
+    <category name="${MSG.combine[language]}" categorystyle="combine">
+      <block type="combine_glue"></block>
+      <block type="combine_join"></block>
+    </category>
+  </xml>`
+}
 
 module.exports = {
   THEME,
-  XML_CONFIG,
+  createXmlConfig,
   createBlocks
 }

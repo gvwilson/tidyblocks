@@ -28,9 +28,12 @@ class ReactInterface extends UserInterface {
     // Create an environment so the React app can get the pre-loaded datasets.
     const env = new Env(this)
 
+    // Create the XML configuration (internationalized).
+    const xmlConfig = blocks.createXmlConfig(language)
+
     // Render React.
     const app = ReactDOM.render(
-      <TidyBlocksApp settings={settings} toolbox={blocks.XML_CONFIG} initialEnv={env}/>,
+      <TidyBlocksApp settings={settings} toolbox={xmlConfig} initialEnv={env}/>,
       document.getElementById(rootId)
     )
 
