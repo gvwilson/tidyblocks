@@ -2,6 +2,8 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 const combine = require('./combine')
 const data = require('./data')
 const op = require('./op')
@@ -274,7 +276,7 @@ const createBlocks = (language = 'en') => {
 // Toolbox configuration.
 // ----------------------------------------------------------------------
 
-const MSG = {
+const MESSAGES = {
   combine: {
     en: 'combine'
   },
@@ -300,11 +302,12 @@ const MSG = {
 
 /**
  * Create XML configuration for toolbox, internationalizing the category names.
- * @param {string} language Waht language to use for the string lookup table.
+ * @param {string} language What language to use for the string lookup table.
  */
-const createXmlConfig = (language = 'en') => {
+const createXmlConfig = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   return `<xml id="toolbox" style="display: none">
-    <category name="${MSG.data[language]}" categorystyle="data">
+    <category name="${msg.get('data')}" categorystyle="data">
       <block type="data_colors"></block>
       <block type="data_earthquakes"></block>
       <block type="data_penguins"></block>
@@ -312,7 +315,7 @@ const createXmlConfig = (language = 'en') => {
       <block type="data_sequence"></block>
       <block type="data_user"></block>
     </category>
-    <category name="${MSG.transform[language]}" categorystyle="transform">
+    <category name="${msg.get('transform')}" categorystyle="transform">
       <block type="transform_create"></block>
       <block type="transform_drop"></block>
       <block type="transform_filter"></block>
@@ -324,18 +327,18 @@ const createXmlConfig = (language = 'en') => {
       <block type="transform_ungroup"></block>
       <block type="transform_unique"></block>
     </category>
-    <category name="${MSG.plot[language]}" categorystyle="plot">
+    <category name="${msg.get('plot')}" categorystyle="plot">
       <block type="plot_bar"></block>
       <block type="plot_box"></block>
       <block type="plot_dot"></block>
       <block type="plot_histogram"></block>
       <block type="plot_scatter"></block>
     </category>
-    <category name="${MSG.stats[language]}" categorystyle="stats">
+    <category name="${msg.get('stats')}" categorystyle="stats">
       <block type="stats_ttest_one"></block>
       <block type="stats_ttest_two"></block>
     </category>
-    <category name="${MSG.op[language]}" categorystyle="op">
+    <category name="${msg.get('op')}" categorystyle="op">
       <block type="op_arithmetic"></block>
       <block type="op_negate"></block>
       <block type="op_compare"></block>
@@ -347,7 +350,7 @@ const createXmlConfig = (language = 'en') => {
       <block type="op_conditional"></block>
       <block type="op_abs"></block>
     </category>
-    <category name="${MSG.value[language]}" categorystyle="value">
+    <category name="${msg.get('value')}" categorystyle="value">
       <block type="value_column"></block>
       <block type="value_datetime"></block>
       <block type="value_logical"></block>
@@ -358,7 +361,7 @@ const createXmlConfig = (language = 'en') => {
       <block type="value_normal"></block>
       <block type="value_uniform"></block>
     </category>
-    <category name="${MSG.combine[language]}" categorystyle="combine">
+    <category name="${msg.get('combine')}" categorystyle="combine">
       <block type="combine_glue"></block>
       <block type="combine_join"></block>
     </category>

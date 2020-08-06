@@ -2,10 +2,12 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   stats_ttest_one: {
     message0: {
       en: 'One-sample t-test', 
@@ -61,23 +63,24 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // One-sample two-sided t-test
     {
       type: 'stats_ttest_one',
-      message0: MSG.stats_ttest_one.message0[language],
+      message0: msg.get('stats_ttest_one.message0'),
       args0: [],
-      message1: MSG.stats_ttest_one.message1[language],
+      message1: msg.get('stats_ttest_one.message1'),
       args1: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.stats_ttest_one.args1_name[language]
+          text: msg.get('stats_ttest_one.args1_name')
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.stats_ttest_one.args1_column[language]
+          text: msg.get('stats_ttest_one.args1_column')
         },
         {
           type: 'field_number',
@@ -89,38 +92,38 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'stats_blocks',
-      tooltip: MSG.stats_ttest_one.tooltip[language],
+      tooltip: msg.get('stats_ttest_one.tooltip'),
       helpUrl: ''
     },
 
     // Two-sample two-sided t-test
     {
       type: 'stats_ttest_two',
-      message0: MSG.stats_ttest_two.message0[language],
+      message0: msg.get('stats_ttest_two.message0'),
       args0: [],
-      message1: MSG.stats_ttest_two.message1[language],
+      message1: msg.get('stats_ttest_two.message1'),
       args1: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.stats_ttest_two.args1_name[language]
+          text: msg.get('stats_ttest_two.args1_name')
         },
         {
           type: 'field_input',
           name: 'LABEL_COLUMN',
-          text: MSG.stats_ttest_two.args1_label[language]
+          text: msg.get('stats_ttest_two.args1_label')
         },
         {
           type: 'field_input',
           name: 'VALUE_COLUMN',
-          text: MSG.stats_ttest_two.args1_column[language]
+          text: msg.get('stats_ttest_two.args1_column')
         }
       ],
       inputsInline: false,
       previousStatement: null,
       nextStatement: null,
       style: 'stats_blocks',
-      tooltip: MSG.stats_ttest_two.tooltip[language],
+      tooltip: msg.get('stats_ttest_two.tooltip'),
       helpUrl: ''
     }
   ])
