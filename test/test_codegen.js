@@ -159,6 +159,18 @@ describe('expression code generation', () => {
     done()
   })
 
+  it('generates code for absolute values', (done) => {
+    const expected = [Op.FAMILY, 'abs', [Value.FAMILY, 'number', 3]]
+    const w = fixture.workspace()
+    const arg = w.newBlock('value_number')
+    arg.setFieldValue(3, 'VALUE')
+    const block = w.newBlock('op_abs')
+    fixture.addSubBlock(block, 'VALUE', arg)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for comparisons', (done) => {
     const expected = [Op.FAMILY, 'lessEqual',
                       [Value.FAMILY, 'number', 1],
