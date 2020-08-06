@@ -53,6 +53,7 @@
     "react-blockly": "^5.2.0",
     "react-data-grid": "^7.0.0-canary.17",
     "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1",
     "react-select": "^3.1.0",
     "simple-statistics": "^7.1.0",
     "vega": "^5.13.0",

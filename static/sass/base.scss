@@ -36,7 +36,7 @@ html, body, #root {
   font-weight: 400;
 }
 
-$runDiameter: 60px;
+$runDiameter: 110px;
 .runBtn{
   z-index: 3;
   width: $runDiameter;
@@ -62,9 +62,50 @@ $runDiameter: 60px;
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+.helpBtn{
+  z-index: 3;
+  width: $runDiameter;
+  height: $runDiameter;
+  line-height: $runDiameter;
+  position: absolute;
+  top: 20;
+  left: 100;
+  background: #a3b8c7;
+  box-shadow: 0 2px 5px #ced7db;
+  transition: background-color .1s;
+  color: #fff;
+  border-radius: 200px;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  cursor: pointer;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
 .runBtn:hover{
   background: #8195a3;
   box-shadow: 0 2px 5px $lightBlue;
+}
+
+.helpModal{
+  background: #fff;
+  width: 400px;
+  padding: 25px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -200px;
+  font-family: 'Roboto', sans-serif;
+
+  img{
+    max-width: 100%;
+  }
 }
 
 .topRightPane {
@@ -198,44 +239,6 @@ $dotDiameter: 4px;
 
 .sourceSelectInner__control {
   padding: 2px;
-}
-
-.uploadBtn{
-  cursor: pointer;
-  background: $darkBlue;
-  color: #fff;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 6px 16px;
-  font-size: 0.875rem;
-  min-width: 64px;
-  box-sizing: border-box;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 500;
-  line-height: 2.2;
-  border-radius: 4px;
-  letter-spacing: 0.02857em;
-  text-transform: uppercase;
-  width: 175px;
-  text-align: center;
-  margin-bottom: 10px;
-  margin-top: 10px;
-}
-
-.uploadBtn:hover{
-  background: $midBlue;
-}
-
-.dialogBtnIcon{
-  color: #fff;
-  font-size: 1.5rem;
-  vertical-align: middle;
-  margin-right: 10px;
-  padding-bottom: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
 }
 
 [data-type="Resizer"] {

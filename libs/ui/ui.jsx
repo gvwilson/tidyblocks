@@ -23,7 +23,7 @@ import { SaveCsvFormDialog, SaveWorkspaceFormDialog,
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 import { TabSelectionBar, TabPanels } from './tabs.jsx'
 import { theme } from './theme.jsx'
-
+import { HelpModal } from './modal.jsx'
 const DATA_USER = 'user'
 const DATA_REPORT = 'results'
 
@@ -53,6 +53,7 @@ export class TidyBlocksApp extends React.Component {
     this.saveWorkspaceDialog = React.createRef()
     this.saveSvgDialog = React.createRef()
     this.loadCsvDialog = React.createRef()
+    this.helpModal = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -127,6 +128,7 @@ export class TidyBlocksApp extends React.Component {
     this.minimizePanel = this.minimizePanel.bind(this)
     this.restorePanel = this.restorePanel.bind(this)
     this.updateZoom = this.updateZoom.bind(this)
+    this.openHelpModal = this.openHelpModal.bind(this)
     this.workspaceChanged = this.workspaceChanged.bind(this)
   }
 
@@ -543,6 +545,10 @@ export class TidyBlocksApp extends React.Component {
     })
   }
 
+  openHelpModal () {
+    this.helpModal.current.handleOpen()
+  }
+
   // Calls the file upload input.
   loadCsvClick () {
     this.loadCsvDialog.current.handleClickOpen()
@@ -605,13 +611,14 @@ export class TidyBlocksApp extends React.Component {
         <MuiThemeProvider theme={theme}>
           <LoadCsvDialog ref={this.loadCsvDialog} fileUploadRef={this.refs.csvFileUploader} loadCsvUrl={this.loadCsvUrl}/>
           <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
+          <HelpModal ref={this.helpModal}/>
           { this.blocklyRef.current &&
             <>
               <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
               <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
             </>
           }
-          <MenuBar 
+          <MenuBar
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}
             saveWorkspace={this.saveWorkspace}
@@ -644,6 +651,8 @@ export class TidyBlocksApp extends React.Component {
                   workspaceDidChange={this.workspaceChanged}
                 />
                 <a className="runBtn" onClick={this.runProgram}> Run </a>
+                <a className="helpBtn" onClick={this.openHelpModal}> Help </a>
+
               </div>
               <div className="topRightPane">
                 <AppBar position="static" color="default" component={'span'}>
