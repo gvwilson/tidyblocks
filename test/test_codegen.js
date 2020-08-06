@@ -283,7 +283,7 @@ describe('expression code generation', () => {
 
 describe('transform code generation', () => {
   it('generates code for loading standard datasets', (done) => {
-    for (let name of ['colors', 'earthquakes', 'penguins']) {
+    for (let name of ['colors', 'earthquakes', 'penguins', 'phish']) {
       const expected = [Transform.FAMILY, 'data', name]
       const w = fixture.workspace()
       const block = w.newBlock(`data_${name}`)

@@ -47,18 +47,27 @@ class Messages {
    */
   get (path) {
     const components = path.split('.')
+
     const lookup = components.reduce((table, current) => {
+      if (!table) {
+        return null
+      }
       return table[current]
     }, this.messages)
+
+    if (lookup === null) {
+      return Messages.UNDEFINED
+    }
     if (this.language in lookup) {
       return lookup[this.language]
     }
     if (this.defaultLanguage in lookup) {
       return lookup[this.defaultLanguage]
     }
-    return 'undefined'
+    return Messages.UNDEFINED
   }
 }
+Messages.UNDEFINED = 'undefined'
 
 module.exports = {
   ORDER_NONE,
