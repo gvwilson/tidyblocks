@@ -22,3 +22,5 @@ layout: plain
     <img src="{{'/static/flags/spain.svg' | relative_url}}" height="20em"/> Español
   </a>
 </h2>
+
+<p> Herramienta basada en bloques que permiten manipulacion de datos y analisis de manera ordenada.</p>
