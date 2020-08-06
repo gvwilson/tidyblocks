@@ -36,9 +36,7 @@ export class HelpModal extends React.Component{
     const body = (
       <div className="helpModal">
         <h2 id="simple-modal-title">Text in a modal</h2>
-        <p id="simple-modal-description">
-          <ReactMarkdown source={this.state.contents} />
-        </p>
+        <ReactMarkdown source={this.state.contents} />
         <HelpModal />
       </div>
     )
