@@ -2,7 +2,10 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {valueToCode} = require('./helpers')
+const {
+  valueToCode,
+  Messages
+} = require('./helpers')
 
 /**
  * Helper function to turn a string containing comma-separated column names into
@@ -21,7 +24,7 @@ const _formatMultiColNames = (raw) => {
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   multiple_columns: {
     en: 'column, column', 
     es: 'columna, columna'
@@ -149,16 +152,17 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Create
     {
       type: 'transform_create',
-      message0: MSG.create.message0[language],
+      message0: msg.get('create.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.create.args0_text[language]
+          text: msg.get('create.args0_text')
         },
         {
           type: 'input_value',
@@ -169,7 +173,7 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.create.tooltip[language],
+      tooltip: msg.get('create.tooltip'),
       helpUrl: '',
       extensions: ['validate_COLUMN']
     },
@@ -177,19 +181,19 @@ const setup = (language) => {
     // Drop
     {
       type: 'transform_drop',
-      message0: MSG.drop.message0[language],
+      message0: msg.get('drop.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.drop.args0_tooltip[language],
+      tooltip: msg.get('drop.args0_tooltip'),
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
@@ -197,37 +201,37 @@ const setup = (language) => {
     // Filter
     {
       type: 'transform_filter',
-      message0: MSG.filter.message0[language],
+      message0: msg.get('filter.message0'),
       args0: [
         {
           type: 'input_value',
-          name: MSG.filter.args0_name[language]
+          name: msg.get('filter.args0_name')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.filter.tooltip[language],
+      tooltip: msg.get('filter.tooltip'),
       helpUrl: ''
     },
 
     // Group
     {
       type: 'transform_groupBy',
-      message0: MSG.groupby.message0[language],
+      message0: msg.get('groupby.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.groupby.tooltip[language],
+      tooltip: msg.get('groupby.tooltip'),
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
@@ -235,18 +239,18 @@ const setup = (language) => {
     // Report
     {
       type: 'transform_report',
-      message0: MSG.report.message0[language],
+      message0: msg.get('report.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.report.args0_text[language]
+          text: msg.get('report.args0_text')
         }
       ],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.report.tooltip[language],
+      tooltip: msg.get('report.tooltip'),
       helpUrl: '',
       extensions: ['validate_NAME']
     },
@@ -254,19 +258,19 @@ const setup = (language) => {
     // Select
     {
       type: 'transform_select',
-      message0: MSG.select.message0[language],
+      message0: msg.get('select.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.select.tooltip[language],
+      tooltip: msg.get('select.tooltip'),
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
@@ -274,12 +278,12 @@ const setup = (language) => {
     // Sort
     {
       type: 'transform_sort',
-      message0: MSG.sort.message0[language],
+      message0: msg.get('sort.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         },
         {
           type: 'field_checkbox',
@@ -292,14 +296,14 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       extensions: ['validate_MULTIPLE_COLUMNS'],
-      tooltip: MSG.sort.tooltip[language],
+      tooltip: msg.get('sort.tooltip'),
       helpUrl: ''
     },
 
     // Summarize
     {
       type: 'transform_summarize',
-      message0: MSG.summarize.message0[language],
+      message0: msg.get('summarize.message0'),
       args0: [
         {
           type: 'field_dropdown',
@@ -320,14 +324,14 @@ const setup = (language) => {
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.summarize.args0_text[language]
+          text: msg.get('summarize.args0_text')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.summarize.tooltip[language],
+      tooltip: msg.get('summarize.tooltip'),
       helpUrl: '',
       extensions: ['validate_COLUMN']
     },
@@ -335,32 +339,32 @@ const setup = (language) => {
     // Ungroup
     {
       type: 'transform_ungroup',
-      message0: MSG.ungroup.message0[language],
+      message0: msg.get('ungroup.message0'),
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.ungroup.tooltip[language],
+      tooltip: msg.get('ungroup.tooltip'),
       helpUrl: ''
     },
 
     // Unique
     {
       type: 'transform_unique',
-      message0: MSG.unique.message0[language],
+      message0: msg.get('unique.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.unique.tooltip,
+      tooltip: msg.get('unique.tooltip'),
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     }

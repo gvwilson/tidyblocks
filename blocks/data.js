@@ -2,10 +2,12 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   colors: {
     message0: {
       en: 'Colors',
@@ -81,52 +83,53 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Colors
     {
       type: 'data_colors',
-      message0: MSG.colors.message0[language],
+      message0: msg.get('colors.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.colors.tooltip[language]
+      tooltip: msg.get('colors.tooltip')
     },
     // Earthquakes
     {
       type: 'data_earthquakes',
-      message0: MSG.earthquakes.message0[language],
+      message0: msg.get('earthquakes.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.earthquakes.tooltip[language]
+      tooltip: msg.get('earthquakes.tooltip')
     },
     // Penguins
     {
       type: 'data_penguins',
-      message0: MSG.penguins.message0[language],
+      message0: msg.get('penguins.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.penguins.tooltip[language]
+      tooltip: msg.get('penguins.tooltip')
     },
     // Phish
     {
       type: 'data_phish',
-      message0: MSG.phish.message0[language],
+      message0: msg.get('phish.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.phish.tooltip[language]
+      tooltip: msg.get('phish.tooltip')
     },
     // Sequence
     {
       type: 'data_sequence',
-      message0: MSG.sequence.message0[language],
+      message0: msg.get('sequence.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.sequence.args0_text[language]
+          text: msg.get('sequence.args0_text')
         },
         {
           type: 'field_number',
@@ -137,24 +140,24 @@ const setup = (language) => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.sequence.tooltip[language],
+      tooltip: msg.get('sequence.tooltip'),
       helpUrl: ''
     },
     // User data
     {
       type: 'data_user',
-      message0: MSG.data_user.message0[language],
+      message0: msg.get('data_user.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.data_user.args0_text[language]
+          text: msg.get('data_user.args0_text')
         }
       ],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.data_user.tooltip[language],
+      tooltip: msg.get('data_user.tooltip'),
       helpUrl: ''
     }
   ])

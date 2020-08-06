@@ -4,13 +4,14 @@ const Blockly = require('blockly/blockly_compressed')
 
 const {
   ORDER_NONE,
-  valueToCode
+  valueToCode,
+  Messages
 } = require('./helpers')
 
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   arithmetic: {
     tooltip: {
       en: 'do arithmetic',
@@ -98,6 +99,7 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Binary arithmetic
     {
@@ -128,7 +130,7 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.arithmetic.tooltip[language],
+      tooltip: msg.get('arithmetic.tooltip'),
       helpUrl: ''
     },
 
@@ -145,7 +147,7 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.negate.tooltip[language],
+      tooltip: msg.get('negate.tooltip'),
       helpUrl: ''
     },
 
@@ -162,7 +164,7 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.abs.tooltip[language],
+      tooltip: msg.get('abs.tooltip'),
       helpUrl: ''
     },
 
@@ -195,7 +197,7 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.compare.tooltip[language],
+      tooltip: msg.get('compare.tooltip'),
       helpUrl: ''
     },
 
@@ -224,14 +226,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.logical.tooltip[language],
+      tooltip: msg.get('logical.tooltip'),
       helpUrl: ''
     },
 
     // Logical negation
     {
       type: 'op_not',
-      message0: MSG.not.message0[language],
+      message0: msg.get('not.message0'),
       args0: [
         {
           type: 'input_value',
@@ -241,14 +243,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.not.tooltip[language],
+      tooltip: msg.get('not.tooltip'),
       helpUrl: ''
     },
 
     // Type checking
     {
       type: 'op_type',
-      message0: MSG.type.message0[language],
+      message0: msg.get('type.message0'),
       args0: [
         {
           type: 'input_value',
@@ -269,14 +271,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.type.tooltip[language],
+      tooltip: msg.get('type.tooltip'),
       helpUrl: ''
     },
 
     // Type conversion
     {
       type: 'op_convert',
-      message0: MSG.convert.message0[language],
+      message0: msg.get('convert.message0'),
       args0: [
         {
           type: 'input_value',
@@ -296,14 +298,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.convert.tooltip[language],
+      tooltip: msg.get('convert.tooltip'),
       helpUrl: ''
     },
 
     // Datetime conversions
     {
       type: 'op_datetime',
-      message0: MSG.datetime.message0[language],
+      message0: msg.get('datetime.message0'),
       args0: [
         {
           type: 'field_dropdown',
@@ -326,14 +328,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.datetime.tooltip[language],
+      tooltip: msg.get('datetime.tooltip'),
       helpUrl: ''
     },
 
     // Conditional
     {
       type: 'op_conditional',
-      message0: MSG.conditional.message0[language],
+      message0: msg.get('conditional.message0'),
       args0: [
         {
           type: 'input_value',
@@ -351,7 +353,7 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.conditional.tooltip[language],
+      tooltip: msg.get('conditional.tooltip'),
       helpUrl: ''
     }
   ])
