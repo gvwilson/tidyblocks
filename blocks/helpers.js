@@ -23,7 +23,54 @@ const valueToCode = (block, label) => {
   return raw
 }
 
+/**
+ * Create a table lookup object.
+ */
+class Messages {
+  /**
+   * Construct message lookup class.
+   * @param {object} messages Nested JSON lookup table.
+   * @param {string} language What language to use by preference.
+   * @param {string} defaultLanguage What to use if nothing else available (English).
+   */
+  constructor (messages, language, defaultLanguage = 'en') {
+    this.messages = messages
+    this.language = language
+    this.defaultLanguage = defaultLanguage
+  }
+
+  /**
+   * Look up a value in the preferred language if available, or the default
+   * language if not.
+   * @param {string} path Dot-separated path such as 'plot_bar.message0'.
+   * @returns String (or 'undefined' if not found).
+   */
+  get (path) {
+    const components = path.split('.')
+
+    const lookup = components.reduce((table, current) => {
+      if (!table) {
+        return null
+      }
+      return table[current]
+    }, this.messages)
+
+    if (lookup === null) {
+      return Messages.UNDEFINED
+    }
+    if (this.language in lookup) {
+      return lookup[this.language]
+    }
+    if (this.defaultLanguage in lookup) {
+      return lookup[this.defaultLanguage]
+    }
+    return Messages.UNDEFINED
+  }
+}
+Messages.UNDEFINED = 'undefined'
+
 module.exports = {
   ORDER_NONE,
-  valueToCode
+  valueToCode,
+  Messages
 }

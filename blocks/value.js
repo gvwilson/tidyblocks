@@ -2,12 +2,15 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {ORDER_NONE} = require('./helpers')
+const {
+  ORDER_NONE,
+  Messages
+} = require('./helpers')
 
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   absent: {
     message0: {
       en: 'Absent', 
@@ -107,16 +110,17 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Absent value
     {
       type: 'value_absent',
-      message0: MSG.absent.message0[language],
+      message0: msg.get('absent.message0'),
       args0: [],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.absent.tooltip[language]
+      tooltip: msg.get('absent.tooltip')
     },
 
     // Column name
@@ -126,12 +130,12 @@ const setup = (language) => {
       args0: [{
         type: 'field_input',
         name: 'COLUMN',
-        text: MSG.column.column[language]
+        text: msg.get('column.column')
       }],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.column.tooltip[language],
+      tooltip: msg.get('column.tooltip'),
       extensions: ['validate_COLUMN']
     },
 
@@ -142,12 +146,12 @@ const setup = (language) => {
       args0: [{
         type: 'field_input',
         name: 'DATE',
-        text: MSG.datetime.text[language]
+        text: msg.get('datetime.text')
       }],
       output: 'DateTime',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.datetime.tooltip[language],
+      tooltip: msg.get('datetime.tooltip'),
       extensions: ['validate_DATE']
     },
 
@@ -168,7 +172,7 @@ const setup = (language) => {
       output: 'Boolean',
       helpUrl: '',
       style: 'value_block',
-      tooltip: MSG.logical.tooltip[language]
+      tooltip: msg.get('logical.tooltip')
     },
 
     // Number
@@ -183,7 +187,7 @@ const setup = (language) => {
       output: 'Number',
       helpUrl: '',
       style: 'value_block',
-      tooltip: MSG.number.tooltip[language]
+      tooltip: msg.get('number.tooltip')
     },
 
     // Text
@@ -194,30 +198,30 @@ const setup = (language) => {
         {
           type: 'field_input',
           name: 'VALUE',
-          text: MSG.text.text[language]
+          text: msg.get('text.text')
         }
       ],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.text.tooltip[language]
+      tooltip: msg.get('text.tooltip')
     },
 
     // Row number
     {
       type: 'value_rownum',
-      message0: MSG.rownum.message0[language],
+      message0: msg.get('rownum.message0'),
       args0: [],
       output: 'String',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.rownum.tooltip[language]
+      tooltip: msg.get('rownum.tooltip')
     },
 
     // Exponential random variable
     {
       type: 'value_exponential',
-      message0: MSG.exponential.message0[language],
+      message0: msg.get('exponential.message0'),
       args0: [
         {
           type: 'field_input',
@@ -228,14 +232,14 @@ const setup = (language) => {
       output: 'Number',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.exponential.tooltip[language],
+      tooltip: msg.get('exponential.tooltip'),
       extensions: ['validate_RATE']
     },
 
     // Normal random variable
     {
       type: 'value_normal',
-      message0: MSG.normal.message0[language],
+      message0: msg.get('normal.message0'),
       args0: [
         {
           type: 'field_input',
@@ -251,14 +255,14 @@ const setup = (language) => {
       output: 'Number',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.normal.tooltip[language],
+      tooltip: msg.get('normal.tooltip'),
       extensions: ['validate_STDDEV']
     },
 
     // Uniform random variable
     {
       type: 'value_uniform',
-      message0: MSG.uniform.message0[language],
+      message0: msg.get('uniform.message0'),
       args0: [
         {
           type: 'field_input',
@@ -274,7 +278,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'value_block',
       helpUrl: '',
-      tooltip: MSG.uniform.tooltip[language]
+      tooltip: msg.get('uniform.tooltip')
     }
   ])
 

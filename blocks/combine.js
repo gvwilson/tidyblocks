@@ -2,10 +2,12 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   glue: {
     message0: {
       en: 'Glue left %1 right %2 labels %3',
@@ -57,72 +59,73 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Glue
     {
       type: 'combine_glue',
-      message0: MSG.glue.message0[language],
+      message0: msg.get('glue.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'LEFT_TABLE',
-          text: MSG.glue.table_name[language]
+          text: msg.get('glue.table_name')
         },
         {
           type: 'field_input',
           name: 'RIGHT_TABLE',
-          text: MSG.glue.table_name[language]
+          text: msg.get('glue.table_name')
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.glue.label[language]
+          text: msg.get('glue.label')
         }
       ],
       inputsInline: false,
       nextStatement: null,
       style: 'combine_block',
       hat: 'cap',
-      tooltip: MSG.glue.tooltip[language],
+      tooltip: msg.get('glue.tooltip'),
       helpUrl: '',
       extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE', 'validate_COLUMN']
     },
     // Join
     {
       type: 'combine_join',
-      message0: MSG.join.message0[language],
+      message0: msg.get('join.message0'),
       args0: [],
-      message1: MSG.join.message1[language],
+      message1: msg.get('join.message1'),
       args1: [
         {
           type: 'field_input',
           name: 'LEFT_TABLE',
-          text: MSG.join.table[language]
+          text: msg.get('join.table')
         },
         {
           type: 'field_input',
           name: 'LEFT_COLUMN',
-          text: MSG.join.column[language]
+          text: msg.get('join.column')
         }
       ],
-      message2: MSG.join.message2[language],
+      message2: msg.get('join.message2'),
       args2: [
         {
           type: 'field_input',
           name: 'RIGHT_TABLE',
-          text: MSG.join.table[language]
+          text: msg.get('join.table')
         },
         {
           type: 'field_input',
           name: 'RIGHT_COLUMN',
-          text: MSG.join.column[language]
+          text: msg.get('join.column')
         }
       ],
       inputsInline: false,
       nextStatement: null,
       style: 'combine_block',
       hat: 'cap',
-      tooltip: MSG.join.tooltip[language],
+      tooltip: msg.get('join.tooltip'),
       helpUrl: '',
       extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
     }
