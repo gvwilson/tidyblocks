@@ -11,7 +11,7 @@ const MESSAGES = {
   name: {
     en: 'name',
     es: 'nombre',
-    ar: 'ﻹسم'
+    ar: 'الإسم'
   },
   x_axis: {
     en: 'X axis',
@@ -27,7 +27,7 @@ const MESSAGES = {
     message0: {
       en: 'Bar %1 %2 %3',
       es: 'Barras %1 %2 %3',
-      ar: 'الأعمده ١٪ ٢٪ ٣٪'
+      ar: 'الأعمده %1 %2 %3'
     },
     tooltip: {
       en: 'create bar plot',
@@ -39,7 +39,7 @@ const MESSAGES = {
     message0: {
       en: 'Box %1 %2 %3',
       es: 'Cajas %1 %2 %3',
-      ar: 'الصندوق ١٪ ٢٪ ٣٪'
+      ar: 'الصندوق %1 %2 %3'
     },
     tooltip: {
       en: 'create box plot',
@@ -51,7 +51,7 @@ const MESSAGES = {
     message0: {
       en: 'Dot %1 %2',
       es: 'Puntos %1 %2',
-      ar: 'النقطه ١٪ ٢٪'
+      ar: 'النقطه %1 %2'
     },
     tooltip: {
       en: 'create dot plot',
@@ -63,12 +63,12 @@ const MESSAGES = {
     message0: {
       en: 'Histogram %1 %2 %3',
       es: 'Histograma %1 %2 %3',
-      ar: 'المدرج التكراري'
+      ar: 'المدرج التكراري %1 %2 %3'
     },
     column: {
       en: 'column',
       es: 'columna',
-      ar: '١٪ ٢٪'
+      ar: 'العمود'
     },
     tooltip: {
       en: 'create histogram',
@@ -80,7 +80,7 @@ const MESSAGES = {
     message0: {
       en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
-      ar: 'التشتت ١٪ ٢٪ ٣٪ اللون ٤٪ إضافه خط؟٥٪'
+      ar: 'التشتت %1 %2 %3 اللون %4 إضافه خط؟ %5'
     },
     tooltip: {
       en: 'create scatter plot',
