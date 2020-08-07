@@ -11,45 +11,55 @@ const MESSAGES = {
   glue: {
     message0: {
       en: 'Glue left %1 right %2 labels %3',
-      es: 'Pegar izquierda %1 derecha %2 etiquetas %3'
+      es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
+      ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3'
     },
     table_name: {
       en: 'name',
-      es: 'nombre'
+      es: 'nombre',
+      ko: '이름'
     },
     label: {
       en: 'label',
-      es: 'etiqueta'
+      es: 'etiqueta',
+      ko: '라벨'
     },
     tooltip: {
       en: 'glue rows from two tables together',
-      es: 'pegar juntas filas de dos tablas'
+      es: 'pegar juntas filas de dos tablas',
+      ko: '두 테이블의 행을 붙이기'
     }
   },
   join: {
     message0: {
       en: 'Join',
-      es: 'Unir'
+      es: 'Unir',
+      ko: '연결'
     },
     message1: {
       en: 'left %1 %2',
-      es: 'izquierda  %1 %2'
+      es: 'izquierda  %1 %2',
+      ko: '왼쪽 %1 %2'
     },
     message2: {
       en: 'right %1 %2',
-      es: 'derecha %1 %2'
+      es: 'derecha %1 %2',
+      ko: '오른쪽 %1 %2'
     },
     table: {
       en: 'table',
-      es: 'tabla'
+      es: 'tabla',
+      ko: '테이블'
     },
     column: {
       en: 'column',
-      es: 'columna'
+      es: 'columna',
+      ko: '열'
     },
     tooltip: {
       en: 'join two tables by matching values',
-      es: 'unir dos tables emparenjando valores'
+      es: 'unir dos tables emparenjando valores',
+      ko: '일치하는 값으로 두 테이블 연결'
     }
   }
 }
