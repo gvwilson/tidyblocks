@@ -12,82 +12,96 @@ const MESSAGES = {
     message0: {
       en: 'Colors',
       es: 'Colores',
-      ar: 'الألوان'
+      ar: 'الألوان',
+      ko: '색깔'
     },
     tooltip: {
       en: 'eleven colors',
       es: 'once colores',
-      ar: 'احد عشر لون'
+      ar: 'احد عشر لون',
+      ko: '11개의 색'
     }
   },
   earthquakes: {
     message0: {
       en: 'Earthquakes',
       es: 'Terremotos',
-      ar: 'الزلزال'
+      ar: 'الزلزال',
+      ko: '지진'
     },
     tooltip: {
       en: 'earthquake data', 
       es: 'datos de terremotos',
-      ar: 'بيانات الزلزال'
+      ar: 'بيانات الزلزال',
+      ko: '지진 데이터'
     }
   },
   penguins: {
     message0: {
       en: 'Penguins', 
       es: 'Pingüinos',
-      ar: 'طيور البطريق'
+      ar: 'طيور البطريق',
+      ko: '펭귄'
     },
     tooltip: {
       en: 'penguin data',
       es: 'datos de pingüinos',
-      ar: 'بيانات طيور البطريق'
+      ar: 'بيانات طيور البطريق',
+      ko: '펭귄 데이터'
     }
   },
   phish: {
     message0: {
       en: 'Phish', 
       es: 'Phish',
-      ar: 'فرقه الفيش الموسيقيه'
+      ar: 'فرقه الفيش الموسيقيه',
+      ko: '피시'
     },
     tooltip: {
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
-      ar: 'بيانات فرقه الفيش الموسيقيه'
+      ar: 'بيانات فرقه الفيش الموسيقيه',
+      ko: '피시 콘서트 데이터'
     }
   },
   sequence: {
     message0: {
       en: 'Sequence %1 %2',
       es: 'Sequencia %1 %2',
-      ar: 'المتسلسله %1 %2'
+      ar: 'المتسلسله %1 %2',
+      ko: '배열 %1 %2'
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
-      ar: 'اﻹسم'
+      ar: 'اﻹسم',
+      ko: '이름'
     },
     tooltip: {
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
-      ar: 'إنشاء متسلسله ١..ن'
+      ar: 'إنشاء متسلسله ١..ن',
+      ko: '배열 실행 1..N'
     }
   },
   data_user: {
     message0: {
       en: 'User data %1', 
       es: 'Datos de usuario %1',
-      ar: 'بيانات المسته %1'
+      ar: 'بيانات المسته %1',
+      ko: '사용자 데이터 %1'
     },
     args0_text: {
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم'
+      ar: 'الإسم',
+      ko: '이름'
     },
     tooltip: {
       en: 'use previously-loaded data', 
       es: 'usa datos previamente cargados',
-      ar: 'إستخدام بيانات محمله مسبقا'
+      ar: 'إستخدام بيانات محمله مسبقا',
+      ko: '이전에 로드된 데이터 사용'
     }
   }
 }
