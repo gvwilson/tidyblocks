@@ -206,14 +206,14 @@ describe('executes program', () => {
     done()
   })
 
-  it('runs a single pipeline with no dependencies that does not notify', (done) => {
+  it('runs a single pipeline with no dependencies that only returns the unnamed report', (done) => {
     const program = new Program()
     const pipeline = new Pipeline(fixture.HEAD, fixture.NO_OUTPUT)
     program.register(pipeline)
     const env = new Env(INTERFACE)
     program.run(env)
-    assert.equal(env.results.size, 0,
-                 `Nothing should be registered`)
+    assert.equal(env.results.size, 1,
+                 `Only the unnamed report should be registered`)
     done()
   })
 
@@ -257,7 +257,7 @@ describe('executes program', () => {
     program.run(env)
     assert(env.getData('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
-    assert.deepEqual(env.log, [['log', 'head'], ['log', 'report keyword'], ['log', 'headRequire']],
+    assert.deepEqual(env.log, [['log', 'head'], ['log', 'report keyword'], ['log', 'headRequire'], ["log", "report unnamed 1"]],
                      `Expected to see report in log`)
     done()
   })
