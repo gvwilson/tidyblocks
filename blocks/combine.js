@@ -11,45 +11,55 @@ const MESSAGES = {
   glue: {
     message0: {
       en: 'Glue left %1 right %2 labels %3',
-      es: 'Pegar izquierda %1 derecha %2 etiquetas %3'
+      es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
+      ar: 'دمج من جهة اليسار %1 اليمين %2 الفئات %3'
     },
     table_name: {
       en: 'name',
-      es: 'nombre'
+      es: 'nombre',
+      ar: 'الإسم'
     },
     label: {
       en: 'label',
-      es: 'etiqueta'
+      es: 'etiqueta',
+      ar: 'الفئة'
     },
     tooltip: {
       en: 'glue rows from two tables together',
-      es: 'pegar juntas filas de dos tablas'
+      es: 'pegar juntas filas de dos tablas',
+      ar: 'دمج صفوف من جدولين'
     }
   },
   join: {
     message0: {
       en: 'Join',
-      es: 'Unir'
+      es: 'Unir',
+      ar: 'دمج'
     },
     message1: {
       en: 'left %1 %2',
-      es: 'izquierda  %1 %2'
+      es: 'izquierda  %1 %2',
+      ar: 'يسار %1 %2'
     },
     message2: {
       en: 'right %1 %2',
-      es: 'derecha %1 %2'
+      es: 'derecha %1 %2',
+      ar: 'يمين %1 %2'
     },
     table: {
       en: 'table',
-      es: 'tabla'
+      es: 'tabla',
+      ar: 'الجدول'
     },
     column: {
       en: 'column',
-      es: 'columna'
+      es: 'columna',
+      ar: 'العمود'
     },
     tooltip: {
       en: 'join two tables by matching values',
-      es: 'unir dos tables emparenjando valores'
+      es: 'unir dos tables emparenjando valores',
+      ar: 'دمج جدولين عن طريق تشابه القيم'
     }
   }
 }
