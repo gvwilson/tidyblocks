@@ -24,9 +24,6 @@ import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 import { TabSelectionBar, TabPanels } from './tabs.jsx'
 import { theme } from './theme.jsx'
 
-const DATA_USER = 'user'
-const DATA_REPORT = 'results'
-
 const createToolboxCategories = (props) => {
   const categories = parseWorkspaceXml(props.toolbox)
   const styles = props.settings.theme.categoryStyles
@@ -393,16 +390,14 @@ export class TidyBlocksApp extends React.Component {
       }
     }
     if (this.state.activeDataOption) {
-      if (this.state.activeDataOption.type == DATA_USER){
-        data = env.ui.userData.get(this.state.activeDataOption.label)['data']
-        dataColumns = env.ui.userData.get(this.state.activeDataOption.label)['columns']
-        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-      }
+      data = env.ui.userData.get(this.state.activeDataOption.label)['data']
+      dataColumns = env.ui.userData.get(this.state.activeDataOption.label)['columns']
+      dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
       activeDataOption = this.state.activeDataOption
     } else {
       let result = dataKeys.next()
       if (!result.done){
-        activeDataOption = {value: DATA_USER + '_' + result.value, type: DATA_USER, label: result.value}
+        activeDataOption = {value: result.value, label: result.value}
         data = env.ui.userData.get(activeDataOption.label)['data']
         dataColumns = env.ui.userData.get(activeDataOption.label)['columns']
         dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
@@ -410,7 +405,7 @@ export class TidyBlocksApp extends React.Component {
     }
     let dataOptions = []
     for (let key of env.ui.userData.keys()){
-      dataOptions.push({value: DATA_USER + '_' + key, type: DATA_USER, label: key})
+      dataOptions.push({value: key, label: key})
     }
 
     // Indicate the tab was updated if it has been.
@@ -446,7 +441,7 @@ export class TidyBlocksApp extends React.Component {
     } else {
       let result = resultKeys.next()
       if (!result.done){
-        activeResultOption = {value: DATA_USER + '_' + result.value, type: DATA_USER, label: result.value}
+        activeResultOption = {value: result.value, label: result.value}
         results = env.results.get(activeResultOption.label)['data']
         resultColumns = env.results.get(activeResultOption.label)['columns']
         resultColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
@@ -455,7 +450,7 @@ export class TidyBlocksApp extends React.Component {
 
     let resultOptions = []
     for (let key of env.results.keys()){
-      resultOptions.push({value: DATA_REPORT + '_' + key, type: DATA_REPORT, label: key})
+      resultOptions.push({value: key, label: key})
     }
 
     // Indicate the tab was updated if it has been.
