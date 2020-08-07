@@ -125,7 +125,7 @@ module.exports = {
   TABLE,
   HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, true),
   MIDDLE: new MockTransform('middle', pass, [], true, true),
-  REPORT: new Transform.report('keyword'),
+  REPORT: new Transform.saveAs('keyword'),
   NO_OUTPUT: new MockTransform('no_output', pass, [], true, false),
   pass,
   TestInterface

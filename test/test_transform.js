@@ -96,9 +96,9 @@ describe('build dataframe operations', () => {
     done()
   })
 
-  it('builds report transform', (done) => {
+  it('builds saveAs transform', (done) => {
     const env = new Env(INTERFACE)
-    const transform = new Transform.report('answer')
+    const transform = new Transform.saveAs('answer')
     const input = new DataFrame(fixture.NAMES)
     const result = transform.run(env, input)
     const expected = new DataFrame(fixture.NAMES)
@@ -463,9 +463,9 @@ describe('transform equality tests', () => {
     done()
   })
 
-  it('compares report', (done) => {
-    const report_a = new Transform.report('a')
-    const report_b = new Transform.report('b')
+  it('compares saveAs reports', (done) => {
+    const report_a = new Transform.saveAs('a')
+    const report_b = new Transform.saveAs('b')
     assert(report_a.equal(report_a),
            `Same should match`)
     assert(!report_a.equal(report_b),
@@ -531,7 +531,7 @@ describe('transform equality tests', () => {
     const u2 = new Transform.ungroup()
     assert(u1.equal(u2),
            `All ungroup transforms should be equal`)
-    const report = new Transform.report('name')
+    const report = new Transform.saveAs('name')
     assert(!report.equal(u1),
            `Different transforms should not equal`)
     done()

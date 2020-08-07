@@ -43,7 +43,6 @@ export const DataTabSelect = ({options, onChange, value}) => (
   <Select className="sourceSelect" classNamePrefix="sourceSelectInner"
     options={options}
     value={value}
-    styles={colourStyles}
     onChange={(e) => onChange(e)}
   />
 )

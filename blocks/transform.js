@@ -26,7 +26,7 @@ const _formatMultiColNames = (raw) => {
  */
 const MESSAGES = {
   multiple_columns: {
-    en: 'column, column', 
+    en: 'column, column',
     es: 'columna, columna'
   },
   create: {
@@ -39,7 +39,7 @@ const MESSAGES = {
       es: 'nueva_columna'
     },
     tooltip: {
-      en: 'create new column from existing columns', 
+      en: 'create new column from existing columns',
       es: 'crear nueva columna de las columnas existentes'
     }
   },
@@ -55,39 +55,39 @@ const MESSAGES = {
   },
   filter: {
     message0: {
-      en: 'Filter %1', 
+      en: 'Filter %1',
       es: 'Filtrar %1'
     },
     args0_name: {
-      en: 'TEST', 
+      en: 'TEST',
       es: 'TEST'
     },
     tooltip: {
-      en: 'filter rows by condition', 
+      en: 'filter rows by condition',
       es: 'filtrar filas por condicion'
     }
   },
   groupby: {
     message0: {
-      en: 'Group by %1', 
+      en: 'Group by %1',
       es: 'Agrupar por %1'
     },
     tooltip: {
-      en: 'group data by values in columns', 
+      en: 'group data by values in columns',
       es: 'agrupar datos por valores en columnas'
     }
   },
-  report: {
+  saveas: {
     message0: {
-      en: 'Report %1',
+      en: 'Save As %1',
       es: 'Reporte %1'
     },
     args0_text: {
-      en: 'name', 
+      en: 'name',
       es: 'nombre'
     },
     tooltip: {
-      en: 'report a result', 
+      en: 'save a result',
       es: 'reporta un resultado'
     }
   },
@@ -117,7 +117,7 @@ const MESSAGES = {
       es: 'Resumen %1 %2'
     },
     args0_text: {
-      en: 'column', 
+      en: 'column',
       es: 'columna'
     },
     tooltip: {
@@ -131,17 +131,17 @@ const MESSAGES = {
       es: 'Desagrupar'
     },
     tooltip: {
-      en: 'remove grouping', 
+      en: 'remove grouping',
       es: 'quita agrupamiento'
     }
   },
   unique: {
     message0: {
-      en: 'Unique %1', 
+      en: 'Unique %1',
       es: 'Unico %1'
     },
     tooltip: {
-      en: 'select rows with unique values', 
+      en: 'select rows with unique values',
       es: 'selecciona filas con valores unicos'
     }
   }
@@ -236,21 +236,21 @@ const setup = (language) => {
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
-    // Report
+    // Save As
     {
-      type: 'transform_report',
-      message0: msg.get('report.message0'),
+      type: 'transform_saveAs',
+      message0: msg.get('saveas.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: msg.get('report.args0_text')
+          text: msg.get('saveas.args0_text')
         }
       ],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: msg.get('report.tooltip'),
+      tooltip: msg.get('saveAs.tooltip'),
       helpUrl: '',
       extensions: ['validate_NAME']
     },
@@ -396,9 +396,9 @@ const setup = (language) => {
   }
 
   // Report
-  Blockly.TidyBlocks['transform_report'] = (block) => {
+  Blockly.TidyBlocks['transform_saveAs'] = (block) => {
     const name = block.getFieldValue('NAME')
-    return `["@transform", "report", "${name}"]`
+    return `["@transform", "saveAs", "${name}"]`
   }
 
   // Select

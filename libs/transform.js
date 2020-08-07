@@ -241,9 +241,9 @@ class TransformJoin extends TransformBase {
 
 /**
  * Report that a result is available.
- * @param {string} label Name to use for reported value.
+ * @param {string} label Name to use for saved value.
  */
-class TransformReport extends TransformBase {
+class TransformSaveAs extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
                `Expected string`)
@@ -593,13 +593,21 @@ class TransformScatter extends TransformPlot {
 }
 
 // ----------------------------------------------------------------------
+/**
+ * Base class for identifying our stats transforms.
+ */
+class TransformStats extends TransformBase {
+  constructor (species, requires, input, output) {
+    super(species, requires, input, output)
+  }
+}
 
 /**
  * One-sample two-sided t-test.
  * @param {string} colName The column to get values from.
  * @param {number} mean Mean value tested for.
  */
-class TransformTTestOneSample extends TransformBase {
+class TransformTTestOneSample extends TransformStats {
   constructor (label, colName, mean) {
     super('ttest_one', [], true, true)
     this.label = label
@@ -622,7 +630,7 @@ class TransformTTestOneSample extends TransformBase {
  * @param {string} labelCol The column to get labels from.
  * @param {string} valueCol The column to get the values from.
  */
-class TransformTTestPaired extends TransformBase {
+class TransformTTestPaired extends TransformStats {
   constructor (label, labelCol, valueCol) {
     super('ttest_two', [], true, true)
     this.label = label
@@ -661,18 +669,20 @@ module.exports = {
   glue: TransformGlue,
   groupBy: TransformGroupBy,
   join: TransformJoin,
-  report: TransformReport,
+  saveAs: TransformSaveAs,
   select: TransformSelect,
   sequence: TransformSequence,
   sort: TransformSort,
   summarize: TransformSummarize,
   ungroup: TransformUngroup,
   unique: TransformUnique,
+  plot: TransformPlot,
   bar: TransformBar,
   box: TransformBox,
   dot: TransformDot,
   histogram: TransformHistogram,
   scatter: TransformScatter,
+  stats: TransformStats,
   ttest_one: TransformTTestOneSample,
-  ttest_two: TransformTTestPaired
+  ttest_two: TransformTTestPaired,
 }

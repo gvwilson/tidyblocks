@@ -264,8 +264,8 @@ describe('executes program', () => {
 
   it('handles a join correctly', (done) => {
     const program = new Program()
-    const reportAlpha = new Transform.report('alpha')
-    const reportBeta = new Transform.report('beta')
+    const reportAlpha = new Transform.saveAs('alpha')
+    const reportBeta = new Transform.saveAs('beta')
     const join = new Transform.join('alpha', 'left', 'beta', 'left')
 
     program.register(new Pipeline(fixture.HEAD, reportAlpha))

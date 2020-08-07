@@ -2,6 +2,7 @@
 
 const util = require('./util')
 const Transform = require('./transform')
+let unnamedCounter = 1
 
 /**
  * Manage a single pipeline.
@@ -52,8 +53,21 @@ class Pipeline {
 
     let data = null
     for (const transform of this.transforms) {
+      console.log(transform)
       data = transform.run(env, data)
     }
+
+    // If the last block of the pipeline is not a report we'll report it as an
+    // unamed result.
+    if (!(this.transforms[this.transforms.length - 1] instanceof Transform.saveAs)
+      && !(this.transforms[this.transforms.length - 1] instanceof Transform.plot)
+      && !(this.transforms[this.transforms.length - 1] instanceof Transform.stats)){
+      data = new Transform.saveAs("unnamed " + unnamedCounter).run(env, data)
+      unnamedCounter = unnamedCounter + 1
+    }
+
+    console.log("running pipe")
+    console.log(data)
   }
 }
 

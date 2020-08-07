@@ -527,10 +527,10 @@ describe('combiner code generation', () => {
     done()
   })
 
-  it('generates code for report', (done) => {
-    const expected = [Transform.FAMILY, 'report', 'stuff']
+  it('generates code for saveAs', (done) => {
+    const expected = [Transform.FAMILY, 'saveAs', 'stuff']
     const w = fixture.workspace()
-    const block = w.newBlock('transform_report')
+    const block = w.newBlock('transform_saveAs')
     block.setFieldValue('stuff', 'NAME')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
