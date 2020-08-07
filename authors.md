@@ -14,3 +14,4 @@ title: "Authors"
 <h2>Other Contributors</h2>
 
 <p><a href="http://dermitmaria.com/">Maria Dermit</a>: translation to Español.</p>
+<p><a href="http://samarelsheikh.com/">Samar Elsheikh</a>: translation to اَلْعَرَبِيَّةُ.</p>
