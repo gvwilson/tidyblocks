@@ -11,69 +11,83 @@ const MESSAGES = {
   colors: {
     message0: {
       en: 'Colors',
-      es: 'Colores'
+      es: 'Colores',
+      ko: '색깔'
     },
     tooltip: {
       en: 'eleven colors',
-      es: 'once colores'
+      es: 'once colores',
+      ko: '11개의 색'
     }
   },
   earthquakes: {
     message0: {
       en: 'Earthquakes',
-      es: 'Terremotos'
+      es: 'Terremotos',
+      ko: '지진'
     },
     tooltip: {
       en: 'earthquake data', 
-      es: 'datos de terremotos'
+      es: 'datos de terremotos',
+      ko: '지진 데이터'
     }
   },
   penguins: {
     message0: {
       en: 'Penguins', 
-      es: 'Pingüinos'
+      es: 'Pingüinos',
+      ko: '펭귄'
     },
     tooltip: {
       en: 'penguin data',
-      es: 'datos de pingüinos'
+      es: 'datos de pingüinos',
+      ko: '펭귄 데이터'
     }
   },
   phish: {
     message0: {
       en: 'Phish', 
-      es: 'Phish'
+      es: 'Phish',
+      ko: '피시'
     },
     tooltip: {
       en: 'Phish concert data',
-      es: 'datos de conciertos Phish'
+      es: 'datos de conciertos Phish',
+      ko: '피시 콘서트 데이터'
     }
   },
   sequence: {
     message0: {
       en: 'Sequence %1 %2',
-      es: 'Sequencia %1 %2'
+      es: 'Sequencia %1 %2',
+      ko: '배열 %1 %2'
     },
     args0_text: {
       en: 'name', 
-      es: 'nombre'
+      es: 'nombre',
+      ko: '이름'
     },
     tooltip: {
       en: 'Generate a sequence 1..N',
-      es: 'Generar una sequencia 1..N'
+      es: 'Generar una sequencia 1..N',
+      ko: '배열 실행 1..N'
     }
   },
   data_user: {
     message0: {
       en: 'User data %1', 
-      es: 'Datos de usuario %1'
+      es: 'Datos de usuario %1',
+      ko: '사용자 데이터 %1'
     },
     args0_text: {
       en: 'name',
-      es: 'nombre'
+      es: 'nombre',
+      ko: '이름'
     },
     tooltip: {
       en: 'use previously-loaded data', 
-      es: 'usa datos previamente cargados'
+      es: 'usa datos previamente cargados',
+      ko: '이전에 로드된 데이터 사용'
     }
   }
 }
