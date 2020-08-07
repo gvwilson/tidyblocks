@@ -180,6 +180,10 @@ export class TidyBlocksApp extends React.Component {
       this.setState({hideStatsTable: true}, () => {
         this.setState({hideStatsTable: false})
       })
+    } else if(this.state.results != prevState.results){
+      this.setState({hideResultTable: true}, () => {
+        this.setState({hideResultTable: false})
+      })
     }
   }
 
@@ -733,6 +737,7 @@ export class TidyBlocksApp extends React.Component {
                   plotData={this.state.plotData}
                   isDraggingPane={this.state.isDraggingPane}
                   hideDataTable={this.state.hideDataTable}
+                  hideResultTable={this.state.hideResultTable}
                   hideStatsTable={this.state.hideStatsTable}
                 />
               </div>
