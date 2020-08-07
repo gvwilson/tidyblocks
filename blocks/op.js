@@ -15,81 +15,96 @@ const MESSAGES = {
   arithmetic: {
     tooltip: {
       en: 'do arithmetic',
-      es: 'haz la aritmética'
+      es: 'haz la aritmética',
+      ar: ''
     }
   },
   negate: {
     tooltip: {
       en: 'negate a numeric column',
-      es: 'excluye una columna numerica'
+      es: 'excluye una columna numerica',
+      ar: ''
     }
   },
   abs: {
     tooltip: {
       en: 'absolute value of a numeric column',
-      es: 'FIXME'
+      es: 'FIXME',
+      ar: ''
     }
   },
   compare: {
     tooltip: {
       en: 'compare two columns',
-      es: 'compara dos columnas'
+      es: 'compara dos columnas',
+      ar: ''
     }
   },
   logical: {
     tooltip: {
       en: 'combine logical values of two columns',
-      es: 'combina los valores logicos de dos columnas'
+      es: 'combina los valores logicos de dos columnas',
+      ar: ''
     }
   },
   not: {
     message0: {
       en: 'not %1',
-      es: 'no %1'
+      es: 'no %1',
+      ar: ''
     },
     tooltip: {
       en: 'negate a logical column',
-      es: 'excluye una columna numerica'
+      es: 'excluye una columna numerica',
+      ar: ''
     }
   },
   type: {
     message0: {
       en: '%1 is %2 ?',
-      es: '¿Es %1 %2 ?'
+      es: '¿Es %1 %2 ?',
+      ar: ''
     },
     tooltip: {
       en: 'check the type of a value',
-      es: 'comprueba el tipo de valor'
+      es: 'comprueba el tipo de valor',
+      ar: ''
     }
   },
   convert: {
     message0: {
       en: '%1 to %2',
-      es: '%1 a %2'
+      es: '%1 a %2',
+      ar: ''
     },
     tooltip: {
       en: 'change the datatype of a value',
-      es: 'cambia el tipo de dato del valor'
+      es: 'cambia el tipo de dato del valor',
+      ar: ''
     }
   },
   datetime: {
     message0: {
       en: 'get %1 from %2',
-      es: 'obten %1 de %2'
+      es: 'obten %1 de %2',
+      ar: ''
     },
     tooltip: {
       en: 'change the datatype of a value',
-      es: 'cambia el tipo de dato del valor'
+      es: 'cambia el tipo de dato del valor',
+      ar: ''
     }
   },
   conditional: {
     message0: {
       en: 'If %1 then %2 else %3',
-      es: 'Si %1 entonces %2 sino %3'
+      es: 'Si %1 entonces %2 sino %3',
+      ar: ''
     },
     tooltip: {
       en: 'select value based on condition',
-      es: 'selecciona el valor basandote en la condicion'
+      es: 'selecciona el valor basandote en la condicion',
+      ar: ''
     }
   }
 }

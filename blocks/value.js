@@ -14,93 +14,111 @@ const MESSAGES = {
   absent: {
     message0: {
       en: 'Absent', 
-      es: 'Ausente'
+      es: 'Ausente',
+      ar: ''
     },
     tooltip: {
       en: 'represent a hole', 
-      es: 'representa un agujero'
+      es: 'representa un agujero',
+      ar: ''
     }
   },
   column: {
     column: {
       en: 'column', 
-      es: 'columna'
+      es: 'columna',
+      ar: ''
     },
     tooltip: {
       en: 'get the value of a column',
-      es: 'obten el valor de una columna'
+      es: 'obten el valor de una columna',
+      ar: ''
     }
   },
   datetime: {
     text: {
       en: 'YYYY-MM-DD',
-      es: 'AAAA-MM-DD' 
+      es: 'AAAA-MM-DD',
+      ar: ''
     },
     tooltip: {
       en: 'constant date/time',
-      es: 'constante fecha/tiempo'
+      es: 'constante fecha/tiempo',
+      ar: ''
     }
   },
   logical: {
     tooltip: {
       en: 'logical constant', 
-      es: 'constante logica'
+      es: 'constante logica',
+      ar: ''
     }
   },
   number: {
     tooltip: {
       en: 'constant number',
-      es: 'numbero constante'
+      es: 'numbero constante',
+      ar: ''
     }
   },
   text: {
     text: {
       en: 'text',
-      es: 'texto'
+      es: 'texto',
+      ar: ''
     },
     tooltip: {
       en: 'constant text', 
-      es: 'texto constante'
+      es: 'texto constante',
+      ar: ''
     }
   },
   rownum: {
     message0: {
       en: 'Row number',
-      es: 'Numero de fila'
+      es: 'Numero de fila',
+      ar: ''
     },
     tooltip: {
       en: 'row number',
-      es: 'numero de fila'
+      es: 'numero de fila',
+      ar: ''
     }
   },
   exponential: {
     message0: {
       en: 'Exponential \u03BB %1',
-      es: 'Exponencial \u03BB %1'
+      es: 'Exponencial \u03BB %1',
+      ar: ''
     },
     tooltip: {
       en: 'exponential random value',
-      es: 'valor aleatorio exponencial'
+      es: 'valor aleatorio exponencial',
+      ar: ''
     }
   },
   normal: {
     message0: {
       en: 'Normal \u03BC %1 \u03C3 %2',
-      es: 'Normal \u03BC %1 \u03C3 %2'
+      es: 'Normal \u03BC %1 \u03C3 %2',
+      ar: ''
     },
     tooltip: {
       en: 'normal random value',
-      es: 'valor aleatorio normal'
+      es: 'valor aleatorio normal',
+      ar: ''
     }
   },
   uniform: {
     message0: {
       en: 'Uniform \u03B1 %1 \u03B2 %2', 
-      es: 'Uniforme \u03B1 %1 \u03B2 %2'
+      es: 'Uniforme \u03B1 %1 \u03B2 %2',
+      ar: ''
     },
     tooltip: {
       en: 'uniform random value', 
-      es: 'valor aleatorio uniforme'
+      es: 'valor aleatorio uniforme',
+      ar: ''
     }
   }
 }
