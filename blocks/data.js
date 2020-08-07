@@ -12,82 +12,82 @@ const MESSAGES = {
     message0: {
       en: 'Colors',
       es: 'Colores',
-      ar: ''
+      ar: 'الألوان'
     },
     tooltip: {
       en: 'eleven colors',
       es: 'once colores',
-      ar: ''
+      ar: 'احد عشر لون'
     }
   },
   earthquakes: {
     message0: {
       en: 'Earthquakes',
       es: 'Terremotos',
-      ar: ''
+      ar: 'الزلزال'
     },
     tooltip: {
       en: 'earthquake data', 
       es: 'datos de terremotos',
-      ar: ''
+      ar: 'بيانات الزلزال'
     }
   },
   penguins: {
     message0: {
       en: 'Penguins', 
       es: 'Pingüinos',
-      ar: ''
+      ar: 'طيور البطريق'
     },
     tooltip: {
       en: 'penguin data',
       es: 'datos de pingüinos',
-      ar: ''
+      ar: 'بيانات طيور البطريق'
     }
   },
   phish: {
     message0: {
       en: 'Phish', 
       es: 'Phish',
-      ar: ''
+      ar: 'فرقه الفيش الموسيقيه'
     },
     tooltip: {
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
-      ar: ''
+      ar: 'بيانات فرقه الفيش الموسيقيه'
     }
   },
   sequence: {
     message0: {
       en: 'Sequence %1 %2',
       es: 'Sequencia %1 %2',
-      ar: ''
+      ar: 'المتسلسله %1 %2'
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
-      ar: ''
+      ar: 'اﻹسم'
     },
     tooltip: {
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
-      ar: ''
+      ar: 'إنشاء متسلسله ١..ن'
     }
   },
   data_user: {
     message0: {
       en: 'User data %1', 
       es: 'Datos de usuario %1',
-      ar: ''
+      ar: 'بيانات المسته %1'
     },
     args0_text: {
       en: 'name',
       es: 'nombre',
-      ar: ''
+      ar: 'الإسم'
     },
     tooltip: {
       en: 'use previously-loaded data', 
       es: 'usa datos previamente cargados',
-      ar: ''
+      ar: 'إستخدام بيانات محمله مسبقا'
     }
   }
 }

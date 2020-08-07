@@ -16,95 +16,95 @@ const MESSAGES = {
     tooltip: {
       en: 'do arithmetic',
       es: 'haz la aritmética',
-      ar: ''
+      ar: 'إجراء عمليات حسابيه'
     }
   },
   negate: {
     tooltip: {
       en: 'negate a numeric column',
       es: 'excluye una columna numerica',
-      ar: ''
+      ar: 'الغاء عمود حسابي'
     }
   },
   abs: {
     tooltip: {
       en: 'absolute value of a numeric column',
       es: 'FIXME',
-      ar: ''
+      ar: 'القيمه المطلقه لعمود حسابي'
     }
   },
   compare: {
     tooltip: {
       en: 'compare two columns',
       es: 'compara dos columnas',
-      ar: ''
+      ar: 'مقارنه عمودين'
     }
   },
   logical: {
     tooltip: {
       en: 'combine logical values of two columns',
       es: 'combina los valores logicos de dos columnas',
-      ar: ''
+      ar: 'دمج القيم المنطقيه لعمودين'
     }
   },
   not: {
     message0: {
       en: 'not %1',
       es: 'no %1',
-      ar: ''
+      ar: 'غير %1'
     },
     tooltip: {
       en: 'negate a logical column',
       es: 'excluye una columna numerica',
-      ar: ''
+      ar: 'إلغاء عمود منطقي'
     }
   },
   type: {
     message0: {
       en: '%1 is %2 ?',
       es: '¿Es %1 %2 ?',
-      ar: ''
+      ar: 'هل %1 هو %2؟'
     },
     tooltip: {
       en: 'check the type of a value',
       es: 'comprueba el tipo de valor',
-      ar: ''
+      ar: 'التعرف على نوع القيمه'
     }
   },
   convert: {
     message0: {
       en: '%1 to %2',
       es: '%1 a %2',
-      ar: ''
+      ar: 'من %1 إلي %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
-      ar: ''
+      ar: 'تغيير نوع القيمه'
     }
   },
   datetime: {
     message0: {
       en: 'get %1 from %2',
       es: 'obten %1 de %2',
-      ar: ''
+      ar: 'الحصول على %1 من %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
-      ar: ''
+      ar: 'تغيير نوع القيمه'
     }
   },
   conditional: {
     message0: {
       en: 'If %1 then %2 else %3',
       es: 'Si %1 entonces %2 sino %3',
-      ar: ''
+      ar: 'إذا %1 افعل %2 غير ذلك %3'
     },
     tooltip: {
       en: 'select value based on condition',
       es: 'selecciona el valor basandote en la condicion',
-      ar: ''
+      ar: 'اختيار قيمه توافي شرط'
     }
   }
 }

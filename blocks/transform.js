@@ -27,146 +27,147 @@ const _formatMultiColNames = (raw) => {
 const MESSAGES = {
   multiple_columns: {
     en: 'column, column', 
-    es: 'columna, columna'
+    es: 'columna, columna',
+    ar: 'عمود, عمود'
   },
   create: {
     message0: {
       en: 'Create %1 %2',
       es: 'Crear %1 %2',
-      ar: ''
+      ar: 'إنشاء %1 %2'
     },
     args0_text: {
       en: 'new_column',
       es: 'nueva_columna',
-      ar: ''
+      ar: 'عمود_جديد'
     },
     tooltip: {
       en: 'create new column from existing columns', 
       es: 'crear nueva columna de las columnas existentes',
-      ar: ''
+      ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا'
     }
   },
   drop: {
     message0: {
       en: 'Drop %1',
       es: 'Excluir %1',
-      ar: ''
+      ar: 'حذف %1'
     },
     args0_tooltip: {
       en: 'drop columns by name',
       es: 'Excluir columnas por nombre',
-      ar: ''
+      ar: 'حذف الأعمده بإستخدام اسمائها'
     }
   },
   filter: {
     message0: {
       en: 'Filter %1', 
       es: 'Filtrar %1',
-      ar: ''
+      ar: 'تصفية أو فلتره %1'
     },
     args0_name: {
       en: 'TEST', 
       es: 'TEST',
-      ar: ''
+      ar: 'إختبار'
     },
     tooltip: {
       en: 'filter rows by condition', 
       es: 'filtrar filas por condicion',
-      ar: ''
+      ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط'
     }
   },
   groupby: {
     message0: {
       en: 'Group by %1', 
       es: 'Agrupar por %1',
-      ar: ''
+      ar: 'تقسيم البيانات عن طريف: %1'
     },
     tooltip: {
       en: 'group data by values in columns', 
       es: 'agrupar datos por valores en columnas',
-      ar: ''
+      ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده'
     }
   },
   report: {
     message0: {
       en: 'Report %1',
       es: 'Reporte %1',
-      ar: ''
+      ar: 'التقرير %1'
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
-      ar: ''
+      ar: 'الإسم'
     },
     tooltip: {
       en: 'report a result', 
       es: 'reporta un resultado',
-      ar: ''
+      ar: 'عرض النتائج'
     }
   },
   select: {
     message0: {
       en: 'Select %1',
       es: 'Selecciona %1',
-      ar: ''
+      ar: 'إختيار %1'
     },
     tooltip: {
       en: 'select columns by name',
       es: 'selecciona columnas por nombre',
-      ar: ''
+      ar: 'إختيار الأعمده بإستخدام اسمائها'
     }
   },
   sort: {
     message0: {
       en: 'Sort %1 descending %2',
       es: 'Ordena %1 descendiente %2',
-      ar: ''
+      ar: 'ترتيب %1 تنازلي %2'
     },
     tooltip: {
       en: 'sort table by multiple columns',
       es: 'ordena tabla por multiples columnas',
-      ar: ''
+      ar: 'ترتيب الجدول بإستخدام اكثر من عمود'
     }
   },
   summarize: {
     message0: {
       en: 'Summarize %1 %2',
       es: 'Resumen %1 %2',
-      ar: ''
+      ar: 'تلخيص البيانات %1 %2'
     },
     args0_text: {
       en: 'column', 
       es: 'columna',
-      ar: ''
+      ar: 'العمود'
     },
     tooltip: {
       en: 'summarize values in  column',
       es: 'Resume valores en columna',
-      ar: ''
+      ar: 'تلخيص قيم العمود'
     }
   },
   ungroup: {
     message0: {
       en: 'Ungroup',
       es: 'Desagrupar',
-      ar: ''
+      ar: 'الغاء التقسيم'
     },
     tooltip: {
       en: 'remove grouping', 
       es: 'quita agrupamiento',
-      ar: ''
+      ar: 'الغاءتقسيم البيانات'
     }
   },
   unique: {
     message0: {
       en: 'Unique %1', 
       es: 'Unico %1',
-      ar: ''
+      ar: 'فريد %1'
     },
     tooltip: {
       en: 'select rows with unique values', 
       es: 'selecciona filas con valores unicos',
-      ar: ''
+      ar: 'إختيار الصفوف ذات القيم الفريده'
     }
   }
 }

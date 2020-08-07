@@ -15,110 +15,110 @@ const MESSAGES = {
     message0: {
       en: 'Absent', 
       es: 'Ausente',
-      ar: ''
+      ar: 'غائب'
     },
     tooltip: {
       en: 'represent a hole', 
       es: 'representa un agujero',
-      ar: ''
+      ar: 'تمثيل فجوه'
     }
   },
   column: {
     column: {
       en: 'column', 
       es: 'columna',
-      ar: ''
+      ar: 'العمود'
     },
     tooltip: {
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
-      ar: ''
+      ar: 'الحصول على قيمه من عمود'
     }
   },
   datetime: {
     text: {
       en: 'YYYY-MM-DD',
       es: 'AAAA-MM-DD',
-      ar: ''
+      ar: 'YYYY-MM-DD'
     },
     tooltip: {
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
-      ar: ''
+      ar: 'ثابت تاريخ/وقت'
     }
   },
   logical: {
     tooltip: {
       en: 'logical constant', 
       es: 'constante logica',
-      ar: ''
+      ar: 'ثابت منطقي'
     }
   },
   number: {
     tooltip: {
       en: 'constant number',
       es: 'numbero constante',
-      ar: ''
+      ar: 'رقم ثابت'
     }
   },
   text: {
     text: {
       en: 'text',
       es: 'texto',
-      ar: ''
+      ar: 'نص'
     },
     tooltip: {
       en: 'constant text', 
       es: 'texto constante',
-      ar: ''
+      ar: 'نص ثابت'
     }
   },
   rownum: {
     message0: {
       en: 'Row number',
       es: 'Numero de fila',
-      ar: ''
+      ar: 'رقم الصف'
     },
     tooltip: {
       en: 'row number',
       es: 'numero de fila',
-      ar: ''
+      ar: 'رقم الصف'
     }
   },
   exponential: {
     message0: {
       en: 'Exponential \u03BB %1',
       es: 'Exponencial \u03BB %1',
-      ar: ''
+      ar: 'الأسيه \u03BB %1'
     },
     tooltip: {
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
-      ar: ''
+      ar: 'المتغيرات العشوائه الأسيه'
     }
   },
   normal: {
     message0: {
       en: 'Normal \u03BC %1 \u03C3 %2',
       es: 'Normal \u03BC %1 \u03C3 %2',
-      ar: ''
+      ar: 'الطبيعي \u03BC %1 \u03C3 %2'
     },
     tooltip: {
       en: 'normal random value',
       es: 'valor aleatorio normal',
-      ar: ''
+      ar: 'المتغير العشوائي الطبيعي'
     }
   },
   uniform: {
     message0: {
       en: 'Uniform \u03B1 %1 \u03B2 %2', 
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
-      ar: ''
+      ar: 'المنتظم \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
       en: 'uniform random value', 
       es: 'valor aleatorio uniforme',
-      ar: ''
+      ar: 'المتغير العشوائي المنتظم'
     }
   }
 }
