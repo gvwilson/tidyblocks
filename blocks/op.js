@@ -15,81 +15,96 @@ const MESSAGES = {
   arithmetic: {
     tooltip: {
       en: 'do arithmetic',
-      es: 'haz la aritmética'
+      es: 'haz la aritmética',
+      ko: '연산 실행'
     }
   },
   negate: {
     tooltip: {
       en: 'negate a numeric column',
-      es: 'excluye una columna numerica'
+      es: 'excluye una columna numerica',
+      ko: '숫자열 취소'
     }
   },
   abs: {
     tooltip: {
       en: 'absolute value of a numeric column',
-      es: 'FIXME'
+      es: 'FIXME',
+      ko: '숫자열의 절대값'
     }
   },
   compare: {
     tooltip: {
       en: 'compare two columns',
-      es: 'compara dos columnas'
+      es: 'compara dos columnas',
+      ko: '두 열을 비교'
     }
   },
   logical: {
     tooltip: {
       en: 'combine logical values of two columns',
-      es: 'combina los valores logicos de dos columnas'
+      es: 'combina los valores logicos de dos columnas',
+      ko: '두 열의 논리 변수를 결합'
     }
   },
   not: {
     message0: {
       en: 'not %1',
-      es: 'no %1'
+      es: 'no %1',
+      ko: '논리 부정 %1'
     },
     tooltip: {
       en: 'negate a logical column',
-      es: 'excluye una columna numerica'
+      es: 'excluye una columna numerica',
+      ko: '논리 열 취소'
     }
   },
   type: {
     message0: {
       en: '%1 is %2 ?',
-      es: '¿Es %1 %2 ?'
+      es: '¿Es %1 %2 ?',
+      ko: '%1 은 %2 ?'
     },
     tooltip: {
       en: 'check the type of a value',
-      es: 'comprueba el tipo de valor'
+      es: 'comprueba el tipo de valor',
+      ko: '값의 유형을 확인'
     }
   },
   convert: {
     message0: {
       en: '%1 to %2',
-      es: '%1 a %2'
+      es: '%1 a %2',
+      ko: '%1 에서 %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
-      es: 'cambia el tipo de dato del valor'
+      es: 'cambia el tipo de dato del valor',
+      ko: '값의 데이터 유형을 변경'
     }
   },
   datetime: {
     message0: {
       en: 'get %1 from %2',
-      es: 'obten %1 de %2'
+      es: 'obten %1 de %2',
+      ko: '%2 에서 %1 가져오기'
     },
     tooltip: {
       en: 'change the datatype of a value',
-      es: 'cambia el tipo de dato del valor'
+      es: 'cambia el tipo de dato del valor',
+      ko: '값의 데이터 유형을 변경'
     }
   },
   conditional: {
     message0: {
       en: 'If %1 then %2 else %3',
-      es: 'Si %1 entonces %2 sino %3'
+      es: 'Si %1 entonces %2 sino %3',
+      ko: '%1 이면 %2 그렇지 않으면 %3'
     },
     tooltip: {
       en: 'select value based on condition',
-      es: 'selecciona el valor basandote en la condicion'
+      es: 'selecciona el valor basandote en la condicion',
+      ko: '조건에  값을 선택'
     }
   }
 }
