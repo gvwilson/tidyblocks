@@ -372,8 +372,6 @@ export class TidyBlocksApp extends React.Component {
   runProgram () {
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
-    console.log('env')
-    console.log(env)
     this.updateDataInformation(env)
     this.updateResultsInformation(env)
     this.updatePlotInformation(env)

@@ -2,7 +2,6 @@
 
 const util = require('./util')
 const Transform = require('./transform')
-let unnamedCounter = 1
 
 /**
  * Manage a single pipeline.
@@ -38,8 +37,12 @@ class Pipeline {
    * Run this pipeline.
    * @param {Env} env The runtime environment. This is filled with results,
    * statistics, and plots as a side effect of running certain blocks.
+   * @param {int} unnamedCounter The number used to label any unnamed results
+   * we display.
+   * @returns {int} the unnamedCounter, updated if a new unnaamed result was
+   * reported.
    */
-  run (env) {
+  run (env, unnamedCounter) {
     util.check(Array.isArray(this.transforms) &&
                (this.transforms.length > 0) &&
                this.transforms.every(transform => transform instanceof Transform.base),
@@ -53,21 +56,18 @@ class Pipeline {
 
     let data = null
     for (const transform of this.transforms) {
-      console.log(transform)
       data = transform.run(env, data)
     }
 
-    // If the last block of the pipeline is not a report we'll report it as an
-    // unamed result.
+    // If the last block of the pipeline is not a report, plot result, or stats
+    // result we'll report it as an unnamed result.
     if (!(this.transforms[this.transforms.length - 1] instanceof Transform.saveAs)
       && !(this.transforms[this.transforms.length - 1] instanceof Transform.plot)
       && !(this.transforms[this.transforms.length - 1] instanceof Transform.stats)){
       data = new Transform.saveAs("unnamed " + unnamedCounter).run(env, data)
       unnamedCounter = unnamedCounter + 1
     }
-
-    console.log("running pipe")
-    console.log(data)
+    return unnamedCounter
   }
 }
 

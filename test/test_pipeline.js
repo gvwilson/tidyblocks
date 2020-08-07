@@ -58,8 +58,8 @@ describe('executes pipelines', () => {
     const pipeline = new Pipeline(fixture.HEAD)
     const env = new Env(INTERFACE)
     pipeline.run(env)
-    assert.equal(env.results.size, 0,
-                 `No results should be registered`)
+    assert.equal(env.results.size, 1,
+                 `Only the unnamed result we generate should be reported`)
     done()
   })
 
@@ -67,8 +67,8 @@ describe('executes pipelines', () => {
     const pipeline = new Pipeline(fixture.HEAD, fixture.MIDDLE)
     const env = new Env(INTERFACE)
     pipeline.run(env)
-    assert.equal(env.results.size, 0,
-                 `No results should be registered`)
+    assert.equal(env.results.size, 1,
+                 `Only the unnamed result we generate should be reported`)
     done()
   })
 
