@@ -11,49 +11,60 @@ const MESSAGES = {
   stats_ttest_one: {
     message0: {
       en: 'One-sample t-test', 
-      es: 'T-test para una muestra'
+      es: 'T-test para una muestra',
+      ko: '독립표본 t-테스트'
     },
     message1: {
       en: 'name %1 column %2 mean \u03BC %3',
-      es: 'nombre %1 columna %2 media \u03BC %3'
+      es: 'nombre %1 columna %2 media \u03BC %3',
+      ko: '이름 %1 열 %2 평균'
     },
     args1_name: {
       en: 'name',
-      es: 'nombre'
+      es: 'nombre',
+      ko: '이름'
     },
     args1_column: {
       en: 'column',
-      es: 'columna'
+      es: 'columna',
+      ko: '열'
     },
     tooltip: {
       en: 'perform one-sample two-sided t-test',
-      es: 'hacer t-test para una muestra dos colas'
+      es: 'hacer t-test para una muestra dos colas',
+      ko: '독립표본 양측에서 t-테스트 수행'
     }
   },
   stats_ttest_two: {
     message0: {
       en: 'Two-sample t-test',
-      es: 'T-test para dos muestras'
+      es: 'T-test para dos muestras',
+      ko: '두 표본 t-테스트'
     },
     message1: {
       en: 'name %1 labels %2 values %3',
-      es: 'nombre %1 etiquetas %2 valores %3'
+      es: 'nombre %1 etiquetas %2 valores %3',
+      ko: '이름 %1 라벨 %2 값 %3'
     },
     args1_name: {
       en: 'name',
-      es: 'nombre'
+      es: 'nombre',
+      ko: '이름'
     },
     args1_label: {
       en: 'label',
-      es: 'etiqueta'
+      es: 'etiqueta',
+      ko: '라벨'
     },
     args1_column: {
       en: 'column',
-      es: 'columna'
+      es: 'columna',
+      ko: '열'
     },
     tooltip: {
       en: 'perform two-sample two-sided t-test',
-      es: 'hacer t-test para dos muestras dos colas'
+      es: 'hacer t-test para dos muestras dos colas',
+      koL '두 표본 양측에서 t-테스트 수행'
     }
   }
 }
