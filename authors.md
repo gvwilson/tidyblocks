@@ -10,3 +10,7 @@ title: "Authors"
   <p>{{person.bio}}</p>
 </div>
 {% endfor %}
+
+<h2>Other Contributors</h2>
+
+<p><a href="http://dermitmaria.com/">Maria Dermit</a>: translation to Español.</p>
