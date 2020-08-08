@@ -28,146 +28,171 @@ const MESSAGES = {
   multiple_columns: {
     en: 'column, column', 
     es: 'columna, columna',
-    ar: 'عمود, عمود'
+    ar: 'عمود, عمود',
+    ko: '열, 열'
   },
   create: {
     message0: {
       en: 'Create %1 %2',
       es: 'Crear %1 %2',
-      ar: 'إنشاء %1 %2'
+      ar: 'إنشاء %1 %2',
+      ko: '%1 %2 만들기'
     },
     args0_text: {
       en: 'new_column',
       es: 'nueva_columna',
-      ar: 'عمود_جديد'
+      ar: 'عمود_جديد',
+      ko: '새로운 열'
     },
     tooltip: {
       en: 'create new column from existing columns', 
       es: 'crear nueva columna de las columnas existentes',
-      ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا'
+      ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
+      ko: '기존의 열에서 새로운 열 만들기'
     }
   },
   drop: {
     message0: {
       en: 'Drop %1',
       es: 'Excluir %1',
-      ar: 'حذف %1'
+      ar: 'حذف %1',
+      ko: '%1 삭제'
     },
     args0_tooltip: {
       en: 'drop columns by name',
       es: 'Excluir columnas por nombre',
-      ar: 'حذف الأعمده بإستخدام اسمائها'
+      ar: 'حذف الأعمده بإستخدام اسمائها',
+      ko: '이름에 따라 열 삭제'
     }
   },
   filter: {
     message0: {
       en: 'Filter %1', 
       es: 'Filtrar %1',
-      ar: 'تصفية أو فلتره %1'
+      ar: 'تصفية أو فلتره %1',
+      ko: '%1 거르기'
     },
     args0_name: {
       en: 'TEST', 
       es: 'TEST',
-      ar: 'إختبار'
+      ar: 'إختبار',
+      ko: '테스트'
     },
     tooltip: {
       en: 'filter rows by condition', 
       es: 'filtrar filas por condicion',
-      ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط'
+      ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
+      ko: '조건에 따라 행 거르기'
     }
   },
   groupby: {
     message0: {
       en: 'Group by %1', 
       es: 'Agrupar por %1',
-      ar: 'تقسيم البيانات عن طريف: %1'
+      ar: 'تقسيم البيانات عن طريف: %1',
+      ko: '%1 로 그룹화'
     },
     tooltip: {
       en: 'group data by values in columns', 
       es: 'agrupar datos por valores en columnas',
-      ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده'
+      ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
+      ko: '열의 값들로 데이터 그룹화'
     }
   },
   report: {
     message0: {
       en: 'Report %1',
       es: 'Reporte %1',
-      ar: 'التقرير %1'
+      ar: 'التقرير %1',
+      ko: '%1 리포트'
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
-      ar: 'الإسم'
+      ar: 'الإسم',
+      ko: '이름'
     },
     tooltip: {
       en: 'report a result', 
       es: 'reporta un resultado',
-      ar: 'عرض النتائج'
+      ar: 'عرض النتائج',
+      ko: '결과 리포트'
     }
   },
   select: {
     message0: {
       en: 'Select %1',
       es: 'Selecciona %1',
-      ar: 'إختيار %1'
+      ar: 'إختيار %1',
+      ko: '%1 선택'
     },
     tooltip: {
       en: 'select columns by name',
       es: 'selecciona columnas por nombre',
-      ar: 'إختيار الأعمده بإستخدام اسمائها'
+      ar: 'إختيار الأعمده بإستخدام اسمائها',
+      ko: '이름으로 열 선택'
     }
   },
   sort: {
     message0: {
       en: 'Sort %1 descending %2',
       es: 'Ordena %1 descendiente %2',
-      ar: 'ترتيب %1 تنازلي %2'
+      ar: 'ترتيب %1 تنازلي %2',
+      ko: '%2 내림차순으로 %1 정렬'
     },
     tooltip: {
       en: 'sort table by multiple columns',
       es: 'ordena tabla por multiples columnas',
-      ar: 'ترتيب الجدول بإستخدام اكثر من عمود'
+      ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
+      ko: '다중 열에 따라 테이블 정렬'
     }
   },
   summarize: {
     message0: {
       en: 'Summarize %1 %2',
       es: 'Resumen %1 %2',
-      ar: 'تلخيص البيانات %1 %2'
+      ar: 'تلخيص البيانات %1 %2',
+      ko: '%1 %2 축소'
     },
     args0_text: {
       en: 'column', 
       es: 'columna',
-      ar: 'العمود'
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
       en: 'summarize values in  column',
       es: 'Resume valores en columna',
-      ar: 'تلخيص قيم العمود'
+      ar: 'تلخيص قيم العمود',
+      ko: '열의 값 축소'
     }
   },
   ungroup: {
     message0: {
       en: 'Ungroup',
       es: 'Desagrupar',
-      ar: 'الغاء التقسيم'
+      ar: 'الغاء التقسيم',
+      ko: '그룹화 해제'
     },
     tooltip: {
       en: 'remove grouping', 
       es: 'quita agrupamiento',
-      ar: 'الغاءتقسيم البيانات'
+      ar: 'الغاءتقسيم البيانات',
+      ko: '그룹화 삭제'
     }
   },
   unique: {
     message0: {
       en: 'Unique %1', 
       es: 'Unico %1',
-      ar: 'فريد %1'
+      ar: 'فريد %1',
+      ko: '%1 을 유일값으로 만들기'
     },
     tooltip: {
       en: 'select rows with unique values', 
       es: 'selecciona filas con valores unicos',
-      ar: 'إختيار الصفوف ذات القيم الفريده'
+      ar: 'إختيار الصفوف ذات القيم الفريده',
+      ko: '유일값으로 행 선택'
     }
   }
 }

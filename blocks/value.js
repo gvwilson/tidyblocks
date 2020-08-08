@@ -15,110 +15,128 @@ const MESSAGES = {
     message0: {
       en: 'Absent', 
       es: 'Ausente',
-      ar: 'غائب'
+      ar: 'غائب',
+      ko: '공백'
     },
     tooltip: {
       en: 'represent a hole', 
       es: 'representa un agujero',
-      ar: 'تمثيل فجوه'
+      ar: 'تمثيل فجوه',
+      ko: '홀을 나타내기'
     }
   },
   column: {
     column: {
       en: 'column', 
       es: 'columna',
-      ar: 'العمود'
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
-      ar: 'الحصول على قيمه من عمود'
+      ar: 'الحصول على قيمه من عمود',
+      ko: '열의 값 가져오기'
     }
   },
   datetime: {
     text: {
       en: 'YYYY-MM-DD',
       es: 'AAAA-MM-DD',
-      ar: 'YYYY-MM-DD'
+      ar: 'YYYY-MM-DD',
+      ko: '연도-월-일'
     },
     tooltip: {
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
-      ar: 'ثابت تاريخ/وقت'
+      ar: 'ثابت تاريخ/وقت',
+      ko: '날짜/시간 유지'
     }
   },
   logical: {
     tooltip: {
       en: 'logical constant', 
       es: 'constante logica',
-      ar: 'ثابت منطقي'
+      ar: 'ثابت منطقي',
+      ko: '논리 상수'
     }
   },
   number: {
     tooltip: {
       en: 'constant number',
       es: 'numbero constante',
-      ar: 'رقم ثابت'
+      ar: 'رقم ثابت',
+      ko: '상수'
     }
   },
   text: {
     text: {
       en: 'text',
       es: 'texto',
-      ar: 'نص'
+      ar: 'نص',
+      ko: '텍스트'
     },
     tooltip: {
       en: 'constant text', 
       es: 'texto constante',
-      ar: 'نص ثابت'
+      ar: 'نص ثابت',
+      ko: '상수 텍스트'
     }
   },
   rownum: {
     message0: {
       en: 'Row number',
       es: 'Numero de fila',
-      ar: 'رقم الصف'
+      ar: 'رقم الصف',
+      ko: '행 번호'
     },
     tooltip: {
       en: 'row number',
       es: 'numero de fila',
-      ar: 'رقم الصف'
+      ar: 'رقم الصف',
+      ko: '행 번호'
     }
   },
   exponential: {
     message0: {
       en: 'Exponential \u03BB %1',
       es: 'Exponencial \u03BB %1',
-      ar: 'الأسيه \u03BB %1'
+      ar: 'الأسيه \u03BB %1',
+      ko: '\u03BB %1 지수로 표현'
     },
     tooltip: {
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
-      ar: 'المتغيرات العشوائه الأسيه'
+      ar: 'المتغيرات العشوائه الأسيه',
+      ko: '지수 랜덤 값'
     }
   },
   normal: {
     message0: {
       en: 'Normal \u03BC %1 \u03C3 %2',
       es: 'Normal \u03BC %1 \u03C3 %2',
-      ar: 'الطبيعي \u03BC %1 \u03C3 %2'
+      ar: 'الطبيعي \u03BC %1 \u03C3 %2',
+      ko: '\u03BC %1 \u03C3 %2 정규화'
     },
     tooltip: {
       en: 'normal random value',
       es: 'valor aleatorio normal',
-      ar: 'المتغير العشوائي الطبيعي'
+      ar: 'المتغير العشوائي الطبيعي',
+      ko: '정규 랜덤 값'
     }
   },
   uniform: {
     message0: {
       en: 'Uniform \u03B1 %1 \u03B2 %2', 
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
-      ar: 'المنتظم \u03B1 %1 \u03B2 %2'
+      ar: 'المنتظم \u03B1 %1 \u03B2 %2',
+      ko: '\u03B1 %1 \u03B2 %2 균등화'
     },
     tooltip: {
       en: 'uniform random value', 
       es: 'valor aleatorio uniforme',
-      ar: 'المتغير العشوائي المنتظم'
+      ar: 'المتغير العشوائي المنتظم',
+      ko: '균등 랜덤 값'
     }
   }
 }
