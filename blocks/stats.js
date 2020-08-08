@@ -12,59 +12,70 @@ const MESSAGES = {
     message0: {
       en: 'One-sample t-test', 
       es: 'T-test para una muestra',
-      ar: 'إختبار (ت) لعينه واحده'
+      ar: 'إختبار (ت) لعينه واحده',
+      ko: '독립표본 t-검정'
     },
     message1: {
       en: 'name %1 column %2 mean \u03BC %3',
       es: 'nombre %1 columna %2 media \u03BC %3',
-      ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3'
+      ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
+      ko: '이름 %1 열 %2 평균 \u03BC %3'
     },
     args1_name: {
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم'
+      ar: 'الإسم',
+      ko: '이름'
     },
     args1_column: {
       en: 'column',
       es: 'columna',
-      ar: 'العمود'
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
       en: 'perform one-sample two-sided t-test',
       es: 'hacer t-test para una muestra dos colas',
-      ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده'
+      ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده',
+      ko: '독립표본 양측 t-검정 수행'
     }
   },
   stats_ttest_two: {
     message0: {
       en: 'Two-sample t-test',
       es: 'T-test para dos muestras',
-      ar: 'إختبار (ت) لعينتين'
+      ar: 'إختبار (ت) لعينتين',
+      ko: '이표본 t-검정'
     },
     message1: {
       en: 'name %1 labels %2 values %3',
       es: 'nombre %1 etiquetas %2 valores %3',
-      ar: 'الإسم %1 الفئه %2 القيم %3'
+      ar: 'الإسم %1 الفئه %2 القيم %3',
+      ko: '이름 %1 라벨 %2 값 %3'
     },
     args1_name: {
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم'
+      ar: 'الإسم',
+      ko: '이름'
     },
     args1_label: {
       en: 'label',
       es: 'etiqueta',
-      ar: 'الفئه'
+      ar: 'الفئه',
+      ko: '라벨'
     },
     args1_column: {
       en: 'column',
       es: 'columna',
-      ar: 'العمود'
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
       en: 'perform two-sample two-sided t-test',
       es: 'hacer t-test para dos muestras dos colas',
-      ar: 'إختبار (ت) ذو الإتجاهين لعينتين'
+      ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
+      ko: '이표본 양측 t-검정 수행'
     }
   }
 }
