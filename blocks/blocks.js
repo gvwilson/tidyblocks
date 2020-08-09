@@ -278,25 +278,32 @@ const createBlocks = (language = 'en') => {
 
 const MESSAGES = {
   combine: {
-    en: 'combine'
+    en: 'combine',
+    ar: 'دمج'
   },
   data: {
-    en: 'data'
+    en: 'data',
+    ar: 'بيانات'
   },
   op: {
-    en: 'op'
+    en: 'op',
+    ar: 'حساب'
   },
   plot: {
-    en: 'plot'
+    en: 'plot',
+    ar: 'رسم'
   },
   stats: {
-    en: 'stats'
+    en: 'stats',
+    ar: 'إحصائيات'
   },
   transform: {
-    en: 'transform'
+    en: 'transform',
+    ar: 'تغيير'
   },
   value: {
-    en: 'value'
+    en: 'value',
+    ar: 'القيمه'
   }
 }
 
