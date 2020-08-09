@@ -280,36 +280,43 @@ const MESSAGES = {
   combine: {
     ar: 'دمج',
     en: 'combine',
+    es: 'combinar',
     ko: '결합'
   },
   data: {
     ar: 'بيانات',
     en: 'data',
+    es: 'datos',
     ko: '데이터'
   },
   op: {
     ar: 'حساب',
     en: 'op',
+    es: 'operacion',
     ko: '작업'
   },
   plot: {
     ar: 'رسم',
     en: 'plot',
+    es: 'grafico',
     ko: '그래프'
   },
   stats: {
     ar: 'إحصائيات',
     en: 'stats',
+    es: 'estadísticas',
     ko: '통계'
   },
   transform: {
     ar: 'تغيير',
     en: 'transform',
+    es: 'transformar',
     ko: '변환'
   },
   value: {
     ar: 'القيمه',
     en: 'value',
+    es: 'valor',
     ko: '값'
   }
 }
