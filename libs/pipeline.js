@@ -36,7 +36,8 @@ class Pipeline {
   /**
    * Run this pipeline.
    * @param {Env} env The runtime environment. This is filled with results,
-   * statistics, and plots as a side effect of running certain blocks.
+   * statistics, and plots as a side effect of running certain blocks. Its
+   * counter of unnamed results is updated as needed.
    */
   run (env) {
     util.check(Array.isArray(this.transforms) &&
@@ -47,15 +48,26 @@ class Pipeline {
                `First transform of pipeline cannot require input`)
     util.check(this.transforms.slice(1).every(transform => transform.input),
                `All transforms of pipeline after the first must take input`)
-    util.check(this.transforms.slice(0, -1).every(transform => transform.output),
-               `All transforms of pipeline except the last must produce output`)
 
+    // Run each stage in order.
     let data = null
     for (const transform of this.transforms) {
       data = transform.run(env, data)
     }
+
+    // If the last block of the pipeline does not automatically save its result,
+    // save it manually.
+    if (!(this.transforms[this.transforms.length - 1].savesResult)) {
+      const label = `${Pipeline.UNNAMED_RESULT} ${env.getNextUnnamedId()}`
+      data = new Transform.saveAs(label).run(env, data)
+    }
   }
 }
+
+/**
+ * Identifier used for anonymous results.
+ */
+Pipeline.UNNAMED_RESULT = 'unnamed'
 
 /**
  * Indicate that persisted JSON is a pipeline.

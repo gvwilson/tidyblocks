@@ -3,23 +3,10 @@
 const Blockly = require('blockly/blockly_compressed')
 
 const {
+  formatMultiColNames,
   valueToCode,
   Messages
 } = require('./helpers')
-
-/**
- * Helper function to turn a string containing comma-separated column names into
- * an array of JavaScript strings.
- */
-const _formatMultiColNames = (raw) => {
-  const joined = raw
-    .split(',')
-    .map(c => c.trim())
-    .filter(c => (c.length > 0))
-    .map(c => `"${c}"`)
-    .join(', ')
-  return `[${joined}]`
-}
 
 /**
  * Lookup table for message strings.
@@ -85,7 +72,7 @@ const MESSAGES = {
       ko: '조건에 따라 행 거르기'
     }
   },
-  groupby: {
+  groupBy: {
     message0: {
       en: 'Group by %1', 
       es: 'Agrupar por %1',
@@ -99,12 +86,12 @@ const MESSAGES = {
       ko: '열의 값들로 데이터 그룹화'
     }
   },
-  report: {
+  saveAs: {
     message0: {
-      en: 'Report %1',
-      es: 'Reporte %1',
-      ar: 'التقرير %1',
-      ko: '%1 리포트'
+      en: 'Save as %1',
+      es: 'Reporte %1', // TRANSLATE ES
+      ar: 'التقرير %1', // TRANSLATE AR
+      ko: '%1 리포트' // TRANSLATE KO
     },
     args0_text: {
       en: 'name', 
@@ -113,10 +100,10 @@ const MESSAGES = {
       ko: '이름'
     },
     tooltip: {
-      en: 'report a result', 
-      es: 'reporta un resultado',
-      ar: 'عرض النتائج',
-      ko: '결과 리포트'
+      en: 'save a result',
+      es: 'reporta un resultado', // TRANSLATE ES
+      ar: 'عرض النتائج', // TRANSLATE AR
+      ko: '결과 리포트' // TRANSLATE KO
     }
   },
   select: {
@@ -269,7 +256,7 @@ const setup = (language) => {
     // Group
     {
       type: 'transform_groupBy',
-      message0: msg.get('groupby.message0'),
+      message0: msg.get('groupBy.message0'),
       args0: [
         {
           type: 'field_input',
@@ -281,26 +268,26 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: msg.get('groupby.tooltip'),
+      tooltip: msg.get('groupBy.tooltip'),
       helpUrl: '',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
-    // Report
+    // Save As
     {
-      type: 'transform_report',
-      message0: msg.get('report.message0'),
+      type: 'transform_saveAs',
+      message0: msg.get('saveAs.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: msg.get('report.args0_text')
+          text: msg.get('saveAs.args0_text')
         }
       ],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: msg.get('report.tooltip'),
+      tooltip: msg.get('saveAs.tooltip'),
       helpUrl: '',
       extensions: ['validate_NAME']
     },
@@ -429,7 +416,7 @@ const setup = (language) => {
 
   // Drop
   Blockly.TidyBlocks['transform_drop'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "drop", ${columns}]`
   }
 
@@ -441,25 +428,25 @@ const setup = (language) => {
 
   // Group
   Blockly.TidyBlocks['transform_groupBy'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "groupBy", ${columns}]`
   }
 
   // Report
-  Blockly.TidyBlocks['transform_report'] = (block) => {
+  Blockly.TidyBlocks['transform_saveAs'] = (block) => {
     const name = block.getFieldValue('NAME')
-    return `["@transform", "report", "${name}"]`
+    return `["@transform", "saveAs", "${name}"]`
   }
 
   // Select
   Blockly.TidyBlocks['transform_select'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "select", ${columns}]`
   }
 
   // Sort
   Blockly.TidyBlocks['transform_sort'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
     return `["@transform", "sort", ${columns}, ${descending}]`
   }
@@ -478,7 +465,7 @@ const setup = (language) => {
 
   // Unique
   Blockly.TidyBlocks['transform_unique'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "unique", ${columns}]`
   }
 }

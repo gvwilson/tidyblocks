@@ -25,7 +25,7 @@ describe('creates the interface object', () => {
     const block = gui.workspace.newBlock('data_colors')
     block.hat = 'cap'
     gui.runProgram()
-    assert.deepEqual(gui.env.log, [['log', 'read colors']],
+    assert.deepEqual(gui.env.log, [['log', 'read colors'], ['log', 'report unnamed 1']],
                      `Program did not run as expected`)
     done()
   })
@@ -43,7 +43,7 @@ describe('creates the interface object', () => {
     assert.deepEqual(code, program,
                      `Did not generate correct code`)
     gui.runProgram()
-    const expected = [['warn', '1 stray stacks found'], ['log', 'read colors']]
+    const expected = [['warn', '1 stray stacks found'], ['log', 'read colors'], ['log', 'report unnamed 1']]
     assert.deepEqual(gui.env.log, expected,
                      `Did not get stray count report`)
     done()

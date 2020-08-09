@@ -13,6 +13,18 @@ const transform = require('./transform')
 const value = require('./value')
 
 // ----------------------------------------------------------------------
+// Block colors.
+// ----------------------------------------------------------------------
+
+const COMBINE_COLOR = '#404040'
+const DATA_COLOR = '#FEBE4C'
+const OP_COLOR = '#F9B5B2'
+const PLOT_COLOR = '#A4C588'
+const STATS_COLOR = '#BA93DB'
+const TRANSFORM_COLOR = '#76AADB'
+const VALUE_COLOR = '#E7553C'
+
+// ----------------------------------------------------------------------
 // Toolbox configuration.
 // ----------------------------------------------------------------------
 
@@ -130,16 +142,8 @@ const createXmlConfig = (language) => {
 }
 
 // ----------------------------------------------------------------------
-// Block appearance and behavior.
+// Theme.
 // ----------------------------------------------------------------------
-
-const COMBINE_COLOR = '#404040'
-const DATA_COLOR = '#FEBE4C'
-const OP_COLOR = '#F9B5B2'
-const PLOT_COLOR = '#A4C588'
-const STATS_COLOR = '#BA93DB'
-const TRANSFORM_COLOR = '#76AADB'
-const VALUE_COLOR = '#E7553C'
 
 /**
  * Theme for all blocks.
@@ -193,7 +197,7 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
 })
 
 // ----------------------------------------------------------------------
-// Creating and decorating the TidyBlocks code generator.
+// TidyBlocks code generator.
 // ----------------------------------------------------------------------
 
 /**
@@ -358,6 +362,10 @@ const _createValidators = () => {
   Blockly.Extensions.register('validate_COLOR', _validateColor('COLOR', MATCH_COL_NAME))
   Blockly.Extensions.register('validate_DATE', _validateDate('DATE'))
 }
+
+// ----------------------------------------------------------------------
+// Create blocks.
+// ----------------------------------------------------------------------
 
 // Guard to ensure that `createBlocks` is only run once during testing.
 let _createBlocksHasRun = false

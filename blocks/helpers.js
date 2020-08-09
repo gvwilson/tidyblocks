@@ -9,6 +9,20 @@ const Blockly = require('blockly/blockly_compressed')
 const ORDER_NONE = 0
 
 /**
+ * Helper function to turn a string containing comma-separated column names into
+ * an array of JavaScript strings.
+ */
+const formatMultiColNames = (raw) => {
+  const joined = raw
+    .split(',')
+    .map(c => c.trim())
+    .filter(c => (c.length > 0))
+    .map(c => `"${c}"`)
+    .join(', ')
+  return `[${joined}]`
+}
+
+/**
  * Get the value of a sub-block as text or an 'absent' placeholder if the
  * sub-block is missing.
  * @param block The block object.
@@ -71,6 +85,7 @@ Messages.UNDEFINED = 'undefined'
 
 module.exports = {
   ORDER_NONE,
+  formatMultiColNames,
   valueToCode,
   Messages
 }

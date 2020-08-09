@@ -85,7 +85,8 @@ class Program {
   run (env) {
     this.env = env
     try {
-      // Run until queue is empty.
+      // Run until queue is empty, calculating which new results have been added
+      // to the environment so that we can notify waiting pipelines.
       while (this.queue.length > 0) {
         const pipeline = this.queue.shift()
         const previous = new Set(this.env.results.keys())
@@ -94,7 +95,8 @@ class Program {
           .filter(key => !previous.has(key))
           .forEach(key => this.notify(key))
       }
-      // Report how many things were not run.
+
+      // Report how many things were not run (making sure to remove duplicates).
       if (this.waiting.size > 0) {
         const unseen = new Set()
         this.waiting.forEach(keySet => {
