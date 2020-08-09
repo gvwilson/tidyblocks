@@ -111,15 +111,6 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
       colourTertiary: '#760918'
     }
   },
-  categoryStyles: {
-    combine: {colour: COMBINE_COLOR},
-    data: {colour: DATA_COLOR},
-    op: {colour: OP_COLOR},
-    plot: {colour: PLOT_COLOR},
-    stats: {colour: STATS_COLOR},
-    transform: {colour: TRANSFORM_COLOR},
-    value: {colour: VALUE_COLOR}
-  },
   componentStyles: {
     toolboxBackgroundColour: '#e9eff2',
     toolboxForegroundColour: '#1C313A',
@@ -328,7 +319,7 @@ const MESSAGES = {
 const createXmlConfig = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   return `<xml id="toolbox" style="display: none">
-    <category name="${msg.get('data')}" categorystyle="data">
+    <category name="${msg.get('data')}" colour="${DATA_COLOR}">
       <block type="data_colors"></block>
       <block type="data_earthquakes"></block>
       <block type="data_penguins"></block>
@@ -336,7 +327,7 @@ const createXmlConfig = (language) => {
       <block type="data_sequence"></block>
       <block type="data_user"></block>
     </category>
-    <category name="${msg.get('transform')}" categorystyle="transform">
+    <category name="${msg.get('transform')}" colour="${TRANSFORM_COLOR}">
       <block type="transform_create"></block>
       <block type="transform_drop"></block>
       <block type="transform_filter"></block>
@@ -348,18 +339,18 @@ const createXmlConfig = (language) => {
       <block type="transform_ungroup"></block>
       <block type="transform_unique"></block>
     </category>
-    <category name="${msg.get('plot')}" categorystyle="plot">
+    <category name="${msg.get('plot')}" colour="${PLOT_COLOR}">
       <block type="plot_bar"></block>
       <block type="plot_box"></block>
       <block type="plot_dot"></block>
       <block type="plot_histogram"></block>
       <block type="plot_scatter"></block>
     </category>
-    <category name="${msg.get('stats')}" categorystyle="stats">
+    <category name="${msg.get('stats')}" colour="${STATS_COLOR}">
       <block type="stats_ttest_one"></block>
       <block type="stats_ttest_two"></block>
     </category>
-    <category name="${msg.get('op')}" categorystyle="op">
+    <category name="${msg.get('op')}" colour="${OP_COLOR}">
       <block type="op_arithmetic"></block>
       <block type="op_negate"></block>
       <block type="op_compare"></block>
@@ -371,7 +362,7 @@ const createXmlConfig = (language) => {
       <block type="op_conditional"></block>
       <block type="op_abs"></block>
     </category>
-    <category name="${msg.get('value')}" categorystyle="value">
+    <category name="${msg.get('value')}" colour="${VALUE_COLOR}">
       <block type="value_column"></block>
       <block type="value_datetime"></block>
       <block type="value_logical"></block>
@@ -382,7 +373,7 @@ const createXmlConfig = (language) => {
       <block type="value_normal"></block>
       <block type="value_uniform"></block>
     </category>
-    <category name="${msg.get('combine')}" categorystyle="combine">
+    <category name="${msg.get('combine')}" colour="${COMBINE_COLOR}">
       <block type="combine_glue"></block>
       <block type="combine_join"></block>
     </category>
