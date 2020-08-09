@@ -21,9 +21,9 @@ class TransformBase {
    * @param {string} species What this transform is called.
    * @param {string[]} requires What datasets are required before this can run?
    * @param {Boolean} input Does this transform require input?
-   * @param {Boolean} output Does this transform produce output?
+   * @param {Boolean} savesResult Does this transform automatically save its result in the environment?
    */
-  constructor (species, requires, input, output) {
+  constructor (species, requires, input, savesResult) {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')),
@@ -31,7 +31,7 @@ class TransformBase {
     this.species = species
     this.requires = requires
     this.input = input
-    this.output = output
+    this.savesResult = savesResult
   }
 
   equal (other) {
@@ -64,7 +64,7 @@ class TransformCreate extends TransformBase {
                `Expected string as new name`)
     util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super('create', [], true, true)
+    super('create', [], true, false)
     this.newName = newName
     this.expr = expr
   }
@@ -89,7 +89,7 @@ class TransformData extends TransformBase {
   constructor (name) {
     util.check(typeof name === 'string',
                `Expected string`)
-    super('read', [], false, true)
+    super('read', [], false, false)
     this.name = name
   }
 
@@ -114,7 +114,7 @@ class TransformDrop extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('drop', [], true, true)
+    super('drop', [], true, false)
     this.columns = columns
   }
 
@@ -136,7 +136,7 @@ class TransformFilter extends TransformBase {
   constructor (expr) {
     util.check(expr instanceof ExprBase,
                `Expected expression`)
-    super('filter', [], true, true)
+    super('filter', [], true, false)
     this.expr = expr
   }
 
@@ -159,7 +159,7 @@ class TransformFilter extends TransformBase {
  */
 class TransformGlue extends TransformBase {
   constructor (leftName, rightName, label) {
-    super('glue', [leftName, rightName], false, true)
+    super('glue', [leftName, rightName], false, false)
     this.leftName = leftName
     this.rightName = rightName
     this.label = label
@@ -190,7 +190,7 @@ class TransformGroupBy extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('groupBy', [], true, true)
+    super('groupBy', [], true, false)
     this.columns = columns
   }
 
@@ -213,7 +213,7 @@ class TransformGroupBy extends TransformBase {
  */
 class TransformJoin extends TransformBase {
   constructor (leftName, leftCol, rightName, rightCol) {
-    super('join', [leftName, rightName], false, true)
+    super('join', [leftName, rightName], false, false)
     this.leftName = leftName
     this.leftCol = leftCol
     this.rightName = rightName
@@ -271,7 +271,7 @@ class TransformSelect extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('select', [], true, true)
+    super('select', [], true, false)
     this.columns = columns
   }
 
@@ -294,7 +294,7 @@ class TransformSequence extends TransformBase {
   constructor (newName, limit) {
     util.check(typeof newName === 'string',
                `Expected string as new name`)
-    super('sequence', [], true, true)
+    super('sequence', [], true, false)
     this.newName = newName
     this.limit = limit
   }
@@ -329,7 +329,7 @@ class TransformSort extends TransformBase {
                `Expected array of columns`)
     util.check(typeof reverse === 'boolean',
                `Expected Boolean`)
-    super('sort', [], true, true)
+    super('sort', [], true, false)
     this.columns = columns
     this.reverse = reverse
   }
@@ -357,7 +357,7 @@ class TransformSummarize extends TransformBase {
                `Unknown summarization operation ${action}`)
     util.check(typeof column === 'string',
                `Expected string as column name`)
-    super('summarize', [], true, true)
+    super('summarize', [], true, false)
     this.action = action
     this.column = column
   }
@@ -379,7 +379,7 @@ class TransformSummarize extends TransformBase {
  */
 class TransformUngroup extends TransformBase {
   constructor () {
-    super('ungroup', [], true, true)
+    super('ungroup', [], true, false)
   }
 
   run (env, df) {
@@ -396,7 +396,7 @@ class TransformUnique extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
                `Expected array of columns`)
-    super('unique', [], true, true)
+    super('unique', [], true, false)
     this.columns = columns
   }
 
@@ -597,8 +597,8 @@ class TransformScatter extends TransformPlot {
  * Base class for identifying our stats transforms.
  */
 class TransformStats extends TransformBase {
-  constructor (species, requires, input, output) {
-    super(species, requires, input, output)
+  constructor (species, requires, input) {
+    super(species, [], true, true)
   }
 }
 
@@ -609,7 +609,7 @@ class TransformStats extends TransformBase {
  */
 class TransformTTestOneSample extends TransformStats {
   constructor (label, colName, mean) {
-    super('ttest_one', [], true, true)
+    super('ttest_one')
     this.label = label
     this.colName = colName
     this.mean = mean
@@ -632,7 +632,7 @@ class TransformTTestOneSample extends TransformStats {
  */
 class TransformTTestPaired extends TransformStats {
   constructor (label, labelCol, valueCol) {
-    super('ttest_two', [], true, true)
+    super('ttest_two')
     this.label = label
     this.labelCol = labelCol
     this.valueCol = valueCol

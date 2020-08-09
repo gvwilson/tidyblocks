@@ -123,10 +123,9 @@ module.exports = {
   ],
   COLORS: require('../data/colors'),
   TABLE,
-  HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, true),
-  MIDDLE: new MockTransform('middle', pass, [], true, true),
+  HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, false),
+  MIDDLE: new MockTransform('middle', pass, [], true, false),
   REPORT: new Transform.saveAs('keyword'),
-  NO_OUTPUT: new MockTransform('no_output', pass, [], true, false),
   pass,
   TestInterface
 }

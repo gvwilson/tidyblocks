@@ -36,13 +36,10 @@ class Pipeline {
   /**
    * Run this pipeline.
    * @param {Env} env The runtime environment. This is filled with results,
-   * statistics, and plots as a side effect of running certain blocks.
-   * @param {int} unnamedCounter The number used to label any unnamed results
-   * we display.
-   * @returns {int} the unnamedCounter, updated if a new unnaamed result was
-   * reported.
+   * statistics, and plots as a side effect of running certain blocks. Its
+   * counter of unnamed results is updated as needed.
    */
-  run (env, unnamedCounter) {
+  run (env) {
     util.check(Array.isArray(this.transforms) &&
                (this.transforms.length > 0) &&
                this.transforms.every(transform => transform instanceof Transform.base),
@@ -51,25 +48,26 @@ class Pipeline {
                `First transform of pipeline cannot require input`)
     util.check(this.transforms.slice(1).every(transform => transform.input),
                `All transforms of pipeline after the first must take input`)
-    util.check(this.transforms.slice(0, -1).every(transform => transform.output),
-               `All transforms of pipeline except the last must produce output`)
 
+    // Run each stage in order.
     let data = null
     for (const transform of this.transforms) {
       data = transform.run(env, data)
     }
 
-    // If the last block of the pipeline is not a report, plot result, or stats
-    // result we'll report it as an unnamed result.
-    if (!(this.transforms[this.transforms.length - 1] instanceof Transform.saveAs)
-      && !(this.transforms[this.transforms.length - 1] instanceof Transform.plot)
-      && !(this.transforms[this.transforms.length - 1] instanceof Transform.stats)){
-      data = new Transform.saveAs("unnamed " + unnamedCounter).run(env, data)
-      unnamedCounter = unnamedCounter + 1
+    // If the last block of the pipeline does not automatically save its result,
+    // save it manually.
+    if (!(this.transforms[this.transforms.length - 1].savesResult)) {
+      const label = `${Pipeline.UNNAMED_RESULT} ${env.getNextUnnamedId()}`
+      data = new Transform.saveAs(label).run(env, data)
     }
-    return unnamedCounter
   }
 }
+
+/**
+ * Identifier used for anonymous results.
+ */
+Pipeline.UNNAMED_RESULT = 'unnamed'
 
 /**
  * Indicate that persisted JSON is a pipeline.

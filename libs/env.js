@@ -19,6 +19,7 @@ class Env {
     this.plots = new Map()
     this.stats = new Map()
     this.log = []
+    this.unnamedCounter = 0
   }
 
   /**
@@ -116,6 +117,15 @@ class Env {
     util.check(level && (typeof level === 'string') && Env.LOG_LEVELS.has(level),
                `Invalid or unknown log level "${level}"`)
     this.log.push([level, message])
+  }
+
+  /**
+   * Get the serial number of the next unnamed result.
+   * @returns {number} Unique serial number of next unnamed result.
+   */
+  getNextUnnamedId () {
+    this.unnamedCounter += 1
+    return this.unnamedCounter
   }
 }
 

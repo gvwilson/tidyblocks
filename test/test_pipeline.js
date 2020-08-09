@@ -46,20 +46,15 @@ describe('executes pipelines', () => {
     done()
   })
 
-  it('refuses to execute a pipeline whose early transforms do not produce output', (done) => {
-    const pipeline = new Pipeline(fixture.HEAD, fixture.NO_OUTPUT, fixture.REPORT)
-    assert.throws(() => pipeline.run(new Env(INTERFACE)),
-                  Error,
-                  `Should not execute pipeline whose middle transform does not produce output`)
-    done()
-  })
-
-  it('executes a single-transform pipeline without a report', (done) => {
+  it('executes a single-transform pipeline without a report and saves anonymous output', (done) => {
     const pipeline = new Pipeline(fixture.HEAD)
     const env = new Env(INTERFACE)
     pipeline.run(env)
     assert.equal(env.results.size, 1,
                  `Only the unnamed result we generate should be reported`)
+    console.log('RESULTS', env.results)
+    assert(env.results.has(`${Pipeline.UNNAMED_RESULT} 1`),
+           `Anonymous result does not have expected name`)
     done()
   })
 
