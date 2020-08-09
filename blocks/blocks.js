@@ -93,7 +93,7 @@ const createXmlConfig = (language) => {
       <block type="transform_drop"></block>
       <block type="transform_filter"></block>
       <block type="transform_groupBy"></block>
-      <block type="transform_report"></block>
+      <block type="transform_saveAs"></block>
       <block type="transform_select"></block>
       <block type="transform_sort"></block>
       <block type="transform_summarize"></block>
