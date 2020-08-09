@@ -278,25 +278,32 @@ const createBlocks = (language = 'en') => {
 
 const MESSAGES = {
   combine: {
-    en: 'combine'
+    en: 'combine',
+    ko: '결합'
   },
   data: {
-    en: 'data'
+    en: 'data',
+    ko: '데이터'
   },
   op: {
-    en: 'op'
+    en: 'op',
+    ko: '작업'
   },
   plot: {
-    en: 'plot'
+    en: 'plot',
+    ko: '그래프'
   },
   stats: {
-    en: 'stats'
+    en: 'stats',
+    ko: '통계'
   },
   transform: {
-    en: 'transform'
+    en: 'transform',
+    ko: '변환'
   },
   value: {
-    en: 'value'
+    en: 'value',
+    ko: '값'
   }
 }
 
