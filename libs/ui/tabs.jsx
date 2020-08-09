@@ -103,6 +103,20 @@ export function TabSelectionBar (props) {
             </Animated>
           </div>
         }/>
+        <Tab {...a11yProps(props.resultsIndex)}
+          label={
+            <div className="tabWrapper">
+              <span className="dotPadding"></span>
+              Results
+              <Animated
+                animationIn="fadeIn"
+                animationOut="fadeOut"
+                animateOnMount={false}
+                isVisible={props.tabUpdated.results}>
+                  <span className="dotIndicator defaultDotIndicator"></span>
+              </Animated>
+            </div>
+          }/>
       <Tab {...a11yProps(props.statsIndex)}
         label={
           <div className="tabWrapper">
@@ -187,7 +201,42 @@ export function TabPanels (props) {
           </div>
         </Animated>
       </TabPanel>
-      <TabPanel value={props.tabValue} index={1}>
+      <TabPanel value={props.tabValue} index={1} component="div">
+        <TabHeader
+          maximizePanel={props.maximizePanel}
+          minimizePanel={props.minimizePanel}
+          restorePanel={props.restorePanel}
+          selectDropdown={props.resultsDropdown}/>
+        <Animated
+          animationIn="fadeIn"
+          animationOut="fadeOut"
+          animationInDuration={800}
+          animationOutDuration={800}
+          >
+          <div className="relativeWrapper">
+            <div className="dataWrapper">
+              {props.resultColumns &&
+                <Animated
+                  animationIn="fadeIn"
+                  animationOut="fadeOut"
+                  animationInDuration={800}
+                  animationOutDuration={800}
+                  isVisible={!props.hideResultTable}>
+                  <DataGrid
+                    ref={props.resultGridRef}
+                    columns={props.resultColumns}
+                    rows={props.results}
+                    enableCellAutoFocus={false}
+                    height={props.topRightPaneHeight}
+                    onGridSort={props.sortRows}
+                    />
+                </Animated>
+              }
+            </div>
+          </div>
+        </Animated>
+      </TabPanel>
+      <TabPanel value={props.tabValue} index={2}>
         <TabHeader maximizePanel={props.maximizePanel}
           minimizePanel={props.minimizePanel}
           restorePanel={props.restorePanel}
@@ -230,7 +279,7 @@ export function TabPanels (props) {
           }
         </Animated>
       </TabPanel>
-      <TabPanel value={props.tabValue} index={2} component="div">
+      <TabPanel value={props.tabValue} index={3} component="div">
         <TabHeader maximizePanel={props.maximizePanel}
           minimizePanel={props.minimizePanel}
           restorePanel={props.restorePanel}
@@ -256,7 +305,7 @@ export function TabPanels (props) {
           </div>
         </Animated>
       </TabPanel>
-      <TabPanel value={props.tabValue} index={3}>
+      <TabPanel value={props.tabValue} index={4}>
         <TabHeader maximizePanel={props.maximizePanel}
           minimizePanel={props.minimizePanel}
           restorePanel={props.restorePanel}
