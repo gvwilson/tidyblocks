@@ -16,12 +16,15 @@ class Program {
    * - `waiting` maps sets of dependency names to runnable pipelines, and is
    *   used to keep track of pipelines that are waiting for other things to
    *   finish.
+   * - `unnamedCounter` tracks how many unnamed results have been reported 
+   *   for for labelling purposes.
    */
   constructor (...pipelines) {
     this.env = null
     this.pipelines = []
     this.queue = []
     this.waiting = new Map()
+    this.unnamedCounter = 1
 
     pipelines.forEach(pipeline => this.register(pipeline))
   }
@@ -83,13 +86,14 @@ class Program {
    * @param {Env} env The runtime environment of the program.
    */
   run (env) {
+    this.unnamedCounter = 1
     this.env = env
     try {
       // Run until queue is empty.
       while (this.queue.length > 0) {
         const pipeline = this.queue.shift()
         const previous = new Set(this.env.results.keys())
-        pipeline.run(this.env)
+        this.unnamedCounter = pipeline.run(this.env, this.unnamedCounter)
         Array.from(this.env.results.keys())
           .filter(key => !previous.has(key))
           .forEach(key => this.notify(key))
