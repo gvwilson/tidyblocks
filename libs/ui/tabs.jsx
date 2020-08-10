@@ -11,7 +11,7 @@ import Container from "@material-ui/core/Container"
 import Tooltip from '@material-ui/core/Tooltip'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faWindowMaximize, faWindowMinimize, faWindowRestore, faChartBar,
-  faTable } from '@fortawesome/free-solid-svg-icons'
+  faTable, faDatabase } from '@fortawesome/free-solid-svg-icons'
 import { Animated } from "react-animated-css"
 import DataGrid from 'react-data-grid'
 
@@ -187,14 +187,23 @@ export function TabPanels (props) {
                   animationInDuration={800}
                   animationOutDuration={800}
                   isVisible={!props.hideDataTable}>
-                  <DataGrid
-                    ref={props.dataGridRef}
-                    columns={props.dataColumns}
-                    rows={props.data}
-                    enableCellAutoFocus={false}
-                    height={props.topRightPaneHeight}
-                    onGridSort={props.sortRows}
-                    />
+                  {props.dataColumns.length > 0 ?
+                    <DataGrid
+                      ref={props.dataGridRef}
+                      columns={props.dataColumns}
+                      rows={props.data}
+                      enableCellAutoFocus={false}
+                      height={props.topRightPaneHeight}
+                      onGridSort={props.sortRows}
+                      />
+                    :
+                      <div className="emptyPanelWrapper">
+                        <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
+                        <p className="emptyPanelText">You aren't currently displaying any data.</p>
+                        <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                        </p>
+                      </div>
+                    }
                 </Animated>
               }
             </div>
@@ -222,14 +231,23 @@ export function TabPanels (props) {
                   animationInDuration={800}
                   animationOutDuration={800}
                   isVisible={!props.hideResultTable}>
-                  <DataGrid
-                    ref={props.resultGridRef}
-                    columns={props.resultColumns}
-                    rows={props.results}
-                    enableCellAutoFocus={false}
-                    height={props.topRightPaneHeight}
-                    onGridSort={props.sortRows}
-                    />
+                  {props.resultColumns.length > 0 ?
+                    <DataGrid
+                      ref={props.resultGridRef}
+                      columns={props.resultColumns}
+                      rows={props.results}
+                      enableCellAutoFocus={false}
+                      height={props.topRightPaneHeight}
+                      onGridSort={props.sortRows}
+                      />
+                  :
+                    <div className="emptyPanelWrapper">
+                      <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
+                      <p className="emptyPanelText">You aren't currently displaying any results.</p>
+                      <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                      </p>
+                    </div>
+                  }
                 </Animated>
               }
             </div>

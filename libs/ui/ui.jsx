@@ -84,7 +84,7 @@ export class TidyBlocksApp extends React.Component {
       env: initialEnv,
       dataKeys: null,
       data: null,
-      dataColumns: null,
+      dataColumns: [],
       dataOptions: [],
       dataValue: null,
       activeDataOption: null,
@@ -92,7 +92,7 @@ export class TidyBlocksApp extends React.Component {
 
       resultKeys: null,
       results: null,
-      resultColumns: null,
+      resultColumns: [],
       resultOptions: [],
       resultValue: null,
       activeResultOption: null,
@@ -383,7 +383,7 @@ export class TidyBlocksApp extends React.Component {
   updateDataInformation (env) {
     const dataKeys = env.ui.userData.keys()
     let data = null
-    let dataColumns = null
+    let dataColumns = [] 
     let activeDataOption = null
     let formattedColumns = []
     // If the active data option no longer exists remove it. This happens
@@ -425,7 +425,7 @@ export class TidyBlocksApp extends React.Component {
   updateResultsInformation (env) {
     const resultKeys = env.results.keys()
     let results = null
-    let resultColumns = null
+    let resultColumns = []
     let activeResultOption = null
     let formattedColumns = []
 
