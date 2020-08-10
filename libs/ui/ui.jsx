@@ -85,7 +85,7 @@ export class TidyBlocksApp extends React.Component {
       env: initialEnv,
       dataKeys: null,
       data: null,
-      dataColumns: null,
+      dataColumns: [],
       dataOptions: [],
       dataValue: null,
       activeDataOption: null,
@@ -384,7 +384,7 @@ export class TidyBlocksApp extends React.Component {
   updateDataInformation (env) {
     const dataKeys = env.ui.userData.keys()
     let data = null
-    let dataColumns = null
+    let dataColumns = [] 
     let activeDataOption = null
     let formattedColumns = []
     // If the active data option no longer exists remove it. This happens
