@@ -109,7 +109,7 @@ export class SaveCsvFormDialog extends React.Component{
           contentText={this.state.contentText}
           linkId={this.state.linkId}
           filename={this.state.filename}
-          data={this.props.data}/>
+          data={this.props.saveData}/>
       </div>
     )
   }
