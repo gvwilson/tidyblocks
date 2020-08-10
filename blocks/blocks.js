@@ -55,7 +55,7 @@ const MESSAGES = {
     en: 'plot',
     es: 'grafico',
     ko: '그래프',
-    it: 'grafico'
+    it: 'grafici'
   },
   stats: {
     ar: 'إحصائيات',
@@ -69,7 +69,7 @@ const MESSAGES = {
     en: 'transform',
     es: 'transformar',
     ko: '변환',
-    it: 'trasformare'
+    it: 'trasformazioni'
   },
   value: {
     ar: 'القيمه',
