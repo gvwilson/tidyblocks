@@ -1,5 +1,5 @@
 ---
-permalink: /es/transformar/
+permalink: /es/transform/
 title: "Transforma"
 language: es
 headings:
