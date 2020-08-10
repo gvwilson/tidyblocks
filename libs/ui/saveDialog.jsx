@@ -216,9 +216,9 @@ export class SaveSvgFormDialog extends React.Component{
   handleDownload (workspace){
     const canvas = workspace.svgBlockCanvas_.cloneNode(true)
     canvas.removeAttribute("transform");
-    let themeCss = document.getElementById("blockly-renderer-style-geras-tidyblocks").innerHTML
+    let themeCss = document.getElementById("blockly-renderer-style-thrasos-tidyblocks").innerHTML
     // Theme name isn't inserted on our pulled svg so we remove it.
-    themeCss = themeCss.replace(/.geras-renderer.tidyblocks-theme/g, '')
+    themeCss = themeCss.replace(/.thrasos-renderer.tidyblocks-theme/g, '')
     // Default blockly css.
     let blocklyCss = document.getElementById("blockly-common-style").innerHTML
     const css = `<defs><style type="text/css">` + themeCss + blocklyCss + `</style></defs>`
