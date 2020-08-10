@@ -9,6 +9,7 @@ headings:
   text: Glue
 ---
 
+<div id="join" markdown="1">
 ## Join
 
 <img class="block" src="{{page.permalink | append: 'join.svg' | relative_url}}" alt="join block"/>
@@ -48,7 +49,9 @@ while the other columns appear as <code><em>table</em>\_<em>column</em></code>.
 - **left_column**: The column to join on from that table.
 - **right_table**: The name used to identify a table in a [report](../transform/#report) block.
 - **right_column**: The column to join on from that table.
+</div>
 
+<div id="glue" markdown="1">
 ## Glue
 
 <img class="block" src="{{page.permalink | append: 'glue.svg' | relative_url}}" alt="glue block"/>
@@ -85,3 +88,4 @@ then the final table contains:
 - **left_table**: The name used to identify a table in a [report](../combine/#report) block.
 - **right_table**: The name used to identify a table in a [report](../combine/#report) block.
 - **label**: The name of the column holding the row's source.
+</div>

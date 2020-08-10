@@ -7,14 +7,15 @@ headings:
   text: Arithmetic
 - id: logical
   text: Logical
-- id: types
+- id: type
   text: Types
-- id: dates-times
+- id: datetime
   text: Dates/Times
 - id: conditional
   text: Conditional
 ---
 
+<div id="arithmetic" markdown="1">
 ## Arithmetic
 
 <img class="block" src="{{page.permalink | append: 'arithmetic.svg' | relative_url}}" alt="arithmetic block"/>
@@ -31,7 +32,9 @@ It accepts numbers, column names, and nested operation blocks.
 Negate a number.
 
 - *space*: The value to negate.
+</div>
 
+<div id="logical" markdown="1">
 ## Logical
 
 <img class="block" src="{{page.permalink | append: 'logical_op.svg' | relative_url}}" alt="logical operation block"/>
@@ -53,8 +56,10 @@ it is not either-or-both rather than one-or-the-other.
 Produce `true` if the value is `false` or `false` if the value is `true`.
 
 - *space*: The value to invert.
+</div>
 
-## Types
+<div id="type" markdown="1">
+## Type
 
 <img class="block" src="{{page.permalink | append: 'type_check.svg' | relative_url}}" alt="type checking block"/>
 
@@ -69,7 +74,9 @@ Convert a value from one type to another.
 
 - *space*: The value to convert.
 - *drop down*: Select the type to convert to.
+</div>
 
+<div id="datetime" markdown="1">
 ## Dates/Times
 
 <img class="block" src="{{page.permalink | append: 'datetime_op.svg' | relative_url}}" alt="datetime operation block"/>
@@ -78,7 +85,9 @@ Extract the year, month, or day from a date/time value.
 
 - *space*: The date/time value to convert.
 - *drop down*: Select the sub-value to extract.
+</div>
 
+<div id="conditional" markdown="1">
 ## Conditional
 
 <img class="block" src="{{page.permalink | append: 'conditional.svg' | relative_url}}" alt="conditional block"/>
@@ -90,3 +99,4 @@ but the values used for the true and false cases must have the same type.
 - *first space*: The condition to test.
 - *second space*: The value if the condition is true.
 - *third space*: The value if the condition is false.
+</div>

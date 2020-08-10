@@ -137,7 +137,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_bar.tooltip'),
-      helpUrl: '',
+      helpUrl: './plot/#bar',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
@@ -167,7 +167,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_box.tooltip'),
-      helpUrl: '',
+      helpUrl: './plot/#box',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
@@ -192,7 +192,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_dot.tooltip'),
-      helpUrl: '',
+      helpUrl: './plot/#dot',
       extensions: ['validate_NAME', 'validate_X_AXIS']
     },
 
@@ -222,7 +222,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_histogram.tooltip'),
-      helpUrl: '',
+      helpUrl: './plot/#histogram',
       extensions: ['validate_NAME', 'validate_COLUMN']
     },
 
@@ -262,7 +262,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_scatter.tooltip'),
-      helpUrl: '',
+      helpUrl: './plot/#scatter',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
     }
   ])

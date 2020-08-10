@@ -15,6 +15,7 @@ headings:
   text: Scatter
 ---
 
+<div id="bar" markdown="1">
 ## Bar
 
 <img class="block" src="{{page.permalink | append: 'bar.svg' | relative_url}}" alt="bar block"/>
@@ -24,7 +25,9 @@ A bar chart uses height to represent a value, and so the base of the bar must al
 
 - **X_axis**: Which column to use for the X axis.
 - **Y_axis**: Which column to use for the Y axis.
+</div>
 
+<div id="box" markdown="1">
 ## Box
 
 <img class="block" src="{{page.permalink | append: 'box.svg' | relative_url}}" alt="box block"/>
@@ -38,7 +41,9 @@ Any outlier points beyond the whisker are displayed using point marks.
 
 - **X_axis**: Which column to use for the X axis.
 - **Y_axis**: Which column to use for the Y axis.
+</div>
 
+<div id="dot" markdown="1">
 ## Dot
 
 <img class="block" src="{{page.permalink | append: 'dot.svg' | relative_url}}" alt="dot block"/>
@@ -46,7 +51,9 @@ Any outlier points beyond the whisker are displayed using point marks.
 Display a dot plot.
 
 - **X_axis**: Which column to use for the X axis.
+</div>
 
+<div id="histogram" markdown="1">
 ## Histogram
 
 <img class="block" src="{{page.permalink | append: 'histogram.svg' | relative_url}}" alt="histogram block"/>
@@ -58,7 +65,9 @@ Histograms display the counts with bars.
 
 - **column**: Which column to bin.
 - **bins (10)**: The number of bins.
+</div>
 
+<div id="scatter" markdown="1">
 ## Scatter
 
 <img class="block" src="{{page.permalink | append: 'scatter.svg' | relative_url}}" alt="scatter block"/>
@@ -69,3 +78,4 @@ Display a scatter plot.
 - **Y_axis**: Which column to use for Y coordinates.
 - **color**: Which column to use for colors (optional).
 - **Add line**: Show a linear regression line?
+</div>
