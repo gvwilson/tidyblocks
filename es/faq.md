@@ -1,6 +1,6 @@
 ---
 permalink: /es/faq/
-title: "Preguntas más frecuentes"
+title: "Preguntas frecuentes"
 language: es
 ---
 
