@@ -200,7 +200,7 @@ export function TabPanels (props) {
                       <div className="emptyPanelWrapper">
                         <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
                         <p className="emptyPanelText">You aren't currently displaying any data.</p>
-                        <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                        <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
                         </p>
                       </div>
                     }
@@ -244,7 +244,7 @@ export function TabPanels (props) {
                     <div className="emptyPanelWrapper">
                       <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
                       <p className="emptyPanelText">You aren't currently displaying any results.</p>
-                      <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                      <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
                       </p>
                     </div>
                   }
@@ -290,7 +290,7 @@ export function TabPanels (props) {
               <div className="emptyPanelWrapper">
                 <FontAwesomeIcon className="panelIcon"icon={faTable} />
                 <p className="emptyPanelText">You aren't currently displaying any stats.</p>
-                <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
                 </p>
               </div>
             </div>
@@ -313,7 +313,7 @@ export function TabPanels (props) {
                 <div className="emptyPanelWrapper">
                   <FontAwesomeIcon className="panelIcon"icon={faChartBar} />
                   <p className="emptyPanelText">You aren't currently displaying any plots.</p>
-                  <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+                  <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
                   </p>
                 </div>
               </div>
