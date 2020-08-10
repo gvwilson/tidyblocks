@@ -211,7 +211,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('create.tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#create',
       extensions: ['validate_COLUMN']
     },
 
@@ -231,7 +231,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('drop.args0_tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#drop',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
@@ -250,10 +250,10 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('filter.tooltip'),
-      helpUrl: ''
+      helpUrl: './transform/#filter'
     },
 
-    // Group
+    // Group by
     {
       type: 'transform_groupBy',
       message0: msg.get('groupBy.message0'),
@@ -269,7 +269,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('groupBy.tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#groupBy',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
@@ -288,7 +288,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('saveAs.tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#saveAs',
       extensions: ['validate_NAME']
     },
 
@@ -308,7 +308,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('select.tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#select',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
@@ -334,7 +334,7 @@ const setup = (language) => {
       style: 'transform_block',
       extensions: ['validate_MULTIPLE_COLUMNS'],
       tooltip: msg.get('sort.tooltip'),
-      helpUrl: ''
+      helpUrl: './transform/#sort'
     },
 
     // Summarize
@@ -369,7 +369,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('summarize.tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#summarize',
       extensions: ['validate_COLUMN']
     },
 
@@ -383,7 +383,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('ungroup.tooltip'),
-      helpUrl: ''
+      helpUrl: './transform/#ungroup'
     },
 
     // Unique
@@ -402,7 +402,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('unique.tooltip'),
-      helpUrl: '',
+      helpUrl: './transform/#unique',
       extensions: ['validate_MULTIPLE_COLUMNS']
     }
   ])

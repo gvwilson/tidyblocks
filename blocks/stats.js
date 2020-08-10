@@ -115,7 +115,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_one.tooltip'),
-      helpUrl: ''
+      helpUrl: './stats/#ttest_one'
     },
 
     // Two-sample two-sided t-test
@@ -146,7 +146,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_two.tooltip'),
-      helpUrl: ''
+      helpUrl: './stats/#ttest_two'
     }
   ])
 

@@ -9,8 +9,10 @@ headings:
   text: Drop
 - id: filter
   text: Filter
-- id: group-by
+- id: groupBy
   text: Group By
+- id: saveAs
+  text: Save As
 - id: select
   text: Select
 - id: sort
@@ -23,6 +25,7 @@ headings:
   text: Unique
 ---
 
+<div id="create" markdown="1">
 ## Create
 
 <img class="block" src="{{page.permalink | append: 'create.svg' | relative_url}}" alt="create block"/>
@@ -32,7 +35,9 @@ A column can be replaced if a new column is given the same name as an existing c
 
 - **new_column**: Name for new column.
 - *first space*: A [value](../value/) or the result of an [operation](../operation/).
+</div>
 
+<div id="drop" markdown="1">
 ## Drop
 
 <img class="block" src="{{page.permalink | append: 'drop.svg' | relative_url}}" alt="drop block"/>
@@ -43,7 +48,9 @@ dropping columns often makes the display easier to read.
 This block is the opposite of [select](../transform/#select).
 
 - **column, column**: A comma-separated list of the names of the columns to drop.
+</div>
 
+<div id="filter" markdown="1">
 ## Filter
 
 <img class="block" src="{{page.permalink | append: 'filter.svg' | relative_url}}" alt="filter block"/>
@@ -55,10 +62,12 @@ and tests can be combined using the [and](../operation/#logical),
 and [not](../operation/#not) blocks.
 
 -  *expression*: the test each row must pass to be included in the result.
+</div>
 
+<div id="groupBy" markdown="1">
 ## Group By
 
-<img class="block" src="{{page.permalink | append: 'group_by.svg' | relative_url}}" alt="grouping block"/>
+<img class="block" src="{{page.permalink | append: 'groupby.svg' | relative_url}}" alt="grouping block"/>
 
 Most data operations are done on groups of records that share values, such as people from the same country.
 This block adds a new column to the table called `_group_` that has a unique value for each group.
@@ -66,7 +75,19 @@ Grouping can be removed using the [ungroup](../transform/#ungroup) block.
 
 - **column, column**: A comma-separated list of the names of the columns to group by.
   Every unique combination of values in these columns produces one group.
+</div>
 
+<div id="saveAs" markdown="1">
+## Save As
+
+<img class="block" src="{{page.permalink | append: 'select.svg' | relative_url}}" alt="select block"/>
+
+Save a result for later inspection or to be [combined](../combine/) with a result from another pipeline.
+
+- **name** Result name
+</div>
+
+<div id="select" markdown="1">
 ## Select
 
 <img class="block" src="{{page.permalink | append: 'select.svg' | relative_url}}" alt="select block"/>
@@ -78,7 +99,9 @@ but discarding unneeded columns can make the display easier to read.
 This block is the opposite of [drop](../transform/#drop).
 
 - **column, column**: One or more columns to keep.
+</div>
 
+<div id="sort" markdown="1">
 ## Sort
 
 <img class="block" src="{{page.permalink | append: 'sort.svg' | relative_url}}" alt="sort block"/>
@@ -87,7 +110,9 @@ Sort the rows in a table according to the values in one or more columns.
 
 - **column, column**: A comma-separated list of the names of the columns to sort by.
 - **descending**: If checked, sort in descending order (i.e., greatest value first).
+</div>
 
+<div id="summarize" markdown="1">
 ## Summarize
 
 <img class="block" src="{{page.permalink | append: 'summarize.svg' | relative_url}}" alt="summarize block"/>
@@ -100,14 +125,18 @@ e.g., <code>mean\_age</code>.
 
 -   *drop down*: which summarization operation to use.
 -   **column**: which column to summarize.
+</div>
 
+<div id="ungroup" markdown="1">
 ## Ungroup
 
 <img class="block" src="{{page.permalink | append: 'ungroup.svg' | relative_url}}" alt="ungroup block"/>
 
 Undo grouping created by [group](../transform/#group)
 by removing the special \_group\_ column.
+</div>
 
+<div id="unique" markdown="1">
 ## Unique
 
 <img class="block" src="{{page.permalink | append: 'unique.svg' | relative_url}}" alt="unique block"/>
@@ -118,3 +147,4 @@ but different values in other columns,
 one row from that group will be chosen arbitrarily and kept.
 
 - **column, column**: One or more columns to check for distinct values.
+</div>

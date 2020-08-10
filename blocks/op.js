@@ -161,7 +161,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('arithmetic.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#arithmetic'
     },
 
     // Arithmetic negation
@@ -178,7 +178,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('negate.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#negate'
     },
 
     // Absolute value
@@ -195,7 +195,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('abs.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#abs'
     },
 
     // Comparisons
@@ -228,7 +228,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('compare.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#compare'
     },
 
     // Binary logical operations
@@ -257,7 +257,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('logical.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#logical'
     },
 
     // Logical negation
@@ -274,7 +274,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('not.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#not'
     },
 
     // Type checking
@@ -302,7 +302,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('type.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#type'
     },
 
     // Type conversion
@@ -329,7 +329,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('convert.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#convert'
     },
 
     // Datetime conversions
@@ -359,7 +359,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('datetime.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#datetime'
     },
 
     // Conditional
@@ -384,7 +384,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('conditional.tooltip'),
-      helpUrl: ''
+      helpUrl: './op/#conditional'
     }
   ])
 

@@ -120,7 +120,8 @@ const setup = (language) => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: msg.get('colors.tooltip')
+      tooltip: msg.get('colors.tooltip'),
+      helpUrl: './data/#colors'
     },
     // Earthquakes
     {
@@ -129,7 +130,8 @@ const setup = (language) => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: msg.get('earthquakes.tooltip')
+      tooltip: msg.get('earthquakes.tooltip'),
+      helpUrl: './data/#earthquakes'
     },
     // Penguins
     {
@@ -138,7 +140,8 @@ const setup = (language) => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: msg.get('penguins.tooltip')
+      tooltip: msg.get('penguins.tooltip'),
+      helpUrl: './data/#penguins'
     },
     // Phish
     {
@@ -147,7 +150,8 @@ const setup = (language) => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: msg.get('phish.tooltip')
+      tooltip: msg.get('phish.tooltip'),
+      helpUrl: './data/#phish'
     },
     // Sequence
     {
@@ -169,7 +173,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('sequence.tooltip'),
-      helpUrl: ''
+      helpUrl: './data/#sequence'
     },
     // User data
     {
@@ -186,7 +190,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('data_user.tooltip'),
-      helpUrl: ''
+      helpUrl: './data/#user'
     }
   ])
 

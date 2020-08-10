@@ -155,7 +155,7 @@ const setup = (language) => {
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#absent',
       tooltip: msg.get('absent.tooltip')
     },
 
@@ -170,7 +170,7 @@ const setup = (language) => {
       }],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#column',
       tooltip: msg.get('column.tooltip'),
       extensions: ['validate_COLUMN']
     },
@@ -186,7 +186,7 @@ const setup = (language) => {
       }],
       output: 'DateTime',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#datetime',
       tooltip: msg.get('datetime.tooltip'),
       extensions: ['validate_DATE']
     },
@@ -206,7 +206,7 @@ const setup = (language) => {
         }
       ],
       output: 'Boolean',
-      helpUrl: '',
+      helpUrl: './value/#logical',
       style: 'value_block',
       tooltip: msg.get('logical.tooltip')
     },
@@ -221,7 +221,7 @@ const setup = (language) => {
         value: 0
       }],
       output: 'Number',
-      helpUrl: '',
+      helpUrl: './value/#number',
       style: 'value_block',
       tooltip: msg.get('number.tooltip')
     },
@@ -239,7 +239,7 @@ const setup = (language) => {
       ],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#text',
       tooltip: msg.get('text.tooltip')
     },
 
@@ -250,7 +250,7 @@ const setup = (language) => {
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#rownum',
       tooltip: msg.get('rownum.tooltip')
     },
 
@@ -267,7 +267,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#exponential',
       tooltip: msg.get('exponential.tooltip'),
       extensions: ['validate_RATE']
     },
@@ -290,7 +290,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#normal',
       tooltip: msg.get('normal.tooltip'),
       extensions: ['validate_STDDEV']
     },
@@ -313,7 +313,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: '',
+      helpUrl: './value/#uniform',
       tooltip: msg.get('uniform.tooltip')
     }
   ])
