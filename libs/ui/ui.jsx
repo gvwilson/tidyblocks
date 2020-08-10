@@ -77,6 +77,7 @@ export class TidyBlocksApp extends React.Component {
       CONSOLE_ERROR: 'CONSOLE_ERROR',
 
       tabValueBottom: 0,
+      saveData: [],
       zoom: '1.00',
       // The results returned from running the program. We store them in full
       // in env for use during updates/changes, but may also use more specific
@@ -84,7 +85,7 @@ export class TidyBlocksApp extends React.Component {
       env: initialEnv,
       dataKeys: null,
       data: null,
-      dataColumns: null,
+      dataColumns: [],
       dataOptions: [],
       dataValue: null,
       activeDataOption: null,
@@ -92,7 +93,7 @@ export class TidyBlocksApp extends React.Component {
 
       resultKeys: null,
       results: null,
-      resultColumns: null,
+      resultColumns: [],
       resultOptions: [],
       resultValue: null,
       activeResultOption: null,
@@ -383,7 +384,7 @@ export class TidyBlocksApp extends React.Component {
   updateDataInformation (env) {
     const dataKeys = env.ui.userData.keys()
     let data = null
-    let dataColumns = null
+    let dataColumns = [] 
     let activeDataOption = null
     let formattedColumns = []
     // If the active data option no longer exists remove it. This happens
@@ -425,7 +426,7 @@ export class TidyBlocksApp extends React.Component {
   updateResultsInformation (env) {
     const resultKeys = env.results.keys()
     let results = null
-    let resultColumns = null
+    let resultColumns = []
     let activeResultOption = null
     let formattedColumns = []
 
@@ -569,7 +570,19 @@ export class TidyBlocksApp extends React.Component {
 
   // Saves the currently displayed data table to a file.
   saveData(){
-    this.saveCsvNameDialog.current.handleClickOpen()
+
+    // If we're on the results tab, and there're results download them,
+    // otherwise download the data.
+    if (this.state.tabValue == this.state.RESULTS_TAB_INDEX
+      && this.state.resultColumns.length > 0){
+      this.setState({saveData: this.state.results}, () => {
+        this.saveCsvNameDialog.current.handleClickOpen()
+      })
+    } else {
+      this.setState({saveData: this.state.data}, () => {
+        this.saveCsvNameDialog.current.handleClickOpen()
+      })
+    }
   }
 
   // Saves the current Blockly workspace to a file.
@@ -660,7 +673,7 @@ export class TidyBlocksApp extends React.Component {
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
           <LoadCsvDialog ref={this.loadCsvDialog} fileUploadRef={this.refs.csvFileUploader} loadCsvUrl={this.loadCsvUrl}/>
-          <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
+          <SaveCsvFormDialog ref={this.saveCsvNameDialog} saveData={this.state.saveData}/>
           { this.blocklyRef.current &&
             <>
               <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
