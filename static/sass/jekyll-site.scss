@@ -50,6 +50,10 @@
     width: 0;
   }
 
+  .navRight a:hover {
+    color: black;
+  }
+
   .navRight a:hover:after { 
     width: 100%; 
     left: 0; 

@@ -13,6 +13,9 @@ language: en
   <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
 </div>
 
+<br/>
+<br/>
+
 Una herramienta basada en bloques para la manipulación y el análisis de datos ordenados.
 Por favor ve a <https://tidyblocks.tech> o para una versión gratuita en línea
 visita [nuestro reprositoria de GitHub]({{site.repo}}).
