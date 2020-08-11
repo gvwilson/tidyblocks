@@ -1,7 +1,8 @@
 ---
-permalink: /es/combine/
-title: "Uniendo"
 language: es
+layout: es/page
+permalink: /es/combinar/
+title: "Combinar"
 headings:
 - id: join
   text: Unir

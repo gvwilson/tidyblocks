@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/combine/
 title: "Combining"
-language: en
 headings:
 - id: join
   text: Join

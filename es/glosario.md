@@ -1,7 +1,8 @@
 ---
-permalink: /es/glossary/
-title: "Glosario"
 language: es
+layout: es/page
+permalink: /es/glosario/
+title: "Glosario"
 ---
 
 {:auto_ids}

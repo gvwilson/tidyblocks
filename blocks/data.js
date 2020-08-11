@@ -8,6 +8,10 @@ const {Messages} = require('./helpers')
  * Lookup table for message strings.
  */
 const MESSAGES = {
+  _base: {
+    en: 'data',
+    es: 'datos'
+  },
   colors: {
     message0: {
       en: 'Colors',
@@ -121,7 +125,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('colors.tooltip'),
-      helpUrl: './data/#colors'
+      helpUrl: `./${msg.get('_base')}/#colors`
     },
     // Earthquakes
     {
@@ -131,7 +135,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('earthquakes.tooltip'),
-      helpUrl: './data/#earthquakes'
+      helpUrl: `./${msg.get('_base')}/#earthquakes`
     },
     // Penguins
     {
@@ -141,7 +145,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('penguins.tooltip'),
-      helpUrl: './data/#penguins'
+      helpUrl: `./${msg.get('_base')}/#penguins`
     },
     // Phish
     {
@@ -151,7 +155,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('phish.tooltip'),
-      helpUrl: './data/#phish'
+      helpUrl: `./${msg.get('_base')}/#phish`
     },
     // Sequence
     {
@@ -173,7 +177,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('sequence.tooltip'),
-      helpUrl: './data/#sequence'
+      helpUrl: `./${msg.get('_base')}/#sequence`
     },
     // User data
     {
@@ -190,7 +194,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('data_user.tooltip'),
-      helpUrl: './data/#user'
+      helpUrl: `./${msg.get('_base')}/#user`
     }
   ])
 

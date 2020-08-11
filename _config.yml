@@ -4,17 +4,6 @@ year: 2020
 repo: "https://github.com/tidyblocks/tidyblocks"
 email: info@tidyblocks.tech
 
-# Layouts
-defaults:
-- scope:
-    path: ""
-  values:
-    layout: "page"
-- scope:
-    path: "_posts"
-  values:
-    layout: "post"
-
 # Parsing
 kramdown:
   toc_levels: "2"

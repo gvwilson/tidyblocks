@@ -1,7 +1,7 @@
 ---
-permalink: /en/guide/
-layout: page
 language: en
+layout: en/page
+permalink: /en/guide/
 ---
 
 <h1><a href="../index.html">TidyBlocks</a></h1>

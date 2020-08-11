@@ -1,14 +1,21 @@
 ---
-permalink: /en/op/
-title: "Operations"
 language: en
+layout: en/page
+permalink: /en/operation/
+title: "Operations"
 headings:
 - id: arithmetic
   text: Arithmetic
+- id: negate
+  text: Negate
 - id: logical
   text: Logical
+- id: not
+  text: Not
 - id: type
   text: Types
+- id: convert
+  text: Convert
 - id: datetime
   text: Dates/Times
 - id: conditional
@@ -26,6 +33,10 @@ It accepts numbers, column names, and nested operation blocks.
 - *left space*: The left-hand side of the operation.
 - *drop down*: Select addition, subtraction, multiplication, division, remainder, or exponentiation.
 - *right space*: The right-hand side of the operation.
+</div>
+
+<div id="negate" markdown="1">
+## Negate
 
 <img class="block" src="{{page.permalink | append: 'negate.svg' | relative_url}}" alt="negate block"/>
 
@@ -50,6 +61,10 @@ and produces either `true` or `false`.
 Note that logical AND is only true if *both* sides are true,
 while logical OR is true if *either or both* sides are true:
 it is not either-or-both rather than one-or-the-other.
+</div>
+
+<div id="not" markdown="1">
+## Not
 
 <img class="block" src="{{page.permalink | append: 'not.svg' | relative_url}}" alt="not block"/>
 
@@ -67,6 +82,10 @@ Check if a value is of a particular type.
 
 - *space*: The value to check.
 - *drop down*: Select the type to convert for.
+</div>
+
+<div id="convert" markdown="1">
+## Convert
 
 <img class="block" src="{{page.permalink | append: 'type_convert.svg' | relative_url}}" alt="type conversion block"/>
 

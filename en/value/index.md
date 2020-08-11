@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/value/
 title: "Values"
-language: en
 headings:
 - id: column
   text: Column

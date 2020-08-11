@@ -1,7 +1,8 @@
 ---
-permalink: /es/plot/
-title: "Graficos"
 language: es
+layout: es/page
+permalink: /es/grafico/
+title: "Graficos"
 headings:
 - id: bar
   text: Barras

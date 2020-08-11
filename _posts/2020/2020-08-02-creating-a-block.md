@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "Creating a Block"
 author: "Maya Gans"
 ---

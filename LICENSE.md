@@ -1,7 +1,7 @@
 ---
+layout: plain
 permalink: /license/
 title: "License"
-layout: plain
 ---
 
 Copyright © 2020 Maya Gans, Justin Singh, Greg Wilson

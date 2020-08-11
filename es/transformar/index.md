@@ -1,7 +1,8 @@
 ---
-permalink: /es/transform/
-title: "Transforma"
 language: es
+layout: es/page
+permalink: /es/transformar/
+title: "Transformar"
 headings:
 - id: create
   text: Crear

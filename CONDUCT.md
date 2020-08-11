@@ -1,7 +1,7 @@
 ---
+layout: plain
 permalink: /conduct/
 title: "Code of Conduct"
-layout: plain
 ---
 
 In the interest of fostering an open and welcoming environment, we as

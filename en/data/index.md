@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/data/
 title: "Data"
-language: en
 headings:
 - id: colors
   text: Colors

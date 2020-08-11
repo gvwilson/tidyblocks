@@ -8,6 +8,10 @@ const {Messages} = require('./helpers')
  * Lookup table for message strings.
  */
 const MESSAGES = {
+  _base: {
+    en: 'combine',
+    es: 'combinar'
+  },
   glue: {
     message0: {
       en: 'Glue left %1 right %2 labels %3',
@@ -107,7 +111,7 @@ const setup = (language) => {
       style: 'combine_block',
       hat: 'cap',
       tooltip: msg.get('glue.tooltip'),
-      helpUrl: './combine/#glue',
+      helpUrl: `./${msg.get('_base')}/#glue`,
       extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE', 'validate_COLUMN']
     },
     // Join
@@ -146,7 +150,7 @@ const setup = (language) => {
       style: 'combine_block',
       hat: 'cap',
       tooltip: msg.get('join.tooltip'),
-      helpUrl: './combine/#join',
+      helpUrl: `./${msg.get('_base')}/#join`,
       extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
     }
   ])

@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/faq/
 title: "FAQ"
-language: en
 ---
 
 Who is TidyBlocks for?

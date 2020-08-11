@@ -1,0 +1,30 @@
+<p>
+  <a href="{{ '/' | append: page.language | append: '/faq/' | relative_url}}">FAQ</a>
+  <br/>
+  <a href="{{ '/' | append: page.language | append: '/guia/' | relative_url}}">Guia</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/datos/' | relative_url}}">Datos</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/transformar/' | relative_url}}">Transformar</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/grafico/' | relative_url}}">Grafico</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/estadisticas/' | relative_url}}">Estadísticas</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/operacion/' | relative_url}}">Operacíon</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/valor/' | relative_url}}">Valor</a>
+  <br/>
+  - <a href="{{ '/' | append: page.language | append: '/combinar/' | relative_url}}">Combinar</a>
+  <br/>
+  <a href="{{ '/' | append: page.language | append:  '/glosario/' | relative_url }}">Glosario</a>
+</p>
+{% if page.headings %}
+<hr/>
+<p>
+{% for heading in page.headings %}
+  - <a href="#{{heading.id}}">{{heading.text}}</a>
+  {% unless forloop.last %}<br/>{% endunless %}
+{% endfor %}
+</p>
+{% endif %}

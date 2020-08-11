@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/plot/
 title: "Plots"
-language: en
 headings:
 - id: bar
   text: Bar

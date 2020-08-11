@@ -1,7 +1,7 @@
 ---
+layout: plain
 permalink: /contributing/
 title: "Contributing"
-layout: plain
 ---
 
 Contributions of all kinds are welcome.

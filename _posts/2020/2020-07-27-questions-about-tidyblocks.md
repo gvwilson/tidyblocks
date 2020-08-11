@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "Questions About TidyBlocks"
 author: "Greg Wilson"
 ---

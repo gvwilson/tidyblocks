@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "Structure"
 author: "Greg Wilson"
 ---

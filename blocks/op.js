@@ -12,6 +12,10 @@ const {
  * Lookup table for message strings.
  */
 const MESSAGES = {
+  _base: {
+    en: 'operation',
+    es: 'operacion'
+  },
   arithmetic: {
     tooltip: {
       en: 'do arithmetic',
@@ -161,7 +165,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('arithmetic.tooltip'),
-      helpUrl: './op/#arithmetic'
+      helpUrl: `./${msg.get('_base')}/#arithmetic`
     },
 
     // Arithmetic negation
@@ -178,7 +182,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('negate.tooltip'),
-      helpUrl: './op/#negate'
+      helpUrl: `./${msg.get('_base')}/#negate`
     },
 
     // Absolute value
@@ -195,7 +199,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('abs.tooltip'),
-      helpUrl: './op/#abs'
+      helpUrl: `./${msg.get('_base')}/#abs`
     },
 
     // Comparisons
@@ -228,7 +232,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('compare.tooltip'),
-      helpUrl: './op/#compare'
+      helpUrl: `./${msg.get('_base')}/#compare`
     },
 
     // Binary logical operations
@@ -257,7 +261,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('logical.tooltip'),
-      helpUrl: './op/#logical'
+      helpUrl: `./${msg.get('_base')}/#logical`
     },
 
     // Logical negation
@@ -274,7 +278,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('not.tooltip'),
-      helpUrl: './op/#not'
+      helpUrl: `./${msg.get('_base')}/#not`
     },
 
     // Type checking
@@ -302,7 +306,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('type.tooltip'),
-      helpUrl: './op/#type'
+      helpUrl: `./${msg.get('_base')}/#type`
     },
 
     // Type conversion
@@ -329,7 +333,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('convert.tooltip'),
-      helpUrl: './op/#convert'
+      helpUrl: `./${msg.get('_base')}/#convert`
     },
 
     // Datetime conversions
@@ -359,7 +363,7 @@ const setup = (language) => {
       output: 'Number',
       style: 'op_block',
       tooltip: msg.get('datetime.tooltip'),
-      helpUrl: './op/#datetime'
+      helpUrl: `./${msg.get('_base')}/#datetime`
     },
 
     // Conditional
@@ -384,7 +388,7 @@ const setup = (language) => {
       output: 'Boolean',
       style: 'op_block',
       tooltip: msg.get('conditional.tooltip'),
-      helpUrl: './op/#conditional'
+      helpUrl: `./${msg.get('_base')}/#conditional`
     }
   ])
 

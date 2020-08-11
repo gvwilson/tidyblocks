@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/glossary/
 title: "Glossary"
-language: en
 ---
 
 {:auto_ids}

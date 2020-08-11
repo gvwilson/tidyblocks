@@ -8,6 +8,10 @@ const {Messages} = require('./helpers')
  * Lookup table for message strings.
  */
 const MESSAGES = {
+  _base: {
+    en: 'statistics',
+    es: 'estadisticas'
+  },
   stats_ttest_one: {
     message0: {
       en: 'One-sample t-test', 
@@ -115,7 +119,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_one.tooltip'),
-      helpUrl: './stats/#ttest_one'
+      helpUrl: `./${msg.get('_base')}/#ttest_one`
     },
 
     // Two-sample two-sided t-test
@@ -146,7 +150,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_two.tooltip'),
-      helpUrl: './stats/#ttest_two'
+      helpUrl: `./${msg.get('_base')}/#ttest_two`
     }
   ])
 

@@ -12,6 +12,10 @@ const {
  * Lookup table for message strings.
  */
 const MESSAGES = {
+  _base: {
+    en: 'transform',
+    es: 'transformar'
+  },
   multiple_columns: {
     en: 'column, column', 
     es: 'columna, columna',
@@ -211,7 +215,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('create.tooltip'),
-      helpUrl: './transform/#create',
+      helpUrl: `./${msg.get('_base')}/#create`,
       extensions: ['validate_COLUMN']
     },
 
@@ -231,7 +235,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('drop.args0_tooltip'),
-      helpUrl: './transform/#drop',
+      helpUrl: `./${msg.get('_base')}/#drop`,
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
@@ -250,7 +254,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('filter.tooltip'),
-      helpUrl: './transform/#filter'
+      helpUrl: `./${msg.get('_base')}/#filter`
     },
 
     // Group by
@@ -269,7 +273,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('groupBy.tooltip'),
-      helpUrl: './transform/#groupBy',
+      helpUrl: `./${msg.get('_base')}/#groupBy`,
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
@@ -288,7 +292,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('saveAs.tooltip'),
-      helpUrl: './transform/#saveAs',
+      helpUrl: `./${msg.get('_base')}/#saveAs`,
       extensions: ['validate_NAME']
     },
 
@@ -308,7 +312,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('select.tooltip'),
-      helpUrl: './transform/#select',
+      helpUrl: `./${msg.get('_base')}/#select`,
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
@@ -334,7 +338,7 @@ const setup = (language) => {
       style: 'transform_block',
       extensions: ['validate_MULTIPLE_COLUMNS'],
       tooltip: msg.get('sort.tooltip'),
-      helpUrl: './transform/#sort'
+      helpUrl: `./${msg.get('_base')}/#sort`
     },
 
     // Summarize
@@ -369,7 +373,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('summarize.tooltip'),
-      helpUrl: './transform/#summarize',
+      helpUrl: `./${msg.get('_base')}/#summarize`,
       extensions: ['validate_COLUMN']
     },
 
@@ -383,7 +387,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('ungroup.tooltip'),
-      helpUrl: './transform/#ungroup'
+      helpUrl: `./${msg.get('_base')}/#ungroup`
     },
 
     // Unique
@@ -402,7 +406,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       tooltip: msg.get('unique.tooltip'),
-      helpUrl: './transform/#unique',
+      helpUrl: `./${msg.get('_base')}/#unique`,
       extensions: ['validate_MULTIPLE_COLUMNS']
     }
   ])

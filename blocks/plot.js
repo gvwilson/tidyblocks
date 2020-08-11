@@ -8,6 +8,10 @@ const {Messages} = require('./helpers')
  * Lookup table for message strings.
  */
 const MESSAGES = {
+  _base: {
+    en: 'plot',
+    es: 'grafico'
+  },
   name: {
     en: 'name',
     es: 'nombre',
@@ -137,7 +141,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_bar.tooltip'),
-      helpUrl: './plot/#bar',
+      helpUrl: `./${msg.get('_base')}/#bar`,
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
@@ -167,7 +171,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_box.tooltip'),
-      helpUrl: './plot/#box',
+      helpUrl: `./${msg.get('_base')}/#box`,
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
@@ -192,7 +196,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_dot.tooltip'),
-      helpUrl: './plot/#dot',
+      helpUrl: `./${msg.get('_base')}/#dot`,
       extensions: ['validate_NAME', 'validate_X_AXIS']
     },
 
@@ -222,7 +226,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_histogram.tooltip'),
-      helpUrl: './plot/#histogram',
+      helpUrl: `./${msg.get('_base')}/#histogram`,
       extensions: ['validate_NAME', 'validate_COLUMN']
     },
 
@@ -262,7 +266,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_scatter.tooltip'),
-      helpUrl: './plot/#scatter',
+      helpUrl: `./${msg.get('_base')}/#scatter`,
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
     }
   ])

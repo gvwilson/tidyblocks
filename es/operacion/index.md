@@ -1,14 +1,21 @@
 ---
-permalink: /es/op/
-title: "Operations"
 language: es
+layout: es/page
+permalink: /es/operacion/
+title: "Operación"
 headings:
 - id: arithmetic
   text: Aritmética
+- id: negate
+  text: Negar
 - id: logical
   text: Lógico
+- id: "not"
+  text: "No"
 - id: types
   text: Tipos
+- id: convert
+  text: Convertir
 - id: datetime
   text: Fechas/Tiempos
 - id: conditional
@@ -26,6 +33,10 @@ Acepta números, nombres de columna y bloques de operación anidados.
 - *espacio izquierdo*: El lado izquierdo de la operación.
 - *desplegable*: Selecciona suma, resta, multiplicación, división, resto o exponenciación.
 - *espacio derecho*: El lado derecho de la operación.
+</div>
+
+<div id="negate" markdown="1">
+## Negar
 
 <img class="block" src="{{page.permalink | append: 'negate.svg' | relative_url}}" alt="negate block"/>
 
@@ -48,6 +59,10 @@ y produce "verdadero" o "falso".
 - *espacio derecho*: El lado derecho de la operación.
 
 Tenga en cuenta que el AND lógico solo es verdadero si *ambos* lados son verdaderos, mientras que OR lógico es verdadero si *uno o ambos* lados son verdaderos: no es uno o ambos en lugar de uno o el otro.
+</div>
+
+<div id="not" markdown="1">
+## No
 
 <img class="block" src="{{page.permalink | append: 'not.svg' | relative_url}}" alt="not block"/>
 
@@ -65,6 +80,10 @@ Compruebe si un valor es de un tipo en particular.
 
 - *espacio*: El valor a comprobar.
 - *despegable*: Selecciona el tipo a convertir.
+</div>
+
+<div id="convert" markdown="1">
+## Convertir
 
 <img class="block" src="{{page.permalink | append: 'type_convert.svg' | relative_url}}" alt="type conversion block"/>
 

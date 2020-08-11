@@ -1,7 +1,8 @@
 ---
-permalink: /es/data/
-title: "Datos"
 language: es
+layout: es/page
+permalink: /es/datos/
+title: "Datos"
 headings:
 - id: colors
   text: Colores

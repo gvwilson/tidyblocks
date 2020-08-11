@@ -1,7 +1,8 @@
 ---
+language: en
+layout: en/page
 permalink: /en/transform/
 title: "Transforms"
-language: en
 headings:
 - id: create
   text: Create

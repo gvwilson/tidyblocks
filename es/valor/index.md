@@ -1,7 +1,8 @@
 ---
-permalink: /es/value/
-title: "Valores"
 language: es
+layout: es/page
+permalink: /es/valor/
+title: "Valores"
 headings:
 - id: column
   text: Columna

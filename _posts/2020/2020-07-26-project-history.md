@@ -1,4 +1,5 @@
 ---
+layout: post
 title: "Project History"
 author: "Greg Wilson"
 ---

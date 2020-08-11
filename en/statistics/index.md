@@ -1,7 +1,8 @@
 ---
-permalink: /en/stats/
-title: "Statistics"
 language: en
+layout: en/page
+permalink: /en/statistics/
+title: "Statistics"
 headings:
 - id: ttest_one
   text: One-sample T test
