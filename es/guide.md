@@ -14,7 +14,7 @@ language: es
 <br/>
 
 <div align="center">
-  <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
+  <img width="75%" border="1" src="{{ '/static/screenshot_es.png' | relative_url }}" alt="Screenshot" />
 </div>
 
 <br/>
@@ -29,37 +29,37 @@ Contribuciones de todo tipo son bienvenidas:
 Por favor ve a [nuestra guia de contribuidores]({{ '/contributing/' | relative_url }}) para empezar,
 y tenga en cuenta que todos los contribuyentes deben cumplir con nuestro [Codigo de conducta]({{ '/conduct/' | relative_url }}).
 
-<h1 id="es_data">Data</h1>
+<h1 id="es_data">DATOS</h1>
 {% include_relative data/index.md %}
-<h1 id="es_transforms">Transforms</h1>
+<h1 id="es_transforms">TRANSFORMAR</h1>
 {% include_relative transform/index.md %}
-<h1 id="es_plots">Plots</h1>
+<h1 id="es_plots">GRAFICO</h1>
 {% include_relative plot/index.md %}
-<h1 id="es_stats">Statistics</h1>
+<h1 id="es_stats">ESTADISTICAS</h1>
 {% include_relative stats/index.md %}
-<h1 id="es_op">Operations</h1>
+<h1 id="es_op">OPERACION</h1>
 {% include_relative op/index.md %}
-<h1 id="es_values">Values</h1>
+<h1 id="es_values">VALOR</h1>
 {% include_relative value/index.md %}
-<h1 id="es_combine">Combining</h1>
+<h1 id="es_combine">COMBINAR</h1>
 {% include_relative combine/index.md %}
 </div>
 
 <!-- these links should hyperlink to the h1s above -->
 <div class="guide_rhs">
- <a href="#es_data">DATA</a>
+ <a href="#es_data">DATOS</a>
   <br/><br/>
- <a href="#es_transforms">TRANSFORMS</a>
+ <a href="#es_transforms">TRANSFORMAR</a>
   <br/><br/>
- <a href="#es_plots">PLOTS</a>
+ <a href="#es_plots">GRAFICO</a>
   <br/><br/>
- <a href="#es_stats">STATISTICS</a>
+ <a href="#es_stats">ESTADISTICAS</a>
   <br/><br/>
- <a href="#es_op">OPERATIONS</a>
+ <a href="#es_op">OPERACION</a>
    <br/><br/>
- <a href="#es_values">VALUES</a>
+ <a href="#es_values">VALOR</a>
   <br/><br/>
- <a href="#es_combine">COMBINING</a>
+ <a href="#es_combine">COMBINAR</a>
 </div>
 
 </div>
