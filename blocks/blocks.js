@@ -396,6 +396,7 @@ const createBlocks = (language = 'en') => {
 }
 
 module.exports = {
+  MESSAGES,
   THEME,
   createXmlConfig,
   createBlocks

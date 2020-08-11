@@ -179,5 +179,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

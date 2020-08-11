@@ -7,6 +7,7 @@
     "build-dev": "webpack --config webpack.config.js",
     "build": "webpack --config webpack.production.config.js",
     "watch": "webpack --config webpack.config.js --watch",
+    "check": "node bin/check_translations.js",
     "coverage": "nyc --reporter=html --reporter=text mocha",
     "data": "data/generate.js data/*.csv",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
