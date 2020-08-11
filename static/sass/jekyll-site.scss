@@ -1,39 +1,87 @@
 .jekyllBody {
-  font-family: "Helvetica Neue", Helvetica;
+  font-family: 'Open Sans Light', sans-serif;
   font-size: 12pt;
-  width: 70rem;
 
   /* ------------------------------------------------------------ */
-
-  nav {
-      height: 100%;
-      width: 8rem;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      border-right: 1px solid black;
-      overflow-x: hidden;
-  }
-
-  nav p + ul {
-      margin-top: -2ex;
-  }
-
-  nav ul {
-      padding-left: 1rem;
-  }
 
   /* ------------------------------------------------------------ */
 
   main {
-      margin-left: 10rem; /* Same as the width +padding of sidenav */
-      padding-left: 1rem; /* A little extra space around the border */
+      margin-left: 15rem; /* Same as the width +padding of sidenav */
+      margin-top: -5rem; /* A little extra space around the border */ 
+      margin-right: 7rem;
+      margin-bottom: 2rem;
+      min-height: calc(100vh - 70px);
+  }
+
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
+  .navDiv {
+    overflow: hidden;
+  }
+
+  .navRight {
+    float: right;
+    margin: 25px;
+  }
+
+  .navRight a {
+    color:grey;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    padding: 15px 20px;
+    position: relative;
+  }
+
+  .navRight a:after {    
+    background: none repeat scroll 0 0 transparent;
+    bottom: 0;
+    content: "";
+    display: block;
+    height: 2px;
+    left: 50%;
+    position: absolute;
+    background: grey;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    width: 0;
+  }
+
+  .navRight a:hover:after { 
+    width: 100%; 
+    left: 0; 
+  }
+
+  nav a {
+    color: black;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    padding: 10px;
+  }
+
+  hr {
+      border: white;
+  }
+
+  a:hover { 
+    width: 100%; 
+    left: 0; 
+    color: grey;
   }
 
   code {
       background-color: lavender;
+  }
+
+  pre {
+      background-color: lavender;
+      padding: 15px;
+      margin: 15px;
+      border-radius: 5px;
   }
 
   dt {
@@ -58,17 +106,21 @@
       border: 1px solid gray;
   }
 
+  h1, h2, h3, h4 {
+      color: #1C313A;
+  }
+
   /* ------------------------------------------------------------ */
 
   footer {
-      border-top: 1px solid black;
-      margin-top: 1ex;
-      padding-top: 1ex;
-      text-align: center;
+    height: 90px;
+    background-color: #1C313A;
+    text-align: center;
   }
 
   img.footer {
-      height: 2ex;
+      height: 5ex !important;
+      margin: 20px;
   }
 
   /* ------------------------------------------------------------ */
