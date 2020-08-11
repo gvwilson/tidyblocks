@@ -11,12 +11,16 @@ Who is TidyBlocks for?
     such as students doing introductory statistics at the college level,
     will also find it useful.
 
+<br/>
+
 Why blocks?
 :   For several reasons:
     1.  Many studies have shown that block-based programming is more accessible to novices than text-based programming.
     2.  If school-age users have done any programming before, they have probably used [Scratch](http://scratch.mit.edu),
         so the block interface will already be familiar to them.
     3.  Just as importantly, the interface will already be familiar to their teachers.
+
+<br/>
 
 Can TidyBlocks do [thing]?
 :   The answer is either "no" or "not yet":
@@ -30,13 +34,19 @@ Can TidyBlocks do [thing]?
         as are examples and help with implementation.
         Please [contact us](mailto:{{site.email}}) if you would like to contribute.
 
+<br/>
+
 Is TidyBlocks an RStudio product?
 :   No.
     The first version was developed by [Maya Gans]({{'/authors/#gans-maya' | relative_url }}) while she was a summer intern,
     but TidyBlocks is a free-standing open source project.
 
+<br/>
+
 Does TidyBlocks use R or Python?
 :   No: TidyBlocks is 100% JavaScript.
+
+<br/>
 
 Does TidyBlocks generate R or Python code?
 :   No,
@@ -48,6 +58,8 @@ Does TidyBlocks generate R or Python code?
     but from a teaching point of view we think it would be better to get learners to use those systems directly
     once they have learned what they're trying to do.
 
+<br/>
+
 Do I need to install anything to use TidyBlocks?
 :   No.
     TidyBlocks runs in any modern browser without any kind of server process,
@@ -55,9 +67,13 @@ Do I need to install anything to use TidyBlocks?
     (This is particularly important for users at schools and libraries,
     whose machines are often locked down for security reasons.)
 
+<br/>
+
 Do I need to create an account to use TidyBlocks?
 :   No,
     and we do not collect any data of any kind about our users.
+
+<br/>
 
 Can I save projects, results, and plots locally?
 :   Yes.
@@ -65,12 +81,16 @@ Can I save projects, results, and plots locally?
     -   TidyBlocks can load CSV data and save the tables that it creates.
     -   Plots can be saved as PNG images (which can then be included in homework hand-ins).
 
+<br/>
+
 What license does TidyBlocks use?
 :   The [Hippocratic License]({{'/license/' | relative_url}}),
     which allows it to be used for anything that doesn't violate basic human rights laws.
     (If what you're teaching or the way you're teaching it violates
     [the Universal Declaration of Human Rights](https://www.un.org/en/universal-declaration-human-rights/),
     we'd rather not be involvd.)
+
+<br/>
 
 How does the project make decisions?
 :   [Maya Gans]({{'/authors/#gans-maya' | relative_url }}),
@@ -83,6 +103,8 @@ How does the project make decisions?
     but if we gain more regular contributors,
     we will start using [Martha's Rules](https://third-bit.com/2019/06/13/marthas-rules.html)
     to give everyone involved an equal voice.
+
+<br/>
 
 How can I contribute?
 :   We're glad you asked:
@@ -97,6 +119,8 @@ How can I contribute?
     -   If *you are fluent in a language other than English*,
         both the interface and the [user guide]({{'/guide/' | relative_url}}) can be translated
         and we'd be happy to coordinate.
+
+<br/>
 
 Where can I contribute?
 :   Please use [our GitHub repository]({{site.github.url}}) to file issues and submit pull requests.

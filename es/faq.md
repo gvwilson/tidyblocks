@@ -11,6 +11,8 @@ language: es
     introducción a la estadística a nivel universitario, también lo encontrará
     úti
 
+<br/>
+
 ¿Por qué bloques?
 :   Por varias razones:
     1.  Muchos estudios han demostrado que la programación basada en bloques es
@@ -19,6 +21,8 @@ language: es
         antes, probablemente hayan utilizado [Scratch](http://scratch.mit.edu),
         por lo que la interfaz del bloque ya les resultará familiar.
     3.  Igual de importante, la interfaz ya será familiar para sus profesores.
+
+<br/>
 
 ¿Puede TidyBlocks hacer [cosa]?
 :   La respuesta es "no" o "todavía no":
@@ -34,13 +38,19 @@ language: es
         con la implementación.  Por favor [contact us](mailto:{{site.email}}) si
         le gustaría contribuir.
 
+<br/>
+
 ¿TidyBlocks es un producto de RStudio?
 :   No.
     La primera versión fue desarrollada por [Maya Gans]({{'/authors/#gans-maya' | relative_url }})
     mientras ella era pasante de verano, pero TidyBlocks es un proyecto de código abierto independiente.
 
+<br/>
+
 ¿TidyBlocks usa R o Python?
 :   No: TidyBlocks es 100% JavaScript.
+
+<br/>
 
 ¿TidyBlocks genera código R o Python?
 :   No, pero podria.
@@ -52,6 +62,8 @@ language: es
     esos sistemas directamente una vez que han aprendido lo que están tratando
     de hacer.
 
+<br/>
+
 ¿Necesito instalar algo para usar TidyBlocks?:  
 :   No.
     TidyBlocks se ejecuta en cualquier navegador moderno sin ningún tipo de
@@ -59,8 +71,12 @@ language: es
     particularmente importante para los usuarios de escuelas y bibliotecas,
     cuyas máquinas a menudo están bloqueadas por razones de seguridad.)
 
+<br/>
+
 ¿Necesito crear una cuenta para usar TidyBlocks?
 :   No, y no recopilamos ningún dato de ningún tipo sobre nuestros usuarios.
+
+<br/>
 
 ¿Puedo guardar proyectos, resultados y parcelas localmente?
 :   Si.
@@ -70,12 +86,16 @@ language: es
     -   Los gráficos se pueden guardar como imágenes PNG (que puede ser incluido
         en las entregas de trabajos de tarea).
 
+<br/>
+
 ¿Qué licencia usa TidyBlocks?
 :   La [Licencia Hippocratica ]({{'/license/' | relative_url}}),
     que permite su uso para cualquier cosa que no viole las leyes básicas de derechos humanos.
     (Si lo que está enseñando o la forma en que lo está enseñando viola
     [La Declaracion Universal de Derechos Humanos](https://www.un.org/en/universal-declaration-human-rights/),
     preferimos no involucrarnos.)
+
+<br/>
 
 ¿Cómo toma decisiones el proyecto?
 :   [Maya Gans]({{'/authors/#gans-maya' | relative_url }}),
@@ -87,6 +107,8 @@ language: es
     habituales, vamos a empezar a usar [Martha's
     Rules](https://third-bit.com/2019/06/13/marthas-rules.html) para dar a todos
     los involucrados una voz igual.
+
+<br/>
 
 ¿Cómo puedo contribuir?
 :   Nos alegra que hayas preguntado:
@@ -104,6 +126,8 @@ language: es
     -   Si *hablas con fluidez un idioma que no sea el inglés*, tanto la interfaz
         como la [guia de usuario]({{'/guide/' | relative_url}}) puede ser
         traducido y estaremos encantados de coordinar.
+
+<br/>
 
 ¿Dónde puedo contribuir?
 :   Por favor use [our GitHub repository]({{site.github.url}}) para presentar
