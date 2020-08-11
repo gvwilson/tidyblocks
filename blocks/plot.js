@@ -16,32 +16,37 @@ const MESSAGES = {
     en: 'name',
     es: 'nombre',
     ar: 'الإسم',
-    ko: '이름'
+    ko: '이름',
+    it: 'nome'
   },
   x_axis: {
     en: 'X axis',
     es: 'eje X',
     ar: 'المحور الأفقي',
-    ko: 'X축'
+    ko: 'X축',
+    it: 'asse X'
   },
   y_axis: {
     en: 'Y axis',
     es: 'eje Y',
     ar: 'المحور الرأسي',
-    ko: 'Y축'
+    ko: 'Y축', 
+    it: 'asse Y'
   },
   plot_bar: {
     message0: {
       en: 'Bar %1 %2 %3',
       es: 'Barras %1 %2 %3',
       ar: 'الأعمده %1 %2 %3',
-      ko: '막대 %1 %2 %3'
+      ko: '막대 %1 %2 %3',
+      it: 'barra %1 %2 %3'
     },
     tooltip: {
       en: 'create bar plot',
       es: 'crear grafico barras',
       ar: 'إنشاء رسم الأعمده البيانيه',
-      ko: '막대 그래프 만들기'
+      ko: '막대 그래프 만들기', 
+      it: 'crea un grafico a barre'
     }
   },
   plot_box: {
@@ -49,13 +54,15 @@ const MESSAGES = {
       en: 'Box %1 %2 %3',
       es: 'Cajas %1 %2 %3',
       ar: 'الصندوق %1 %2 %3',
-      ko: '박스 %1 %2 %3'
+      ko: '박스 %1 %2 %3', 
+      it: 'Scatola %1 %2 %3'
     },
     tooltip: {
       en: 'create box plot',
       es: 'crear grafico cajas',
       ar: 'إنشاء مخطط الصندوق ذو العارضتين',
-      ko: '박스 그래프 만들기'
+      ko: '박스 그래프 만들기', 
+      it: 'crea diagramma a scatola e baffi'
     }
   },
   plot_dot: {
@@ -63,13 +70,15 @@ const MESSAGES = {
       en: 'Dot %1 %2',
       es: 'Puntos %1 %2',
       ar: 'النقطه %1 %2',
-      ko: '도트 %1 %2'
+      ko: '도트 %1 %2',
+      it: 'punti %1 %2'
     },
     tooltip: {
       en: 'create dot plot',
       es: 'crear grafico puntos',
       ar: 'إنشاء المخطط النقطي',
-      ko: '도트 그래프 만들기'
+      ko: '도트 그래프 만들기',
+      it: 'crea un diagramma a punti'
     }
   },
   plot_histogram: {
@@ -77,19 +86,22 @@ const MESSAGES = {
       en: 'Histogram %1 %2 %3',
       es: 'Histograma %1 %2 %3',
       ar: 'المدرج التكراري %1 %2 %3',
-      ko: '히스토그램 %1 %2 %3'
+      ko: '히스토그램 %1 %2 %3', 
+      it: 'istogramma %1 %2 %3'
     },
     column: {
       en: 'column',
       es: 'columna',
       ar: 'العمود',
-      ko: '열'
+      ko: '열', 
+      it: 'colonna'
     },
     tooltip: {
       en: 'create histogram',
       es: 'crear histograma',
       ar: 'إنشاء المدرج التكراري',
-      ko: '히스토그램 만들기'
+      ko: '히스토그램 만들기', 
+      it: 'crea istogramma'
     }
   },
   plot_scatter: {
@@ -97,13 +109,15 @@ const MESSAGES = {
       en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
       ar: 'التشتت %1 %2 %3 اللون %4 إضافه خط؟ %5',
-      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5'
+      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5', 
+      it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5'
     },
     tooltip: {
       en: 'create scatter plot',
-      en: 'crear grafico dispersion',
+      es: 'crear grafico dispersion',
       ar: 'إنشاء مخطط الإنتشار',
-      ko: '분산 그래프 만들기'
+      ko: '분산 그래프 만들기', 
+      it: 'crea un grafico di dispersione'
     }
   }
 }
@@ -314,5 +328,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

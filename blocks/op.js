@@ -21,7 +21,8 @@ const MESSAGES = {
       en: 'do arithmetic',
       es: 'haz la aritmética',
       ar: 'إجراء عمليات حسابيه',
-      ko: '연산 실행'
+      ko: '연산 실행', 
+      it: 'eseguire la aritmentica'
     }
   },
   negate: {
@@ -29,7 +30,8 @@ const MESSAGES = {
       en: 'negate a numeric column',
       es: 'excluye una columna numerica',
       ar: 'الغاء عمود حسابي',
-      ko: '숫자열 취소'
+      ko: '숫자열 취소', 
+      it: 'escludere una colonna numerica'
     }
   },
   abs: {
@@ -37,7 +39,8 @@ const MESSAGES = {
       en: 'absolute value of a numeric column',
       es: 'FIXME',
       ar: 'القيمه المطلقه لعمود حسابي',
-      ko: '숫자열의 절대값'
+      ko: '숫자열의 절대값',
+      it: 'valore assoluto di una colonna numerica'
     }
   },
   compare: {
@@ -45,7 +48,8 @@ const MESSAGES = {
       en: 'compare two columns',
       es: 'compara dos columnas',
       ar: 'مقارنه عمودين',
-      ko: '두 열을 비교'
+      ko: '두 열을 비교',
+      it: 'comparare due colonne'
     }
   },
   logical: {
@@ -53,7 +57,8 @@ const MESSAGES = {
       en: 'combine logical values of two columns',
       es: 'combina los valores logicos de dos columnas',
       ar: 'دمج القيم المنطقيه لعمودين',
-      ko: '두 열의 논리 변수를 결합'
+      ko: '두 열의 논리 변수를 결합',
+      it: 'combinare i valori logici di due colonne'
     }
   },
   not: {
@@ -61,13 +66,15 @@ const MESSAGES = {
       en: 'not %1',
       es: 'no %1',
       ar: 'غير %1',
-      ko: '논리 부정 %1'
+      ko: '논리 부정 %1',
+      it: 'no %1'
     },
     tooltip: {
       en: 'negate a logical column',
       es: 'excluye una columna numerica',
       ar: 'إلغاء عمود منطقي',
-      ko: '논리 열 취소'
+      ko: '논리 열 취소',
+      it: 'escludere una colonna logica'
     }
   },
   type: {
@@ -75,13 +82,15 @@ const MESSAGES = {
       en: '%1 is %2 ?',
       es: '¿Es %1 %2 ?',
       ar: 'هل %1 هو %2؟',
-      ko: '%1 은 %2 ?'
+      ko: '%1 은 %2 ?',
+      it: '%1 è %2'
     },
     tooltip: {
       en: 'check the type of a value',
       es: 'comprueba el tipo de valor',
       ar: 'التعرف على نوع القيمه',
-      ko: '값의 유형을 확인'
+      ko: '값의 유형을 확인',
+      it: 'controlla il tipo di valore'
     }
   },
   convert: {
@@ -89,13 +98,15 @@ const MESSAGES = {
       en: '%1 to %2',
       es: '%1 a %2',
       ar: 'من %1 إلي %2',
-      ko: '%1 에서 %2'
+      ko: '%1 에서 %2',
+      it: '%1 a %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       ar: 'تغيير نوع القيمه',
-      ko: '값의 데이터 유형을 변경'
+      ko: '값의 데이터 유형을 변경',
+      it: 'cambiare il tipo di dato di un valore'
     }
   },
   datetime: {
@@ -103,13 +114,15 @@ const MESSAGES = {
       en: 'get %1 from %2',
       es: 'obten %1 de %2',
       ar: 'الحصول على %1 من %2',
-      ko: '%2 에서 %1 가져오기'
+      ko: '%2 에서 %1 가져오기',
+      it: 'ottieni %1 da %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       ar: 'تغيير نوع القيمه',
-      ko: '값의 데이터 유형을 변경'
+      ko: '값의 데이터 유형을 변경',
+      it: 'cambiare il tipo di dato di un valore' 
     }
   },
   conditional: {
@@ -117,13 +130,15 @@ const MESSAGES = {
       en: 'If %1 then %2 else %3',
       es: 'Si %1 entonces %2 sino %3',
       ar: 'إذا %1 افعل %2 غير ذلك %3',
-      ko: '%1 이면 %2 그렇지 않으면 %3'
+      ko: '%1 이면 %2 그렇지 않으면 %3', 
+      it: 'se %1 allora %2 altrimenti %3'
     },
     tooltip: {
       en: 'select value based on condition',
       es: 'selecciona el valor basandote en la condicion',
       ar: 'اختيار قيمه توافي شرط',
-      ko: '조건에  값을 선택'
+      ko: '조건에  값을 선택', 
+      it: 'seleziona il valore in base alla condizione'
     }
   }
 }
@@ -475,5 +490,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

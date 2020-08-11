@@ -163,11 +163,15 @@ $dotDiameter: 4px;
   text-decoration: underline;
 }
 // Plot Styling.
-#plotOutput {
+#plotOutputTop, #plotOutputBottom {
   display: block;
   margin-top: 5px;
   margin-left: 0px;
   margin-right: 0px;
+}
+
+.hidePlot{
+    display: none;
 }
 
 .plotWrapper {
@@ -198,6 +202,15 @@ $dotDiameter: 4px;
 
 .sourceSelectInner__control {
   padding: 2px;
+}
+
+.maxSelectMsg{
+  text-align: center;
+  padding: 8px;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: #888;
 }
 
 .uploadBtn{
@@ -290,4 +303,12 @@ $dotDiameter: 4px;
 }
 .Resizer.disabled:hover {
   border-color: transparent;
+}
+
+// React-Data-Grid tables
+.rdg{
+  .rdg-header-row{
+    background: rgb(233, 239, 242);
+    color: #000;
+  }
 }
