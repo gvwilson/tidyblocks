@@ -36,7 +36,7 @@ describe('expression persistence', () => {
                   `Requires known kind of expression`)
     done()
   })
-  
+
   it('restores a row number', (done) => {
     const factory = new Restore()
     assert.deepEqual(factory.expr([Value.FAMILY, 'rownum']),
@@ -44,7 +44,7 @@ describe('expression persistence', () => {
                      `Row number`)
     done()
   })
-  
+
   it('restores a number', (done) => {
     const factory = new Restore()
     assert.deepEqual(factory.expr([Value.FAMILY, 'number', 123]),
@@ -250,8 +250,8 @@ describe('transform persistence', () => {
   it('restores report from JSON', (done) => {
     const label = 'result_name'
     const factory = new Restore()
-    assert.deepEqual(factory.transform([Transform.FAMILY, 'report', label]),
-                     new Transform.report(label),
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'saveAs', label]),
+                     new Transform.saveAs(label),
                      `report`)
     done()
   })

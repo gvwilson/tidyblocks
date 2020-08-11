@@ -74,10 +74,10 @@ class HelpMenuItems extends React.Component{
         <Link target="_blank" href="./guide" onClick={this.props.onClose}>
           <MenuItem>Guide</MenuItem>
         </Link>
-        <Link target="_blank" href="./license" onClick={this.props.onClose}>
+        <Link target="_blank" href="../license" onClick={this.props.onClose}>
           <MenuItem>License</MenuItem>
         </Link>
-        <Link target="_blank" href="./blog" onClick={this.props.onClose}>
+        <Link target="_blank" href="../blog" onClick={this.props.onClose}>
           <MenuItem>Blog</MenuItem>
         </Link>
       </React.Fragment>
@@ -189,9 +189,6 @@ export class MenuBar extends React.Component{
               TidyBlocks
             </Typography>
             </Box>
-              <TidyBlocksButtonItem name="Run"
-                icon={<PlayArrowIcon className="menuIcon"/>}
-                handleClick={this.props.runProgram}/>
               <TidyBlocksButtonItem name="Load Workspace"
                 icon={<PublishIcon className="menuIcon" />}
                 handleClick={this.props.loadWorkspaceClick}/>

@@ -2,62 +2,106 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   colors: {
     message0: {
-      en: 'Colors'
+      en: 'Colors',
+      es: 'Colores',
+      ar: 'الألوان',
+      ko: '색깔'
     },
     tooltip: {
-      en: 'eleven colors'
+      en: 'eleven colors',
+      es: 'once colores',
+      ar: 'احد عشر لون',
+      ko: '11개의 색'
     }
   },
   earthquakes: {
     message0: {
-      en: 'Earthquakes'
+      en: 'Earthquakes',
+      es: 'Terremotos',
+      ar: 'الزلزال',
+      ko: '지진'
     },
     tooltip: {
-      en: 'earthquake data'
+      en: 'earthquake data', 
+      es: 'datos de terremotos',
+      ar: 'بيانات الزلزال',
+      ko: '지진 데이터'
     }
   },
   penguins: {
     message0: {
-      en: 'Penguins'
+      en: 'Penguins', 
+      es: 'Pingüinos',
+      ar: 'طيور البطريق',
+      ko: '펭귄'
     },
     tooltip: {
-      en: 'penguin data'
+      en: 'penguin data',
+      es: 'datos de pingüinos',
+      ar: 'بيانات طيور البطريق',
+      ko: '펭귄 데이터'
     }
   },
   phish: {
     message0: {
-      en: 'Phish'
+      en: 'Phish', 
+      es: 'Phish',
+      ar: 'فرقه الفيش الموسيقيه',
+      ko: '피시'
     },
     tooltip: {
-      en: 'Phish concert data'
+      en: 'Phish concert data',
+      es: 'datos de conciertos Phish',
+      ar: 'بيانات فرقه الفيش الموسيقيه',
+      ko: '피시 콘서트 데이터'
     }
   },
   sequence: {
     message0: {
-      en: 'Sequence %1 %2'
+      en: 'Sequence %1 %2',
+      es: 'Sequencia %1 %2',
+      ar: 'المتسلسله %1 %2',
+      ko: '배열 %1 %2'
     },
     args0_text: {
-      en: 'name'
+      en: 'name', 
+      es: 'nombre',
+      ar: 'اﻹسم',
+      ko: '이름'
     },
     tooltip: {
-      en: 'Generate a sequence 1..N'
+      en: 'Generate a sequence 1..N',
+      es: 'Generar una sequencia 1..N',
+      ar: 'إنشاء متسلسله ١..ن',
+      ko: '배열 실행 1..N'
     }
   },
   data_user: {
     message0: {
-      en: 'User data %1'
+      en: 'User data %1', 
+      es: 'Datos de usuario %1',
+      ar: 'بيانات المسته %1',
+      ko: '사용자 데이터 %1'
     },
     args0_text: {
-      en: 'name'
+      en: 'name',
+      es: 'nombre',
+      ar: 'الإسم',
+      ko: '이름'
     },
     tooltip: {
-      en: 'use previously-loaded data'
+      en: 'use previously-loaded data', 
+      es: 'usa datos previamente cargados',
+      ar: 'إستخدام بيانات محمله مسبقا',
+      ko: '이전에 로드된 데이터 사용'
     }
   }
 }
@@ -67,52 +111,57 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Colors
     {
       type: 'data_colors',
-      message0: MSG.colors.message0[language],
+      message0: msg.get('colors.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.colors.tooltip[language]
+      tooltip: msg.get('colors.tooltip'),
+      helpUrl: './data/#colors'
     },
     // Earthquakes
     {
       type: 'data_earthquakes',
-      message0: MSG.earthquakes.message0[language],
+      message0: msg.get('earthquakes.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.earthquakes.tooltip[language]
+      tooltip: msg.get('earthquakes.tooltip'),
+      helpUrl: './data/#earthquakes'
     },
     // Penguins
     {
       type: 'data_penguins',
-      message0: MSG.penguins.message0[language],
+      message0: msg.get('penguins.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.penguins.tooltip[language]
+      tooltip: msg.get('penguins.tooltip'),
+      helpUrl: './data/#penguins'
     },
     // Phish
     {
       type: 'data_phish',
-      message0: MSG.phish.message0[language],
+      message0: msg.get('phish.message0'),
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.phish.tooltip[language]
+      tooltip: msg.get('phish.tooltip'),
+      helpUrl: './data/#phish'
     },
     // Sequence
     {
       type: 'data_sequence',
-      message0: MSG.sequence.message0[language],
+      message0: msg.get('sequence.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.sequence.args0_text[language]
+          text: msg.get('sequence.args0_text')
         },
         {
           type: 'field_number',
@@ -123,25 +172,25 @@ const setup = (language) => {
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.sequence.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('sequence.tooltip'),
+      helpUrl: './data/#sequence'
     },
     // User data
     {
       type: 'data_user',
-      message0: MSG.data_user.message0[language],
+      message0: msg.get('data_user.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.data_user.args0_text[language]
+          text: msg.get('data_user.args0_text')
         }
       ],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
-      tooltip: MSG.data_user.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('data_user.tooltip'),
+      helpUrl: './data/#user'
     }
   ])
 

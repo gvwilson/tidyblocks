@@ -87,7 +87,7 @@ Here's the definition of the one-sample t-test block:
     Again, we look this up in a table so that we can internationalize it.
 
 <div align="center">
-  <img src="{{'/guide/en/stats/ttest_one.svg' | relative_url}}" alt="One Sample T-Test Block UI"/>
+  <img src="{{'/en/stats/ttest_one.svg' | relative_url}}" alt="One Sample T-Test Block UI"/>
 </div>
 
 ## Generator 

@@ -2,42 +2,74 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   glue: {
     message0: {
-      en: 'Glue left %1 right %2 labels %3'
+      en: 'Glue left %1 right %2 labels %3',
+      es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
+      ar: 'دمج من جهة اليسار %1 اليمين %2 الفئات %3',
+      ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3'
     },
     table_name: {
-      en: 'name'
+      en: 'name',
+      es: 'nombre',
+      ar: 'الإسم',
+      ko: '이름'
     },
     label: {
-      en: 'label'
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئة',
+      ko: '라벨'
     },
     tooltip: {
-      en: 'glue rows from two tables together'
+      en: 'glue rows from two tables together',
+      es: 'pegar juntas filas de dos tablas',
+      ar: 'دمج صفوف من جدولين',
+      ko: '두 테이블의 행을 붙이기'
     }
   },
   join: {
     message0: {
-      en: 'Join'
+      en: 'Join',
+      es: 'Unir',
+      ar: 'دمج',
+      ko: '연결'
     },
     message1: {
-      en: 'left %1 %2'
+      en: 'left %1 %2',
+      es: 'izquierda  %1 %2',
+      ar: 'يسار %1 %2',
+      ko: '왼쪽 %1 %2'
     },
     message2: {
-      en: 'right %1 %2'
+      en: 'right %1 %2',
+      es: 'derecha %1 %2',
+      ar: 'يمين %1 %2',
+      ko: '오른쪽 %1 %2'
     },
     table: {
-      en: 'table'
+      en: 'table',
+      es: 'tabla',
+      ar: 'الجدول',
+      ko: '테이블'
     },
     column: {
-      en: 'column'
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
-      en: 'join two tables by matching values'
+      en: 'join two tables by matching values',
+      es: 'unir dos tables emparenjando valores',
+      ar: 'دمج جدولين عن طريق تشابه القيم',
+      ko: '일치하는 값으로 두 테이블 연결'
     }
   }
 }
@@ -47,73 +79,74 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Glue
     {
       type: 'combine_glue',
-      message0: MSG.glue.message0[language],
+      message0: msg.get('glue.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'LEFT_TABLE',
-          text: MSG.glue.table_name[language]
+          text: msg.get('glue.table_name')
         },
         {
           type: 'field_input',
           name: 'RIGHT_TABLE',
-          text: MSG.glue.table_name[language]
+          text: msg.get('glue.table_name')
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.glue.label[language]
+          text: msg.get('glue.label')
         }
       ],
       inputsInline: false,
       nextStatement: null,
       style: 'combine_block',
       hat: 'cap',
-      tooltip: MSG.glue.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('glue.tooltip'),
+      helpUrl: './combine/#glue',
       extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE', 'validate_COLUMN']
     },
     // Join
     {
       type: 'combine_join',
-      message0: MSG.join.message0[language],
+      message0: msg.get('join.message0'),
       args0: [],
-      message1: MSG.join.message1[language],
+      message1: msg.get('join.message1'),
       args1: [
         {
           type: 'field_input',
           name: 'LEFT_TABLE',
-          text: MSG.join.table[language]
+          text: msg.get('join.table')
         },
         {
           type: 'field_input',
           name: 'LEFT_COLUMN',
-          text: MSG.join.column[language]
+          text: msg.get('join.column')
         }
       ],
-      message2: MSG.join.message2[language],
+      message2: msg.get('join.message2'),
       args2: [
         {
           type: 'field_input',
           name: 'RIGHT_TABLE',
-          text: MSG.join.table[language]
+          text: msg.get('join.table')
         },
         {
           type: 'field_input',
           name: 'RIGHT_COLUMN',
-          text: MSG.join.column[language]
+          text: msg.get('join.column')
         }
       ],
       inputsInline: false,
       nextStatement: null,
       style: 'combine_block',
       hat: 'cap',
-      tooltip: MSG.join.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('join.tooltip'),
+      helpUrl: './combine/#join',
       extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
     }
   ])

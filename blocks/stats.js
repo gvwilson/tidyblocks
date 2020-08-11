@@ -2,45 +2,80 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   stats_ttest_one: {
     message0: {
-      en: 'One-sample t-test'
+      en: 'One-sample t-test', 
+      es: 'T-test para una muestra',
+      ar: 'إختبار (ت) لعينه واحده',
+      ko: '독립표본 t-검정'
     },
     message1: {
-      en: 'name %1 column %2 mean \u03BC %3'
+      en: 'name %1 column %2 mean \u03BC %3',
+      es: 'nombre %1 columna %2 media \u03BC %3',
+      ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
+      ko: '이름 %1 열 %2 평균 \u03BC %3'
     },
     args1_name: {
-      en: 'name'
+      en: 'name',
+      es: 'nombre',
+      ar: 'الإسم',
+      ko: '이름'
     },
     args1_column: {
-      en: 'column'
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
-      en: 'perform one-sample two-sided t-test'
+      en: 'perform one-sample two-sided t-test',
+      es: 'hacer t-test para una muestra dos colas',
+      ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده',
+      ko: '독립표본 양측 t-검정 수행'
     }
   },
   stats_ttest_two: {
     message0: {
-      en: 'Two-sample t-test'
+      en: 'Two-sample t-test',
+      es: 'T-test para dos muestras',
+      ar: 'إختبار (ت) لعينتين',
+      ko: '이표본 t-검정'
     },
     message1: {
-      en: 'name %1 labels %2 values %3'
+      en: 'name %1 labels %2 values %3',
+      es: 'nombre %1 etiquetas %2 valores %3',
+      ar: 'الإسم %1 الفئه %2 القيم %3',
+      ko: '이름 %1 라벨 %2 값 %3'
     },
     args1_name: {
-      en: 'name'
+      en: 'name',
+      es: 'nombre',
+      ar: 'الإسم',
+      ko: '이름'
     },
     args1_label: {
-      en: 'label'
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئه',
+      ko: '라벨'
     },
     args1_column: {
-      en: 'column'
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
-      en: 'perform two-sample two-sided t-test'
+      en: 'perform two-sample two-sided t-test',
+      es: 'hacer t-test para dos muestras dos colas',
+      ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
+      ko: '이표본 양측 t-검정 수행'
     }
   }
 }
@@ -50,23 +85,24 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // One-sample two-sided t-test
     {
       type: 'stats_ttest_one',
-      message0: MSG.stats_ttest_one.message0[language],
+      message0: msg.get('stats_ttest_one.message0'),
       args0: [],
-      message1: MSG.stats_ttest_one.message1[language],
+      message1: msg.get('stats_ttest_one.message1'),
       args1: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.stats_ttest_one.args1_name[language]
+          text: msg.get('stats_ttest_one.args1_name')
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.stats_ttest_one.args1_column[language]
+          text: msg.get('stats_ttest_one.args1_column')
         },
         {
           type: 'field_number',
@@ -78,39 +114,39 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'stats_blocks',
-      tooltip: MSG.stats_ttest_one.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('stats_ttest_one.tooltip'),
+      helpUrl: './stats/#ttest_one'
     },
 
     // Two-sample two-sided t-test
     {
       type: 'stats_ttest_two',
-      message0: MSG.stats_ttest_two.message0[language],
+      message0: msg.get('stats_ttest_two.message0'),
       args0: [],
-      message1: MSG.stats_ttest_two.message1[language],
+      message1: msg.get('stats_ttest_two.message1'),
       args1: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.stats_ttest_two.args1_name[language]
+          text: msg.get('stats_ttest_two.args1_name')
         },
         {
           type: 'field_input',
           name: 'LABEL_COLUMN',
-          text: MSG.stats_ttest_two.args1_label[language]
+          text: msg.get('stats_ttest_two.args1_label')
         },
         {
           type: 'field_input',
           name: 'VALUE_COLUMN',
-          text: MSG.stats_ttest_two.args1_column[language]
+          text: msg.get('stats_ttest_two.args1_column')
         }
       ],
       inputsInline: false,
       previousStatement: null,
       nextStatement: null,
       style: 'stats_blocks',
-      tooltip: MSG.stats_ttest_two.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('stats_ttest_two.tooltip'),
+      helpUrl: './stats/#ttest_two'
     }
   ])
 

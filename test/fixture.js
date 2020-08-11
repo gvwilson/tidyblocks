@@ -97,7 +97,7 @@ module.exports = {
   ],
   NUMBER: [
     {left: 2, right: 2},
-    {left: 5, right: 2},
+    {left: 5, right: -2},
     {left: 2, right: 0},
     {left: util.MISSING, right: 3},
     {left: 4, right: util.MISSING},
@@ -123,10 +123,9 @@ module.exports = {
   ],
   COLORS: require('../data/colors'),
   TABLE,
-  HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, true),
-  MIDDLE: new MockTransform('middle', pass, [], true, true),
-  REPORT: new Transform.report('keyword'),
-  NO_OUTPUT: new MockTransform('no_output', pass, [], true, false),
+  HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, false),
+  MIDDLE: new MockTransform('middle', pass, [], true, false),
+  REPORT: new Transform.saveAs('keyword'),
   pass,
   TestInterface
 }

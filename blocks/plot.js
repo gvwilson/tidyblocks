@@ -2,60 +2,104 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   name: {
-    en: 'name'
+    en: 'name',
+    es: 'nombre',
+    ar: 'الإسم',
+    ko: '이름'
   },
   x_axis: {
-    en: 'X axis'
+    en: 'X axis',
+    es: 'eje X',
+    ar: 'المحور الأفقي',
+    ko: 'X축'
   },
   y_axis: {
-    en: 'Y axis'
+    en: 'Y axis',
+    es: 'eje Y',
+    ar: 'المحور الرأسي',
+    ko: 'Y축'
   },
   plot_bar: {
     message0: {
-      en: 'Bar %1 %2 %3'
+      en: 'Bar %1 %2 %3',
+      es: 'Barras %1 %2 %3',
+      ar: 'الأعمده %1 %2 %3',
+      ko: '막대 %1 %2 %3'
     },
     tooltip: {
-      en: 'create bar plot'
+      en: 'create bar plot',
+      es: 'crear grafico barras',
+      ar: 'إنشاء رسم الأعمده البيانيه',
+      ko: '막대 그래프 만들기'
     }
   },
   plot_box: {
     message0: {
-      en: 'Box %1 %2 %3'
+      en: 'Box %1 %2 %3',
+      es: 'Cajas %1 %2 %3',
+      ar: 'الصندوق %1 %2 %3',
+      ko: '박스 %1 %2 %3'
     },
     tooltip: {
-      en: 'create box plot'
+      en: 'create box plot',
+      es: 'crear grafico cajas',
+      ar: 'إنشاء مخطط الصندوق ذو العارضتين',
+      ko: '박스 그래프 만들기'
     }
   },
   plot_dot: {
     message0: {
-      en: 'Dot %1 %2'
+      en: 'Dot %1 %2',
+      es: 'Puntos %1 %2',
+      ar: 'النقطه %1 %2',
+      ko: '도트 %1 %2'
     },
     tooltip: {
-      en: 'create dot plot'
+      en: 'create dot plot',
+      es: 'crear grafico puntos',
+      ar: 'إنشاء المخطط النقطي',
+      ko: '도트 그래프 만들기'
     }
   },
   plot_histogram: {
     message0: {
-      en: 'Histogram %1 %2 %3'
+      en: 'Histogram %1 %2 %3',
+      es: 'Histograma %1 %2 %3',
+      ar: 'المدرج التكراري %1 %2 %3',
+      ko: '히스토그램 %1 %2 %3'
     },
     column: {
-      en: 'column'
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
-      en: 'create histogram'
+      en: 'create histogram',
+      es: 'crear histograma',
+      ar: 'إنشاء المدرج التكراري',
+      ko: '히스토그램 만들기'
     }
   },
   plot_scatter: {
     message0: {
-      en: 'Scatter %1 %2 %3 Color %4 Add Line? %5'
+      en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
+      es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
+      ar: 'التشتت %1 %2 %3 اللون %4 إضافه خط؟ %5',
+      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5'
     },
     tooltip: {
-      en: 'create scatter plot'
+      en: 'create scatter plot',
+      en: 'crear grafico dispersion',
+      ar: 'إنشاء مخطط الإنتشار',
+      ko: '분산 그래프 만들기'
     }
   }
 }
@@ -65,106 +109,107 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Bar plot
     {
       type: 'plot_bar',
-      message0: MSG.plot_bar.message0[language],
+      message0: msg.get('plot_bar.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.name[language]
+          text: msg.get('name')
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: MSG.x_axis[language]
+          text: msg.get('x_axis')
         },
         {
           type: 'field_input',
           name: 'Y_AXIS',
-          text: MSG.y_axis[language]
+          text: msg.get('y_axis')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: MSG.plot_bar.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('plot_bar.tooltip'),
+      helpUrl: './plot/#bar',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
     // Box plot
     {
       type: 'plot_box',
-      message0: MSG.plot_box.message0[language],
+      message0: msg.get('plot_box.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.name[language]
+          text: msg.get('name')
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: MSG.x_axis[language]
+          text: msg.get('x_axis')
         },
         {
           type: 'field_input',
           name: 'Y_AXIS',
-          text: MSG.y_axis[language]
+          text: msg.get('y_axis')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: MSG.plot_box.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('plot_box.tooltip'),
+      helpUrl: './plot/#box',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
     // Dot plot
     {
       type: 'plot_dot',
-      message0: MSG.plot_dot.message0[language],
+      message0: msg.get('plot_dot.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.name[language]
+          text: msg.get('name')
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: MSG.x_axis[language]
+          text: msg.get('x_axis')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: MSG.plot_dot.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('plot_dot.tooltip'),
+      helpUrl: './plot/#dot',
       extensions: ['validate_NAME', 'validate_X_AXIS']
     },
 
     // Histogram plot
     {
       type: 'plot_histogram',
-      message0: MSG.plot_histogram.message0[language],
+      message0: msg.get('plot_histogram.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.name[language]
+          text: msg.get('name')
         },
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.plot_histogram.column[language]
+          text: msg.get('plot_histogram.column')
         },
         {
           type: 'field_number',
@@ -176,30 +221,30 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: MSG.plot_histogram.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('plot_histogram.tooltip'),
+      helpUrl: './plot/#histogram',
       extensions: ['validate_NAME', 'validate_COLUMN']
     },
 
     // Scatter plot
     {
       type: 'plot_scatter',
-      message0: MSG.plot_scatter.message0[language],
+      message0: msg.get('plot_scatter.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.name[language]
+          text: msg.get('name')
         },
         {
           type: 'field_input',
           name: 'X_AXIS',
-          text: MSG.x_axis[language]
+          text: msg.get('x_axis')
         },
         {
           type: 'field_input',
           name: 'Y_AXIS',
-          text: MSG.y_axis[language]
+          text: msg.get('y_axis')
         },
         {
           type: 'field_input',
@@ -216,8 +261,8 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'plot_block',
-      tooltip: MSG.plot_scatter.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('plot_scatter.tooltip'),
+      helpUrl: './plot/#scatter',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
     }
   ])

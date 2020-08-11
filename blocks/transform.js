@@ -2,119 +2,184 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {valueToCode} = require('./helpers')
-
-/**
- * Helper function to turn a string containing comma-separated column names into
- * an array of JavaScript strings.
- */
-const _formatMultiColNames = (raw) => {
-  const joined = raw
-    .split(',')
-    .map(c => c.trim())
-    .filter(c => (c.length > 0))
-    .map(c => `"${c}"`)
-    .join(', ')
-  return `[${joined}]`
-}
+const {
+  formatMultiColNames,
+  valueToCode,
+  Messages
+} = require('./helpers')
 
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   multiple_columns: {
-    en: 'column, column'
+    en: 'column, column', 
+    es: 'columna, columna',
+    ar: 'عمود, عمود',
+    ko: '열, 열'
   },
   create: {
     message0: {
-      en: 'Create %1 %2'
+      en: 'Create %1 %2',
+      es: 'Crear %1 %2',
+      ar: 'إنشاء %1 %2',
+      ko: '%1 %2 만들기'
     },
     args0_text: {
-      en: 'new_column'
+      en: 'new_column',
+      es: 'nueva_columna',
+      ar: 'عمود_جديد',
+      ko: '새로운 열'
     },
     tooltip: {
-      en: 'create new column from existing columns'
+      en: 'create new column from existing columns', 
+      es: 'crear nueva columna de las columnas existentes',
+      ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
+      ko: '기존의 열에서 새로운 열 만들기'
     }
   },
   drop: {
     message0: {
-      en: 'Drop %1'
+      en: 'Drop %1',
+      es: 'Excluir %1',
+      ar: 'حذف %1',
+      ko: '%1 삭제'
     },
     args0_tooltip: {
-      en: 'drop columns by name'
+      en: 'drop columns by name',
+      es: 'Excluir columnas por nombre',
+      ar: 'حذف الأعمده بإستخدام اسمائها',
+      ko: '이름에 따라 열 삭제'
     }
   },
   filter: {
     message0: {
-      en: 'Filter %1'
+      en: 'Filter %1', 
+      es: 'Filtrar %1',
+      ar: 'تصفية أو فلتره %1',
+      ko: '%1 거르기'
     },
     args0_name: {
-      en: 'TEST'
+      en: 'TEST', 
+      es: 'TEST',
+      ar: 'إختبار',
+      ko: '테스트'
     },
     tooltip: {
-      en: 'filter rows by condition'
+      en: 'filter rows by condition', 
+      es: 'filtrar filas por condicion',
+      ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
+      ko: '조건에 따라 행 거르기'
     }
   },
-  groupby: {
+  groupBy: {
     message0: {
-      en: 'Group by %1'
+      en: 'Group by %1', 
+      es: 'Agrupar por %1',
+      ar: 'تقسيم البيانات عن طريف: %1',
+      ko: '%1 로 그룹화'
     },
     tooltip: {
-      en: 'group data by values in columns'
+      en: 'group data by values in columns', 
+      es: 'agrupar datos por valores en columnas',
+      ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
+      ko: '열의 값들로 데이터 그룹화'
     }
   },
-  report: {
+  saveAs: {
     message0: {
-      en: 'Report %1'
+      en: 'Save as %1',
+      es: 'Reporte %1', // TRANSLATE ES
+      ar: 'التقرير %1', // TRANSLATE AR
+      ko: '%1 리포트' // TRANSLATE KO
     },
     args0_text: {
-      en: 'name'
+      en: 'name', 
+      es: 'nombre',
+      ar: 'الإسم',
+      ko: '이름'
     },
     tooltip: {
-      en: 'report a result'
+      en: 'save a result',
+      es: 'reporta un resultado', // TRANSLATE ES
+      ar: 'عرض النتائج', // TRANSLATE AR
+      ko: '결과 리포트' // TRANSLATE KO
     }
   },
   select: {
     message0: {
-      en: 'Select %1'
+      en: 'Select %1',
+      es: 'Selecciona %1',
+      ar: 'إختيار %1',
+      ko: '%1 선택'
     },
     tooltip: {
-      en: 'select columns by name'
+      en: 'select columns by name',
+      es: 'selecciona columnas por nombre',
+      ar: 'إختيار الأعمده بإستخدام اسمائها',
+      ko: '이름으로 열 선택'
     }
   },
   sort: {
     message0: {
-      en: 'Sort %1 descending %2'
+      en: 'Sort %1 descending %2',
+      es: 'Ordena %1 descendiente %2',
+      ar: 'ترتيب %1 تنازلي %2',
+      ko: '%2 내림차순으로 %1 정렬'
     },
     tooltip: {
-      en: 'sort table by multiple columns'
+      en: 'sort table by multiple columns',
+      es: 'ordena tabla por multiples columnas',
+      ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
+      ko: '다중 열에 따라 테이블 정렬'
     }
   },
   summarize: {
     message0: {
-      en: 'Summarize %1 %2'
+      en: 'Summarize %1 %2',
+      es: 'Resumen %1 %2',
+      ar: 'تلخيص البيانات %1 %2',
+      ko: '%1 %2 축소'
     },
     args0_text: {
-      en: 'column'
+      en: 'column', 
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
-      en: 'summarize values in  column'
+      en: 'summarize values in  column',
+      es: 'Resume valores en columna',
+      ar: 'تلخيص قيم العمود',
+      ko: '열의 값 축소'
     }
   },
   ungroup: {
     message0: {
-      en: 'Ungroup'
+      en: 'Ungroup',
+      es: 'Desagrupar',
+      ar: 'الغاء التقسيم',
+      ko: '그룹화 해제'
     },
     tooltip: {
-      en: 'remove grouping'
+      en: 'remove grouping', 
+      es: 'quita agrupamiento',
+      ar: 'الغاءتقسيم البيانات',
+      ko: '그룹화 삭제'
     }
   },
   unique: {
     message0: {
-      en: 'Unique %1'
+      en: 'Unique %1', 
+      es: 'Unico %1',
+      ar: 'فريد %1',
+      ko: '%1 을 유일값으로 만들기'
     },
     tooltip: {
-      en: 'select rows with unique values'
+      en: 'select rows with unique values', 
+      es: 'selecciona filas con valores unicos',
+      ar: 'إختيار الصفوف ذات القيم الفريده',
+      ko: '유일값으로 행 선택'
     }
   }
 }
@@ -124,17 +189,17 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
-  console.log('SETUP WITH LANGUAGE', language)
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Create
     {
       type: 'transform_create',
-      message0: MSG.create.message0[language],
+      message0: msg.get('create.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.create.args0_text[language]
+          text: msg.get('create.args0_text')
         },
         {
           type: 'input_value',
@@ -145,117 +210,117 @@ const setup = (language) => {
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.create.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('create.tooltip'),
+      helpUrl: './transform/#create',
       extensions: ['validate_COLUMN']
     },
 
     // Drop
     {
       type: 'transform_drop',
-      message0: MSG.drop.message0[language],
+      message0: msg.get('drop.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.drop.args0_tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('drop.args0_tooltip'),
+      helpUrl: './transform/#drop',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
     // Filter
     {
       type: 'transform_filter',
-      message0: MSG.filter.message0[language],
+      message0: msg.get('filter.message0'),
       args0: [
         {
           type: 'input_value',
-          name: MSG.filter.args0_name[language]
+          name: msg.get('filter.args0_name')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.filter.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('filter.tooltip'),
+      helpUrl: './transform/#filter'
     },
 
-    // Group
+    // Group by
     {
       type: 'transform_groupBy',
-      message0: MSG.groupby.message0[language],
+      message0: msg.get('groupBy.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.groupby.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('groupBy.tooltip'),
+      helpUrl: './transform/#groupBy',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
-    // Report
+    // Save As
     {
-      type: 'transform_report',
-      message0: MSG.report.message0[language],
+      type: 'transform_saveAs',
+      message0: msg.get('saveAs.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'NAME',
-          text: MSG.report.args0_text[language]
+          text: msg.get('saveAs.args0_text')
         }
       ],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.report.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('saveAs.tooltip'),
+      helpUrl: './transform/#saveAs',
       extensions: ['validate_NAME']
     },
 
     // Select
     {
       type: 'transform_select',
-      message0: MSG.select.message0[language],
+      message0: msg.get('select.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.select.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('select.tooltip'),
+      helpUrl: './transform/#select',
       extensions: ['validate_MULTIPLE_COLUMNS']
     },
 
     // Sort
     {
       type: 'transform_sort',
-      message0: MSG.sort.message0[language],
+      message0: msg.get('sort.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         },
         {
           type: 'field_checkbox',
@@ -268,14 +333,14 @@ const setup = (language) => {
       nextStatement: null,
       style: 'transform_block',
       extensions: ['validate_MULTIPLE_COLUMNS'],
-      tooltip: MSG.sort.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('sort.tooltip'),
+      helpUrl: './transform/#sort'
     },
 
     // Summarize
     {
       type: 'transform_summarize',
-      message0: MSG.summarize.message0[language],
+      message0: msg.get('summarize.message0'),
       args0: [
         {
           type: 'field_dropdown',
@@ -296,48 +361,48 @@ const setup = (language) => {
         {
           type: 'field_input',
           name: 'COLUMN',
-          text: MSG.summarize.args0_text[language]
+          text: msg.get('summarize.args0_text')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.summarize.tooltip[language],
-      helpUrl: '',
+      tooltip: msg.get('summarize.tooltip'),
+      helpUrl: './transform/#summarize',
       extensions: ['validate_COLUMN']
     },
 
     // Ungroup
     {
       type: 'transform_ungroup',
-      message0: MSG.ungroup.message0[language],
+      message0: msg.get('ungroup.message0'),
       args0: [],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.ungroup.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('ungroup.tooltip'),
+      helpUrl: './transform/#ungroup'
     },
 
     // Unique
     {
       type: 'transform_unique',
-      message0: MSG.unique.message0[language],
+      message0: msg.get('unique.message0'),
       args0: [
         {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
-          text: MSG.multiple_columns[language]
+          text: msg.get('multiple_columns')
         }
       ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
-      tooltip: MSG.unique.tooltip,
-      helpUrl: '',
+      tooltip: msg.get('unique.tooltip'),
+      helpUrl: './transform/#unique',
       extensions: ['validate_MULTIPLE_COLUMNS']
     }
   ])
@@ -351,7 +416,7 @@ const setup = (language) => {
 
   // Drop
   Blockly.TidyBlocks['transform_drop'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "drop", ${columns}]`
   }
 
@@ -363,25 +428,25 @@ const setup = (language) => {
 
   // Group
   Blockly.TidyBlocks['transform_groupBy'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "groupBy", ${columns}]`
   }
 
   // Report
-  Blockly.TidyBlocks['transform_report'] = (block) => {
+  Blockly.TidyBlocks['transform_saveAs'] = (block) => {
     const name = block.getFieldValue('NAME')
-    return `["@transform", "report", "${name}"]`
+    return `["@transform", "saveAs", "${name}"]`
   }
 
   // Select
   Blockly.TidyBlocks['transform_select'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "select", ${columns}]`
   }
 
   // Sort
   Blockly.TidyBlocks['transform_sort'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     const descending = (block.getFieldValue('DESCENDING') === 'TRUE')
     return `["@transform", "sort", ${columns}, ${descending}]`
   }
@@ -400,7 +465,7 @@ const setup = (language) => {
 
   // Unique
   Blockly.TidyBlocks['transform_unique'] = (block) => {
-    const columns = _formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
+    const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "unique", ${columns}]`
   }
 }

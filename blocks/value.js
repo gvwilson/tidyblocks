@@ -2,84 +2,141 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {ORDER_NONE} = require('./helpers')
+const {
+  ORDER_NONE,
+  Messages
+} = require('./helpers')
 
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   absent: {
     message0: {
-      en: 'Absent'
+      en: 'Absent', 
+      es: 'Ausente',
+      ar: 'غائب',
+      ko: '공백'
     },
     tooltip: {
-      en: 'represent a hole'
+      en: 'represent a hole', 
+      es: 'representa un agujero',
+      ar: 'تمثيل فجوه',
+      ko: '홀을 나타내기'
     }
   },
   column: {
     column: {
-      en: 'column'
+      en: 'column', 
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열'
     },
     tooltip: {
-      en: 'get the value of a column'
+      en: 'get the value of a column',
+      es: 'obten el valor de una columna',
+      ar: 'الحصول على قيمه من عمود',
+      ko: '열의 값 가져오기'
     }
   },
   datetime: {
     text: {
-      en: 'YYYY-MM-DD'
+      en: 'YYYY-MM-DD',
+      es: 'AAAA-MM-DD',
+      ar: 'YYYY-MM-DD',
+      ko: '연도-월-일'
     },
     tooltip: {
-      en: 'constant date/time'
+      en: 'constant date/time',
+      es: 'constante fecha/tiempo',
+      ar: 'ثابت تاريخ/وقت',
+      ko: '날짜/시간 유지'
     }
   },
   logical: {
     tooltip: {
-      en: 'logical constant'
+      en: 'logical constant', 
+      es: 'constante logica',
+      ar: 'ثابت منطقي',
+      ko: '논리 상수'
     }
   },
   number: {
     tooltip: {
-      en: 'constant number'
+      en: 'constant number',
+      es: 'numbero constante',
+      ar: 'رقم ثابت',
+      ko: '상수'
     }
   },
   text: {
     text: {
-      en: 'text'
+      en: 'text',
+      es: 'texto',
+      ar: 'نص',
+      ko: '텍스트'
     },
     tooltip: {
-      en: 'constant text'
+      en: 'constant text', 
+      es: 'texto constante',
+      ar: 'نص ثابت',
+      ko: '상수 텍스트'
     }
   },
   rownum: {
     message0: {
-      en: 'Row number'
+      en: 'Row number',
+      es: 'Numero de fila',
+      ar: 'رقم الصف',
+      ko: '행 번호'
     },
     tooltip: {
-      en: 'row number'
+      en: 'row number',
+      es: 'numero de fila',
+      ar: 'رقم الصف',
+      ko: '행 번호'
     }
   },
   exponential: {
     message0: {
-      en: 'Exponential \u03BB %1'
+      en: 'Exponential \u03BB %1',
+      es: 'Exponencial \u03BB %1',
+      ar: 'الأسيه \u03BB %1',
+      ko: '\u03BB %1 지수로 표현'
     },
     tooltip: {
-      en: 'exponential random value'
+      en: 'exponential random value',
+      es: 'valor aleatorio exponencial',
+      ar: 'المتغيرات العشوائه الأسيه',
+      ko: '지수 랜덤 값'
     }
   },
   normal: {
     message0: {
-      en: 'Normal \u03BC %1 \u03C3 %2'
+      en: 'Normal \u03BC %1 \u03C3 %2',
+      es: 'Normal \u03BC %1 \u03C3 %2',
+      ar: 'الطبيعي \u03BC %1 \u03C3 %2',
+      ko: '\u03BC %1 \u03C3 %2 정규화'
     },
     tooltip: {
-      en: 'normal random value'
+      en: 'normal random value',
+      es: 'valor aleatorio normal',
+      ar: 'المتغير العشوائي الطبيعي',
+      ko: '정규 랜덤 값'
     }
   },
   uniform: {
     message0: {
-      en: 'Uniform \u03B1 %1 \u03B2 %2'
+      en: 'Uniform \u03B1 %1 \u03B2 %2', 
+      es: 'Uniforme \u03B1 %1 \u03B2 %2',
+      ar: 'المنتظم \u03B1 %1 \u03B2 %2',
+      ko: '\u03B1 %1 \u03B2 %2 균등화'
     },
     tooltip: {
-      en: 'uniform random value'
+      en: 'uniform random value', 
+      es: 'valor aleatorio uniforme',
+      ar: 'المتغير العشوائي المنتظم',
+      ko: '균등 랜덤 값'
     }
   }
 }
@@ -89,16 +146,17 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Absent value
     {
       type: 'value_absent',
-      message0: MSG.absent.message0[language],
+      message0: msg.get('absent.message0'),
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.absent.tooltip[language]
+      helpUrl: './value/#absent',
+      tooltip: msg.get('absent.tooltip')
     },
 
     // Column name
@@ -108,12 +166,12 @@ const setup = (language) => {
       args0: [{
         type: 'field_input',
         name: 'COLUMN',
-        text: MSG.column.column[language]
+        text: msg.get('column.column')
       }],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.column.tooltip[language],
+      helpUrl: './value/#column',
+      tooltip: msg.get('column.tooltip'),
       extensions: ['validate_COLUMN']
     },
 
@@ -124,12 +182,12 @@ const setup = (language) => {
       args0: [{
         type: 'field_input',
         name: 'DATE',
-        text: MSG.datetime.text[language]
+        text: msg.get('datetime.text')
       }],
       output: 'DateTime',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.datetime.tooltip[language],
+      helpUrl: './value/#datetime',
+      tooltip: msg.get('datetime.tooltip'),
       extensions: ['validate_DATE']
     },
 
@@ -148,9 +206,9 @@ const setup = (language) => {
         }
       ],
       output: 'Boolean',
-      helpUrl: '',
+      helpUrl: './value/#logical',
       style: 'value_block',
-      tooltip: MSG.logical.tooltip[language]
+      tooltip: msg.get('logical.tooltip')
     },
 
     // Number
@@ -163,9 +221,9 @@ const setup = (language) => {
         value: 0
       }],
       output: 'Number',
-      helpUrl: '',
+      helpUrl: './value/#number',
       style: 'value_block',
-      tooltip: MSG.number.tooltip[language]
+      tooltip: msg.get('number.tooltip')
     },
 
     // Text
@@ -176,30 +234,30 @@ const setup = (language) => {
         {
           type: 'field_input',
           name: 'VALUE',
-          text: MSG.text.text[language]
+          text: msg.get('text.text')
         }
       ],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.text.tooltip[language]
+      helpUrl: './value/#text',
+      tooltip: msg.get('text.tooltip')
     },
 
     // Row number
     {
       type: 'value_rownum',
-      message0: MSG.rownum.message0[language],
+      message0: msg.get('rownum.message0'),
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.rownum.tooltip[language]
+      helpUrl: './value/#rownum',
+      tooltip: msg.get('rownum.tooltip')
     },
 
     // Exponential random variable
     {
       type: 'value_exponential',
-      message0: MSG.exponential.message0[language],
+      message0: msg.get('exponential.message0'),
       args0: [
         {
           type: 'field_input',
@@ -209,15 +267,15 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.exponential.tooltip[language],
+      helpUrl: './value/#exponential',
+      tooltip: msg.get('exponential.tooltip'),
       extensions: ['validate_RATE']
     },
 
     // Normal random variable
     {
       type: 'value_normal',
-      message0: MSG.normal.message0[language],
+      message0: msg.get('normal.message0'),
       args0: [
         {
           type: 'field_input',
@@ -232,15 +290,15 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.normal.tooltip[language],
+      helpUrl: './value/#normal',
+      tooltip: msg.get('normal.tooltip'),
       extensions: ['validate_STDDEV']
     },
 
     // Uniform random variable
     {
       type: 'value_uniform',
-      message0: MSG.uniform.message0[language],
+      message0: msg.get('uniform.message0'),
       args0: [
         {
           type: 'field_input',
@@ -255,8 +313,8 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: '',
-      tooltip: MSG.uniform.tooltip[language]
+      helpUrl: './value/#uniform',
+      tooltip: msg.get('uniform.tooltip')
     }
   ])
 

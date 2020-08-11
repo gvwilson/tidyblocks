@@ -4,71 +4,122 @@ const Blockly = require('blockly/blockly_compressed')
 
 const {
   ORDER_NONE,
-  valueToCode
+  valueToCode,
+  Messages
 } = require('./helpers')
 
 /**
  * Lookup table for message strings.
  */
-const MSG = {
+const MESSAGES = {
   arithmetic: {
     tooltip: {
-      en: 'do arithmetic'
+      en: 'do arithmetic',
+      es: 'haz la aritmética',
+      ar: 'إجراء عمليات حسابيه',
+      ko: '연산 실행'
     }
   },
   negate: {
     tooltip: {
-      en: 'negate a numeric column'
+      en: 'negate a numeric column',
+      es: 'excluye una columna numerica',
+      ar: 'الغاء عمود حسابي',
+      ko: '숫자열 취소'
+    }
+  },
+  abs: {
+    tooltip: {
+      en: 'absolute value of a numeric column',
+      es: 'FIXME',
+      ar: 'القيمه المطلقه لعمود حسابي',
+      ko: '숫자열의 절대값'
     }
   },
   compare: {
     tooltip: {
-      en: 'compare two columns'
+      en: 'compare two columns',
+      es: 'compara dos columnas',
+      ar: 'مقارنه عمودين',
+      ko: '두 열을 비교'
     }
   },
   logical: {
     tooltip: {
-      en: 'combine logical values of two columns'
+      en: 'combine logical values of two columns',
+      es: 'combina los valores logicos de dos columnas',
+      ar: 'دمج القيم المنطقيه لعمودين',
+      ko: '두 열의 논리 변수를 결합'
     }
   },
   not: {
     message0: {
-      en: 'not %1'
+      en: 'not %1',
+      es: 'no %1',
+      ar: 'غير %1',
+      ko: '논리 부정 %1'
     },
     tooltip: {
-      en: 'negate a logical column'
+      en: 'negate a logical column',
+      es: 'excluye una columna numerica',
+      ar: 'إلغاء عمود منطقي',
+      ko: '논리 열 취소'
     }
   },
   type: {
     message0: {
-      en: '%1 is %2 ?'
+      en: '%1 is %2 ?',
+      es: '¿Es %1 %2 ?',
+      ar: 'هل %1 هو %2؟',
+      ko: '%1 은 %2 ?'
     },
     tooltip: {
-      en: 'check the type of a value'
+      en: 'check the type of a value',
+      es: 'comprueba el tipo de valor',
+      ar: 'التعرف على نوع القيمه',
+      ko: '값의 유형을 확인'
     }
   },
   convert: {
     message0: {
-      en: '%1 to %2'
+      en: '%1 to %2',
+      es: '%1 a %2',
+      ar: 'من %1 إلي %2',
+      ko: '%1 에서 %2'
     },
     tooltip: {
-      en: 'change the datatype of a value'
+      en: 'change the datatype of a value',
+      es: 'cambia el tipo de dato del valor',
+      ar: 'تغيير نوع القيمه',
+      ko: '값의 데이터 유형을 변경'
     }
   },
   datetime: {
     message0: {
-      en: 'get %1 from %2'
+      en: 'get %1 from %2',
+      es: 'obten %1 de %2',
+      ar: 'الحصول على %1 من %2',
+      ko: '%2 에서 %1 가져오기'
     },
     tooltip: {
-      en: 'change the datatype of a value'
+      en: 'change the datatype of a value',
+      es: 'cambia el tipo de dato del valor',
+      ar: 'تغيير نوع القيمه',
+      ko: '값의 데이터 유형을 변경'
     }
   },
   conditional: {
     message0: {
-      en: 'If %1 then %2 else %3'
+      en: 'If %1 then %2 else %3',
+      es: 'Si %1 entonces %2 sino %3',
+      ar: 'إذا %1 افعل %2 غير ذلك %3',
+      ko: '%1 이면 %2 그렇지 않으면 %3'
     },
     tooltip: {
-      en: 'select value based on condition'
+      en: 'select value based on condition',
+      es: 'selecciona el valor basandote en la condicion',
+      ar: 'اختيار قيمه توافي شرط',
+      ko: '조건에  값을 선택'
     }
   }
 }
@@ -78,6 +129,7 @@ const MSG = {
  * @param {string} language Two-letter language code to use for string lookups.
  */
 const setup = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Binary arithmetic
     {
@@ -108,8 +160,8 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.arithmetic.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('arithmetic.tooltip'),
+      helpUrl: './op/#arithmetic'
     },
 
     // Arithmetic negation
@@ -125,8 +177,25 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.negate.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('negate.tooltip'),
+      helpUrl: './op/#negate'
+    },
+
+    // Absolute value
+    {
+      type: 'op_abs',
+      message0: 'abs %1',
+      args0: [
+        {
+          type: 'input_value',
+          name: 'VALUE'
+        }
+      ],
+      inputsInline: true,
+      output: 'Number',
+      style: 'op_block',
+      tooltip: msg.get('abs.tooltip'),
+      helpUrl: './op/#abs'
     },
 
     // Comparisons
@@ -158,8 +227,8 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.compare.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('compare.tooltip'),
+      helpUrl: './op/#compare'
     },
 
     // Binary logical operations
@@ -187,14 +256,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.logical.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('logical.tooltip'),
+      helpUrl: './op/#logical'
     },
 
     // Logical negation
     {
       type: 'op_not',
-      message0: MSG.not.message0[language],
+      message0: msg.get('not.message0'),
       args0: [
         {
           type: 'input_value',
@@ -204,14 +273,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.not.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('not.tooltip'),
+      helpUrl: './op/#not'
     },
 
     // Type checking
     {
       type: 'op_type',
-      message0: MSG.type.message0[language],
+      message0: msg.get('type.message0'),
       args0: [
         {
           type: 'input_value',
@@ -232,14 +301,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.type.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('type.tooltip'),
+      helpUrl: './op/#type'
     },
 
     // Type conversion
     {
       type: 'op_convert',
-      message0: MSG.convert.message0[language],
+      message0: msg.get('convert.message0'),
       args0: [
         {
           type: 'input_value',
@@ -259,14 +328,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.convert.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('convert.tooltip'),
+      helpUrl: './op/#convert'
     },
 
     // Datetime conversions
     {
       type: 'op_datetime',
-      message0: MSG.datetime.message0[language],
+      message0: msg.get('datetime.message0'),
       args0: [
         {
           type: 'field_dropdown',
@@ -289,14 +358,14 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
-      tooltip: MSG.datetime.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('datetime.tooltip'),
+      helpUrl: './op/#datetime'
     },
 
     // Conditional
     {
       type: 'op_conditional',
-      message0: MSG.conditional.message0[language],
+      message0: msg.get('conditional.message0'),
       args0: [
         {
           type: 'input_value',
@@ -314,8 +383,8 @@ const setup = (language) => {
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
-      tooltip: MSG.conditional.tooltip[language],
-      helpUrl: ''
+      tooltip: msg.get('conditional.tooltip'),
+      helpUrl: './op/#conditional'
     }
   ])
 
@@ -332,6 +401,13 @@ const setup = (language) => {
   Blockly.TidyBlocks['op_negate'] = (block) => {
     const value = valueToCode(block, 'VALUE')
     const code = `["@op", "negate", ${value}]`
+    return [code, ORDER_NONE]
+  }
+
+  // Absolute value
+  Blockly.TidyBlocks['op_abs'] = (block) => {
+    const value = valueToCode(block, 'VALUE')
+    const code = `["@op", "abs", ${value}]`
     return [code, ORDER_NONE]
   }
 

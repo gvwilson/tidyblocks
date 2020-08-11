@@ -2,6 +2,8 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
+const {Messages} = require('./helpers')
+
 const combine = require('./combine')
 const data = require('./data')
 const op = require('./op')
@@ -11,50 +13,7 @@ const transform = require('./transform')
 const value = require('./value')
 
 // ----------------------------------------------------------------------
-// Creating and decorating the TidyBlocks code generator.
-// ----------------------------------------------------------------------
-
-/**
- * TidyBlocks code generator.
- */
-Blockly.TidyBlocks = new Blockly.Generator('TidyBlocks')
-
-/**
- * Generate code as stringified JSON. (This has to be a string because Blockly's
- * code generator insists on strings.)
- * @param workspace The Blockly workspace containing the program.
- * @returns Stringified JSON representation of the workspace.
- */
-Blockly.TidyBlocks.workspaceToCode = (workspace) => {
-  const allTopBlocks = workspace.getTopBlocks()
-  const cappedBlocks = allTopBlocks.filter(block => (block.hat === 'cap'))
-  const strayCount = allTopBlocks.length - cappedBlocks.length
-  const pipelines = cappedBlocks.map(top => _makePipeline(top))
-  pipelines.unshift('"@program"')
-  const code = `[${pipelines}]`
-  return {code, strayCount}
-}
-
-/**
- * Helper function to generate code given the top block of a stack.
- * @param top Top block of stack.
- * @returns Stringified JSON representation of stack.
- */
-const _makePipeline = (top) => {
-  const blocks = []
-  let current = top
-  while (current && (current instanceof Blockly.Block)) {
-    blocks.push(current)
-    current = current.getNextBlock()
-  }
-  const transforms =
-        blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
-  transforms.unshift('"@pipeline"')
-  return `[${transforms}]`
-}
-
-// ----------------------------------------------------------------------
-// Block appearance and behavior.
+// Block colors.
 // ----------------------------------------------------------------------
 
 const COMBINE_COLOR = '#404040'
@@ -64,6 +23,127 @@ const PLOT_COLOR = '#A4C588'
 const STATS_COLOR = '#BA93DB'
 const TRANSFORM_COLOR = '#76AADB'
 const VALUE_COLOR = '#E7553C'
+
+// ----------------------------------------------------------------------
+// Toolbox configuration.
+// ----------------------------------------------------------------------
+
+const MESSAGES = {
+  combine: {
+    ar: 'دمج',
+    en: 'combine',
+    es: 'combinar',
+    ko: '결합'
+  },
+  data: {
+    ar: 'بيانات',
+    en: 'data',
+    es: 'datos',
+    ko: '데이터'
+  },
+  op: {
+    ar: 'حساب',
+    en: 'op',
+    es: 'operacion',
+    ko: '작업'
+  },
+  plot: {
+    ar: 'رسم',
+    en: 'plot',
+    es: 'grafico',
+    ko: '그래프'
+  },
+  stats: {
+    ar: 'إحصائيات',
+    en: 'stats',
+    es: 'estadísticas',
+    ko: '통계'
+  },
+  transform: {
+    ar: 'تغيير',
+    en: 'transform',
+    es: 'transformar',
+    ko: '변환'
+  },
+  value: {
+    ar: 'القيمه',
+    en: 'value',
+    es: 'valor',
+    ko: '값'
+  }
+}
+
+/**
+ * Create XML configuration for toolbox, internationalizing the category names.
+ * @param {string} language What language to use for the string lookup table.
+ */
+const createXmlConfig = (language) => {
+  const msg = new Messages(MESSAGES, language, 'en')
+  return `<xml id="toolbox" style="display: none">
+    <category name="${msg.get('data')}" colour="${DATA_COLOR}">
+      <block type="data_colors"></block>
+      <block type="data_earthquakes"></block>
+      <block type="data_penguins"></block>
+      <block type="data_phish"></block>
+      <block type="data_sequence"></block>
+      <block type="data_user"></block>
+    </category>
+    <category name="${msg.get('transform')}" colour="${TRANSFORM_COLOR}">
+      <block type="transform_create"></block>
+      <block type="transform_drop"></block>
+      <block type="transform_filter"></block>
+      <block type="transform_groupBy"></block>
+      <block type="transform_saveAs"></block>
+      <block type="transform_select"></block>
+      <block type="transform_sort"></block>
+      <block type="transform_summarize"></block>
+      <block type="transform_ungroup"></block>
+      <block type="transform_unique"></block>
+    </category>
+    <category name="${msg.get('plot')}" colour="${PLOT_COLOR}">
+      <block type="plot_bar"></block>
+      <block type="plot_box"></block>
+      <block type="plot_dot"></block>
+      <block type="plot_histogram"></block>
+      <block type="plot_scatter"></block>
+    </category>
+    <category name="${msg.get('stats')}" colour="${STATS_COLOR}">
+      <block type="stats_ttest_one"></block>
+      <block type="stats_ttest_two"></block>
+    </category>
+    <category name="${msg.get('op')}" colour="${OP_COLOR}">
+      <block type="op_arithmetic"></block>
+      <block type="op_negate"></block>
+      <block type="op_compare"></block>
+      <block type="op_logical"></block>
+      <block type="op_not"></block>
+      <block type="op_type"></block>
+      <block type="op_convert"></block>
+      <block type="op_datetime"></block>
+      <block type="op_conditional"></block>
+      <block type="op_abs"></block>
+    </category>
+    <category name="${msg.get('value')}" colour="${VALUE_COLOR}">
+      <block type="value_column"></block>
+      <block type="value_datetime"></block>
+      <block type="value_logical"></block>
+      <block type="value_number"></block>
+      <block type="value_text"></block>
+      <block type="value_rownum"></block>
+      <block type="value_exponential"></block>
+      <block type="value_normal"></block>
+      <block type="value_uniform"></block>
+    </category>
+    <category name="${msg.get('combine')}" colour="${COMBINE_COLOR}">
+      <block type="combine_glue"></block>
+      <block type="combine_join"></block>
+    </category>
+  </xml>`
+}
+
+// ----------------------------------------------------------------------
+// Theme.
+// ----------------------------------------------------------------------
 
 /**
  * Theme for all blocks.
@@ -109,16 +189,55 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
       colourTertiary: '#760918'
     }
   },
-  categoryStyles: {
-    combine: {colour: COMBINE_COLOR},
-    data: {colour: DATA_COLOR},
-    op: {colour: OP_COLOR},
-    plot: {colour: PLOT_COLOR},
-    stats: {colour: STATS_COLOR},
-    transform: {colour: TRANSFORM_COLOR},
-    value: {colour: VALUE_COLOR}
+  componentStyles: {
+    toolboxBackgroundColour: '#e9eff2',
+    toolboxForegroundColour: '#1C313A',
+    flyoutBackgroundColour: '#F9F9F9',
   }
 })
+
+// ----------------------------------------------------------------------
+// TidyBlocks code generator.
+// ----------------------------------------------------------------------
+
+/**
+ * TidyBlocks code generator.
+ */
+Blockly.TidyBlocks = new Blockly.Generator('TidyBlocks')
+
+/**
+ * Generate code as stringified JSON. (This has to be a string because Blockly's
+ * code generator insists on strings.)
+ * @param workspace The Blockly workspace containing the program.
+ * @returns Stringified JSON representation of the workspace.
+ */
+Blockly.TidyBlocks.workspaceToCode = (workspace) => {
+  const allTopBlocks = workspace.getTopBlocks()
+  const cappedBlocks = allTopBlocks.filter(block => (block.hat === 'cap'))
+  const strayCount = allTopBlocks.length - cappedBlocks.length
+  const pipelines = cappedBlocks.map(top => _makePipeline(top))
+  pipelines.unshift('"@program"')
+  const code = `[${pipelines}]`
+  return {code, strayCount}
+}
+
+/**
+ * Helper function to generate code given the top block of a stack.
+ * @param top Top block of stack.
+ * @returns Stringified JSON representation of stack.
+ */
+const _makePipeline = (top) => {
+  const blocks = []
+  let current = top
+  while (current && (current instanceof Blockly.Block)) {
+    blocks.push(current)
+    current = current.getNextBlock()
+  }
+  const transforms =
+        blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
+  transforms.unshift('"@pipeline"')
+  return `[${transforms}]`
+}
 
 // ----------------------------------------------------------------------
 // Validators for block fields.
@@ -244,6 +363,10 @@ const _createValidators = () => {
   Blockly.Extensions.register('validate_DATE', _validateDate('DATE'))
 }
 
+// ----------------------------------------------------------------------
+// Create blocks.
+// ----------------------------------------------------------------------
+
 // Guard to ensure that `createBlocks` is only run once during testing.
 let _createBlocksHasRun = false
 
@@ -265,73 +388,8 @@ const createBlocks = (language = 'en') => {
   }
 }
 
-/**
- * Configuration of blocks. This is here instead of in the HTML page in order to
- * avoid confusing React (which otherwise complains about `xml` being an unknown
- * UI component).
- */
-const XML_CONFIG = `<xml id="toolbox" style="display: none">
-  <category name="data" categorystyle="data">
-    <block type="data_colors"></block>
-    <block type="data_earthquakes"></block>
-    <block type="data_penguins"></block>
-    <block type="data_phish"></block>
-    <block type="data_sequence"></block>
-    <block type="data_user"></block>
-  </category>
-  <category name="transform" categorystyle="transform">
-    <block type="transform_create"></block>
-    <block type="transform_drop"></block>
-    <block type="transform_filter"></block>
-    <block type="transform_groupBy"></block>
-    <block type="transform_report"></block>
-    <block type="transform_select"></block>
-    <block type="transform_sort"></block>
-    <block type="transform_summarize"></block>
-    <block type="transform_ungroup"></block>
-    <block type="transform_unique"></block>
-  </category>
-  <category name="plot" categorystyle="plot">
-    <block type="plot_bar"></block>
-    <block type="plot_box"></block>
-    <block type="plot_dot"></block>
-    <block type="plot_histogram"></block>
-    <block type="plot_scatter"></block>
-  </category>
-  <category name="stats" categorystyle="stats">
-    <block type="stats_ttest_one"></block>
-    <block type="stats_ttest_two"></block>
-  </category>
-  <category name="op" categorystyle="op">
-    <block type="op_arithmetic"></block>
-    <block type="op_negate"></block>
-    <block type="op_compare"></block>
-    <block type="op_logical"></block>
-    <block type="op_not"></block>
-    <block type="op_type"></block>
-    <block type="op_convert"></block>
-    <block type="op_datetime"></block>
-    <block type="op_conditional"></block>
-  </category>
-  <category name="value" categorystyle="value">
-    <block type="value_column"></block>
-    <block type="value_datetime"></block>
-    <block type="value_logical"></block>
-    <block type="value_number"></block>
-    <block type="value_text"></block>
-    <block type="value_rownum"></block>
-    <block type="value_exponential"></block>
-    <block type="value_normal"></block>
-    <block type="value_uniform"></block>
-  </category>
-  <category name="combine" categorystyle="combine">
-    <block type="combine_glue"></block>
-    <block type="combine_join"></block>
-  </category>
-</xml>`
-
 module.exports = {
   THEME,
-  XML_CONFIG,
+  createXmlConfig,
   createBlocks
 }

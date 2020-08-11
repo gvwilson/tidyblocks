@@ -18,19 +18,23 @@ class ReactInterface extends UserInterface {
    * Build user interface object.
    * @param {string} language What language to use for localizing blocks.
    * @param {string} rootId HTML ID of root element.
+   * @param {Boolean} rightToLeft Right-to-left rendering?
    */
-  constructor (language, rootId) {
+  constructor (language, rootId, rightToLeft) {
     super(language)
 
     // Create the Blockly settings.
-    const settings = this._createSettings()
+    const settings = this._createSettings(rightToLeft)
 
     // Create an environment so the React app can get the pre-loaded datasets.
     const env = new Env(this)
 
+    // Create the XML configuration (internationalized).
+    const xmlConfig = blocks.createXmlConfig(language)
+
     // Render React.
     const app = ReactDOM.render(
-      <TidyBlocksApp settings={settings} toolbox={blocks.XML_CONFIG} initialEnv={env}/>,
+      <TidyBlocksApp settings={settings} toolbox={xmlConfig} initialEnv={env}/>,
       document.getElementById(rootId)
     )
 
@@ -50,7 +54,7 @@ class ReactInterface extends UserInterface {
    * Create the JSON settings used to initialize the workspace.
    * @returns JSON settings object.
    */
-  _createSettings () {
+  _createSettings (rightToLeft) {
     return {
       theme: blocks.THEME,
       zoom: {
@@ -61,7 +65,8 @@ class ReactInterface extends UserInterface {
         minScale: 0.3,
         scaleSpeed: 1.2
       },
-      renderer: 'thrasos'
+      renderer: 'thrasos',
+      RTL: rightToLeft
     }
   }
 }
@@ -70,9 +75,10 @@ class ReactInterface extends UserInterface {
  * Initialize the interface.
  * @param {string} language What language to use for localizing blocks.
  * @param {string} rootId HTML ID of element that will contain workspace.
+ * @param {Boolean} rtl Right-to-left rendering? (default is 'false').
  */
-const setup = (language, rootId) => {
-  return new ReactInterface(language, rootId)
+const setup = (language, rootId, rtl = false) => {
+  return new ReactInterface(language, rootId, rtl)
 }
 
 module.exports = {

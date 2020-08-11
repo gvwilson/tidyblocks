@@ -19,13 +19,10 @@ import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
 import { MenuBar } from './menuBar.jsx'
 import { SaveCsvFormDialog, SaveWorkspaceFormDialog,
-  SaveSvgFormDialog } from './saveDialog.jsx'
+  SaveSvgFormDialog, LoadCsvDialog } from './saveDialog.jsx'
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 import { TabSelectionBar, TabPanels } from './tabs.jsx'
 import { theme } from './theme.jsx'
-
-const DATA_USER = 'user'
-const DATA_REPORT = 'results'
 
 const createToolboxCategories = (props) => {
   const categories = parseWorkspaceXml(props.toolbox)
@@ -47,11 +44,13 @@ export class TidyBlocksApp extends React.Component {
     this.blocklyRef = React.createRef()
     this.plotOutputRef = React.createRef()
     this.dataGridRef = React.createRef()
+    this.resultGridRef = React.createRef()
     this.workspaceFileUploader = React.createRef()
     this.csvFileUploader = React.createRef()
     this.saveCsvNameDialog = React.createRef()
     this.saveWorkspaceDialog = React.createRef()
     this.saveSvgDialog = React.createRef()
+    this.loadCsvDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
     const initialEnv = props.initialEnv
@@ -63,19 +62,22 @@ export class TidyBlocksApp extends React.Component {
       tabValue: 0,
       tabUpdated: {
         'data': false,
+        'results': false,
         'stats': false,
         'plot': false,
         'console': false
       },
       DATA_TAB_INDEX: 0,
-      STATS_TAB_INDEX: 1,
-      PLOT_TAB_INDEX: 2,
-      CONSOLE_TAB_INDEX: 3,
+      RESULTS_TAB_INDEX: 1,
+      STATS_TAB_INDEX: 2,
+      PLOT_TAB_INDEX: 3,
+      CONSOLE_TAB_INDEX: 4,
       CONSOLE_SUCCESS: 'CONSOLE_SUCCESS',
       CONSOLE_WARNING: 'CONSOLE_WARNING',
       CONSOLE_ERROR: 'CONSOLE_ERROR',
 
       tabValueBottom: 0,
+      saveData: [],
       zoom: '1.00',
       // The results returned from running the program. We store them in full
       // in env for use during updates/changes, but may also use more specific
@@ -88,6 +90,14 @@ export class TidyBlocksApp extends React.Component {
       dataValue: null,
       activeDataOptions: [],
       hideDataTable: false,
+
+      resultKeys: null,
+      results: [],
+      resultColumns: [],
+      resultOptions: [],
+      resultValue: null,
+      activeResultOptions: [],
+      hideResultTable: false,
 
       plotKeys: null,
       plotData: [],
@@ -113,7 +123,9 @@ export class TidyBlocksApp extends React.Component {
     this.loadWorkspace = this.loadWorkspace.bind(this)
     this.loadCsvClick = this.loadCsvClick.bind(this)
     this.loadCsv = this.loadCsv.bind(this)
+    this.loadCsvUrl = this.loadCsvUrl.bind(this)
     this.changeData = this.changeData.bind(this)
+    this.changeResults = this.changeResults.bind(this)
     this.changeStats = this.changeStats.bind(this)
     this.handleTabChange = this.handleTabChange.bind(this)
     this.sortRows = this.sortRows.bind(this)
@@ -168,6 +180,10 @@ export class TidyBlocksApp extends React.Component {
     } else if(this.state.stats != prevState.stats){
       this.setState({hideStatsTable: true}, () => {
         this.setState({hideStatsTable: false})
+      })
+    } else if(this.state.results != prevState.results){
+      this.setState({hideResultTable: true}, () => {
+        this.setState({hideResultTable: false})
       })
     }
   }
@@ -308,20 +324,36 @@ export class TidyBlocksApp extends React.Component {
       // results.
       for (let optIndex = 0; optIndex < activeDataOptions.length; optIndex++){
         let tempColumns = []
-        if (activeDataOptions[optIndex].type == DATA_USER){
-          data.push(this.state.env.ui.userData.get(activeDataOptions[optIndex].label)['data'])
-          dataColumns = this.state.env.ui.userData.get(activeDataOptions[optIndex].label)['columns']
-          dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
-          formattedColumns.push(tempColumns)
-        } else if (activeDataOptions[optIndex].type == DATA_REPORT){
-          data.push(this.state.env.results.get(activeDataOptions[optIndex].label)['data'])
-          dataColumns = this.state.env.results.get(activeDataOptions[optIndex].label)['columns']
-          dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
-          formattedColumns.push(tempColumns)
-        }
+        data.push(this.state.env.ui.userData.get(activeDataOptions[optIndex].label)['data'])
+        dataColumns = this.state.env.ui.userData.get(activeDataOptions[optIndex].label)['columns']
+        dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
       }
       this.setState({activeDataOptions: activeDataOptions, data: data,
         dataColumns: formattedColumns})
+    }
+  }
+
+  changeResults (e) {
+    const activeResultOptions = e ? e : []
+    let formattedColumns = []
+    let results = []
+    let resultColumns = []
+    if (!e) {
+      this.setState({activeResultOptions: [], results: [],
+        resultColumns: []})
+    } else {
+      // Swap the stored data depending on whether we're showing userData or
+      // results.
+      for (let optIndex = 0; optIndex < activeResultOptions.length; optIndex++){
+        let tempColumns = []
+        results.push(this.state.env.results.get(activeResultOptions[optIndex].label)['data'])
+        resultColumns = this.state.env.results.get(activeResultOptions[optIndex].label)['columns']
+        resultColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
+      }
+      this.setState({activeResultOptions: activeResultOptions, results: results,
+        resultColumns: formattedColumns})
     }
   }
 
@@ -391,6 +423,7 @@ export class TidyBlocksApp extends React.Component {
     TidyBlocksUI.runProgram()
     const env = TidyBlocksUI.env
     this.updateDataInformation(env)
+    this.updateResultsInformation(env)
     this.updatePlotInformation(env)
     this.updateStatsInformation(env)
     this.updateLogMessages(env)
@@ -399,7 +432,7 @@ export class TidyBlocksApp extends React.Component {
     if (!env.plots.keys().next().done) {
       this.handleTabChange(null, this.state.PLOT_TAB_INDEX)
     } else if (!env.results.keys().next().done){
-      this.handleTabChange(null, this.state.DATA_TAB_INDEX)
+      this.handleTabChange(null, this.state.RESULTS_TAB_INDEX)
     } else if (!env.stats.keys().next().done) {
       this.handleTabChange(null, this.state.STATS_TAB_INDEX)
     } else {
@@ -415,54 +448,23 @@ export class TidyBlocksApp extends React.Component {
     let formattedColumns = []
     let tempColumns = []
 
-    // If there exists a report, but no reports are currently selected clear the
-    // active selection.
-    let reportResult = env.results.keys().next()
-    let hasReportOption = false
-    for (let optIndex = 0; optIndex < this.state.activeDataOptions.length; optIndex++){
-      if (this.state.activeDataOptions[optIndex].type == DATA_REPORT){
-        hasReportOption = true
-      }
-    }
-    if (!reportResult.done && !hasReportOption){
-      this.state.activeDataOptions = []
-    }
-
-
     if (this.state.activeDataOptions.length > 0){
       for (let optIndex = 0; optIndex < this.state.activeDataOptions.length; optIndex++){
         tempColumns = []
         if (this.state.activeDataOptions[optIndex]) {
-          if (this.state.activeDataOptions[optIndex].type == DATA_USER){
-            if (env.ui.userData.has(this.state.activeDataOptions[optIndex].label)){
-              data.push(env.ui.userData.get(this.state.activeDataOptions[optIndex].label)['data'])
-              dataColumns = env.ui.userData.get(this.state.activeDataOptions[optIndex].label)['columns']
-              dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
-              formattedColumns.push(tempColumns)
-              activeDataOptions.push(this.state.activeDataOptions[optIndex])
-            }
-          } else if (this.state.activeDataOptions[optIndex].type == DATA_REPORT){
-            if (env.results.has(this.state.activeDataOptions[optIndex].label)){
-              data.push(env.results.get(this.state.activeDataOptions[optIndex].label)['data'])
-              dataColumns = env.results.get(this.state.activeDataOptions[optIndex].label)['columns']
-              dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
-              formattedColumns.push(tempColumns)
-              activeDataOptions.push(this.state.activeDataOptions[optIndex])
-            }
+          if (env.ui.userData.has(this.state.activeDataOptions[optIndex].label)){
+            data.push(env.ui.userData.get(this.state.activeDataOptions[optIndex].label)['data'])
+            dataColumns = env.ui.userData.get(this.state.activeDataOptions[optIndex].label)['columns']
+            dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+            formattedColumns.push(tempColumns)
+            activeDataOptions.push(this.state.activeDataOptions[optIndex])
           }
         }
       }
     } else {
-      let reportResult = env.results.keys().next()
-      let userResult = dataKeys.next()
-      if (!reportResult.done){
-        activeDataOptions = [{'value': reportResult.value, type: DATA_REPORT, 'label': reportResult.value}]
-        data = [env.results.get(activeDataOptions[0].value)['data']]
-        dataColumns = env.results.get(activeDataOptions[0].label)['columns']
-        dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
-        formattedColumns.push(tempColumns)
-      } else if (!userResult.done){
-        activeDataOptions = [{'value': userResult.value, type: DATA_USER, 'label': userResult.value}]
+      let dataResult = env.ui.userData.keys().next()
+      if (!dataResult.done){
+        activeDataOptions = [{'value': dataResult.value, 'label': dataResult.value}]
         data = [env.ui.userData.get(activeDataOptions[0].value)['data']]
         dataColumns = env.ui.userData.get(activeDataOptions[0].label)['columns']
         dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
@@ -472,11 +474,9 @@ export class TidyBlocksApp extends React.Component {
 
     let dataOptions = []
     for (let key of env.ui.userData.keys()){
-      dataOptions.push({value: DATA_USER + '_' + key, type: DATA_USER, label: key})
+      dataOptions.push({value: key, label: key})
     }
-    for (let key of env.results.keys()){
-      dataOptions.push({value: DATA_REPORT + '_' + key, type: DATA_REPORT, label: key})
-    }
+
     // Indicate the tab was updated if it has been.
     let tabUpdated = this.state.tabUpdated
     if (data && data.length != this.state.data.length && this.state.tabValue != this.state.DATA_TAB_INDEX){
@@ -486,6 +486,59 @@ export class TidyBlocksApp extends React.Component {
       activeDataOptions: activeDataOptions, dataOptions: dataOptions,
       tabUpdated: tabUpdated})
   }
+
+  updateResultsInformation (env) {
+    const resultKeys = env.results.keys()
+    let results = []
+    let resultColumns = []
+    let activeResultOptions = []
+    let formattedColumns = []
+    let tempColumns = []
+
+    if (this.state.activeResultOptions.length > 0){
+      for (let optIndex = 0; optIndex < this.state.activeResultOptions.length; optIndex++){
+        tempColumns = []
+        if (this.state.activeResultOptions[optIndex]) {
+          if (env.results.has(this.state.activeResultOptions[optIndex].label)){
+            results.push(env.results.get(this.state.activeResultOptions[optIndex].label)['data'])
+            resultColumns = env.results.get(this.state.activeResultOptions[optIndex].label)['columns']
+            resultColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+            formattedColumns.push(tempColumns)
+            activeResultOptions.push(this.state.activeResultOptions[optIndex])
+          }
+        }
+      }
+    } else {
+      let reportResult = env.results.keys().next()
+      if (!reportResult.done){
+        activeResultOptions = [{'value': reportResult.value, 'label': reportResult.value}]
+        results = [env.results.get(activeResultOptions[0].value)['data']]
+        resultColumns = env.results.get(activeResultOptions[0].label)['columns']
+        resultColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
+      }
+    }
+
+    let resultOptions = []
+    for (let key of env.results.keys()){
+      resultOptions.push({value: key, label: key})
+    }
+
+    // Indicate the tab was updated if it has been.
+    let tabUpdated = this.state.tabUpdated
+    if (results && results.length != this.state.results.length && this.state.tabValue != this.state.RESULTS_TAB_INDEX){
+      console.log("RESULTS")
+      console.log(results)
+      console.log(this.state.results)
+      console.log(results != this.state.results)
+
+      tabUpdated.results = true
+    }
+    this.setState({resultKeys:resultKeys, results: results, resultColumns: formattedColumns,
+      activeResultOptions: activeResultOptions, resultOptions: resultOptions,
+      tabUpdated: tabUpdated})
+  }
+
 
   updatePlotInformation (env) {
     const plotKeys = env.plots.keys()
@@ -569,6 +622,9 @@ export class TidyBlocksApp extends React.Component {
       case this.state.DATA_TAB_INDEX:
         tabUpdated.data = false
         break
+      case this.state.RESULTS_TAB_INDEX:
+        tabUpdated.results = false
+        break
       case this.state.STATS_TAB_INDEX:
         tabUpdated.stats = false
         break
@@ -588,7 +644,19 @@ export class TidyBlocksApp extends React.Component {
 
   // Saves the currently displayed data table to a file.
   saveData(){
-    this.saveCsvNameDialog.current.handleClickOpen()
+
+    // If we're on the results tab, and there're results download them,
+    // otherwise download the data.
+    if (this.state.tabValue == this.state.RESULTS_TAB_INDEX
+      && this.state.resultColumns.length > 0){
+      this.setState({saveData: this.state.results}, () => {
+        this.saveCsvNameDialog.current.handleClickOpen()
+      })
+    } else {
+      this.setState({saveData: this.state.data}, () => {
+        this.saveCsvNameDialog.current.handleClickOpen()
+      })
+    }
   }
 
   // Saves the current Blockly workspace to a file.
@@ -618,7 +686,7 @@ export class TidyBlocksApp extends React.Component {
 
   // Calls the file upload input.
   loadCsvClick () {
-    this.refs.csvFileUploader.click()
+    this.loadCsvDialog.current.handleClickOpen()
   }
 
   // Processes and loads the csv after the file has been uploaded
@@ -636,6 +704,20 @@ export class TidyBlocksApp extends React.Component {
     })
   }
 
+  // Loads a csv file from a URL
+  loadCsvUrl(url){
+    // Get the end of the url, removing the extension (if it's there)
+    const formattedUrl = url.replace(/#[^#]+$/, "").replace(/\?[^\?]+$/, "").replace(/\/$/, "");
+    const label = formattedUrl.substr(formattedUrl.lastIndexOf("/") + 1).replace('.csv', '')
+    fetch(url, {mode:'cors'}).then(response => response.text()).then(text => {
+      const workspace = this.getWorkspace().state.workspace
+      const df = new DataFrame(csvToTable(text))
+      this.state.env.ui.userData.set(label, df)
+      this.setState({env: this.state.env}, () => {
+        this.updateDataInformation(this.state.env)})
+    })
+  }
+
   render () {
     const logMessages = (!this.state.logMessages) ?
           <li className="tb-log" key="message-0">No messages</li> :
@@ -647,6 +729,8 @@ export class TidyBlocksApp extends React.Component {
     const logMessageList = <ul className="tb-messages">{logMessages}</ul>
     const dataDropdown = <DataTabSelect options={this.state.dataOptions}
       onChange={this.changeData} value={this.state.activeDataOptions}/>
+    const resultsDropdown = <DataTabSelect options={this.state.resultOptions}
+      onChange={this.changeResults} value={this.state.activeResultOptions}/>
     const statsDropdown = <StatsTabSelect options={this.state.statsOptions}
       onChange={this.changeStats} value={this.state.activeStatsOptions}/>
     const plotDropdown = <PlotTabSelect options={this.state.plotOptions}
@@ -662,14 +746,15 @@ export class TidyBlocksApp extends React.Component {
     return (
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
-          <SaveCsvFormDialog ref={this.saveCsvNameDialog} data={this.state.data}/>
+          <LoadCsvDialog ref={this.loadCsvDialog} fileUploadRef={this.refs.csvFileUploader} loadCsvUrl={this.loadCsvUrl}/>
+          <SaveCsvFormDialog ref={this.saveCsvNameDialog} saveData={this.state.saveData}/>
           { this.blocklyRef.current &&
             <>
               <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
               <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
             </>
           }
-          <MenuBar runProgram={this.runProgram}
+          <MenuBar
             loadCsvClick={this.loadCsvClick}
             loadWorkspaceClick={this.loadWorkspaceClick}
             saveWorkspace={this.saveWorkspace}
@@ -701,6 +786,7 @@ export class TidyBlocksApp extends React.Component {
                   wrapperDivClassName="fill-height"
                   workspaceDidChange={this.workspaceChanged}
                 />
+                <a className="runBtn" onClick={this.runProgram}> Run </a>
               </div>
               <div className="topRightPane">
                 <AppBar position="static" color="default" component={'span'}>
@@ -708,6 +794,7 @@ export class TidyBlocksApp extends React.Component {
                     tabValue={this.state.tabValue}
                     handleTabChange={this.handleTabChange}
                     dataIndex={this.state.DATA_TAB_INDEX}
+                    resultIndex={this.state.RESULTS_TAB_INDEX}
                     statsIndex={this.state.STATS_TAB_INDEX}
                     plotIndex={this.state.PLOT_TAB_INDEX}
                     tabUpdated={this.state.tabUpdated}
@@ -719,6 +806,7 @@ export class TidyBlocksApp extends React.Component {
                   restorePanel={this.restorePanel}
                   maximizePanel={this.maximizePanel}
                   dataDropdown={dataDropdown}
+                  resultsDropdown={resultsDropdown}
                   statsDropdown={statsDropdown}
                   plotDropdown={plotDropdown}
                   plotOutputRef={this.plotOutputRef}
@@ -728,11 +816,15 @@ export class TidyBlocksApp extends React.Component {
                   data={this.state.data}
                   topRightPaneHeight={this.state.topRightPaneHeight}
                   sortRows={this.state.sortRows}
+                  resultColumns={this.state.resultColumns}
+                  resultGridRef={this.resultGridRef}
+                  results={this.state.results}
                   stats={this.state.stats}
                   statsColumns={this.state.statsColumns}
                   plotData={this.state.plotData}
                   isDraggingPane={this.state.isDraggingPane}
                   hideDataTable={this.state.hideDataTable}
+                  hideResultTable={this.state.hideResultTable}
                   hideStatsTable={this.state.hideStatsTable}
                 />
               </div>
