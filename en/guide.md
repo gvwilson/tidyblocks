@@ -9,6 +9,9 @@ language: en
 <div class="guide_lhs">
 <h1><a href="../index.html">TidyBlocks</a></h1>
 
+<br/>
+<br/>
+
 <div align="center">
   <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
 </div>

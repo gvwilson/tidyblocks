@@ -4,6 +4,9 @@ title: "FAQ"
 language: en
 ---
 
+<br/>
+<br/>
+
 Who is TidyBlocks for?
 :   Our primary audience is students in middle school and high school (ages 10-18)
     who are learning how to use and interpret data.

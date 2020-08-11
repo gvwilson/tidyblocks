@@ -1,13 +1,17 @@
 ---
 permalink: /es/guide/
 layout: page
-language: en
+language: es
 ---
 
 <div id="guide_wrapper">
 
 <div class="guide_lhs">
 <h1><a href="../index.html">TidyBlocks</a></h1>
+
+<br/>
+<br/>
+<br/>
 
 <div align="center">
   <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
