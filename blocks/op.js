@@ -18,7 +18,7 @@ const MESSAGES = {
       es: 'haz la aritmética',
       ar: 'إجراء عمليات حسابيه',
       ko: '연산 실행', 
-      it. 'eseguire la aritmentica'
+      it: 'eseguire la aritmentica'
     }
   },
   negate: {
