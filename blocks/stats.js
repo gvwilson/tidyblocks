@@ -88,6 +88,34 @@ const MESSAGES = {
       ko: '이표본 양측 t-검정 수행', 
       it: 'eseguire un t-test a due campioni su due lati'
     }
+  },
+  stats_k_means: {
+    message0: {
+      en: 'k-means cluster'
+    },
+    message1: {
+      en: 'name %1 column %2 number %3 label %4'
+    },
+    args1_name: {
+      en: 'name'
+    },
+    args1_column: {
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      ko: '열',
+      it: 'colonna'
+    },
+    args1_label: {
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئه',
+      ko: '라벨',
+      it: 'etichetta'
+    },
+    tooltip: {
+      en: 'calculate k-means cluster IDs'
+    }
   }
 }
 
@@ -158,6 +186,42 @@ const setup = (language) => {
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_two.tooltip'),
       helpUrl: './stats/#ttest_two'
+    },
+
+    // K-means clustering
+    {
+      type: 'stats_k_means',
+      message0: msg.get('stats_k_means.message0'),
+      args0: [],
+      message1: msg.get('stats_k_means.message1'),
+      args1: [
+        {
+          type: 'field_input',
+          name: 'NAME',
+          text: msg.get('stats_k_means.args1_name')
+        },
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('stats_k_means.args1_column')
+        },
+        {
+          type: 'field_number',
+          name: 'NUMBER',
+          value: 2
+        },
+        {
+          type: 'field_input',
+          name: 'LABEL',
+          text: msg.get('stats_k_means.args1_label')
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'stats_blocks',
+      tooltip: msg.get('stats_k_means.tooltip'),
+      helpUrl: './stats/#k_means'
     }
   ])
 
@@ -175,6 +239,15 @@ const setup = (language) => {
     const labels = block.getFieldValue('LABEL_COLUMN')
     const values = block.getFieldValue('VALUE_COLUMN')
     return `["@transform", "ttest_two", "${name}", "${labels}", "${values}"]`
+  }
+
+  // Create k-means cluster.
+  Blockly.TidyBlocks['stats_k_means'] = (block) => {
+    const name = block.getFieldValue('NAME')
+    const column = block.getFieldValue('COLUMN')
+    const number = block.getFieldValue('NUMBER')
+    const label = block.getFieldValue('LABEL')
+    return `["@transform", "k_means", "${name}", "${column}", ${number}, "${label}"]`
   }
 }
 

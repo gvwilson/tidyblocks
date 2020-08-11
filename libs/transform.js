@@ -657,6 +657,48 @@ class TransformTTestPaired extends TransformStats {
   }
 }
 
+/**
+ * K-means clustering.
+ * @param {string} valueCol The column to get values from.
+ * @param {number} numClusters The number of clusters to create.
+ */
+class TransformKMeansClustering extends TransformStats {
+  constructor (label, valueCol, numClusters, labelCol) {
+    util.check(numClusters > 0,
+               `Require positive number of clusters`)
+    super('k_means')
+    this.label = label
+    this.valueCol = valueCol
+    this.numClusters = numClusters
+    this.labelCol = labelCol
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
+    const samples = df.data.map(row => row[this.valueCol])
+    const clusters = stats.ckmeans(samples, this.numClusters)
+    const lookup = this._valuesToLabels(clusters)
+    const newCol = {}
+    const data = this.data.map(row => {
+      newCol[this.labelCol] = lookup.get(row[this.valueCol])
+      return Object.assign({}, row, newCol)
+    })
+    env.setStats(this.label, 'FIXME') // calculate goodness of fit (?)
+    return data
+  }
+
+  _valuesToLabels (allClusters) {
+    const result = new Map()
+    allClusters.forEach((cluster, i) => {
+      const label = i + 1
+      cluster.forEach(value => {
+        result[value] = label
+      })
+    })
+    return result
+  }
+}
+
 // ----------------------------------------------------------------------
 
 module.exports = {
@@ -685,4 +727,5 @@ module.exports = {
   stats: TransformStats,
   ttest_one: TransformTTestOneSample,
   ttest_two: TransformTTestPaired,
+  k_means: TransformKMeansClustering
 }
