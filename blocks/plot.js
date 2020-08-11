@@ -110,7 +110,7 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'create scatter plot',
-      en: 'crear grafico dispersion',
+      es: 'crear grafico dispersion',
       ar: 'إنشاء مخطط الإنتشار',
       ko: '분산 그래프 만들기', 
       it: 'crea un grafico di dispersione'
@@ -324,5 +324,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }
