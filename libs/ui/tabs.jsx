@@ -14,6 +14,7 @@ import { faWindowMaximize, faWindowMinimize, faWindowRestore, faChartBar,
   faTable, faDatabase } from '@fortawesome/free-solid-svg-icons'
 import { Animated } from "react-animated-css"
 import DataGrid from 'react-data-grid'
+import Splitter from 'm-react-splitters'
 
 export const TabPanel = (props) => {
   const { children, value, index, ...other } = props
@@ -163,7 +164,111 @@ export function TabSelectionBar (props) {
   )
 }
 
+function MultiDataGrid (props) {
+  return (
+    <>
+      { props.dataColumns && props.dataColumns.length == 2 &&
+        <>
+          <div className="relativeWrapper">
+            <div className="dataWrapper">
+              <DataGrid
+                columns={props.dataColumns[0]}
+                rows={props.data[0]}
+                enableCellAutoFocus={false}
+                onGridSort={props.sortRows}
+                height={props.topRightPaneHeight/2}
+                />
+            </div>
+          </div>
+          <div className="relativeWrapper">
+            <div className="dataWrapper">
+            <DataGrid
+              columns={props.dataColumns[1]}
+              rows={props.data[1]}
+              enableCellAutoFocus={false}
+              onGridSort={props.sortRows}
+              height={props.topRightPaneHeight/2}
+
+              />
+            </div>
+          </div>
+        </>
+      }
+      { props.dataColumns && props.dataColumns.length == 1 &&
+        <DataGrid
+          columns={props.dataColumns[0]}
+          rows={props.data[0]}
+          enableCellAutoFocus={false}
+          height={props.topRightPaneHeight}
+          />
+      }
+      { !props.dataColumns || props.dataColumns.length == 0 &&
+        <div className="emptyPanelWrapper">
+          <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
+          <p className="emptyPanelText">You aren't currently displaying any {props.descriptorLabel}.</p>
+          <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+          </p>
+        </div>
+      }
+    </>
+  )
+}
+
+function MultiStatsGrid (props) {
+  return (
+    <>
+      { props.stats && props.stats.length == 2 &&
+        <>
+          <div className="relativeWrapper">
+            <div className="dataWrapper">
+              <DataGrid
+                columns={props.statsColumns}
+                rows={props.stats[0]}
+                enableCellAutoFocus={false}
+                height={props.topRightPaneHeight/2}
+                />
+            </div>
+          </div>
+          <div className="relativeWrapper">
+            <div className="dataWrapper">
+            <DataGrid
+              columns={props.statsColumns}
+              rows={props.stats[1]}
+              enableCellAutoFocus={false}
+              height={props.topRightPaneHeight/2}
+              />
+            </div>
+          </div>
+        </>
+      }
+      { props.stats && props.stats.length == 1 &&
+        <DataGrid
+          columns={props.statsColumns}
+          rows={props.stats[0]}
+          enableCellAutoFocus={false}
+          height={props.topRightPaneHeight}
+          />
+      }
+      { !props.stats || props.stats.length == 0 &&
+        <div className="relativeWrapper">
+          <div className="emptyPanelWrapper">
+            <FontAwesomeIcon className="panelIcon"icon={faTable} />
+            <p className="emptyPanelText">You aren't currently displaying any stats.</p>
+            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+            </p>
+          </div>
+        </div>
+      }
+    </>
+  )
+}
+
+
 export function TabPanels (props) {
+  const plotDataSize = props.plotData.length
+  const topPlotClass = plotDataSize > 0 ? 'showPlot ' : 'hidePlot '
+  const bottomPlotClass = plotDataSize > 1 ? 'showPlot ' : 'hidePlot '
+
   return(
     <>
       <TabPanel value={props.tabValue} index={0} component="div">
@@ -177,37 +282,13 @@ export function TabPanels (props) {
           animationOut="fadeOut"
           animationInDuration={800}
           animationOutDuration={800}
-          >
-          <div className="relativeWrapper">
-            <div className="dataWrapper">
-              {props.dataColumns &&
-                <Animated
-                  animationIn="fadeIn"
-                  animationOut="fadeOut"
-                  animationInDuration={800}
-                  animationOutDuration={800}
-                  isVisible={!props.hideDataTable}>
-                  {props.dataColumns.length > 0 ?
-                    <DataGrid
-                      ref={props.dataGridRef}
-                      columns={props.dataColumns}
-                      rows={props.data}
-                      enableCellAutoFocus={false}
-                      height={props.topRightPaneHeight}
-                      onGridSort={props.sortRows}
-                      />
-                    :
-                      <div className="emptyPanelWrapper">
-                        <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
-                        <p className="emptyPanelText">You aren't currently displaying any data.</p>
-                        <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
-                        </p>
-                      </div>
-                    }
-                </Animated>
-              }
-            </div>
-          </div>
+          isVisible={!props.hideDataTable}>
+          <MultiDataGrid
+            dataColumns={props.dataColumns}
+            data={props.data}
+            descriptorLabel="data"
+            topRightPaneHeight={props.topRightPaneHeight}
+            sortRows={props.sortRows}/>
         </Animated>
       </TabPanel>
       <TabPanel value={props.tabValue} index={1} component="div">
@@ -221,39 +302,16 @@ export function TabPanels (props) {
           animationOut="fadeOut"
           animationInDuration={800}
           animationOutDuration={800}
-          >
-          <div className="relativeWrapper">
-            <div className="dataWrapper">
-              {props.resultColumns &&
-                <Animated
-                  animationIn="fadeIn"
-                  animationOut="fadeOut"
-                  animationInDuration={800}
-                  animationOutDuration={800}
-                  isVisible={!props.hideResultTable}>
-                  {props.resultColumns.length > 0 ?
-                    <DataGrid
-                      ref={props.resultGridRef}
-                      columns={props.resultColumns}
-                      rows={props.results}
-                      enableCellAutoFocus={false}
-                      height={props.topRightPaneHeight}
-                      onGridSort={props.sortRows}
-                      />
-                  :
-                    <div className="emptyPanelWrapper">
-                      <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
-                      <p className="emptyPanelText">You aren't currently displaying any results.</p>
-                      <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
-                      </p>
-                    </div>
-                  }
-                </Animated>
-              }
-            </div>
-          </div>
+          isVisible={!props.hideResultTable}>
+          <MultiDataGrid
+            dataColumns={props.resultColumns}
+            data={props.results}
+            descriptorLabel="results"
+            topRightPaneHeight={props.topRightPaneHeight}
+            sortRows={props.sortRows}/>
         </Animated>
       </TabPanel>
+
       <TabPanel value={props.tabValue} index={2}>
         <TabHeader maximizePanel={props.maximizePanel}
           minimizePanel={props.minimizePanel}
@@ -264,7 +322,6 @@ export function TabPanels (props) {
           animationOut="fadeOut"
           animationInDuration={800}
           animationOutDuration={800}>
-          {props.stats ?
             <div className="relativeWrapper">
               <div className="absoluteWrapper">
                 <div className="dataWrapper">
@@ -274,27 +331,15 @@ export function TabPanels (props) {
                     animationInDuration={800}
                     animationOutDuration={800}
                     isVisible={!props.hideStatsTable}>
-                    <DataGrid
-                      columns={props.statsColumns}
-                      rows={props.stats}
-                      enableCellAutoFocus={false}
-                      height={props.topRightPaneHeight}
-                      onGridSort={props.sortRows}
-                      />
+                    <MultiStatsGrid
+                      statsColumns={props.statsColumns}
+                      stats={props.stats}
+                      topRightPaneHeight={props.topRightPaneHeight}
+                      sortRows={props.sortRows}/>
                   </Animated>
                 </div>
               </div>
             </div>
-          :
-            <div className="relativeWrapper">
-              <div className="emptyPanelWrapper">
-                <FontAwesomeIcon className="panelIcon"icon={faTable} />
-                <p className="emptyPanelText">You aren't currently displaying any stats.</p>
-                <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
-                </p>
-              </div>
-            </div>
-          }
         </Animated>
       </TabPanel>
       <TabPanel value={props.tabValue} index={3} component="div">
@@ -308,7 +353,7 @@ export function TabPanels (props) {
           animationInDuration={800}
           animationOutDuration={800}>
           <div className="plotWrapper">
-            { !props.plotData &&
+            { props.plotData.length == 0 &&
               <div className="relativeWrapper">
                 <div className="emptyPanelWrapper">
                   <FontAwesomeIcon className="panelIcon"icon={faChartBar} />
@@ -318,16 +363,20 @@ export function TabPanels (props) {
                 </div>
               </div>
             }
-            <div id="plotOutput" className={props.isDraggingPane ? '' : "plotOutputFade"}
-              ref={props.plotOutputRef}></div>
+            <span className={topPlotClass}>
+              <div id="plotOutputTop" className={ props.isDraggingPane ? '' : "plotOutputFade"}
+                  ref={props.plotOutputRef}></div>
+            </span>
+            <span className={bottomPlotClass}>
+              <div id="plotOutputBottom" className={ props.isDraggingPane ? '' : "plotOutputFade"}></div>
+            </span>
           </div>
         </Animated>
       </TabPanel>
       <TabPanel value={props.tabValue} index={4}>
         <TabHeader maximizePanel={props.maximizePanel}
           minimizePanel={props.minimizePanel}
-          restorePanel={props.restorePanel}
-          />
+          restorePanel={props.restorePanel}/>
         <Animated
           animationIn="fadeIn"
           animationOut="fadeOut"
