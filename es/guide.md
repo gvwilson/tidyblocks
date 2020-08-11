@@ -40,13 +40,19 @@ y tenga en cuenta que todos los contribuyentes deben cumplir con nuestro [Codigo
 
 <!-- these links should hyperlink to the h1s above -->
 <div class="guide_rhs">
- <a>Data</a>
-  <br/>
- <a>Transforms</a>
-  <br/>
- <a>Plots</a>
-  <br/>
- <a>Statistics</a>
+ <a>DATA</a>
+  <br/><br/>
+ <a>TRANSFORMS</a>
+  <br/><br/>
+ <a>PLOTS</a>
+  <br/><br/>
+ <a>STATISTICS</a>
+  <br/><br/>
+ <a>OPERATIONS</a>
+   <br/><br/>
+ <a>VALUES</a>
+  <br/><br/>
+ <a>COMBINING</a>
 </div>
 
 </div>
