@@ -1,18 +1,7 @@
----
-permalink: /es/stats/
-title: "Estadisticas"
-language: es
-headings:
-- id: ttest_one
-  text: T-test de una muestra
-- id: ttest_two
-  text: T-test pareado
----
-
 <div id="ttest_one" markdown="1">
-## T-test de una muestra
+### T-test de una muestra
 
-<img class="block" src="{{page.permalink | append: 'ttest_one.svg' | relative_url}}" alt="ttest_one block"/>
+<img class="block" src="{{ 'es/stats/ttest_one.svg' | relative_url }}" alt="ttest_one block"/>
 
 Hacer un t-test de una muestra.
 
@@ -22,9 +11,9 @@ Hacer un t-test de una muestra.
 </div>
 
 <div id="ttest_two" markdown="1">
-## T-test pareado
+### T-test pareado
 
-<img class="block" src="{{page.permalink | append: 'ttest_two.svg' | relative_url}}" alt="ttest_two block"/>
+<img class="block" src="{{ 'es/stats/ttest_two.svg' | relative_url }}" alt="ttest_two block"/>
 
 Hacer un t-test pareado.
 

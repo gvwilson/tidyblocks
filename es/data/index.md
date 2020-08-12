@@ -1,24 +1,7 @@
----
-permalink: /es/data/
-title: "Datos"
-language: es
-headings:
-- id: colors
-  text: Colores
-- id: earthquakes
-  text: Terremotos
-- id: penguins
-  text: Pingüinos
-- id: sequence
-  text: Secuencia
-- id: user
-  text: Datos de usuario
----
-
 <div id="colors" markdown="1">
-## Colores
+### Colores
 
-<img class="block" src="{{page.permalink | append: 'colors.svg' | relative_url}}" alt="color block"/>
+<img class="block" src="{{ 'es/data/colors.svg' | relative_url }}" alt="color block"/>
 
 Los conjuntos de datos `colores` tiene valores rojo-verde-azul (RGB) para once colores estándar:
 negro, rojo, granate, lima, verde, azul, azul marino, amarillo, fucsia, aguamarina y blanco
@@ -34,9 +17,9 @@ Cada valor es un número entero en el rango 0… 255.
 </div>
 
 <div id="earthquakes" markdown="1">
-## Terremotos
+### Terremotos
 
-<img class="block" src="{{page.permalink | append: 'earthquakes.svg' | relative_url}}" alt="earthquakes block"/>
+<img class="block" src="{{ 'es/data/earthquakes.svg' | relative_url }}" alt="earthquakes block"/>
 
 Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. UU. sobre terremotos de 2016.
 
@@ -51,9 +34,9 @@ Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. U
 </div>
 
 <div id="penguins" markdown="1">
-## Pingüinos
+### Pingüinos
 
-<img class="block" src="{{page.permalink | append: 'penguins.svg' | relative_url}}" alt="penguins block"/>
+<img class="block" src="{{ 'es/data/penguins.svg' | relative_url }}" alt="penguins block"/>
 
 | Columna            | Tipodedatos    | Valor |
 | -----------------  | -----------    | ----- |
@@ -68,9 +51,9 @@ Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. U
 </div>
 
 <div id="sequence" markdown="1">
-## Sequencia
+### Sequencia
 
-<img class="block" src="{{page.permalink | append: 'sequence.svg' | relative_url}}" alt="sequence block"/>
+<img class="block" src="{{ 'es/data/sequence.svg' | relative_url }}" alt="sequence block"/>
 
 Cre una secuencia de números del 1 al N inclusive.
 
@@ -80,9 +63,9 @@ Cre una secuencia de números del 1 al N inclusive.
 </div>
 
 <div id="user" markdown="1">
-## Datos de usuario
+### Datos de usuario
 
-<img class="block" src="{{page.permalink | append: 'user_data.svg' | relative_url}}" alt="user data block"/>
+<img class="block" src="{{ 'es/data/user_data.svg' | relative_url }}" alt="user data block"/>
 
 Utilice un conjunto de datos previamente cargado.
 

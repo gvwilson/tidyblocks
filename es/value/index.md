@@ -1,32 +1,7 @@
----
-permalink: /es/value/
-title: "Valores"
-language: es
-headings:
-- id: column
-  text: Columna
-- id: datetime
-  text: Fecha y hora
-- id: logical
-  text: Logico
-- id: number
-  text: Numbero
-- id: text
-  text: Texto
-- id: rownum
-  text: Numero de fila 
-- id: exponential
-  text: Exponencial
-- id: normal
-  text: Normal
-- id: uniform
-  text: Uniforme
----
-
 <div id="column" markdown="1">
-## Columna
+### Columna
 
-<img class="block" src="{{page.permalink | append: 'column.svg' | relative_url}}" alt="column block"/>
+<img class="block" src="{{ 'es/value/column.svg' | relative_url }}" alt="column block"/>
 
 Especifica el nombre de una sola columna en los datos.
 
@@ -34,9 +9,9 @@ Especifica el nombre de una sola columna en los datos.
 </div>
 
 <div id="datetime" markdown="1">
-## Fecha y hora
+### Fecha y hora
 
-<img class="block" src="{{page.permalink | append: 'datetime_val.svg' | relative_url}}" alt="datetime block"/>
+<img class="block" src="{{ 'es/value/datetime_val.svg' | relative_url }}" alt="datetime block"/>
 
 Especifica una fecha y hora fijas.
 
@@ -44,9 +19,9 @@ Especifica una fecha y hora fijas.
 </div>
 
 <div id="logical" markdown="1">
-## Logico
+### Logico
 
-<img class="block" src="{{page.permalink | append: 'logical_val.svg' | relative_url}}" alt="logical block"/>
+<img class="block" src="{{ 'es/value/logical_val.svg' | relative_url }}" alt="logical block"/>
 
 Seleccione un valor lógico constante.
 
@@ -54,9 +29,9 @@ Seleccione un valor lógico constante.
 </div>
 
 <div id="number" markdown="1">
-## Numbero
+### Numbero
 
-<img class="block" src="{{page.permalink | append: 'number.svg' | relative_url}}" alt="number block"/>
+<img class="block" src="{{ 'es/value/number.svg' | relative_url }}" alt="number block"/>
 
 Especifica un número fijo.
 
@@ -64,9 +39,9 @@ Especifica un número fijo.
 </div>
 
 <div id="text" markdown="1">
-## Texto
+### Texto
 
-<img class="block" src="{{page.permalink | append: 'text.svg' | relative_url}}" alt="text block"/>
+<img class="block" src="{{ 'es/value/text.svg' | relative_url }}" alt="text block"/>
 
 Especifica un texto fijo.
 El valor *no* debe citarse:
@@ -75,17 +50,17 @@ Las comillas simples o dobles proporcionadas se incluirán en el texto.
 </div>
 
 <div id="rownum" markdown="1">
-## Numero de fila
+### Numero de fila
 
-<img class="block" src="{{page.permalink | append: 'rownum.svg' | relative_url}}" alt="row number block"/>
+<img class="block" src="{{ 'es/value/rownum.svg' | relative_url }}" alt="row number block"/>
 
 Genere el número de fila, comenzando por 1.
 </div>
 
 <div id="exponential" markdown="1">
-## Valor exponencial aleatorio
+### Valor exponencial aleatorio
 
-<img class="block" src="{{page.permalink | append: 'exponential.svg' | relative_url}}" alt="exponential random value block"/>
+<img class="block" src="{{ 'es/value/exponential.svg' | relative_url }}" alt="exponential random value block"/>
 
 Genere un valor aleatorio a partir de la distribución exponencial con el parámetro de tasa &lambda;.
 
@@ -93,9 +68,9 @@ Genere un valor aleatorio a partir de la distribución exponencial con el parám
 </div>
 
 <div id="normal" markdown="1">
-## Variable normal aleatoria
+### Variable normal aleatoria
 
-<img class="block" src="{{page.permalink | append: 'normal.svg' | relative_url}}" alt="normal random value block"/>
+<img class="block" src="{{ 'es/value/normal.svg' | relative_url }}" alt="normal random value block"/>
 
 Genera un valor aleatorio a partir de la distribución normal con media &mu; y desviación estándar &sigma ;.
 
@@ -104,9 +79,9 @@ Genera un valor aleatorio a partir de la distribución normal con media &mu; y d
 </div>
 
 <div id="uniform" markdown="1">
-## Variable uniforme aleatoria
+### Variable uniforme aleatoria
 
-<img class="block" src="{{page.permalink | append: 'uniform.svg' | relative_url}}" alt="uniform random value block"/>
+<img class="block" src="{{ 'es/value/uniform.svg' | relative_url }}" alt="uniform random value block"/>
 
 Genera un valor aleatorio a partir de la distribución uniforme en el rango dado.
 

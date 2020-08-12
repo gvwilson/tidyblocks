@@ -10,9 +10,9 @@ headings:
 ---
 
 <div id="join" markdown="1">
-## Unir
+### Unir
 
-<img class="block" src="{{page.permalink | append: 'join.svg' | relative_url}}" alt="join block"/>
+<img class="block" src="{{ 'es/combine/join.svg' | relative_url }}" alt="join block"/>
 
 Une dos tablas haciendo coincidir los valores en la columna X de la tabla A
 con los valores de la columna Y de la tabla B.
@@ -52,9 +52,9 @@ mientras que la otra columna aparece como <code><em>tabla</em>\_<em>columna</em>
 </div>
 
 <div id="glue" markdown="1">
-## Pegar
+### Pegar
 
-<img class="block" src="{{page.permalink | append: 'glue.svg' | relative_url}}" alt="glue block"/>
+<img class="block" src="{{ 'es/combine/glue.svg' | relative_url }}" alt="glue block"/>
 
 Combina las filas de dos tablas para crear una nueva tabla.
 Las tablas de entrada deben tener el mismo número de columnas,
