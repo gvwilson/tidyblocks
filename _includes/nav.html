@@ -2,10 +2,23 @@
   <a href="{{'/' | relative_url}}"><img src="{{'/static/logo.svg' | relative_url}}" alt="TidyBlocks logo" width="5%" /></a>
   
   <div class="navRight">
-  <a href="{{ '/blog/' | relative_url }}">Blog</a>
-  <a href="{{ '/es/guide/' | relative_url}}">Guide</a>
-  <a href="{{ '/en/FAQ' | relative_url }}">FAQ</a>
-  <a href="{{ '/authors/' | relative_url }}">Authors</a>
-  <a href="mailto:{{site.email}}">Contact</a>
-  </div>
+
+    <ul>
+      <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+      <li class="dropdown">
+        <a href="javascript:void(0)" class="dropbtn">Guide</a>
+        <div class="dropdown-content">
+          <a href="{{ '/en/guide' | relative_url }}">English</a>
+          <a href="{{ '/es/guide' | relative_url }}">Español</a>
+        </div>
+      </li>
+      <li class="dropdown">
+        <a href="javascript:void(0)" class="dropbtn">FAQ</a>
+        <div class="dropdown-content">
+          <a href="{{ '/en/FAQ' | relative_url }}">English</a>
+          <a href="{{ '/es/FAQ' | relative_url }}">Español</a>
+        </div>
+      </li>
+      <li><a href="mailto:{{site.email}}">Contact</a></li>
+    </ul>
 </div>
