@@ -28,37 +28,37 @@ Contributions of all kinds are welcome:
 please see [our contributors' guide]({{ '/contributing/' | relative_url }}) to get started,
 and please note that all contributors are required to abide by our [Code of Conduct]({{ '/conduct/' | relative_url }}).
 
-<h1 id="en_data">DATA</h1>
+<h1 class="data" id="en_data">DATA</h1>
 {% include_relative data/index.md %}
-<h1 id="en_transforms">TRANSFORMS</h1>
+<h1 class="transform" id="en_transforms">TRANSFORMS</h1>
 {% include_relative transform/index.md %}
-<h1 id="en_plots">PLOTS</h1>
+<h1 class="plot" id="en_plots">PLOTS</h1>
 {% include_relative plot/index.md %}
-<h1 id="en_stats">STATISTICS</h1>
+<h1 class="stats" id="en_stats">STATISTICS</h1>
 {% include_relative stats/index.md %}
-<h1 id="en_op">OPERATIONS</h1>
+<h1 class="op" id="en_op">OPERATIONS</h1>
 {% include_relative op/index.md %}
-<h1 id="en_values">VALUES</h1>
+<h1 class="values" id="en_values">VALUES</h1>
 {% include_relative value/index.md %}
-<h1 id="en_combine">COMBINING</h1>
+<h1 class="combine" id="en_combine">COMBINING</h1>
 {% include_relative combine/index.md %}
 </div>
 
 <!-- these links should hyperlink to the h1s above -->
 <div class="guide_rhs">
- <a href="#en_data">DATA</a>
+ <a class="data" href="#en_data">DATA</a>
   <br/><br/>
- <a href="#en_transforms">TRANSFORMS</a>
+ <a class="transform" href="#en_transforms">TRANSFORMS</a>
   <br/><br/>
- <a href="#en_plots">PLOTS</a>
+ <a class="plot" href="#en_plots">PLOTS</a>
   <br/><br/>
- <a href="#en_stats">STATISTICS</a>
+ <a class="stats" href="#en_stats">STATISTICS</a>
   <br/><br/>
- <a href="#en_op">OPERATIONS</a>
+ <a class="op" href="#en_op">OPERATIONS</a>
    <br/><br/>
- <a href="#en_values">VALUES</a>
+ <a class="values" href="#en_values">VALUES</a>
   <br/><br/>
- <a href="#en_combine">COMBINING</a>
+ <a class="combine" href="#en_combine">COMBINING</a>
 </div>
 
 </div>
