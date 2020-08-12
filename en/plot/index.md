@@ -1,24 +1,7 @@
----
-permalink: /en/plot/
-title: "Plots"
-language: en
-headings:
-- id: bar
-  text: Bar
-- id: box
-  text: Box
-- id: dot
-  text: Dot
-- id: histogram
-  text: Histogram
-- id: scatter
-  text: Scatter
----
-
 <div id="bar" markdown="1">
-## Bar
+### Bar
 
-<img class="block" src="{{page.permalink | append: 'bar.svg' | relative_url}}" alt="bar block"/>
+<img class="block" src="{{ 'en/plot/bar.svg' | relative_url }}" alt="bar block"/>
 
 The bar block makes the height of the bar proportional to the number of cases in each group.
 A bar chart uses height to represent a value, and so the base of the bar must always be shown to produce a valid visual comparison.
@@ -28,9 +11,9 @@ A bar chart uses height to represent a value, and so the base of the bar must al
 </div>
 
 <div id="box" markdown="1">
-## Box
+### Box
 
-<img class="block" src="{{page.permalink | append: 'box.svg' | relative_url}}" alt="box block"/>
+<img class="block" src="{{ 'en/plot/box.svg' | relative_url }}" alt="box block"/>
 
 The Tukey box plot block summarizes a distribution of quantitative values using a set of summary statistics.
 The middle tick in the box represents the median.
@@ -44,9 +27,9 @@ Any outlier points beyond the whisker are displayed using point marks.
 </div>
 
 <div id="dot" markdown="1">
-## Dot
+### Dot
 
-<img class="block" src="{{page.permalink | append: 'dot.svg' | relative_url}}" alt="dot block"/>
+<img class="block" src="{{ 'en/plot/dot.svg' | relative_url }}" alt="dot block"/>
 
 Display a dot plot.
 
@@ -54,9 +37,9 @@ Display a dot plot.
 </div>
 
 <div id="histogram" markdown="1">
-## Histogram
+### Histogram
 
-<img class="block" src="{{page.permalink | append: 'histogram.svg' | relative_url}}" alt="histogram block"/>
+<img class="block" src="{{ 'en/plot/histogram.svg' | relative_url }}" alt="histogram block"/>
 
 Visualise the distribution of a single continuous variable
 by dividing the X axis into bins
@@ -68,9 +51,9 @@ Histograms display the counts with bars.
 </div>
 
 <div id="scatter" markdown="1">
-## Scatter
+### Scatter
 
-<img class="block" src="{{page.permalink | append: 'scatter.svg' | relative_url}}" alt="scatter block"/>
+<img class="block" src="{{ 'en/plot/scatter.svg' | relative_url }}" alt="scatter block"/>
 
 Display a scatter plot.
 

@@ -1,18 +1,7 @@
----
-permalink: /en/combine/
-title: "Combining"
-language: en
-headings:
-- id: join
-  text: Join
-- id: glue
-  text: Glue
----
-
 <div id="join" markdown="1">
-## Join
+### Join
 
-<img class="block" src="{{page.permalink | append: 'join.svg' | relative_url}}" alt="join block"/>
+<img class="block" src="{{ 'en/combine/join.svg' | relative_url }}" alt="join block"/>
 
 Join two tables by matching values in column X of table A
 to the values in column Y of table B.
@@ -52,9 +41,9 @@ while the other columns appear as <code><em>table</em>\_<em>column</em></code>.
 </div>
 
 <div id="glue" markdown="1">
-## Glue
+### Glue
 
-<img class="block" src="{{page.permalink | append: 'glue.svg' | relative_url}}" alt="glue block"/>
+<img class="block" src="{{ 'en/combine/glue.svg' | relative_url }}" alt="glue block"/>
 
 Combine the rows of two tables to create a new table.
 The input tables must have the same number of columns,

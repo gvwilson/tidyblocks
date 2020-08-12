@@ -1,24 +1,7 @@
----
-permalink: /en/data/
-title: "Data"
-language: en
-headings:
-- id: colors
-  text: Colors
-- id: earthquakes
-  text: Earthquakes
-- id: penguins
-  text: Penguins
-- id: sequence
-  text: Sequence
-- id: user
-  text: User Data
----
-
 <div id="colors" markdown="1">
-## Colors
+### Colors
 
-<img class="block" src="{{page.permalink | append: 'colors.svg' | relative_url}}" alt="color block"/>
+<img class="block" src="{{ 'en/data/colors.svg' | relative_url }}" alt="color block"/>
 
 The `colors` dataset has red-green-blue (RGB) values for eleven standard colors:
 black, red, maroon, lime, green, blue, navy, yellow, fuchsia, aqua, and white
@@ -34,9 +17,9 @@ Each value is an integer in the range 0…255.
 </div>
 
 <div id="earthquakes" markdown="1">
-## Earthquakes
+### Earthquakes
 
-<img class="block" src="{{page.permalink | append: 'earthquakes.svg' | relative_url}}" alt="earthquakes block"/>
+<img class="block" src="{{ 'en/data/earthquakes.svg' | relative_url }}" alt="earthquakes block"/>
 
 This block provides a subset of US Geological Survey data on earthquakes from 2016.
 
@@ -51,9 +34,9 @@ This block provides a subset of US Geological Survey data on earthquakes from 20
 </div>
 
 <div id="penguins" markdown="1">
-## Penguins
+### Penguins
 
-<img class="block" src="{{page.permalink | append: 'penguins.svg' | relative_url}}" alt="penguins block"/>
+<img class="block" src="{{ 'en/data/penguins.svg' | relative_url }}" alt="penguins block"/>
 
 | Column            | Datatype    | Value |
 | ----------------- | ----------- | ----- |
@@ -68,9 +51,9 @@ This block provides a subset of US Geological Survey data on earthquakes from 20
 </div>
 
 <div id="sequence" markdown="1">
-## Sequence
+### Sequence
 
-<img class="block" src="{{page.permalink | append: 'sequence.svg' | relative_url}}" alt="sequence block"/>
+<img class="block" src="{{ 'en/data/sequence.svg' | relative_url }}" alt="sequence block"/>
 
 Create a sequence of numbers from 1 to N inclusive.
 
@@ -79,9 +62,9 @@ Create a sequence of numbers from 1 to N inclusive.
 </div>
 
 <div id="user" markdown="1">
-## User Data
+### User Data
 
-<img class="block" src="{{page.permalink | append: 'user_data.svg' | relative_url}}" alt="user data block"/>
+<img class="block" src="{{ 'en/data/user_data.svg' | relative_url }}" alt="user data block"/>
 
 Use a previously-loaded dataset.
 

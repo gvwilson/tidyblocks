@@ -1,34 +1,7 @@
----
-permalink: /en/transform/
-title: "Transforms"
-language: en
-headings:
-- id: create
-  text: Create
-- id: drop
-  text: Drop
-- id: filter
-  text: Filter
-- id: groupBy
-  text: Group By
-- id: saveAs
-  text: Save As
-- id: select
-  text: Select
-- id: sort
-  text: Sort
-- id: summarize
-  text: Summarize
-- id: ungroup
-  text: Ungroup
-- id: unique
-  text: Unique
----
-
 <div id="create" markdown="1">
-## Create
+### Create
 
-<img class="block" src="{{page.permalink | append: 'create.svg' | relative_url}}" alt="create block"/>
+<img class="block" src="{{ 'en/transform/create.svg' | relative_url }}" alt="create block"/>
 
 Add new columns while keeping existing ones.
 A column can be replaced if a new column is given the same name as an existing column.
@@ -38,9 +11,9 @@ A column can be replaced if a new column is given the same name as an existing c
 </div>
 
 <div id="drop" markdown="1">
-## Drop
+### Drop
 
-<img class="block" src="{{page.permalink | append: 'drop.svg' | relative_url}}" alt="drop block"/>
+<img class="block" src="{{ 'en/transform/drop.svg' | relative_url }}" alt="drop block"/>
 
 Discard one or more columns from the data.
 This block isn't strictly necessary—you can just ignore a column if you don't need it—but
@@ -51,9 +24,9 @@ This block is the opposite of [select](../transform/#select).
 </div>
 
 <div id="filter" markdown="1">
-## Filter
+### Filter
 
-<img class="block" src="{{page.permalink | append: 'filter.svg' | relative_url}}" alt="filter block"/>
+<img class="block" src="{{ 'en/transform/filter.svg' | relative_url }}" alt="filter block"/>
 
 Keep a subset of rows that pass some test such as `age > 65` or `country = "Iceland"`.
 The test is checked independently for each row,
@@ -65,9 +38,9 @@ and [not](../operation/#not) blocks.
 </div>
 
 <div id="groupBy" markdown="1">
-## Group By
+### Group By
 
-<img class="block" src="{{page.permalink | append: 'groupby.svg' | relative_url}}" alt="grouping block"/>
+<img class="block" src="{{ 'en/transform/groupby.svg' | relative_url }}" alt="grouping block"/>
 
 Most data operations are done on groups of records that share values, such as people from the same country.
 This block adds a new column to the table called `_group_` that has a unique value for each group.
@@ -78,9 +51,10 @@ Grouping can be removed using the [ungroup](../transform/#ungroup) block.
 </div>
 
 <div id="saveAs" markdown="1">
-## Save As
+### Save As
 
-<img class="block" src="{{page.permalink | append: 'select.svg' | relative_url}}" alt="select block"/>
+
+<img class="block" src="{{ 'en/transform/saveas.svg' | relative_url }}" alt="save as block"/>
 
 Save a result for later inspection or to be [combined](../combine/) with a result from another pipeline.
 
@@ -88,9 +62,9 @@ Save a result for later inspection or to be [combined](../combine/) with a resul
 </div>
 
 <div id="select" markdown="1">
-## Select
+### Select
 
-<img class="block" src="{{page.permalink | append: 'select.svg' | relative_url}}" alt="select block"/>
+<img class="block" src="{{ 'en/transform/select.svg' | relative_url }}" alt="select block"/>
 
 Choose columns from a table: columns that are not named will be dropped.
 This block is not strictly necessary,
@@ -102,9 +76,9 @@ This block is the opposite of [drop](../transform/#drop).
 </div>
 
 <div id="sort" markdown="1">
-## Sort
+### Sort
 
-<img class="block" src="{{page.permalink | append: 'sort.svg' | relative_url}}" alt="sort block"/>
+<img class="block" src="{{ 'en/transform/sort.svg' | relative_url }}" alt="sort block"/>
 
 Sort the rows in a table according to the values in one or more columns.
 
@@ -113,9 +87,9 @@ Sort the rows in a table according to the values in one or more columns.
 </div>
 
 <div id="summarize" markdown="1">
-## Summarize
+### Summarize
 
-<img class="block" src="{{page.permalink | append: 'summarize.svg' | relative_url}}" alt="summarize block"/>
+<img class="block" src="{{ 'en/transform/summarize.svg' | relative_url }}" alt="summarize block"/>
 
 Summarize the values in one or more columns.
 If the data has been [grouped](../transform/#group),
@@ -128,18 +102,18 @@ e.g., <code>mean\_age</code>.
 </div>
 
 <div id="ungroup" markdown="1">
-## Ungroup
+### Ungroup
 
-<img class="block" src="{{page.permalink | append: 'ungroup.svg' | relative_url}}" alt="ungroup block"/>
+<img class="block" src="{{ 'en/transform/ungroup.svg' | relative_url }}" alt="ungroup block"/>
 
 Undo grouping created by [group](../transform/#group)
 by removing the special \_group\_ column.
 </div>
 
 <div id="unique" markdown="1">
-## Unique
+### Unique
 
-<img class="block" src="{{page.permalink | append: 'unique.svg' | relative_url}}" alt="unique block"/>
+<img class="block" src="{{ 'en/transform/unique.svg' | relative_url }}" alt="unique block"/>
 
 Discard rows containing redundant values.
 If several rows have the same values in the specified columns

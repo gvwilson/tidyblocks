@@ -28,19 +28,19 @@ Contributions of all kinds are welcome:
 please see [our contributors' guide]({{ '/contributing/' | relative_url }}) to get started,
 and please note that all contributors are required to abide by our [Code of Conduct]({{ '/conduct/' | relative_url }}).
 
-<h1 id="en_data">Data</h1>
+<h1 id="en_data">DATA</h1>
 {% include_relative data/index.md %}
-<h1 id="en_transforms">Transforms</h1>
+<h1 id="en_transforms">TRANSFORMS</h1>
 {% include_relative transform/index.md %}
-<h1 id="en_plots">Plots</h1>
+<h1 id="en_plots">PLOTS</h1>
 {% include_relative plot/index.md %}
-<h1 id="en_stats">Statistics</h1>
+<h1 id="en_stats">STATISTICS</h1>
 {% include_relative stats/index.md %}
-<h1 id="en_op">Operations</h1>
+<h1 id="en_op">OPERATIONS</h1>
 {% include_relative op/index.md %}
-<h1 id="en_values">Values</h1>
+<h1 id="en_values">VALUES</h1>
 {% include_relative value/index.md %}
-<h1 id="en_combine">Combining</h1>
+<h1 id="en_combine">COMBINING</h1>
 {% include_relative combine/index.md %}
 </div>
 
