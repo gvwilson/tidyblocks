@@ -21,6 +21,7 @@
 
   .navDiv {
     overflow: hidden;
+    padding-left: 20px;
   }
 
   .navRight {
@@ -82,6 +83,9 @@
       color: #1C313A;
   }
 
+  #img_logo {
+    padding-top: 10px;
+  }
   /* ------------------------------------------------------------ */
 
   footer {
@@ -228,6 +232,9 @@
         }
       }
     }
+  }
+  a.hidden-a {
+    margin-left: -3rem;
   }
 }
 
