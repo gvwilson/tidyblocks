@@ -13,13 +13,15 @@ const MESSAGES = {
       en: 'Colors',
       es: 'Colores',
       ar: 'الألوان',
-      ko: '색깔'
+      ko: '색깔', 
+      it: 'Colori'
     },
     tooltip: {
       en: 'eleven colors',
       es: 'once colores',
       ar: 'احد عشر لون',
-      ko: '11개의 색'
+      ko: '11개의 색', 
+      it: 'undici colori'
     }
   },
   earthquakes: {
@@ -27,13 +29,15 @@ const MESSAGES = {
       en: 'Earthquakes',
       es: 'Terremotos',
       ar: 'الزلزال',
-      ko: '지진'
+      ko: '지진', 
+      it: 'Terremoti'
     },
     tooltip: {
       en: 'earthquake data', 
       es: 'datos de terremotos',
       ar: 'بيانات الزلزال',
-      ko: '지진 데이터'
+      ko: '지진 데이터', 
+      it: 'dati sui terremoti'
     }
   },
   penguins: {
@@ -41,13 +45,15 @@ const MESSAGES = {
       en: 'Penguins', 
       es: 'Pingüinos',
       ar: 'طيور البطريق',
-      ko: '펭귄'
+      ko: '펭귄',
+      it: 'Pinguini'
     },
     tooltip: {
       en: 'penguin data',
       es: 'datos de pingüinos',
       ar: 'بيانات طيور البطريق',
-      ko: '펭귄 데이터'
+      ko: '펭귄 데이터',
+      it: 'dati sui pinguini'
     }
   },
   phish: {
@@ -55,13 +61,15 @@ const MESSAGES = {
       en: 'Phish', 
       es: 'Phish',
       ar: 'فرقه الفيش الموسيقيه',
-      ko: '피시'
+      ko: '피시', 
+      it: 'Phish'
     },
     tooltip: {
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
       ar: 'بيانات فرقه الفيش الموسيقيه',
-      ko: '피시 콘서트 데이터'
+      ko: '피시 콘서트 데이터',
+      it: 'dati sui concerti dei Phish'
     }
   },
   sequence: {
@@ -69,19 +77,22 @@ const MESSAGES = {
       en: 'Sequence %1 %2',
       es: 'Sequencia %1 %2',
       ar: 'المتسلسله %1 %2',
-      ko: '배열 %1 %2'
+      ko: '배열 %1 %2',
+      it: 'sequenza %1 %2'
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
       ar: 'اﻹسم',
-      ko: '이름'
+      ko: '이름',
+      it: 'nome'
     },
     tooltip: {
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
       ar: 'إنشاء متسلسله ١..ن',
-      ko: '배열 실행 1..N'
+      ko: '배열 실행 1..N',
+      it: 'genera una sequenza 1..N'
     }
   },
   data_user: {
@@ -89,19 +100,22 @@ const MESSAGES = {
       en: 'User data %1', 
       es: 'Datos de usuario %1',
       ar: 'بيانات المسته %1',
-      ko: '사용자 데이터 %1'
+      ko: '사용자 데이터 %1', 
+      it: 'Dati utenti %1'
     },
     args0_text: {
       en: 'name',
       es: 'nombre',
       ar: 'الإسم',
-      ko: '이름'
+      ko: '이름',
+      it: 'nome'
     },
     tooltip: {
       en: 'use previously-loaded data', 
       es: 'usa datos previamente cargados',
       ar: 'إستخدام بيانات محمله مسبقا',
-      ko: '이전에 로드된 데이터 사용'
+      ko: '이전에 로드된 데이터 사용',
+      it: 'usa i dati caricati in precedenza'
     }
   }
 }
@@ -229,5 +243,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

@@ -13,25 +13,29 @@ const MESSAGES = {
       en: 'Glue left %1 right %2 labels %3',
       es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
       ar: 'دمج من جهة اليسار %1 اليمين %2 الفئات %3',
-      ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3'
+      ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3', 
+      it: 'incolla sinistra %1 destra %2 etichette %3'
     },
     table_name: {
       en: 'name',
       es: 'nombre',
       ar: 'الإسم',
-      ko: '이름'
+      ko: '이름', 
+      it: 'nome'
     },
     label: {
       en: 'label',
       es: 'etiqueta',
       ar: 'الفئة',
-      ko: '라벨'
+      ko: '라벨',
+      it: 'etichetta'
     },
     tooltip: {
       en: 'glue rows from two tables together',
       es: 'pegar juntas filas de dos tablas',
       ar: 'دمج صفوف من جدولين',
-      ko: '두 테이블의 행을 붙이기'
+      ko: '두 테이블의 행을 붙이기',
+      it: 'incolla le righe di due tabelle insieme'
     }
   },
   join: {
@@ -39,37 +43,43 @@ const MESSAGES = {
       en: 'Join',
       es: 'Unir',
       ar: 'دمج',
-      ko: '연결'
+      ko: '연결', 
+      it: 'unisci'
     },
     message1: {
       en: 'left %1 %2',
       es: 'izquierda  %1 %2',
       ar: 'يسار %1 %2',
-      ko: '왼쪽 %1 %2'
+      ko: '왼쪽 %1 %2',
+      it: 'sinistra %1 %2'
     },
     message2: {
       en: 'right %1 %2',
       es: 'derecha %1 %2',
       ar: 'يمين %1 %2',
-      ko: '오른쪽 %1 %2'
+      ko: '오른쪽 %1 %2',
+      it: 'destra %1 %2'
     },
     table: {
       en: 'table',
       es: 'tabla',
       ar: 'الجدول',
-      ko: '테이블'
+      ko: '테이블',
+      it: 'tabella'
     },
     column: {
       en: 'column',
       es: 'columna',
       ar: 'العمود',
-      ko: '열'
+      ko: '열',
+      it: 'colonna'
     },
     tooltip: {
       en: 'join two tables by matching values',
       es: 'unir dos tables emparenjando valores',
       ar: 'دمج جدولين عن طريق تشابه القيم',
-      ko: '일치하는 값으로 두 테이블 연결'
+      ko: '일치하는 값으로 두 테이블 연결',
+      it: 'unisce due tabelle con valori corrispondenti'
     }
   }
 }
@@ -170,5 +180,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

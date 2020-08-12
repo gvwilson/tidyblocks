@@ -16,26 +16,30 @@ const MESSAGES = {
     en: 'column, column', 
     es: 'columna, columna',
     ar: 'عمود, عمود',
-    ko: '열, 열'
+    ko: '열, 열',
+    it: 'colonna, colonna'
   },
   create: {
     message0: {
       en: 'Create %1 %2',
       es: 'Crear %1 %2',
       ar: 'إنشاء %1 %2',
-      ko: '%1 %2 만들기'
+      ko: '%1 %2 만들기',
+      it: 'crea %1 %2'
     },
     args0_text: {
       en: 'new_column',
       es: 'nueva_columna',
       ar: 'عمود_جديد',
-      ko: '새로운 열'
+      ko: '새로운 열', 
+      it: 'nuova colonna'
     },
     tooltip: {
       en: 'create new column from existing columns', 
       es: 'crear nueva columna de las columnas existentes',
       ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
-      ko: '기존의 열에서 새로운 열 만들기'
+      ko: '기존의 열에서 새로운 열 만들기',
+      it: 'crea una nuova colonna da colonne già esistente'
     }
   },
   drop: {
@@ -43,13 +47,15 @@ const MESSAGES = {
       en: 'Drop %1',
       es: 'Excluir %1',
       ar: 'حذف %1',
-      ko: '%1 삭제'
+      ko: '%1 삭제', 
+      it: 'escludi %1'
     },
     args0_tooltip: {
       en: 'drop columns by name',
       es: 'Excluir columnas por nombre',
       ar: 'حذف الأعمده بإستخدام اسمائها',
-      ko: '이름에 따라 열 삭제'
+      ko: '이름에 따라 열 삭제', 
+      it: 'escludi colonne per nome'
     }
   },
   filter: {
@@ -57,19 +63,22 @@ const MESSAGES = {
       en: 'Filter %1', 
       es: 'Filtrar %1',
       ar: 'تصفية أو فلتره %1',
-      ko: '%1 거르기'
+      ko: '%1 거르기',
+      it: 'filtra %1'
     },
     args0_name: {
       en: 'TEST', 
       es: 'TEST',
       ar: 'إختبار',
-      ko: '테스트'
+      ko: '테스트',
+      it: 'TEST'
     },
     tooltip: {
       en: 'filter rows by condition', 
       es: 'filtrar filas por condicion',
       ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
-      ko: '조건에 따라 행 거르기'
+      ko: '조건에 따라 행 거르기',
+      it: 'Filtra righe per condizione'
     }
   },
   groupBy: {
@@ -77,13 +86,15 @@ const MESSAGES = {
       en: 'Group by %1', 
       es: 'Agrupar por %1',
       ar: 'تقسيم البيانات عن طريف: %1',
-      ko: '%1 로 그룹화'
+      ko: '%1 로 그룹화', 
+      it: 'raggruppa per %1'
     },
     tooltip: {
       en: 'group data by values in columns', 
       es: 'agrupar datos por valores en columnas',
       ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
-      ko: '열의 값들로 데이터 그룹화'
+      ko: '열의 값들로 데이터 그룹화',
+      it: 'raggruppare i dati per valori in colonne'
     }
   },
   saveAs: {
@@ -91,19 +102,22 @@ const MESSAGES = {
       en: 'Save as %1',
       es: 'Reporte %1', // TRANSLATE ES
       ar: 'التقرير %1', // TRANSLATE AR
-      ko: '%1 리포트' // TRANSLATE KO
+      ko: '%1 리포트', // TRANSLATE KO
+      it: 'Salva come %1' // TRANSLATE IT
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
       ar: 'الإسم',
-      ko: '이름'
+      ko: '이름', 
+      it: 'nome'
     },
     tooltip: {
       en: 'save a result',
       es: 'reporta un resultado', // TRANSLATE ES
       ar: 'عرض النتائج', // TRANSLATE AR
-      ko: '결과 리포트' // TRANSLATE KO
+      ko: '결과 리포트', // TRANSLATE KO
+      it: 'salva risultato' // TRANSLATE IT
     }
   },
   select: {
@@ -111,13 +125,15 @@ const MESSAGES = {
       en: 'Select %1',
       es: 'Selecciona %1',
       ar: 'إختيار %1',
-      ko: '%1 선택'
+      ko: '%1 선택', 
+      it: 'Seleziona %1'
     },
     tooltip: {
       en: 'select columns by name',
       es: 'selecciona columnas por nombre',
       ar: 'إختيار الأعمده بإستخدام اسمائها',
-      ko: '이름으로 열 선택'
+      ko: '이름으로 열 선택', 
+      it: 'seleziona colonne per nome'
     }
   },
   sort: {
@@ -125,13 +141,15 @@ const MESSAGES = {
       en: 'Sort %1 descending %2',
       es: 'Ordena %1 descendiente %2',
       ar: 'ترتيب %1 تنازلي %2',
-      ko: '%2 내림차순으로 %1 정렬'
+      ko: '%2 내림차순으로 %1 정렬', 
+      it: 'Ordina %1 discendente %2'
     },
     tooltip: {
       en: 'sort table by multiple columns',
       es: 'ordena tabla por multiples columnas',
       ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
-      ko: '다중 열에 따라 테이블 정렬'
+      ko: '다중 열에 따라 테이블 정렬',
+      it: 'ordina la tabella per colonne multiple'
     }
   },
   summarize: {
@@ -139,19 +157,22 @@ const MESSAGES = {
       en: 'Summarize %1 %2',
       es: 'Resumen %1 %2',
       ar: 'تلخيص البيانات %1 %2',
-      ko: '%1 %2 축소'
+      ko: '%1 %2 축소',
+      it: 'Riassumi %1 %2'
     },
     args0_text: {
       en: 'column', 
       es: 'columna',
       ar: 'العمود',
-      ko: '열'
+      ko: '열',
+      it: 'colonna'
     },
     tooltip: {
       en: 'summarize values in  column',
       es: 'Resume valores en columna',
       ar: 'تلخيص قيم العمود',
-      ko: '열의 값 축소'
+      ko: '열의 값 축소', 
+      it: 'riassumi valori in colonna'
     }
   },
   ungroup: {
@@ -159,13 +180,15 @@ const MESSAGES = {
       en: 'Ungroup',
       es: 'Desagrupar',
       ar: 'الغاء التقسيم',
-      ko: '그룹화 해제'
+      ko: '그룹화 해제',
+      it: 'Disaggrega'
     },
     tooltip: {
       en: 'remove grouping', 
       es: 'quita agrupamiento',
       ar: 'الغاءتقسيم البيانات',
-      ko: '그룹화 삭제'
+      ko: '그룹화 삭제',
+      it: 'rimuovi raggruppamento'
     }
   },
   unique: {
@@ -173,13 +196,15 @@ const MESSAGES = {
       en: 'Unique %1', 
       es: 'Unico %1',
       ar: 'فريد %1',
-      ko: '%1 을 유일값으로 만들기'
+      ko: '%1 을 유일값으로 만들기',
+      it: 'Unico %1'
     },
     tooltip: {
       en: 'select rows with unique values', 
       es: 'selecciona filas con valores unicos',
       ar: 'إختيار الصفوف ذات القيم الفريده',
-      ko: '유일값으로 행 선택'
+      ko: '유일값으로 행 선택',
+      it: 'selezionare le righe con valori univoci'
     }
   }
 }
@@ -471,5 +496,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }
