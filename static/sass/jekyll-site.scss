@@ -37,43 +37,11 @@
     position: relative;
   }
 
-  .navRight a:after {    
-    background: none repeat scroll 0 0 transparent;
-    bottom: 0;
-    content: "";
-    display: block;
-    height: 2px;
-    left: 50%;
-    position: absolute;
-    background: grey;
-    transition: width 0.3s ease 0s, left 0.3s ease 0s;
-    width: 0;
-  }
-
-  .navRight a:hover {
-    color: black;
-  }
-
-  .navRight a:hover:after { 
-    width: 30%; 
-    left: 0; 
-  }
-
-  nav a {
-    color: black;
-    text-transform: uppercase;
-    text-decoration: none;
-    letter-spacing: 0.12em;
-    padding: 10px;
-  }
-
   hr {
       border: white;
   }
 
   a:hover { 
-    width: 100%; 
-    left: 0; 
     color: grey;
   }
 
@@ -188,52 +156,74 @@
 
    /* ------------------------------------------------------------ */
 
-  .navRight ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
+   .topnav {
+    display: flex;
+    align-items: center;
+
+    & a:after {    
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: block;
+      height: 2px;
+      left: 50%;
+      position: absolute;
+      background: grey;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+
+    & a:hover:after { 
+      width: 100%; 
+      left: 0; 
+    }
   
-  .navRight li {
-    float: left;
-  }
+    & ul {
+      list-style: none;
+    }
   
-  .navRight li a, .dropbtn {
-    display: inline-block;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-  }
+    & li {
+      display: inline-block;
   
-  .navRight li a:hover, .dropdown:hover .dropbtn {
-  }
+      & a {
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: grey;
+        padding: 1rem 3rem 1rem;
   
-  .navRight li.dropdown {
-    display: inline-block;
-  }
+        &:hover {
+          color: black;
+        }
+      }
   
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
+      & .hidden-ul {
+        display: none;
+        position: absolute;
+        min-width: 4rem;
+        z-index: 1;
+        background-color: white;
+      }
   
-  .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-  }
+      &:hover .hidden-ul {
+        display: block;
+        width: 17rem;
+        margin-top: 1rem;
+        overflow: hidden;
+
+        & .hidden-a {
+          display: block;
+          width: 100%;
+          cursor: pointer;
+          padding: 1rem 3rem 1rem;
+          text-align: left;
   
-  .dropdown-content a:hover {background-color: #f1f1f1;}
-  
-  .dropdown:hover .dropdown-content {
-    display: block;
+          &:hover {
+            color: black;
+          }
+        }
+      }
+    }
   }
 }
 

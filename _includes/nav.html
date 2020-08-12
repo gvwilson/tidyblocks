@@ -3,22 +3,24 @@
   
   <div class="navRight">
 
-    <ul>
-      <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
-      <li class="dropdown">
-        <a href="javascript:void(0)" class="dropbtn">Guide</a>
-        <div class="dropdown-content">
-          <a href="{{ '/en/guide' | relative_url }}">English</a>
-          <a href="{{ '/es/guide' | relative_url }}">Español</a>
-        </div>
-      </li>
-      <li class="dropdown">
-        <a href="javascript:void(0)" class="dropbtn">FAQ</a>
-        <div class="dropdown-content">
-          <a href="{{ '/en/FAQ' | relative_url }}">English</a>
-          <a href="{{ '/es/FAQ' | relative_url }}">Español</a>
-        </div>
-      </li>
-      <li><a href="mailto:{{site.email}}">Contact</a></li>
-    </ul>
+    <nav class="topnav">
+      <ul>
+        <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/en/guide' | relative_url }}">English</a></li>
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/es/guide' | relative_url }}">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/en/FAQ' | relative_url }}">English</a></li>
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/es/FAQ' | relative_url }}">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:{{site.email}}">contact</a></li>
+      </ul>
+    </nav>
 </div>

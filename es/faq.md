@@ -4,6 +4,10 @@ title: "Preguntas frecuentes"
 language: es
 ---
 
+
+<br/>
+<br/>
+
 ¿Para quién es TidyBlocks?
 :   Nuestra audiencia principal son los estudiantes de secundaria y preparatoria
     (de 10 a 18 años) que están aprendiendo a utilizar e interpretar datos.
