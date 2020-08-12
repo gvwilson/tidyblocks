@@ -211,6 +211,10 @@
         margin-top: 1rem;
         overflow: hidden;
 
+        & a:after {    
+          background: white;
+        }
+
         & .hidden-a {
           display: block;
           width: 100%;
