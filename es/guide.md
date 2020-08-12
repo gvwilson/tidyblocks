@@ -55,7 +55,7 @@ y tenga en cuenta que todos los contribuyentes deben cumplir con nuestro [Codigo
   <br/><br/>
  <a class="stats" href="#es_stats">ESTADISTICAS</a>
   <br/><br/>
- <a class="op" ref="#es_op">OPERACION</a>
+ <a class="op" href="#es_op">OPERACION</a>
    <br/><br/>
  <a class="values" href="#es_values">VALOR</a>
   <br/><br/>
