@@ -3,6 +3,11 @@ const path = require('path');
 module.exports = {
   devtool: 'source-map',
   mode: "development",
+
+  // Workaround for webpack bug: https://github.com/webpack-contrib/css-loader/issues/447
+  node: {
+    fs: 'empty'
+  },
   module: {
     rules: [
       {
