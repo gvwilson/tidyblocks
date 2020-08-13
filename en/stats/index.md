@@ -12,7 +12,7 @@ headings:
 <div id="ttest_one" markdown="1">
 ### One-sample T test
 
-<img class="block" src="{{ 'en/stats/ttest_one.svg' | relative_url }}" alt="ttest_one block"/>
+<img class="block" src="{{ 'en/img/stats_ttest_one.svg' | relative_url }}" alt="ttest_one block"/>
 
 Run a one-sample t-test.
 
@@ -24,7 +24,7 @@ Run a one-sample t-test.
 <div id="ttest_two" markdown="1">
 ### Two-sample T test
 
-<img class="block" src="{{ 'en/stats/ttest_two.svg' | relative_url }}" alt="ttest_two block"/>
+<img class="block" src="{{ 'en/img/stats_ttest_two.svg' | relative_url }}" alt="ttest_two block"/>
 
 Run a paired t-test.
 

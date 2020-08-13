@@ -1,7 +1,7 @@
 <div id="column" markdown="1">
 ### Column
 
-<img class="block" src="{{ 'en/value/column.svg' | relative_url }}" alt="column block"/>
+<img class="block" src="{{ 'en/img/value_column.svg' | relative_url }}" alt="column block"/>
 
 Specify the name of a single column in the data.
 
@@ -11,7 +11,7 @@ Specify the name of a single column in the data.
 <div id="datetime" markdown="1">
 ### Datetime
 
-<img class="block" src="{{ 'en/value/datetime_val.svg' | relative_url }}" alt="datetime block"/>
+<img class="block" src="{{ 'en/img/value_datetime.svg' | relative_url }}" alt="datetime block"/>
 
 Specify a fixed date and time.
 
@@ -21,7 +21,7 @@ Specify a fixed date and time.
 <div id="logical" markdown="1">
 ### Logical
 
-<img class="block" src="{{ 'en/value/logical_val.svg' | relative_url }}" alt="logical block"/>
+<img class="block" src="{{ 'en/img/value_logical.svg' | relative_url }}" alt="logical block"/>
 
 Select a constant logical value.
 
@@ -31,7 +31,7 @@ Select a constant logical value.
 <div id="number" markdown="1">
 ### Number
 
-<img class="block" src="{{ 'en/value/number.svg' | relative_url }}" alt="number block"/>
+<img class="block" src="{{ 'en/img/value_number.svg' | relative_url }}" alt="number block"/>
 
 Specify a fixed number.
 
@@ -41,7 +41,7 @@ Specify a fixed number.
 <div id="text" markdown="1">
 ### Text
 
-<img class="block" src="{{ 'en/value/text.svg' | relative_url }}" alt="text block"/>
+<img class="block" src="{{ 'en/img/value_text.svg' | relative_url }}" alt="text block"/>
 
 Specify a fixed text.
 The value should *not* be quoted:
@@ -53,7 +53,7 @@ any single or double quotes provided will be included in the text.
 <div id="rownum" markdown="1">
 ### Row Number
 
-<img class="block" src="{{ 'en/value/rownum.svg' | relative_url }}" alt="row number block"/>
+<img class="block" src="{{ 'en/img/value_rownum.svg' | relative_url }}" alt="row number block"/>
 
 Generate the row number, starting from 1.
 </div>
@@ -61,7 +61,7 @@ Generate the row number, starting from 1.
 <div id="exponential" markdown="1">
 ### Exponential Random Value
 
-<img class="block" src="{{ 'en/value/exponential.svg' | relative_url }}" alt="exponential random block"/>
+<img class="block" src="{{ 'en/img/value_exponential.svg' | relative_url }}" alt="exponential random block"/>
 
 Generate a random value from the exponential distribution with the rate parameter &lambda;.
 
@@ -71,7 +71,7 @@ Generate a random value from the exponential distribution with the rate paramete
 <div id="normal" markdown="1">
 ### Normal Random Variable
 
-<img class="block" src="{{ 'en/value/normal.svg' | relative_url }}" alt="normal random value block"/>
+<img class="block" src="{{ 'en/img/value_normal.svg' | relative_url }}" alt="normal random value block"/>
 
 Generate a random value from the normal distribution with mean &mu; and standard deviation &sigma;.
 
@@ -82,7 +82,7 @@ Generate a random value from the normal distribution with mean &mu; and standard
 <div id="uniform" markdown="1">
 ### Uniform Random Variable
 
-<img class="block" src="{{ 'en/value/uniform.svg' | relative_url }}" alt="uniforn random value block"/>
+<img class="block" src="{{ 'en/img/value_uniform.svg' | relative_url }}" alt="uniforn random value block"/>
 
 Generate a random value from the uniform distribution across the given range.
 
