@@ -1,7 +1,7 @@
 <div id="bar" markdown="1">
 ### Barras
 
-<img class="block" src="{{ 'es/plot/bar.svg' | relative_url }}" alt="bar block"/>
+<img class="block" src="{{ 'es/img/plot_bar.svg' | relative_url }}" alt="bar block"/>
 
 El bloque de barra hace que la altura de la barra sea proporcional al número de casos en cada grupo.
 Un gráfico de barras usa la altura para representar un valor, por lo que la base de la barra siempre debe mostrarse para producir una comparación visual válida.
@@ -13,7 +13,7 @@ Un gráfico de barras usa la altura para representar un valor, por lo que la bas
 <div id="box" markdown="1">
 ### Cajas
 
-<img class="block" src="{{ 'es/plot/box.svg' | relative_url }}" alt="box block"/>
+<img class="block" src="{{ 'es/img/plot_box.svg' | relative_url }}" alt="box block"/>
 
 El bloque de diagrama de caja de Tukey resume una distribución de valores cuantitativos utilizando un conjunto de estadísticas de resumen.
 La marca del medio en el cuadro representa la mediana.
@@ -29,7 +29,7 @@ Los puntos atípicos más allá del bigote se muestran mediante marcas de puntos
 <div id="dot" markdown="1">
 ### Puntos
 
-<img class="block" src="{{ 'es/plot/dot.svg' | relative_url }}" alt="dot block"/>
+<img class="block" src="{{ 'es/img/plot_dot.svg' | relative_url }}" alt="dot block"/>
 
 Muestra un grafico de puntos.
 
@@ -39,7 +39,7 @@ Muestra un grafico de puntos.
 <div id="histogram" markdown="1">
 ### Histograma
 
-<img class="block" src="{{ 'es/plot/histogram.svg' | relative_url }}" alt="histogram block"/>
+<img class="block" src="{{ 'es/img/plot_histogram.svg' | relative_url }}" alt="histogram block"/>
 
 Visualice la distribución de una única variable continua
 dividiendo el eje X en grupos de clase
@@ -53,7 +53,7 @@ Los histogramas muestran los recuentos con barras.
 <div id="scatter" markdown="1">
 ### Dispersion
 
-<img class="block" src="{{ 'es/plot/scatter.svg' | relative_url }}" alt="scatter block"/>
+<img class="block" src="{{ 'es/img/plot_scatter.svg' | relative_url }}" alt="scatter block"/>
 
 Muestra un diagrama de dispersión.
 

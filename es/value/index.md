@@ -1,7 +1,7 @@
 <div id="column" markdown="1">
 ### Columna
 
-<img class="block" src="{{ 'es/value/column.svg' | relative_url }}" alt="column block"/>
+<img class="block" src="{{ 'es/img/value_column.svg' | relative_url }}" alt="column block"/>
 
 Especifica el nombre de una sola columna en los datos.
 
@@ -11,7 +11,7 @@ Especifica el nombre de una sola columna en los datos.
 <div id="datetime" markdown="1">
 ### Fecha y hora
 
-<img class="block" src="{{ 'es/value/datetime_val.svg' | relative_url }}" alt="datetime block"/>
+<img class="block" src="{{ 'es/img/value_datetime.svg' | relative_url }}" alt="datetime block"/>
 
 Especifica una fecha y hora fijas.
 
@@ -21,7 +21,7 @@ Especifica una fecha y hora fijas.
 <div id="logical" markdown="1">
 ### Logico
 
-<img class="block" src="{{ 'es/value/logical_val.svg' | relative_url }}" alt="logical block"/>
+<img class="block" src="{{ 'es/img/value_logical.svg' | relative_url }}" alt="logical block"/>
 
 Seleccione un valor lógico constante.
 
@@ -31,7 +31,7 @@ Seleccione un valor lógico constante.
 <div id="number" markdown="1">
 ### Numbero
 
-<img class="block" src="{{ 'es/value/number.svg' | relative_url }}" alt="number block"/>
+<img class="block" src="{{ 'es/img/value_number.svg' | relative_url }}" alt="number block"/>
 
 Especifica un número fijo.
 
@@ -41,7 +41,7 @@ Especifica un número fijo.
 <div id="text" markdown="1">
 ### Texto
 
-<img class="block" src="{{ 'es/value/text.svg' | relative_url }}" alt="text block"/>
+<img class="block" src="{{ 'es/img/value_text.svg' | relative_url }}" alt="text block"/>
 
 Especifica un texto fijo.
 El valor *no* debe citarse:
@@ -52,7 +52,7 @@ Las comillas simples o dobles proporcionadas se incluirán en el texto.
 <div id="rownum" markdown="1">
 ### Numero de fila
 
-<img class="block" src="{{ 'es/value/rownum.svg' | relative_url }}" alt="row number block"/>
+<img class="block" src="{{ 'es/img/value_rownum.svg' | relative_url }}" alt="row number block"/>
 
 Genere el número de fila, comenzando por 1.
 </div>
@@ -60,7 +60,7 @@ Genere el número de fila, comenzando por 1.
 <div id="exponential" markdown="1">
 ### Valor exponencial aleatorio
 
-<img class="block" src="{{ 'es/value/exponential.svg' | relative_url }}" alt="exponential random value block"/>
+<img class="block" src="{{ 'es/img/value_exponential.svg' | relative_url }}" alt="exponential random value block"/>
 
 Genere un valor aleatorio a partir de la distribución exponencial con el parámetro de tasa &lambda;.
 
@@ -70,7 +70,7 @@ Genere un valor aleatorio a partir de la distribución exponencial con el parám
 <div id="normal" markdown="1">
 ### Variable normal aleatoria
 
-<img class="block" src="{{ 'es/value/normal.svg' | relative_url }}" alt="normal random value block"/>
+<img class="block" src="{{ 'es/img/value_normal.svg' | relative_url }}" alt="normal random value block"/>
 
 Genera un valor aleatorio a partir de la distribución normal con media &mu; y desviación estándar &sigma ;.
 
@@ -81,7 +81,7 @@ Genera un valor aleatorio a partir de la distribución normal con media &mu; y d
 <div id="uniform" markdown="1">
 ### Variable uniforme aleatoria
 
-<img class="block" src="{{ 'es/value/uniform.svg' | relative_url }}" alt="uniform random value block"/>
+<img class="block" src="{{ 'es/img/value_uniform.svg' | relative_url }}" alt="uniform random value block"/>
 
 Genera un valor aleatorio a partir de la distribución uniforme en el rango dado.
 

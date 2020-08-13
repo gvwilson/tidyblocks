@@ -2,7 +2,7 @@
 ### Crear
 
 
-<img class="block" src="{{ 'es/transform/create.svg' | relative_url }}" alt="create block"/>
+<img class="block" src="{{ 'es/img/transform_create.svg' | relative_url }}" alt="create block"/>
 
 Añade nuevas columnas manteniendo las existentes keeping existing ones.
 Una columna puede ser reemplazada si a la nueva columna se le da el nombre de la columna existente.
@@ -14,7 +14,7 @@ Una columna puede ser reemplazada si a la nueva columna se le da el nombre de la
 <div id="drop" markdown="1">
 ### Descartar
 
-<img class="block" src="{{ 'es/transform/drop.svg' | relative_url }}" alt="drop block"/>
+<img class="block" src="{{ 'es/img/transform_drop.svg' | relative_url }}" alt="drop block"/>
 
 Descarta una o más columnas de los datos.
 Este bloque no es estrictamente necesario; puede ignorar una columna si no la necesita, pero
@@ -27,7 +27,7 @@ Este bloque es lo contrario de [seleccionar](../transform/#select).
 <div id="filter" markdown="1">
 ### Filtrar
 
-<img class="block" src="{{ 'es/transform/filter.svg' | relative_url }}" alt="filter block"/>
+<img class="block" src="{{ 'es/img/transform_filter.svg' | relative_url }}" alt="filter block"/>
 
 Mantiene un subconjunto de filas que pasen alguna prueba como `edad> 65` o `país = "Islandia"`.
 La prueba se verifica de forma independiente para cada fila,
@@ -41,7 +41,7 @@ and [no](../operation/#not) blocks.
 <div id="groupBy" markdown="1">
 ### Agrupar por
 
-<img class="block" src="{{ 'es/transform/group_by.svg' | relative_url }}" alt="grouping block"/>
+<img class="block" src="{{ 'es/img/transform_groupBy.svg' | relative_url }}" alt="grouping block"/>
 
 La mayoría de las operaciones de datos se realizan en grupos de registros que comparten valores, como personas del mismo país.
 Este bloque agrega una nueva columna a la tabla llamada`_groupo_` que tiene un valor único para cada grupo.
@@ -54,7 +54,7 @@ La agrupación se puede eliminar utilizando el bloque [desagrupar](../transform/
 <div id="saveAs" markdown="1">
 ## Save As
 
-<img class="block" src="{{ 'es/transform/saveas.svg' | relative_url }}" alt="save as block"/>
+<img class="block" src="{{ 'es/img/transform_saveas.svg' | relative_url }}" alt="save as block"/>
 
 FIXME
 
@@ -63,7 +63,7 @@ FIXME
 <div id="select" markdown="1">
 ### Seleccionar
 
-<img class="block" src="{{ 'es/transform/select.svg' | relative_url }}" alt="select block"/>
+<img class="block" src="{{ 'es/img/transform_select.svg' | relative_url }}" alt="select block"/>
 
 Elija columnas de una tabla: las columnas que no tengan nombre se eliminarán.Este bloque no es estrictamente necesario,
 dado que las columnas innecesarias pueden simplemente ignorarse,
@@ -76,7 +76,7 @@ pero descartar columnas innecesarias puede facilitar la lectura de la pantalla. 
 ### Ordenar
 
 
-<img class="block" src="{{ 'es/transform/sort.svg' | relative_url }}" alt="sort block"/>
+<img class="block" src="{{ 'es/img/transform_sort.svg' | relative_url }}" alt="sort block"/>
 
 Ordene las filas de una tabla según los valores de una o más columnas.
 
@@ -88,7 +88,7 @@ Ordene las filas de una tabla según los valores de una o más columnas.
 ### Resumir
 
 
-<img class="block" src="{{ 'es/transform/summarize.svg' | relative_url }}" alt="summarize block"/>
+<img class="block" src="{{ 'es/img/transform_summarize.svg' | relative_url }}" alt="summarize block"/>
 
 Resuma los valores en una o más columnas.
 Si los datos han sido [agrupado](../transform/#group),
@@ -104,7 +104,7 @@ e.g., <code>mean\_age</code>.
 ### Desagrupar
 
 
-<img class="block" src="{{ 'es/transform/ungroup.svg' | relative_url }}" alt="ungroup block"/>
+<img class="block" src="{{ 'es/img/transform_ungroup.svg' | relative_url }}" alt="ungroup block"/>
 
 Deshace el agrupamiento greado por [agrupar](../transform/#group)
 quitando el especial \_group\_ column.
@@ -114,7 +114,7 @@ quitando el especial \_group\_ column.
 ### Unico
 
 
-<img class="block" src="{{ 'es/transform/unique.svg' | relative_url }}" alt="unique block"/>
+<img class="block" src="{{ 'es/img/transform_unique.svg' | relative_url }}" alt="unique block"/>
 
 Descarte las filas que contienen valores redundantes.
 Si varias filas tienen los mismos valores en las columnas especificadas

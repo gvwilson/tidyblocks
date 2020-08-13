@@ -1,7 +1,7 @@
 <div id="colors" markdown="1">
 ### Colores
 
-<img class="block" src="{{ 'es/data/colors.svg' | relative_url }}" alt="color block"/>
+<img class="block" src="{{ 'es/img/data_colors.svg' | relative_url }}" alt="color block"/>
 
 Los conjuntos de datos `colores` tiene valores rojo-verde-azul (RGB) para once colores estándar:
 negro, rojo, granate, lima, verde, azul, azul marino, amarillo, fucsia, aguamarina y blanco
@@ -19,7 +19,7 @@ Cada valor es un número entero en el rango 0… 255.
 <div id="earthquakes" markdown="1">
 ### Terremotos
 
-<img class="block" src="{{ 'es/data/earthquakes.svg' | relative_url }}" alt="earthquakes block"/>
+<img class="block" src="{{ 'es/img/data_earthquakes.svg' | relative_url }}" alt="earthquakes block"/>
 
 Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. UU. sobre terremotos de 2016.
 
@@ -36,7 +36,7 @@ Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. U
 <div id="penguins" markdown="1">
 ### Pingüinos
 
-<img class="block" src="{{ 'es/data/penguins.svg' | relative_url }}" alt="penguins block"/>
+<img class="block" src="{{ 'es/img/data_penguins.svg' | relative_url }}" alt="penguins block"/>
 
 | Columna            | Tipodedatos    | Valor |
 | -----------------  | -----------    | ----- |
@@ -53,7 +53,7 @@ Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. U
 <div id="sequence" markdown="1">
 ### Sequencia
 
-<img class="block" src="{{ 'es/data/sequence.svg' | relative_url }}" alt="sequence block"/>
+<img class="block" src="{{ 'es/img/data_sequence.svg' | relative_url }}" alt="sequence block"/>
 
 Cre una secuencia de números del 1 al N inclusive.
 
@@ -65,7 +65,7 @@ Cre una secuencia de números del 1 al N inclusive.
 <div id="user" markdown="1">
 ### Datos de usuario
 
-<img class="block" src="{{ 'es/data/user_data.svg' | relative_url }}" alt="user data block"/>
+<img class="block" src="{{ 'es/img/data_user_data.svg' | relative_url }}" alt="user data block"/>
 
 Utilice un conjunto de datos previamente cargado.
 

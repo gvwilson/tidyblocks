@@ -1,7 +1,7 @@
 <div id="arithmetic" markdown="1">
 ### Aritmética
 
-<img class="block" src="{{ 'es/op/arithmetic.svg' | relative_url }}" alt="arithmetic block"/>
+<img class="block" src="{{ 'es/img/op_arithmetic.svg' | relative_url }}" alt="arithmetic block"/>
 
 Este bloque implementa cálculos matemáticos en dos valores.
 Acepta números, nombres de columna y bloques de operación anidados.
@@ -10,7 +10,7 @@ Acepta números, nombres de columna y bloques de operación anidados.
 - *desplegable*: Selecciona suma, resta, multiplicación, división, resto o exponenciación.
 - *espacio derecho*: El lado derecho de la operación.
 
-<img class="block" src="{{ 'es/op/negate.svg' | relative_url }}" alt="negate block"/>
+<img class="block" src="{{ 'es/img/op_negate.svg' | relative_url }}" alt="negate block"/>
 
 Deniega un numero.
 
@@ -20,7 +20,7 @@ Deniega un numero.
 <div id="logical" markdown="1">
 ### Lógico
 
-<img class="block" src="{{ 'es/op/logical_op.svg' | relative_url }}" alt="logical operation block"/>
+<img class="block" src="{{ 'es/img/op_logical.svg' | relative_url }}" alt="logical operation block"/>
 
 Este bloque implementa operaciones lógicas en dos valores.
 Acepta cualquier valor en el lado izquierdo y derecho
@@ -32,7 +32,7 @@ y produce "verdadero" o "falso".
 
 Tenga en cuenta que el AND lógico solo es verdadero si *ambos* lados son verdaderos, mientras que OR lógico es verdadero si *uno o ambos* lados son verdaderos: no es uno o ambos en lugar de uno o el otro.
 
-<img class="block" src="{{ 'es/op/not.svg' | relative_url }}" alt="not block"/>
+<img class="block" src="{{ 'es/img/op_not.svg' | relative_url }}" alt="not block"/>
 
 Produce `verdadero` si el valor es `falso` o `falso` si el valor es `verdadero`.
 
@@ -42,14 +42,14 @@ Produce `verdadero` si el valor es `falso` o `falso` si el valor es `verdadero`.
 <div id="type" markdown="1">
 ### Tipos
 
-<img class="block" src="{{ 'es/op/type_check.svg' | relative_url }}" alt="type checking block"/>
+<img class="block" src="{{ 'es/img/op_type.svg' | relative_url }}" alt="type checking block"/>
 
 Compruebe si un valor es de un tipo en particular.
 
 - *espacio*: El valor a comprobar.
 - *despegable*: Selecciona el tipo a convertir.
 
-<img class="block" src="{{ 'es/op/type_convert.svg' | relative_url }}" alt="type conversion block"/>
+<img class="block" src="{{ 'es/img/op_convert.svg' | relative_url }}" alt="type conversion block"/>
 
 Convierta un valor de un tipo a otro.
 
@@ -60,7 +60,7 @@ Convierta un valor de un tipo a otro.
 <div id="datetime" markdown="1">
 ### Fechas/Tiempos
 
-<img class="block" src="{{ 'es/op/datetime_op.svg' | relative_url }}" alt="datetime block"/>
+<img class="block" src="{{ 'es/img/op_datetime.svg' | relative_url }}" alt="datetime block"/>
 
 Extrae el año, mes o día de un valor de fecha/hora.
 
@@ -71,7 +71,7 @@ Extrae el año, mes o día de un valor de fecha/hora.
 <div id="conditional" markdown="1">
 ### Condicional
 
-<img class="block" src="{{ 'es/op/conditional.svg' | relative_url }}" alt="conditional block"/>
+<img class="block" src="{{ 'es/img/op_conditional.svg' | relative_url }}" alt="conditional block"/>
 
 Seleccione uno de los dos valores en función de una condición.
 Se puede usar cualquier valor para la condición o para los resultados si la condición es verdadera o falsa,

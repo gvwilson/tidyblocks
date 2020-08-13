@@ -40,7 +40,7 @@ and [not](../operation/#not) blocks.
 <div id="groupBy" markdown="1">
 ### Group By
 
-<img class="block" src="{{ 'en/img/transform_groupby.svg' | relative_url }}" alt="grouping block"/>
+<img class="block" src="{{ 'en/img/transform_groupBy.svg' | relative_url }}" alt="grouping block"/>
 
 Most data operations are done on groups of records that share values, such as people from the same country.
 This block adds a new column to the table called `_group_` that has a unique value for each group.
