@@ -34,49 +34,56 @@ const MESSAGES = {
     en: 'combine',
     es: 'combinar',
     ko: '결합', 
-    it: 'unire'
+    it: 'unire', 
+    el: 'ένωση'
   },
   data: {
     ar: 'بيانات',
     en: 'data',
     es: 'datos',
     ko: '데이터',
-    it: 'dati'
+    it: 'dati', 
+    el: 'δεδομένα'
   },
   op: {
     ar: 'حساب',
     en: 'op',
     es: 'operacion',
     ko: '작업',
-    it: 'operatori'
+    it: 'operatori',
+    el: 'λειτουργίες'
   },
   plot: {
     ar: 'رسم',
     en: 'plot',
     es: 'grafico',
     ko: '그래프',
-    it: 'grafici'
+    it: 'grafici',
+    el: 'γραφικό'
   },
   stats: {
     ar: 'إحصائيات',
     en: 'stats',
     es: 'estadísticas',
     ko: '통계',
-    it: 'statistiche'
+    it: 'statistiche',
+    el: 'στατιστική'
   },
   transform: {
     ar: 'تغيير',
     en: 'transform',
     es: 'transformar',
     ko: '변환',
-    it: 'trasformazioni'
+    it: 'trasformazioni',
+    el: 'μετασχηματισμός'
   },
   value: {
     ar: 'القيمه',
     en: 'value',
     es: 'valor',
     ko: '값', 
-    it: 'valore'
+    it: 'valore',
+    el: 'στοιχείο'
   }
 }
 
