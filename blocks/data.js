@@ -14,14 +14,16 @@ const MESSAGES = {
       es: 'Colores',
       ar: 'الألوان',
       ko: '색깔', 
-      it: 'Colori'
+      it: 'Colori', 
+      el: 'Χρώματα'
     },
     tooltip: {
       en: 'eleven colors',
       es: 'once colores',
       ar: 'احد عشر لون',
       ko: '11개의 색', 
-      it: 'undici colori'
+      it: 'undici colori', 
+      el: 'έντεκα χρώματα'
     }
   },
   earthquakes: {
@@ -30,14 +32,16 @@ const MESSAGES = {
       es: 'Terremotos',
       ar: 'الزلزال',
       ko: '지진', 
-      it: 'Terremoti'
+      it: 'Terremoti', 
+      el: 'Σεισμοί'
     },
     tooltip: {
       en: 'earthquake data', 
       es: 'datos de terremotos',
       ar: 'بيانات الزلزال',
       ko: '지진 데이터', 
-      it: 'dati sui terremoti'
+      it: 'dati sui terremoti', 
+      el: 'σεισμολογικά στοιχεία'
     }
   },
   penguins: {
@@ -46,14 +50,16 @@ const MESSAGES = {
       es: 'Pingüinos',
       ar: 'طيور البطريق',
       ko: '펭귄',
-      it: 'Pinguini'
+      it: 'Pinguini', 
+      el: 'Πιγκουίνι'
     },
     tooltip: {
       en: 'penguin data',
       es: 'datos de pingüinos',
       ar: 'بيانات طيور البطريق',
       ko: '펭귄 데이터',
-      it: 'dati sui pinguini'
+      it: 'dati sui pinguini', 
+      el: 'στοιχεία πιγκουίνων'
     }
   },
   phish: {
@@ -62,14 +68,16 @@ const MESSAGES = {
       es: 'Phish',
       ar: 'فرقه الفيش الموسيقيه',
       ko: '피시', 
-      it: 'Phish'
+      it: 'Phish', 
+      el: 'Phish'
     },
     tooltip: {
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
       ar: 'بيانات فرقه الفيش الموسيقيه',
       ko: '피시 콘서트 데이터',
-      it: 'dati sui concerti dei Phish'
+      it: 'dati sui concerti dei Phish', 
+      el: 'στοιχεία συναυλιών Phish'
     }
   },
   sequence: {
@@ -78,21 +86,24 @@ const MESSAGES = {
       es: 'Sequencia %1 %2',
       ar: 'المتسلسله %1 %2',
       ko: '배열 %1 %2',
-      it: 'sequenza %1 %2'
+      it: 'sequenza %1 %2', 
+      el: 'Ακολουθία %1 %2'
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
       ar: 'اﻹسم',
       ko: '이름',
-      it: 'nome'
+      it: 'nome', 
+      el: 'όνομα'
     },
     tooltip: {
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
       ar: 'إنشاء متسلسله ١..ن',
       ko: '배열 실행 1..N',
-      it: 'genera una sequenza 1..N'
+      it: 'genera una sequenza 1..N', 
+      el: 'Πάραγε μία ακολουθία 1..Ν'
     }
   },
   data_user: {
@@ -101,21 +112,24 @@ const MESSAGES = {
       es: 'Datos de usuario %1',
       ar: 'بيانات المسته %1',
       ko: '사용자 데이터 %1', 
-      it: 'Dati utenti %1'
+      it: 'Dati utenti %1', 
+      el: 'Στοιχεία χρήστη %1'
     },
     args0_text: {
       en: 'name',
       es: 'nombre',
       ar: 'الإسم',
       ko: '이름',
-      it: 'nome'
+      it: 'nome', 
+      el: 'όνομα'
     },
     tooltip: {
       en: 'use previously-loaded data', 
       es: 'usa datos previamente cargados',
       ar: 'إستخدام بيانات محمله مسبقا',
       ko: '이전에 로드된 데이터 사용',
-      it: 'usa i dati caricati in precedenza'
+      it: 'usa i dati caricati in precedenza', 
+      el: 'χρησιμοποίησε προηγουμένως ανεβασμένα στοιχεία'
     }
   }
 }
