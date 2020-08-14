@@ -18,7 +18,8 @@ const MESSAGES = {
       es: 'haz la aritmética',
       ar: 'إجراء عمليات حسابيه',
       ko: '연산 실행', 
-      it: 'eseguire la aritmentica'
+      it: 'eseguire la aritmentica',
+      el: 'κάνε αριθμητική'
     }
   },
   negate: {
@@ -27,7 +28,8 @@ const MESSAGES = {
       es: 'excluye una columna numerica',
       ar: 'الغاء عمود حسابي',
       ko: '숫자열 취소', 
-      it: 'escludere una colonna numerica'
+      it: 'escludere una colonna numerica',
+      el: 'απόκλεισε μία αριθμητική στήλη'
     }
   },
   abs: {
@@ -36,7 +38,8 @@ const MESSAGES = {
       es: 'FIXME',
       ar: 'القيمه المطلقه لعمود حسابي',
       ko: '숫자열의 절대값',
-      it: 'valore assoluto di una colonna numerica'
+      it: 'valore assoluto di una colonna numerica',
+      el: 'απόύτη τιμή αριθμητικής στήλης'
     }
   },
   compare: {
@@ -45,7 +48,8 @@ const MESSAGES = {
       es: 'compara dos columnas',
       ar: 'مقارنه عمودين',
       ko: '두 열을 비교',
-      it: 'comparare due colonne'
+      it: 'comparare due colonne',
+      el: 'σύγκρινε δύο στήλες'
     }
   },
   logical: {
@@ -54,7 +58,8 @@ const MESSAGES = {
       es: 'combina los valores logicos de dos columnas',
       ar: 'دمج القيم المنطقيه لعمودين',
       ko: '두 열의 논리 변수를 결합',
-      it: 'combinare i valori logici di due colonne'
+      it: 'combinare i valori logici di due colonne',
+      el: 'συνδύασε δύο στήλες με λογικές τιμές'
     }
   },
   not: {
@@ -63,14 +68,16 @@ const MESSAGES = {
       es: 'no %1',
       ar: 'غير %1',
       ko: '논리 부정 %1',
-      it: 'no %1'
+      it: 'no %1',
+      el: 'όχι %1'
     },
     tooltip: {
       en: 'negate a logical column',
       es: 'excluye una columna numerica',
       ar: 'إلغاء عمود منطقي',
       ko: '논리 열 취소',
-      it: 'escludere una colonna logica'
+      it: 'escludere una colonna logica',
+      el: 'απόκλεισε μία στήλη με λογικές τιμές'
     }
   },
   type: {
@@ -79,14 +86,16 @@ const MESSAGES = {
       es: '¿Es %1 %2 ?',
       ar: 'هل %1 هو %2؟',
       ko: '%1 은 %2 ?',
-      it: '%1 è %2'
+      it: '%1 è %2',
+      el: '%1 είναι %2;'
     },
     tooltip: {
       en: 'check the type of a value',
       es: 'comprueba el tipo de valor',
       ar: 'التعرف على نوع القيمه',
       ko: '값의 유형을 확인',
-      it: 'controlla il tipo di valore'
+      it: 'controlla il tipo di valore',
+      el: 'έλεγξε το είδος μίας τιμής'
     }
   },
   convert: {
@@ -95,14 +104,16 @@ const MESSAGES = {
       es: '%1 a %2',
       ar: 'من %1 إلي %2',
       ko: '%1 에서 %2',
-      it: '%1 a %2'
+      it: '%1 a %2',
+      el: '%1 σε %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       ar: 'تغيير نوع القيمه',
       ko: '값의 데이터 유형을 변경',
-      it: 'cambiare il tipo di dato di un valore'
+      it: 'cambiare il tipo di dato di un valore',
+      el: 'άλλαξε το είδος μίας τιμής'
     }
   },
   datetime: {
@@ -111,14 +122,16 @@ const MESSAGES = {
       es: 'obten %1 de %2',
       ar: 'الحصول على %1 من %2',
       ko: '%2 에서 %1 가져오기',
-      it: 'ottieni %1 da %2'
+      it: 'ottieni %1 da %2',
+      el: 'βρες %1 από %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       ar: 'تغيير نوع القيمه',
       ko: '값의 데이터 유형을 변경',
-      it: 'cambiare il tipo di dato di un valore' 
+      it: 'cambiare il tipo di dato di un valore',
+      el: 'άλλαξε το είδος μίας τιμής'
     }
   },
   conditional: {
@@ -127,14 +140,16 @@ const MESSAGES = {
       es: 'Si %1 entonces %2 sino %3',
       ar: 'إذا %1 افعل %2 غير ذلك %3',
       ko: '%1 이면 %2 그렇지 않으면 %3', 
-      it: 'se %1 allora %2 altrimenti %3'
+      it: 'se %1 allora %2 altrimenti %3',
+      el: 'Αν %1 τότε %2 αλλιώς %3'
     },
     tooltip: {
       en: 'select value based on condition',
       es: 'selecciona el valor basandote en la condicion',
       ar: 'اختيار قيمه توافي شرط',
       ko: '조건에  값을 선택', 
-      it: 'seleziona il valore in base alla condizione'
+      it: 'seleziona il valore in base alla condizione',
+      el: 'επίλεξε τιμή βάση των συνθηκών'
     }
   }
 }
