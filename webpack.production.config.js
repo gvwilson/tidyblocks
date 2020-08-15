@@ -2,6 +2,10 @@ const path = require('path');
 
 module.exports = {
   mode: "production",
+  // Workaround for webpack bug: https://github.com/webpack-contrib/css-loader/issues/447
+  node: {
+    fs: 'empty'
+  },
   optimization: {
     minimize: true,
   },

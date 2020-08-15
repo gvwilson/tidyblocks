@@ -19,7 +19,7 @@ import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
 import { MenuBar } from './menuBar.jsx'
 import { SaveCsvFormDialog, SaveWorkspaceFormDialog,
-  SaveSvgFormDialog, LoadCsvDialog } from './saveDialog.jsx'
+  SaveSvgFormDialog, SaveAllSvgFormDialog, LoadCsvDialog } from './saveDialog.jsx'
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 import { TabSelectionBar, TabPanels } from './tabs.jsx'
 import { theme } from './theme.jsx'
@@ -50,6 +50,7 @@ export class TidyBlocksApp extends React.Component {
     this.saveCsvNameDialog = React.createRef()
     this.saveWorkspaceDialog = React.createRef()
     this.saveSvgDialog = React.createRef()
+    this.saveAllSvgDialog = React.createRef()
     this.loadCsvDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
@@ -133,6 +134,7 @@ export class TidyBlocksApp extends React.Component {
     this.saveWorkspace = this.saveWorkspace.bind(this)
     this.saveData = this.saveData.bind(this)
     this.saveSvg = this.saveSvg.bind(this)
+    this.saveAllSvg = this.saveAllSvg.bind(this)
     this.maximizePanel = this.maximizePanel.bind(this)
     this.minimizePanel = this.minimizePanel.bind(this)
     this.restorePanel = this.restorePanel.bind(this)
@@ -527,11 +529,6 @@ export class TidyBlocksApp extends React.Component {
     // Indicate the tab was updated if it has been.
     let tabUpdated = this.state.tabUpdated
     if (results && results.length != this.state.results.length && this.state.tabValue != this.state.RESULTS_TAB_INDEX){
-      console.log("RESULTS")
-      console.log(results)
-      console.log(this.state.results)
-      console.log(results != this.state.results)
-
       tabUpdated.results = true
     }
     this.setState({resultKeys:resultKeys, results: results, resultColumns: formattedColumns,
@@ -669,6 +666,10 @@ export class TidyBlocksApp extends React.Component {
     this.saveSvgDialog.current.handleClickOpen()
   }
 
+  // Saves all the svg files (used as a developer tool to update documentation).
+  saveAllSvg(){
+    this.saveAllSvgDialog.current.handleClickOpen()
+  }
 
   // Calls the file upload input.
   loadWorkspaceClick () {
@@ -752,6 +753,11 @@ export class TidyBlocksApp extends React.Component {
             <>
               <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
               <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
+              <SaveAllSvgFormDialog ref={this.saveAllSvgDialog}
+                toolbox={this.props.toolbox}
+                blocklyRef={this.blocklyRef}
+                data={this.getWorkspace().state.workspace}/>
+
             </>
           }
           <MenuBar
@@ -759,7 +765,8 @@ export class TidyBlocksApp extends React.Component {
             loadWorkspaceClick={this.loadWorkspaceClick}
             saveWorkspace={this.saveWorkspace}
             saveData={this.saveData}
-            saveSvg={this.saveSvg}/>
+            saveSvg={this.saveSvg}
+            saveAllSvg={this.saveAllSvg}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
             style={{display: "none"}}/>
