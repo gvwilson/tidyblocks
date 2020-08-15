@@ -17,23 +17,26 @@ const MESSAGES = {
       en: 'do arithmetic',
       es: 'haz la aritmética',
       ar: 'إجراء عمليات حسابيه',
-      ko: '연산 실행'
+      ko: '연산 실행',
+      pt: 'fazer a aritmética'
     }
   },
   negate: {
     tooltip: {
       en: 'negate a numeric column',
-      es: 'excluye una columna numerica',
+      es: 'excluye una columna numérica',
       ar: 'الغاء عمود حسابي',
-      ko: '숫자열 취소'
+      ko: '숫자열 취소',
+      pt: 'excluir uma coluna numérica'
     }
   },
   abs: {
     tooltip: {
       en: 'absolute value of a numeric column',
-      es: 'FIXME',
+      es: 'valor absoluto de una columna numérica',
       ar: 'القيمه المطلقه لعمود حسابي',
-      ko: '숫자열의 절대값'
+      ko: '숫자열의 절대값',
+      pt: 'valor absoluto de uma coluna numérica'
     }
   },
   compare: {
@@ -41,7 +44,8 @@ const MESSAGES = {
       en: 'compare two columns',
       es: 'compara dos columnas',
       ar: 'مقارنه عمودين',
-      ko: '두 열을 비교'
+      ko: '두 열을 비교',
+      pt: 'comparar duas colunas'
     }
   },
   logical: {
@@ -49,7 +53,8 @@ const MESSAGES = {
       en: 'combine logical values of two columns',
       es: 'combina los valores logicos de dos columnas',
       ar: 'دمج القيم المنطقيه لعمودين',
-      ko: '두 열의 논리 변수를 결합'
+      ko: '두 열의 논리 변수를 결합',
+      pt: 'combinar os valores lógicos de duas colunas'
     }
   },
   not: {
@@ -57,13 +62,15 @@ const MESSAGES = {
       en: 'not %1',
       es: 'no %1',
       ar: 'غير %1',
-      ko: '논리 부정 %1'
+      ko: '논리 부정 %1',
+      pt: 'não %1'
     },
     tooltip: {
       en: 'negate a logical column',
-      es: 'excluye una columna numerica',
+      es: 'excluye una columna logica',
       ar: 'إلغاء عمود منطقي',
-      ko: '논리 열 취소'
+      ko: '논리 열 취소',
+      pt: 'excluir uma coluna lógica'
     }
   },
   type: {
@@ -71,13 +78,15 @@ const MESSAGES = {
       en: '%1 is %2 ?',
       es: '¿Es %1 %2 ?',
       ar: 'هل %1 هو %2؟',
-      ko: '%1 은 %2 ?'
+      ko: '%1 은 %2 ?',
+      pt: '%1 é %2 ?'
     },
     tooltip: {
       en: 'check the type of a value',
       es: 'comprueba el tipo de valor',
       ar: 'التعرف على نوع القيمه',
-      ko: '값의 유형을 확인'
+      ko: '값의 유형을 확인',
+      pt: 'confira o tipo de um valor'
     }
   },
   convert: {
@@ -85,13 +94,15 @@ const MESSAGES = {
       en: '%1 to %2',
       es: '%1 a %2',
       ar: 'من %1 إلي %2',
-      ko: '%1 에서 %2'
+      ko: '%1 에서 %2',
+      pt: '%1 para %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       ar: 'تغيير نوع القيمه',
-      ko: '값의 데이터 유형을 변경'
+      ko: '값의 데이터 유형을 변경',
+      pt: 'mude o tipo de dado de um valor'
     }
   },
   datetime: {
@@ -99,13 +110,15 @@ const MESSAGES = {
       en: 'get %1 from %2',
       es: 'obten %1 de %2',
       ar: 'الحصول على %1 من %2',
-      ko: '%2 에서 %1 가져오기'
+      ko: '%2 에서 %1 가져오기',
+      pt: 'pegue %1 de %2'
     },
     tooltip: {
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       ar: 'تغيير نوع القيمه',
-      ko: '값의 데이터 유형을 변경'
+      ko: '값의 데이터 유형을 변경',
+      pt: 'mude o tipo de dado de um valor'
     }
   },
   conditional: {
@@ -113,13 +126,15 @@ const MESSAGES = {
       en: 'If %1 then %2 else %3',
       es: 'Si %1 entonces %2 sino %3',
       ar: 'إذا %1 افعل %2 غير ذلك %3',
-      ko: '%1 이면 %2 그렇지 않으면 %3'
+      ko: '%1 이면 %2 그렇지 않으면 %3',
+      pt: 'Se %1 então %2 se não %3'
     },
     tooltip: {
       en: 'select value based on condition',
       es: 'selecciona el valor basandote en la condicion',
       ar: 'اختيار قيمه توافي شرط',
-      ko: '조건에  값을 선택'
+      ko: '조건에  값을 선택',
+      pt: 'seleciona um valor baseado em uma condição'
     }
   }
 }
@@ -135,8 +150,7 @@ const setup = (language) => {
     {
       type: 'op_arithmetic',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'LEFT'
         },
@@ -168,12 +182,10 @@ const setup = (language) => {
     {
       type: 'op_negate',
       message0: '- %1',
-      args0: [
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: 'VALUE'
+      }],
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
@@ -185,12 +197,10 @@ const setup = (language) => {
     {
       type: 'op_abs',
       message0: 'abs %1',
-      args0: [
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: 'VALUE'
+      }],
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
@@ -202,8 +212,7 @@ const setup = (language) => {
     {
       type: 'op_compare',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'LEFT'
         },
@@ -235,8 +244,7 @@ const setup = (language) => {
     {
       type: 'op_logical',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'LEFT'
         },
@@ -264,12 +272,10 @@ const setup = (language) => {
     {
       type: 'op_not',
       message0: msg.get('not.message0'),
-      args0: [
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: 'VALUE'
+      }],
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
@@ -281,8 +287,7 @@ const setup = (language) => {
     {
       type: 'op_type',
       message0: msg.get('type.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'VALUE'
         },
@@ -309,8 +314,7 @@ const setup = (language) => {
     {
       type: 'op_convert',
       message0: msg.get('convert.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'VALUE'
         },
@@ -336,8 +340,7 @@ const setup = (language) => {
     {
       type: 'op_datetime',
       message0: msg.get('datetime.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_dropdown',
           name: 'TYPE',
           options: [
@@ -366,8 +369,7 @@ const setup = (language) => {
     {
       type: 'op_conditional',
       message0: msg.get('conditional.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'COND'
         },
