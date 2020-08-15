@@ -1,14 +1,3 @@
----
-permalink: /en/stats/
-title: "Statistics"
-language: en
-headings:
-- id: ttest_one
-  text: One-sample T test
-- id: ttest_two
-  text: Two-sample T test
----
-
 <div id="ttest_one" markdown="1">
 ### One-sample T test
 
