@@ -13,29 +13,33 @@ const {
  */
 const MESSAGES = {
   multiple_columns: {
-    en: 'column, column', 
+    en: 'column, column',
     es: 'columna, columna',
     ar: 'عمود, عمود',
-    ko: '열, 열'
+    ko: '열, 열',
+    pt: 'coluna, coluna'
   },
   create: {
     message0: {
       en: 'Create %1 %2',
       es: 'Crear %1 %2',
       ar: 'إنشاء %1 %2',
-      ko: '%1 %2 만들기'
+      ko: '%1 %2 만들기',
+      pt: 'Criar %1 %2'
     },
     args0_text: {
       en: 'new_column',
       es: 'nueva_columna',
       ar: 'عمود_جديد',
-      ko: '새로운 열'
+      ko: '새로운 열',
+      pt: 'nova_coluna'
     },
     tooltip: {
-      en: 'create new column from existing columns', 
+      en: 'create new column from existing columns',
       es: 'crear nueva columna de las columnas existentes',
       ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
-      ko: '기존의 열에서 새로운 열 만들기'
+      ko: '기존의 열에서 새로운 열 만들기',
+      pt: 'criar nova coluna a partir de colunas existentes'
     }
   },
   drop: {
@@ -43,47 +47,54 @@ const MESSAGES = {
       en: 'Drop %1',
       es: 'Excluir %1',
       ar: 'حذف %1',
-      ko: '%1 삭제'
+      ko: '%1 삭제',
+      pt: 'Excluir %1'
     },
     args0_tooltip: {
       en: 'drop columns by name',
       es: 'Excluir columnas por nombre',
       ar: 'حذف الأعمده بإستخدام اسمائها',
-      ko: '이름에 따라 열 삭제'
+      ko: '이름에 따라 열 삭제',
+      pt: 'excluir colunas por nome'
     }
   },
   filter: {
     message0: {
-      en: 'Filter %1', 
+      en: 'Filter %1',
       es: 'Filtrar %1',
       ar: 'تصفية أو فلتره %1',
-      ko: '%1 거르기'
+      ko: '%1 거르기',
+      pt: 'Filtrar %1'
     },
     args0_name: {
-      en: 'TEST', 
+      en: 'TEST',
       es: 'TEST',
       ar: 'إختبار',
-      ko: '테스트'
+      ko: '테스트',
+      pt: 'TESTE'
     },
     tooltip: {
-      en: 'filter rows by condition', 
+      en: 'filter rows by condition',
       es: 'filtrar filas por condicion',
       ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
-      ko: '조건에 따라 행 거르기'
+      ko: '조건에 따라 행 거르기',
+      pt: 'filtrar linhas por condição'
     }
   },
   groupBy: {
     message0: {
-      en: 'Group by %1', 
+      en: 'Group by %1',
       es: 'Agrupar por %1',
       ar: 'تقسيم البيانات عن طريف: %1',
-      ko: '%1 로 그룹화'
+      ko: '%1 로 그룹화',
+      pt: 'Agrupar por %1'
     },
     tooltip: {
-      en: 'group data by values in columns', 
+      en: 'group data by values in columns',
       es: 'agrupar datos por valores en columnas',
       ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
-      ko: '열의 값들로 데이터 그룹화'
+      ko: '열의 값들로 데이터 그룹화',
+      pt: 'agrupar dados por valores em colunas'
     }
   },
   saveAs: {
@@ -91,19 +102,22 @@ const MESSAGES = {
       en: 'Save as %1',
       es: 'Reporte %1', // TRANSLATE ES
       ar: 'التقرير %1', // TRANSLATE AR
-      ko: '%1 리포트' // TRANSLATE KO
+      ko: '%1 리포트', // TRANSLATE KO
+      pt: 'Salvar como %1'
     },
     args0_text: {
-      en: 'name', 
+      en: 'name',
       es: 'nombre',
       ar: 'الإسم',
-      ko: '이름'
+      ko: '이름',
+      pt: 'nome'
     },
     tooltip: {
       en: 'save a result',
       es: 'reporta un resultado', // TRANSLATE ES
       ar: 'عرض النتائج', // TRANSLATE AR
-      ko: '결과 리포트' // TRANSLATE KO
+      ko: '결과 리포트', // TRANSLATE KO
+      pt: 'salvar um resultado'
     }
   },
   select: {
@@ -111,13 +125,15 @@ const MESSAGES = {
       en: 'Select %1',
       es: 'Selecciona %1',
       ar: 'إختيار %1',
-      ko: '%1 선택'
+      ko: '%1 선택',
+      pt: 'Selecionar %1'
     },
     tooltip: {
       en: 'select columns by name',
       es: 'selecciona columnas por nombre',
       ar: 'إختيار الأعمده بإستخدام اسمائها',
-      ko: '이름으로 열 선택'
+      ko: '이름으로 열 선택',
+      pt: 'seleciona colunas por nome'
     }
   },
   sort: {
@@ -125,13 +141,15 @@ const MESSAGES = {
       en: 'Sort %1 descending %2',
       es: 'Ordena %1 descendiente %2',
       ar: 'ترتيب %1 تنازلي %2',
-      ko: '%2 내림차순으로 %1 정렬'
+      ko: '%2 내림차순으로 %1 정렬',
+      pt: 'Ordenar %1 descendente %2'
     },
     tooltip: {
       en: 'sort table by multiple columns',
       es: 'ordena tabla por multiples columnas',
       ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
-      ko: '다중 열에 따라 테이블 정렬'
+      ko: '다중 열에 따라 테이블 정렬',
+      pt: 'ordenar a table por múltiplas colunas'
     }
   },
   summarize: {
@@ -139,19 +157,22 @@ const MESSAGES = {
       en: 'Summarize %1 %2',
       es: 'Resumen %1 %2',
       ar: 'تلخيص البيانات %1 %2',
-      ko: '%1 %2 축소'
+      ko: '%1 %2 축소',
+      pt: 'Agregar %1 %2'
     },
     args0_text: {
-      en: 'column', 
+      en: 'column',
       es: 'columna',
       ar: 'العمود',
-      ko: '열'
+      ko: '열',
+      pt: 'coluna'
     },
     tooltip: {
       en: 'summarize values in  column',
       es: 'Resume valores en columna',
       ar: 'تلخيص قيم العمود',
-      ko: '열의 값 축소'
+      ko: '열의 값 축소',
+      pt: 'agrega valores em coluna'
     }
   },
   ungroup: {
@@ -159,27 +180,31 @@ const MESSAGES = {
       en: 'Ungroup',
       es: 'Desagrupar',
       ar: 'الغاء التقسيم',
-      ko: '그룹화 해제'
+      ko: '그룹화 해제',
+      pt: 'Desagrupar'
     },
     tooltip: {
-      en: 'remove grouping', 
+      en: 'remove grouping',
       es: 'quita agrupamiento',
       ar: 'الغاءتقسيم البيانات',
-      ko: '그룹화 삭제'
+      ko: '그룹화 삭제',
+      pt: 'remover agrupamento'
     }
   },
   unique: {
     message0: {
-      en: 'Unique %1', 
+      en: 'Unique %1',
       es: 'Unico %1',
       ar: 'فريد %1',
-      ko: '%1 을 유일값으로 만들기'
+      ko: '%1 을 유일값으로 만들기',
+      pt: 'Único %1'
     },
     tooltip: {
-      en: 'select rows with unique values', 
+      en: 'select rows with unique values',
       es: 'selecciona filas con valores unicos',
       ar: 'إختيار الصفوف ذات القيم الفريده',
-      ko: '유일값으로 행 선택'
+      ko: '유일값으로 행 선택',
+      pt: 'seleciona linhas com valores únicos'
     }
   }
 }
@@ -195,8 +220,7 @@ const setup = (language) => {
     {
       type: 'transform_create',
       message0: msg.get('create.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'COLUMN',
           text: msg.get('create.args0_text')
@@ -219,13 +243,11 @@ const setup = (language) => {
     {
       type: 'transform_drop',
       message0: msg.get('drop.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -239,12 +261,10 @@ const setup = (language) => {
     {
       type: 'transform_filter',
       message0: msg.get('filter.message0'),
-      args0: [
-        {
-          type: 'input_value',
-          name: msg.get('filter.args0_name')
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: msg.get('filter.args0_name')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -257,13 +277,11 @@ const setup = (language) => {
     {
       type: 'transform_groupBy',
       message0: msg.get('groupBy.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -277,13 +295,11 @@ const setup = (language) => {
     {
       type: 'transform_saveAs',
       message0: msg.get('saveAs.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'NAME',
-          text: msg.get('saveAs.args0_text')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'NAME',
+        text: msg.get('saveAs.args0_text')
+      }],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
@@ -296,13 +312,11 @@ const setup = (language) => {
     {
       type: 'transform_select',
       message0: msg.get('select.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -316,8 +330,7 @@ const setup = (language) => {
     {
       type: 'transform_sort',
       message0: msg.get('sort.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
           text: msg.get('multiple_columns')
@@ -341,8 +354,7 @@ const setup = (language) => {
     {
       type: 'transform_summarize',
       message0: msg.get('summarize.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_dropdown',
           name: 'OP',
           options: [
@@ -390,13 +402,11 @@ const setup = (language) => {
     {
       type: 'transform_unique',
       message0: msg.get('unique.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
