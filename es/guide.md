@@ -30,19 +30,19 @@ Por favor ve a [nuestra guia de contribuidores]({{ '/contributing/' | relative_u
 y tenga en cuenta que todos los contribuyentes deben cumplir con nuestro [Codigo de conducta]({{ '/conduct/' | relative_url }}).
 
 <h1 class="data" id="es_data">DATOS</h1>
-{% include_relative data/index.md %}
+{% include_relative data.md %}
 <h1 class="trasforms" id="es_transforms">TRANSFORMAR</h1>
-{% include_relative transform/index.md %}
+{% include_relative transform.md %}
 <h1 class="plot" id="es_plots">GRAFICO</h1>
-{% include_relative plot/index.md %}
+{% include_relative plot.md %}
 <h1 class="stats" id="es_stats">ESTADISTICAS</h1>
-{% include_relative stats/index.md %}
+{% include_relative stats.md %}
 <h1 class="op" id="es_op">OPERACION</h1>
-{% include_relative op/index.md %}
+{% include_relative op.md %}
 <h1 class="values" id="es_values">VALOR</h1>
-{% include_relative value/index.md %}
+{% include_relative value.md %}
 <h1 class="combine" id="es_combine">COMBINAR</h1>
-{% include_relative combine/index.md %}
+{% include_relative combine.md %}
 </div>
 
 <!-- these links should hyperlink to the h1s above -->

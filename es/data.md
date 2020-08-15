@@ -65,7 +65,7 @@ Cre una secuencia de números del 1 al N inclusive.
 <div id="user" markdown="1">
 ### Datos de usuario
 
-<img class="block" src="{{ 'es/img/data_user_data.svg' | relative_url }}" alt="user data block"/>
+<img class="block" src="{{ 'es/img/data_user.svg' | relative_url }}" alt="user data block"/>
 
 Utilice un conjunto de datos previamente cargado.
 

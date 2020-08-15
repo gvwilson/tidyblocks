@@ -29,19 +29,19 @@ please see [our contributors' guide]({{ '/contributing/' | relative_url }}) to g
 and please note that all contributors are required to abide by our [Code of Conduct]({{ '/conduct/' | relative_url }}).
 
 <h1 class="data" id="en_data">DATA</h1>
-{% include_relative data/index.md %}
+{% include_relative data.md %}
 <h1 class="transform" id="en_transforms">TRANSFORMS</h1>
-{% include_relative transform/index.md %}
+{% include_relative transform.md %}
 <h1 class="plot" id="en_plots">PLOTS</h1>
-{% include_relative plot/index.md %}
+{% include_relative plot.md %}
 <h1 class="stats" id="en_stats">STATISTICS</h1>
-{% include_relative stats/index.md %}
+{% include_relative stats.md %}
 <h1 class="op" id="en_op">OPERATIONS</h1>
-{% include_relative op/index.md %}
+{% include_relative op.md %}
 <h1 class="values" id="en_values">VALUES</h1>
-{% include_relative value/index.md %}
+{% include_relative value.md %}
 <h1 class="combine" id="en_combine">COMBINING</h1>
-{% include_relative combine/index.md %}
+{% include_relative combine.md %}
 </div>
 
 <!-- these links should hyperlink to the h1s above -->
