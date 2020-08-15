@@ -13,30 +13,34 @@ const {
 const MESSAGES = {
   absent: {
     message0: {
-      en: 'Absent', 
+      en: 'Absent',
       es: 'Ausente',
       ar: 'غائب',
-      ko: '공백'
+      ko: '공백',
+      pt: 'Ausente'
     },
     tooltip: {
-      en: 'represent a hole', 
+      en: 'represent a hole',
       es: 'representa un agujero',
       ar: 'تمثيل فجوه',
-      ko: '홀을 나타내기'
+      ko: '홀을 나타내기',
+      pt: 'representa um buraco'
     }
   },
   column: {
     column: {
-      en: 'column', 
+      en: 'column',
       es: 'columna',
       ar: 'العمود',
-      ko: '열'
+      ko: '열',
+      pt: 'coluna'
     },
     tooltip: {
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
       ar: 'الحصول على قيمه من عمود',
-      ko: '열의 값 가져오기'
+      ko: '열의 값 가져오기',
+      pt: 'obtém o valor de uma coluna'
     }
   },
   datetime: {
@@ -44,21 +48,24 @@ const MESSAGES = {
       en: 'YYYY-MM-DD',
       es: 'AAAA-MM-DD',
       ar: 'YYYY-MM-DD',
-      ko: '연도-월-일'
+      ko: '연도-월-일',
+      pt: 'AAAA-MM-DD'
     },
     tooltip: {
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
       ar: 'ثابت تاريخ/وقت',
-      ko: '날짜/시간 유지'
+      ko: '날짜/시간 유지',
+      pt: 'constante data/tempo'
     }
   },
   logical: {
     tooltip: {
-      en: 'logical constant', 
+      en: 'logical constant',
       es: 'constante logica',
       ar: 'ثابت منطقي',
-      ko: '논리 상수'
+      ko: '논리 상수',
+      pt: 'constante lógica'
     }
   },
   number: {
@@ -66,7 +73,8 @@ const MESSAGES = {
       en: 'constant number',
       es: 'numbero constante',
       ar: 'رقم ثابت',
-      ko: '상수'
+      ko: '상수',
+      pt: 'número constante'
     }
   },
   text: {
@@ -74,13 +82,15 @@ const MESSAGES = {
       en: 'text',
       es: 'texto',
       ar: 'نص',
-      ko: '텍스트'
+      ko: '텍스트',
+      pt: 'texto'
     },
     tooltip: {
-      en: 'constant text', 
+      en: 'constant text',
       es: 'texto constante',
       ar: 'نص ثابت',
-      ko: '상수 텍스트'
+      ko: '상수 텍스트',
+      pt: 'texto constante '
     }
   },
   rownum: {
@@ -88,13 +98,15 @@ const MESSAGES = {
       en: 'Row number',
       es: 'Numero de fila',
       ar: 'رقم الصف',
-      ko: '행 번호'
+      ko: '행 번호',
+      pt: 'Número da linha'
     },
     tooltip: {
       en: 'row number',
       es: 'numero de fila',
       ar: 'رقم الصف',
-      ko: '행 번호'
+      ko: '행 번호',
+      pt: 'numero da linha'
     }
   },
   exponential: {
@@ -102,13 +114,15 @@ const MESSAGES = {
       en: 'Exponential \u03BB %1',
       es: 'Exponencial \u03BB %1',
       ar: 'الأسيه \u03BB %1',
-      ko: '\u03BB %1 지수로 표현'
+      ko: '\u03BB %1 지수로 표현',
+      pt: 'Exponencial \u03BB %1'
     },
     tooltip: {
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
       ar: 'المتغيرات العشوائه الأسيه',
-      ko: '지수 랜덤 값'
+      ko: '지수 랜덤 값',
+      pt: 'valor aleatório exponencial'
     }
   },
   normal: {
@@ -116,27 +130,31 @@ const MESSAGES = {
       en: 'Normal \u03BC %1 \u03C3 %2',
       es: 'Normal \u03BC %1 \u03C3 %2',
       ar: 'الطبيعي \u03BC %1 \u03C3 %2',
-      ko: '\u03BC %1 \u03C3 %2 정규화'
+      ko: '\u03BC %1 \u03C3 %2 정규화',
+      pt: 'Normal \u03BC %1 \u03C3 %2'
     },
     tooltip: {
       en: 'normal random value',
       es: 'valor aleatorio normal',
       ar: 'المتغير العشوائي الطبيعي',
-      ko: '정규 랜덤 값'
+      ko: '정규 랜덤 값',
+      pt: 'valor aleatório normal'
     }
   },
   uniform: {
     message0: {
-      en: 'Uniform \u03B1 %1 \u03B2 %2', 
+      en: 'Uniform \u03B1 %1 \u03B2 %2',
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
       ar: 'المنتظم \u03B1 %1 \u03B2 %2',
-      ko: '\u03B1 %1 \u03B2 %2 균등화'
+      ko: '\u03B1 %1 \u03B2 %2 균등화',
+      pt: 'Uniforme \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
-      en: 'uniform random value', 
+      en: 'uniform random value',
       es: 'valor aleatorio uniforme',
       ar: 'المتغير العشوائي المنتظم',
-      ko: '균등 랜덤 값'
+      ko: '균등 랜덤 값',
+      pt: 'valor aleatório uniforme',
     }
   }
 }
@@ -195,16 +213,14 @@ const setup = (language) => {
     {
       type: 'value_logical',
       message0: '%1',
-      args0: [
-        {
-          type: 'field_dropdown',
-          name: 'VALUE',
-          options: [
-            ['true', 'true'],
-            ['false', 'false']
-          ]
-        }
-      ],
+      args0: [{
+        type: 'field_dropdown',
+        name: 'VALUE',
+        options: [
+          ['true', 'true'],
+          ['false', 'false']
+        ]
+      }],
       output: 'Boolean',
       helpUrl: './value/#logical',
       style: 'value_block',
@@ -230,13 +246,11 @@ const setup = (language) => {
     {
       type: 'value_text',
       message0: '%1',
-      args0: [
-        {
-          type: 'field_input',
-          name: 'VALUE',
-          text: msg.get('text.text')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'VALUE',
+        text: msg.get('text.text')
+      }],
       output: 'String',
       style: 'value_block',
       helpUrl: './value/#text',
@@ -258,13 +272,11 @@ const setup = (language) => {
     {
       type: 'value_exponential',
       message0: msg.get('exponential.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'RATE',
-          text: '1.0'
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'RATE',
+        text: '1.0'
+      }],
       output: 'Number',
       style: 'value_block',
       helpUrl: './value/#exponential',
@@ -276,8 +288,7 @@ const setup = (language) => {
     {
       type: 'value_normal',
       message0: msg.get('normal.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'MEAN',
           text: '0'
@@ -299,8 +310,7 @@ const setup = (language) => {
     {
       type: 'value_uniform',
       message0: msg.get('uniform.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'LOW',
           text: '0'
