@@ -10,6 +10,7 @@ import Link from '@material-ui/core/Link'
 import Blockly from 'blockly/blockly_compressed'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
+import AdmZip from 'adm-zip'
 
 function SaveDialog (props) {
   return (
@@ -178,6 +179,31 @@ export class SaveWorkspaceFormDialog extends React.Component{
   }
 }
 
+// Helper function that returns the SVG of the provided workspace.
+function getSvgXml(workspace){
+  const canvas = workspace.svgBlockCanvas_.cloneNode(true)
+  canvas.removeAttribute("transform");
+  let themeCss = document.getElementById("blockly-renderer-style-thrasos-tidyblocks").innerHTML
+  // Theme name isn't inserted on our pulled svg so we remove it.
+  themeCss = themeCss.replace(/.thrasos-renderer.tidyblocks-theme/g, '')
+  // Default blockly css.
+  let blocklyCss = document.getElementById("blockly-common-style").innerHTML
+  const css = `<defs><style type="text/css">` + themeCss + blocklyCss + `</style></defs>`
+  const bboxElement = document.getElementsByClassName("blocklyBlockCanvas")[0];
+  const bbox = bboxElement.getBBox();
+  const content = new XMLSerializer().serializeToString(canvas);
+  const xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${
+    bbox.width}" height="${bbox.height}" viewBox=" ${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">${
+    css}">${content}</svg>`
+  return xml
+}
+
+// Returns the number of bytes in a string, accounting for multi-byte characters.
+// https://stackoverflow.com/a/12205668
+function byteCount(s) {
+    return encodeURI(s).split(/%..|./).length - 1
+}
+
 export class SaveSvgFormDialog extends React.Component{
   constructor(props) {
     super(props)
@@ -214,25 +240,87 @@ export class SaveSvgFormDialog extends React.Component{
   }
 
   handleDownload (workspace){
-    const canvas = workspace.svgBlockCanvas_.cloneNode(true)
-    canvas.removeAttribute("transform");
-    let themeCss = document.getElementById("blockly-renderer-style-thrasos-tidyblocks").innerHTML
-    // Theme name isn't inserted on our pulled svg so we remove it.
-    themeCss = themeCss.replace(/.thrasos-renderer.tidyblocks-theme/g, '')
-    // Default blockly css.
-    let blocklyCss = document.getElementById("blockly-common-style").innerHTML
-    const css = `<defs><style type="text/css">` + themeCss + blocklyCss + `</style></defs>`
-    const bboxElement = document.getElementsByClassName("blocklyBlockCanvas")[0];
-    const bbox = bboxElement.getBBox();
-    const content = new XMLSerializer().serializeToString(canvas);
-    const xml = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="${
-      bbox.width}" height="${bbox.height}" viewBox=" ${bbox.x} ${bbox.y} ${bbox.width} ${bbox.height}">${
-      css}">${content}</svg>`
+    let xml = getSvgXml(workspace)
     const blob = new Blob([xml])
     const link = document.getElementById('downloadSvg')
     link.setAttribute('href', URL.createObjectURL(blob))
     link.setAttribute('download', this.state.filename)
     this.handleClose()
+  }
+
+  render () {
+    return (
+      <div>
+        <SaveDialog
+          open={this.state.open}
+          title={this.state.title}
+          handleClose={this.handleClose}
+          handleDownload={this.handleDownload}
+          handleFilenameChange={this.handleFilenameChange}
+          contentText={this.state.contentText}
+          linkId={this.state.linkId}
+          filename={this.state.filename}
+          data={this.props.data}/>
+      </div>
+    )
+  }
+}
+
+export class SaveAllSvgFormDialog extends React.Component{
+  constructor(props) {
+    super(props)
+    const dateObj = new Date()
+    const month = dateObj.getUTCMonth() + 1
+    const day = dateObj.getUTCDate()
+    const year = dateObj.getUTCFullYear()
+    const filename = year + '_' + month + '_' + day + '.zip'
+
+    this.state = {
+      open: false,
+      filename: filename,
+      linkId: 'downloadAllSvg',
+      title: 'Save All Svgs',
+      contentText: 'Enter the name for your zip file.'
+    }
+    this.handleClickOpen = this.handleClickOpen.bind(this)
+    this.handleClose = this.handleClose.bind(this)
+    this.handleDownload = this.handleDownload.bind(this)
+    this.handleFilenameChange = this.handleFilenameChange.bind(this)
+  }
+
+  handleClickOpen () {
+    this.setState({open: true})
+  }
+
+  handleClose () {
+    this.setState({open: false})
+  }
+
+  handleFilenameChange (evt) {
+    const value = evt.target.value
+    this.setState({ filename: value })
+  }
+
+  handleDownload (workspace){
+    var regex = /type="(.*)"/g;
+    const matchAll = this.props.toolbox.matchAll(regex);
+    Blockly.mainWorkspace.clear()
+    let svgZip = new AdmZip();
+
+    // Iterate over all blocks we passed into our toolbox. Generate their svg,
+    // and add the files to a list.
+    for (const match of matchAll) {
+      this.props.blocklyRef.current.workspace.importFromXml('<xml><block type="'
+        + match[1] + '"></block></xml>')
+      let xml = getSvgXml(workspace).toString('utf8')
+      svgZip.addFile(match[1] + ".svg", Buffer.alloc(byteCount(xml), xml), match[1] + " svg file");
+      Blockly.mainWorkspace.clear()
+    }
+    const zipBuffer = svgZip.toBuffer();
+    const blob = new Blob([zipBuffer])
+    const link = document.getElementById('downloadAllSvg')
+    link.setAttribute('href', URL.createObjectURL(blob))
+    link.setAttribute('download', this.state.filename)
   }
 
   render () {
