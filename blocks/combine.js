@@ -2,7 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {Messages} = require('./helpers')
+const {
+  Messages
+} = require('./helpers')
 
 /**
  * Lookup table for message strings.
@@ -13,29 +15,33 @@ const MESSAGES = {
       en: 'Glue left %1 right %2 labels %3',
       es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
       ar: 'دمج من جهة اليسار %1 اليمين %2 الفئات %3',
+      it: 'incolla sinistra %1 destra %2 etichette %3',
       ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3', 
-      it: 'incolla sinistra %1 destra %2 etichette %3'
+      pt: 'Juntar esquerda %1 direita %2 etiquetas %3'
     },
     table_name: {
       en: 'name',
       es: 'nombre',
       ar: 'الإسم',
+      it: 'nome',
       ko: '이름', 
-      it: 'nome'
+      pt: 'nome'
     },
     label: {
       en: 'label',
       es: 'etiqueta',
       ar: 'الفئة',
+      it: 'etichetta',
       ko: '라벨',
-      it: 'etichetta'
+      pt: 'etiqueta'
     },
     tooltip: {
       en: 'glue rows from two tables together',
       es: 'pegar juntas filas de dos tablas',
       ar: 'دمج صفوف من جدولين',
+      it: 'incolla le righe di due tabelle insieme',
       ko: '두 테이블의 행을 붙이기',
-      it: 'incolla le righe di due tabelle insieme'
+      pt: 'juntar linhas de duas tabelas'
     }
   },
   join: {
@@ -43,43 +49,49 @@ const MESSAGES = {
       en: 'Join',
       es: 'Unir',
       ar: 'دمج',
+      it: 'unisci',
       ko: '연결', 
-      it: 'unisci'
+      pt: 'Unir'
     },
     message1: {
       en: 'left %1 %2',
       es: 'izquierda  %1 %2',
       ar: 'يسار %1 %2',
+      it: 'sinistra %1 %2',
       ko: '왼쪽 %1 %2',
-      it: 'sinistra %1 %2'
+      pt: 'esquerda %1 %2'
     },
     message2: {
       en: 'right %1 %2',
       es: 'derecha %1 %2',
       ar: 'يمين %1 %2',
+      it: 'destra %1 %2',
       ko: '오른쪽 %1 %2',
-      it: 'destra %1 %2'
+      pt: 'direita %1 %2'
     },
     table: {
       en: 'table',
       es: 'tabla',
       ar: 'الجدول',
+      it: 'tabella',
       ko: '테이블',
-      it: 'tabella'
+      pt: 'tabela'
     },
     column: {
       en: 'column',
       es: 'columna',
       ar: 'العمود',
+      it: 'colonna',
       ko: '열',
-      it: 'colonna'
+      pt: 'coluna'
     },
     tooltip: {
       en: 'join two tables by matching values',
       es: 'unir dos tables emparenjando valores',
       ar: 'دمج جدولين عن طريق تشابه القيم',
+      it: 'unisce due tabelle con valori corrispondenti',
       ko: '일치하는 값으로 두 테이블 연결',
-      it: 'unisce due tabelle con valori corrispondenti'
+      pt: 'unir duas tabelas usando valores coincidentes'
     }
   }
 }
@@ -95,8 +107,7 @@ const setup = (language) => {
     {
       type: 'combine_glue',
       message0: msg.get('glue.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'LEFT_TABLE',
           text: msg.get('glue.table_name')
@@ -126,8 +137,7 @@ const setup = (language) => {
       message0: msg.get('join.message0'),
       args0: [],
       message1: msg.get('join.message1'),
-      args1: [
-        {
+      args1: [{
           type: 'field_input',
           name: 'LEFT_TABLE',
           text: msg.get('join.table')
@@ -139,8 +149,7 @@ const setup = (language) => {
         }
       ],
       message2: msg.get('join.message2'),
-      args2: [
-        {
+      args2: [{
           type: 'field_input',
           name: 'RIGHT_TABLE',
           text: msg.get('join.table')
