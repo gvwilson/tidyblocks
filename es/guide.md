@@ -11,7 +11,6 @@ language: es
 
 <br/>
 <br/>
-<br/>
 
 <div align="center">
   <img width="75%" border="1" src="{{ '/static/screenshot_es.png' | relative_url }}" alt="Screenshot" />
