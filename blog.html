@@ -9,9 +9,10 @@ layout: page
 
 <div class="posts">
   {% for post in site.posts %}
-  <article>
-    <h2>{{ post.date | date: "%Y-%m-%d" }}: <a href="{{ post.url }}">{{ post.title }}</a></h2>
-    {{ post.excerpt }}
+  <article style="padding-bottom:40px;margin-right:15rem;">
+    <p style="color:grey;">{{ post.date | date: "%Y-%m-%d" }}</p>
+    <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
+    <div style="color:grey;">{{ post.excerpt }}</p>
   </article>
   {% endfor %}
 </div>
