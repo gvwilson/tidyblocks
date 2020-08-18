@@ -686,7 +686,9 @@ class TransformKMeansClustering extends TransformStats {
       newRow[this.labelCol] = labels[i]
       return newRow
     })
-    return new DataFrame(data)
+    const result = new DataFrame(data)
+    env.setResult(this.label, result)
+    return result
   }
 }
 
