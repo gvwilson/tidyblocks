@@ -6,6 +6,7 @@ const util = require('./util')
 const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
+const {kMeansCluster} = require('./stats')
 
 /**
  * Indicate that persisted JSON is a transform.
@@ -659,43 +660,33 @@ class TransformTTestPaired extends TransformStats {
 
 /**
  * K-means clustering.
- * @param {string} valueCol The column to get values from.
+ * @param {string} axisX Which column to use for the X axis.
+ * @param {string} axisY Which column to use for the Y axis.
  * @param {number} numClusters The number of clusters to create.
+ * @param {string} labelCol What to call the label column.
  */
 class TransformKMeansClustering extends TransformStats {
-  constructor (label, valueCol, numClusters, labelCol) {
+  constructor (label, axisX, axisY, numClusters, labelCol) {
     util.check(numClusters > 0,
                `Require positive number of clusters`)
     super('k_means')
     this.label = label
-    this.valueCol = valueCol
+    this.axisX = axisX
+    this.axisY = axisY
     this.numClusters = numClusters
     this.labelCol = labelCol
   }
 
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.label}`)
-    const samples = df.data.map(row => row[this.valueCol])
-    const clusters = stats.ckmeans(samples, this.numClusters)
-    const lookup = this._valuesToLabels(clusters)
-    const newCol = {}
-    const data = this.data.map(row => {
-      newCol[this.labelCol] = lookup.get(row[this.valueCol])
-      return Object.assign({}, row, newCol)
+    const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
+    const {labels, centroids} = kMeansCluster(points, this.numClusters)
+    const data = df.data.map((row, i) => {
+      const newRow = Object.assign({}, row)
+      newRow[this.labelCol] = labels[i]
+      return newRow
     })
-    env.setStats(this.label, 'FIXME') // calculate goodness of fit (?)
-    return data
-  }
-
-  _valuesToLabels (allClusters) {
-    const result = new Map()
-    allClusters.forEach((cluster, i) => {
-      const label = i + 1
-      cluster.forEach(value => {
-        result[value] = label
-      })
-    })
-    return result
+    return new DataFrame(data)
   }
 }
 

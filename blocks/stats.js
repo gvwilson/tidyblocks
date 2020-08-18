@@ -107,17 +107,26 @@ const MESSAGES = {
       en: 'k-means cluster'
     },
     message1: {
-      en: 'name %1 column %2 number %3 label %4'
+      en: 'name %1 X %2 Y %3 number %4 label %5'
     },
     args1_name: {
       en: 'name'
     },
-    args1_column: {
-      en: 'column',
-      es: 'columna',
-      ar: 'العمود',
-      ko: '열',
-      it: 'colonna'
+    args1_x: {
+      en: 'X axis',
+      es: 'eje X',
+      ar: 'المحور الأفقي',
+      it: 'asse X',
+      ko: 'X축',
+      pt: 'eixo X'
+    },
+    args1_y: {
+      en: 'Y axis',
+      es: 'eje Y',
+      ar: 'المحور الرأسي',
+      it: 'asse Y',
+      ko: 'Y축', 
+      pt: 'eixo Y'
     },
     args1_label: {
       en: 'label',
@@ -213,8 +222,13 @@ const setup = (language) => {
         },
         {
           type: 'field_input',
-          name: 'COLUMN',
-          text: msg.get('stats_k_means.args1_column')
+          name: 'X_AXIS',
+          text: msg.get('stats_k_means.args1_x')
+        },
+        {
+          type: 'field_input',
+          name: 'Y_AXIS',
+          text: msg.get('stats_k_means.args1_y')
         },
         {
           type: 'field_number',
@@ -255,10 +269,11 @@ const setup = (language) => {
   // Create k-means cluster.
   Blockly.TidyBlocks['stats_k_means'] = (block) => {
     const name = block.getFieldValue('NAME')
-    const column = block.getFieldValue('COLUMN')
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
     const number = block.getFieldValue('NUMBER')
     const label = block.getFieldValue('LABEL')
-    return `["@transform", "k_means", "${name}", "${column}", ${number}, "${label}"]`
+    return `["@transform", "k_means", "${name}", "${xAxis}", "${yAxis}", ${number}, "${label}"]`
   }
 }
 

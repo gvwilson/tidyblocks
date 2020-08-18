@@ -363,6 +363,22 @@ describe('build statistics', () => {
     const stats = env.getStats('result')
     done()
   })
+
+  it('clusters points', (done) => {
+    const df = new DataFrame([
+      {x: 0.0, y: 0.0},
+      {x: 1.0, y: 0.5},
+      {x: 0.1, y: 0.0}
+    ])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.k_means('result', 'x', 'y', 2, 'label')
+    const result = transform.run(env, df)
+    assert.equal(result.data[0].label, result.data[2].label,
+                 `Points not in the same group`)
+    assert.notEqual(result.data[0].label, result.data[1].label,
+                    `Points should not be in the same group`)
+    done()
+  })
 })
 
 describe('transform equality tests', () => {
