@@ -2,7 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {Messages} = require('./helpers')
+const {
+  Messages
+} = require('./helpers')
 
 const combine = require('./combine')
 const data = require('./data')
@@ -33,50 +35,57 @@ const MESSAGES = {
     ar: 'دمج',
     en: 'combine',
     es: 'combinar',
+    it: 'unire',
     ko: '결합', 
-    it: 'unire'
+    pt: 'combinar'
   },
   data: {
     ar: 'بيانات',
     en: 'data',
     es: 'datos',
+    it: 'dati',
     ko: '데이터',
-    it: 'dati'
+    pt: 'dados'
   },
   op: {
     ar: 'حساب',
     en: 'op',
     es: 'operacion',
+    it: 'operatori',
     ko: '작업',
-    it: 'operatori'
+    pt: 'operação'
   },
   plot: {
     ar: 'رسم',
     en: 'plot',
     es: 'grafico',
+    it: 'grafici',
     ko: '그래프',
-    it: 'grafici'
+    pt: 'gráfico'
   },
   stats: {
     ar: 'إحصائيات',
     en: 'stats',
     es: 'estadísticas',
+    it: 'statistiche',
     ko: '통계',
-    it: 'statistiche'
+    pt: 'estatísticas'
   },
   transform: {
     ar: 'تغيير',
     en: 'transform',
     es: 'transformar',
+    it: 'trasformazioni',
     ko: '변환',
-    it: 'trasformazioni'
+    pt: 'transformar'
   },
   value: {
     ar: 'القيمه',
     en: 'value',
     es: 'valor',
+    it: 'valore',
     ko: '값', 
-    it: 'valore'
+    pt: 'valor'
   }
 }
 
@@ -226,7 +235,10 @@ Blockly.TidyBlocks.workspaceToCode = (workspace) => {
   const pipelines = cappedBlocks.map(top => _makePipeline(top))
   pipelines.unshift('"@program"')
   const code = `[${pipelines}]`
-  return {code, strayCount}
+  return {
+    code,
+    strayCount
+  }
 }
 
 /**
@@ -242,7 +254,7 @@ const _makePipeline = (top) => {
     current = current.getNextBlock()
   }
   const transforms =
-        blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
+    blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
   transforms.unshift('"@pipeline"')
   return `[${transforms}]`
 }

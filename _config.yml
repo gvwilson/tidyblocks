@@ -18,6 +18,7 @@ defaults:
 # Parsing
 kramdown:
   toc_levels: "2"
+  parse_block_html: true
 
 # Files to ignore
 exclude:

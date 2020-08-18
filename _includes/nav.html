@@ -1,23 +1,44 @@
-<p>
-  <a href="{{'/' | relative_url}}"><img src="{{'/static/logo.svg' | relative_url}}" alt="TidyBlocks logo" width="80%" /></a>
-  <br/>
-  <a href="{{'/' | relative_url}}">TidyBlocks</a>
-</p>
-<hr/>
-<p>
-  <a href="mailto:{{site.email}}">Contact</a>
-  <br/>
-  <a href="{{ '/blog/' | relative_url }}">Blog</a>
-  <br/>
-  <a href="{{ '/license/' | relative_url }}">License</a>
-  <br/>
-  <a href="{{ '/conduct/' | relative_url }}">Code of Conduct</a>
-  <br/>
-  <a href="{{ '/contributing/' | relative_url }}">Contributing</a>
-  <br/>
-  <a href="{{ '/authors/' | relative_url }}">Authors</a>
-  <br/>
-  <a href="{{ '/docs/' | relative_url }}">Source Docs</a>
-  <br/>
-  <a href="{{site.repo}}">Source</a></p>
-</p>
+<div class="navDiv">
+  <a href="{{'/' | relative_url}}"><img id="img_logo" src="{{'/static/logo.svg' | relative_url}}" alt="TidyBlocks logo" width="5%" /></a>
+  
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="{{ '/ar/' | relative_url}}">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="{{ '/en/' | relative_url}}">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="{{ '/es/' | relative_url}}">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="{{ '/it/' | relative_url}}">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="{{ '/ko/' | relative_url}}">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="{{ '/pt/' | relative_url}}">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/en/guide' | relative_url }}">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/es/guide' | relative_url }}">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/en/FAQ' | relative_url }}">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="{{ '/es/FAQ' | relative_url }}">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:{{site.email}}">contact</a></li>
+      </ul>
+    </nav>
+</div>

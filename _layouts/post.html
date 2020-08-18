@@ -9,14 +9,12 @@
   <body class="jekyllBody">
     <nav>
       {% include nav.html %}
-      <hr/>
-      {% include languages.html %}
     </nav>
     <main>
       <h1>{{page.title}}</h1>
       {{content}}
       <p align="right"><em>— {{page.author}} / {{page.date | date: "%Y-%m-%d"}}</em></p>
-      {% include footer.html %}
     </main>
+    {% include footer.html %}
   </body>
 </html>
