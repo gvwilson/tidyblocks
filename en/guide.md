@@ -4,21 +4,25 @@ layout: page
 language: en
 ---
 
-<div id="guide_wrapper">
-
-<div class="guide_lhs">
+<div class="guide_container">
 <h1><a href="../index.html">TidyBlocks</a></h1>
 
+<!-- these links should hyperlink to the h1s above -->
+
 <br/>
 <br/>
 
-<div align="center">
-  <img width="75%" border="1" src="{{ '/static/screenshot.png' | relative_url }}" alt="Screenshot" />
+<div class="guide_lhs">
+ <a class="data" href="#en_data">DATA</a><br/>
+ <a class="transform" href="#en_transforms">TRANSFORMS</a><br/>
+ <a class="plot" href="#en_plots">PLOTS</a><br/>
+ <a class="stats" href="#en_stats">STATISTICS</a><br/>
+ <a class="op" href="#en_op">OPERATIONS</a><br/>
+ <a class="values" href="#en_values">VALUES</a><br/>
+ <a class="combine" href="#en_combine">COMBINING</a><br/>
 </div>
 
-<br/>
-<br/>
-
+<div class="guide_rhs">
 A blocks-based tool for tidy data manipulation and analysis.
 Please see <https://tidyblocks.tech> for a free online version
 or visit [our GitHub repository]({{site.repo}}).
@@ -27,6 +31,9 @@ This work is made freely available under the [Hippocratic License]({{ '/license/
 Contributions of all kinds are welcome:
 please see [our contributors' guide]({{ '/contributing/' | relative_url }}) to get started,
 and please note that all contributors are required to abide by our [Code of Conduct]({{ '/conduct/' | relative_url }}).
+
+<br/>
+<br/>
 
 <h1 class="data" id="en_data">DATA</h1>
 {% include_relative data.md %}
@@ -43,22 +50,4 @@ and please note that all contributors are required to abide by our [Code of Cond
 <h1 class="combine" id="en_combine">COMBINING</h1>
 {% include_relative combine.md %}
 </div>
-
-<!-- these links should hyperlink to the h1s above -->
-<div class="guide_rhs">
- <a class="data" href="#en_data">DATA</a>
-  <br/><br/>
- <a class="transform" href="#en_transforms">TRANSFORMS</a>
-  <br/><br/>
- <a class="plot" href="#en_plots">PLOTS</a>
-  <br/><br/>
- <a class="stats" href="#en_stats">STATISTICS</a>
-  <br/><br/>
- <a class="op" href="#en_op">OPERATIONS</a>
-   <br/><br/>
- <a class="values" href="#en_values">VALUES</a>
-  <br/><br/>
- <a class="combine" href="#en_combine">COMBINING</a>
-</div>
-
 </div>
