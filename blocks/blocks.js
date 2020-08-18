@@ -127,6 +127,7 @@ const createXmlConfig = (language) => {
       <block type="stats_ttest_one"></block>
       <block type="stats_ttest_two"></block>
       <block type="stats_k_means"></block>
+      <block type="stats_silhouette"></block>
     </category>
     <category name="${msg.get('op')}" colour="${OP_COLOR}">
       <block type="op_arithmetic"></block>

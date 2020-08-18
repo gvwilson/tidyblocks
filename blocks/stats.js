@@ -107,10 +107,7 @@ const MESSAGES = {
       en: 'k-means cluster'
     },
     message1: {
-      en: 'name %1 X %2 Y %3 number %4 label %5'
-    },
-    args1_name: {
-      en: 'name'
+      en: 'X %1 Y %2 number %3 label %4'
     },
     args1_x: {
       en: 'X axis',
@@ -137,6 +134,43 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'calculate k-means cluster IDs'
+    }
+  },
+  stats_silhouette: {
+    message0: {
+      en: 'silhouette'
+    },
+    message1: {
+      en: 'X %1 Y %2 label %3 score %4'
+    },
+    args1_x: {
+      en: 'X axis',
+      es: 'eje X',
+      ar: 'المحور الأفقي',
+      it: 'asse X',
+      ko: 'X축',
+      pt: 'eixo X'
+    },
+    args1_y: {
+      en: 'Y axis',
+      es: 'eje Y',
+      ar: 'المحور الرأسي',
+      it: 'asse Y',
+      ko: 'Y축', 
+      pt: 'eixo Y'
+    },
+    args1_label: {
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئه',
+      ko: '라벨',
+      it: 'etichetta'
+    },
+    args1_score: {
+      en: 'score'
+    },
+    tooltip: {
+      en: 'calculate silhouette score of 2D clusters'
     }
   }
 }
@@ -217,11 +251,6 @@ const setup = (language) => {
       args1: [
         {
           type: 'field_input',
-          name: 'NAME',
-          text: msg.get('stats_k_means.args1_name')
-        },
-        {
-          type: 'field_input',
           name: 'X_AXIS',
           text: msg.get('stats_k_means.args1_x')
         },
@@ -247,6 +276,42 @@ const setup = (language) => {
       style: 'stats_blocks',
       tooltip: msg.get('stats_k_means.tooltip'),
       helpUrl: './stats/#k_means'
+    },
+
+    // Silhouette
+    {
+      type: 'stats_silhouette',
+      message0: msg.get('stats_silhouette.message0'),
+      args0: [],
+      message1: msg.get('stats_silhouette.message1'),
+      args1: [
+        {
+          type: 'field_input',
+          name: 'X_AXIS',
+          text: msg.get('stats_silhouette.args1_x')
+        },
+        {
+          type: 'field_input',
+          name: 'Y_AXIS',
+          text: msg.get('stats_silhouette.args1_y')
+        },
+        {
+          type: 'field_input',
+          name: 'LABEL',
+          text: msg.get('stats_silhouette.args1_label')
+        },
+        {
+          type: 'field_input',
+          name: 'SCORE',
+          text: msg.get('stats_silhouette.args1_score')
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'stats_blocks',
+      tooltip: msg.get('stats_silhouette.tooltip'),
+      helpUrl: './stats/#silhouette'
     }
   ])
 
@@ -268,12 +333,20 @@ const setup = (language) => {
 
   // Create k-means cluster.
   Blockly.TidyBlocks['stats_k_means'] = (block) => {
-    const name = block.getFieldValue('NAME')
     const xAxis = block.getFieldValue('X_AXIS')
     const yAxis = block.getFieldValue('Y_AXIS')
     const number = block.getFieldValue('NUMBER')
     const label = block.getFieldValue('LABEL')
-    return `["@transform", "k_means", "${name}", "${xAxis}", "${yAxis}", ${number}, "${label}"]`
+    return `["@transform", "k_means", "${xAxis}", "${yAxis}", ${number}, "${label}"]`
+  }
+
+  // Calculate silhouette score for 2D clusters.
+  Blockly.TidyBlocks['stats_silhouette'] = (block) => {
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
+    const label = block.getFieldValue('LABEL')
+    const score = block.getFieldValue('SCORE')
+    return `["@transform", "silhouette", "${xAxis}", "${yAxis}", "${label}", "${score}"]`
   }
 }
 

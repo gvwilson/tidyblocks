@@ -6,7 +6,10 @@ const util = require('./util')
 const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
-const {kMeansCluster} = require('./stats')
+const {
+  kMeansCluster,
+  silhouette
+} = require('./stats')
 
 /**
  * Indicate that persisted JSON is a transform.
@@ -663,32 +666,59 @@ class TransformTTestPaired extends TransformStats {
  * @param {string} axisX Which column to use for the X axis.
  * @param {string} axisY Which column to use for the Y axis.
  * @param {number} numClusters The number of clusters to create.
- * @param {string} labelCol What to call the label column.
+ * @param {string} labels What to call the label column.
  */
 class TransformKMeansClustering extends TransformStats {
-  constructor (label, axisX, axisY, numClusters, labelCol) {
+  constructor (axisX, axisY, numClusters, labels) {
     util.check(numClusters > 0,
                `Require positive number of clusters`)
     super('k_means')
-    this.label = label
     this.axisX = axisX
     this.axisY = axisY
     this.numClusters = numClusters
-    this.labelCol = labelCol
+    this.labels = labels
   }
 
   run (env, df) {
-    env.appendLog('log', `${this.species} ${this.label}`)
+    env.appendLog('log', `${this.species}`)
     const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
     const {labels, centroids} = kMeansCluster(points, this.numClusters)
     const data = df.data.map((row, i) => {
       const newRow = Object.assign({}, row)
-      newRow[this.labelCol] = labels[i]
+      newRow[this.labels] = labels[i]
       return newRow
     })
-    const result = new DataFrame(data)
-    env.setResult(this.label, result)
-    return result
+    return new DataFrame(data)
+  }
+}
+
+/**
+ * Silhouette scoring of clusters.
+ * @param {string} axisX Which column to use for the X axis.
+ * @param {string} axisY Which column to use for the Y axis.
+ * @param {string} labels What to call the label column.
+ * @param {string} score Where to put the calculated score.
+ */
+class TransformSilhouette extends TransformStats {
+  constructor (axisX, axisY, labels, score) {
+    super('silhouette')
+    this.axisX = axisX
+    this.axisY = axisY
+    this.labels = labels
+    this.score = score
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species}`)
+    const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
+    const labels = df.data.map(row => row[this.labels])
+    const scores = silhouette(points, labels)
+    const data = df.data.map((row, i) => {
+      const newRow = Object.assign({}, row)
+      newRow[this.score] = scores[i]
+      return newRow
+    })
+    return new DataFrame(data)
   }
 }
 
@@ -720,5 +750,6 @@ module.exports = {
   stats: TransformStats,
   ttest_one: TransformTTestOneSample,
   ttest_two: TransformTTestPaired,
-  k_means: TransformKMeansClustering
+  k_means: TransformKMeansClustering,
+  silhouette: TransformSilhouette
 }

@@ -306,6 +306,5 @@ function makeMatrix(columns, rows) {
 
 module.exports = {
   kMeansCluster,
-  silhouette,
-  silhouetteMetric
+  silhouette
 };
