@@ -209,7 +209,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_one.tooltip'),
-      helpUrl: './stats/#ttest_one'
+      helpUrl: './guide/#ttest_one'
     },
 
     // Two-sample two-sided t-test
@@ -239,7 +239,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_two.tooltip'),
-      helpUrl: './stats/#ttest_two'
+      helpUrl: './guide/#ttest_two'
     },
 
     // K-means clustering
@@ -275,7 +275,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_k_means.tooltip'),
-      helpUrl: './stats/#k_means'
+      helpUrl: './guide/#k_means'
     },
 
     // Silhouette
@@ -311,7 +311,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'stats_blocks',
       tooltip: msg.get('stats_silhouette.tooltip'),
-      helpUrl: './stats/#silhouette'
+      helpUrl: './guide/#silhouette'
     }
   ])
 
