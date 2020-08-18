@@ -151,7 +151,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('colors.tooltip'),
-      helpUrl: './data/#colors'
+      helpUrl: './guide/#colors'
     },
     // Earthquakes
     {
@@ -161,7 +161,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('earthquakes.tooltip'),
-      helpUrl: './data/#earthquakes'
+      helpUrl: './guide/#earthquakes'
     },
     // Penguins
     {
@@ -171,7 +171,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('penguins.tooltip'),
-      helpUrl: './data/#penguins'
+      helpUrl: './guide/#penguins'
     },
     // Phish
     {
@@ -181,7 +181,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('phish.tooltip'),
-      helpUrl: './data/#phish'
+      helpUrl: './guide/#phish'
     },
     // Sequence
     {
@@ -202,7 +202,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('sequence.tooltip'),
-      helpUrl: './data/#sequence'
+      helpUrl: './guide/#sequence'
     },
     // User data
     {
@@ -217,7 +217,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('data_user.tooltip'),
-      helpUrl: './data/#user'
+      helpUrl: './guide/#user'
     }
   ])
 

@@ -128,7 +128,7 @@ const setup = (language) => {
       style: 'combine_block',
       hat: 'cap',
       tooltip: msg.get('glue.tooltip'),
-      helpUrl: './combine/#glue',
+      helpUrl: './guide/#glue',
       extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE', 'validate_COLUMN']
     },
     // Join
@@ -165,7 +165,7 @@ const setup = (language) => {
       style: 'combine_block',
       hat: 'cap',
       tooltip: msg.get('join.tooltip'),
-      helpUrl: './combine/#join',
+      helpUrl: './guide/#join',
       extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
     }
   ])

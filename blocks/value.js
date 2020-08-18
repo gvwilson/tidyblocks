@@ -191,7 +191,7 @@ const setup = (language) => {
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#absent',
+      helpUrl: './guide/#absent',
       tooltip: msg.get('absent.tooltip')
     },
 
@@ -206,7 +206,7 @@ const setup = (language) => {
       }],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#column',
+      helpUrl: './guide/#column',
       tooltip: msg.get('column.tooltip'),
       extensions: ['validate_COLUMN']
     },
@@ -222,7 +222,7 @@ const setup = (language) => {
       }],
       output: 'DateTime',
       style: 'value_block',
-      helpUrl: './value/#datetime',
+      helpUrl: './guide/#datetime',
       tooltip: msg.get('datetime.tooltip'),
       extensions: ['validate_DATE']
     },
@@ -240,7 +240,7 @@ const setup = (language) => {
         ]
       }],
       output: 'Boolean',
-      helpUrl: './value/#logical',
+      helpUrl: './guide/#logical',
       style: 'value_block',
       tooltip: msg.get('logical.tooltip')
     },
@@ -255,7 +255,7 @@ const setup = (language) => {
         value: 0
       }],
       output: 'Number',
-      helpUrl: './value/#number',
+      helpUrl: './guide/#number',
       style: 'value_block',
       tooltip: msg.get('number.tooltip')
     },
@@ -271,7 +271,7 @@ const setup = (language) => {
       }],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#text',
+      helpUrl: './guide/#text',
       tooltip: msg.get('text.tooltip')
     },
 
@@ -282,7 +282,7 @@ const setup = (language) => {
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#rownum',
+      helpUrl: './guide/#rownum',
       tooltip: msg.get('rownum.tooltip')
     },
 
@@ -297,7 +297,7 @@ const setup = (language) => {
       }],
       output: 'Number',
       style: 'value_block',
-      helpUrl: './value/#exponential',
+      helpUrl: './guide/#exponential',
       tooltip: msg.get('exponential.tooltip'),
       extensions: ['validate_RATE']
     },
@@ -319,7 +319,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: './value/#normal',
+      helpUrl: './guide/#normal',
       tooltip: msg.get('normal.tooltip'),
       extensions: ['validate_STDDEV']
     },
@@ -341,7 +341,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: './value/#uniform',
+      helpUrl: './guide/#uniform',
       tooltip: msg.get('uniform.tooltip')
     }
   ])
