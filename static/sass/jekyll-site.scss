@@ -256,5 +256,20 @@
     color: #404040;
   }
 
+  .posts {
+    article {
+      padding-bottom:40px;
+      margin-right:15rem;
+
+      p {
+        color: grey;
+      }
+
+      div {
+        color: grey;
+      }
+    }
+  }
+
 }
 
