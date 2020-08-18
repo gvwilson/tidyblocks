@@ -56,11 +56,11 @@ class SaveMenuItems extends React.Component{
         </Link>
         <Link>
           <MenuItem onClick={() => this.handleClick(this.props.saveSvg)}>
-            Save Svg</MenuItem>
+            Save SVG</MenuItem>
         </Link>
         <Link>
           <MenuItem onClick={() => this.handleClick(this.props.saveAllSvg)}>
-            Save All Svgs</MenuItem>
+            Save All SVGs</MenuItem>
         </Link>
 
       </React.Fragment>

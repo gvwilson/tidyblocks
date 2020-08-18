@@ -217,8 +217,8 @@ export class SaveSvgFormDialog extends React.Component{
       open: false,
       filename: filename,
       linkId: 'downloadSvg',
-      title: 'Save Svg',
-      contentText: 'Enter the name for your svg file.'
+      title: 'Save SVG',
+      contentText: 'Enter the name for your SVG file.'
     }
     this.handleClickOpen = this.handleClickOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -279,7 +279,7 @@ export class SaveAllSvgFormDialog extends React.Component{
       open: false,
       filename: filename,
       linkId: 'downloadAllSvg',
-      title: 'Save All Svgs',
+      title: 'Save All SVGs',
       contentText: 'Enter the name for your zip file.'
     }
     this.handleClickOpen = this.handleClickOpen.bind(this)
