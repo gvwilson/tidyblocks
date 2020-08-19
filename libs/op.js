@@ -509,6 +509,60 @@ class OpSubtract extends OpArithmeticBase {
 // ----------------------------------------------------------------------
 
 /**
+ * Extremum operations.
+ */
+class OpExtremumBase extends ExprBinary {
+  /**
+   * Constructor.
+   * @param {string} species The name of the operation.
+   * @param {expr} left How to get the left value.
+   * @param {expr} right How to get the right value.
+   */
+  constructor (species, left, right, operator) {
+    super(FAMILY, species, left, right)
+    this.operator = operator
+  }
+
+  /**
+   * Select an extremum.
+   * @param {object} row The row to operate on.
+   * @param {number} i The row index within the dataframe.
+   * @returns The result.
+   */
+  run (row, i, numRows) {
+    const left = this.left.run(row, i, numRows)
+    const right = this.right.run(row, i, numRows)
+    return ((left === util.MISSING) || (right === util.MISSING))
+      ? util.MISSING
+      : this.operator(left, right)
+  }
+}
+
+/**
+ * Maximum of two values.
+ */
+class OpMaximum extends OpExtremumBase {
+  static OPERATOR = (left, right) => (left > right ? left : right)
+
+  constructor (left, right) {
+    super('maximum', left, right, OpMaximum.OPERATOR)
+  }
+}
+
+/**
+ * Minimum of two values.
+ */
+class OpMinimum extends OpExtremumBase {
+  static OPERATOR = (left, right) => (left < right ? left : right)
+
+  constructor (left, right) {
+    super('minimum', left, right, OpMinimum.OPERATOR)
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
  * Binary comparison expressions.
  */
 class OpCompareBase extends ExprBinary {
@@ -603,66 +657,6 @@ class OpNotEqual extends OpCompareBase {
 
   constructor (left, right) {
     super('notEqual', left, right, OpNotEqual.OPERATOR)
-  }
-}
-
-// ----------------------------------------------------------------------
-
-/**
- * Binary extremum expressions.
- */
-class OpExtremumBase extends ExprBinary {
-  /**
-   * Constructor.
-   * @param {string} species The name of the operation.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
-   */
-  constructor (species, left, right) {
-    super(FAMILY, species, left, right)
-  }
-
-  /**
-   * Perform a binary extremum operation.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @param func How to calculate the result.
-   * @returns The result.
-   */
-  extremum (row, i, func) {
-    const left = this.left.run(row, i)
-    const right = this.right.run(row, i)
-    util.checkTypeEqual(left, right,
-                        `Require equal types for ${this.species}`)
-    return ((left === util.MISSING) || (right === util.MISSING))
-      ? util.MISSING
-      : func(left, right)
-  }
-}
-
-/**
- * Maximum of two values.
- */
-class OpMaximum extends OpExtremumBase {
-  constructor (left, right) {
-    super('maximum', left, right)
-  }
-
-  run (row, i) {
-    return this.extremum(row, i, (left, right) => (left > right ? left : right))
-  }
-}
-
-/**
- * Minimum of two values.
- */
-class OpMinimum extends OpExtremumBase {
-  constructor (left, right) {
-    super('minimum', left, right)
-  }
-
-  run (row, i) {
-    return this.extremum(row, i, (left, right) => (left < right ? left : right))
   }
 }
 

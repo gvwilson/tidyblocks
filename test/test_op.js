@@ -137,7 +137,8 @@ describe('extrema', () => {
   it('finds maximum numbers', (done) => {
     const expected = [2, 5, 2, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.maximum(getLeft, getRight)
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
+    const numRows = fixture.NUMBER.length
+    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for maximum numbers`)
     done()
@@ -146,7 +147,8 @@ describe('extrema', () => {
   it('finds minimum numbers', (done) => {
     const expected = [2, -2, 0, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.minimum(getLeft, getRight)
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
+    const numRows = fixture.NUMBER.length
+    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for minimum numbers`)
     done()
@@ -155,7 +157,8 @@ describe('extrema', () => {
   it('finds maximum strings', (done) => {
     const expected = ['pqr', 'def', 'def', 'abc', util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.maximum(getLeft, getRight)
-    const actual = fixture.STRING.map((row, i) => op.run(row, i))
+    const numRows = fixture.STRING.length
+    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for maximum strings`)
     done()
@@ -164,7 +167,8 @@ describe('extrema', () => {
   it('finds minimum strings', (done) => {
     const expected = ['pqr', 'abc', 'abc', '', util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.minimum(getLeft, getRight)
-    const actual = fixture.STRING.map((row, i) => op.run(row, i))
+    const numRows = fixture.STRING.length
+    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for minimum strings`)
     done()
