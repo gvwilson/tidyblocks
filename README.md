@@ -1,6 +1,8 @@
 # TidyBlocks Revisited
 
-Contributions of all kinds are welcome.
+Contributions of all kinds are welcome,
+from translations and examples to bug fixes and new features.
+Please see [our contributors' guide](CONTRIBUTING.md) for instructions.
 By offering a contribution, you agree to abide by our [Code of Conduct](CONDUCT.md)
 and that your work may be made available under the terms of [our license](LICENSE.md).
 
