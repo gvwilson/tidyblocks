@@ -9,12 +9,42 @@ It accepts numbers, column names, and nested operation blocks.
 - *left space*: The left-hand side of the operation.
 - *drop down*: Select addition, subtraction, multiplication, division, remainder, or exponentiation.
 - *right space*: The right-hand side of the operation.
+</div>
+
+<div id="negate" markdown="1">
+## Negate
 
 <img class="block" src="{{ 'en/img/op_negate.svg' | relative_url }}" alt="negate block"/>
 
 Negate a number.
 
 - *space*: The value to negate.
+</div>
+
+<div id="compare" markdown="1">
+### Comparison
+
+<img class="block" src="{{ 'en/img/op_compare.svg' | relative_url }}" alt="comparison block"/>
+
+This block compares two values.
+It accepts any values on the left and right side
+and produces either `true` or `false`.
+
+- *left space*: The left-hand side of the operation.
+- *drop down*: Select equal, not equal, greater, less or equal, and so on.
+- *right space*: The right-hand side of the operation.
+</div>
+
+<div id="extremum" markdown="1">
+### Maximum and Minimum
+
+<img class="block" src="{{ 'en/img/op_extremum.svg' | relative_url }}" alt="maximum/minimum block"/>
+
+This block selects the maximum or minimum value from two different columns.
+
+- *left space*: The left-hand side of the operation.
+- *drop down*: Select maximum or minimum.
+- *right space*: The right-hand side of the operation.
 </div>
 
 <div id="logical" markdown="1">
@@ -33,6 +63,10 @@ and produces either `true` or `false`.
 Note that logical AND is only true if *both* sides are true,
 while logical OR is true if *either or both* sides are true:
 it is not either-or-both rather than one-or-the-other.
+</div>
+
+<div id="not" markdown="1">
+## Not
 
 <img class="block" src="{{ 'en/img/op_not.svg' | relative_url }}" alt="not block"/>
 

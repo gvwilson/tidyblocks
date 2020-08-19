@@ -131,6 +131,7 @@ const createXmlConfig = (language) => {
       <block type="op_arithmetic"></block>
       <block type="op_negate"></block>
       <block type="op_compare"></block>
+      <block type="op_extremum"></block>
       <block type="op_logical"></block>
       <block type="op_not"></block>
       <block type="op_type"></block>
