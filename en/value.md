@@ -50,6 +50,14 @@ any single or double quotes provided will be included in the text.
 - **text**: The desired text.
 </div>
 
+<div id="missing" markdown="1">
+### Missing Value
+
+<img class="block" src="{{ 'en/img/value_missing.svg' | relative_url }}" alt="missing value block"/>
+
+The special value representing missing data.
+</div>
+
 <div id="rownum" markdown="1">
 ### Row Number
 

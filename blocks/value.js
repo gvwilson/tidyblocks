@@ -103,6 +103,14 @@ const MESSAGES = {
       pt: 'texto constante '
     }
   },
+  missing: {
+    message0: {
+      en: 'Missing'
+    },
+    tooltip: {
+      en: 'missing value'
+    }
+  },
   rownum: {
     message0: {
       en: 'Row number',
@@ -275,6 +283,17 @@ const setup = (language) => {
       tooltip: msg.get('text.tooltip')
     },
 
+    // Missing value
+    {
+      type: 'value_missing',
+      message0: msg.get('missing.message0'),
+      args0: [],
+      output: 'String',
+      style: 'value_block',
+      helpUrl: './guide/#missing',
+      tooltip: msg.get('missing.tooltip')
+    },
+
     // Row number
     {
       type: 'value_rownum',
@@ -384,6 +403,12 @@ const setup = (language) => {
   Blockly.TidyBlocks['value_text'] = (block) => {
     const value = block.getFieldValue('VALUE')
     const code = `["@value", "text", "${value}"]`
+    return [code, ORDER_NONE]
+  }
+
+  // Missing value
+  Blockly.TidyBlocks['value_missing'] = (block) => {
+    const code = `["@value", "missing"]`
     return [code, ORDER_NONE]
   }
 

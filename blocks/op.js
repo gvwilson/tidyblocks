@@ -52,6 +52,11 @@ const MESSAGES = {
       pt: 'comparar duas colunas'
     }
   },
+  extremum: {
+    tooltip: {
+      en: 'select the largest or smallest value'
+    }
+  },
   logical: {
     tooltip: {
       en: 'combine logical values of two columns',
@@ -165,7 +170,8 @@ const setup = (language) => {
     {
       type: 'op_arithmetic',
       message0: '%1 %2 %3',
-      args0: [{
+      args0: [
+        {
           type: 'input_value',
           name: 'LEFT'
         },
@@ -197,10 +203,12 @@ const setup = (language) => {
     {
       type: 'op_negate',
       message0: '- %1',
-      args0: [{
-        type: 'input_value',
-        name: 'VALUE'
-      }],
+      args0: [
+        {
+          type: 'input_value',
+          name: 'VALUE'
+        }
+      ],
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
@@ -212,10 +220,12 @@ const setup = (language) => {
     {
       type: 'op_abs',
       message0: 'abs %1',
-      args0: [{
-        type: 'input_value',
-        name: 'VALUE'
-      }],
+      args0: [
+        {
+          type: 'input_value',
+          name: 'VALUE'
+        }
+      ],
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
@@ -227,7 +237,8 @@ const setup = (language) => {
     {
       type: 'op_compare',
       message0: '%1 %2 %3',
-      args0: [{
+      args0: [
+        {
           type: 'input_value',
           name: 'LEFT'
         },
@@ -255,11 +266,41 @@ const setup = (language) => {
       helpUrl: './guide/#compare'
     },
 
+    // Extrema
+    {
+      type: 'op_extremum',
+      message0: '%1 %2 %3',
+      args0: [
+        {
+          type: 'field_dropdown',
+          name: 'OP',
+          options: [
+            ['maximum', 'maximum'],
+            ['mininum', 'mininum']
+          ]
+        },
+        {
+          type: 'input_value',
+          name: 'LEFT'
+        },
+        {
+          type: 'input_value',
+          name: 'RIGHT'
+        }
+      ],
+      inputsInline: true,
+      output: 'Boolean',
+      style: 'op_block',
+      tooltip: msg.get('extremum.tooltip'),
+      helpUrl: './guide/#extremum'
+    },
+
     // Binary logical operations
     {
       type: 'op_logical',
       message0: '%1 %2 %3',
-      args0: [{
+      args0: [
+        {
           type: 'input_value',
           name: 'LEFT'
         },
@@ -287,10 +328,12 @@ const setup = (language) => {
     {
       type: 'op_not',
       message0: msg.get('not.message0'),
-      args0: [{
-        type: 'input_value',
-        name: 'VALUE'
-      }],
+      args0: [
+        {
+          type: 'input_value',
+          name: 'VALUE'
+        }
+      ],
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
@@ -302,7 +345,8 @@ const setup = (language) => {
     {
       type: 'op_type',
       message0: msg.get('type.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'input_value',
           name: 'VALUE'
         },
@@ -329,7 +373,8 @@ const setup = (language) => {
     {
       type: 'op_convert',
       message0: msg.get('convert.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'input_value',
           name: 'VALUE'
         },
@@ -355,7 +400,8 @@ const setup = (language) => {
     {
       type: 'op_datetime',
       message0: msg.get('datetime.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_dropdown',
           name: 'TYPE',
           options: [
@@ -384,7 +430,8 @@ const setup = (language) => {
     {
       type: 'op_conditional',
       message0: msg.get('conditional.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'input_value',
           name: 'COND'
         },
@@ -425,6 +472,15 @@ const setup = (language) => {
   Blockly.TidyBlocks['op_abs'] = (block) => {
     const value = valueToCode(block, 'VALUE')
     const code = `["@op", "abs", ${value}]`
+    return [code, ORDER_NONE]
+  }
+
+  // Extrema
+  Blockly.TidyBlocks['op_extremum'] = (block) => {
+    const op = block.getFieldValue('OP')
+    const left = valueToCode(block, 'LEFT')
+    const right = valueToCode(block, 'RIGHT')
+    const code = `["@op", "${op}", ${left}, ${right}]`
     return [code, ORDER_NONE]
   }
 
