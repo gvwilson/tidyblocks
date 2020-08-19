@@ -122,6 +122,44 @@ describe('logical operations', () => {
   })
 })
 
+describe('extrema', () => {
+  it('finds maximum numbers', (done) => {
+    const expected = [2, 5, 2, util.MISSING, util.MISSING, util.MISSING]
+    const op = new Op.maximum(getLeft, getRight)
+    const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) for maximum numbers`)
+    done()
+  })
+
+  it('finds minimum numbers', (done) => {
+    const expected = [2, -2, 0, util.MISSING, util.MISSING, util.MISSING]
+    const op = new Op.minimum(getLeft, getRight)
+    const actual = fixture.NUMBER.map((row, i) => op.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) for minimum numbers`)
+    done()
+  })
+
+  it('finds maximum strings', (done) => {
+    const expected = ['pqr', 'def', 'def', 'abc', util.MISSING, util.MISSING, util.MISSING]
+    const op = new Op.maximum(getLeft, getRight)
+    const actual = fixture.STRING.map((row, i) => op.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) for maximum strings`)
+    done()
+  })
+
+  it('finds minimum strings', (done) => {
+    const expected = ['pqr', 'abc', 'abc', '', util.MISSING, util.MISSING, util.MISSING]
+    const op = new Op.minimum(getLeft, getRight)
+    const actual = fixture.STRING.map((row, i) => op.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) for minimum strings`)
+    done()
+  })
+})
+
 describe('comparison on numbers', () => {
   it('greater numbers', (done) => {
     const expected = [false, true, true, util.MISSING, util.MISSING, util.MISSING]
