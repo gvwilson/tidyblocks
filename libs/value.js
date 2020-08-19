@@ -34,6 +34,26 @@ class ValueAbsent extends ExprBase {
 }
 
 /**
+ * Missing value.
+ * - Requires no parameters.
+ * - Is exactly equal to other missing value expressions.
+ * - Produces MISSING.
+ */
+class ValueMissing extends ExprBase {
+  constructor () {
+    super(FAMILY, 'missing')
+  }
+
+  equal (other) {
+    return other instanceof ValueMissing
+  }
+
+  run (row, i) {
+    return util.MISSING
+  }
+}
+
+/**
  * Row number.
  * - Requires no parameters.
  * - Is exactly equal to other row number expressions.
@@ -300,6 +320,7 @@ class ValueUniform extends ExprBase {
 module.exports = {
   FAMILY: FAMILY,
   absent: ValueAbsent,
+  missing: ValueMissing,
   rownum: ValueRowNum,
   column: ValueColumn,
   datetime: ValueDatetime,

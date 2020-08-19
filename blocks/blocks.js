@@ -145,6 +145,7 @@ const createXmlConfig = (language) => {
       <block type="value_logical"></block>
       <block type="value_number"></block>
       <block type="value_text"></block>
+      <block type="value_missing"></block>
       <block type="value_rownum"></block>
       <block type="value_exponential"></block>
       <block type="value_normal"></block>

@@ -37,6 +37,14 @@ describe('expression persistence', () => {
     done()
   })
 
+  it('restores a missing value creator', (done) => {
+    const factory = new Restore()
+    assert.deepEqual(factory.expr([Value.FAMILY, 'missing']),
+                     new Value.missing(),
+                     `Missing value creator`)
+    done()
+  })
+
   it('restores a row number', (done) => {
     const factory = new Restore()
     assert.deepEqual(factory.expr([Value.FAMILY, 'rownum']),

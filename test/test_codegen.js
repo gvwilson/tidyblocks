@@ -77,6 +77,15 @@ describe('value code generation', () => {
     done()
   })
 
+  it('generates code for missing value creators', (done) => {
+    const expected = [Value.FAMILY, 'missing']
+    const w = fixture.workspace()
+    const block = w.newBlock('value_missing')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for row numbers', (done) => {
     const expected = [Value.FAMILY, 'rownum']
     const w = fixture.workspace()
