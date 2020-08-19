@@ -28,7 +28,7 @@ class ValueAbsent extends ExprBase {
     return other instanceof ValueAbsent
   }
 
-  run (row, i) {
+  run (row, i, numRows) {
     util.fail('Missing expression')
   }
 }
@@ -48,7 +48,7 @@ class ValueRowNum extends ExprBase {
     return other instanceof ValueRowNum
   }
 
-  run (row, i) {
+  run (row, i, numRows) {
     return i
   }
 }
@@ -75,7 +75,7 @@ class ValueColumn extends ExprValue {
    * @param i The row number.
    * @returns The value (of any type).
    */
-  run (row, i) {
+  run (row, i, numRows) {
     util.check(typeof row === 'object',
                `Row must be object`)
     util.check(this.value in row,
@@ -105,7 +105,7 @@ class ValueDatetime extends ExprValue {
    * @param i The row number.
    * @returns The constant datetime value.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.value
   }
 }
@@ -130,7 +130,7 @@ class ValueLogical extends ExprValue {
    * @param i The row number.
    * @returns The constant logical value.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.value
   }
 }
@@ -155,7 +155,7 @@ class ValueNumber extends ExprValue {
    * @param i The row number.
    * @returns The constant numeric value.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.value
   }
 }
@@ -180,7 +180,7 @@ class ValueText extends ExprValue {
    * @param i The row number.
    * @returns The constant text value.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.value
   }
 }
@@ -206,7 +206,7 @@ class ValueExponential extends ExprValue {
    * @param i The row number.
    * @returns A sample from the distribution.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.generator()
   }
 }
@@ -248,7 +248,7 @@ class ValueNormal extends ExprBase {
    * @param i The row number.
    * @returns A sample from the distribution.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.generator()
   }
 }
@@ -292,7 +292,7 @@ class ValueUniform extends ExprBase {
    * @param i The row number.
    * @returns A sample from the distribution.
    */
-  run (row, i) {
+  run (row, i, numRows) {
     return this.generator()
   }
 }
