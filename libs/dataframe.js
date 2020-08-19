@@ -82,9 +82,10 @@ class DataFrame {
                `illegal new name for column`)
     util.check(expr instanceof ExprBase,
                `new value expression is not an expression object`)
+    const numRows = this.data.length
     const newData = this.data.map((row, i) => {
       const newRow = {...row}
-      newRow[newName] = expr.run(row, i)
+      newRow[newName] = expr.run(row, i, numRows)
       return newRow
     })
     const newColumns = this._makeColumns(newData, this.columns,
@@ -113,7 +114,8 @@ class DataFrame {
   filter (expr) {
     util.check(expr instanceof ExprBase,
                `filter expression is not an expression object`)
-    const newData = this.data.filter((row, i) => expr.run(row, i))
+    const numRows = this.data.length
+    const newData = this.data.filter((row, i) => expr.run(row, i, numRows))
     const newColumns = this._makeColumns(newData, this.columns)
     return new DataFrame(newData, newColumns)
   }
