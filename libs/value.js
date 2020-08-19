@@ -48,7 +48,7 @@ class ValueMissing extends ExprBase {
     return other instanceof ValueMissing
   }
 
-  run (row, i) {
+  run (row, i, numRows) {
     return util.MISSING
   }
 }
