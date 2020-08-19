@@ -15,25 +15,16 @@ const FAMILY = '@op'
 // ----------------------------------------------------------------------
 
 /**
- * Base class for negations.
- */
-class OpNegationBase extends ExprUnary {
-  constructor (species, arg) {
-    super(FAMILY, species, arg)
-  }
-}
-
-/**
  * Arithmetic negation.
  */
-class OpNegate extends OpNegationBase {
+class OpNegate extends ExprUnary {
   /**
    * Constructor.
    * @param {expr} arg How to get the value.
    * @returns The negation.
    */
   constructor (arg) {
-    super('negate', arg)
+    super(FAMILY, 'negate', arg)
   }
 
   /**
@@ -42,8 +33,8 @@ class OpNegate extends OpNegationBase {
    * @param {number} i The row's index.
    * @return The negation of the value returned by the sub-expression.
    */
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     util.checkNumber(value,
                      `Require number for ${this.name}`)
     return (value === util.MISSING) ? util.MISSING : util.safeValue(-value)
@@ -69,8 +60,8 @@ class OpAbs extends ExprUnary {
    * @param {number} i The row's index.
    * @return The negation of the value returned by the sub-expression.
    */
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     util.checkNumber(value,
                      `Require number for ${this.name}`)
     return (value === util.MISSING) ? util.MISSING : util.safeValue(Math.abs(value))
@@ -80,14 +71,14 @@ class OpAbs extends ExprUnary {
 /**
  * Logical negation.
  */
-class OpNot extends OpNegationBase {
+class OpNot extends ExprUnary {
   /**
    * Constructor.
    * @param {expr} arg How to get the value.
    * @returns The negation.
    */
   constructor (arg) {
-    super('not', arg)
+    super(FAMILY, 'not', arg)
   }
 
   /**
@@ -96,8 +87,8 @@ class OpNot extends OpNegationBase {
    * @param {number} i The row's index.
    * @return The logical negation of the value returned by the sub-expression.
    */
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     return (value === util.MISSING) ? util.MISSING : !util.makeLogical(value)
   }
 }
@@ -124,8 +115,8 @@ class OpTypecheckBase extends ExprUnary {
    * @param {string} typeName What type to check for.
    * @returns True or false.
    */
-  typeCheck (row, i, typeName) {
-    const value = this.arg.run(row, i)
+  typeCheck (row, i, numRows, typeName) {
+    const value = this.arg.run(row, i, numRows)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -142,8 +133,8 @@ class OpIsLogical extends OpTypecheckBase {
     super('isLogical', arg)
   }
 
-  run (row, i) {
-    return this.typeCheck(row, i, 'boolean')
+  run (row, i, numRows) {
+    return this.typeCheck(row, i, numRows, 'boolean')
   }
 }
 
@@ -155,8 +146,8 @@ class OpIsDatetime extends OpTypecheckBase {
     super('isDatetime', arg)
   }
 
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     return (value === util.MISSING) ? util.MISSING : (value instanceof Date)
   }
 }
@@ -169,8 +160,8 @@ class OpIsMissing extends OpTypecheckBase {
     super('isMissing', arg)
   }
 
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     return value === util.MISSING
   }
 }
@@ -183,8 +174,8 @@ class OpIsNumber extends OpTypecheckBase {
     super('isNumber', arg)
   }
 
-  run (row, i) {
-    return this.typeCheck(row, i, 'number')
+  run (row, i, numRows) {
+    return this.typeCheck(row, i, numRows, 'number')
   }
 }
 
@@ -196,8 +187,8 @@ class OpIsText extends OpTypecheckBase {
     super('isText', arg)
   }
 
-  run (row, i) {
-    return this.typeCheck(row, i, 'string')
+  run (row, i, numRows) {
+    return this.typeCheck(row, i, numRows, 'string')
   }
 }
 
@@ -231,8 +222,8 @@ class OpToLogical extends OpConvertBase {
    * @param {number} i The row's index.
    * @return The sub-expression value as MISSING, true, or false.
    */
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     return (value === util.MISSING) ? util.MISSING : util.makeLogical(value)
   }
 }
@@ -251,8 +242,8 @@ class OpToDatetime extends OpConvertBase {
    * @param {number} i The row's index.
    * @return The sub-expression value as MISSING or a Date.
    */
-  run (row, i) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     return util.makeDate(value)
   }
 }
@@ -271,8 +262,8 @@ class OpToNumber extends OpConvertBase {
    * @param {number} i The row's index.
    * @return The sub-expression value as a number.
    */
-  run (row, i) {
-    let value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    let value = this.arg.run(row, i, numRows)
     return util.makeNumber(value)
   }
 }
@@ -291,8 +282,8 @@ class OpToText extends OpConvertBase {
    * @param {number} i The row's index.
    * @return The sub-expression value as text.
    */
-  run (row, i) {
-    let value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    let value = this.arg.run(row, i, numRows)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -314,25 +305,25 @@ class OpDatetimeBase extends ExprUnary {
    * @param {string} species The precise function name.
    * @param arg How to get a value.
    */
-  constructor (species, arg) {
+  constructor (species, arg, converter) {
     super(FAMILY, species, arg)
+    this.converter = converter
   }
 
   /**
    * Extract a date component.
    * @param {object} row The row to operate on.
    * @param {number} i The row index within the dataframe.
-   * @param func How to get the date component value.
    * @returns The date component's value.
    */
-  dateValue (row, i, func) {
-    const value = this.arg.run(row, i)
+  run (row, i, numRows) {
+    const value = this.arg.run(row, i, numRows)
     if (value === util.MISSING) {
       return util.MISSING
     }
     util.check(value instanceof Date,
                `Require date for ${this.species}`)
-    return func(value)
+    return this.converter(value)
   }
 }
 
@@ -340,12 +331,10 @@ class OpDatetimeBase extends ExprUnary {
  * Extract year from date.
  */
 class OpToYear extends OpDatetimeBase {
-  constructor (arg) {
-    super('toYear', arg)
-  }
+  static CONVERTER = d => d.getFullYear()
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getFullYear())
+  constructor (arg) {
+    super('toYear', arg, OpToYear.CONVERTER)
   }
 }
 
@@ -353,12 +342,10 @@ class OpToYear extends OpDatetimeBase {
  * Extract 1-based month from date.
  */
 class OpToMonth extends OpDatetimeBase {
-  constructor (arg) {
-    super('toMonth', arg)
-  }
+  static CONVERTER = d => d.getMonth() + 1
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getMonth() + 1)
+  constructor (arg) {
+    super('toMonth', arg, OpToMonth.CONVERTER)
   }
 }
 
@@ -366,12 +353,10 @@ class OpToMonth extends OpDatetimeBase {
  * Extract 1-based day of month from date.
  */
 class OpToDay extends OpDatetimeBase {
-  constructor (arg) {
-    super('toDay', arg)
-  }
+  static CONVERTER = d => d.getDate()
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getDate())
+  constructor (arg) {
+    super('toDay', arg, OpToDay.CONVERTER)
   }
 }
 
@@ -379,12 +364,10 @@ class OpToDay extends OpDatetimeBase {
  * Extract day of week from date.
  */
 class OpToWeekday extends OpDatetimeBase {
-  constructor (arg) {
-    super('toWeekday', arg)
-  }
+  static CONVERTER = d => d.getDay()
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getDay())
+  constructor (arg) {
+    super('toWeekday', arg, OpToWeekday.CONVERTER)
   }
 }
 
@@ -392,12 +375,10 @@ class OpToWeekday extends OpDatetimeBase {
  * Extract hour from date.
  */
 class OpToHours extends OpDatetimeBase {
-  constructor (arg) {
-    super('toHours', arg)
-  }
+  static CONVERTER = d => d.getHours()
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getHours())
+  constructor (arg) {
+    super('toHours', arg, OpToHours.CONVERTER)
   }
 }
 
@@ -405,12 +386,10 @@ class OpToHours extends OpDatetimeBase {
  * Extract minutes from date.
  */
 class OpToMinutes extends OpDatetimeBase {
-  constructor (arg) {
-    super('toMinutes', arg)
-  }
+  static CONVERTER = d => d.getMinutes()
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getMinutes())
+  constructor (arg) {
+    super('toMinutes', arg, OpToMinutes.CONVERTER)
   }
 }
 
@@ -418,12 +397,10 @@ class OpToMinutes extends OpDatetimeBase {
  * Extract seconds from date.
  */
 class OpToSeconds extends OpDatetimeBase {
-  constructor (arg) {
-    super('toSeconds', arg)
-  }
+  static CONVERTER = d => d.getSeconds()
 
-  run (row, i) {
-    return this.dateValue(row, i, d => d.getSeconds())
+  constructor (arg) {
+    super('toSeconds', arg, OpToSeconds.CONVERTER)
   }
 }
 
@@ -439,27 +416,27 @@ class OpArithmeticBase extends ExprBinary {
    * @param {expr} left How to get the left value.
    * @param {expr} right How to get the right value.
    */
-  constructor (species, left, right) {
+  constructor (species, left, right, operator) {
     super(FAMILY, species, left, right)
+    this.operator = operator
   }
 
   /**
    * Perform a binary arithmetic operation.
    * @param {object} row The row to operate on.
    * @param {number} i The row index within the dataframe.
-   * @param func How to calculate the result.
    * @returns The result.
    */
-  arithmetic (row, i, func) {
-    const left = this.left.run(row, i)
+  run (row, i, numRows) {
+    const left = this.left.run(row, i, numRows)
     util.checkNumber(left,
                      `Require number for ${this.species}`)
-    const right = this.right.run(row, i)
+    const right = this.right.run(row, i, numRows)
     util.checkNumber(right,
                      `Require number for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
       ? util.MISSING
-      : util.safeValue(func(left, right))
+      : util.safeValue(this.operator(left, right))
   }
 }
 
@@ -467,12 +444,10 @@ class OpArithmeticBase extends ExprBinary {
  * Addition.
  */
 class OpAdd extends OpArithmeticBase {
-  constructor (left, right) {
-    super('add', left, right)
-  }
+  static OPERATOR = (left, right) => left + right
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left + right)
+  constructor (left, right) {
+    super('add', left, right, OpAdd.OPERATOR)
   }
 }
 
@@ -480,12 +455,10 @@ class OpAdd extends OpArithmeticBase {
  * Division.
  */
 class OpDivide extends OpArithmeticBase {
-  constructor (left, right) {
-    super('divide', left, right)
-  }
+  static OPERATOR = (left, right) => left / right
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left / right)
+  constructor (left, right) {
+    super('divide', left, right, OpDivide.OPERATOR)
   }
 }
 
@@ -493,12 +466,10 @@ class OpDivide extends OpArithmeticBase {
  * Multiplication.
  */
 class OpMultiply extends OpArithmeticBase {
-  constructor (left, right) {
-    super('multiply', left, right)
-  }
+  static OPERATOR = (left, right) => left * right
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left * right)
+  constructor (left, right) {
+    super('multiply', left, right, OpMultiply.OPERATOR)
   }
 }
 
@@ -506,12 +477,10 @@ class OpMultiply extends OpArithmeticBase {
  * Exponentiation.
  */
 class OpPower extends OpArithmeticBase {
-  constructor (left, right) {
-    super('power', left, right)
-  }
+  static OPERATOR = (left, right) => left ** right
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left ** right)
+  constructor (left, right) {
+    super('power', left, right, OpPower.OPERATOR)
   }
 }
 
@@ -519,12 +488,10 @@ class OpPower extends OpArithmeticBase {
  * Remainder.
  */
 class OpRemainder extends OpArithmeticBase {
-  constructor (left, right) {
-    super('remainder', left, right)
-  }
+  static OPERATOR = (left, right) => left % right
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left % right)
+  constructor (left, right) {
+    super('remainder', left, right, OpRemainder.OPERATOR)
   }
 }
 
@@ -532,12 +499,10 @@ class OpRemainder extends OpArithmeticBase {
  * Subtraction.
  */
 class OpSubtract extends OpArithmeticBase {
-  constructor (left, right) {
-    super('subtract', left, right)
-  }
+  static OPERATOR = (left, right) => left - right
 
-  run (row, i) {
-    return this.arithmetic(row, i, (left, right) => left - right)
+  constructor (left, right) {
+    super('subtract', left, right, OpSubtract.OPERATOR)
   }
 }
 
@@ -553,25 +518,25 @@ class OpCompareBase extends ExprBinary {
    * @param {expr} left How to get the left value.
    * @param {expr} right How to get the right value.
    */
-  constructor (species, left, right) {
+  constructor (species, left, right, operator) {
     super(FAMILY, species, left, right)
+    this.operator = operator
   }
 
   /**
    * Perform a binary comparison operation.
    * @param {object} row The row to operate on.
    * @param {number} i The row index within the dataframe.
-   * @param func How to calculate the result.
    * @returns The result.
    */
-  comparison (row, i, func) {
-    const left = this.left.run(row, i)
-    const right = this.right.run(row, i)
+  run (row, i, numRows) {
+    const left = this.left.run(row, i, numRows)
+    const right = this.right.run(row, i, numRows)
     util.checkTypeEqual(left, right,
                         `Require equal types for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
       ? util.MISSING
-      : func(left, right)
+      : this.operator(left, right)
   }
 }
 
@@ -579,12 +544,10 @@ class OpCompareBase extends ExprBinary {
  * Equality.
  */
 class OpEqual extends OpCompareBase {
-  constructor (left, right) {
-    super('equal', left, right)
-  }
+  static OPERATOR = (left, right) => util.equal(left, right)
 
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => util.equal(left, right))
+  constructor (left, right) {
+    super('equal', left, right, OpEqual.OPERATOR)
   }
 }
 
@@ -592,12 +555,10 @@ class OpEqual extends OpCompareBase {
  * Strictly greater than.
  */
 class OpGreater extends OpCompareBase {
-  constructor (left, right) {
-    super('greater', left, right)
-  }
+  static OPERATOR = (left, right) => (left > right)
 
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left > right))
+  constructor (left, right) {
+    super('greater', left, right, OpGreater.OPERATOR)
   }
 }
 
@@ -605,12 +566,10 @@ class OpGreater extends OpCompareBase {
  * Greater than or equal.
  */
 class OpGreaterEqual extends OpCompareBase {
-  constructor (left, right) {
-    super('greaterEqual', left, right)
-  }
+  static OPERATOR = (left, right) => (left >= right)
 
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left >= right))
+  constructor (left, right) {
+    super('greaterEqual', left, right, OpGreaterEqual.OPERATOR)
   }
 }
 
@@ -618,12 +577,10 @@ class OpGreaterEqual extends OpCompareBase {
  * Strictly less than.
  */
 class OpLess extends OpCompareBase {
-  constructor (left, right) {
-    super('less', left, right)
-  }
+  static OPERATOR = (left, right) => (left < right)
 
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left < right))
+  constructor (left, right) {
+    super('less', left, right, OpLess.OPERATOR)
   }
 }
 
@@ -631,12 +588,10 @@ class OpLess extends OpCompareBase {
  * Less than or equal.
  */
 class OpLessEqual extends OpCompareBase {
-  constructor (left, right) {
-    super('lessEqual', left, right)
-  }
+  static OPERATOR = (left, right) => (left <= right)
 
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (left <= right))
+  constructor (left, right) {
+    super('lessEqual', left, right, OpLessEqual.OPERATOR)
   }
 }
 
@@ -644,12 +599,10 @@ class OpLessEqual extends OpCompareBase {
  * Inequality.
  */
 class OpNotEqual extends OpCompareBase {
-  constructor (left, right) {
-    super('notEqual', left, right)
-  }
+  static OPERATOR = (left, right) => (!util.equal(left, right))
 
-  run (row, i) {
-    return this.comparison(row, i, (left, right) => (!util.equal(left, right)))
+  constructor (left, right) {
+    super('notEqual', left, right, OpNotEqual.OPERATOR)
   }
 }
 
@@ -685,12 +638,12 @@ class OpAnd extends OpLogicalBase {
    * @returns The left value if it is not truthy, otherwise the right value. The
    * right expression is only evaluated if necessary.
    */
-  run (row, i) {
-    const left = this.left.run(row, i)
+  run (row, i, numRows) {
+    const left = this.left.run(row, i, numRows)
     if (!left) {
       return left
     }
-    return this.right.run(row, i)
+    return this.right.run(row, i, numRows)
   }
 }
 
@@ -709,12 +662,12 @@ class OpOr extends OpLogicalBase {
    * @returns The left value if it is truthy, otherwise the right value. The
    * right expression is only evaluated if necessary.
    */
-  run (row, i) {
-    const left = this.left.run(row, i)
+  run (row, i, numRows) {
+    const left = this.left.run(row, i, numRows)
     if (left) {
       return left
     }
-    return this.right.run(row, i)
+    return this.right.run(row, i, numRows)
   }
 }
 
@@ -741,11 +694,11 @@ class OpIfElse extends ExprTernary {
    * @returns The left value if the condition is truthy, otherwise the right
    * value. The left and right expressions are only evaluated if necessary.
    */
-  run (row, i) {
-    const cond = this.left.run(row, i)
+  run (row, i, numRows) {
+    const cond = this.left.run(row, i, numRows)
     return (cond === util.MISSING)
       ? util.MISSING
-      : (cond ? this.middle.run(row, i) : this.right.run(row, i))
+      : (cond ? this.middle.run(row, i, numRows) : this.right.run(row, i, numRows))
   }
 }
 
