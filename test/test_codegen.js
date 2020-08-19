@@ -198,6 +198,24 @@ describe('expression code generation', () => {
     done()
   })
 
+  it('generates code for extrema', (done) => {
+    const expected = [Op.FAMILY, 'maximum',
+                      [Value.FAMILY, 'number', 1],
+                      [Value.FAMILY, 'number', 2]]
+    const w = fixture.workspace()
+    const left = w.newBlock('value_number')
+    left.setFieldValue(1, 'VALUE')
+    const right = w.newBlock('value_number')
+    right.setFieldValue(2, 'VALUE')
+    const block = w.newBlock('op_extremum')
+    block.setFieldValue('maximum', 'OP')
+    fixture.addSubBlock(block, 'LEFT', left)
+    fixture.addSubBlock(block, 'RIGHT', right)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for binary logical operations', (done) => {
     const expected = [Op.FAMILY, 'and',
                       [Value.FAMILY, 'logical', true],
