@@ -35,6 +35,18 @@ and produces either `true` or `false`.
 - *right space*: The right-hand side of the operation.
 </div>
 
+<div id="extremum" markdown="1">
+### Maximum and Minimum
+
+<img class="block" src="{{ 'en/img/op_extremum.svg' | relative_url }}" alt="maximum/minimum block"/>
+
+This block selects the maximum or minimum value from two different columns.
+
+- *left space*: The left-hand side of the operation.
+- *drop down*: Select maximum or minimum.
+- *right space*: The right-hand side of the operation.
+</div>
+
 <div id="logical" markdown="1">
 ### Logical
 

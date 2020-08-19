@@ -509,6 +509,60 @@ class OpSubtract extends OpArithmeticBase {
 // ----------------------------------------------------------------------
 
 /**
+ * Extremum operations.
+ */
+class OpExtremumBase extends ExprBinary {
+  /**
+   * Constructor.
+   * @param {string} species The name of the operation.
+   * @param {expr} left How to get the left value.
+   * @param {expr} right How to get the right value.
+   */
+  constructor (species, left, right, operator) {
+    super(FAMILY, species, left, right)
+    this.operator = operator
+  }
+
+  /**
+   * Select an extremum.
+   * @param {object} row The row to operate on.
+   * @param {number} i The row index within the dataframe.
+   * @returns The result.
+   */
+  run (row, i, numRows) {
+    const left = this.left.run(row, i, numRows)
+    const right = this.right.run(row, i, numRows)
+    return ((left === util.MISSING) || (right === util.MISSING))
+      ? util.MISSING
+      : this.operator(left, right)
+  }
+}
+
+/**
+ * Maximum of two values.
+ */
+class OpMaximum extends OpExtremumBase {
+  static OPERATOR = (left, right) => (left > right ? left : right)
+
+  constructor (left, right) {
+    super('maximum', left, right, OpMaximum.OPERATOR)
+  }
+}
+
+/**
+ * Minimum of two values.
+ */
+class OpMinimum extends OpExtremumBase {
+  static OPERATOR = (left, right) => (left < right ? left : right)
+
+  constructor (left, right) {
+    super('minimum', left, right, OpMinimum.OPERATOR)
+  }
+}
+
+// ----------------------------------------------------------------------
+
+/**
  * Binary comparison expressions.
  */
 class OpCompareBase extends ExprBinary {
@@ -706,6 +760,7 @@ class OpIfElse extends ExprTernary {
 
 module.exports = {
   FAMILY: FAMILY,
+  abs: OpAbs,
   add: OpAdd,
   and: OpAnd,
   divide: OpDivide,
@@ -713,31 +768,32 @@ module.exports = {
   greater: OpGreater,
   greaterEqual: OpGreaterEqual,
   ifElse: OpIfElse,
+  isDatetime: OpIsDatetime,
+  isLogical: OpIsLogical,
+  isMissing: OpIsMissing,
+  isNumber: OpIsNumber,
+  isText: OpIsText,
   less: OpLess,
   lessEqual: OpLessEqual,
+  maximum: OpMaximum,
+  minimum: OpMinimum,
   multiply: OpMultiply,
   negate: OpNegate,
-  abs: OpAbs,
   not: OpNot,
   notEqual: OpNotEqual,
   or: OpOr,
   power: OpPower,
   remainder: OpRemainder,
   subtract: OpSubtract,
-  isLogical: OpIsLogical,
-  isDatetime: OpIsDatetime,
-  isMissing: OpIsMissing,
-  isNumber: OpIsNumber,
-  isText: OpIsText,
-  toLogical: OpToLogical,
   toDatetime: OpToDatetime,
-  toNumber: OpToNumber,
-  toText: OpToText,
-  toYear: OpToYear,
-  toMonth: OpToMonth,
   toDay: OpToDay,
-  toWeekday: OpToWeekday,
   toHours: OpToHours,
+  toLogical: OpToLogical,
   toMinutes: OpToMinutes,
-  toSeconds: OpToSeconds
+  toMonth: OpToMonth,
+  toNumber: OpToNumber,
+  toSeconds: OpToSeconds,
+  toText: OpToText,
+  toWeekday: OpToWeekday,
+  toYear: OpToYear
 }
