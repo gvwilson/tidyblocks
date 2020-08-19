@@ -44,6 +44,19 @@ describe('get values', () => {
     done()
   })
 
+  it('injects missing values', (done) => {
+    const missing = new Value.missing()
+    const expected = [util.MISSING, util.MISSING, util.MISSING]
+    const actual = fixture.NAMES.map((row, i) => missing.run(row, i))
+    assert.deepEqual(expected, actual,
+                     `Got wrong value(s)`)
+    assert(missing.equal(new Value.missing()),
+           `Missing value creators should be equal`)
+    assert(!missing.equal(new Value.absent()),
+           `Missing value object should not equal absent object`)
+    done()
+  })
+
   it('extracts row numbers', (done) => {
     const rownum = new Value.rownum()
     const expected = [0, 1, 2, 3, 4, 5]

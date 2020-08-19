@@ -77,6 +77,15 @@ describe('value code generation', () => {
     done()
   })
 
+  it('generates code for missing value creators', (done) => {
+    const expected = [Value.FAMILY, 'missing']
+    const w = fixture.workspace()
+    const block = w.newBlock('value_missing')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for row numbers', (done) => {
     const expected = [Value.FAMILY, 'rownum']
     const w = fixture.workspace()
@@ -182,6 +191,24 @@ describe('expression code generation', () => {
     right.setFieldValue(2, 'VALUE')
     const block = w.newBlock('op_compare')
     block.setFieldValue('lessEqual', 'OP')
+    fixture.addSubBlock(block, 'LEFT', left)
+    fixture.addSubBlock(block, 'RIGHT', right)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for extrema', (done) => {
+    const expected = [Op.FAMILY, 'maximum',
+                      [Value.FAMILY, 'number', 1],
+                      [Value.FAMILY, 'number', 2]]
+    const w = fixture.workspace()
+    const left = w.newBlock('value_number')
+    left.setFieldValue(1, 'VALUE')
+    const right = w.newBlock('value_number')
+    right.setFieldValue(2, 'VALUE')
+    const block = w.newBlock('op_extremum')
+    block.setFieldValue('maximum', 'OP')
     fixture.addSubBlock(block, 'LEFT', left)
     fixture.addSubBlock(block, 'RIGHT', right)
     const actual = getCode(block)
