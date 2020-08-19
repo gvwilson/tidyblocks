@@ -126,6 +126,8 @@ const createXmlConfig = (language) => {
     <category name="${msg.get('stats')}" colour="${STATS_COLOR}">
       <block type="stats_ttest_one"></block>
       <block type="stats_ttest_two"></block>
+      <block type="stats_k_means"></block>
+      <block type="stats_silhouette"></block>
     </category>
     <category name="${msg.get('op')}" colour="${OP_COLOR}">
       <block type="op_arithmetic"></block>
@@ -276,6 +278,7 @@ const SINGLE_COL_FIELDS = [
   'LEFT_COLUMN',
   'LEFT_TABLE',
   'NAME',
+  'NUMBER',
   'RIGHT_COLUMN',
   'RIGHT_TABLE',
   'VALUES',

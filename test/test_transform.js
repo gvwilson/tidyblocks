@@ -10,6 +10,7 @@ const Env = require('../libs/env')
 
 const fixture = require('./fixture')
 const INTERFACE = new fixture.TestInterface()
+const approx = require('./approx')
 
 describe('build dataframe operations', () => {
   it('builds data loading transform', (done) => {
@@ -361,6 +362,39 @@ describe('build statistics', () => {
     const transform = new Transform.ttest_two('result', 'left', 'right')
     const result = transform.run(env, new DataFrame(paired))
     const stats = env.getStats('result')
+    done()
+  })
+
+  it('clusters points', (done) => {
+    const df = new DataFrame([
+      {x: 0.0, y: 0.0},
+      {x: 1.0, y: 0.5},
+      {x: 0.1, y: 0.0}
+    ])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.k_means('x', 'y', 2, 'label')
+    const result = transform.run(env, df)
+    assert.equal(result.data[0].label, result.data[2].label,
+                 `Points not in the same group`)
+    assert.notEqual(result.data[0].label, result.data[1].label,
+                    `Points should not be in the same group`)
+    done()
+  })
+
+  it('calculates silhouette scores', (done) => {
+    const df = new DataFrame([
+      {x: 0.2, y: 0.0, gid: 0},
+      {x: 0.4, y: 0.0, gid: 0},
+      {x: 0.6, y: 0.0, gid: 1},
+      {x: 0.8, y: 0.0, gid: 1}
+    ])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.silhouette('x', 'y', 'gid', 'result')
+    const result = transform.run(env, df)
+    const expected = [4/5, 2/3, 2/3, 4/5]
+    const actual = result.data.map(row => row.result)
+    assert(approx.allApproxEqual(expected, actual),
+           `Did not get expected stores`)
     done()
   })
 })

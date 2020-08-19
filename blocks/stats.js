@@ -101,6 +101,77 @@ const MESSAGES = {
       ko: '이표본 양측 t-검정 수행', 
       pt: 'fazer teste-t bilateral de duas amostras'
     }
+  },
+  stats_k_means: {
+    message0: {
+      en: 'k-means cluster'
+    },
+    message1: {
+      en: 'X %1 Y %2 number %3 label %4'
+    },
+    args1_x: {
+      en: 'X axis',
+      es: 'eje X',
+      ar: 'المحور الأفقي',
+      it: 'asse X',
+      ko: 'X축',
+      pt: 'eixo X'
+    },
+    args1_y: {
+      en: 'Y axis',
+      es: 'eje Y',
+      ar: 'المحور الرأسي',
+      it: 'asse Y',
+      ko: 'Y축', 
+      pt: 'eixo Y'
+    },
+    args1_label: {
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئه',
+      ko: '라벨',
+      it: 'etichetta'
+    },
+    tooltip: {
+      en: 'calculate k-means cluster IDs'
+    }
+  },
+  stats_silhouette: {
+    message0: {
+      en: 'silhouette'
+    },
+    message1: {
+      en: 'X %1 Y %2 label %3 score %4'
+    },
+    args1_x: {
+      en: 'X axis',
+      es: 'eje X',
+      ar: 'المحور الأفقي',
+      it: 'asse X',
+      ko: 'X축',
+      pt: 'eixo X'
+    },
+    args1_y: {
+      en: 'Y axis',
+      es: 'eje Y',
+      ar: 'المحور الرأسي',
+      it: 'asse Y',
+      ko: 'Y축', 
+      pt: 'eixo Y'
+    },
+    args1_label: {
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئه',
+      ko: '라벨',
+      it: 'etichetta'
+    },
+    args1_score: {
+      en: 'score'
+    },
+    tooltip: {
+      en: 'calculate silhouette score of 2D clusters'
+    }
   }
 }
 
@@ -169,6 +240,78 @@ const setup = (language) => {
       style: 'stats_blocks',
       tooltip: msg.get('stats_ttest_two.tooltip'),
       helpUrl: './guide/#ttest_two'
+    },
+
+    // K-means clustering
+    {
+      type: 'stats_k_means',
+      message0: msg.get('stats_k_means.message0'),
+      args0: [],
+      message1: msg.get('stats_k_means.message1'),
+      args1: [
+        {
+          type: 'field_input',
+          name: 'X_AXIS',
+          text: msg.get('stats_k_means.args1_x')
+        },
+        {
+          type: 'field_input',
+          name: 'Y_AXIS',
+          text: msg.get('stats_k_means.args1_y')
+        },
+        {
+          type: 'field_number',
+          name: 'NUMBER',
+          value: 2
+        },
+        {
+          type: 'field_input',
+          name: 'LABEL',
+          text: msg.get('stats_k_means.args1_label')
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'stats_blocks',
+      tooltip: msg.get('stats_k_means.tooltip'),
+      helpUrl: './guide/#k_means'
+    },
+
+    // Silhouette
+    {
+      type: 'stats_silhouette',
+      message0: msg.get('stats_silhouette.message0'),
+      args0: [],
+      message1: msg.get('stats_silhouette.message1'),
+      args1: [
+        {
+          type: 'field_input',
+          name: 'X_AXIS',
+          text: msg.get('stats_silhouette.args1_x')
+        },
+        {
+          type: 'field_input',
+          name: 'Y_AXIS',
+          text: msg.get('stats_silhouette.args1_y')
+        },
+        {
+          type: 'field_input',
+          name: 'LABEL',
+          text: msg.get('stats_silhouette.args1_label')
+        },
+        {
+          type: 'field_input',
+          name: 'SCORE',
+          text: msg.get('stats_silhouette.args1_score')
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'stats_blocks',
+      tooltip: msg.get('stats_silhouette.tooltip'),
+      helpUrl: './guide/#silhouette'
     }
   ])
 
@@ -186,6 +329,24 @@ const setup = (language) => {
     const labels = block.getFieldValue('LABEL_COLUMN')
     const values = block.getFieldValue('VALUE_COLUMN')
     return `["@transform", "ttest_two", "${name}", "${labels}", "${values}"]`
+  }
+
+  // Create k-means cluster.
+  Blockly.TidyBlocks['stats_k_means'] = (block) => {
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
+    const number = block.getFieldValue('NUMBER')
+    const label = block.getFieldValue('LABEL')
+    return `["@transform", "k_means", "${xAxis}", "${yAxis}", ${number}, "${label}"]`
+  }
+
+  // Calculate silhouette score for 2D clusters.
+  Blockly.TidyBlocks['stats_silhouette'] = (block) => {
+    const xAxis = block.getFieldValue('X_AXIS')
+    const yAxis = block.getFieldValue('Y_AXIS')
+    const label = block.getFieldValue('LABEL')
+    const score = block.getFieldValue('SCORE')
+    return `["@transform", "silhouette", "${xAxis}", "${yAxis}", "${label}", "${score}"]`
   }
 }
 

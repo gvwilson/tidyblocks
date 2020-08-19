@@ -526,6 +526,32 @@ describe('stats code generation', () => {
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
   })
+
+  it('creates k-means cluster from blocks', (done) => {
+    const expected = [Transform.FAMILY, 'k_means', 'onX', 'onY', 3, 'flavor']
+    const w = fixture.workspace()
+    const block = w.newBlock('stats_k_means')
+    block.setFieldValue('onX', 'X_AXIS')
+    block.setFieldValue('onY', 'Y_AXIS')
+    block.setFieldValue(3, 'NUMBER')
+    block.setFieldValue('flavor', 'LABEL')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('creates silhouette from blocks', (done) => {
+    const expected = [Transform.FAMILY, 'silhouette', 'onX', 'onY', 'flavors', 'scores']
+    const w = fixture.workspace()
+    const block = w.newBlock('stats_silhouette')
+    block.setFieldValue('onX', 'X_AXIS')
+    block.setFieldValue('onY', 'Y_AXIS')
+    block.setFieldValue('flavors', 'LABEL')
+    block.setFieldValue('scores', 'SCORE')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
 })
 
 describe('combiner code generation', () => {
