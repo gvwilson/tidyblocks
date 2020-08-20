@@ -321,6 +321,7 @@ export class SaveAllSvgFormDialog extends React.Component{
     const link = document.getElementById('downloadAllSvg')
     link.setAttribute('href', URL.createObjectURL(blob))
     link.setAttribute('download', this.state.filename)
+    this.handleClose()
   }
 
   render () {
