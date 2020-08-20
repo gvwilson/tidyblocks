@@ -28,7 +28,7 @@ class ValueAbsent extends ExprBase {
     return other instanceof ValueAbsent
   }
 
-  run (row, i, numRows) {
+  run (data, i) {
     util.fail('Missing expression')
   }
 }
@@ -48,7 +48,7 @@ class ValueMissing extends ExprBase {
     return other instanceof ValueMissing
   }
 
-  run (row, i, numRows) {
+  run (data, i) {
     return util.MISSING
   }
 }
@@ -68,7 +68,7 @@ class ValueRowNum extends ExprBase {
     return other instanceof ValueRowNum
   }
 
-  run (row, i, numRows) {
+  run (data, i) {
     return i
   }
 }
@@ -89,13 +89,10 @@ class ValueColumn extends ExprValue {
     super(FAMILY, 'column', name)
   }
 
-  /**
-   * Extract the value of a column given its name.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The value (of any type).
-   */
-  run (row, i, numRows) {
+  run (data, i) {
+    util.check((0 <= i) && (i < data.length),
+               `Row index ${i} out of range`)
+    const row = data[i]
     util.check(typeof row === 'object',
                `Row must be object`)
     util.check(this.value in row,
@@ -119,13 +116,7 @@ class ValueDatetime extends ExprValue {
     super(FAMILY, 'datetime', value)
   }
 
-  /**
-   * Produce the constant datetime value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant datetime value.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.value
   }
 }
@@ -144,13 +135,7 @@ class ValueLogical extends ExprValue {
     super(FAMILY, 'logical', value)
   }
 
-  /**
-   * Produce the constant logical value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant logical value.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.value
   }
 }
@@ -169,13 +154,7 @@ class ValueNumber extends ExprValue {
     super(FAMILY, 'number', value)
   }
 
-  /**
-   * Produce the constant numeric value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant numeric value.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.value
   }
 }
@@ -194,13 +173,7 @@ class ValueText extends ExprValue {
     super(FAMILY, 'text', value)
   }
 
-  /**
-   * Produce the constant text value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant text value.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.value
   }
 }
@@ -220,13 +193,7 @@ class ValueExponential extends ExprValue {
     this.generator = random.exponential(this.value)
   }
 
-  /**
-   * Produce a sample from the exponential distribution.
-   * @param row The row.
-   * @param i The row number.
-   * @returns A sample from the distribution.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.generator()
   }
 }
@@ -262,13 +229,7 @@ class ValueNormal extends ExprBase {
       (this.stdDev === other.stdDev)
   }
 
-  /**
-   * Produce a sample from the normal distribution.
-   * @param row The row.
-   * @param i The row number.
-   * @returns A sample from the distribution.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.generator()
   }
 }
@@ -306,13 +267,7 @@ class ValueUniform extends ExprBase {
       (this.high === other.high)
   }
 
-  /**
-   * Produce a sample from the uniform distribution.
-   * @param row The row.
-   * @param i The row number.
-   * @returns A sample from the distribution.
-   */
-  run (row, i, numRows) {
+  run (data, i) {
     return this.generator()
   }
 }

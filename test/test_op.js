@@ -23,8 +23,8 @@ describe('arithmetic operations', () => {
   it('adds', (done) => {
     const expected = [4, 3, 2, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.add(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for add`)
     done()
@@ -33,8 +33,8 @@ describe('arithmetic operations', () => {
   it('divides', (done) => {
     const expected = [1.0, -2.5, util.MISSING, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.divide(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for divide`)
     done()
@@ -43,8 +43,8 @@ describe('arithmetic operations', () => {
   it('exponentiates', (done) => {
     const expected = [4, 0.04, 1, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.power(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for power`)
     done()
@@ -53,8 +53,8 @@ describe('arithmetic operations', () => {
   it('multiplies', (done) => {
     const expected = [4, -10, 0, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.multiply(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for multiply`)
     done()
@@ -63,8 +63,8 @@ describe('arithmetic operations', () => {
   it('negates', (done) => {
     const expected = [-2, 2, 0, -3, util.MISSING, util.MISSING]
     const op = new Op.negate(getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for negate`)
     done()
@@ -73,8 +73,8 @@ describe('arithmetic operations', () => {
   it('absolute value', (done) => {
     const expected = [2, 2, 0, 3, util.MISSING, util.MISSING]
     const op = new Op.abs(getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for absolute value`)
     done()
@@ -83,8 +83,8 @@ describe('arithmetic operations', () => {
   it('remainders', (done) => {
     const expected = [0, 1, util.MISSING, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.remainder(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for power`)
     done()
@@ -93,8 +93,8 @@ describe('arithmetic operations', () => {
   it('subtracts', (done) => {
     const expected = [0, 7, 2, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.subtract(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for subtract`)
     done()
@@ -105,8 +105,8 @@ describe('logical operations', () => {
   it('ands', (done) => {
     const expected = [true, false, false, false, util.MISSING, false, util.MISSING]
     const op = new Op.and(getLeft, getRight)
-    const numRows = fixture.BOOL.length
-    const actual = fixture.BOOL.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.BOOL
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for and`)
     done()
@@ -115,8 +115,8 @@ describe('logical operations', () => {
   it('nots', (done) => {
     const expected = [false, false, true, true, util.MISSING, true, util.MISSING]
     const op = new Op.not(getLeft)
-    const numRows = fixture.BOOL.length
-    const actual = fixture.BOOL.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.BOOL
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for not`)
     done()
@@ -125,8 +125,8 @@ describe('logical operations', () => {
   it('ors', (done) => {
     const expected = [true, true, true, false, false, util.MISSING, util.MISSING]
     const op = new Op.or(getLeft, getRight)
-    const numRows = fixture.BOOL.length
-    const actual = fixture.BOOL.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.BOOL
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for or`)
     done()
@@ -137,8 +137,8 @@ describe('extrema', () => {
   it('finds maximum numbers', (done) => {
     const expected = [2, 5, 2, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.maximum(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for maximum numbers`)
     done()
@@ -147,8 +147,8 @@ describe('extrema', () => {
   it('finds minimum numbers', (done) => {
     const expected = [2, -2, 0, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.minimum(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for minimum numbers`)
     done()
@@ -157,8 +157,8 @@ describe('extrema', () => {
   it('finds maximum strings', (done) => {
     const expected = ['pqr', 'def', 'def', 'abc', util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.maximum(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for maximum strings`)
     done()
@@ -167,8 +167,8 @@ describe('extrema', () => {
   it('finds minimum strings', (done) => {
     const expected = ['pqr', 'abc', 'abc', '', util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.minimum(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for minimum strings`)
     done()
@@ -179,8 +179,8 @@ describe('comparison on numbers', () => {
   it('greater numbers', (done) => {
     const expected = [false, true, true, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.greater(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for greater numbers`)
     done()
@@ -189,8 +189,8 @@ describe('comparison on numbers', () => {
   it('greater equals numbers', (done) => {
     const expected = [true, true, true, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.greaterEqual(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for greater equal numbers`)
     done()
@@ -199,8 +199,8 @@ describe('comparison on numbers', () => {
   it('equals numbers', (done) => {
     const expected = [true, false, false, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.equal(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for equal numbers`)
     done()
@@ -209,8 +209,8 @@ describe('comparison on numbers', () => {
   it('not equals numbers', (done) => {
     const expected = [false, true, true, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.notEqual(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for not equal numbers`)
     done()
@@ -219,8 +219,8 @@ describe('comparison on numbers', () => {
   it('less equals numbers', (done) => {
     const expected = [true, false, false, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.lessEqual(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for less equal numbers`)
     done()
@@ -229,8 +229,8 @@ describe('comparison on numbers', () => {
   it('less numbers', (done) => {
     const expected = [false, false, false, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.less(getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for less numbers`)
     done()
@@ -241,8 +241,8 @@ describe('comparison on strings', () => {
   it('greater strings', (done) => {
     const expected = [false, false, true, true, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.greater(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for greater strings`)
     done()
@@ -251,8 +251,8 @@ describe('comparison on strings', () => {
   it('greater equals strings', (done) => {
     const expected = [true, false, true, true, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.greaterEqual(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for greater equal strings`)
     done()
@@ -261,8 +261,8 @@ describe('comparison on strings', () => {
   it('equals strings', (done) => {
     const expected = [true, false, false, false, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.equal(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for equal strings`)
     done()
@@ -271,8 +271,8 @@ describe('comparison on strings', () => {
   it('not equals strings', (done) => {
     const expected = [false, true, true, true, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.notEqual(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for not equal strings`)
     done()
@@ -281,8 +281,8 @@ describe('comparison on strings', () => {
   it('less equals strings', (done) => {
     const expected = [true, true, false, false, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.lessEqual(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for less equal strings`)
     done()
@@ -291,8 +291,8 @@ describe('comparison on strings', () => {
   it('less strings', (done) => {
     const expected = [false, true, false, false, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.less(getLeft, getRight)
-    const numRows = fixture.STRING.length
-    const actual = fixture.STRING.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.STRING
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for less strings`)
     done()
@@ -304,8 +304,7 @@ describe('comparison on dates', () => {
     const test = new Value.datetime(new Date(4000))
     const op = new Op.greater(test, getDate)
     const expected = [true, true, true]
-    const numRows = threeDates.length
-    const actual = threeDates.map((row, i) => op.run(row, i, numRows))
+    const actual = threeDates.map((row, i) => op.run(threeDates, i))
     assert.deepEqual(expected, actual,
                      `Wrong result(s) for greater dates`)
     done()
@@ -315,8 +314,7 @@ describe('comparison on dates', () => {
     const test = new Value.datetime(new Date(20))
     const op = new Op.greaterEqual(test, getDate)
     const expected = [true, true, false]
-    const numRows = threeDates.length
-    const actual = threeDates.map((row, i) => op.run(row, i, numRows))
+    const actual = threeDates.map((row, i) => op.run(threeDates, i))
     assert.deepEqual(expected, actual,
                      `Wrong result(s) for greater equal dates`)
     done()
@@ -326,8 +324,7 @@ describe('comparison on dates', () => {
     const test = new Value.datetime(new Date(20))
     const op = new Op.equal(test, getDate)
     const expected = [false, true, false]
-    const numRows = threeDates.length
-    const actual = threeDates.map((row, i) => op.run(row, i, numRows))
+    const actual = threeDates.map((row, i) => op.run(threeDates, i))
     assert.deepEqual(expected, actual,
                      `Wrong result(s) for equal dates`)
     done()
@@ -337,8 +334,7 @@ describe('comparison on dates', () => {
     const test = new Value.datetime(new Date(20))
     const op = new Op.notEqual(test, getDate)
     const expected = [true, false, true]
-    const numRows = threeDates.length
-    const actual = threeDates.map((row, i) => op.run(row, i, numRows))
+    const actual = threeDates.map((row, i) => op.run(threeDates, i))
     assert.deepEqual(expected, actual,
                      `Wrong result(s) for not equal dates`)
     done()
@@ -348,8 +344,7 @@ describe('comparison on dates', () => {
     const test = new Value.datetime(new Date(20))
     const op = new Op.lessEqual(test, getDate)
     const expected = [false, true, true]
-    const numRows = threeDates.length
-    const actual = threeDates.map((row, i) => op.run(row, i, numRows))
+    const actual = threeDates.map((row, i) => op.run(threeDates, i))
     assert.deepEqual(expected, actual,
                      `Wrong result(s) for less equal dates`)
     done()
@@ -359,8 +354,7 @@ describe('comparison on dates', () => {
     const test = new Value.datetime(new Date(1))
     const op = new Op.less(test, getDate)
     const expected = [false, true, true]
-    const numRows = threeDates.length
-    const actual = threeDates.map((row, i) => op.run(row, i, numRows))
+    const actual = threeDates.map((row, i) => op.run(threeDates, i))
     assert.deepEqual(expected, actual,
                      `Wrong result(s) for less dates`)
     done()
@@ -371,8 +365,8 @@ describe('conditional', () => {
   it('pulls values conditionally', (done) => {
     const expected = [2, 5, 0, util.MISSING, util.MISSING, util.MISSING]
     const op = new Op.ifElse(getRight, getLeft, getRight)
-    const numRows = fixture.NUMBER.length
-    const actual = fixture.NUMBER.map((row, i) => op.run(row, i, numRows))
+    const data = fixture.NUMBER
+    const actual = data.map((row, i) => op.run(data, i))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) for conditional`)
     done()
@@ -395,9 +389,9 @@ describe('type checks', () => {
       [new Op.isDatetime(getStr), 'datetime', 'str'],
       [new Op.isNumber(getStr), 'num', 'str']
     ]
-    const numRows = fixture.MIXED.length
+    const data = fixture.MIXED
     for (const [check, tested, actual] of allChecks) {
-      assert.deepEqual(fixture.MIXED.map((row, i) => check.run(row, i, numRows)),
+      assert.deepEqual(data.map((row, i) => check.run(data, i)),
                        [false, util.MISSING],
                        `Should not think ${actual} is ${tested}`)
     }
@@ -411,9 +405,9 @@ describe('type checks', () => {
       [new Op.isNumber(getNum), 'num'],
       [new Op.isText(getStr), 'text']
     ]
-    const numRows = fixture.MIXED.length
+    const data = fixture.MIXED
     for (const [check, name] of allChecks) {
-      assert.deepEqual(fixture.MIXED.map((row, i) => check.run(row, i, numRows)),
+      assert.deepEqual(data.map((row, i) => check.run(data, i)),
                        [true, util.MISSING],
                        `Incorrect result(s) for ${name}`)
     }
@@ -427,10 +421,10 @@ describe('type checks', () => {
       [getNum, 'num'],
       [getStr, 'text']
     ]
-    const numRows = fixture.MIXED.length
+    const data = fixture.MIXED
     for (const [get, name] of allChecks) {
       const check = new Op.isMissing(get)
-      assert.deepEqual(fixture.MIXED.map((row, i) => check.run(row, i, numRows)),
+      assert.deepEqual(data.map((row, i) => check.run(data, i)),
                        [false, true],
                        `Incorrect result(s) for ${name}`)
     }
@@ -465,7 +459,7 @@ describe('type conversions', () => {
     ]
     for (const [value, convert, expected] of checks) {
       const op = new convert(value)
-      const actual = op.run({}, 0, 1)
+      const actual = op.run([{}], 0)
       assert.equal(actual, expected,
                    `Wrong result for ${value} and ${convert}: expected ${expected}, got ${actual}`)
     }
@@ -477,7 +471,7 @@ describe('type conversions', () => {
                     new Value.text('abc')]
     for (const input of checks) {
       const op = new Op.toDatetime(input)
-      assert.throws(() => op.run({}, 0, 1),
+      assert.throws(() => op.run([{}], 0),
                     Error,
                     `Should not be able to convert "${input}"`)
     }
@@ -491,14 +485,14 @@ describe('type conversions', () => {
     ]
     for (const [expr, expected] of checks) {
       const op = new Op.toDatetime(expr)
-      const actual = op.run({}, 0, 1)
+      const actual = op.run([{}], 0)
       assert(actual instanceof Date,
              `Wrong result type for ${expected}`)
       assert.equal(actual.getTime(), expected.getTime(),
                    `Wrong result for ${expected}`)
     }
     const op = new Op.toDatetime(new Value.number(util.MISSING))
-    const actual = op.run({}, 0, 1)
+    const actual = op.run([{}], 0)
     assert.equal(actual, util.MISSING,
                  `Should have MISSING`)
     done()
@@ -509,19 +503,19 @@ describe('extract values from datetimes', () => {
   it('extracts components of datetimes', (done) => {
     // Zero-based month in constructor *sigh*.
     const value = new Value.datetime(new Date(1983, 11, 2, 7, 55, 19, 0))
-    assert.equal((new Op.toYear(value)).run({}, 0, 1), 1983,
+    assert.equal((new Op.toYear(value)).run([{}], 0), 1983,
                  `Wrong year`)
-    assert.equal((new Op.toMonth(value)).run({}, 0, 1), 12,
+    assert.equal((new Op.toMonth(value)).run([{}], 0), 12,
                  `Wrong month`)
-    assert.equal((new Op.toDay(value)).run({}, 0, 1), 2,
+    assert.equal((new Op.toDay(value)).run([{}], 0), 2,
                  `Wrong day`)
-    assert.equal((new Op.toWeekday(value)).run({}, 0, 1), 5,
+    assert.equal((new Op.toWeekday(value)).run([{}], 0), 5,
                  `Wrong weekday`)
-    assert.equal((new Op.toHours(value)).run({}, 0, 1), 7,
+    assert.equal((new Op.toHours(value)).run([{}], 0), 7,
                  `Wrong hours`)
-    assert.equal((new Op.toMinutes(value)).run({}, 0, 1), 55,
+    assert.equal((new Op.toMinutes(value)).run([{}], 0), 55,
                  `Wrong minutes`)
-    assert.equal((new Op.toSeconds(value)).run({}, 0, 1), 19,
+    assert.equal((new Op.toSeconds(value)).run([{}], 0), 19,
                  `Wrong seconds`)
     done()
   })
@@ -539,7 +533,7 @@ describe('extract values from datetimes', () => {
     const value = new Value.datetime(util.MISSING)
     for (const [name, conv] of converters) {
       const op = new conv(value)
-      const result = op.run({}, 0, 1)
+      const result = op.run([{}], 0)
       assert.equal(result, util.MISSING,
                    `Wrong result for ${name}`)
     }

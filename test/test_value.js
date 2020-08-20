@@ -22,8 +22,9 @@ describe('get values', () => {
   })
 
   it('gets values from rows', (done) => {
+    const data = fixture.NUMBER
     const expected = [2, 5, 2, util.MISSING, 4, util.MISSING]
-    const actual = fixture.NUMBER.map((row, i) => getLeft.run(row, i))
+    const actual = data.map((row, i) => getLeft.run(data, i))
     assert.deepEqual(expected, actual,
                      `Got wrong value(s)`)
     done()
@@ -31,7 +32,7 @@ describe('get values', () => {
 
   it('does not get values from nonexistent columns', (done) => {
     const getNope = new Value.column('nope')
-    assert.throws(() => getNope({left: 1}, 0),
+    assert.throws(() => getNope([{left: 1}], 0),
                   Error,
                   `Should not be able to get value for missing column`)
     done()
@@ -46,8 +47,9 @@ describe('get values', () => {
 
   it('injects missing values', (done) => {
     const missing = new Value.missing()
+    const data = fixture.NAMES
     const expected = [util.MISSING, util.MISSING, util.MISSING]
-    const actual = fixture.NAMES.map((row, i) => missing.run(row, i))
+    const actual = data.map((row, i) => missing.run(data, i))
     assert.deepEqual(expected, actual,
                      `Got wrong value(s)`)
     assert(missing.equal(new Value.missing()),
@@ -59,8 +61,9 @@ describe('get values', () => {
 
   it('extracts row numbers', (done) => {
     const rownum = new Value.rownum()
+    const data = fixture.NUMBER
     const expected = [0, 1, 2, 3, 4, 5]
-    const actual = fixture.NUMBER.map((row, i) => rownum.run(row, i))
+    const actual = data.map((row, i) => rownum.run(data, i))
     assert.deepEqual(expected, actual,
                      `Got wrong value(s)`)
     assert(rownum.equal(new Value.rownum()),
@@ -71,9 +74,10 @@ describe('get values', () => {
   })
 
   it('generates exponential values', (done) => {
+    const data = fixture.NUMBER
     const exponential = new Value.exponential(1.0)
-    const actual = fixture.NUMBER.map((row, i) => exponential.run(row, i))
-    assert.equal(fixture.NUMBER.length, actual.length,
+    const actual = data.map((row, i) => exponential.run(data, i))
+    assert.equal(data.length, actual.length,
                  `Wrong number of values`)
     assert(actual.every(x => (0 <= x)),
            `Expected non-negative values`)
@@ -81,9 +85,10 @@ describe('get values', () => {
   })
 
   it('generates normal values', (done) => {
+    const data = fixture.NUMBER
     const normal = new Value.normal(5.0, 0.1)
-    const actual = fixture.NUMBER.map((row, i) => normal.run(row, i))
-    assert.equal(fixture.NUMBER.length, actual.length,
+    const actual = data.map((row, i) => normal.run(data, i))
+    assert.equal(data.length, actual.length,
                  `Wrong number of values`)
     assert(actual.every(x => (0 <= x)),
            `Expected non-negative values`)
@@ -95,9 +100,10 @@ describe('get values', () => {
   })
 
   it('generates uniform values', (done) => {
+    const data = fixture.NUMBER
     const uniform = new Value.uniform(1.0, 2.0)
-    const actual = fixture.NUMBER.map((row, i) => uniform.run(row, i))
-    assert.equal(fixture.NUMBER.length, actual.length,
+    const actual = data.map((row, i) => uniform.run(data, i))
+    assert.equal(data.length, actual.length,
                  `Wrong number of values`)
     assert(actual.every(x => ((1.0 <= x) && (x <= 2.0))),
            `Expected values in range`)

@@ -85,7 +85,7 @@ class DataFrame {
     const numRows = this.data.length
     const newData = this.data.map((row, i) => {
       const newRow = {...row}
-      newRow[newName] = expr.run(row, i, numRows)
+      newRow[newName] = expr.run(this.data, i)
       return newRow
     })
     const newColumns = this._makeColumns(newData, this.columns,
@@ -115,7 +115,7 @@ class DataFrame {
     util.check(expr instanceof ExprBase,
                `filter expression is not an expression object`)
     const numRows = this.data.length
-    const newData = this.data.filter((row, i) => expr.run(row, i, numRows))
+    const newData = this.data.filter((row, i) => expr.run(this.data, i))
     const newColumns = this._makeColumns(newData, this.columns)
     return new DataFrame(newData, newColumns)
   }
