@@ -4,7 +4,7 @@ const util = require('./util')
 
 /**
  * Represent an expression as an object. Derived classes must implement
- * `equal(other)` and `run(row, i)`.
+ * `equal(other)` and `run(row, i, data)`.
  */
 class ExprBase {
   /**
