@@ -350,7 +350,7 @@ describe('shift', () => {
     const expected = [util.MISSING, 2, 5, 2, util.MISSING, 4]
     const op = new Op.shift('left', 1)
     const data = fixture.NUMBER
-    const actual = data.map((row, i) => op.run(data, i))
+    const actual = data.map((r, i, d) => op.run(r, i, d))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) when shifting up`)
     done()
@@ -360,7 +360,7 @@ describe('shift', () => {
     const expected = [2, 5, 2, util.MISSING, 4, util.MISSING]
     const op = new Op.shift('left', 0)
     const data = fixture.NUMBER
-    const actual = data.map((row, i) => op.run(data, i))
+    const actual = data.map((r, i, d) => op.run(r, i, d))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) when shifting by zero`)
     done()
@@ -370,7 +370,7 @@ describe('shift', () => {
     const expected = [5, 2, util.MISSING, 4, util.MISSING, util.MISSING]
     const op = new Op.shift('left', -1)
     const data = fixture.NUMBER
-    const actual = data.map((row, i) => op.run(data, i))
+    const actual = data.map((r, i, d) => op.run(r, i, d))
     assert.deepEqual(expected, actual,
                      `Wrong value(s) when shifting down`)
     done()

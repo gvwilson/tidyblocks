@@ -689,8 +689,8 @@ class OpShift extends ExprBase {
       (this.amount === other.amount)
   }
 
-  run (data, i) {
-    util.check(this.column in data[i],
+  run (row, i, data) {
+    util.check(this.column in row,
                `${this.column} not in data`)
 
     // Shift up.
