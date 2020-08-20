@@ -117,3 +117,14 @@ but the values used for the true and false cases must have the same type.
 - *second space*: The value if the condition is true.
 - *third space*: The value if the condition is false.
 </div>
+
+<div id="shift" markdown="1">
+### Shift
+
+<img class="block" src="{{ 'en/img/op_shift.svg' | relative_url }}" alt="shift block"/>
+
+Shift values up or down in a column.
+
+- **column**: Which column to shift
+- *number*: How much to shift by (positive to shift up that many places, negative to shift down).
+</div>

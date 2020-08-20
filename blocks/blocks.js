@@ -132,6 +132,7 @@ const createXmlConfig = (language) => {
     <category name="${msg.get('op')}" colour="${OP_COLOR}">
       <block type="op_arithmetic"></block>
       <block type="op_negate"></block>
+      <block type="op_abs"></block>
       <block type="op_compare"></block>
       <block type="op_extremum"></block>
       <block type="op_logical"></block>
@@ -140,7 +141,7 @@ const createXmlConfig = (language) => {
       <block type="op_convert"></block>
       <block type="op_datetime"></block>
       <block type="op_conditional"></block>
-      <block type="op_abs"></block>
+      <block type="op_shift"></block>
     </category>
     <category name="${msg.get('value')}" colour="${VALUE_COLOR}">
       <block type="value_column"></block>

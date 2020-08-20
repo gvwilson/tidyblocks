@@ -156,7 +156,23 @@ const MESSAGES = {
       ko: '조건에  값을 선택', 
       pt: 'seleciona um valor baseado em uma condição'
     }
-  }
+  },
+  shift: {
+    message0: {
+      en: 'Shift %1 by %2'
+    },
+    column: {
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      it: 'colonna',
+      ko: '열',
+      pt: 'coluna'
+    },
+    tooltip: {
+      en: 'shift in a column up or down'
+    }
+  },
 }
 
 /**
@@ -449,6 +465,29 @@ const setup = (language) => {
       style: 'op_block',
       tooltip: msg.get('conditional.tooltip'),
       helpUrl: './guide/#conditional'
+    },
+
+    // Shift
+    {
+      type: 'op_shift',
+      message0: msg.get('shift.message0'),
+      args0: [
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('shift.column')
+        },
+        {
+          type: 'field_number',
+          name: 'NUMBER',
+          value: 1
+        }
+      ],
+      inputsInline: true,
+      output: 'Boolean',
+      style: 'op_block',
+      tooltip: msg.get('shift.tooltip'),
+      helpUrl: './guide/#shift'
     }
   ])
 
@@ -539,6 +578,14 @@ const setup = (language) => {
     const left = valueToCode(block, 'LEFT')
     const right = valueToCode(block, 'RIGHT')
     const code = `["@op", "ifElse", ${cond}, ${left}, ${right}]`
+    return [code, ORDER_NONE]
+  }
+
+  // Shift
+  Blockly.TidyBlocks['op_shift'] = (block) => {
+    const column = block.getFieldValue('COLUMN')
+    const amount = block.getFieldValue('NUMBER')
+    const code = `["@op", "shift", "${column}", ${amount}]`
     return [code, ORDER_NONE]
   }
 }
