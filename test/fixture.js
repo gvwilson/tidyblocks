@@ -121,6 +121,9 @@ module.exports = {
     {num: -1, date: new Date(), str: "abc", bool: true},
     {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
   ],
+  SINGLE: [
+    {num: 0}
+  ],
   COLORS: require('../data/colors'),
   TABLE,
   HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, false),

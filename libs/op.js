@@ -28,8 +28,8 @@ class OpNegate extends ExprUnary {
     super(FAMILY, 'negate', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     util.checkNumber(value,
                      `Require number for ${this.name}`)
     return (value === util.MISSING) ? util.MISSING : util.safeValue(-value)
@@ -49,8 +49,8 @@ class OpAbs extends ExprUnary {
     super(FAMILY, 'abs', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     util.checkNumber(value,
                      `Require number for ${this.name}`)
     return (value === util.MISSING) ? util.MISSING : util.safeValue(Math.abs(value))
@@ -70,8 +70,8 @@ class OpNot extends ExprUnary {
     super(FAMILY, 'not', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return (value === util.MISSING) ? util.MISSING : !util.makeLogical(value)
   }
 }
@@ -94,8 +94,8 @@ class OpTypecheckBase extends ExprUnary {
   /**
    * Check the type of a value.
    */
-  typeCheck (data, i, typeName) {
-    const value = this.arg.run(data, i)
+  typeCheck (row, i, data, typeName) {
+    const value = this.arg.run(row, i, data)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -112,8 +112,8 @@ class OpIsLogical extends OpTypecheckBase {
     super('isLogical', arg)
   }
 
-  run (data, i) {
-    return this.typeCheck(data, i, 'boolean')
+  run (row, i, data) {
+    return this.typeCheck(row, i, data, 'boolean')
   }
 }
 
@@ -125,8 +125,8 @@ class OpIsDatetime extends OpTypecheckBase {
     super('isDatetime', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return (value === util.MISSING) ? util.MISSING : (value instanceof Date)
   }
 }
@@ -139,8 +139,8 @@ class OpIsMissing extends OpTypecheckBase {
     super('isMissing', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return value === util.MISSING
   }
 }
@@ -153,8 +153,8 @@ class OpIsNumber extends OpTypecheckBase {
     super('isNumber', arg)
   }
 
-  run (data, i) {
-    return this.typeCheck(data, i, 'number')
+  run (row, i, data) {
+    return this.typeCheck(row, i, data, 'number')
   }
 }
 
@@ -166,8 +166,8 @@ class OpIsText extends OpTypecheckBase {
     super('isText', arg)
   }
 
-  run (data, i) {
-    return this.typeCheck(data, i, 'string')
+  run (row, i, data) {
+    return this.typeCheck(row, i, data, 'string')
   }
 }
 
@@ -195,8 +195,8 @@ class OpToLogical extends OpConvertBase {
     super('toLogical', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return (value === util.MISSING) ? util.MISSING : util.makeLogical(value)
   }
 }
@@ -209,8 +209,8 @@ class OpToDatetime extends OpConvertBase {
     super('toDatetime', arg)
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return util.makeDate(value)
   }
 }
@@ -223,8 +223,8 @@ class OpToNumber extends OpConvertBase {
     super('toNumber', arg)
   }
 
-  run (data, i) {
-    let value = this.arg.run(data, i)
+  run (row, i, data) {
+    let value = this.arg.run(row, i, data)
     return util.makeNumber(value)
   }
 }
@@ -237,8 +237,8 @@ class OpToText extends OpConvertBase {
     super('toText', arg)
   }
 
-  run (data, i) {
-    let value = this.arg.run(data, i)
+  run (row, i, data) {
+    let value = this.arg.run(row, i, data)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -265,8 +265,8 @@ class OpDatetimeBase extends ExprUnary {
     this.converter = converter
   }
 
-  run (data, i) {
-    const value = this.arg.run(data, i)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -370,11 +370,11 @@ class OpArithmeticBase extends ExprBinary {
     this.operator = operator
   }
 
-  run (data, i) {
-    const left = this.left.run(data, i)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
     util.checkNumber(left,
                      `Require number for ${this.species}`)
-    const right = this.right.run(data, i)
+    const right = this.right.run(row, i, data)
     util.checkNumber(right,
                      `Require number for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
@@ -466,9 +466,9 @@ class OpExtremumBase extends ExprBinary {
     this.operator = operator
   }
 
-  run (data, i) {
-    const left = this.left.run(data, i)
-    const right = this.right.run(data, i)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
+    const right = this.right.run(row, i, data)
     return ((left === util.MISSING) || (right === util.MISSING))
       ? util.MISSING
       : this.operator(left, right)
@@ -514,9 +514,9 @@ class OpCompareBase extends ExprBinary {
     this.operator = operator
   }
 
-  run (data, i) {
-    const left = this.left.run(data, i)
-    const right = this.right.run(data, i)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
+    const right = this.right.run(row, i, data)
     util.checkTypeEqual(left, right,
                         `Require equal types for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
@@ -616,12 +616,12 @@ class OpAnd extends OpLogicalBase {
     super('and', left, right)
   }
 
-  run (data, i) {
-    const left = this.left.run(data, i)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
     if (!left) {
       return left
     }
-    return this.right.run(data, i)
+    return this.right.run(row, i, data)
   }
 }
 
@@ -633,12 +633,12 @@ class OpOr extends OpLogicalBase {
     super('or', left, right)
   }
 
-  run (data, i) {
-    const left = this.left.run(data, i)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
     if (left) {
       return left
     }
-    return this.right.run(data, i)
+    return this.right.run(row, i, data)
   }
 }
 
@@ -658,11 +658,11 @@ class OpIfElse extends ExprTernary {
     super(FAMILY, 'ifElse', left, middle, right)
   }
 
-  run (data, i) {
-    const cond = this.left.run(data, i)
+  run (row, i, data) {
+    const cond = this.left.run(row, i, data)
     return (cond === util.MISSING)
       ? util.MISSING
-      : (cond ? this.middle.run(data, i) : this.right.run(data, i))
+      : (cond ? this.middle.run(row, i, data) : this.right.run(row, i, data))
   }
 }
 

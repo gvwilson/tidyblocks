@@ -28,7 +28,7 @@ class ValueAbsent extends ExprBase {
     return other instanceof ValueAbsent
   }
 
-  run (data, i) {
+  run (row, i, data) {
     util.fail('Missing expression')
   }
 }
@@ -48,7 +48,7 @@ class ValueMissing extends ExprBase {
     return other instanceof ValueMissing
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return util.MISSING
   }
 }
@@ -68,7 +68,7 @@ class ValueRowNum extends ExprBase {
     return other instanceof ValueRowNum
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return i
   }
 }
@@ -89,10 +89,9 @@ class ValueColumn extends ExprValue {
     super(FAMILY, 'column', name)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     util.check((0 <= i) && (i < data.length),
                `Row index ${i} out of range`)
-    const row = data[i]
     util.check(typeof row === 'object',
                `Row must be object`)
     util.check(this.value in row,
@@ -116,7 +115,7 @@ class ValueDatetime extends ExprValue {
     super(FAMILY, 'datetime', value)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.value
   }
 }
@@ -135,7 +134,7 @@ class ValueLogical extends ExprValue {
     super(FAMILY, 'logical', value)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.value
   }
 }
@@ -154,7 +153,7 @@ class ValueNumber extends ExprValue {
     super(FAMILY, 'number', value)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.value
   }
 }
@@ -173,7 +172,7 @@ class ValueText extends ExprValue {
     super(FAMILY, 'text', value)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.value
   }
 }
@@ -193,7 +192,7 @@ class ValueExponential extends ExprValue {
     this.generator = random.exponential(this.value)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.generator()
   }
 }
@@ -229,7 +228,7 @@ class ValueNormal extends ExprBase {
       (this.stdDev === other.stdDev)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.generator()
   }
 }
@@ -267,7 +266,7 @@ class ValueUniform extends ExprBase {
       (this.high === other.high)
   }
 
-  run (data, i) {
+  run (row, i, data) {
     return this.generator()
   }
 }
