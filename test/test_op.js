@@ -345,6 +345,38 @@ describe('conditional', () => {
   })
 })
 
+describe('shift', () => {
+  it('shifts up', (done) => {
+    const expected = [util.MISSING, 2, 5, 2, util.MISSING, 4]
+    const op = new Op.shift('left', 1)
+    const data = fixture.NUMBER
+    const actual = data.map((r, i, d) => op.run(r, i, d))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) when shifting up`)
+    done()
+  })
+
+  it('shifts by zero', (done) => {
+    const expected = [2, 5, 2, util.MISSING, 4, util.MISSING]
+    const op = new Op.shift('left', 0)
+    const data = fixture.NUMBER
+    const actual = data.map((r, i, d) => op.run(r, i, d))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) when shifting by zero`)
+    done()
+  })
+
+  it('shifts down', (done) => {
+    const expected = [5, 2, util.MISSING, 4, util.MISSING, util.MISSING]
+    const op = new Op.shift('left', -1)
+    const data = fixture.NUMBER
+    const actual = data.map((r, i, d) => op.run(r, i, d))
+    assert.deepEqual(expected, actual,
+                     `Wrong value(s) when shifting down`)
+    done()
+  })
+})
+
 describe('type checks', () => {
   it('correctly identifies wrong types', (done) => {
     const allChecks = [
@@ -549,6 +581,23 @@ describe('expression equality tests', () => {
     const if_2 = new Op.ifElse(cond_1, val_1_true, val_2_false)
     assert(!if_2.equal(if_1),
            `Unequal nested expressions`)
+    done()
+  })
+
+  it('compares shift expressons', (done) => {
+    const original = new Op.shift('pink', 3)
+    const duplicate = new Op.shift('pink', 3)
+    assert(original.equal(duplicate),
+           `Should be equal`)
+    const others = [
+      new Op.shift('magenta', 3),
+      new Op.shift('pink', 5),
+      new Value.column('pink')
+    ]
+    for (const o of others) {
+      assert(!original.equal(o),
+             `Should not be equal`)
+    }
     done()
   })
 })
