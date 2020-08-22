@@ -2,6 +2,7 @@
 
 const util = require('./util')
 const {
+  ExprBase,
   ExprUnary,
   ExprBinary,
   ExprTernary
@@ -27,14 +28,8 @@ class OpNegate extends ExprUnary {
     super(FAMILY, 'negate', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The negation of the value returned by the sub-expression.
-   */
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     util.checkNumber(value,
                      `Require number for ${this.name}`)
     return (value === util.MISSING) ? util.MISSING : util.safeValue(-value)
@@ -54,14 +49,8 @@ class OpAbs extends ExprUnary {
     super(FAMILY, 'abs', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The negation of the value returned by the sub-expression.
-   */
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     util.checkNumber(value,
                      `Require number for ${this.name}`)
     return (value === util.MISSING) ? util.MISSING : util.safeValue(Math.abs(value))
@@ -81,14 +70,8 @@ class OpNot extends ExprUnary {
     super(FAMILY, 'not', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The logical negation of the value returned by the sub-expression.
-   */
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return (value === util.MISSING) ? util.MISSING : !util.makeLogical(value)
   }
 }
@@ -110,13 +93,9 @@ class OpTypecheckBase extends ExprUnary {
 
   /**
    * Check the type of a value.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @param {string} typeName What type to check for.
-   * @returns True or false.
    */
-  typeCheck (row, i, numRows, typeName) {
-    const value = this.arg.run(row, i, numRows)
+  typeCheck (row, i, data, typeName) {
+    const value = this.arg.run(row, i, data)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -133,8 +112,8 @@ class OpIsLogical extends OpTypecheckBase {
     super('isLogical', arg)
   }
 
-  run (row, i, numRows) {
-    return this.typeCheck(row, i, numRows, 'boolean')
+  run (row, i, data) {
+    return this.typeCheck(row, i, data, 'boolean')
   }
 }
 
@@ -146,8 +125,8 @@ class OpIsDatetime extends OpTypecheckBase {
     super('isDatetime', arg)
   }
 
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return (value === util.MISSING) ? util.MISSING : (value instanceof Date)
   }
 }
@@ -160,8 +139,8 @@ class OpIsMissing extends OpTypecheckBase {
     super('isMissing', arg)
   }
 
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return value === util.MISSING
   }
 }
@@ -174,8 +153,8 @@ class OpIsNumber extends OpTypecheckBase {
     super('isNumber', arg)
   }
 
-  run (row, i, numRows) {
-    return this.typeCheck(row, i, numRows, 'number')
+  run (row, i, data) {
+    return this.typeCheck(row, i, data, 'number')
   }
 }
 
@@ -187,8 +166,8 @@ class OpIsText extends OpTypecheckBase {
     super('isText', arg)
   }
 
-  run (row, i, numRows) {
-    return this.typeCheck(row, i, numRows, 'string')
+  run (row, i, data) {
+    return this.typeCheck(row, i, data, 'string')
   }
 }
 
@@ -216,14 +195,8 @@ class OpToLogical extends OpConvertBase {
     super('toLogical', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The sub-expression value as MISSING, true, or false.
-   */
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return (value === util.MISSING) ? util.MISSING : util.makeLogical(value)
   }
 }
@@ -236,14 +209,8 @@ class OpToDatetime extends OpConvertBase {
     super('toDatetime', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The sub-expression value as MISSING or a Date.
-   */
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     return util.makeDate(value)
   }
 }
@@ -256,14 +223,8 @@ class OpToNumber extends OpConvertBase {
     super('toNumber', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The sub-expression value as a number.
-   */
-  run (row, i, numRows) {
-    let value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    let value = this.arg.run(row, i, data)
     return util.makeNumber(value)
   }
 }
@@ -276,14 +237,8 @@ class OpToText extends OpConvertBase {
     super('toText', arg)
   }
 
-  /**
-   * Operate on a single row.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row's index.
-   * @return The sub-expression value as text.
-   */
-  run (row, i, numRows) {
-    let value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    let value = this.arg.run(row, i, data)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -310,14 +265,8 @@ class OpDatetimeBase extends ExprUnary {
     this.converter = converter
   }
 
-  /**
-   * Extract a date component.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The date component's value.
-   */
-  run (row, i, numRows) {
-    const value = this.arg.run(row, i, numRows)
+  run (row, i, data) {
+    const value = this.arg.run(row, i, data)
     if (value === util.MISSING) {
       return util.MISSING
     }
@@ -421,17 +370,11 @@ class OpArithmeticBase extends ExprBinary {
     this.operator = operator
   }
 
-  /**
-   * Perform a binary arithmetic operation.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The result.
-   */
-  run (row, i, numRows) {
-    const left = this.left.run(row, i, numRows)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
     util.checkNumber(left,
                      `Require number for ${this.species}`)
-    const right = this.right.run(row, i, numRows)
+    const right = this.right.run(row, i, data)
     util.checkNumber(right,
                      `Require number for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
@@ -523,15 +466,9 @@ class OpExtremumBase extends ExprBinary {
     this.operator = operator
   }
 
-  /**
-   * Select an extremum.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The result.
-   */
-  run (row, i, numRows) {
-    const left = this.left.run(row, i, numRows)
-    const right = this.right.run(row, i, numRows)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
+    const right = this.right.run(row, i, data)
     return ((left === util.MISSING) || (right === util.MISSING))
       ? util.MISSING
       : this.operator(left, right)
@@ -577,15 +514,9 @@ class OpCompareBase extends ExprBinary {
     this.operator = operator
   }
 
-  /**
-   * Perform a binary comparison operation.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The result.
-   */
-  run (row, i, numRows) {
-    const left = this.left.run(row, i, numRows)
-    const right = this.right.run(row, i, numRows)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
+    const right = this.right.run(row, i, data)
     util.checkTypeEqual(left, right,
                         `Require equal types for ${this.species}`)
     return ((left === util.MISSING) || (right === util.MISSING))
@@ -685,19 +616,12 @@ class OpAnd extends OpLogicalBase {
     super('and', left, right)
   }
 
-  /**
-   * Perform short-circuit logical 'and'.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The left value if it is not truthy, otherwise the right value. The
-   * right expression is only evaluated if necessary.
-   */
-  run (row, i, numRows) {
-    const left = this.left.run(row, i, numRows)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
     if (!left) {
       return left
     }
-    return this.right.run(row, i, numRows)
+    return this.right.run(row, i, data)
   }
 }
 
@@ -709,19 +633,12 @@ class OpOr extends OpLogicalBase {
     super('or', left, right)
   }
 
-  /**
-   * Perform short-circuit logical 'or'.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The left value if it is truthy, otherwise the right value. The
-   * right expression is only evaluated if necessary.
-   */
-  run (row, i, numRows) {
-    const left = this.left.run(row, i, numRows)
+  run (row, i, data) {
+    const left = this.left.run(row, i, data)
     if (left) {
       return left
     }
-    return this.right.run(row, i, numRows)
+    return this.right.run(row, i, data)
   }
 }
 
@@ -741,18 +658,11 @@ class OpIfElse extends ExprTernary {
     super(FAMILY, 'ifElse', left, middle, right)
   }
 
-  /**
-   * Perform short-circuit logical 'or'.
-   * @param {object} row The row to operate on.
-   * @param {number} i The row index within the dataframe.
-   * @returns The left value if the condition is truthy, otherwise the right
-   * value. The left and right expressions are only evaluated if necessary.
-   */
-  run (row, i, numRows) {
-    const cond = this.left.run(row, i, numRows)
+  run (row, i, data) {
+    const cond = this.left.run(row, i, data)
     return (cond === util.MISSING)
       ? util.MISSING
-      : (cond ? this.middle.run(row, i, numRows) : this.right.run(row, i, numRows))
+      : (cond ? this.middle.run(row, i, data) : this.right.run(row, i, data))
   }
 }
 
