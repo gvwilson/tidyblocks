@@ -144,6 +144,15 @@ describe('expression persistence', () => {
     done()
   })
 
+  it('restores shift operations', (done) => {
+    const factory = new Restore()
+    const json = [Op.FAMILY, 'shift', 'pink', -3]
+    assert.deepEqual(factory.expr(json),
+                     new Op.shift('pink', -3),
+                     `Failed to restore shift`)
+    done()
+  })
+
   it('restores type-checking operations', (done) => {
     const childObj = new Value.number(123)
     const childJSON = [Value.FAMILY, 'number', 123]

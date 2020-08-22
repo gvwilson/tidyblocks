@@ -668,6 +668,54 @@ class OpIfElse extends ExprTernary {
 
 // ----------------------------------------------------------------------
 
+/**
+ * Shift values up or down a column.
+ */
+class OpShift extends ExprBase {
+  constructor (column, amount) {
+    super(FAMILY, 'shift')
+    this.column = column
+    this.amount = amount
+  }
+
+  /**
+   * Check for equality.
+   * @param other The object to check against.
+   * @returns Equality.
+   */
+  equal (other) {
+    return (other instanceof OpShift) &&
+      (this.column === other.column) &&
+      (this.amount === other.amount)
+  }
+
+  run (row, i, data) {
+    util.check(this.column in row,
+               `${this.column} not in data`)
+
+    // Shift up.
+    if (this.amount > 0) {
+      if ((i - this.amount) < 0) {
+        return util.MISSING
+      }
+      return data[i - this.amount][this.column]
+    }
+
+    // No shift
+    if (this.amount === 0) {
+      return data[i][this.column]
+    }
+
+    // Shift down (amount is negative).
+    if ((i - this.amount) >= data.length) {
+      return util.MISSING
+    }
+    return data[i - this.amount][this.column]
+  }
+}
+
+// ----------------------------------------------------------------------
+
 module.exports = {
   FAMILY: FAMILY,
   abs: OpAbs,
@@ -694,6 +742,7 @@ module.exports = {
   or: OpOr,
   power: OpPower,
   remainder: OpRemainder,
+  shift: OpShift,
   subtract: OpSubtract,
   toDatetime: OpToDatetime,
   toDay: OpToDay,

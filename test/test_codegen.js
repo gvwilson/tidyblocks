@@ -246,6 +246,17 @@ describe('expression code generation', () => {
     done()
   })
 
+  it('generates code for shift', (done) => {
+    const expected = [Op.FAMILY, 'shift', 'pink', 3]
+    const w = fixture.workspace()
+    const block = w.newBlock('op_shift')
+    block.setFieldValue('pink', 'COLUMN')
+    block.setFieldValue(3, 'NUMBER')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for type checking', (done) => {
     const expected = [Op.FAMILY, 'isLogical', [Value.FAMILY, 'number', 123]]
     const w = fixture.workspace()
