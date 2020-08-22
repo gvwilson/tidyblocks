@@ -105,10 +105,13 @@ const MESSAGES = {
   },
   missing: {
     message0: {
-      en: 'Missing'
+      en: 'Missing',
+      es: 'Falta'
     },
     tooltip: {
-      en: 'missing value'
+      en: 'missing value',
+      es: 'valor que falta'
+
     }
   },
   rownum: {
