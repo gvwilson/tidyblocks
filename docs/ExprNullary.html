@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: OpMaximum</title>
+    <title>JSDoc: Class: ExprNullary</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: OpMaximum</h1>
+    <h1 class="page-title">Class: ExprNullary</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>OpMaximum<span class="signature">(left, right)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ExprNullary<span class="signature">(family, kind, value)</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -41,7 +41,7 @@
     
 
     
-    <h4 class="name" id="OpMaximum"><span class="type-signature"></span>new OpMaximum<span class="signature">(left, right)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ExprNullary"><span class="type-signature"></span>new ExprNullary<span class="signature">(family, kind, value)</span><span class="type-signature"></span></h4>
     
 
     
@@ -81,13 +81,13 @@
 
         <tr>
             
-                <td class="name"><code>left</code></td>
+                <td class="name"><code>family</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="ExprBase.html">ExprBase</a></span>
+<span class="param-type">string</span>
 
 
             
@@ -97,20 +97,20 @@
 
             
 
-            <td class="description last"><p>How to get a value.</p></td>
+            <td class="description last"><p>An '@'-prefixed family name for dispatch in <code>Restore</code>.</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>right</code></td>
+                <td class="name"><code>kind</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="ExprBase.html">ExprBase</a></span>
+<span class="param-type">string</span>
 
 
             
@@ -120,7 +120,30 @@
 
             
 
-            <td class="description last"><p>How to get a value.</p></td>
+            <td class="description last"><p>Identifies a specific class within that family.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value of this expression.</p></td>
         </tr>
 
     
@@ -161,7 +184,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="op.js.html">op.js</a>, <a href="op.js.html#line629">line 629</a>
+        <a href="expr.js.html">expr.js</a>, <a href="expr.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -201,7 +224,7 @@
 
 
     <ul>
-        <li><a href="OpExtremumBase.html">OpExtremumBase</a></li>
+        <li><a href="ExprBase.html">ExprBase</a></li>
     </ul>
 
 
@@ -217,72 +240,6 @@
 
     
 
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="OPERATOR"><span class="type-signature"></span>OPERATOR<span class="type-signature"></span></h4>
-
-
-
-
-<div class="description">
-    <p>Get maximum of values.</p>
-</div>
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="op.js.html">op.js</a>, <a href="op.js.html#line623">line 623</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
     
 
     

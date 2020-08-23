@@ -1,15 +1,11 @@
 'use strict'
 
-/**
- * Represent values in the evaluation tree.
- */
-
 const random = require('random')
 
 const util = require('./util')
 const {
   ExprBase,
-  ExprValue
+  ExprNullary
 } = require('./expr')
 
 /**
@@ -18,6 +14,7 @@ const {
 const FAMILY = '@value'
 
 /**
+ * @extends ExprBase
  * Absent value used as placeholder for incomplete expressions.
  *
  * - Requires no parameters.
@@ -39,6 +36,7 @@ class ValueAbsent extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Missing value (called `NULL` in SQL or `NA` in R).
  *
  * - Requires no parameters.
@@ -59,6 +57,7 @@ class ValueMissing extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Row number.
  *
  * - Requires no parameters.
@@ -80,6 +79,7 @@ class ValueRowNum extends ExprBase {
 }
 
 /**
+ * @extends ExprNullary
  * Get value of a column.
  *
  * - Requires a column name when constructed.
@@ -89,7 +89,7 @@ class ValueRowNum extends ExprBase {
  * The column name cannot be checked at build time because the table being
  * accessed may be changed dynamically by preceding expressions.
  */
-class ValueColumn extends ExprValue {
+class ValueColumn extends ExprNullary {
   /**
    * @param {string} name Column to access.
    */
@@ -111,13 +111,14 @@ class ValueColumn extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * A constant datetime value.
  *
  * - Can be constructed from `MISSING`, a `Date` object, or a string that can be converted to a `Date`.
  * - Equal to other datetimes with the same value.
  * - Produces that constant datetime.
  */
-class ValueDatetime extends ExprValue {
+class ValueDatetime extends ExprNullary {
   /**
    * @param {(MISSING|string|Date)} value Value to produce.
    */
@@ -134,13 +135,14 @@ class ValueDatetime extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * A constant logical (Boolean) value.
  *
  * - Can be constructed from `MISSING` or a `boolean` value.
  * - Equal to other equally-valued logical values.
  * - Always produces the logical value.
  */
-class ValueLogical extends ExprValue {
+class ValueLogical extends ExprNullary {
   /**
    * @param {(MISSING|boolean)} value Value to produce.
    */
@@ -156,13 +158,14 @@ class ValueLogical extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * A constant numeric value.
  *
  * - Can be constructed from `MISSING` or the specific number.
  * - Equal to equal numbers.
  * - Produces the specified value.
  */
-class ValueNumber extends ExprValue {
+class ValueNumber extends ExprNullary {
   /**
    * @param {(MISSING|number)} value Value to produce.
    */
@@ -178,13 +181,14 @@ class ValueNumber extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * A constant text value.
  *
  * - Can be constructed from `MISSING` or a text value (possibly the empty string).
  * - Equal to equal-valued text.
  * - Produces that text.
  */
-class ValueText extends ExprValue {
+class ValueText extends ExprNullary {
   /**
    * @param {(MISSING|string)} value Value to produce.
    */
@@ -200,13 +204,14 @@ class ValueText extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * Sample an exponential distribution.
  *
  * - Requires a positive number as a rate parameter when constructed.
  * - Equal to equivalent exponential distributions.
  * - Samples the specified distribution.
  */
-class ValueExponential extends ExprValue {
+class ValueExponential extends ExprNullary {
   /**
    * @param {number} rate Distribution parameter.
    */
@@ -223,6 +228,7 @@ class ValueExponential extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * Sample a normal distribution.
  *
  * - Requires a number as mean and a non-negative number as standard deviation.
@@ -257,6 +263,7 @@ class ValueNormal extends ExprBase {
 }
 
 /**
+ * @extends ExprNullary
  * Sample a uniform distribution.
  *
  * - Requires an ordered pair of numbers as low and high bounds.
