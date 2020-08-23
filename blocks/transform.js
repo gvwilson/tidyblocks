@@ -434,7 +434,12 @@ const setup = (language) => {
           type: 'field_dropdown',
           name: 'OP',
           options: [
+            ['all', 'all'],
+            ['any', 'any'],
             ['index', 'index'],
+            ['maximum', 'maximum'],
+            ['mean', 'mean'],
+            ['minimum', 'minimum'],
             ['sum', 'sum']
           ]
         },
