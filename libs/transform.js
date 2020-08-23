@@ -3,7 +3,7 @@
 import stats from 'simple-statistics'
 
 import util from './util'
-import {ExprBase from './expr'
+import ExprBase from './expr'
 import DataFrame from './dataframe'
 import Summarize from './summarize'
 
@@ -720,29 +720,29 @@ class TransformSilhouette extends TransformStats {
 
 // ----------------------------------------------------------------------
 
-export TransformBase as base
-export TransformCreate as create
-export TransformData as data
-export TransformDrop as drop
-export TransformFilter as filter
-export TransformGlue as glue
-export TransformGroupBy as groupBy
-export TransformJoin as join
-export TransformSaveAs as saveAs
-export TransformSelect as select
-export TransformSequence as sequence
-export TransformSort as sort
-export TransformSummarize as summarize
-export TransformUngroup as ungroup
-export TransformUnique as unique
-export TransformPlot as plot
-export TransformBar as bar
-export TransformBox as box
-export TransformDot as dot
-export TransformHistogram as histogram
-export TransformScatter as scatter
-export TransformStats as stats
-export TransformTTestOneSample as ttest_one
-export TransformTTestPaired as ttest_two
-export TransformKMeansClustering as k_means
-export TransformSilhouette as silhouette
+export { TransformBase as base }
+export { TransformCreate as create }
+export { TransformData as data }
+export { TransformDrop as drop }
+export { TransformFilter as filter }
+export { TransformGlue as glue }
+export { TransformGroupBy as groupBy }
+export { TransformJoin as join }
+export { TransformSaveAs as saveAs }
+export { TransformSelect as select }
+export { TransformSequence as sequence }
+export { TransformSort as sort }
+export { TransformSummarize as summarize }
+export { TransformUngroup as ungroup }
+export { TransformUnique as unique }
+export { TransformPlot as plot }
+export { TransformBar as bar }
+export { TransformBox as box }
+export { TransformDot as dot }
+export { TransformHistogram as histogram }
+export { TransformScatter as scatter }
+export { TransformStats as stats }
+export { TransformTTestOneSample as ttest_one }
+export { TransformTTestPaired as ttest_two }
+export { TransformKMeansClustering as k_means }
+export { TransformSilhouette as silhouette }

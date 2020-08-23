@@ -3,12 +3,12 @@
 import fs from 'fs'
 import Blockly from 'blockly/blockly_compressed'
 
-import util from '../libs/util'
-import Transform from '../libs/transform'
-import DataFrame from '../libs/dataframe'
-import UserInterface from '../libs/gui'
-import colors from '../data/colors'
-import blocks from '../blocks/blocks'
+import * as util from '../libs/util'
+import * as Transform from '../libs/transform'
+import * as DataFrame from '../libs/dataframe'
+import * as UserInterface from '../libs/gui'
+import * as colors from '../data/colors'
+import * as blocks from '../blocks/blocks'
 
 // Define all of our blocks.
 blocks.createBlocks()

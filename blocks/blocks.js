@@ -6,13 +6,13 @@ import {
   Messages
 } from './helpers'
 
-import combine from './combine'
-import data from './data'
-import op from './op'
-import plot from './plot'
-import stats from './stats'
-import transform from './transform'
-import value from './value'
+import * as combine from './combine'
+import * as data from './data'
+import * as op from './op'
+import * as plot from './plot'
+import * as stats from './stats'
+import * as transform from './transform'
+import * as value from './value'
 
 // ----------------------------------------------------------------------
 // Block colors.
@@ -36,7 +36,7 @@ export const MESSAGES = {
     en: 'combine',
     es: 'combinar',
     it: 'unire',
-    ko: '결합', 
+    ko: '결합',
     pt: 'combinar'
   },
   data: {
@@ -84,7 +84,7 @@ export const MESSAGES = {
     en: 'value',
     es: 'valor',
     it: 'valore',
-    ko: '값', 
+    ko: '값',
     pt: 'valor'
   }
 }

@@ -299,14 +299,14 @@ class ValueUniform extends ExprBase {
   }
 }
 
-export ValueAbsent as absent
-export ValueMissing as missing
-export ValueRowNum as rownum
-export ValueColumn as column
-export ValueDatetime as datetime
-export ValueLogical as logical
-export ValueNumber as number
-export ValueText as text
-export ValueExponential as exponential
-export ValueNormal as normal
-export ValueUniform as uniform
+export { ValueAbsent as absent }
+export { ValueMissing as missing }
+export { ValueRowNum as rownum }
+export { ValueColumn as column }
+export { ValueDatetime as datetime }
+export { ValueLogical as logical }
+export { ValueNumber as number }
+export { ValueText as text }
+export { ValueExponential as exponential }
+export { ValueNormal as normal }
+export { ValueUniform as uniform }

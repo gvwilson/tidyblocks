@@ -164,14 +164,14 @@ class SummarizeVariance extends SummarizeBase {
   }
 }
 
-export SummarizeBase as base
-export SummarizeAll as all
-export SummarizeAny as any
-export SummarizeCount as count
-export SummarizeMaximum as maximum
-export SummarizeMean as mean
-export SummarizeMedian as median
-export SummarizeMinimum as minimum
-export SummarizeStdDev as stdDev
-export SummarizeSum as sum
-export SummarizeVariance as variance
+export { SummarizeBase as base }
+export { SummarizeAll as all }
+export { SummarizeAny as any }
+export { SummarizeCount as count }
+export { SummarizeMaximum as maximum }
+export { SummarizeMean as mean }
+export { SummarizeMedian as median }
+export { SummarizeMinimum as minimum }
+export { SummarizeStdDev as stdDev }
+export { SummarizeSum as sum }
+export { SummarizeVariance as variance }

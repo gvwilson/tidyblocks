@@ -1,6 +1,6 @@
-import path from 'path';
+const path = require('path');
 
-export default {
+module.exports = {
   mode: "production",
   // Workaround for webpack bug: https://github.com/webpack-contrib/css-loader/issues/447
   node: {
@@ -24,6 +24,7 @@ export default {
           },
         },
       },
+      
       {
         test: /\.css$/i,
         exclude: /\.lazy\.css$/i,
