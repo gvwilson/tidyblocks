@@ -27,7 +27,7 @@ class DataFrame {
   /**
    * Check if two dataframes are equal (used primarily in testing).
    * @param {Object} other The other dataframe.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     util.check(other instanceof DataFrame,
@@ -73,7 +73,7 @@ class DataFrame {
    * Create a new column using values from existing columns.
    * @param {string} newName New column's name. (If column already exists, it is replaced.)
    * @param {ExprBase} expr The expression object that calculates new values.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   create (newName, expr) {
     util.check(newName,
@@ -97,7 +97,7 @@ class DataFrame {
    * Drop columns.
    * @param {string[]} columns The names of the columns to discard (which must
    * be present).
-   * @returns A new dataframe that doesn't have those columns.
+   * @return A new dataframe that doesn't have those columns.
    */
   drop (columns) {
     util.check(this.hasColumns(columns),
@@ -109,7 +109,7 @@ class DataFrame {
   /**
    * Filter rows, keeping those that pass a test.
    * @param {ExprBase} expr The expression object that tests rows.
-   * @returns A new dataframe (possibly empty).
+   * @return A new dataframe (possibly empty).
    */
   filter (expr) {
     util.check(expr instanceof ExprBase,
@@ -125,7 +125,7 @@ class DataFrame {
    * a special name. Values can be grouped by values in multiple columns; to
    * create sub-groups, group by GROUPCOL and other columns to replace GROUPCOL.
    * @param {string[]} columns The columns that determine groups.
-   * @returns A new dataframe with a group column.
+   * @return A new dataframe with a group column.
    */
   groupBy (columns) {
     util.check(columns.length > 0,
@@ -143,7 +143,7 @@ class DataFrame {
   /**
    * Select columns.
    * @param {string[]} columns The names of the columns to keep.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   select (columns) {
     util.check(this.hasColumns(columns),
@@ -167,7 +167,7 @@ class DataFrame {
    * Sort data by values in specified columns.
    * @param {string[]} columns Names of columns to sort by.
    * @param {Boolean} reverse Sort in reverse (descending) order?
-   * @returns New data frame with sorted data.
+   * @return New data frame with sorted data.
    */
   sort (columns, reverse = false) {
     util.check(columns.length > 0,
@@ -204,7 +204,7 @@ class DataFrame {
   /**
    * Summarize values (possibly grouped).
    * @param {Summarizer} action What summarization to use.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   summarize (action) {
     util.check(action instanceof Summarize.base,
@@ -219,7 +219,7 @@ class DataFrame {
 
   /**
    * Remove grouping if present.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   ungroup () {
     util.check(this.hasColumns([DataFrame.GROUPCOL]),
@@ -237,7 +237,7 @@ class DataFrame {
   /**
    * Select rows with unique values in columns.
    * @param {string[]} columns The names of the columns to use for uniqueness test.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   unique (columns) {
     util.check(columns.length > 0,
@@ -262,7 +262,7 @@ class DataFrame {
    * @param {string} other Other table to join to.
    * @param {string} otherName Name to use for other table in result.
    * @param {string} labelCol Name of column to put labels in.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   glue (thisName, other, otherName, labelCol) {
     util.check(thisName.match(DataFrame.TABLE_NAME),
@@ -300,7 +300,7 @@ class DataFrame {
    * @param {string} other Other table to join to.
    * @param {string} otherName Name to use for other table in result.
    * @param {string} otherCol Name of column in other table.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   join (thisName, thisCol, other, otherName, otherCol) {
     util.check(thisName.match(DataFrame.TABLE_NAME),
@@ -342,7 +342,7 @@ class DataFrame {
    * Test whether the dataframe has the specified columns.
    * @param {string[]} colNames Names of column to check for.
    * @param {Boolean} exact Must column names match exactly?
-   * @returns {Boolean} Are columns present?
+   * @return {Boolean} Are columns present?
    */
   hasColumns (colNames, exact = false) {
     util.check(Array.isArray(colNames),

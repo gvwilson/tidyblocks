@@ -230,7 +230,7 @@ Blockly.TidyBlocks = new Blockly.Generator('TidyBlocks')
  * Generate code as stringified JSON. (This has to be a string because Blockly's
  * code generator insists on strings.)
  * @param workspace The Blockly workspace containing the program.
- * @returns Stringified JSON representation of the workspace.
+ * @return Stringified JSON representation of the workspace.
  */
 Blockly.TidyBlocks.workspaceToCode = (workspace) => {
   const allTopBlocks = workspace.getTopBlocks()
@@ -248,7 +248,7 @@ Blockly.TidyBlocks.workspaceToCode = (workspace) => {
 /**
  * Helper function to generate code given the top block of a stack.
  * @param top Top block of stack.
- * @returns Stringified JSON representation of stack.
+ * @return Stringified JSON representation of stack.
  */
 const _makePipeline = (top) => {
   const blocks = []

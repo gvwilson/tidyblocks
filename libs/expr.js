@@ -36,7 +36,7 @@ class ExprValue extends ExprBase {
   /**
    * Check for equality.
    * @param other The object to check against.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     return (other instanceof ExprValue) &&
@@ -65,7 +65,7 @@ class ExprUnary extends ExprBase {
   /**
    * Check for equality.
    * @param other The object to check against.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     return (other instanceof ExprUnary) &&
@@ -98,7 +98,7 @@ class ExprBinary extends ExprBase {
   /**
    * Check for equality.
    * @param other The object to check against.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     return (other instanceof ExprBinary) &&
@@ -136,7 +136,7 @@ class ExprTernary extends ExprBase {
   /**
    * Check for equality.
    * @param other The object to check against.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     return (other instanceof ExprTernary) &&

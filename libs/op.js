@@ -22,7 +22,7 @@ class OpNegate extends ExprUnary {
   /**
    * Constructor.
    * @param {expr} arg How to get the value.
-   * @returns The negation.
+   * @return The negation.
    */
   constructor (arg) {
     super(FAMILY, 'negate', arg)
@@ -43,7 +43,7 @@ class OpAbs extends ExprUnary {
   /**
    * Constructor.
    * @param {expr} arg How to get the value.
-   * @returns The absolute value.
+   * @return The absolute value.
    */
   constructor (arg) {
     super(FAMILY, 'abs', arg)
@@ -64,7 +64,7 @@ class OpNot extends ExprUnary {
   /**
    * Constructor.
    * @param {expr} arg How to get the value.
-   * @returns The negation.
+   * @return The negation.
    */
   constructor (arg) {
     super(FAMILY, 'not', arg)
@@ -681,7 +681,7 @@ class OpShift extends ExprBase {
   /**
    * Check for equality.
    * @param other The object to check against.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     return (other instanceof OpShift) &&

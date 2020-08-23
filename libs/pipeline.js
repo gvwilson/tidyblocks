@@ -16,7 +16,7 @@ class Pipeline {
   /**
    * Equality check (primarily for testing).
    * @param {Pipeline} other Other pipeline to compare to.
-   * @returns Boolean.
+   * @return Boolean.
    */
   equal (other) {
     util.check(other instanceof Pipeline,
@@ -27,7 +27,7 @@ class Pipeline {
 
   /**
    * What does this pipeline require?
-   * @returns Array of strings.
+   * @return Array of strings.
    */
   requires () {
     return (this.transforms.length > 0) ? this.transforms[0].requires : []
