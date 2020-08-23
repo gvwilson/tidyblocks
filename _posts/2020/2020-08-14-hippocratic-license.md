@@ -1,6 +1,8 @@
 ---
+layout: post.liquid
 title: "The Hippocratic License"
 author: "Greg Wilson"
+date: "2020-08-14T12:00"
 ---
 
 Over the past few years,

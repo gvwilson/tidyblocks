@@ -1,6 +1,6 @@
 ---
 permalink: /ar/guide/
-layout: page
+layout: page.liquid
 language: ar
 ---
 

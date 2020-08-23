@@ -1,4 +1,5 @@
 ---
+layout: plain.liquid
 permalink: /es/glossary/
 title: "Glosario"
 language: es

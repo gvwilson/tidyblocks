@@ -1,6 +1,8 @@
 ---
+layout: post.liquid
 title: "And Now for Some Statistics"
 author: "Greg Wilson"
+date: "2020-08-15T12:00"
 ---
 
 It has been another busy week for TidyBlocks:

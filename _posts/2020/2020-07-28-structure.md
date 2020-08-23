@@ -1,6 +1,8 @@
 ---
+layout: post.liquid
 title: "Structure"
 author: "Greg Wilson"
+date: "2020-07-28T12:00"
 ---
 
 The structure of the code in TidyBlocks is dictated by three things:
