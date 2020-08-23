@@ -1,8 +1,7 @@
-<div id="create" markdown="1">
-### Crear
+<div id="create">
+<h3>Crear</h3>
 
-
-<img class="block" src="{{ 'es/img/transform_create.svg' | relative_url }}" alt="create block"/>
+<img class="block" src="{{ './transform_create.svg' | relative_url }}" alt="create block"/>
 
 Añade nuevas columnas manteniendo las existentes keeping existing ones.
 Una columna puede ser reemplazada si a la nueva columna se le da el nombre de la columna existente.
@@ -11,10 +10,10 @@ Una columna puede ser reemplazada si a la nueva columna se le da el nombre de la
 - *primer espacio*: Un [Valor](../value/) o el resultado de una [operascion](../operation/).
 </div>
 
-<div id="drop" markdown="1">
-### Descartar
+<div id="drop">
+<h3>Descartar</h3>
 
-<img class="block" src="{{ 'es/img/transform_drop.svg' | relative_url }}" alt="drop block"/>
+<img class="block" src="{{ './transform_drop.svg' | relative_url }}" alt="drop block"/>
 
 Descarta una o más columnas de los datos.
 Este bloque no es estrictamente necesario; puede ignorar una columna si no la necesita, pero
@@ -24,10 +23,10 @@ Este bloque es lo contrario de [seleccionar](../transform/#select).
 - **columna, columna**: Una lista separada por comas de los nombres de las columnas que se eliminarán.
 </div>
 
-<div id="filter" markdown="1">
-### Filtrar
+<div id="filter">
+<h3>Filtrar</h3>
 
-<img class="block" src="{{ 'es/img/transform_filter.svg' | relative_url }}" alt="filter block"/>
+<img class="block" src="{{ './transform_filter.svg' | relative_url }}" alt="filter block"/>
 
 Mantiene un subconjunto de filas que pasen alguna prueba como `edad> 65` o `país = "Islandia"`.
 La prueba se verifica de forma independiente para cada fila,
@@ -38,10 +37,10 @@ and [no](../operation/#not) blocks.
 -  *expresion*: La prueba debe pasar cada fila para ser incluida en el resultado.
 </div>
 
-<div id="groupBy" markdown="1">
-### Agrupar por
+<div id="groupBy">
+<h3>Agrupar por</h3>
 
-<img class="block" src="{{ 'es/img/transform_groupBy.svg' | relative_url }}" alt="grouping block"/>
+<img class="block" src="{{ './transform_groupBy.svg' | relative_url }}" alt="grouping block"/>
 
 La mayoría de las operaciones de datos se realizan en grupos de registros que comparten valores, como personas del mismo país.
 Este bloque agrega una nueva columna a la tabla llamada`_groupo_` que tiene un valor único para cada grupo.
@@ -51,19 +50,19 @@ La agrupación se puede eliminar utilizando el bloque [desagrupar](../transform/
    Cada combinación única de valores en estas columnas produce un grupo.
 </div>
 
-<div id="saveAs" markdown="1">
-## Save As
+<div id="saveAs">
+<h3>ave As</h3>
 
-<img class="block" src="{{ 'es/img/transform_saveas.svg' | relative_url }}" alt="save as block"/>
+<img class="block" src="{{ './transform_saveas.svg' | relative_url }}" alt="save as block"/>
 
 FIXME
 
 </div>
 
-<div id="select" markdown="1">
-### Seleccionar
+<div id="select">
+<h3>Seleccionar</h3>
 
-<img class="block" src="{{ 'es/img/transform_select.svg' | relative_url }}" alt="select block"/>
+<img class="block" src="{{ './transform_select.svg' | relative_url }}" alt="select block"/>
 
 Elija columnas de una tabla: las columnas que no tengan nombre se eliminarán.Este bloque no es estrictamente necesario,
 dado que las columnas innecesarias pueden simplemente ignorarse,
@@ -72,11 +71,10 @@ pero descartar columnas innecesarias puede facilitar la lectura de la pantalla. 
 - **columna, columna**: Una o más columnas a mantener.
 </div>
 
-<div id="sort" markdown="1">
-### Ordenar
+<div id="sort">
+<h3>Ordenar</h3>
 
-
-<img class="block" src="{{ 'es/img/transform_sort.svg' | relative_url }}" alt="sort block"/>
+<img class="block" src="{{ './transform_sort.svg' | relative_url }}" alt="sort block"/>
 
 Ordene las filas de una tabla según los valores de una o más columnas.
 
@@ -84,11 +82,10 @@ Ordene las filas de una tabla según los valores de una o más columnas.
 - **Descendiendo**: If checked, sort in descending order (i.e., greatest value first).
 </div>
 
-<div id="summarize" markdown="1">
-### Resumir
+<div id="summarize">
+<h3>Resumir</h3>
 
-
-<img class="block" src="{{ 'es/img/transform_summarize.svg' | relative_url }}" alt="summarize block"/>
+<img class="block" src="{{ './transform_summarize.svg' | relative_url }}" alt="summarize block"/>
 
 Resuma los valores en una o más columnas.
 Si los datos han sido [agrupado](../transform/#group),
@@ -100,21 +97,19 @@ e.g., <code>mean\_age</code>.
 -   **columna**: que columna se va a resumir.
 </div>
 
-<div id="ungroup" markdown="1">
-### Desagrupar
+<div id="ungroup">
+<h3>Desagrupar</h3>
 
-
-<img class="block" src="{{ 'es/img/transform_ungroup.svg' | relative_url }}" alt="ungroup block"/>
+<img class="block" src="{{ './transform_ungroup.svg' | relative_url }}" alt="ungroup block"/>
 
 Deshace el agrupamiento greado por [agrupar](../transform/#group)
 quitando el especial \_group\_ column.
 </div>
 
-<div id="unique" markdown="1">
-### Unico
+<div id="unique">
+<h3>Unico</h3>
 
-
-<img class="block" src="{{ 'es/img/transform_unique.svg' | relative_url }}" alt="unique block"/>
+<img class="block" src="{{ './transform_unique.svg' | relative_url }}" alt="unique block"/>
 
 Descarte las filas que contienen valores redundantes.
 Si varias filas tienen los mismos valores en las columnas especificadas

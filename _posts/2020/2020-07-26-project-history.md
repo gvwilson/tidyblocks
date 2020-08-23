@@ -1,6 +1,8 @@
 ---
+layout: post.liquid
 title: "Project History"
 author: "Greg Wilson"
+date: "2020-07-26T12:00"
 ---
 
 TidyBlocks officially started in May 2019,

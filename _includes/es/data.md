@@ -1,7 +1,7 @@
-<div id="colors" markdown="1">
-### Colores
+<div id="colors">
+<h3>Colores</h3>
 
-<img class="block" src="{{ 'es/img/data_colors.svg' | relative_url }}" alt="color block"/>
+<img class="block" src="{{ './data_colors.svg' | relative_url }}" alt="color block"/>
 
 Los conjuntos de datos `colores` tiene valores rojo-verde-azul (RGB) para once colores estándar:
 negro, rojo, granate, lima, verde, azul, azul marino, amarillo, fucsia, aguamarina y blanco
@@ -16,10 +16,10 @@ Cada valor es un número entero en el rango 0… 255.
 
 </div>
 
-<div id="earthquakes" markdown="1">
-### Terremotos
+<div id="earthquakes">
+<h3>Terremotos</h3>
 
-<img class="block" src="{{ 'es/img/data_earthquakes.svg' | relative_url }}" alt="earthquakes block"/>
+<img class="block" src="{{ './data_earthquakes.svg' | relative_url }}" alt="earthquakes block"/>
 
 Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. UU. sobre terremotos de 2016.
 
@@ -33,10 +33,10 @@ Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. U
 
 </div>
 
-<div id="penguins" markdown="1">
-### Pingüinos
+<div id="penguins">
+<h3>Pingüinos</h3>
 
-<img class="block" src="{{ 'es/img/data_penguins.svg' | relative_url }}" alt="penguins block"/>
+<img class="block" src="{{ './data_penguins.svg' | relative_url }}" alt="penguins block"/>
 
 | Columna            | Tipodedatos    | Valor |
 | -----------------  | -----------    | ----- |
@@ -50,10 +50,10 @@ Este bloque proporciona un subconjunto de datos del Servicio Geológico de EE. U
 
 </div>
 
-<div id="sequence" markdown="1">
-### Sequencia
+<div id="sequence">
+<h3>Sequencia</h3>
 
-<img class="block" src="{{ 'es/img/data_sequence.svg' | relative_url }}" alt="sequence block"/>
+<img class="block" src="{{ './data_sequence.svg' | relative_url }}" alt="sequence block"/>
 
 Cre una secuencia de números del 1 al N inclusive.
 
@@ -62,10 +62,10 @@ Cre una secuencia de números del 1 al N inclusive.
 
 </div>
 
-<div id="user" markdown="1">
-### Datos de usuario
+<div id="user">
+<h3>Datos de usuario</h3>
 
-<img class="block" src="{{ 'es/img/data_user.svg' | relative_url }}" alt="user data block"/>
+<img class="block" src="{{ './data_user.svg' | relative_url }}" alt="user data block"/>
 
 Utilice un conjunto de datos previamente cargado.
 

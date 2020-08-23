@@ -1,6 +1,6 @@
 ---
 permalink: /it/guide/
-layout: page
+layout: page.liquid
 language: it
 ---
 

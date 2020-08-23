@@ -1,7 +1,7 @@
-<div id="join" markdown="1">
-### Join
+<div id="join">
+<h3>Join</h3>
 
-<img class="block" src="{{ 'en/img/combine_join.svg' | relative_url }}" alt="join block"/>
+<img class="block" src="{{ './combine_join.svg' | relative_url }}" alt="join block"/>
 
 Join two tables by matching values in column X of table A
 to the values in column Y of table B.
@@ -40,10 +40,10 @@ while the other columns appear as <code><em>table</em>\_<em>column</em></code>.
 - **right_column**: The column to join on from that table.
 </div>
 
-<div id="glue" markdown="1">
-### Glue
+<div id="glue">
+<h3>Glue</h3>
 
-<img class="block" src="{{ 'en/img/combine_glue.svg' | relative_url }}" alt="glue block"/>
+<img class="block" src="{{ './combine_glue.svg' | relative_url }}" alt="glue block"/>
 
 Combine the rows of two tables to create a new table.
 The input tables must have the same number of columns,
