@@ -9,7 +9,7 @@ const random = require('random')
 const util = require('./util')
 const {
   ExprBase,
-  ExprValue
+  ExprNullary
 } = require('./expr')
 
 /**
@@ -89,7 +89,7 @@ class ValueRowNum extends ExprBase {
  * The column name cannot be checked at build time because the table being
  * accessed may be changed dynamically by preceding expressions.
  */
-class ValueColumn extends ExprValue {
+class ValueColumn extends ExprNullary {
   /**
    * @param {string} name Column to access.
    */
@@ -117,7 +117,7 @@ class ValueColumn extends ExprValue {
  * - Equal to other datetimes with the same value.
  * - Produces that constant datetime.
  */
-class ValueDatetime extends ExprValue {
+class ValueDatetime extends ExprNullary {
   /**
    * @param {(MISSING|string|Date)} value Value to produce.
    */
@@ -140,7 +140,7 @@ class ValueDatetime extends ExprValue {
  * - Equal to other equally-valued logical values.
  * - Always produces the logical value.
  */
-class ValueLogical extends ExprValue {
+class ValueLogical extends ExprNullary {
   /**
    * @param {(MISSING|boolean)} value Value to produce.
    */
@@ -162,7 +162,7 @@ class ValueLogical extends ExprValue {
  * - Equal to equal numbers.
  * - Produces the specified value.
  */
-class ValueNumber extends ExprValue {
+class ValueNumber extends ExprNullary {
   /**
    * @param {(MISSING|number)} value Value to produce.
    */
@@ -184,7 +184,7 @@ class ValueNumber extends ExprValue {
  * - Equal to equal-valued text.
  * - Produces that text.
  */
-class ValueText extends ExprValue {
+class ValueText extends ExprNullary {
   /**
    * @param {(MISSING|string)} value Value to produce.
    */
@@ -206,7 +206,7 @@ class ValueText extends ExprValue {
  * - Equal to equivalent exponential distributions.
  * - Samples the specified distribution.
  */
-class ValueExponential extends ExprValue {
+class ValueExponential extends ExprNullary {
   /**
    * @param {number} rate Distribution parameter.
    */

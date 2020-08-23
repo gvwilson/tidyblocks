@@ -8,7 +8,6 @@ const util = require('./util')
  */
 class ExprBase {
   /**
-   * Construct a new expression object.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
    */
@@ -19,27 +18,23 @@ class ExprBase {
 }
 
 /**
- * Generic value expression.
+ * Base class for nullary (no-argument) expressions.
+ *
+ * - Equal to other nullary expressions of the same type with the same value.
  */
-class ExprValue extends ExprBase {
+class ExprNullary extends ExprBase {
   /**
-   * Construct a new expression object that stores a value.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
-   * @param value The value of this expression.
+   * @param {any} value The value of this expression.
    */
   constructor (family, kind, value) {
     super(family, kind)
     this.value = value
   }
 
-  /**
-   * Check for equality.
-   * @param other The object to check against.
-   * @return Equality.
-   */
   equal (other) {
-    return (other instanceof ExprValue) &&
+    return (other instanceof ExprNullary) &&
       (this.kind === other.kind) &&
       util.equal(this.value, other.value)
   }
@@ -47,13 +42,15 @@ class ExprValue extends ExprBase {
 
 /**
  * Generic unary expression.
+ *
+ * - Equal to other unary expressions of the same type whose argument is equal.
  */
 class ExprUnary extends ExprBase {
   /**
    * Construct a new expression object that applies a unary function to a sub-expression.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
-   * @param arg The runnable sub-expression to operate on.
+   * @param {ExprBase} arg The runnable sub-expression to operate on.
    */
   constructor (family, kind, arg) {
     util.check(arg instanceof ExprBase,
@@ -62,11 +59,6 @@ class ExprUnary extends ExprBase {
     this.arg = arg
   }
 
-  /**
-   * Check for equality.
-   * @param other The object to check against.
-   * @return Equality.
-   */
   equal (other) {
     return (other instanceof ExprUnary) &&
       (this.kind === other.kind) &&
@@ -76,14 +68,16 @@ class ExprUnary extends ExprBase {
 
 /**
  * Generic binary expression.
+ *
+ * - Equal to other binary expressions of the same type whose arguments are equal.
  */
 class ExprBinary extends ExprBase {
   /**
    * Construct a new expression object that applies a binary function to two sub-expressions.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
-   * @param left The left-hand runnable sub-expression to operate on.
-   * @param right The right-hand runnable sub-expression to operate on.
+   * @param {ExprBase} left The left-hand runnable sub-expression to operate on.
+   * @param {ExprBase} right The right-hand runnable sub-expression to operate on.
    */
   constructor (family, kind, left, right) {
     util.check(left instanceof ExprBase,
@@ -95,11 +89,6 @@ class ExprBinary extends ExprBase {
     this.right = right
   }
 
-  /**
-   * Check for equality.
-   * @param other The object to check against.
-   * @return Equality.
-   */
   equal (other) {
     return (other instanceof ExprBinary) &&
       (this.kind === other.kind) &&
@@ -110,15 +99,17 @@ class ExprBinary extends ExprBase {
 
 /**
  * Generic ternary expression.
+ *
+ * - Equal to other ternary expressions of the same type whose arguments are equal.
  */
 class ExprTernary extends ExprBase {
   /**
    * Construct a new expression object that applies a ternary function to three sub-expressions.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
-   * @param left The left-hand runnable sub-expression to operate on.
-   * @param middle The middle runnable sub-expression to operate on.
-   * @param right The right-hand runnable sub-expression to operate on.
+   * @param {ExprBase} left The left-hand runnable sub-expression to operate on.
+   * @param {ExprBase} middle The middle runnable sub-expression to operate on.
+   * @param {ExprBase} right The right-hand runnable sub-expression to operate on.
    */
   constructor (family, kind, left, middle, right) {
     util.check(left instanceof ExprBase,
@@ -133,11 +124,6 @@ class ExprTernary extends ExprBase {
     this.right = right
   }
 
-  /**
-   * Check for equality.
-   * @param other The object to check against.
-   * @return Equality.
-   */
   equal (other) {
     return (other instanceof ExprTernary) &&
       (this.kind === other.kind) &&
@@ -149,7 +135,7 @@ class ExprTernary extends ExprBase {
 
 module.exports = {
   ExprBase,
-  ExprValue,
+  ExprNullary,
   ExprUnary,
   ExprBinary,
   ExprTernary

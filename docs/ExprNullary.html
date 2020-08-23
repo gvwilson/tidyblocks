@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: OpMaximum</title>
+    <title>JSDoc: Class: ExprNullary</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: OpMaximum</h1>
+    <h1 class="page-title">Class: ExprNullary</h1>
 
     
 
@@ -28,9 +28,12 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>OpMaximum<span class="signature">()</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>ExprNullary<span class="signature">(family, kind, value)</span><span class="type-signature"></span></h2>
         
-            <div class="class-description"><p>Maximum of two values.</p></div>
+            <div class="class-description"><p>Base class for nullary (no-argument) expressions.</p>
+<ul>
+<li>Equal to other nullary expressions of the same type with the same value.</li>
+</ul></div>
         
     
 </header>
@@ -45,7 +48,7 @@
     
 
     
-    <h4 class="name" id="OpMaximum"><span class="type-signature"></span>new OpMaximum<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="ExprNullary"><span class="type-signature"></span>new ExprNullary<span class="signature">(family, kind, value)</span><span class="type-signature"></span></h4>
     
 
     
@@ -58,6 +61,101 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>family</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An '@'-prefixed family name for dispatch in <code>Restore</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>kind</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Identifies a specific class within that family.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The value of this expression.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -93,7 +191,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="op.js.html">op.js</a>, <a href="op.js.html#line484">line 484</a>
+        <a href="expr.js.html">expr.js</a>, <a href="expr.js.html#line31">line 31</a>
     </li></ul></dd>
     
 
