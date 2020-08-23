@@ -113,6 +113,7 @@ const createXmlConfig = (language) => {
       <block type="transform_select"></block>
       <block type="transform_sort"></block>
       <block type="transform_summarize"></block>
+      <block type="transform_running"></block>
       <block type="transform_ungroup"></block>
       <block type="transform_unique"></block>
     </category>
@@ -150,7 +151,6 @@ const createXmlConfig = (language) => {
       <block type="value_number"></block>
       <block type="value_text"></block>
       <block type="value_missing"></block>
-      <block type="value_rownum"></block>
       <block type="value_exponential"></block>
       <block type="value_normal"></block>
       <block type="value_uniform"></block>

@@ -52,7 +52,6 @@ describe('executes pipelines', () => {
     pipeline.run(env)
     assert.equal(env.results.size, 1,
                  `Only the unnamed result we generate should be reported`)
-    console.log('RESULTS', env.results)
     assert(env.results.has(`${Pipeline.UNNAMED_RESULT} 1`),
            `Anonymous result does not have expected name`)
     done()

@@ -196,6 +196,22 @@ const MESSAGES = {
       pt: 'agrega valores em coluna'
     }
   },
+  running: {
+    message0: {
+      en: 'Running %1 %2'
+    },
+    args0_text: {
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      it: 'colonna',
+      ko: '열',
+      pt: 'coluna'
+    },
+    tooltip: {
+      en: 'accumulate running values'
+    }
+  },
   ungroup: {
     message0: {
       en: 'Ungroup',
@@ -410,6 +426,33 @@ const setup = (language) => {
       extensions: ['validate_COLUMN']
     },
 
+    // Running
+    {
+      type: 'transform_running',
+      message0: msg.get('running.message0'),
+      args0: [{
+          type: 'field_dropdown',
+          name: 'OP',
+          options: [
+            ['index', 'index'],
+            ['sum', 'sum']
+          ]
+        },
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('running.args0_text')
+        }
+      ],
+      inputsInline: true,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: msg.get('running.tooltip'),
+      helpUrl: './guide/#running',
+      extensions: ['validate_COLUMN']
+    },
+
     // Ungroup
     {
       type: 'transform_ungroup',
@@ -491,6 +534,13 @@ const setup = (language) => {
     const op = block.getFieldValue('OP')
     const column = block.getFieldValue('COLUMN')
     return `["@transform", "summarize", "${op}", "${column}"]`
+  }
+
+  // Running
+  Blockly.TidyBlocks['transform_running'] = (block) => {
+    const op = block.getFieldValue('OP')
+    const column = block.getFieldValue('COLUMN')
+    return `["@transform", "running", "${op}", "${column}"]`
   }
 
   // Ungroup

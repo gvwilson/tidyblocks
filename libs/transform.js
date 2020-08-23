@@ -6,6 +6,7 @@ const util = require('./util')
 const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
+const Running = require('./running')
 const {
   kMeansCluster,
   silhouette
@@ -379,6 +380,36 @@ class TransformSummarize extends TransformBase {
 }
 
 /**
+ * Calculate running values.
+ * @param {string} action Name of operation.
+ * @param {string} column Column to summarize.
+ */
+class TransformRunning extends TransformBase {
+  constructor (action, column) {
+    util.check(typeof action === 'string',
+               `Expected string as action`)
+    util.check(action in Running,
+               `Unknown running operation ${action}`)
+    util.check(typeof column === 'string',
+               `Expected string as column name`)
+    super('running', [], true, false)
+    this.action = action
+    this.column = column
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.action === other.action) &&
+      (this.column === other.column)
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.action} ${this.column}`)
+    return df.running(new Running[this.action](this.column))
+  }
+}
+
+/**
  * Make a function to remove grouping
  */
 class TransformUngroup extends TransformBase {
@@ -739,6 +770,7 @@ module.exports = {
   sequence: TransformSequence,
   sort: TransformSort,
   summarize: TransformSummarize,
+  running: TransformRunning,
   ungroup: TransformUngroup,
   unique: TransformUnique,
   plot: TransformPlot,

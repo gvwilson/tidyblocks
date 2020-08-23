@@ -59,20 +59,6 @@ describe('get values', () => {
     done()
   })
 
-  it('extracts row numbers', (done) => {
-    const rownum = new Value.rownum()
-    const data = fixture.NUMBER
-    const expected = [0, 1, 2, 3, 4, 5]
-    const actual = data.map((r, i, d) => rownum.run(r, i, d))
-    assert.deepEqual(expected, actual,
-                     `Got wrong value(s)`)
-    assert(rownum.equal(new Value.rownum()),
-           `Row number objects should be equal`)
-    assert(!rownum.equal(new Value.absent()),
-           `Row number object should not equal absent object`)
-    done()
-  })
-
   it('generates exponential values', (done) => {
     const data = fixture.NUMBER
     const exponential = new Value.exponential(1.0)

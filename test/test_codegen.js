@@ -86,15 +86,6 @@ describe('value code generation', () => {
     done()
   })
 
-  it('generates code for row numbers', (done) => {
-    const expected = [Value.FAMILY, 'rownum']
-    const w = fixture.workspace()
-    const block = w.newBlock('value_rownum')
-    const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
-    done()
-  })
-
   it('generates code for exponential distributions', (done) => {
     const expected = [Value.FAMILY, 'exponential', 0.5]
     const w = fixture.workspace()
@@ -425,6 +416,17 @@ describe('transform code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('transform_summarize')
     block.setFieldValue('maximum', 'OP')
+    block.setFieldValue('red', 'COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for running values', (done) => {
+    const expected = [Transform.FAMILY, 'running', 'sum', 'red']
+    const w = fixture.workspace()
+    const block = w.newBlock('transform_running')
+    block.setFieldValue('sum', 'OP')
     block.setFieldValue('red', 'COLUMN')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)

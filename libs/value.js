@@ -54,26 +54,6 @@ class ValueMissing extends ExprBase {
 }
 
 /**
- * Row number.
- * - Requires no parameters.
- * - Is exactly equal to other row number expressions.
- * - Generates the row number.
- */
-class ValueRowNum extends ExprBase {
-  constructor () {
-    super(FAMILY, 'rownum')
-  }
-
-  equal (other) {
-    return other instanceof ValueRowNum
-  }
-
-  run (row, i, data) {
-    return i
-  }
-}
-
-/**
  * Column value.
  */
 class ValueColumn extends ExprValue {
@@ -275,7 +255,6 @@ module.exports = {
   FAMILY: FAMILY,
   absent: ValueAbsent,
   missing: ValueMissing,
-  rownum: ValueRowNum,
   column: ValueColumn,
   datetime: ValueDatetime,
   logical: ValueLogical,
