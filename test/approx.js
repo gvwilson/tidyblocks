@@ -7,7 +7,7 @@ const TOLERANCE = 1.0e-6;
  * Relative error.
  * @param {number} a One value.
  * @param {number} a The other value.
- * @returns {number} The relative error.
+ * @return {number} The relative error.
  */
 function relativeError(a, b) {
     if (a === b) {
@@ -21,7 +21,7 @@ function relativeError(a, b) {
  * @param {number} a One value.
  * @param {number} a The other value.
  * @param {number} tolerance The acceptable relative difference.
- * @returns {boolean} Whether numbers are within tolerance.
+ * @return {boolean} Whether numbers are within tolerance.
  */
 function approxEqual(a, b, tolerance = TOLERANCE) {
     if (tolerance < 0.0) {
@@ -35,7 +35,7 @@ function approxEqual(a, b, tolerance = TOLERANCE) {
  * @param {number} a One vector.
  * @param {number} a The other vector.
  * @param {number} tolerance The acceptable relative difference between elements.
- * @returns {boolean} Whether all numbers are within tolerance.
+ * @return {boolean} Whether all numbers are within tolerance.
  */
 function allApproxEqual(a, b, tolerance = TOLERANCE) {
     if (a.length !== b.length) {

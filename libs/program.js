@@ -29,7 +29,7 @@ class Program {
   /**
    * Check equality with another program.
    * @param {Program} other The thing to check against.
-   * @returns True or false.
+   * @return True or false.
    */
   equal (other) {
     util.check(other instanceof Program,

@@ -54,7 +54,7 @@ const checkTypeEqual = (left, right) => {
  * Implementing equality test that handles dates correctly.
  * @param left One side of test.
  * @param right Other side of test.
- * @returns Boolean.
+ * @return Boolean.
  */
 const equal = (left, right) => {
   if ((left === MISSING) && (right === MISSING)) {
@@ -70,7 +70,7 @@ const equal = (left, right) => {
  * Turn something into a date. MISSING and actual dates are returned as-is,
  * strings are converted if they can be, and everything else fails.
  * @param value What to try to convert.
- * @returns Date.
+ * @return Date.
  */
 const makeDate = (value) => {
   if ((value === MISSING) || (value instanceof Date)) {
@@ -90,7 +90,7 @@ const makeDate = (value) => {
 /**
  * Convert a value into a strict Boolean (exactly `true` or `false`).
  * @param value What to convert.
- * @returns Either `true` or `false`.
+ * @return Either `true` or `false`.
  */
 const makeLogical = (value) => {
   if (value) {
@@ -124,7 +124,7 @@ const makeNumber = (value) => {
 /**
  * Convert extraordinary numerical values into our MISSING.
  * @param {value} Value to check and convert.
- * @returns Safe value.
+ * @return Safe value.
  */
 const safeValue = (value) => {
   return isFinite(value) ? value : MISSING
@@ -136,7 +136,7 @@ const safeValue = (value) => {
  * MISSING. Other values (numeric, date, logical) are *not* inferred, but must
  * be converted explicitly.
  * @param {string} text Text to parse.
- * @returns Array of objects.
+ * @return Array of objects.
  */
 const csvToTable = (text) => {
   const seen = new Map() // Headers (used across all calls to transformHeader)
