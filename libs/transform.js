@@ -6,10 +6,6 @@ const util = require('./util')
 const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
-const {
-  kMeansCluster,
-  silhouette
-} = require('./stats')
 
 /**
  * Indicate that persisted JSON is a transform.
@@ -682,7 +678,7 @@ class TransformKMeansClustering extends TransformStats {
   run (env, df) {
     env.appendLog('log', `${this.species}`)
     const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
-    const {labels, centroids} = kMeansCluster(points, this.numClusters)
+    const {labels, centroids} = stats.kMeansCluster(points, this.numClusters)
     const data = df.data.map((row, i) => {
       const newRow = Object.assign({}, row)
       newRow[this.labels] = labels[i]
@@ -712,7 +708,7 @@ class TransformSilhouette extends TransformStats {
     env.appendLog('log', `${this.species}`)
     const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
     const labels = df.data.map(row => row[this.labels])
-    const scores = silhouette(points, labels)
+    const scores = stats.silhouette(points, labels)
     const data = df.data.map((row, i) => {
       const newRow = Object.assign({}, row)
       newRow[this.score] = scores[i]
