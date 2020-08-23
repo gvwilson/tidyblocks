@@ -8,7 +8,7 @@ import Transform from '../libs/transform'
 import DataFrame from '../libs/dataframe'
 import UserInterface from '../libs/gui'
 import colors from '../data/colors'
-import from '../blocks/blocks'
+import blocks from '../blocks/blocks'
 
 // Define all of our blocks.
 blocks.createBlocks()
