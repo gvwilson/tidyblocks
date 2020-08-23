@@ -13,7 +13,8 @@ const main = () => {
     const data = fs.readFileSync(infile, 'utf-8')
     const table = util.csvToTable(data)
     const outfile = infile.replace('.csv', '.js')
-    fs.writeFileSync(outfile, 'module.exports = ' + JSON.stringify(table, null, '  '))
+    const name = infile.split('/').pop().replace('.csv', '').toUpperCase()
+    fs.writeFileSync(outfile, `export const ${name} = ` + JSON.stringify(table, null, '  '))
   }
 }
 

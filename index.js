@@ -1,13 +1,15 @@
 'use strict'
 
-const React = require('react') // eslint-disable-line no-unused-vars
-const ReactDOM = require('react-dom')
-const Blockly = require('blockly/blockly_compressed')
+import React from 'react' // eslint-disable-line no-unused-vars
+import ReactDOM from 'react-dom'
+import Blockly from 'blockly/blockly_compressed'
 
-const blocks = require('./blocks/blocks')
-const Env = require('./libs/env')
-const UserInterface = require('./libs/gui')
-const TidyBlocksApp = require('./libs/ui/ui').TidyBlocksApp // eslint-disable-line no-unused-vars
+import blocks from './blocks/blocks'
+import Env from './libs/env'
+import UserInterface from './libs/gui'
+import ui from './libs/ui/ui'
+
+const TidyBlocksApp = ui.TidyBlocksApp // eslint-disable-line no-unused-vars
 
 /**
  * Define the bridge between React and the rest of our code. Encapsulating this
@@ -77,10 +79,6 @@ class ReactInterface extends UserInterface {
  * @param {string} rootId HTML ID of element that will contain workspace.
  * @param {Boolean} rtl Right-to-left rendering? (default is 'false').
  */
-const setup = (language, rootId, rtl = false) => {
+export const setup = (language, rootId, rtl = false) => {
   return new ReactInterface(language, rootId, rtl)
-}
-
-module.exports = {
-  setup
 }

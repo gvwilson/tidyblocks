@@ -1,16 +1,16 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   ORDER_NONE,
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   absent: {
     message0: {
       en: 'Absent',
@@ -191,7 +191,7 @@ const MESSAGES = {
  * Define value blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Absent value
@@ -442,9 +442,4 @@ const setup = (language) => {
     const code = `["@value", "uniform", ${low}, ${high}]`
     return [code, ORDER_NONE]
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

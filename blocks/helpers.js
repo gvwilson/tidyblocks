@@ -1,18 +1,18 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
 /**
  * Order of operations. We don't need to be more specific because the nesting of
  * our JSON completely defines operator precedence.
  */
-const ORDER_NONE = 0
+export const ORDER_NONE = 0
 
 /**
  * Helper function to turn a string containing comma-separated column names into
  * an array of JavaScript strings.
  */
-const formatMultiColNames = (raw) => {
+export const formatMultiColNames = (raw) => {
   const joined = raw
     .split(',')
     .map(c => c.trim())
@@ -29,7 +29,7 @@ const formatMultiColNames = (raw) => {
  * @param label Which field to get a value from.
  * @return Stringified JSON block representation (possibly 'absent' placeholder).
  */
-const valueToCode = (block, label) => {
+export const valueToCode = (block, label) => {
   let raw = Blockly.TidyBlocks.valueToCode(block, label, ORDER_NONE)
   if (!raw) {
     raw = '["@value", "absent"]'
@@ -40,7 +40,7 @@ const valueToCode = (block, label) => {
 /**
  * Create a table lookup object.
  */
-class Messages {
+export class Messages {
   /**
    * Construct message lookup class.
    * @param {object} messages Nested JSON lookup table.
@@ -82,10 +82,3 @@ class Messages {
   }
 }
 Messages.UNDEFINED = 'undefined'
-
-module.exports = {
-  ORDER_NONE,
-  formatMultiColNames,
-  valueToCode,
-  Messages
-}

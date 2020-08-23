@@ -1,9 +1,9 @@
 'use strict'
 
-const assert = require('assert')
+import assert from 'assert'
 
-const util = require('../libs/util')
-const Summarize = require('../libs/summarize')
+import util from '../libs/util'
+import Summarize from '../libs/summarize'
 
 const TWO_ROWS = [{ones: 1, tens: 10},
                   {ones: 2, tens: 20}]

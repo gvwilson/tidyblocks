@@ -1,6 +1,6 @@
-const path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
   mode: "production",
   // Workaround for webpack bug: https://github.com/webpack-contrib/css-loader/issues/447
   node: {

@@ -1,14 +1,14 @@
 'use strict'
 
-const util = require('./util')
-const DataFrame = require('./dataframe')
+import util from './util'
+import DataFrame from './dataframe'
 
 /**
  * Runtime environment that provides a program with data and captures a
  * program's outputs. This _could_ be unified with the `Program` class,
  * but separating them makes it easier to test transforms.
  */
-class Env {
+export class Env {
   /**
    * Construct a new runtime environment.
    * @param ui The user interface bridge (a subclass of `UserInterface`).
@@ -133,5 +133,3 @@ class Env {
  * Logging levels (stored as a class member).
  */
 Env.LOG_LEVELS = new Set(['log', 'warn', 'error'])
-
-module.exports = Env

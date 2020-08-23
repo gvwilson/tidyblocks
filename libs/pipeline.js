@@ -1,12 +1,12 @@
 'use strict'
 
-const util = require('./util')
-const Transform = require('./transform')
+import util from './util'
+import Transform from './transform'
 
 /**
  * Manage a single pipeline.
  */
-class Pipeline {
+export class Pipeline {
   constructor (...transforms) {
     util.check(transforms.every(s => s instanceof Transform.base),
                `Pipeline must be made of transforms`)
@@ -73,5 +73,3 @@ Pipeline.UNNAMED_RESULT = 'unnamed'
  * Indicate that persisted JSON is a pipeline.
  */
 Pipeline.FAMILY = '@pipeline'
-
-module.exports = Pipeline

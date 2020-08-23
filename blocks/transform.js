@@ -1,17 +1,17 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   formatMultiColNames,
   valueToCode,
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   multiple_columns: {
     en: 'column, column',
     es: 'columna, columna',
@@ -238,7 +238,7 @@ const MESSAGES = {
  * Define transform blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Create
@@ -503,9 +503,4 @@ const setup = (language) => {
     const columns = formatMultiColNames(block.getFieldValue('MULTIPLE_COLUMNS'))
     return `["@transform", "unique", ${columns}]`
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

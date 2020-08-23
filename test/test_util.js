@@ -1,8 +1,8 @@
 'use strict'
 
-const assert = require('assert')
+import assert from 'assert'
 
-const util = require('../libs/util')
+import util from '../libs/util'
 
 // Compare a list of strings to a table of objects.
 const csvTest = (lines, expected, message) => {

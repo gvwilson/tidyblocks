@@ -1,15 +1,15 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   stats_ttest_one: {
     message0: {
       en: 'One-sample t-test',
@@ -186,7 +186,7 @@ const MESSAGES = {
  * Define statistics blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // One-sample two-sided t-test
@@ -355,9 +355,4 @@ const setup = (language) => {
     const score = block.getFieldValue('SCORE')
     return `["@transform", "silhouette", "${xAxis}", "${yAxis}", "${label}", "${score}"]`
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

@@ -1,15 +1,15 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   colors: {
     message0: {
       en: 'Colors',
@@ -140,7 +140,7 @@ const MESSAGES = {
  * Define data blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Colors
@@ -253,9 +253,4 @@ const setup = (language) => {
     const name = block.getFieldValue('NAME')
     return `["@transform", "data", "${name}"]`
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

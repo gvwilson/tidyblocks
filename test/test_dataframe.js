@@ -1,14 +1,14 @@
 'use strict'
 
-const assert = require('assert')
+import assert from 'assert'
 
-const util = require('../libs/util')
-const Value = require('../libs/value')
-const Op = require('../libs/op')
-const Summarize = require('../libs/summarize')
-const DataFrame = require('../libs/dataframe')
+import util from '../libs/util'
+import Value from '../libs/value'
+import Op from '../libs/op'
+import Summarize from '../libs/summarize'
+import DataFrame from '../libs/dataframe'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 const ZERO_ROWS = [],
       ONE_ROW = [{ones: 1, tens: 10}],

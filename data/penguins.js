@@ -1,4 +1,4 @@
-module.exports = [
+export const PENGUINS = [
   {
     "species": "Adelie",
     "island": "Torgersen",

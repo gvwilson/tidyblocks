@@ -1,4 +1,4 @@
-module.exports = [
+export const EARTHQUAKES = [
   {
     "Time": "2016-08-24 03:36:32.000",
     "Latitude": 42.6983,

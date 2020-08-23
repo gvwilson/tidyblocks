@@ -1,12 +1,12 @@
 'use strict'
 
-const assert = require('assert')
+import assert from 'assert'
 
-const Transform = require('../libs/transform')
-const Pipeline = require('../libs/pipeline')
-const Program = require('../libs/program')
+import Transform from '../libs/transform'
+import Pipeline from '../libs/pipeline'
+import Program from '../libs/program'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 describe('creates the interface object', () => {
   it('generates JSON in the GUI', (done) => {

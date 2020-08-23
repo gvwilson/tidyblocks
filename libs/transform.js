@@ -1,16 +1,16 @@
 'use strict'
 
-const stats = require('simple-statistics')
+import stats from 'simple-statistics'
 
-const util = require('./util')
-const {ExprBase} = require('./expr')
-const DataFrame = require('./dataframe')
-const Summarize = require('./summarize')
+import util from './util'
+import {ExprBase from './expr'
+import DataFrame from './dataframe'
+import Summarize from './summarize'
 
 /**
  * Indicate that persisted JSON is a transform.
  */
-const FAMILY = '@transform'
+export const FAMILY = '@transform'
 
 /**
  * Store information about a transform in a pipeline
@@ -720,32 +720,29 @@ class TransformSilhouette extends TransformStats {
 
 // ----------------------------------------------------------------------
 
-module.exports = {
-  FAMILY: FAMILY,
-  base: TransformBase,
-  create: TransformCreate,
-  data: TransformData,
-  drop: TransformDrop,
-  filter: TransformFilter,
-  glue: TransformGlue,
-  groupBy: TransformGroupBy,
-  join: TransformJoin,
-  saveAs: TransformSaveAs,
-  select: TransformSelect,
-  sequence: TransformSequence,
-  sort: TransformSort,
-  summarize: TransformSummarize,
-  ungroup: TransformUngroup,
-  unique: TransformUnique,
-  plot: TransformPlot,
-  bar: TransformBar,
-  box: TransformBox,
-  dot: TransformDot,
-  histogram: TransformHistogram,
-  scatter: TransformScatter,
-  stats: TransformStats,
-  ttest_one: TransformTTestOneSample,
-  ttest_two: TransformTTestPaired,
-  k_means: TransformKMeansClustering,
-  silhouette: TransformSilhouette
-}
+export TransformBase as base
+export TransformCreate as create
+export TransformData as data
+export TransformDrop as drop
+export TransformFilter as filter
+export TransformGlue as glue
+export TransformGroupBy as groupBy
+export TransformJoin as join
+export TransformSaveAs as saveAs
+export TransformSelect as select
+export TransformSequence as sequence
+export TransformSort as sort
+export TransformSummarize as summarize
+export TransformUngroup as ungroup
+export TransformUnique as unique
+export TransformPlot as plot
+export TransformBar as bar
+export TransformBox as box
+export TransformDot as dot
+export TransformHistogram as histogram
+export TransformScatter as scatter
+export TransformStats as stats
+export TransformTTestOneSample as ttest_one
+export TransformTTestPaired as ttest_two
+export TransformKMeansClustering as k_means
+export TransformSilhouette as silhouette

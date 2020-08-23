@@ -1,15 +1,15 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   name: {
     en: 'name',
     es: 'nombre',
@@ -138,7 +138,7 @@ const MESSAGES = {
  * Define plotting blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Bar plot
@@ -332,9 +332,4 @@ const setup = (language) => {
     const lm = (block.getFieldValue('REGRESSION') === 'TRUE')
     return `["@transform", "scatter", "${name}", "${xAxis}", "${yAxis}", "${color}", ${lm}]`
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

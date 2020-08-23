@@ -1,15 +1,15 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   glue: {
     message0: {
       en: 'Glue left %1 right %2 labels %3',
@@ -100,7 +100,7 @@ const MESSAGES = {
  * Define combining blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Glue
@@ -186,9 +186,4 @@ const setup = (language) => {
     const rightColumn = block.getFieldValue('RIGHT_COLUMN')
     return `["@transform", "join", "${leftTable}", "${leftColumn}", "${rightTable}", "${rightColumn}"]`
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

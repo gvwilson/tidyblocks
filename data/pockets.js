@@ -1,4 +1,4 @@
-module.exports = [
+export const POCKETS = [
   {
     "brand": "Arizona",
     "style": "skinny",

@@ -1,18 +1,18 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   Messages
-} = require('./helpers')
+} from './helpers'
 
-const combine = require('./combine')
-const data = require('./data')
-const op = require('./op')
-const plot = require('./plot')
-const stats = require('./stats')
-const transform = require('./transform')
-const value = require('./value')
+import combine from './combine'
+import data from './data'
+import op from './op'
+import plot from './plot'
+import stats from './stats'
+import transform from './transform'
+import value from './value'
 
 // ----------------------------------------------------------------------
 // Block colors.
@@ -30,7 +30,7 @@ const VALUE_COLOR = '#E7553C'
 // Toolbox configuration.
 // ----------------------------------------------------------------------
 
-const MESSAGES = {
+export const MESSAGES = {
   combine: {
     ar: 'دمج',
     en: 'combine',
@@ -93,7 +93,7 @@ const MESSAGES = {
  * Create XML configuration for toolbox, internationalizing the category names.
  * @param {string} language What language to use for the string lookup table.
  */
-const createXmlConfig = (language) => {
+export const createXmlConfig = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   return `<xml id="toolbox" style="display: none">
     <category name="${msg.get('data')}" colour="${DATA_COLOR}">
@@ -169,7 +169,7 @@ const createXmlConfig = (language) => {
 /**
  * Theme for all blocks.
  */
-const THEME = Blockly.Theme.defineTheme('tidyblocks', {
+export const THEME = Blockly.Theme.defineTheme('tidyblocks', {
   base: Blockly.Themes.Classic,
   blockStyles: {
     combine_block: {
@@ -399,7 +399,7 @@ let _createBlocksHasRun = false
  * Create block validators and blocks.
  * @param {string} language What language to use for string table lookups.
  */
-const createBlocks = (language = 'en') => {
+export const createBlocks = (language = 'en') => {
   if (!_createBlocksHasRun) {
     _createBlocksHasRun = true
     _createValidators()
@@ -411,11 +411,4 @@ const createBlocks = (language = 'en') => {
     transform.setup(language)
     value.setup(language)
   }
-}
-
-module.exports = {
-  MESSAGES,
-  THEME,
-  createXmlConfig,
-  createBlocks
 }

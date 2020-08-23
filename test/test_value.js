@@ -1,10 +1,10 @@
 'use strict'
 
-const assert = require('assert')
-const util = require('../libs/util')
-const Value = require('../libs/value')
+import assert from 'assert'
+import util from '../libs/util'
+import Value from '../libs/value'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 const getLeft = new Value.column('left')
 

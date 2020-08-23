@@ -1,15 +1,15 @@
 'use strict'
 
-const assert = require('assert')
+import assert from 'assert'
 
-const Value = require('../libs/value')
-const Op = require('../libs/op')
-const Transform = require('../libs/transform')
-const Pipeline = require('../libs/pipeline')
-const Program = require('../libs/program')
-const Restore = require('../libs/persist')
+import Value from '../libs/value'
+import Op from '../libs/op'
+import Transform from '../libs/transform'
+import Pipeline from '../libs/pipeline'
+import Program from '../libs/program'
+import Restore from '../libs/persist'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 describe('persistence infrastructure', () => {
   it('handles basic types', (done) => {

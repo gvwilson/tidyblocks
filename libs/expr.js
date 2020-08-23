@@ -1,12 +1,12 @@
 'use strict'
 
-const util = require('./util')
+import util from './util'
 
 /**
  * Represent an expression as an object. Derived classes must implement
  * `equal(other)` and `run(row, i, data)`.
  */
-class ExprBase {
+export class ExprBase {
   /**
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
@@ -23,7 +23,7 @@ class ExprBase {
  *
  * - Equal to other nullary expressions of the same type with the same value.
  */
-class ExprNullary extends ExprBase {
+export class ExprNullary extends ExprBase {
   /**
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
    * @param {string} kind Identifies a specific class within that family.
@@ -47,7 +47,7 @@ class ExprNullary extends ExprBase {
  *
  * - Equal to other unary expressions of the same type whose argument is equal.
  */
-class ExprUnary extends ExprBase {
+export class ExprUnary extends ExprBase {
   /**
    * Construct a new expression object that applies a unary function to a sub-expression.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
@@ -74,7 +74,7 @@ class ExprUnary extends ExprBase {
  *
  * - Equal to other binary expressions of the same type whose arguments are equal.
  */
-class ExprBinary extends ExprBase {
+export class ExprBinary extends ExprBase {
   /**
    * Construct a new expression object that applies a binary function to two sub-expressions.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
@@ -106,7 +106,7 @@ class ExprBinary extends ExprBase {
  *
  * - Equal to other ternary expressions of the same type whose arguments are equal.
  */
-class ExprTernary extends ExprBase {
+export class ExprTernary extends ExprBase {
   /**
    * Construct a new expression object that applies a ternary function to three sub-expressions.
    * @param {string} family An '@'-prefixed family name for dispatch in `Restore`.
@@ -135,12 +135,4 @@ class ExprTernary extends ExprBase {
       this.middle.equal(other.middle) &&
       this.right.equal(other.right)
   }
-}
-
-module.exports = {
-  ExprBase,
-  ExprNullary,
-  ExprUnary,
-  ExprBinary,
-  ExprTernary
 }

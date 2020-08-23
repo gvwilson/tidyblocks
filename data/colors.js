@@ -1,4 +1,4 @@
-module.exports = [
+export const COLORS = [
   {
     "name": "black",
     "red": 0,

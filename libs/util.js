@@ -1,18 +1,18 @@
 'use strict'
 
-const papaparse = require('papaparse')
+import papaparse from 'papaparse'
 
 /**
  * Value to indicate missing data.
  */
-const MISSING = null
+export const MISSING = null
 
 /**
  * Unilaterally fail: used to mark unimplemented functions and in cases where
  * `check` won't fit.
  * @param {string} message What to report.
  */
-const fail = (message) => {
+export const fail = (message) => {
   throw new Error(message)
 }
 
@@ -22,7 +22,7 @@ const fail = (message) => {
  * @param {Boolean} condition Condition that must be true.
  * @param {string} message What to say if it isn't.
  */
-const check = (condition, message) => {
+export const check = (condition, message) => {
   if (!condition) {
     fail(message)
   }
@@ -32,7 +32,7 @@ const check = (condition, message) => {
  * Check that a value is MISSING or numeric.
  * @param {whatever} value What to check.
  */
-const checkNumber = (value) => {
+export const checkNumber = (value) => {
   check((value === MISSING) ||
         (typeof value === 'number'),
         `Value ${value} is not missing or a number`)
@@ -43,7 +43,7 @@ const checkNumber = (value) => {
  * @param {whatever} left One of the values.
  * @param {whatever} right The other value.
  */
-const checkTypeEqual = (left, right) => {
+export const checkTypeEqual = (left, right) => {
   check((left === MISSING) ||
         (right === MISSING) ||
         (typeof left === typeof right),
@@ -56,7 +56,7 @@ const checkTypeEqual = (left, right) => {
  * @param right Other side of test.
  * @return Boolean.
  */
-const equal = (left, right) => {
+export const equal = (left, right) => {
   if ((left === MISSING) && (right === MISSING)) {
     return true
   }
@@ -72,7 +72,7 @@ const equal = (left, right) => {
  * @param value What to try to convert.
  * @return Date.
  */
-const makeDate = (value) => {
+export const makeDate = (value) => {
   if ((value === MISSING) || (value instanceof Date)) {
     return value
   }
@@ -92,7 +92,7 @@ const makeDate = (value) => {
  * @param value What to convert.
  * @return Either `true` or `false`.
  */
-const makeLogical = (value) => {
+export const makeLogical = (value) => {
   if (value) {
     return true
   }
@@ -102,7 +102,7 @@ const makeLogical = (value) => {
 /**
  * Convert a value into a number.
  */
-const makeNumber = (value) => {
+export const makeNumber = (value) => {
   if (value === MISSING) {
     return MISSING
   }
@@ -126,7 +126,7 @@ const makeNumber = (value) => {
  * @param {value} Value to check and convert.
  * @return Safe value.
  */
-const safeValue = (value) => {
+export const safeValue = (value) => {
   return isFinite(value) ? value : MISSING
 }
 
@@ -138,7 +138,7 @@ const safeValue = (value) => {
  * @param {string} text Text to parse.
  * @return Array of objects.
  */
-const csvToTable = (text) => {
+export const csvToTable = (text) => {
   const seen = new Map() // Headers (used across all calls to transformHeader)
 
   // Header transformation function required by PapaParse.
@@ -184,18 +184,4 @@ const csvToTable = (text) => {
   })
 
   return result.data
-}
-
-module.exports = {
-  MISSING,
-  fail,
-  check,
-  checkNumber,
-  checkTypeEqual,
-  equal,
-  makeDate,
-  makeLogical,
-  makeNumber,
-  safeValue,
-  csvToTable
 }

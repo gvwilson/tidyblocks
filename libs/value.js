@@ -1,17 +1,17 @@
 'use strict'
 
-const random = require('random')
+import random from 'random'
 
-const util = require('./util')
-const {
+import util from './util'
+import {
   ExprBase,
   ExprNullary
-} = require('./expr')
+} from './expr'
 
 /**
  * Indicate that persisted JSON is a value.
  */
-const FAMILY = '@value'
+export const FAMILY = '@value'
 
 /**
  * @extends ExprBase
@@ -299,17 +299,14 @@ class ValueUniform extends ExprBase {
   }
 }
 
-module.exports = {
-  FAMILY: FAMILY,
-  absent: ValueAbsent,
-  missing: ValueMissing,
-  rownum: ValueRowNum,
-  column: ValueColumn,
-  datetime: ValueDatetime,
-  logical: ValueLogical,
-  number: ValueNumber,
-  text: ValueText,
-  exponential: ValueExponential,
-  normal: ValueNormal,
-  uniform: ValueUniform
-}
+export ValueAbsent as absent
+export ValueMissing as missing
+export ValueRowNum as rownum
+export ValueColumn as column
+export ValueDatetime as datetime
+export ValueLogical as logical
+export ValueNumber as number
+export ValueText as text
+export ValueExponential as exponential
+export ValueNormal as normal
+export ValueUniform as uniform

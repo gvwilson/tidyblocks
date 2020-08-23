@@ -1,23 +1,23 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const DataFrame = require('./dataframe')
-const Restore = require('./persist')
-const Env = require('./env')
-const blocks = require('../blocks/blocks')
+import DataFrame from './dataframe'
+import Restore from './persist'
+import Env from './env'
+import blocks from '../blocks/blocks'
 
 // Load default datasets here rather than inside a function to ensure that
 // bundling picks them up.
-const COLORS = require('../data/colors')
-const EARTHQUAKES = require('../data/earthquakes')
-const PENGUINS = require('../data/penguins')
-const PHISH = require('../data/phish')
+import COLORS from '../data/colors'
+import EARTHQUAKES from '../data/earthquakes'
+import PENGUINS from '../data/penguins'
+import PHISH from '../data/phish'
 
 /**
  * User interface mediator.
  */
-class UserInterface {
+export class UserInterface {
   /**
    * Build user interface object.
    * @param {string} language What language to use for localizing blocks.
@@ -73,5 +73,3 @@ class UserInterface {
     this.userData.set('phish', new DataFrame(PHISH))
   }
 }
-
-module.exports = UserInterface

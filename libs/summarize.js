@@ -1,7 +1,7 @@
 'use strict'
 
-const util = require('./util')
-const stats = require('simple-statistics')
+import util from './util'
+import stats from 'simple-statistics'
 
 /**
  * Represent summarization as object.
@@ -164,16 +164,14 @@ class SummarizeVariance extends SummarizeBase {
   }
 }
 
-module.exports = {
-  base: SummarizeBase,
-  all: SummarizeAll,
-  any: SummarizeAny,
-  count: SummarizeCount,
-  maximum: SummarizeMaximum,
-  mean: SummarizeMean,
-  median: SummarizeMedian,
-  minimum: SummarizeMinimum,
-  stdDev: SummarizeStdDev,
-  sum: SummarizeSum,
-  variance: SummarizeVariance
-}
+export SummarizeBase as base
+export SummarizeAll as all
+export SummarizeAny as any
+export SummarizeCount as count
+export SummarizeMaximum as maximum
+export SummarizeMean as mean
+export SummarizeMedian as median
+export SummarizeMinimum as minimum
+export SummarizeStdDev as stdDev
+export SummarizeSum as sum
+export SummarizeVariance as variance

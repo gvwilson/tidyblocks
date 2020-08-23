@@ -1,15 +1,15 @@
 'use strict'
 
-const assert = require('assert')
-const Blockly = require('blockly/blockly_compressed')
+import assert from 'assert'
+import Blockly from 'blockly/blockly_compressed'
 
-const Value = require('../libs/value')
-const Op = require('../libs/op')
-const Transform = require('../libs/transform')
-const Pipeline = require('../libs/pipeline')
-const Program = require('../libs/program')
+import Value from '../libs/value'
+import Op from '../libs/op'
+import Transform from '../libs/transform'
+import Pipeline from '../libs/pipeline'
+import Program from '../libs/program'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 const getCode = (block) => {
   const result = Blockly.TidyBlocks.blockToCode(block)

@@ -1,17 +1,17 @@
 'use strict'
 
-const util = require('./util')
-const {
+import util from './util'
+import {
   ExprBase,
   ExprUnary,
   ExprBinary,
   ExprTernary
-} = require('./expr')
+} from './expr'
 
 /**
  * Indicate that persisted JSON is an operation.
  */
-const FAMILY = '@op'
+export const FAMILY = '@op'
 
 // ----------------------------------------------------------------------
 
@@ -932,43 +932,40 @@ class OpShift extends ExprBase {
 
 // ----------------------------------------------------------------------
 
-module.exports = {
-  FAMILY: FAMILY,
-  abs: OpAbs,
-  add: OpAdd,
-  and: OpAnd,
-  divide: OpDivide,
-  equal: OpEqual,
-  greater: OpGreater,
-  greaterEqual: OpGreaterEqual,
-  ifElse: OpIfElse,
-  isDatetime: OpIsDatetime,
-  isLogical: OpIsLogical,
-  isMissing: OpIsMissing,
-  isNumber: OpIsNumber,
-  isText: OpIsText,
-  less: OpLess,
-  lessEqual: OpLessEqual,
-  maximum: OpMaximum,
-  minimum: OpMinimum,
-  multiply: OpMultiply,
-  negate: OpNegate,
-  not: OpNot,
-  notEqual: OpNotEqual,
-  or: OpOr,
-  power: OpPower,
-  remainder: OpRemainder,
-  shift: OpShift,
-  subtract: OpSubtract,
-  toDatetime: OpToDatetime,
-  toDay: OpToDay,
-  toHours: OpToHours,
-  toLogical: OpToLogical,
-  toMinutes: OpToMinutes,
-  toMonth: OpToMonth,
-  toNumber: OpToNumber,
-  toSeconds: OpToSeconds,
-  toText: OpToText,
-  toWeekday: OpToWeekday,
-  toYear: OpToYear
-}
+export OpAbs as abs
+export OpAdd as add
+export OpAnd as and
+export OpDivide as divide
+export OpEqual as equal
+export OpGreater as greater
+export OpGreaterEqual as greaterEqual
+export OpIfElse as ifElse
+export OpIsDatetime as isDatetime
+export OpIsLogical as isLogical
+export OpIsMissing as isMissing
+export OpIsNumber as isNumber
+export OpIsText as isText
+export OpLess as less
+export OpLessEqual as lessEqual
+export OpMaximum as maximum
+export OpMinimum as minimum
+export OpMultiply as multiply
+export OpNegate as negate
+export OpNot as not
+export OpNotEqual as notEqual
+export OpOr as or
+export OpPower as power
+export OpRemainder as remainder
+export OpShift as shift
+export OpSubtract as subtract
+export OpToDatetime as toDatetime
+export OpToDay as toDay
+export OpToHours as toHours
+export OpToLogical as toLogical
+export OpToMinutes as toMinutes
+export OpToMonth as toMonth
+export OpToNumber as toNumber
+export OpToSeconds as toSeconds
+export OpToText as toText
+export OpToWeekday as toWeekday
+export OpToYear as toYear

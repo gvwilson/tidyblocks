@@ -1,16 +1,16 @@
 'use strict'
 
-const util = require('./util')
-const Program = require('./program')
-const Pipeline = require('./pipeline')
-const Transform = require('./transform')
-const Op = require('./op')
-const Value = require('./value')
+import util from './util'
+import Program from './program'
+import Pipeline from './pipeline'
+import Transform from './transform'
+import Op from './op'
+import Value from './value'
 
 /**
  * Restore runnable program objects from JSON.
  */
-class Restore {
+export class Restore {
   /**
    * Restore a `Program` from JSON.
    * @params json The JSON containing the program description `['@program', ...pipelines...]`.
@@ -120,5 +120,3 @@ class Restore {
     return new Value[kind](...args)
   }
 }
-
-module.exports = Restore

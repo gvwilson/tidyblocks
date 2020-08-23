@@ -1,14 +1,15 @@
 'use strict'
 
-const util = require('./util')
-const Pipeline = require('./pipeline')
+import util from './util'
+import Pipeline from './pipeline'
 
 /**
  * Manage an entire program.
  */
-class Program {
+export class Program {
   /**
    * Create a runnable program with some pipelines.
+   *
    * - The environment `env` is filled in when the program runs.
    * - The list of pipelines is copied from the input arguments.
    * - The runnable queue contains pipelines that are runnable (have no
@@ -115,5 +116,3 @@ class Program {
  * Indicate that persisted JSON is a program.
  */
 Program.FAMILY = '@program'
-
-module.exports = Program

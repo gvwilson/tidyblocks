@@ -1,14 +1,14 @@
 'use strict'
 
-const assert = require('assert')
+import assert from 'assert'
 
-const util = require('../libs/util')
-const DataFrame = require('../libs/dataframe')
-const Transform = require('../libs/transform')
-const Env = require('../libs/env')
-const Pipeline = require('../libs/pipeline')
+import util from '../libs/util'
+import DataFrame from '../libs/dataframe'
+import Transform from '../libs/transform'
+import Env from '../libs/env'
+import Pipeline from '../libs/pipeline'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 const INTERFACE = new fixture.TestInterface()
 

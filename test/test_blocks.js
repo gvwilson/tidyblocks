@@ -1,10 +1,10 @@
 'use strict'
 
-const assert = require('assert')
-const Blockly = require('blockly/blockly_compressed')
+import assert from 'assert'
+import Blockly from 'blockly/blockly_compressed'
 
-const blocks = require('../blocks/blocks')
-const helpers = require('../blocks/helpers')
+import blocks from '../blocks/blocks'
+import helpers from '../blocks/helpers'
 
 const MESSAGES = {
   commonName: {

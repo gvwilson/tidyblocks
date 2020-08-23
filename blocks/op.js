@@ -1,17 +1,17 @@
 'use strict'
 
-const Blockly = require('blockly/blockly_compressed')
+import Blockly from 'blockly/blockly_compressed'
 
-const {
+import {
   ORDER_NONE,
   valueToCode,
   Messages
-} = require('./helpers')
+} from './helpers'
 
 /**
  * Lookup table for message strings.
  */
-const MESSAGES = {
+export const MESSAGES = {
   arithmetic: {
     tooltip: {
       en: 'do arithmetic',
@@ -179,7 +179,7 @@ const MESSAGES = {
  * Define operation blocks.
  * @param {string} language Two-letter language code to use for string lookups.
  */
-const setup = (language) => {
+export const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
     // Binary arithmetic
@@ -588,9 +588,4 @@ const setup = (language) => {
     const code = `["@op", "shift", "${column}", ${amount}]`
     return [code, ORDER_NONE]
   }
-}
-
-module.exports = {
-  MESSAGES,
-  setup
 }

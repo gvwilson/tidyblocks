@@ -1,8 +1,8 @@
 'use strict'
 
-const util = require('./util')
-const {ExprBase} = require('./expr')
-const Summarize = require('./summarize')
+import util from './util'
+import {ExprBase} from './expr'
+import Summarize from './summarize'
 
 /**
  * Store a dataframe. The frame is represented as an array of 0 or more rows,
@@ -11,7 +11,7 @@ const Summarize = require('./summarize')
  * are stored as well to handle the case where filtering reduces the dataframe
  * to zero rows: it was confusing to have all the columns suddenly disappear.
  */
-class DataFrame {
+export class DataFrame {
   /**
    * Construct a new dataframe.
    * @param {Object[]} values The dataframe's values (aliased, not copied).
@@ -541,5 +541,3 @@ DataFrame.JOINCOL = '_join_'
  * All special names (used for internal lookup).
  */
 DataFrame.SPECIAL_NAMES = new Set([DataFrame.GROUPCOL, DataFrame.JOINCOL])
-
-module.exports = DataFrame

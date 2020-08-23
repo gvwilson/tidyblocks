@@ -1,16 +1,18 @@
 'use strict'
 
-const assert = require('assert')
-const util = require('../libs/util')
-const DataFrame = require('../libs/dataframe')
-const Value = require('../libs/value')
-const Summarize = require('../libs/summarize')
-const Transform = require('../libs/transform')
-const Env = require('../libs/env')
+import assert from 'assert'
 
-const fixture = require('./fixture')
+import util from '../libs/util'
+import DataFrame from '../libs/dataframe'
+import Value from '../libs/value'
+import Summarize from '../libs/summarize'
+import Transform from '../libs/transform'
+import Env from '../libs/env'
+
+import fixture from './fixture'
+import approx from './approx'
+
 const INTERFACE = new fixture.TestInterface()
-const approx = require('./approx')
 
 describe('build dataframe operations', () => {
   it('builds data loading transform', (done) => {

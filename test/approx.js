@@ -9,7 +9,7 @@ const TOLERANCE = 1.0e-6;
  * @param {number} a The other value.
  * @return {number} The relative error.
  */
-function relativeError(a, b) {
+export function relativeError(a, b) {
     if (a === b) {
         return 0.0;
     }
@@ -23,7 +23,7 @@ function relativeError(a, b) {
  * @param {number} tolerance The acceptable relative difference.
  * @return {boolean} Whether numbers are within tolerance.
  */
-function approxEqual(a, b, tolerance = TOLERANCE) {
+export function approxEqual(a, b, tolerance = TOLERANCE) {
     if (tolerance < 0.0) {
         throw new Error("tolerance must be non-negative");
     }
@@ -37,7 +37,7 @@ function approxEqual(a, b, tolerance = TOLERANCE) {
  * @param {number} tolerance The acceptable relative difference between elements.
  * @return {boolean} Whether all numbers are within tolerance.
  */
-function allApproxEqual(a, b, tolerance = TOLERANCE) {
+export function allApproxEqual(a, b, tolerance = TOLERANCE) {
     if (a.length !== b.length) {
         throw new Error("input vectors must have the same length")
     }
@@ -49,10 +49,3 @@ function allApproxEqual(a, b, tolerance = TOLERANCE) {
     }
     return true;
 }
-
-module.exports = {
-    TOLERANCE,
-    relativeError,
-    approxEqual,
-    allApproxEqual
-};

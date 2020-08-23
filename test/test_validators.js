@@ -1,9 +1,9 @@
 'use strict'
 
-const assert = require('assert')
-const Blockly = require('blockly/blockly_compressed')
+import assert from 'assert'
+import Blockly from 'blockly/blockly_compressed'
 
-const fixture = require('./fixture')
+import fixture from './fixture'
 
 describe('validators', () => {
   it('rejects invalid single column names', (done) => {

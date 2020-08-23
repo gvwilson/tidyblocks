@@ -1,21 +1,22 @@
 'use strict'
 
-const fs = require('fs')
-const Blockly = require('blockly/blockly_compressed')
+import fs from 'fs'
+import Blockly from 'blockly/blockly_compressed'
 
-const util = require('../libs/util')
-const Transform = require('../libs/transform')
-const DataFrame = require('../libs/dataframe')
-const UserInterface = require('../libs/gui')
+import util from '../libs/util'
+import Transform from '../libs/transform'
+import DataFrame from '../libs/dataframe'
+import UserInterface from '../libs/gui'
+import colors from '../data/colors'
+import blocks from '../blocks/blocks'
 
 // Define all of our blocks.
-const blocks = require('../blocks/blocks')
 blocks.createBlocks()
 
 /**
  * Create a workspace for block generation.
  */
-const workspace = () => {
+export const workspace = () => {
   Blockly.Events.disable() // to stop it trying to create SVG
   return new Blockly.Workspace({})
 }
@@ -23,7 +24,7 @@ const workspace = () => {
 /**
  * Make `lower` a sub-block in the named `field` of `upper`.
  */
-const addSubBlock = (upper, field, lower) => {
+export const addSubBlock = (upper, field, lower) => {
     const connection = upper.getInput(field).connection
     connection.connect(lower.outputConnection)
 }
@@ -31,14 +32,14 @@ const addSubBlock = (upper, field, lower) => {
 /**
  * Stack `upper` on top of `lower`.
  */
-const stackBlocks = (upper, lower) => {
+export const stackBlocks = (upper, lower) => {
   upper.nextConnection.connect(lower.previousConnection)
 }
 
 /**
  * Testing replacement for a transform (easier constructor).
  */
-class MockTransform extends Transform.base {
+export class MockTransform extends Transform.base {
   constructor (species, func, requires, input, output) {
     super(species, requires, input, output)
     this.func = func
@@ -52,7 +53,7 @@ class MockTransform extends Transform.base {
 /**
  * User interface for testing purposes. Uses 'en' as a language unless told otherwise.
  */
-class TestInterface extends UserInterface {
+export class TestInterface extends UserInterface {
   constructor (language = 'en') {
     super(language)
     Blockly.Events.disable() // to stop it trying to create SVG
@@ -64,71 +65,70 @@ class TestInterface extends UserInterface {
  * Some fixtures for testing.
  */
 
-const pass = (runner, df) => df
+export const pass = (runner, df) => df
 
-const TABLE = new DataFrame([{left: 1, right: 10},
-                             {left: 2, right: 20}])
+export const TABLE = new DataFrame([
+  {left: 1, right: 10},
+  {left: 2, right: 20}
+])
 
 /*
  * Date testing.
  */
-const CONCERT = new Date(1983, 11, 2, 7, 55, 19, 0)
-const CONCERT_STR = CONCERT.toISOString()
+export const CONCERT = new Date(1983, 11, 2, 7, 55, 19, 0)
+export const CONCERT_STR = CONCERT.toISOString()
 
 /*
  * A bag full of exports.
  */
+export const BOOL = [
+  {left: true, right: true},
+  {left: true, right: false},
+  {left: false, right: true},
+  {left: false, right: false},
+  {left: util.MISSING, right: false},
+  {left: false, right: util.MISSING},
+  {left: util.MISSING, right: util.MISSING}
+]
 
-module.exports = {
-  workspace,
-  addSubBlock,
-  stackBlocks,
-  MockTransform,
-  CONCERT,
-  CONCERT_STR,
-  BOOL: [
-    {left: true, right: true},
-    {left: true, right: false},
-    {left: false, right: true},
-    {left: false, right: false},
-    {left: util.MISSING, right: false},
-    {left: false, right: util.MISSING},
-    {left: util.MISSING, right: util.MISSING}
-  ],
-  NUMBER: [
-    {left: 2, right: 2},
-    {left: 5, right: -2},
-    {left: 2, right: 0},
-    {left: util.MISSING, right: 3},
-    {left: 4, right: util.MISSING},
-    {left: util.MISSING, right: util.MISSING}
-  ],
-  STRING: [
-    {left: 'pqr', right: 'pqr'},
-    {left: 'abc', right: 'def'},
-    {left: 'def', right: 'abc'},
-    {left: 'abc', right: ''},
-    {left: util.MISSING, right: 'def'},
-    {left: 'abc', right: util.MISSING},
-    {left: util.MISSING, right: util.MISSING}
-  ],
-  NAMES: [
-    {personal: 'William', family: 'Dyer'},
-    {personal: 'Francesca', family: 'Pabodie'},
-    {personal: 'Meyer', family: 'Meyer'}
-  ],
-  MIXED: [
-    {num: -1, date: new Date(), str: "abc", bool: true},
-    {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
-  ],
-  SINGLE: [
-    {num: 0}
-  ],
-  COLORS: require('../data/colors'),
-  TABLE,
-  HEAD: new MockTransform('head', (runner, df) => TABLE, [], false, false),
-  MIDDLE: new MockTransform('middle', pass, [], true, false),
-  REPORT: new Transform.saveAs('keyword'),
-  pass,
-  TestInterface
-}
+export const NUMBER = [
+  {left: 2, right: 2},
+  {left: 5, right: -2},
+  {left: 2, right: 0},
+  {left: util.MISSING, right: 3},
+  {left: 4, right: util.MISSING},
+  {left: util.MISSING, right: util.MISSING}
+]
+
+export const STRING = [
+  {left: 'pqr', right: 'pqr'},
+  {left: 'abc', right: 'def'},
+  {left: 'def', right: 'abc'},
+  {left: 'abc', right: ''},
+  {left: util.MISSING, right: 'def'},
+  {left: 'abc', right: util.MISSING},
+  {left: util.MISSING, right: util.MISSING}
+]
+
+export const NAMES = [
+  {personal: 'William', family: 'Dyer'},
+  {personal: 'Francesca', family: 'Pabodie'},
+  {personal: 'Meyer', family: 'Meyer'}
+]
+
+export const MIXED = [
+  {num: -1, date: new Date(), str: "abc", bool: true},
+  {num: util.MISSING, date: util.MISSING, str: util.MISSING, bool: util.MISSING}
+]
+
+export const SINGLE = [
+  {num: 0}
+]
+
+export const COLORS = colors
+
+export const HEAD = new MockTransform('head', (runner, df) => TABLE, [], false, false)
+
+export const MIDDLE = new MockTransform('middle', pass, [], true, false)
+
+export const REPORT = new Transform.saveAs('keyword')

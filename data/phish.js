@@ -1,4 +1,4 @@
-module.exports = [
+export const PHISH = [
     {
       "Set": "Set 1",
       "Song": "Shake Your Coconuts",

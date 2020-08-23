@@ -1,4 +1,4 @@
-module.exports = [
+export const POLICE_KILLINGS = [
   {
     "Name": "Kevin Lee Catlett",
     "Age": 62,
