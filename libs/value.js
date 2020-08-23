@@ -1,9 +1,5 @@
 'use strict'
 
-/**
- * Represent values in the evaluation tree.
- */
-
 const random = require('random')
 
 const util = require('./util')
@@ -18,6 +14,7 @@ const {
 const FAMILY = '@value'
 
 /**
+ * @extends ExprBase
  * Absent value used as placeholder for incomplete expressions.
  *
  * - Requires no parameters.
@@ -39,6 +36,7 @@ class ValueAbsent extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Missing value (called `NULL` in SQL or `NA` in R).
  *
  * - Requires no parameters.
@@ -59,6 +57,7 @@ class ValueMissing extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Row number.
  *
  * - Requires no parameters.
@@ -80,6 +79,7 @@ class ValueRowNum extends ExprBase {
 }
 
 /**
+ * @extends ExprNullary
  * Get value of a column.
  *
  * - Requires a column name when constructed.
@@ -111,6 +111,7 @@ class ValueColumn extends ExprNullary {
 }
 
 /**
+ * @extends ExprNullary
  * A constant datetime value.
  *
  * - Can be constructed from `MISSING`, a `Date` object, or a string that can be converted to a `Date`.
@@ -134,6 +135,7 @@ class ValueDatetime extends ExprNullary {
 }
 
 /**
+ * @extends ExprNullary
  * A constant logical (Boolean) value.
  *
  * - Can be constructed from `MISSING` or a `boolean` value.
@@ -156,6 +158,7 @@ class ValueLogical extends ExprNullary {
 }
 
 /**
+ * @extends ExprNullary
  * A constant numeric value.
  *
  * - Can be constructed from `MISSING` or the specific number.
@@ -178,6 +181,7 @@ class ValueNumber extends ExprNullary {
 }
 
 /**
+ * @extends ExprNullary
  * A constant text value.
  *
  * - Can be constructed from `MISSING` or a text value (possibly the empty string).
@@ -200,6 +204,7 @@ class ValueText extends ExprNullary {
 }
 
 /**
+ * @extends ExprNullary
  * Sample an exponential distribution.
  *
  * - Requires a positive number as a rate parameter when constructed.
@@ -223,6 +228,7 @@ class ValueExponential extends ExprNullary {
 }
 
 /**
+ * @extends ExprNullary
  * Sample a normal distribution.
  *
  * - Requires a number as mean and a non-negative number as standard deviation.
@@ -257,6 +263,7 @@ class ValueNormal extends ExprBase {
 }
 
 /**
+ * @extends ExprNullary
  * Sample a uniform distribution.
  *
  * - Requires an ordered pair of numbers as low and high bounds.

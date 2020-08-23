@@ -18,6 +18,7 @@ class ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Base class for nullary (no-argument) expressions.
  *
  * - Equal to other nullary expressions of the same type with the same value.
@@ -41,6 +42,7 @@ class ExprNullary extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Generic unary expression.
  *
  * - Equal to other unary expressions of the same type whose argument is equal.
@@ -67,6 +69,7 @@ class ExprUnary extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Generic binary expression.
  *
  * - Equal to other binary expressions of the same type whose arguments are equal.
@@ -98,6 +101,7 @@ class ExprBinary extends ExprBase {
 }
 
 /**
+ * @extends ExprBase
  * Generic ternary expression.
  *
  * - Equal to other ternary expressions of the same type whose arguments are equal.

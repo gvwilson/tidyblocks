@@ -44,13 +44,12 @@ const FAMILY = '@op'
 // ----------------------------------------------------------------------
 
 /**
+ * @extends ExprUnary
  * Arithmetic negation.
  */
 class OpNegate extends ExprUnary {
   /**
-   * Constructor.
-   * @param {expr} arg How to get the value.
-   * @return The negation.
+   * @param {ExprBase} arg How to get the value (which must be numeric or MISSING).
    */
   constructor (arg) {
     super(FAMILY, 'negate', arg)
@@ -65,13 +64,12 @@ class OpNegate extends ExprUnary {
 }
 
 /**
- * Absolute Value.
+ * @extends ExprUnary
+ * Absolute value.
  */
 class OpAbs extends ExprUnary {
   /**
-   * Constructor.
-   * @param {expr} arg How to get the value.
-   * @return The absolute value.
+   * @param {ExprBase} arg How to get the value (which must be numeric or MISSING).
    */
   constructor (arg) {
     super(FAMILY, 'abs', arg)
@@ -86,13 +84,12 @@ class OpAbs extends ExprUnary {
 }
 
 /**
+ * @extends ExprUnary
  * Logical negation.
  */
 class OpNot extends ExprUnary {
   /**
-   * Constructor.
-   * @param {expr} arg How to get the value.
-   * @return The negation.
+   * @param {ExprBase} arg How to get the value (which must be logical or MISSING).
    */
   constructor (arg) {
     super(FAMILY, 'not', arg)
@@ -107,20 +104,25 @@ class OpNot extends ExprUnary {
 // ----------------------------------------------------------------------
 
 /**
- * Type-checking expressions.
+ * @extends ExprUnary
+ * Base class for type-checking expressions.
  */
 class OpTypecheckBase extends ExprUnary {
   /**
-   * Constructor.
    * @param {string} species The precise function name.
-   * @param arg How to get a value.
+   * @param {ExprBase} arg How to get a value.
    */
   constructor (species, arg) {
     super(FAMILY, species, arg)
   }
 
   /**
-   * Check the type of a value.
+   * Check the type of a value, returning MISSING for missing values.
+   * @param {Object} row The row containing the value.
+   * @param {number} i The row index.
+   * @param {Array&lt;Object>} data The array of rows.
+   * @param {string} typeName The type to check for.
+   * @return {boolean} Whether the value of `arg` has the right type.
    */
   typeCheck (row, i, data, typeName) {
     const value = this.arg.run(row, i, data)
@@ -133,9 +135,13 @@ class OpTypecheckBase extends ExprUnary {
 }
 
 /**
+ * @extends OpTypecheckBase
  * Check if a value is logical.
  */
 class OpIsLogical extends OpTypecheckBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('isLogical', arg)
   }
@@ -146,9 +152,13 @@ class OpIsLogical extends OpTypecheckBase {
 }
 
 /**
+ * @extends OpTypecheckBase
  * Check if a value is a datetime.
  */
 class OpIsDatetime extends OpTypecheckBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('isDatetime', arg)
   }
@@ -160,9 +170,13 @@ class OpIsDatetime extends OpTypecheckBase {
 }
 
 /**
+ * @extends OpTypecheckBase
  * Check if a value is missing.
  */
 class OpIsMissing extends OpTypecheckBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('isMissing', arg)
   }
@@ -174,9 +188,13 @@ class OpIsMissing extends OpTypecheckBase {
 }
 
 /**
+ * @extends OpTypecheckBase
  * Check if a value is numeric.
  */
 class OpIsNumber extends OpTypecheckBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('isNumber', arg)
   }
@@ -187,9 +205,13 @@ class OpIsNumber extends OpTypecheckBase {
 }
 
 /**
+ * @extends OpTypecheckBase
  * Check if a value is text.
  */
 class OpIsText extends OpTypecheckBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('isText', arg)
   }
@@ -202,13 +224,13 @@ class OpIsText extends OpTypecheckBase {
 // ----------------------------------------------------------------------
 
 /**
- * Type conversion expressions.
+ * @extends ExprUnary
+ * Base class for type conversion expressions.
  */
 class OpConvertBase extends ExprUnary {
   /**
-   * Constructor.
    * @param {string} species The precise function name.
-   * @param arg How to get a value.
+   * @param {ExprBase} arg How to get a value.
    */
   constructor (species, arg) {
     super(FAMILY, species, arg)
@@ -216,9 +238,13 @@ class OpConvertBase extends ExprUnary {
 }
 
 /**
- * Convert a value to logical.
+ * @extends OpConvertBase
+ * Convert a value to logical, producing MISSING for missing values.
  */
 class OpToLogical extends OpConvertBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toLogical', arg)
   }
@@ -230,9 +256,13 @@ class OpToLogical extends OpConvertBase {
 }
 
 /**
- * Convert a value to a datetime.
+ * @extends OpConvertBase
+ * Convert a value to a datetime, producing MISSING for missing values.
  */
 class OpToDatetime extends OpConvertBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toDatetime', arg)
   }
@@ -244,9 +274,13 @@ class OpToDatetime extends OpConvertBase {
 }
 
 /**
- * Convert a value to a number.
+ * @extends OpConvertBase
+ * Convert a value to a number, producing MISSING for missing values.
  */
 class OpToNumber extends OpConvertBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toNumber', arg)
   }
@@ -258,9 +292,13 @@ class OpToNumber extends OpConvertBase {
 }
 
 /**
- * Convert a value to text.
+ * @extends OpConvertBase
+ * Convert a value to text, producing MISSING for missing values.
  */
 class OpToText extends OpConvertBase {
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toText', arg)
   }
@@ -280,13 +318,14 @@ class OpToText extends OpConvertBase {
 // ----------------------------------------------------------------------
 
 /**
- * Unary datetime expressions.
+ * @extends ExprUnary
+ * Base class for unary datetime expressions.
  */
 class OpDatetimeBase extends ExprUnary {
   /**
-   * Constructor.
    * @param {string} species The precise function name.
-   * @param arg How to get a value.
+   * @param {ExprBase} arg How to get a value.
+   * @param {function} converter Conversion function from Date to value.
    */
   constructor (species, arg, converter) {
     super(FAMILY, species, arg)
@@ -305,77 +344,126 @@ class OpDatetimeBase extends ExprUnary {
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract year from date.
  */
 class OpToYear extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getFullYear()
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toYear', arg, OpToYear.CONVERTER)
   }
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract 1-based month from date.
  */
 class OpToMonth extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getMonth() + 1
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toMonth', arg, OpToMonth.CONVERTER)
   }
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract 1-based day of month from date.
  */
 class OpToDay extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getDate()
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toDay', arg, OpToDay.CONVERTER)
   }
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract day of week from date.
  */
 class OpToWeekday extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getDay()
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toWeekday', arg, OpToWeekday.CONVERTER)
   }
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract hour from date.
  */
 class OpToHours extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getHours()
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toHours', arg, OpToHours.CONVERTER)
   }
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract minutes from date.
  */
 class OpToMinutes extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getMinutes()
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toMinutes', arg, OpToMinutes.CONVERTER)
   }
 }
 
 /**
+ * @extends OpDatetimeBase
  * Extract seconds from date.
  */
 class OpToSeconds extends OpDatetimeBase {
+  /**
+   * Extract year from Date.
+   */
   static CONVERTER = d => d.getSeconds()
 
+  /**
+   * @param {ExprBase} arg How to get a value.
+   */
   constructor (arg) {
     super('toSeconds', arg, OpToSeconds.CONVERTER)
   }
@@ -384,14 +472,15 @@ class OpToSeconds extends OpDatetimeBase {
 // ----------------------------------------------------------------------
 
 /**
- * Binary arithmetic expressions.
+ * @extends ExprBinary
+ * Base class for binary arithmetic expressions.
  */
 class OpArithmeticBase extends ExprBinary {
   /**
-   * Constructor.
    * @param {string} species The name of the operation.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
+   * @param {ExprBase} left How to get the left value.
+   * @param {ExprBase} right How to get the right value.
+   * @param {function} operator How to combine values.
    */
   constructor (species, left, right, operator) {
     super(FAMILY, species, left, right)
@@ -412,66 +501,114 @@ class OpArithmeticBase extends ExprBinary {
 }
 
 /**
+ * @extends OpArithmeticBase
  * Addition.
  */
 class OpAdd extends OpArithmeticBase {
+  /**
+   * Add values.
+   */
   static OPERATOR = (left, right) => left + right
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('add', left, right, OpAdd.OPERATOR)
   }
 }
 
 /**
+ * @extends OpArithmeticBase
  * Division.
  */
 class OpDivide extends OpArithmeticBase {
+  /**
+   * Divie values.
+   */
   static OPERATOR = (left, right) => left / right
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('divide', left, right, OpDivide.OPERATOR)
   }
 }
 
 /**
+ * @extends OpArithmeticBase
  * Multiplication.
  */
 class OpMultiply extends OpArithmeticBase {
+  /**
+   * Multiply values.
+   */
   static OPERATOR = (left, right) => left * right
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('multiply', left, right, OpMultiply.OPERATOR)
   }
 }
 
 /**
+ * @extends OpArithmeticBase
  * Exponentiation.
  */
 class OpPower extends OpArithmeticBase {
+  /**
+   * Exponentiate values.
+   */
   static OPERATOR = (left, right) => left ** right
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('power', left, right, OpPower.OPERATOR)
   }
 }
 
 /**
+ * @extends OpArithmeticBase
  * Remainder.
  */
 class OpRemainder extends OpArithmeticBase {
+  /**
+   * Remainder values.
+   */
   static OPERATOR = (left, right) => left % right
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('remainder', left, right, OpRemainder.OPERATOR)
   }
 }
 
 /**
+ * @extends OpArithmeticBase
  * Subtraction.
  */
 class OpSubtract extends OpArithmeticBase {
+  /**
+   * Subtract values.
+   */
   static OPERATOR = (left, right) => left - right
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('subtract', left, right, OpSubtract.OPERATOR)
   }
@@ -480,14 +617,14 @@ class OpSubtract extends OpArithmeticBase {
 // ----------------------------------------------------------------------
 
 /**
- * Extremum operations.
+ * @extends ExprBinary
+ * Base class for extremum operations.
  */
 class OpExtremumBase extends ExprBinary {
   /**
-   * Constructor.
    * @param {string} species The name of the operation.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
+   * @param {ExprBase} left How to get the left value.
+   * @param {ExprBase} right How to get the right value.
    */
   constructor (species, left, right, operator) {
     super(FAMILY, species, left, right)
@@ -504,22 +641,38 @@ class OpExtremumBase extends ExprBinary {
 }
 
 /**
+ * @extends OpExtremumBase
  * Maximum of two values.
  */
 class OpMaximum extends OpExtremumBase {
+  /**
+   * Get maximum of values.
+   */
   static OPERATOR = (left, right) => (left > right ? left : right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('maximum', left, right, OpMaximum.OPERATOR)
   }
 }
 
 /**
+ * @extends OpExtremumBase
  * Minimum of two values.
  */
 class OpMinimum extends OpExtremumBase {
+  /**
+   * Get minimum of values.
+   */
   static OPERATOR = (left, right) => (left &lt; right ? left : right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('minimum', left, right, OpMinimum.OPERATOR)
   }
@@ -528,14 +681,14 @@ class OpMinimum extends OpExtremumBase {
 // ----------------------------------------------------------------------
 
 /**
- * Binary comparison expressions.
+ * @extends ExprBinary
+ * Base class for binary comparison expressions.
  */
 class OpCompareBase extends ExprBinary {
   /**
-   * Constructor.
    * @param {string} species The name of the operation.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
+   * @param {ExprBase} left How to get the left value.
+   * @param {ExprBase} right How to get the right value.
    */
   constructor (species, left, right, operator) {
     super(FAMILY, species, left, right)
@@ -554,66 +707,114 @@ class OpCompareBase extends ExprBinary {
 }
 
 /**
+ * @extends OpCompareBase
  * Equality.
  */
 class OpEqual extends OpCompareBase {
+  /**
+   * Test values for equality.
+   */
   static OPERATOR = (left, right) => util.equal(left, right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('equal', left, right, OpEqual.OPERATOR)
   }
 }
 
 /**
+ * @extends OpCompareBase
  * Strictly greater than.
  */
 class OpGreater extends OpCompareBase {
+  /**
+   * Test values for strict order.
+   */
   static OPERATOR = (left, right) => (left > right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('greater', left, right, OpGreater.OPERATOR)
   }
 }
 
 /**
+ * @extends OpCompareBase
  * Greater than or equal.
  */
 class OpGreaterEqual extends OpCompareBase {
+  /**
+   * Test values for order.
+   */
   static OPERATOR = (left, right) => (left >= right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('greaterEqual', left, right, OpGreaterEqual.OPERATOR)
   }
 }
 
 /**
+ * @extends OpCompareBase
  * Strictly less than.
  */
 class OpLess extends OpCompareBase {
+  /**
+   * Test values for strict order.
+   */
   static OPERATOR = (left, right) => (left &lt; right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('less', left, right, OpLess.OPERATOR)
   }
 }
 
 /**
+ * @extends OpCompareBase
  * Less than or equal.
  */
 class OpLessEqual extends OpCompareBase {
+  /**
+   * Test values for order.
+   */
   static OPERATOR = (left, right) => (left &lt;= right)
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('lessEqual', left, right, OpLessEqual.OPERATOR)
   }
 }
 
 /**
+ * @extends OpCompareBase
  * Inequality.
  */
 class OpNotEqual extends OpCompareBase {
+  /**
+   * Test values for inequality.
+   */
   static OPERATOR = (left, right) => (!util.equal(left, right))
 
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('notEqual', left, right, OpNotEqual.OPERATOR)
   }
@@ -622,14 +823,14 @@ class OpNotEqual extends OpCompareBase {
 // ----------------------------------------------------------------------
 
 /**
- * Binary logical expressions.
+ * @extends ExprBinary
+ * Base class for binary logical expressions.
  */
 class OpLogicalBase extends ExprBinary {
   /**
-   * Constructor.
    * @param {string} species The name of the operation.
-   * @param {expr} left How to get the left value.
-   * @param {expr} right How to get the right value.
+   * @param {ExprBase} left How to get the left value.
+   * @param {ExprBase} right How to get the right value.
    */
   constructor (species, left, right) {
     super(FAMILY, species, left, right)
@@ -637,9 +838,14 @@ class OpLogicalBase extends ExprBinary {
 }
 
 /**
+ * @extends OpLogicalBase
  * Logical conjunction.
  */
 class OpAnd extends OpLogicalBase {
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('and', left, right)
   }
@@ -654,9 +860,14 @@ class OpAnd extends OpLogicalBase {
 }
 
 /**
+ * @extends OpLogicalBase
  * Logical disjunction.
  */
 class OpOr extends OpLogicalBase {
+  /**
+   * @param {ExprBase} left How to get a value.
+   * @param {ExprBase} right How to get a value.
+   */
   constructor (left, right) {
     super('or', left, right)
   }
@@ -673,14 +884,15 @@ class OpOr extends OpLogicalBase {
 // ----------------------------------------------------------------------
 
 /**
+ * @extends ExprTernary
  * Logical selection.
  */
 class OpIfElse extends ExprTernary {
   /**
    * Constructor
-   * @param {expr} left How to get the condition's value.
-   * @param {expr} middle How to get a value if the condition is truthy.
-   * @param {expr} right How to get a value if the condition is not truthy.
+   * @param {ExprBase} left How to get the condition's value.
+   * @param {ExprBase} middle How to get a value if the condition is truthy.
+   * @param {ExprBase} right How to get a value if the condition is not truthy.
    */
   constructor (left, middle, right) {
     super(FAMILY, 'ifElse', left, middle, right)
@@ -697,20 +909,24 @@ class OpIfElse extends ExprTernary {
 // ----------------------------------------------------------------------
 
 /**
+ * @extends ExprBase
  * Shift values up or down a column.
  */
 class OpShift extends ExprBase {
+  /**
+   * @param {string} column Which column to get values from.
+   * @param {number} amount How much to shift (positive for up, negative for down).
+   */
   constructor (column, amount) {
+    util.check(column &amp;&amp; (typeof column === 'string'),
+               `Column name must be string`)
+    util.check((typeof amount === 'number') &amp;&amp; Number.isInteger(amount),
+               `Shift amount must be integer`)
     super(FAMILY, 'shift')
     this.column = column
     this.amount = amount
   }
 
-  /**
-   * Check for equality.
-   * @param other The object to check against.
-   * @return Equality.
-   */
   equal (other) {
     return (other instanceof OpShift) &amp;&amp;
       (this.column === other.column) &amp;&amp;
@@ -794,7 +1010,7 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Env.html">Env</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="OpAbs.html">OpAbs</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpExtremumBase.html">OpExtremumBase</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMaximum.html">OpMaximum</a></li><li><a href="OpMinimum.html">OpMinimum</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpShift.html">OpShift</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToText.html">OpToText</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="Restore.html">Restore</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformCreate.html">TransformCreate</a></li><li><a href="TransformData.html">TransformData</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGlue.html">TransformGlue</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformKMeansClustering.html">TransformKMeansClustering</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformSaveAs.html">TransformSaveAs</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSequence.html">TransformSequence</a></li><li><a href="TransformSilhouette.html">TransformSilhouette</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformStats.html">TransformStats</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueMissing.html">ValueMissing</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#FAMILY">FAMILY</a></li><li><a href="global.html#makeDate">makeDate</a></li><li><a href="global.html#makeLogical">makeLogical</a></li><li><a href="global.html#makeNumber">makeNumber</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#random">random</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DataFrame.html">DataFrame</a></li><li><a href="Env.html">Env</a></li><li><a href="ExprBase.html">ExprBase</a></li><li><a href="ExprBinary.html">ExprBinary</a></li><li><a href="ExprNullary.html">ExprNullary</a></li><li><a href="ExprTernary.html">ExprTernary</a></li><li><a href="ExprUnary.html">ExprUnary</a></li><li><a href="OpAbs.html">OpAbs</a></li><li><a href="OpAdd.html">OpAdd</a></li><li><a href="OpAnd.html">OpAnd</a></li><li><a href="OpArithmeticBase.html">OpArithmeticBase</a></li><li><a href="OpCompareBase.html">OpCompareBase</a></li><li><a href="OpConvertBase.html">OpConvertBase</a></li><li><a href="OpDatetimeBase.html">OpDatetimeBase</a></li><li><a href="OpDivide.html">OpDivide</a></li><li><a href="OpEqual.html">OpEqual</a></li><li><a href="OpExtremumBase.html">OpExtremumBase</a></li><li><a href="OpGreater.html">OpGreater</a></li><li><a href="OpGreaterEqual.html">OpGreaterEqual</a></li><li><a href="OpIfElse.html">OpIfElse</a></li><li><a href="OpIsDatetime.html">OpIsDatetime</a></li><li><a href="OpIsLogical.html">OpIsLogical</a></li><li><a href="OpIsMissing.html">OpIsMissing</a></li><li><a href="OpIsNumber.html">OpIsNumber</a></li><li><a href="OpIsText.html">OpIsText</a></li><li><a href="OpLess.html">OpLess</a></li><li><a href="OpLessEqual.html">OpLessEqual</a></li><li><a href="OpLogicalBase.html">OpLogicalBase</a></li><li><a href="OpMaximum.html">OpMaximum</a></li><li><a href="OpMinimum.html">OpMinimum</a></li><li><a href="OpMultiply.html">OpMultiply</a></li><li><a href="OpNegate.html">OpNegate</a></li><li><a href="OpNot.html">OpNot</a></li><li><a href="OpNotEqual.html">OpNotEqual</a></li><li><a href="OpOr.html">OpOr</a></li><li><a href="OpPower.html">OpPower</a></li><li><a href="OpRemainder.html">OpRemainder</a></li><li><a href="OpShift.html">OpShift</a></li><li><a href="OpSubtract.html">OpSubtract</a></li><li><a href="OpToDatetime.html">OpToDatetime</a></li><li><a href="OpToDay.html">OpToDay</a></li><li><a href="OpToHours.html">OpToHours</a></li><li><a href="OpToLogical.html">OpToLogical</a></li><li><a href="OpToMinutes.html">OpToMinutes</a></li><li><a href="OpToMonth.html">OpToMonth</a></li><li><a href="OpToNumber.html">OpToNumber</a></li><li><a href="OpToSeconds.html">OpToSeconds</a></li><li><a href="OpToText.html">OpToText</a></li><li><a href="OpToWeekday.html">OpToWeekday</a></li><li><a href="OpToYear.html">OpToYear</a></li><li><a href="OpTypecheckBase.html">OpTypecheckBase</a></li><li><a href="Pipeline.html">Pipeline</a></li><li><a href="Program.html">Program</a></li><li><a href="Restore.html">Restore</a></li><li><a href="SummarizeAll.html">SummarizeAll</a></li><li><a href="SummarizeAny.html">SummarizeAny</a></li><li><a href="SummarizeBase.html">SummarizeBase</a></li><li><a href="SummarizeCount.html">SummarizeCount</a></li><li><a href="SummarizeMaximum.html">SummarizeMaximum</a></li><li><a href="SummarizeMean.html">SummarizeMean</a></li><li><a href="SummarizeMedian.html">SummarizeMedian</a></li><li><a href="SummarizeMinimum.html">SummarizeMinimum</a></li><li><a href="SummarizeStdDev.html">SummarizeStdDev</a></li><li><a href="SummarizeSum.html">SummarizeSum</a></li><li><a href="SummarizeVariance.html">SummarizeVariance</a></li><li><a href="TransformBar.html">TransformBar</a></li><li><a href="TransformBase.html">TransformBase</a></li><li><a href="TransformBox.html">TransformBox</a></li><li><a href="TransformCreate.html">TransformCreate</a></li><li><a href="TransformData.html">TransformData</a></li><li><a href="TransformDot.html">TransformDot</a></li><li><a href="TransformDrop.html">TransformDrop</a></li><li><a href="TransformFilter.html">TransformFilter</a></li><li><a href="TransformGlue.html">TransformGlue</a></li><li><a href="TransformGroupBy.html">TransformGroupBy</a></li><li><a href="TransformHistogram.html">TransformHistogram</a></li><li><a href="TransformJoin.html">TransformJoin</a></li><li><a href="TransformKMeansClustering.html">TransformKMeansClustering</a></li><li><a href="TransformPlot.html">TransformPlot</a></li><li><a href="TransformSaveAs.html">TransformSaveAs</a></li><li><a href="TransformScatter.html">TransformScatter</a></li><li><a href="TransformSelect.html">TransformSelect</a></li><li><a href="TransformSequence.html">TransformSequence</a></li><li><a href="TransformSilhouette.html">TransformSilhouette</a></li><li><a href="TransformSort.html">TransformSort</a></li><li><a href="TransformStats.html">TransformStats</a></li><li><a href="TransformSummarize.html">TransformSummarize</a></li><li><a href="TransformTTestOneSample.html">TransformTTestOneSample</a></li><li><a href="TransformTTestPaired.html">TransformTTestPaired</a></li><li><a href="TransformUngroup.html">TransformUngroup</a></li><li><a href="TransformUnique.html">TransformUnique</a></li><li><a href="UserInterface.html">UserInterface</a></li><li><a href="ValueAbsent.html">ValueAbsent</a></li><li><a href="ValueColumn.html">ValueColumn</a></li><li><a href="ValueDatetime.html">ValueDatetime</a></li><li><a href="ValueExponential.html">ValueExponential</a></li><li><a href="ValueLogical.html">ValueLogical</a></li><li><a href="ValueMissing.html">ValueMissing</a></li><li><a href="ValueNormal.html">ValueNormal</a></li><li><a href="ValueNumber.html">ValueNumber</a></li><li><a href="ValueRowNum.html">ValueRowNum</a></li><li><a href="ValueText.html">ValueText</a></li><li><a href="ValueUniform.html">ValueUniform</a></li></ul><h3>Global</h3><ul><li><a href="global.html#check">check</a></li><li><a href="global.html#checkNumber">checkNumber</a></li><li><a href="global.html#checkTypeEqual">checkTypeEqual</a></li><li><a href="global.html#csvToTable">csvToTable</a></li><li><a href="global.html#equal">equal</a></li><li><a href="global.html#fail">fail</a></li><li><a href="global.html#FAMILY">FAMILY</a></li><li><a href="global.html#makeDate">makeDate</a></li><li><a href="global.html#makeLogical">makeLogical</a></li><li><a href="global.html#makeNumber">makeNumber</a></li><li><a href="global.html#MISSING">MISSING</a></li><li><a href="global.html#safeValue">safeValue</a></li></ul>
 </nav>
 
 <br class="clear">
