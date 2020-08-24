@@ -351,4 +351,25 @@ describe('seeds random number generation', () => {
                  `Did not re-seed RNG correctly`)
     done()
   })
+
+  it('runs the seed block first', (done) => {
+    const phrase = 'words words words'
+    const json = [Program.FAMILY,
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'data', 'colors']],
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'seed', phrase]]]
+    const factory = new Restore()
+    const program = factory.program(json)
+    const env = new Env(INTERFACE)
+    program.run(env)
+    const expectedLog = [
+      ['log', `seed ${phrase}`],
+      ['log', 'read colors'],
+      ['log', 'report unnamed 1'],
+    ]
+    assert.deepEqual(env.log, expectedLog,
+                    `Did not get expected running order`)
+    done()
+  })
 })

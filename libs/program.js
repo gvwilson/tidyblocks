@@ -20,10 +20,18 @@ class Program {
   constructor (...pipelines) {
     this.env = null
     this.pipelines = []
+    this.controls = []
     this.queue = []
     this.waiting = new Map()
 
-    pipelines.forEach(pipeline => this.register(pipeline))
+    pipelines.forEach(pipeline => {
+      if (pipeline.isControl()) {
+        this.addControl(pipeline)
+      }
+      else {
+        this.register(pipeline)
+      }
+    })
   }
 
   /**
@@ -34,8 +42,10 @@ class Program {
   equal (other) {
     util.check(other instanceof Program,
                `Can only compare programs to programs`)
-    return (this.pipelines.length === other.pipelines.length) &&
-      this.pipelines.every((pipeline, i) => pipeline.equal(other.pipelines[i]))
+    return (this.controls.length === other.controls.length) &&
+      this.controls.every((p, i) => p.equal(other.controls[i])) &&
+      (this.pipelines.length === other.pipelines.length) &&
+      this.pipelines.every((p, i) => p.equal(other.pipelines[i]))
   }
 
   /**
@@ -61,6 +71,18 @@ class Program {
   }
 
   /**
+   * Add a single-block control pipeline.
+   * @param {Pipeline} pipeline What to register.
+   */
+  addControl (pipeline) {
+    util.check(pipeline instanceof Pipeline,
+               `Pipelines must be instances of the Pipeline class`)
+    util.check(pipeline.transforms.length === 1,
+               `Control pipelines must have a single block each`)
+    this.controls.push(pipeline)
+  }
+
+  /**
    * Register a pipeline. If it doesn't depend on anything, add it to the run
    * queue. If it has dependencies, add it to `waiting` instead.
    * @param {Pipeline} pipeline What to register.
@@ -79,12 +101,19 @@ class Program {
   }
 
   /**
-   * Run all pipelines in an order that respects dependencies.
+   * Run all pipelines in an order that respects dependencies.  Single-block
+   * control pipelines are always run before all other pipelines.
    * @param {Env} env The runtime environment of the program.
    */
   run (env) {
     this.env = env
     try {
+      // Run all control pipelines.
+      while (this.controls.length > 0) {
+        const pipeline = this.controls.shift()
+        pipeline.run(this.env)
+      }
+
       // Run until queue is empty, calculating which new results have been added
       // to the environment so that we can notify waiting pipelines.
       while (this.queue.length > 0) {

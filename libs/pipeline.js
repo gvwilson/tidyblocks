@@ -26,6 +26,13 @@ class Pipeline {
   }
 
   /**
+   * Is this a control pipeline (single block of type 'control')?
+   */
+  isControl () {
+    return (this.transforms.length === 1) && this.transforms[0].isControl
+  }
+
+  /**
    * What does this pipeline require?
    * @return Array of strings.
    */

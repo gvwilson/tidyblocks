@@ -24,8 +24,9 @@ class TransformBase {
    * @param {string[]} requires What datasets are required before this can run?
    * @param {Boolean} input Does this transform require input?
    * @param {Boolean} savesResult Does this transform automatically save its result in the environment?
+   * @param {Boolean} isControl Is this a control block? (False by default)
    */
-  constructor (species, requires, input, savesResult) {
+  constructor (species, requires, input, savesResult, isControl=false) {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')),
@@ -34,6 +35,7 @@ class TransformBase {
     this.requires = requires
     this.input = input
     this.savesResult = savesResult
+    this.isControl = isControl
   }
 
   equal (other) {
@@ -273,7 +275,7 @@ class TransformSeed extends TransformBase {
   constructor (seed) {
     util.check(typeof seed === 'string',
                `Expected string as seed`)
-    super('seed', [], false, false)
+    super('seed', [], false, false, true) // is a control block
     this.seed = seed
   }
 
