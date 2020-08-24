@@ -34,9 +34,10 @@ class TransformBase {
     this.savesResult = savesResult
   }
 
-  equal (other) {
+  equal (other, ...fieldNames) {
     return (other instanceof TransformBase) &&
-      (this.species === other.species)
+      (this.species === other.species) &&
+      fieldNames.every(fn => (this[fn] === other[fn]))
   }
 
   equalColumns (other) {
@@ -52,6 +53,51 @@ class TransformBase {
 }
 
 // ----------------------------------------------------------------------
+
+/**
+ * Divide data into bins.
+ * @param {string} column Existing column's name.
+ * @param {number} bins How many bins (integer > 0).
+ * @param {string} label New column containing labels.
+ */
+class TransformBin extends TransformBase {
+  constructor (column, bins, label) {
+    util.check(typeof column === 'string',
+               `Expected string as column name`)
+    util.check(Number.isInteger(bins) && (bins > 0),
+               `Number of bins must be integer > 0`)
+    util.check(typeof label === 'string',
+               `Expected string as label name`)
+    super('bins', [], true, false)
+    this.column = column
+    this.bins = bins
+    this.label = label
+  }
+
+  equal (other) {
+    return super.equal(other, 'column', 'bins', 'label')
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.column} ${this.bins} ${this.label}`)
+    const result = new DataFrame(df.data)
+    const [low, high] = stats.extent(result.data.map(row => row[this.column]))
+    result.data.forEach(row => {
+      row[this.label] = this.pickBin(row[this.column], low, high, this.bins)
+    })
+    return result
+  }
+
+  pickBin (value, low, high, numBins) {
+    if (high === low) {
+      return 1
+    }
+    else if (value === high) {
+      return numBins
+    }
+    return 1 + Math.floor(numBins * (value - low) / (high - low))
+  }
+}
 
 /**
  * Create a new column.
@@ -70,8 +116,7 @@ class TransformCreate extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.newName === other.newName) &&
+    return super.equal(other, 'newName') &&
       (this.expr.equal(other.expr))
   }
 
@@ -94,8 +139,7 @@ class TransformData extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.name === other.name)
+    return super.equal(other, 'name')
   }
 
   run (env, df) {
@@ -166,10 +210,7 @@ class TransformGlue extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.leftName === other.leftName) &&
-      (this.rightName === other.rightName) &&
-      (this.label === other.label)
+    return super.equal(other, 'leftName', 'rightName', 'label')
   }
 
   run (env, df) {
@@ -221,11 +262,7 @@ class TransformJoin extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.leftName === other.leftName) &&
-      (this.leftCol === other.leftCol) &&
-      (this.rightName === other.rightName) &&
-      (this.rightCol === other.rightCol)
+    return super.equal(other, 'leftName', 'leftCol', 'rightName', 'rightCol')
   }
 
   run (env, df) {
@@ -252,8 +289,7 @@ class TransformSaveAs extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.label === other.label)
+    return super.equal(other, 'label')
   }
 
   run (env, df) {
@@ -300,9 +336,7 @@ class TransformSequence extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.newName === other.newName) &&
-      (this.limit === other.limit)
+    return super.equal(other, 'newName', 'limit')
   }
 
   run (env, df) {
@@ -363,9 +397,7 @@ class TransformSummarize extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.action === other.action) &&
-      (this.column === other.column)
+    return super.equal(other, 'action', 'column')
   }
 
   run (env, df) {
@@ -723,6 +755,7 @@ class TransformSilhouette extends TransformStats {
 module.exports = {
   FAMILY: FAMILY,
   base: TransformBase,
+  bin: TransformBin,
   create: TransformCreate,
   data: TransformData,
   drop: TransformDrop,

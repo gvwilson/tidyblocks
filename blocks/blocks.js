@@ -105,6 +105,7 @@ const createXmlConfig = (language) => {
       <block type="data_user"></block>
     </category>
     <category name="${msg.get('transform')}" colour="${TRANSFORM_COLOR}">
+      <block type="transform_bin"></block>
       <block type="transform_create"></block>
       <block type="transform_drop"></block>
       <block type="transform_filter"></block>

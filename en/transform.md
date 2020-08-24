@@ -1,4 +1,16 @@
 <div id="create" markdown="1">
+### Bin
+
+<img class="block" src="{{ 'en/img/transform_bin.svg' | relative_url }}" alt="bin block"/>
+
+Divide data into evenly-spaced bins.
+
+- **column**: Name of column containing data.
+- *first space*: Number of bins (must be 1 or greater).
+- **label**: Name of new column for bin labels.
+</div>
+
+<div id="create" markdown="1">
 ### Create
 
 <img class="block" src="{{ 'en/img/transform_create.svg' | relative_url }}" alt="create block"/>

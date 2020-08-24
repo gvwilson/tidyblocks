@@ -23,6 +23,29 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds binning transform', (done) => {
+    const env = new Env(INTERFACE)
+    const transform = new Transform.bin('red', 4, 'dst')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const actual = result.data.map(row => row.dst)
+    const expected = [1, 4, 3, 1, 1, 1, 1, 4, 4, 1, 4]
+    assert.deepEqual(actual, expected,
+                     `Wrong bins in result`)
+    done()
+  })
+
+  it('builds binning transform with a single bin', (done) => {
+    const env = new Env(INTERFACE)
+    const df = new DataFrame([{a: 2.5}, {a: 2.5}, {a: 2.5}])
+    const transform = new Transform.bin('a', 3, 'dst')
+    const result = transform.run(env, df)
+    const actual = result.data.map(row => row.dst)
+    const expected = [1, 1, 1]
+    assert.deepEqual(actual, expected,
+                     `Wrong bins in result`)
+    done()
+  })
+
   it('builds create transform', (done) => {
     const env = new Env(INTERFACE)
     const creator = new Value.text('stuff')
@@ -410,6 +433,19 @@ describe('transform equality tests', () => {
     const groupBy = new Transform.groupBy(['left'])
     assert(!data_a.equal(groupBy),
            `Different transforms should not equal`)
+    done()
+  })
+
+  it('compares binning', (done) => {
+    const src_5_dst = new Transform.bin('src', 5, 'dst')
+    assert(src_5_dst.equal(src_5_dst),
+           `Same should equal`)
+    assert(!src_5_dst.equal(new Transform.bin('other', 5, 'dst')),
+           `Different should not equal`)
+    assert(!src_5_dst.equal(new Transform.bin('src', 3, 'dst')),
+           `Different should not equal`)
+    assert(!src_5_dst.equal(new Transform.bin('src', 5, 'other')),
+           `Different should not equal`)
     done()
   })
 

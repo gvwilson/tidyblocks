@@ -331,6 +331,18 @@ describe('transform code generation', () => {
     done()
   })
 
+  it('generates code for binning', (done) => {
+    const expected = [Transform.FAMILY, 'bin', 'source', 3, 'labels']
+    const w = fixture.workspace()
+    const block = w.newBlock('transform_bin')
+    block.setFieldValue('source', 'COLUMN')
+    block.setFieldValue(3, 'BINS')
+    block.setFieldValue('labels', 'LABEL')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for create', (done) => {
     const expected = [Transform.FAMILY, 'create', 'fresh',
                       [Value.FAMILY, 'logical', true]]
