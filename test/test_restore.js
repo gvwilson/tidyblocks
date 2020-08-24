@@ -117,11 +117,8 @@ describe('expression persistence', () => {
     for (const [name, func] of allChecks) {
       const factory = new Restore()
       const json = [Op.FAMILY, name, childJSON, childJSON]
-      console.log(`JSON ${JSON.stringify(json, null, 2)}`)
       const actual = factory.expr(json)
-      console.log(`ACTUAL ${JSON.stringify(actual, null, 2)}`)
       const expected = new func(childObj, childObj)
-      console.log(`EXPECTED ${JSON.stringify(expected, null, 2)}`)
       assert.equal(actual.family, expected.family)
       assert.equal(actual.kind, expected.kind)
       assert.deepEqual(actual.left, expected.left)

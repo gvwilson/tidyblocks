@@ -114,6 +114,16 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds seed transform', (done) => {
+    const phrase = 'some random phrase'
+    const env = new Env(INTERFACE)
+    const transform = new Transform.seed(phrase)
+    const result = transform.run(env, null)
+    assert.equal(result, null,
+                 `Should not have output from seed transform`)
+    done()
+  })
+
   it('builds read data transform', (done) => {
     const env = new Env(INTERFACE)
     const transform = new Transform.data('colors')
@@ -506,6 +516,19 @@ describe('transform equality tests', () => {
            `Names should matter`)
     const groupBy = new Transform.groupBy(['left'])
     assert(!report_a.equal(groupBy),
+           `Different transforms should not equal`)
+    done()
+  })
+
+  it('compares RNG seed', (done) => {
+    const seed_a = new Transform.seed('alpha')
+    const seed_b = new Transform.seed('beta')
+    assert(seed_a.equal(seed_a),
+           `Same should match`)
+    assert(!seed_a.equal(seed_b),
+           `Names should matter`)
+    const groupBy = new Transform.groupBy(['left'])
+    assert(!seed_a.equal(groupBy),
            `Different transforms should not equal`)
     done()
   })
