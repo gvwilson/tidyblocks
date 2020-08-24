@@ -114,6 +114,16 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds seed transform', (done) => {
+    const phrase = 'some random phrase'
+    const env = new Env(INTERFACE)
+    const transform = new Transform.seed(phrase)
+    const result = transform.run(env, null)
+    assert.equal(result, null,
+                 `Should not have output from seed transform`)
+    done()
+  })
+
   it('builds read data transform', (done) => {
     const env = new Env(INTERFACE)
     const transform = new Transform.data('colors')

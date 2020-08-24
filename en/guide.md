@@ -20,6 +20,7 @@ language: en
  <a class="op" href="#en_op">OPERATIONS</a><br/>
  <a class="values" href="#en_values">VALUES</a><br/>
  <a class="combine" href="#en_combine">COMBINING</a><br/>
+ <a class="control" href="#en_control">CONTROL</a><br/>
 </div>
 
 <div class="guide_rhs">
@@ -49,5 +50,7 @@ and please note that all contributors are required to abide by our [Code of Cond
 {% include_relative value.md %}
 <h1 class="combine" id="en_combine">COMBINING</h1>
 {% include_relative combine.md %}
+<h1 class="control" id="en_control">CONTROL</h1>
+{% include_relative control.md %}
 </div>
 </div>

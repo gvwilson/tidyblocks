@@ -1,5 +1,7 @@
 'use strict'
 
+const random = require('random')
+const seedrandom = require('seedrandom')
 const stats = require('simple-statistics')
 
 const util = require('./util')
@@ -259,6 +261,32 @@ class TransformSaveAs extends TransformBase {
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.label}`)
     env.setResult(this.label, df)
+    return df
+  }
+}
+
+/**
+ * Seed random number generation.
+ * @param {string} seed Text to use as seed.
+ */
+class TransformSeed extends TransformBase {
+  constructor (seed) {
+    util.check(typeof seed === 'string',
+               `Expected string as seed`)
+    super('seed', [], false, false)
+    this.seed = seed
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.seed === other.seed)
+  }
+
+  run (env, df) {
+    util.check(df === null,
+               `Cannot provide input dataframe to seed`)
+    env.appendLog('log', `${this.species} ${this.seed}`)
+    random.use(seedrandom(this.seed))
     return df
   }
 }
@@ -731,6 +759,7 @@ module.exports = {
   groupBy: TransformGroupBy,
   join: TransformJoin,
   saveAs: TransformSaveAs,
+  seed: TransformSeed,
   select: TransformSelect,
   sequence: TransformSequence,
   sort: TransformSort,

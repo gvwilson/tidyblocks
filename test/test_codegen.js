@@ -602,6 +602,19 @@ describe('combiner code generation', () => {
   })
 })
 
+describe('control code generation', () => {
+  it('generates code for seed', (done) => {
+    const phrase = 'some random phrase'
+    const expected = [Transform.FAMILY, 'seed', phrase]
+    const w = fixture.workspace()
+    const block = w.newBlock('control_seed')
+    block.setFieldValue(phrase, 'SEED')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+})
+
 describe('program code generation', () => {
   it('generates code for a program', (done) => {
     const expected = [Program.FAMILY,
