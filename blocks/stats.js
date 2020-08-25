@@ -106,10 +106,16 @@ const MESSAGES = {
     message0: {
       en: 'k-means cluster',
       es: 'agrupamiento por k-medians'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     message1: {
       en: 'X %1 Y %2 number %3 label %4',
       es: 'X %1 Y %2 numero %3 etiqueta %4'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     args1_x: {
       en: 'X axis',
@@ -137,16 +143,25 @@ const MESSAGES = {
     tooltip: {
       en: 'calculate k-means cluster IDs',
       es: 'calculate k-means cluster IDs'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     }
   },
   stats_silhouette: {
     message0: {
       en: 'silhouette',
       es: 'silueta'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     message1: {
       en: 'X %1 Y %2 label %3 score %4',
       es: 'X %1 Y %2 etiqueta %3 puntuación %4'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     args1_x: {
       en: 'X axis',
@@ -174,10 +189,16 @@ const MESSAGES = {
     args1_score: {
       en: 'score',
       es: 'puntuación'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     tooltip: {
       en: 'calculate silhouette score of 2D clusters',
       es: 'calcular la puntuación de la silueta de los clústeres 2D'
+      // TRANSLATE ar
+      // TRANSLATE ko
+      // TRANSLATE it
     }
   }
 }
