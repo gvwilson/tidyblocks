@@ -1,5 +1,7 @@
 'use strict'
 
+const random = require('random')
+const seedrandom = require('seedrandom')
 const stats = require('simple-statistics')
 
 const util = require('./util')
@@ -23,8 +25,9 @@ class TransformBase {
    * @param {string[]} requires What datasets are required before this can run?
    * @param {Boolean} input Does this transform require input?
    * @param {Boolean} savesResult Does this transform automatically save its result in the environment?
+   * @param {Boolean} isControl Is this a control block? (False by default)
    */
-  constructor (species, requires, input, savesResult) {
+  constructor (species, requires, input, savesResult, isControl=false) {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')),
@@ -33,6 +36,7 @@ class TransformBase {
     this.requires = requires
     this.input = input
     this.savesResult = savesResult
+    this.isControl = isControl
   }
 
   equal (other) {
@@ -260,6 +264,32 @@ class TransformSaveAs extends TransformBase {
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.label}`)
     env.setResult(this.label, df)
+    return df
+  }
+}
+
+/**
+ * Seed random number generation.
+ * @param {string} seed Text to use as seed.
+ */
+class TransformSeed extends TransformBase {
+  constructor (seed) {
+    util.check(typeof seed === 'string',
+               `Expected string as seed`)
+    super('seed', [], false, false, true) // is a control block
+    this.seed = seed
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.seed === other.seed)
+  }
+
+  run (env, df) {
+    util.check(df === null,
+               `Cannot provide input dataframe to seed`)
+    env.appendLog('log', `${this.species} ${this.seed}`)
+    random.use(seedrandom(this.seed))
     return df
   }
 }
@@ -762,6 +792,7 @@ module.exports = {
   groupBy: TransformGroupBy,
   join: TransformJoin,
   saveAs: TransformSaveAs,
+  seed: TransformSeed,
   select: TransformSelect,
   sequence: TransformSequence,
   sort: TransformSort,
