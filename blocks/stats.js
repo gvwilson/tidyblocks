@@ -24,7 +24,7 @@ const MESSAGES = {
       es: 'nombre %1 columna %2 media \u03BC %3',
       ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
       it: 'nome %1 colonna %2 media \u03BC %3',
-      ko: '이름 %1 열 %2 평균 \u03BC %3', 
+      ko: '이름 %1 열 %2 평균 \u03BC %3',
       pt: 'nome %1 coluna %2 média \u03BC %3'
     },
     args1_name: {
@@ -58,7 +58,7 @@ const MESSAGES = {
       es: 'T-test para dos muestras',
       ar: 'إختبار (ت) لعينتين',
       it: 'T-test a due campioni',
-      ko: '이표본 t-검정', 
+      ko: '이표본 t-검정',
       pt: 'Teste-T de duas amostras'
     },
     message1: {
@@ -66,7 +66,7 @@ const MESSAGES = {
       es: 'nombre %1 etiquetas %2 valores %3',
       ar: 'الإسم %1 الفئه %2 القيم %3',
       it: 'nome %1 etichette %2 valori %3',
-      ko: '이름 %1 라벨 %2 값 %3', 
+      ko: '이름 %1 라벨 %2 값 %3',
       pt: 'nome %1 rótulos %2 valores %3'
     },
     args1_name: {
@@ -98,26 +98,26 @@ const MESSAGES = {
       es: 'hacer t-test para dos muestras dos colas',
       ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
       it: 'eseguire un t-test a due campioni su due lati',
-      ko: '이표본 양측 t-검정 수행', 
+      ko: '이표본 양측 t-검정 수행',
       pt: 'fazer teste-t bilateral de duas amostras'
     }
   },
   stats_k_means: {
     message0: {
       en: 'k-means cluster',
-      es: 'agrupamiento por k-medians'
+      es: 'agrupamiento por k-medians',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'agrupamento por k-means'
     },
     message1: {
       en: 'X %1 Y %2 number %3 label %4',
-      es: 'X %1 Y %2 numero %3 etiqueta %4'
+      es: 'X %1 Y %2 numero %3 etiqueta %4',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'X %1 Y %2 número %3 rótulo %4'
     },
     args1_x: {
       en: 'X axis',
@@ -132,7 +132,7 @@ const MESSAGES = {
       es: 'eje Y',
       ar: 'المحور الرأسي',
       it: 'asse Y',
-      ko: 'Y축', 
+      ko: 'Y축',
       pt: 'eixo Y'
     },
     args1_label: {
@@ -144,29 +144,29 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'calculate k-means cluster IDs',
-      es: 'calculate k-means cluster IDs'
+      es: 'calculate k-means cluster IDs',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'calcular os identificadores do agrupamento por k-means'
     }
   },
   stats_silhouette: {
     message0: {
       en: 'silhouette',
-      es: 'silueta'
+      es: 'silueta',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'silhueta'
     },
     message1: {
       en: 'X %1 Y %2 label %3 score %4',
-      es: 'X %1 Y %2 etiqueta %3 puntuación %4'
+      es: 'X %1 Y %2 etiqueta %3 puntuación %4',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'X %1 Y %2 rótulo %3 pontuação %4'
     },
     args1_x: {
       en: 'X axis',
@@ -181,7 +181,7 @@ const MESSAGES = {
       es: 'eje Y',
       ar: 'المحور الرأسي',
       it: 'asse Y',
-      ko: 'Y축', 
+      ko: 'Y축',
       pt: 'eixo Y'
     },
     args1_label: {
@@ -193,19 +193,19 @@ const MESSAGES = {
     },
     args1_score: {
       en: 'score',
-      es: 'puntuación'
+      es: 'puntuación',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'pontuação'
     },
     tooltip: {
       en: 'calculate silhouette score of 2D clusters',
-      es: 'calcular la puntuación de la silueta de los clústeres 2D'
+      es: 'calcular la puntuación de la silueta de los clústeres 2D',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'calcular a pontuação de silhueta dos agrupamentos 2D'
     }
   }
 }
@@ -283,8 +283,7 @@ const setup = (language) => {
       message0: msg.get('stats_k_means.message0'),
       args0: [],
       message1: msg.get('stats_k_means.message1'),
-      args1: [
-        {
+      args1: [{
           type: 'field_input',
           name: 'X_AXIS',
           text: msg.get('stats_k_means.args1_x')
@@ -319,8 +318,7 @@ const setup = (language) => {
       message0: msg.get('stats_silhouette.message0'),
       args0: [],
       message1: msg.get('stats_silhouette.message1'),
-      args1: [
-        {
+      args1: [{
           type: 'field_input',
           name: 'X_AXIS',
           text: msg.get('stats_silhouette.args1_x')
