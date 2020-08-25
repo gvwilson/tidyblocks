@@ -1,4 +1,16 @@
-<div id="create">
+<div id="bin" markdown="1">
+<h3>Bin</h3>
+
+<img class="block" src="{{ './transform_bin.svg' | relative_url }}" alt="bin block"/>
+
+Divide data into evenly-spaced bins.
+
+- **column**: Name of column containing data.
+- *first space*: Number of bins (must be 1 or greater).
+- **label**: Name of new column for bin labels.
+</div>
+
+<div id="create" markdown="1">
 <h3>Create</h3>
 
 <img class="block" src="{{ './transform_create.svg' | relative_url }}" alt="create block"/>
@@ -93,9 +105,25 @@ Sort the rows in a table according to the values in one or more columns.
 
 Summarize the values in one or more columns.
 If the data has been [grouped](../transform/#group),
-one summary row is created for each group.
-The summary values are put in a new column <code><em>op</em>\_<em>col</em></code>,
-e.g., <code>mean\_age</code>.
+a summary value is created for each group.
+The summary values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>mean_age</code>.
+
+-   *drop down*: which summarization operation to use.
+-   **column**: which column to summarize.
+</div>
+
+<div id="running">
+<h3>Running Values</h3>
+
+<img class="block" src="{{ './transform_running.svg' | relative_url }}" alt="running block"/>
+
+Calculate a running value for a column,
+such as a running sum.
+If the data has been [grouped](../transform/#group),
+separate running values are calculated for each group.
+The running values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>index_age</code>.
 
 -   *drop down*: which summarization operation to use.
 -   **column**: which column to summarize.

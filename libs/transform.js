@@ -1,11 +1,14 @@
 'use strict'
 
+const random = require('random')
+const seedrandom = require('seedrandom')
 const stats = require('simple-statistics')
 
 const util = require('./util')
 const {ExprBase} = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
+const Running = require('./running')
 
 /**
  * Indicate that persisted JSON is a transform.
@@ -22,8 +25,9 @@ class TransformBase {
    * @param {string[]} requires What datasets are required before this can run?
    * @param {Boolean} input Does this transform require input?
    * @param {Boolean} savesResult Does this transform automatically save its result in the environment?
+   * @param {Boolean} isControl Is this a control block? (False by default)
    */
-  constructor (species, requires, input, savesResult) {
+  constructor (species, requires, input, savesResult, isControl=false) {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')),
@@ -32,11 +36,13 @@ class TransformBase {
     this.requires = requires
     this.input = input
     this.savesResult = savesResult
+    this.isControl = isControl
   }
 
-  equal (other) {
+  equal (other, ...fieldNames) {
     return (other instanceof TransformBase) &&
-      (this.species === other.species)
+      (this.species === other.species) &&
+      fieldNames.every(fn => (this[fn] === other[fn]))
   }
 
   equalColumns (other) {
@@ -52,6 +58,51 @@ class TransformBase {
 }
 
 // ----------------------------------------------------------------------
+
+/**
+ * Divide data into bins.
+ * @param {string} column Existing column's name.
+ * @param {number} bins How many bins (integer > 0).
+ * @param {string} label New column containing labels.
+ */
+class TransformBin extends TransformBase {
+  constructor (column, bins, label) {
+    util.check(typeof column === 'string',
+               `Expected string as column name`)
+    util.check(Number.isInteger(bins) && (bins > 0),
+               `Number of bins must be integer > 0`)
+    util.check(typeof label === 'string',
+               `Expected string as label name`)
+    super('bins', [], true, false)
+    this.column = column
+    this.bins = bins
+    this.label = label
+  }
+
+  equal (other) {
+    return super.equal(other, 'column', 'bins', 'label')
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.column} ${this.bins} ${this.label}`)
+    const result = new DataFrame(df.data)
+    const [low, high] = stats.extent(result.data.map(row => row[this.column]))
+    result.data.forEach(row => {
+      row[this.label] = this.pickBin(row[this.column], low, high, this.bins)
+    })
+    return result
+  }
+
+  pickBin (value, low, high, numBins) {
+    if (high === low) {
+      return 1
+    }
+    else if (value === high) {
+      return numBins
+    }
+    return 1 + Math.floor(numBins * (value - low) / (high - low))
+  }
+}
 
 /**
  * Create a new column.
@@ -70,8 +121,7 @@ class TransformCreate extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.newName === other.newName) &&
+    return super.equal(other, 'newName') &&
       (this.expr.equal(other.expr))
   }
 
@@ -94,8 +144,7 @@ class TransformData extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.name === other.name)
+    return super.equal(other, 'name')
   }
 
   run (env, df) {
@@ -166,10 +215,7 @@ class TransformGlue extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.leftName === other.leftName) &&
-      (this.rightName === other.rightName) &&
-      (this.label === other.label)
+    return super.equal(other, 'leftName', 'rightName', 'label')
   }
 
   run (env, df) {
@@ -221,11 +267,7 @@ class TransformJoin extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.leftName === other.leftName) &&
-      (this.leftCol === other.leftCol) &&
-      (this.rightName === other.rightName) &&
-      (this.rightCol === other.rightCol)
+    return super.equal(other, 'leftName', 'leftCol', 'rightName', 'rightCol')
   }
 
   run (env, df) {
@@ -252,13 +294,38 @@ class TransformSaveAs extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.label === other.label)
+    return super.equal(other, 'label')
   }
 
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.label}`)
     env.setResult(this.label, df)
+    return df
+  }
+}
+
+/**
+ * Seed random number generation.
+ * @param {string} seed Text to use as seed.
+ */
+class TransformSeed extends TransformBase {
+  constructor (seed) {
+    util.check(typeof seed === 'string',
+               `Expected string as seed`)
+    super('seed', [], false, false, true) // is a control block
+    this.seed = seed
+  }
+
+  equal (other) {
+    return super.equal(other) &&
+      (this.seed === other.seed)
+  }
+
+  run (env, df) {
+    util.check(df === null,
+               `Cannot provide input dataframe to seed`)
+    env.appendLog('log', `${this.species} ${this.seed}`)
+    random.use(seedrandom(this.seed))
     return df
   }
 }
@@ -300,9 +367,7 @@ class TransformSequence extends TransformBase {
   }
 
   equal (other) {
-    return super.equal(other) &&
-      (this.newName === other.newName) &&
-      (this.limit === other.limit)
+    return super.equal(other, 'newName', 'limit')
   }
 
   run (env, df) {
@@ -363,6 +428,34 @@ class TransformSummarize extends TransformBase {
   }
 
   equal (other) {
+    return super.equal(other, 'action', 'column')
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.action} ${this.column}`)
+    return df.summarize(new Summarize[this.action](this.column))
+  }
+}
+
+/**
+ * Calculate running values.
+ * @param {string} action Name of operation.
+ * @param {string} column Column to summarize.
+ */
+class TransformRunning extends TransformBase {
+  constructor (action, column) {
+    util.check(typeof action === 'string',
+               `Expected string as action`)
+    util.check(action in Running,
+               `Unknown running operation ${action}`)
+    util.check(typeof column === 'string',
+               `Expected string as column name`)
+    super('running', [], true, false)
+    this.action = action
+    this.column = column
+  }
+
+  equal (other) {
     return super.equal(other) &&
       (this.action === other.action) &&
       (this.column === other.column)
@@ -370,7 +463,7 @@ class TransformSummarize extends TransformBase {
 
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.action} ${this.column}`)
-    return df.summarize(new Summarize[this.action](this.column))
+    return df.running(new Running[this.action](this.column))
   }
 }
 
@@ -723,6 +816,7 @@ class TransformSilhouette extends TransformStats {
 module.exports = {
   FAMILY: FAMILY,
   base: TransformBase,
+  bin: TransformBin,
   create: TransformCreate,
   data: TransformData,
   drop: TransformDrop,
@@ -731,10 +825,12 @@ module.exports = {
   groupBy: TransformGroupBy,
   join: TransformJoin,
   saveAs: TransformSaveAs,
+  seed: TransformSeed,
   select: TransformSelect,
   sequence: TransformSequence,
   sort: TransformSort,
   summarize: TransformSummarize,
+  running: TransformRunning,
   ungroup: TransformUngroup,
   unique: TransformUnique,
   plot: TransformPlot,

@@ -7,6 +7,7 @@ const {
 } = require('./helpers')
 
 const combine = require('./combine')
+const control = require('./control')
 const data = require('./data')
 const op = require('./op')
 const plot = require('./plot')
@@ -18,7 +19,8 @@ const value = require('./value')
 // Block colors.
 // ----------------------------------------------------------------------
 
-const COMBINE_COLOR = '#404040'
+const COMBINE_COLOR = '#808080'
+const CONTROL_COLOR = '#C0C0C0'
 const DATA_COLOR = '#FEBE4C'
 const OP_COLOR = '#F9B5B2'
 const PLOT_COLOR = '#A4C588'
@@ -38,6 +40,9 @@ const MESSAGES = {
     it: 'unire',
     ko: '결합', 
     pt: 'combinar'
+  },
+  control: {
+    en: 'control'
   },
   data: {
     ar: 'بيانات',
@@ -105,6 +110,7 @@ const createXmlConfig = (language) => {
       <block type="data_user"></block>
     </category>
     <category name="${msg.get('transform')}" colour="${TRANSFORM_COLOR}">
+      <block type="transform_bin"></block>
       <block type="transform_create"></block>
       <block type="transform_drop"></block>
       <block type="transform_filter"></block>
@@ -113,6 +119,7 @@ const createXmlConfig = (language) => {
       <block type="transform_select"></block>
       <block type="transform_sort"></block>
       <block type="transform_summarize"></block>
+      <block type="transform_running"></block>
       <block type="transform_ungroup"></block>
       <block type="transform_unique"></block>
     </category>
@@ -150,7 +157,6 @@ const createXmlConfig = (language) => {
       <block type="value_number"></block>
       <block type="value_text"></block>
       <block type="value_missing"></block>
-      <block type="value_rownum"></block>
       <block type="value_exponential"></block>
       <block type="value_normal"></block>
       <block type="value_uniform"></block>
@@ -158,6 +164,9 @@ const createXmlConfig = (language) => {
     <category name="${msg.get('combine')}" colour="${COMBINE_COLOR}">
       <block type="combine_glue"></block>
       <block type="combine_join"></block>
+    </category>
+    <category name="${msg.get('control')}" colour="${CONTROL_COLOR}">
+      <block type="control_seed"></block>
     </category>
   </xml>`
 }
@@ -174,6 +183,12 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
   blockStyles: {
     combine_block: {
       colourPrimary: COMBINE_COLOR,
+      colourSecondary: '#404040',
+      colourTertiary: '#A0A0A0',
+      hat: 'cap'
+    },
+    control_block: {
+      colourPrimary: CONTROL_COLOR,
       colourSecondary: '#404040',
       colourTertiary: '#A0A0A0',
       hat: 'cap'
@@ -404,6 +419,7 @@ const createBlocks = (language = 'en') => {
     _createBlocksHasRun = true
     _createValidators()
     combine.setup(language)
+    control.setup(language)
     data.setup(language)
     op.setup(language)
     plot.setup(language)

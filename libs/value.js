@@ -57,37 +57,7 @@ class ValueMissing extends ExprBase {
 }
 
 /**
- * @extends ExprBase
- * Row number.
- *
- * - Requires no parameters.
- * - Is exactly equal to other row number expressions.
- * - Equal to the row number (which isn't a constant but can be treated as such).
- */
-class ValueRowNum extends ExprBase {
-  constructor () {
-    super(FAMILY, 'rownum')
-  }
-
-  equal (other) {
-    return other instanceof ValueRowNum
-  }
-
-  run (row, i, data) {
-    return i
-  }
-}
-
-/**
- * @extends ExprNullary
- * Get value of a column.
- *
- * - Requires a column name when constructed.
- * - Is equal to other accessors for the same column.
- * - Produces the value in the named column.
- *
- * The column name cannot be checked at build time because the table being
- * accessed may be changed dynamically by preceding expressions.
+ * Column value.
  */
 class ValueColumn extends ExprNullary {
   /**
@@ -303,7 +273,6 @@ module.exports = {
   FAMILY: FAMILY,
   absent: ValueAbsent,
   missing: ValueMissing,
-  rownum: ValueRowNum,
   column: ValueColumn,
   datetime: ValueDatetime,
   logical: ValueLogical,

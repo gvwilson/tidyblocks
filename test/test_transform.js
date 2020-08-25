@@ -4,7 +4,6 @@ const assert = require('assert')
 const util = require('../libs/util')
 const DataFrame = require('../libs/dataframe')
 const Value = require('../libs/value')
-const Summarize = require('../libs/summarize')
 const Transform = require('../libs/transform')
 const Env = require('../libs/env')
 
@@ -20,6 +19,29 @@ describe('build dataframe operations', () => {
     const actual = transform.run(env, null)
     assert(actual.equal(expected),
            `Mis-match in dataframes`)
+    done()
+  })
+
+  it('builds binning transform', (done) => {
+    const env = new Env(INTERFACE)
+    const transform = new Transform.bin('red', 4, 'dst')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const actual = result.data.map(row => row.dst)
+    const expected = [1, 4, 3, 1, 1, 1, 1, 4, 4, 1, 4]
+    assert.deepEqual(actual, expected,
+                     `Wrong bins in result`)
+    done()
+  })
+
+  it('builds binning transform with a single bin', (done) => {
+    const env = new Env(INTERFACE)
+    const df = new DataFrame([{a: 2.5}, {a: 2.5}, {a: 2.5}])
+    const transform = new Transform.bin('a', 3, 'dst')
+    const result = transform.run(env, df)
+    const actual = result.data.map(row => row.dst)
+    const expected = [1, 1, 1]
+    assert.deepEqual(actual, expected,
+                     `Wrong bins in result`)
     done()
   })
 
@@ -114,6 +136,16 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds seed transform', (done) => {
+    const phrase = 'some random phrase'
+    const env = new Env(INTERFACE)
+    const transform = new Transform.seed(phrase)
+    const result = transform.run(env, null)
+    assert.equal(result, null,
+                 `Should not have output from seed transform`)
+    done()
+  })
+
   it('builds read data transform', (done) => {
     const env = new Env(INTERFACE)
     const transform = new Transform.data('colors')
@@ -166,6 +198,17 @@ describe('build dataframe operations', () => {
     assert.deepEqual(result.data,
                      [{left: 3, left_maximum: 3}],
                      `Incorrect summary`)
+    done()
+  })
+
+  it('builds running transform', (done) => {
+    const df = new DataFrame([{left: 3}, {left: 5}])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.running('sum', 'left')
+    const result = transform.run(env, df)
+    assert.deepEqual(result.data,
+                     [{left: 3, left_sum: 3}, {left: 5, left_sum: 8}],
+                     `Incorrect running values`)
     done()
   })
 
@@ -413,6 +456,19 @@ describe('transform equality tests', () => {
     done()
   })
 
+  it('compares binning', (done) => {
+    const src_5_dst = new Transform.bin('src', 5, 'dst')
+    assert(src_5_dst.equal(src_5_dst),
+           `Same should equal`)
+    assert(!src_5_dst.equal(new Transform.bin('other', 5, 'dst')),
+           `Different should not equal`)
+    assert(!src_5_dst.equal(new Transform.bin('src', 3, 'dst')),
+           `Different should not equal`)
+    assert(!src_5_dst.equal(new Transform.bin('src', 5, 'other')),
+           `Different should not equal`)
+    done()
+  })
+
   it('compares creates', (done) => {
     const create_true = new Transform.create('name', new Value.logical(true))
     const create_false = new Transform.create('name', new Value.logical(false))
@@ -510,6 +566,19 @@ describe('transform equality tests', () => {
     done()
   })
 
+  it('compares RNG seed', (done) => {
+    const seed_a = new Transform.seed('alpha')
+    const seed_b = new Transform.seed('beta')
+    assert(seed_a.equal(seed_a),
+           `Same should match`)
+    assert(!seed_a.equal(seed_b),
+           `Names should matter`)
+    const groupBy = new Transform.groupBy(['left'])
+    assert(!seed_a.equal(groupBy),
+           `Different transforms should not equal`)
+    done()
+  })
+
   it('compares select transforms', (done) => {
     const select_left = new Transform.select(['left'])
     const select_right = new Transform.select(['right'])
@@ -557,6 +626,19 @@ describe('transform equality tests', () => {
            `Different summarize functions should be unequal`)
     assert(!max_right.equal(max_left),
            `Different summarize columns should be unequal`)
+    done()
+  })
+
+  it('compares running value transforms', (done) => {
+    const index_left = new Transform.running('index', 'left')
+    const sum_left = new Transform.running('sum', 'left')
+    const index_right = new Transform.running('index', 'right')
+    assert(index_left.equal(index_left),
+           `Same should equal`)
+    assert(!index_left.equal(sum_left),
+           `Different running functions should be unequal`)
+    assert(!index_right.equal(index_left),
+           `Different source columns should be unequal`)
     done()
   })
 

@@ -3,6 +3,7 @@
 const util = require('./util')
 const {ExprBase} = require('./expr')
 const Summarize = require('./summarize')
+const Running = require('./running')
 
 /**
  * Store a dataframe. The frame is represented as an array of 0 or more rows,
@@ -203,8 +204,8 @@ class DataFrame {
 
   /**
    * Summarize values (possibly grouped).
-   * @param {Summarizer} action What summarization to use.
-   * @return A new dataframe.
+   * @param {Summarize} action What summarization to use.
+   * @returns A new dataframe.
    */
   summarize (action) {
     util.check(action instanceof Summarize.base,
@@ -214,6 +215,22 @@ class DataFrame {
     const newData = this.data.map(row => { return {...row} })
     const destCol = `${action.column}_${action.species}`
     this._summarizeColumn(newData, action, destCol)
+    return new DataFrame(newData, [destCol])
+  }
+
+  /**
+   * Calculate running values (possibly grouped).
+   * @param {Running} action What running value to calculate.
+   * @returns A new dataframe.
+   */
+  running (action) {
+    util.check(action instanceof Running.base,
+               `Operation must be running value object`)
+    util.check(this.hasColumns([action.srcCol]),
+               `unknown column in summarize`)
+    const newData = this.data.map(row => { return {...row} })
+    const destCol = `${action.srcCol}_${action.species}`
+    this._runningColumn(newData, action, destCol)
     return new DataFrame(newData, [destCol])
   }
 
@@ -493,17 +510,10 @@ class DataFrame {
   // Summarize a single column in place.
   //
   _summarizeColumn (data, action, destCol) {
-    // Divide values into groups.
-    const groups = new Map()
-    data.forEach(row => {
-      const groupId = (DataFrame.GROUPCOL in row) ? row[DataFrame.GROUPCOL] : null
-      if (!groups.has(groupId)) {
-        groups.set(groupId, [])
-      }
-      groups.get(groupId).push(row)
-    })
+    // Classify.
+    const groups = this._putRowsInGroups(data)
 
-    // Summarize each group.
+    // Calculate a single value for each group.
     for (let groupId of groups.keys()) {
       const result = action.run(groups.get(groupId))
       groups.set(groupId, result)
@@ -514,6 +524,34 @@ class DataFrame {
       const groupId = (DataFrame.GROUPCOL in row) ? row[DataFrame.GROUPCOL] : null
       row[destCol] = groups.get(groupId)
     })
+  }
+
+  //
+  // Calculate running values for a single column in place.
+  //
+  _runningColumn (data, action, destCol) {
+    // Classify.
+    const groups = this._putRowsInGroups(data)
+
+    // Calculate and save running value for each group.
+    for (let groupId of groups.keys()) {
+      action.run(groups.get(groupId), destCol)
+    }
+  }
+
+  //
+  // Divide data into groups, returning map with null for "everything".
+  //
+  _putRowsInGroups (data) {
+    const groups = new Map()
+    data.forEach(row => {
+      const groupId = (DataFrame.GROUPCOL in row) ? row[DataFrame.GROUPCOL] : null
+      if (!groups.has(groupId)) {
+        groups.set(groupId, [])
+      }
+      groups.get(groupId).push(row)
+    })
+    return groups
   }
 }
 
