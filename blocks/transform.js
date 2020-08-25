@@ -23,6 +23,10 @@ const MESSAGES = {
   bin: {
     message0: {
       en: 'Bin %1 %2 label %3'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     column: {
       en: 'column',
@@ -42,6 +46,10 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'Divide values into equal-sized bins'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     }
   },
   create: {
@@ -223,6 +231,10 @@ const MESSAGES = {
   running: {
     message0: {
       en: 'Running %1 %2'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     args0_text: {
       en: 'column',
@@ -234,6 +246,10 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'accumulate running values'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     }
   },
   ungroup: {

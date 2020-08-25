@@ -55,6 +55,10 @@ const MESSAGES = {
   extremum: {
     tooltip: {
       en: 'select the largest or smallest value'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     }
   },
   logical: {
@@ -160,6 +164,10 @@ const MESSAGES = {
   shift: {
     message0: {
       en: 'Shift %1 by %2'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     },
     column: {
       en: 'column',
@@ -171,6 +179,10 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'shift in a column up or down'
+      // TRANSLATE ar
+      // TRANSLATE es
+      // TRANSLATE ko
+      // TRANSLATE it
     }
   },
 }
