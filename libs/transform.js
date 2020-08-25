@@ -298,7 +298,8 @@ class TransformSaveAs extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', `${this.species} ${this.label}`)
+    const columns = (df === null) ? '-null-' : Array.from(df.columns).sort().join(', ')
+    env.appendLog('log', `${this.species} ${this.label} ${columns}`)
     env.setResult(this.label, df)
     return df
   }

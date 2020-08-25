@@ -24,6 +24,7 @@ class Program {
     this.controls = []
     this.queue = []
     this.waiting = new Map()
+    this.showTrace = false
 
     pipelines.forEach(pipeline => {
       if (pipeline.isControl()) {
@@ -158,7 +159,8 @@ class Program {
       }
     }
     catch (err) {
-      this.env.appendLog('error', `${err.message}`)
+      const trace = this.showTrace ? `\n${err.trace}` : ''
+      this.env.appendLog('error', `${err.message}${trace}`)
     }
   }
 }

@@ -37,6 +37,9 @@ class UserInterface {
     // Create an empty program running environment. (A new environment is
     // created for each run of the program.)
     this.env = null
+
+    // Tell program to record stack trace with error messages?
+    this.showTrace = false
   }
 
   /**
@@ -60,6 +63,7 @@ class UserInterface {
     const json = this.getJSON()
     const converter = new Restore()
     const program = converter.program(json)
+    program.showTrace = this.showTrace
     program.run(this.env)
   }
 

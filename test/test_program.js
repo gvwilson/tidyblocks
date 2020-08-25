@@ -278,9 +278,9 @@ describe('executes program', () => {
            `Missing or incorrect table`)
     const expectedLog = [
       ['log', 'head'],
-      ['log', 'report keyword'],
+      ['log', 'report keyword left, right'],
       ['log', 'headRequire'],
-      ['log', 'report unnamed 1']
+      ['log', 'report unnamed 1 left, right']
     ]
     assert.deepEqual(env.log, expectedLog,
                      `Expected to see report in log`)
@@ -380,7 +380,7 @@ describe('seeds random number generation', () => {
     const expectedLog = [
       ['log', `seed ${phrase}`],
       ['log', 'read colors'],
-      ['log', 'report unnamed 1'],
+      ['log', 'report unnamed 1 blue, green, name, red'],
     ]
     assert.deepEqual(env.log, expectedLog,
                     `Did not get expected running order`)
