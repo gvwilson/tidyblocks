@@ -22,12 +22,12 @@ const MESSAGES = {
   },
   bin: {
     message0: {
-      en: 'Bin %1 %2 label %3'
+      en: 'Bin %1 %2 label %3',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'Intervalo %1 %2 rótulo %3'
     },
     column: {
       en: 'column',
@@ -46,12 +46,12 @@ const MESSAGES = {
       pt: 'rótulo'
     },
     tooltip: {
-      en: 'Divide values into equal-sized bins'
+      en: 'Divide values into equal-sized bins',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: "Divide os valores em intervalos iguais"
     }
   },
   create: {
@@ -68,7 +68,7 @@ const MESSAGES = {
       es: 'nueva_columna',
       ar: 'عمود_جديد',
       it: 'nuova colonna',
-      ko: '새로운 열', 
+      ko: '새로운 열',
       pt: 'nova_coluna'
     },
     tooltip: {
@@ -86,7 +86,7 @@ const MESSAGES = {
       es: 'Excluir %1',
       ar: 'حذف %1',
       it: 'escludi %1',
-      ko: '%1 삭제', 
+      ko: '%1 삭제',
       pt: 'Excluir %1'
     },
     args0_tooltip: {
@@ -94,7 +94,7 @@ const MESSAGES = {
       es: 'Excluir columnas por nombre',
       ar: 'حذف الأعمده بإستخدام اسمائها',
       it: 'escludi colonne per nome',
-      ko: '이름에 따라 열 삭제', 
+      ko: '이름에 따라 열 삭제',
       pt: 'excluir colunas por nome'
     }
   },
@@ -130,7 +130,7 @@ const MESSAGES = {
       es: 'Agrupar por %1',
       ar: 'تقسيم البيانات عن طريف: %1',
       it: 'raggruppa per %1',
-      ko: '%1 로 그룹화', 
+      ko: '%1 로 그룹화',
       pt: 'Agrupar por %1'
     },
     tooltip: {
@@ -156,7 +156,7 @@ const MESSAGES = {
       es: 'nombre',
       ar: 'الإسم',
       it: 'nome',
-      ko: '이름', 
+      ko: '이름',
       pt: 'nome'
     },
     tooltip: {
@@ -174,7 +174,7 @@ const MESSAGES = {
       es: 'Selecciona %1',
       ar: 'إختيار %1',
       it: 'Seleziona %1',
-      ko: '%1 선택', 
+      ko: '%1 선택',
       pt: 'Selecionar %1'
     },
     tooltip: {
@@ -182,7 +182,7 @@ const MESSAGES = {
       es: 'selecciona columnas por nombre',
       ar: 'إختيار الأعمده بإستخدام اسمائها',
       it: 'seleziona colonne per nome',
-      ko: '이름으로 열 선택', 
+      ko: '이름으로 열 선택',
       pt: 'seleciona colunas por nome'
     }
   },
@@ -192,7 +192,7 @@ const MESSAGES = {
       es: 'Ordena %1 descendiente %2',
       ar: 'ترتيب %1 تنازلي %2',
       it: 'Ordina %1 discendente %2',
-      ko: '%2 내림차순으로 %1 정렬', 
+      ko: '%2 내림차순으로 %1 정렬',
       pt: 'Ordenar %1 descendente %2'
     },
     tooltip: {
@@ -226,7 +226,7 @@ const MESSAGES = {
       es: 'Resume valores en columna',
       ar: 'تلخيص قيم العمود',
       it: 'riassumi valori in colonna',
-      ko: '열의 값 축소', 
+      ko: '열의 값 축소',
       pt: 'agrega valores em coluna'
     }
   },
@@ -305,8 +305,7 @@ const setup = (language) => {
     {
       type: 'transform_bin',
       message0: msg.get('bin.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'COLUMN',
           text: msg.get('bin.column')
@@ -335,8 +334,7 @@ const setup = (language) => {
     {
       type: 'transform_create',
       message0: msg.get('create.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'COLUMN',
           text: msg.get('create.args0_text')
@@ -359,13 +357,11 @@ const setup = (language) => {
     {
       type: 'transform_drop',
       message0: msg.get('drop.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -379,12 +375,10 @@ const setup = (language) => {
     {
       type: 'transform_filter',
       message0: msg.get('filter.message0'),
-      args0: [
-        {
-          type: 'input_value',
-          name: msg.get('filter.args0_name')
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: msg.get('filter.args0_name')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -397,13 +391,11 @@ const setup = (language) => {
     {
       type: 'transform_groupBy',
       message0: msg.get('groupBy.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -417,13 +409,11 @@ const setup = (language) => {
     {
       type: 'transform_saveAs',
       message0: msg.get('saveAs.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'NAME',
-          text: msg.get('saveAs.args0_text')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'NAME',
+        text: msg.get('saveAs.args0_text')
+      }],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
@@ -436,13 +426,11 @@ const setup = (language) => {
     {
       type: 'transform_select',
       message0: msg.get('select.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -456,8 +444,7 @@ const setup = (language) => {
     {
       type: 'transform_sort',
       message0: msg.get('sort.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
           text: msg.get('multiple_columns')
@@ -481,8 +468,7 @@ const setup = (language) => {
     {
       type: 'transform_summarize',
       message0: msg.get('summarize.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_dropdown',
           name: 'OP',
           options: [
@@ -562,13 +548,11 @@ const setup = (language) => {
     {
       type: 'transform_unique',
       message0: msg.get('unique.message0'),
-      args0: [
-        {
-          type: 'field_input',
-          name: 'MULTIPLE_COLUMNS',
-          text: msg.get('multiple_columns')
-        }
-      ],
+      args0: [{
+        type: 'field_input',
+        name: 'MULTIPLE_COLUMNS',
+        text: msg.get('multiple_columns')
+      }],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
