@@ -45,14 +45,6 @@ describe('expression persistence', () => {
     done()
   })
 
-  it('restores a row number', (done) => {
-    const factory = new Restore()
-    assert.deepEqual(factory.expr([Value.FAMILY, 'rownum']),
-                     new Value.rownum(),
-                     `Row number`)
-    done()
-  })
-
   it('restores a number', (done) => {
     const factory = new Restore()
     assert.deepEqual(factory.expr([Value.FAMILY, 'number', 123]),
@@ -117,11 +109,8 @@ describe('expression persistence', () => {
     for (const [name, func] of allChecks) {
       const factory = new Restore()
       const json = [Op.FAMILY, name, childJSON, childJSON]
-      console.log(`JSON ${JSON.stringify(json, null, 2)}`)
       const actual = factory.expr(json)
-      console.log(`ACTUAL ${JSON.stringify(actual, null, 2)}`)
       const expected = new func(childObj, childObj)
-      console.log(`EXPECTED ${JSON.stringify(expected, null, 2)}`)
       assert.equal(actual.family, expected.family)
       assert.equal(actual.kind, expected.kind)
       assert.deepEqual(actual.left, expected.left)
@@ -315,6 +304,15 @@ describe('transform persistence', () => {
     assert.deepEqual(factory.transform([Transform.FAMILY, 'summarize', 'mean', 'red']),
                      transform,
                      `summarize`)
+    done()
+  })
+
+  it('restores running from JSON', (done) => {
+    const transform = new Transform.running('sum', 'red')
+    const factory = new Restore()
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'running', 'sum', 'red']),
+                     transform,
+                     `running`)
     done()
   })
 

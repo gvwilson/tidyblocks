@@ -93,9 +93,25 @@ Sort the rows in a table according to the values in one or more columns.
 
 Summarize the values in one or more columns.
 If the data has been [grouped](../transform/#group),
-one summary row is created for each group.
-The summary values are put in a new column <code><em>op</em>\_<em>col</em></code>,
-e.g., <code>mean\_age</code>.
+a summary value is created for each group.
+The summary values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>mean_age</code>.
+
+-   *drop down*: which summarization operation to use.
+-   **column**: which column to summarize.
+</div>
+
+<div id="running" markdown="1">
+### Running Values
+
+<img class="block" src="{{ 'en/img/transform_running.svg' | relative_url }}" alt="running block"/>
+
+Calculate a running value for a column,
+such as a running sum.
+If the data has been [grouped](../transform/#group),
+separate running values are calculated for each group.
+The running values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>index_age</code>.
 
 -   *drop down*: which summarization operation to use.
 -   **column**: which column to summarize.

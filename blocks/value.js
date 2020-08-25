@@ -113,24 +113,6 @@ const MESSAGES = {
       es: 'valor que falta'
     }
   },
-  rownum: {
-    message0: {
-      en: 'Row number',
-      es: 'Numero de fila',
-      ar: 'رقم الصف',
-      it: 'Numero della riga',
-      ko: '행 번호',
-      pt: 'Número da linha'
-    },
-    tooltip: {
-      en: 'row number',
-      es: 'numero de fila',
-      ar: 'رقم الصف',
-      it: 'numero della riga',
-      ko: '행 번호',
-      pt: 'numero da linha'
-    }
-  },
   exponential: {
     message0: {
       en: 'Exponential \u03BB %1',
@@ -296,17 +278,6 @@ const setup = (language) => {
       tooltip: msg.get('missing.tooltip')
     },
 
-    // Row number
-    {
-      type: 'value_rownum',
-      message0: msg.get('rownum.message0'),
-      args0: [],
-      output: 'String',
-      style: 'value_block',
-      helpUrl: './guide/#rownum',
-      tooltip: msg.get('rownum.tooltip')
-    },
-
     // Exponential random variable
     {
       type: 'value_exponential',
@@ -411,12 +382,6 @@ const setup = (language) => {
   // Missing value
   Blockly.TidyBlocks['value_missing'] = (block) => {
     const code = `["@value", "missing"]`
-    return [code, ORDER_NONE]
-  }
-
-  // Row number
-  Blockly.TidyBlocks['value_rownum'] = (block) => {
-    const code = `["@value", "rownum"]`
     return [code, ORDER_NONE]
   }
 

@@ -4,7 +4,6 @@ const assert = require('assert')
 const util = require('../libs/util')
 const DataFrame = require('../libs/dataframe')
 const Value = require('../libs/value')
-const Summarize = require('../libs/summarize')
 const Transform = require('../libs/transform')
 const Env = require('../libs/env')
 
@@ -166,6 +165,17 @@ describe('build dataframe operations', () => {
     assert.deepEqual(result.data,
                      [{left: 3, left_maximum: 3}],
                      `Incorrect summary`)
+    done()
+  })
+
+  it('builds running transform', (done) => {
+    const df = new DataFrame([{left: 3}, {left: 5}])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.running('sum', 'left')
+    const result = transform.run(env, df)
+    assert.deepEqual(result.data,
+                     [{left: 3, left_sum: 3}, {left: 5, left_sum: 8}],
+                     `Incorrect running values`)
     done()
   })
 
@@ -557,6 +567,19 @@ describe('transform equality tests', () => {
            `Different summarize functions should be unequal`)
     assert(!max_right.equal(max_left),
            `Different summarize columns should be unequal`)
+    done()
+  })
+
+  it('compares running value transforms', (done) => {
+    const index_left = new Transform.running('index', 'left')
+    const sum_left = new Transform.running('sum', 'left')
+    const index_right = new Transform.running('index', 'right')
+    assert(index_left.equal(index_left),
+           `Same should equal`)
+    assert(!index_left.equal(sum_left),
+           `Different running functions should be unequal`)
+    assert(!index_right.equal(index_left),
+           `Different source columns should be unequal`)
     done()
   })
 
