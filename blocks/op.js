@@ -18,7 +18,7 @@ const MESSAGES = {
       es: 'haz la aritmética',
       ar: 'إجراء عمليات حسابيه',
       it: 'eseguire la aritmentica',
-      ko: '연산 실행', 
+      ko: '연산 실행',
       pt: 'fazer a aritmética'
     }
   },
@@ -28,7 +28,7 @@ const MESSAGES = {
       es: 'excluye una columna numérica',
       ar: 'الغاء عمود حسابي',
       it: 'escludere una colonna numerica',
-      ko: '숫자열 취소', 
+      ko: '숫자열 취소',
       pt: 'excluir uma coluna numérica'
     }
   },
@@ -54,12 +54,12 @@ const MESSAGES = {
   },
   extremum: {
     tooltip: {
-      en: 'select the largest or smallest value'
+      en: 'select the largest or smallest value',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'selecionar o maior ou menor valor'
     }
   },
   logical: {
@@ -150,7 +150,7 @@ const MESSAGES = {
       es: 'Si %1 entonces %2 sino %3',
       ar: 'إذا %1 افعل %2 غير ذلك %3',
       it: 'se %1 allora %2 altrimenti %3',
-      ko: '%1 이면 %2 그렇지 않으면 %3', 
+      ko: '%1 이면 %2 그렇지 않으면 %3',
       pt: 'Se %1 então %2 se não %3'
     },
     tooltip: {
@@ -158,18 +158,18 @@ const MESSAGES = {
       es: 'selecciona el valor basandote en la condicion',
       ar: 'اختيار قيمه توافي شرط',
       it: 'seleziona il valore in base alla condizione',
-      ko: '조건에  값을 선택', 
+      ko: '조건에  값을 선택',
       pt: 'seleciona um valor baseado em uma condição'
     }
   },
   shift: {
     message0: {
-      en: 'Shift %1 by %2'
+      en: 'Shift %1 by %2',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'Deslocar %1 por %2'
     },
     column: {
       en: 'column',
@@ -180,12 +180,12 @@ const MESSAGES = {
       pt: 'coluna'
     },
     tooltip: {
-      en: 'shift in a column up or down'
+      en: 'shift in a column up or down',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'deslocar uma coluna para cima ou para baixo'
     }
   },
 }
@@ -201,8 +201,7 @@ const setup = (language) => {
     {
       type: 'op_arithmetic',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'LEFT'
         },
@@ -234,12 +233,10 @@ const setup = (language) => {
     {
       type: 'op_negate',
       message0: '- %1',
-      args0: [
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: 'VALUE'
+      }],
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
@@ -251,12 +248,10 @@ const setup = (language) => {
     {
       type: 'op_abs',
       message0: 'abs %1',
-      args0: [
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: 'VALUE'
+      }],
       inputsInline: true,
       output: 'Number',
       style: 'op_block',
@@ -268,8 +263,7 @@ const setup = (language) => {
     {
       type: 'op_compare',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'LEFT'
         },
@@ -301,8 +295,7 @@ const setup = (language) => {
     {
       type: 'op_extremum',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'field_dropdown',
           name: 'OP',
           options: [
@@ -330,8 +323,7 @@ const setup = (language) => {
     {
       type: 'op_logical',
       message0: '%1 %2 %3',
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'LEFT'
         },
@@ -359,12 +351,10 @@ const setup = (language) => {
     {
       type: 'op_not',
       message0: msg.get('not.message0'),
-      args0: [
-        {
-          type: 'input_value',
-          name: 'VALUE'
-        }
-      ],
+      args0: [{
+        type: 'input_value',
+        name: 'VALUE'
+      }],
       inputsInline: true,
       output: 'Boolean',
       style: 'op_block',
@@ -376,8 +366,7 @@ const setup = (language) => {
     {
       type: 'op_type',
       message0: msg.get('type.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'VALUE'
         },
@@ -404,8 +393,7 @@ const setup = (language) => {
     {
       type: 'op_convert',
       message0: msg.get('convert.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'VALUE'
         },
@@ -431,8 +419,7 @@ const setup = (language) => {
     {
       type: 'op_datetime',
       message0: msg.get('datetime.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_dropdown',
           name: 'TYPE',
           options: [
@@ -461,8 +448,7 @@ const setup = (language) => {
     {
       type: 'op_conditional',
       message0: msg.get('conditional.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'input_value',
           name: 'COND'
         },
@@ -486,8 +472,7 @@ const setup = (language) => {
     {
       type: 'op_shift',
       message0: msg.get('shift.message0'),
-      args0: [
-        {
+      args0: [{
           type: 'field_input',
           name: 'COLUMN',
           text: msg.get('shift.column')
