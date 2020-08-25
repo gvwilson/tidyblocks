@@ -59,6 +59,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   },
   logical: {
@@ -168,6 +169,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     column: {
       en: 'column',
@@ -183,6 +185,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   },
 }

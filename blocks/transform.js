@@ -27,6 +27,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     column: {
       en: 'column',
@@ -50,6 +51,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   },
   create: {
@@ -235,6 +237,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     args0_text: {
       en: 'column',
@@ -250,6 +253,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   },
   ungroup: {
