@@ -20,6 +20,30 @@ const MESSAGES = {
     ko: '열, 열',
     pt: 'coluna, coluna'
   },
+  bin: {
+    message0: {
+      en: 'Bin %1 %2 label %3'
+    },
+    column: {
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      it: 'colonna',
+      ko: '열',
+      pt: 'coluna'
+    },
+    label: {
+      en: 'label',
+      es: 'etiqueta',
+      ar: 'الفئه',
+      it: 'etichetta',
+      ko: '라벨',
+      pt: 'rótulo'
+    },
+    tooltip: {
+      en: 'Divide values into equal-sized bins'
+    }
+  },
   create: {
     message0: {
       en: 'Create %1 %2',
@@ -196,6 +220,22 @@ const MESSAGES = {
       pt: 'agrega valores em coluna'
     }
   },
+  running: {
+    message0: {
+      en: 'Running %1 %2'
+    },
+    args0_text: {
+      en: 'column',
+      es: 'columna',
+      ar: 'العمود',
+      it: 'colonna',
+      ko: '열',
+      pt: 'coluna'
+    },
+    tooltip: {
+      en: 'accumulate running values'
+    }
+  },
   ungroup: {
     message0: {
       en: 'Ungroup',
@@ -241,11 +281,42 @@ const MESSAGES = {
 const setup = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   Blockly.defineBlocksWithJsonArray([
+    // Bin
+    {
+      type: 'transform_bin',
+      message0: msg.get('bin.message0'),
+      args0: [
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('bin.column')
+        },
+        {
+          type: 'field_number',
+          name: 'BINS',
+          value: 10
+        },
+        {
+          type: 'field_input',
+          name: 'LABEL',
+          text: msg.get('bin.label')
+        }
+      ],
+      inputsInline: true,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: msg.get('bin.tooltip'),
+      helpUrl: './guide/#bin',
+      extensions: ['validate_COLUMN']
+    },
+
     // Create
     {
       type: 'transform_create',
       message0: msg.get('create.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_input',
           name: 'COLUMN',
           text: msg.get('create.args0_text')
@@ -268,11 +339,13 @@ const setup = (language) => {
     {
       type: 'transform_drop',
       message0: msg.get('drop.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'MULTIPLE_COLUMNS',
-        text: msg.get('multiple_columns')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'MULTIPLE_COLUMNS',
+          text: msg.get('multiple_columns')
+        }
+      ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -286,10 +359,12 @@ const setup = (language) => {
     {
       type: 'transform_filter',
       message0: msg.get('filter.message0'),
-      args0: [{
-        type: 'input_value',
-        name: msg.get('filter.args0_name')
-      }],
+      args0: [
+        {
+          type: 'input_value',
+          name: msg.get('filter.args0_name')
+        }
+      ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -302,11 +377,13 @@ const setup = (language) => {
     {
       type: 'transform_groupBy',
       message0: msg.get('groupBy.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'MULTIPLE_COLUMNS',
-        text: msg.get('multiple_columns')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'MULTIPLE_COLUMNS',
+          text: msg.get('multiple_columns')
+        }
+      ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -320,11 +397,13 @@ const setup = (language) => {
     {
       type: 'transform_saveAs',
       message0: msg.get('saveAs.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'NAME',
-        text: msg.get('saveAs.args0_text')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'NAME',
+          text: msg.get('saveAs.args0_text')
+        }
+      ],
       previousStatement: null,
       nextStatement: null,
       style: 'transform_block',
@@ -337,11 +416,13 @@ const setup = (language) => {
     {
       type: 'transform_select',
       message0: msg.get('select.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'MULTIPLE_COLUMNS',
-        text: msg.get('multiple_columns')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'MULTIPLE_COLUMNS',
+          text: msg.get('multiple_columns')
+        }
+      ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -355,7 +436,8 @@ const setup = (language) => {
     {
       type: 'transform_sort',
       message0: msg.get('sort.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_input',
           name: 'MULTIPLE_COLUMNS',
           text: msg.get('multiple_columns')
@@ -379,7 +461,8 @@ const setup = (language) => {
     {
       type: 'transform_summarize',
       message0: msg.get('summarize.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_dropdown',
           name: 'OP',
           options: [
@@ -410,6 +493,38 @@ const setup = (language) => {
       extensions: ['validate_COLUMN']
     },
 
+    // Running
+    {
+      type: 'transform_running',
+      message0: msg.get('running.message0'),
+      args0: [{
+          type: 'field_dropdown',
+          name: 'OP',
+          options: [
+            ['all', 'all'],
+            ['any', 'any'],
+            ['index', 'index'],
+            ['maximum', 'maximum'],
+            ['mean', 'mean'],
+            ['minimum', 'minimum'],
+            ['sum', 'sum']
+          ]
+        },
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('running.args0_text')
+        }
+      ],
+      inputsInline: true,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: msg.get('running.tooltip'),
+      helpUrl: './guide/#running',
+      extensions: ['validate_COLUMN']
+    },
+
     // Ungroup
     {
       type: 'transform_ungroup',
@@ -427,11 +542,13 @@ const setup = (language) => {
     {
       type: 'transform_unique',
       message0: msg.get('unique.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'MULTIPLE_COLUMNS',
-        text: msg.get('multiple_columns')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'MULTIPLE_COLUMNS',
+          text: msg.get('multiple_columns')
+        }
+      ],
       inputsInline: true,
       previousStatement: null,
       nextStatement: null,
@@ -441,6 +558,14 @@ const setup = (language) => {
       extensions: ['validate_MULTIPLE_COLUMNS']
     }
   ])
+
+  // Bin
+  Blockly.TidyBlocks['transform_bin'] = (block) => {
+    const column = block.getFieldValue('COLUMN')
+    const bins = block.getFieldValue('BINS')
+    const label = block.getFieldValue('LABEL')
+    return `["@transform", "bin", "${column}", ${bins}, "${label}"]`
+  }
 
   // Create
   Blockly.TidyBlocks['transform_create'] = (block) => {
@@ -491,6 +616,13 @@ const setup = (language) => {
     const op = block.getFieldValue('OP')
     const column = block.getFieldValue('COLUMN')
     return `["@transform", "summarize", "${op}", "${column}"]`
+  }
+
+  // Running
+  Blockly.TidyBlocks['transform_running'] = (block) => {
+    const op = block.getFieldValue('OP')
+    const column = block.getFieldValue('COLUMN')
+    return `["@transform", "running", "${op}", "${column}"]`
   }
 
   // Ungroup

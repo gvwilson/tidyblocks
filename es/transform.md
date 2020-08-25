@@ -93,8 +93,8 @@ Ordene las filas de una tabla según los valores de una o más columnas.
 Resuma los valores en una o más columnas.
 Si los datos han sido [agrupado](../transform/#group),
 one summary row is created for each group.
-The summary values are put in a new column <code><em>op</em>\_<em>col</em></code>,
-e.g., <code>mean\_age</code>.
+The summary values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>mean_age</code>.
 
 -   *desplegable*: qué operación de resumen usar.
 -   **columna**: que columna se va a resumir.

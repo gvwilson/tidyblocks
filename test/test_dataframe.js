@@ -6,6 +6,7 @@ const util = require('../libs/util')
 const Value = require('../libs/value')
 const Op = require('../libs/op')
 const Summarize = require('../libs/summarize')
+const Running = require('../libs/running')
 const DataFrame = require('../libs/dataframe')
 
 const fixture = require('./fixture')
@@ -631,6 +632,70 @@ describe('summarize', () => {
     assert(
       result.data.every(row => (row.red_maximum === GROUP_RED_MAX_RED.get(row.red))),
       `Wrong maximum(s) for grouped values`)
+    done()
+  })
+})
+
+describe('running', () => {
+  it('requires a running object', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    assert.throws(() => df.running(null),
+                  Error,
+                 `Require a running object`)
+    assert.throws(() => df.running(new Date()),
+                  Error,
+                 `Require a running object`)
+    done()
+  })
+
+  it('requires non-empty column names', (done) => {
+    assert.throws(() => new Running.index(''),
+                  Error,
+                  `Expected error with empty column name`)
+    done()
+  })
+
+  it('require columns to exist', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    assert.throws(() => df.running(new Running.index('nope')),
+                  Error,
+                  `Expected error with nonexistent column name`)
+    done()
+  })
+
+  it('can calculate running values for a single ungrouped column', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    const running = new Running.index('ones')
+    const result = df.running(running)
+    assert(result.equal(new DataFrame([{ones: 1, tens: 10,
+                                        ones_index: 1},
+                                       {ones: 2, tens: 20,
+                                        ones_index: 2}])),
+           `Wrong result`)
+    done()
+  })
+
+  it('can calculate running values for multiple ungrouped columns', (done) => {
+    const df = new DataFrame(TWO_ROWS)
+    const result = df
+          .running(new Running.sum('ones'))
+          .running(new Running.index('tens'))
+    assert(result.equal(new DataFrame([{ones: 1, tens: 10,
+                                        ones_sum: 1, tens_index: 1},
+                                       {ones: 2, tens: 20,
+                                        ones_sum: 3, tens_index: 2}])),
+           `Wrong result`)
+    done()
+  })
+
+  it('can calculate running values for a single grouped column', (done) => {
+    const df = new DataFrame(fixture.COLORS).groupBy(['red'])
+    const result = df.running(new Running.index('red'))
+    for (let red of [0, 128, 255]) {
+      assert(result.data.filter(row => (row.red === red))
+             .every((row, i) => (row.red_index === (i+1))),
+             `Wrong indices for red === ${red}`)
+    }
     done()
   })
 })

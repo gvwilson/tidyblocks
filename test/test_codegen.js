@@ -86,15 +86,6 @@ describe('value code generation', () => {
     done()
   })
 
-  it('generates code for row numbers', (done) => {
-    const expected = [Value.FAMILY, 'rownum']
-    const w = fixture.workspace()
-    const block = w.newBlock('value_rownum')
-    const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
-    done()
-  })
-
   it('generates code for exponential distributions', (done) => {
     const expected = [Value.FAMILY, 'exponential', 0.5]
     const w = fixture.workspace()
@@ -331,6 +322,18 @@ describe('transform code generation', () => {
     done()
   })
 
+  it('generates code for binning', (done) => {
+    const expected = [Transform.FAMILY, 'bin', 'source', 3, 'labels']
+    const w = fixture.workspace()
+    const block = w.newBlock('transform_bin')
+    block.setFieldValue('source', 'COLUMN')
+    block.setFieldValue(3, 'BINS')
+    block.setFieldValue('labels', 'LABEL')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for create', (done) => {
     const expected = [Transform.FAMILY, 'create', 'fresh',
                       [Value.FAMILY, 'logical', true]]
@@ -425,6 +428,17 @@ describe('transform code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('transform_summarize')
     block.setFieldValue('maximum', 'OP')
+    block.setFieldValue('red', 'COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for running values', (done) => {
+    const expected = [Transform.FAMILY, 'running', 'sum', 'red']
+    const w = fixture.workspace()
+    const block = w.newBlock('transform_running')
+    block.setFieldValue('sum', 'OP')
     block.setFieldValue('red', 'COLUMN')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
@@ -596,6 +610,19 @@ describe('combiner code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('transform_saveAs')
     block.setFieldValue('stuff', 'NAME')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+})
+
+describe('control code generation', () => {
+  it('generates code for seed', (done) => {
+    const phrase = 'some random phrase'
+    const expected = [Transform.FAMILY, 'seed', phrase]
+    const w = fixture.workspace()
+    const block = w.newBlock('control_seed')
+    block.setFieldValue(phrase, 'SEED')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
