@@ -110,6 +110,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     tooltip: {
       en: 'missing value',
@@ -117,6 +118,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   },
   exponential: {

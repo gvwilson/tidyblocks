@@ -109,6 +109,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     message1: {
       en: 'X %1 Y %2 number %3 label %4',
@@ -116,6 +117,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     args1_x: {
       en: 'X axis',
@@ -146,6 +148,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   },
   stats_silhouette: {
@@ -155,6 +158,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     message1: {
       en: 'X %1 Y %2 label %3 score %4',
@@ -162,6 +166,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     args1_x: {
       en: 'X axis',
@@ -192,6 +197,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     },
     tooltip: {
       en: 'calculate silhouette score of 2D clusters',
@@ -199,6 +205,7 @@ const MESSAGES = {
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE pt
     }
   }
 }
