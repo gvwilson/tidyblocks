@@ -232,12 +232,12 @@ const MESSAGES = {
   },
   running: {
     message0: {
-      en: 'Running %1 %2'
+      en: 'Running %1 %2',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: "Acumular %1 %2"
     },
     args0_text: {
       en: 'column',
@@ -248,12 +248,12 @@ const MESSAGES = {
       pt: 'coluna'
     },
     tooltip: {
-      en: 'accumulate running values'
+      en: 'accumulate running values',
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'acumular valores totais'
     }
   },
   ungroup: {

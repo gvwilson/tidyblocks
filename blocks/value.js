@@ -17,7 +17,7 @@ const MESSAGES = {
       es: 'Ausente',
       ar: 'غائب',
       it: 'Assente',
-      ko: '공백', 
+      ko: '공백',
       pt: 'Ausente'
     },
     tooltip: {
@@ -106,19 +106,19 @@ const MESSAGES = {
   missing: {
     message0: {
       en: 'Missing',
-      es: 'Falta'
+      es: 'Falta',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'Faltante'
     },
     tooltip: {
       en: 'missing value',
-      es: 'valor que falta'
+      es: 'valor que falta',
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'valor faltante'
     }
   },
   exponential: {
@@ -127,7 +127,7 @@ const MESSAGES = {
       es: 'Exponencial \u03BB %1',
       ar: 'الأسيه \u03BB %1',
       it: 'Esponenziale \u03BB %1',
-      ko: '\u03BB %1 지수로 표현', 
+      ko: '\u03BB %1 지수로 표현',
       pt: 'Exponencial \u03BB %1'
     },
     tooltip: {
@@ -135,7 +135,7 @@ const MESSAGES = {
       es: 'valor aleatorio exponencial',
       ar: 'المتغيرات العشوائه الأسيه',
       it: 'valore aleatorio esponenziale',
-      ko: '지수 랜덤 값', 
+      ko: '지수 랜덤 값',
       pt: 'valor aleatório exponencial'
     }
   },
