@@ -12,10 +12,20 @@ const {
 const MESSAGES = {
   seed: {
     message0: {
+      // TRANSLATE ar
       en: 'RNG seed %1'
+      // TRANSLATE es
+      // TRANSLATE it
+      // TRANSLATE ko
+      // TRANSLATE pt
     },
     tooltip: {
+      ar: 'إعادة تشغيل مولد الأرقام العشوائية',
       en: 'Restart random number generation'
+      // TRANSLATE es
+      // TRANSLATE it
+      // TRANSLATE ko
+      // TRANSLATE pt
     }
   }
 }

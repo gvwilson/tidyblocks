@@ -13,17 +13,17 @@ const {
 const MESSAGES = {
   absent: {
     message0: {
+      ar: 'غائب',
       en: 'Absent',
       es: 'Ausente',
-      ar: 'غائب',
       it: 'Assente',
-      ko: '공백', 
+      ko: '공백',
       pt: 'Ausente'
     },
     tooltip: {
+      ar: 'تمثيل فجوه',
       en: 'represent a hole',
       es: 'representa un agujero',
-      ar: 'تمثيل فجوه',
       it: 'rappresenta un buco',
       ko: '홀을 나타내기',
       pt: 'representa um buraco'
@@ -31,17 +31,17 @@ const MESSAGES = {
   },
   column: {
     column: {
+      ar: 'العمود',
       en: 'column',
       es: 'columna',
-      ar: 'العمود',
       it: 'colonna',
       ko: '열',
       pt: 'coluna'
     },
     tooltip: {
+      ar: 'الحصول على قيمه من عمود',
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
-      ar: 'الحصول على قيمه من عمود',
       it: 'ottieni il valore di una colonna',
       ko: '열의 값 가져오기',
       pt: 'obtém o valor de uma coluna'
@@ -49,17 +49,17 @@ const MESSAGES = {
   },
   datetime: {
     text: {
+      ar: 'YYYY-MM-DD',
       en: 'YYYY-MM-DD',
       es: 'AAAA-MM-DD',
-      ar: 'YYYY-MM-DD',
       it: 'AAAA-MM-GG',
       ko: '연도-월-일',
       pt: 'AAAA-MM-DD'
     },
     tooltip: {
+      ar: 'ثابت تاريخ/وقت',
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
-      ar: 'ثابت تاريخ/وقت',
       it: 'data/ora costanti',
       ko: '날짜/시간 유지',
       pt: 'constante data/tempo'
@@ -67,9 +67,9 @@ const MESSAGES = {
   },
   logical: {
     tooltip: {
+      ar: 'ثابت منطقي',
       en: 'logical constant',
       es: 'constante logica',
-      ar: 'ثابت منطقي',
       it: 'constante logica',
       ko: '논리 상수',
       pt: 'constante lógica'
@@ -77,9 +77,9 @@ const MESSAGES = {
   },
   number: {
     tooltip: {
+      ar: 'رقم ثابت',
       en: 'constant number',
       es: 'numbero constante',
-      ar: 'رقم ثابت',
       it: 'constante numerica',
       ko: '상수',
       pt: 'número constante'
@@ -87,17 +87,17 @@ const MESSAGES = {
   },
   text: {
     text: {
+      ar: 'نص',
       en: 'text',
       es: 'texto',
-      ar: 'نص',
       it: 'testo',
       ko: '텍스트',
       pt: 'texto'
     },
     tooltip: {
+      ar: 'نص ثابت',
       en: 'constant text',
       es: 'texto constante',
-      ar: 'نص ثابت',
       it: 'testo costante',
       ko: '상수 텍스트',
       pt: 'texto constante '
@@ -105,53 +105,53 @@ const MESSAGES = {
   },
   missing: {
     message0: {
+      ar: 'مفقود',
       en: 'Missing',
-      es: 'Falta'
-      // TRANSLATE ar
+      es: 'Falta',
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'Faltante'
     },
     tooltip: {
+      ar: 'القيمه المفقوده',
       en: 'missing value',
-      es: 'valor que falta'
-      // TRANSLATE ar
+      es: 'valor que falta',
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'valor faltante'
     }
   },
   exponential: {
     message0: {
+      ar: 'الأسيه \u03BB %1',
       en: 'Exponential \u03BB %1',
       es: 'Exponencial \u03BB %1',
-      ar: 'الأسيه \u03BB %1',
       it: 'Esponenziale \u03BB %1',
-      ko: '\u03BB %1 지수로 표현', 
+      ko: '\u03BB %1 지수로 표현',
       pt: 'Exponencial \u03BB %1'
     },
     tooltip: {
+      ar: 'المتغيرات العشوائه الأسيه',
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
-      ar: 'المتغيرات العشوائه الأسيه',
       it: 'valore aleatorio esponenziale',
-      ko: '지수 랜덤 값', 
+      ko: '지수 랜덤 값',
       pt: 'valor aleatório exponencial'
     }
   },
   normal: {
     message0: {
+      ar: 'الطبيعي \u03BC %1 \u03C3 %2',
       en: 'Normal \u03BC %1 \u03C3 %2',
       es: 'Normal \u03BC %1 \u03C3 %2',
-      ar: 'الطبيعي \u03BC %1 \u03C3 %2',
       it: 'Normale \u03BC %1 \u03C3 %2',
       ko: '\u03BC %1 \u03C3 %2 정규화',
       pt: 'Normal \u03BC %1 \u03C3 %2'
     },
     tooltip: {
+      ar: 'المتغير العشوائي الطبيعي',
       en: 'normal random value',
       es: 'valor aleatorio normal',
-      ar: 'المتغير العشوائي الطبيعي',
       it: 'valore aleatorio normale',
       ko: '정규 랜덤 값',
       pt: 'valor aleatório normal'
@@ -159,17 +159,17 @@ const MESSAGES = {
   },
   uniform: {
     message0: {
+      ar: 'المنتظم \u03B1 %1 \u03B2 %2',
       en: 'Uniform \u03B1 %1 \u03B2 %2',
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
-      ar: 'المنتظم \u03B1 %1 \u03B2 %2',
       it: 'Uniforme \u03B1 %1 \u03B2 %2',
       ko: '\u03B1 %1 \u03B2 %2 균등화',
       pt: 'Uniforme \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
+      ar: 'المتغير العشوائي المنتظم',
       en: 'uniform random value',
       es: 'valor aleatorio uniforme',
-      ar: 'المتغير العشوائي المنتظم',
       it: 'valore aleatorio uniforme',
       ko: '균등 랜덤 값',
       pt: 'valor aleatório uniforme'
@@ -199,11 +199,13 @@ const setup = (language) => {
     {
       type: 'value_column',
       message0: '%1',
-      args0: [{
-        type: 'field_input',
-        name: 'COLUMN',
-        text: msg.get('column.column')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('column.column')
+        }
+      ],
       output: 'String',
       style: 'value_block',
       helpUrl: './guide/#column',
@@ -215,11 +217,13 @@ const setup = (language) => {
     {
       type: 'value_datetime',
       message0: '%1',
-      args0: [{
-        type: 'field_input',
-        name: 'DATE',
-        text: msg.get('datetime.text')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'DATE',
+          text: msg.get('datetime.text')
+        }
+      ],
       output: 'DateTime',
       style: 'value_block',
       helpUrl: './guide/#datetime',
@@ -231,14 +235,16 @@ const setup = (language) => {
     {
       type: 'value_logical',
       message0: '%1',
-      args0: [{
-        type: 'field_dropdown',
-        name: 'VALUE',
-        options: [
-          ['true', 'true'],
-          ['false', 'false']
-        ]
-      }],
+      args0: [
+        {
+          type: 'field_dropdown',
+          name: 'VALUE',
+          options: [
+            ['true', 'true'],
+            ['false', 'false']
+          ]
+        }
+      ],
       output: 'Boolean',
       helpUrl: './guide/#logical',
       style: 'value_block',
@@ -249,11 +255,13 @@ const setup = (language) => {
     {
       type: 'value_number',
       message0: '%1',
-      args0: [{
-        type: 'field_number',
-        name: 'VALUE',
-        value: 0
-      }],
+      args0: [
+        {
+          type: 'field_number',
+          name: 'VALUE',
+          value: 0
+        }
+      ],
       output: 'Number',
       helpUrl: './guide/#number',
       style: 'value_block',
@@ -264,11 +272,13 @@ const setup = (language) => {
     {
       type: 'value_text',
       message0: '%1',
-      args0: [{
-        type: 'field_input',
-        name: 'VALUE',
-        text: msg.get('text.text')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'VALUE',
+          text: msg.get('text.text')
+        }
+      ],
       output: 'String',
       style: 'value_block',
       helpUrl: './guide/#text',
@@ -290,11 +300,13 @@ const setup = (language) => {
     {
       type: 'value_exponential',
       message0: msg.get('exponential.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'RATE',
-        text: '1.0'
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'RATE',
+          text: '1.0'
+        }
+      ],
       output: 'Number',
       style: 'value_block',
       helpUrl: './guide/#exponential',
@@ -306,7 +318,8 @@ const setup = (language) => {
     {
       type: 'value_normal',
       message0: msg.get('normal.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_input',
           name: 'MEAN',
           text: '0'
@@ -328,7 +341,8 @@ const setup = (language) => {
     {
       type: 'value_uniform',
       message0: msg.get('uniform.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_input',
           name: 'LOW',
           text: '0'
