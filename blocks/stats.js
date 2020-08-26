@@ -145,7 +145,7 @@ const MESSAGES = {
     tooltip: {
       en: 'calculate k-means cluster IDs',
       es: 'calculate k-means cluster IDs',
-      ar: 'calculate k-means cluster IDs'
+      ar: 'حساب IDs لصنف الخوارزميه التصنيفية'
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
