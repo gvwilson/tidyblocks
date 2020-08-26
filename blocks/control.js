@@ -15,7 +15,8 @@ const MESSAGES = {
       en: 'RNG seed %1'
     },
     tooltip: {
-      en: 'Restart random number generation'
+      en: 'Restart random number generation',
+      ar: 'إعادة تشغيل مولد الأرقام العشوائية'
     }
   }
 }

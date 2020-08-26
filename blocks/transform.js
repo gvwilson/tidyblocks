@@ -22,7 +22,8 @@ const MESSAGES = {
   },
   bin: {
     message0: {
-      en: 'Bin %1 %2 label %3'
+      en: 'Bin %1 %2 label %3',
+      ar: 'صندوق %1 %2 فئة %3'
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
@@ -46,7 +47,8 @@ const MESSAGES = {
       pt: 'rótulo'
     },
     tooltip: {
-      en: 'Divide values into equal-sized bins'
+      en: 'Divide values into equal-sized bins',
+      ar: 'تقسيم القيم إلى صناديق متساويه الحجم'
       // TRANSLATE ar
       // TRANSLATE es
       // TRANSLATE ko
@@ -146,7 +148,7 @@ const MESSAGES = {
     message0: {
       en: 'Save as %1',
       es: 'Reporte %1', // TRANSLATE ES
-      ar: 'التقرير %1', // TRANSLATE AR
+      ar: 'حفظ ك %1',
       it: 'Salva come %1',
       ko: '%1 리포트', // TRANSLATE KO
       pt: 'Salvar como %1'
@@ -162,7 +164,7 @@ const MESSAGES = {
     tooltip: {
       en: 'save a result',
       es: 'reporta un resultado', // TRANSLATE ES
-      ar: 'عرض النتائج', // TRANSLATE AR
+      ar: 'حفظ نتيجة',
       it: 'salva risultato',
       ko: '결과 리포트', // TRANSLATE KO
       pt: 'salvar um resultado'
@@ -232,8 +234,8 @@ const MESSAGES = {
   },
   running: {
     message0: {
-      en: 'Running %1 %2'
-      // TRANSLATE ar
+      en: 'Running %1 %2',
+      ar: 'جاري التنفيذ %1 %2'
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
@@ -248,8 +250,8 @@ const MESSAGES = {
       pt: 'coluna'
     },
     tooltip: {
-      en: 'accumulate running values'
-      // TRANSLATE ar
+      en: 'accumulate running values',
+      ar: 'تراكم القيم الجاري تنفيذها'
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it

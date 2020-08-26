@@ -105,16 +105,16 @@ const MESSAGES = {
   stats_k_means: {
     message0: {
       en: 'k-means cluster',
-      es: 'agrupamiento por k-medians'
-      // TRANSLATE ar
+      es: 'agrupamiento por k-medians',
+      ar: 'الخوارزمية التصنيفية (k-means)'
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
     },
     message1: {
       en: 'X %1 Y %2 number %3 label %4',
-      es: 'X %1 Y %2 numero %3 etiqueta %4'
-      // TRANSLATE ar
+      es: 'X %1 Y %2 numero %3 etiqueta %4',
+      ar: 'س %1 ص %2 الرقم %3 الفئه %4'
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
@@ -144,8 +144,8 @@ const MESSAGES = {
     },
     tooltip: {
       en: 'calculate k-means cluster IDs',
-      es: 'calculate k-means cluster IDs'
-      // TRANSLATE ar
+      ar: 'حساب IDs لصنف الخوارزميه التصنيفية'
+      // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
@@ -154,16 +154,16 @@ const MESSAGES = {
   stats_silhouette: {
     message0: {
       en: 'silhouette',
-      es: 'silueta'
-      // TRANSLATE ar
+      es: 'silueta',
+      ar: 'رسم صورة ظلية'
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
     },
     message1: {
       en: 'X %1 Y %2 label %3 score %4',
-      es: 'X %1 Y %2 etiqueta %3 puntuación %4'
-      // TRANSLATE ar
+      es: 'X %1 Y %2 etiqueta %3 puntuación %4',
+      ar: 'س %1 ص %2 الفئه %3 النتيجه\المعدل %4'
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
@@ -193,15 +193,16 @@ const MESSAGES = {
     },
     args1_score: {
       en: 'score',
-      es: 'puntuación'
-      // TRANSLATE ar
+      es: 'puntuación',
+      ar: 'المعدل\النتيجه'
       // TRANSLATE ko
       // TRANSLATE it
       // TRANSLATE pt
     },
     tooltip: {
       en: 'calculate silhouette score of 2D clusters',
-      es: 'calcular la puntuación de la silueta de los clústeres 2D'
+      es: 'calcular la puntuación de la silueta de los clústeres 2D',
+      ar: 'حساب معدل رسم الصورة الظلية لتصنيف ذو بعدين'
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
