@@ -12,41 +12,41 @@ const {
 const MESSAGES = {
   stats_ttest_one: {
     message0: {
+      ar: 'إختبار (ت) لعينه واحده',
       en: 'One-sample t-test',
       es: 'T-test para una muestra',
-      ar: 'إختبار (ت) لعينه واحده',
       it: 'T-test di un campione',
       ko: '독립표본 t-검정',
       pt: 'Teste-T de amostra única'
     },
     message1: {
+      ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
       en: 'name %1 column %2 mean \u03BC %3',
       es: 'nombre %1 columna %2 media \u03BC %3',
-      ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
       it: 'nome %1 colonna %2 media \u03BC %3',
-      ko: '이름 %1 열 %2 평균 \u03BC %3', 
+      ko: '이름 %1 열 %2 평균 \u03BC %3',
       pt: 'nome %1 coluna %2 média \u03BC %3'
     },
     args1_name: {
+      ar: 'الإسم',
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم',
       it: 'nome',
       ko: '이름',
       pt: 'nome'
     },
     args1_column: {
+      ar: 'العمود',
       en: 'column',
       es: 'columna',
-      ar: 'العمود',
       it: 'colonna',
       ko: '열',
       pt: 'coluna'
     },
     tooltip: {
+      ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده',
       en: 'perform one-sample two-sided t-test',
       es: 'hacer t-test para una muestra dos colas',
-      ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده',
       it: 'eseguire il t-test su un solo campione su due lati',
       ko: '독립표본 양측 t-검정 수행',
       pt: 'fazer teste-t bilateral de amostra única'
@@ -54,159 +54,160 @@ const MESSAGES = {
   },
   stats_ttest_two: {
     message0: {
+      ar: 'إختبار (ت) لعينتين',
       en: 'Two-sample t-test',
       es: 'T-test para dos muestras',
-      ar: 'إختبار (ت) لعينتين',
       it: 'T-test a due campioni',
-      ko: '이표본 t-검정', 
+      ko: '이표본 t-검정',
       pt: 'Teste-T de duas amostras'
     },
     message1: {
+      ar: 'الإسم %1 الفئه %2 القيم %3',
       en: 'name %1 labels %2 values %3',
       es: 'nombre %1 etiquetas %2 valores %3',
-      ar: 'الإسم %1 الفئه %2 القيم %3',
       it: 'nome %1 etichette %2 valori %3',
-      ko: '이름 %1 라벨 %2 값 %3', 
+      ko: '이름 %1 라벨 %2 값 %3',
       pt: 'nome %1 rótulos %2 valores %3'
     },
     args1_name: {
+      ar: 'الإسم',
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم',
       it: 'nome',
       ko: '이름',
       pt: 'nome'
     },
     args1_label: {
+      ar: 'الفئه',
       en: 'label',
       es: 'etiqueta',
-      ar: 'الفئه',
       it: 'etichetta',
       ko: '라벨',
       pt: 'rótulo'
     },
     args1_column: {
+      ar: 'العمود',
       en: 'column',
       es: 'columna',
-      ar: 'العمود',
       it: 'colonna',
       ko: '열',
       pt: 'coluna'
     },
     tooltip: {
+      ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
       en: 'perform two-sample two-sided t-test',
       es: 'hacer t-test para dos muestras dos colas',
-      ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
       it: 'eseguire un t-test a due campioni su due lati',
-      ko: '이표본 양측 t-검정 수행', 
+      ko: '이표본 양측 t-검정 수행',
       pt: 'fazer teste-t bilateral de duas amostras'
     }
   },
   stats_k_means: {
     message0: {
+      ar: 'الخوارزمية التصنيفية (k-means)',
       en: 'k-means cluster',
       es: 'agrupamiento por k-medians',
-      ar: 'الخوارزمية التصنيفية (k-means)'
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'agrupamento por k-means'
     },
     message1: {
+      ar: 'س %1 ص %2 الرقم %3 الفئه %4',
       en: 'X %1 Y %2 number %3 label %4',
       es: 'X %1 Y %2 numero %3 etiqueta %4',
-      ar: 'س %1 ص %2 الرقم %3 الفئه %4'
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'X %1 Y %2 número %3 rótulo %4'
     },
     args1_x: {
+      ar: 'المحور الأفقي',
       en: 'X axis',
       es: 'eje X',
-      ar: 'المحور الأفقي',
       it: 'asse X',
       ko: 'X축',
       pt: 'eixo X'
     },
     args1_y: {
+      ar: 'المحور الرأسي',
       en: 'Y axis',
       es: 'eje Y',
-      ar: 'المحور الرأسي',
       it: 'asse Y',
-      ko: 'Y축', 
+      ko: 'Y축',
       pt: 'eixo Y'
     },
     args1_label: {
+      ar: 'الفئه',
       en: 'label',
       es: 'etiqueta',
-      ar: 'الفئه',
       ko: '라벨',
       it: 'etichetta'
+      // TRANSLATE pt
     },
     tooltip: {
+      ar: 'حساب IDs لصنف الخوارزميه التصنيفية',
       en: 'calculate k-means cluster IDs',
-      ar: 'حساب IDs لصنف الخوارزميه التصنيفية'
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'calcular os identificadores do agrupamento por k-means'
     }
   },
   stats_silhouette: {
     message0: {
+      ar: 'رسم صورة ظلية',
       en: 'silhouette',
       es: 'silueta',
-      ar: 'رسم صورة ظلية'
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'silhueta'
     },
     message1: {
+      ar: 'س %1 ص %2 الفئه %3 النتيجه\المعدل %4',
       en: 'X %1 Y %2 label %3 score %4',
       es: 'X %1 Y %2 etiqueta %3 puntuación %4',
-      ar: 'س %1 ص %2 الفئه %3 النتيجه\المعدل %4'
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'X %1 Y %2 rótulo %3 pontuação %4'
     },
     args1_x: {
+      ar: 'المحور الأفقي',
       en: 'X axis',
       es: 'eje X',
-      ar: 'المحور الأفقي',
       it: 'asse X',
       ko: 'X축',
       pt: 'eixo X'
     },
     args1_y: {
+      ar: 'المحور الرأسي',
       en: 'Y axis',
       es: 'eje Y',
-      ar: 'المحور الرأسي',
       it: 'asse Y',
-      ko: 'Y축', 
+      ko: 'Y축',
       pt: 'eixo Y'
     },
     args1_label: {
+      ar: 'الفئه',
       en: 'label',
       es: 'etiqueta',
-      ar: 'الفئه',
       ko: '라벨',
       it: 'etichetta'
     },
     args1_score: {
+      ar: 'المعدل\النتيجه',
       en: 'score',
       es: 'puntuación',
-      ar: 'المعدل\النتيجه'
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'pontuação'
     },
     tooltip: {
+      ar: 'حساب معدل رسم الصورة الظلية لتصنيف ذو بعدين',
       en: 'calculate silhouette score of 2D clusters',
       es: 'calcular la puntuación de la silueta de los clústeres 2D',
-      ar: 'حساب معدل رسم الصورة الظلية لتصنيف ذو بعدين'
       // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
-      // TRANSLATE pt
+      pt: 'calcular a pontuação de silhueta dos agrupamentos 2D'
     }
   }
 }
@@ -224,7 +225,8 @@ const setup = (language) => {
       message0: msg.get('stats_ttest_one.message0'),
       args0: [],
       message1: msg.get('stats_ttest_one.message1'),
-      args1: [{
+      args1: [
+        {
           type: 'field_input',
           name: 'NAME',
           text: msg.get('stats_ttest_one.args1_name')
@@ -254,7 +256,8 @@ const setup = (language) => {
       message0: msg.get('stats_ttest_two.message0'),
       args0: [],
       message1: msg.get('stats_ttest_two.message1'),
-      args1: [{
+      args1: [
+        {
           type: 'field_input',
           name: 'NAME',
           text: msg.get('stats_ttest_two.args1_name')

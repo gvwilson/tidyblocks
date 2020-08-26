@@ -12,17 +12,17 @@ const {
 const MESSAGES = {
   colors: {
     message0: {
+      ar: 'الألوان',
       en: 'Colors',
       es: 'Colores',
-      ar: 'الألوان',
       it: 'Colori',
       ko: '색깔', 
       pt: 'Cores'
     },
     tooltip: {
+      ar: 'احد عشر لون',
       en: 'eleven colors',
       es: 'once colores',
-      ar: 'احد عشر لون',
       it: 'undici colori',
       ko: '11개의 색', 
       pt: 'onze cores'
@@ -30,17 +30,17 @@ const MESSAGES = {
   },
   earthquakes: {
     message0: {
+      ar: 'الزلزال',
       en: 'Earthquakes',
       es: 'Terremotos',
-      ar: 'الزلزال',
       it: 'Terremoti',
       ko: '지진', 
       pt: 'Terremotos'
     },
     tooltip: {
+      ar: 'بيانات الزلزال',
       en: 'earthquake data',
       es: 'datos de terremotos',
-      ar: 'بيانات الزلزال',
       it: 'dati sui terremoti',
       ko: '지진 데이터', 
       pt: 'dados de terremotos'
@@ -48,17 +48,17 @@ const MESSAGES = {
   },
   penguins: {
     message0: {
+      ar: 'طيور البطريق',
       en: 'Penguins',
       es: 'Pingüinos',
-      ar: 'طيور البطريق',
       it: 'Pinguini',
       ko: '펭귄',
       pt: 'Penguins'
     },
     tooltip: {
+      ar: 'بيانات طيور البطريق',
       en: 'penguin data',
       es: 'datos de pingüinos',
-      ar: 'بيانات طيور البطريق',
       it: 'dati sui pinguini',
       ko: '펭귄 데이터',
       pt: 'dados de penguins'
@@ -66,17 +66,17 @@ const MESSAGES = {
   },
   phish: {
     message0: {
+      ar: 'فرقه الفيش الموسيقيه',
       en: 'Phish',
       es: 'Phish',
-      ar: 'فرقه الفيش الموسيقيه',
       it: 'Phish',
       ko: '피시', 
       pt: 'Phish'
     },
     tooltip: {
+      ar: 'بيانات فرقه الفيش الموسيقيه',
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
-      ar: 'بيانات فرقه الفيش الموسيقيه',
       it: 'dati sui concerti dei Phish',
       ko: '피시 콘서트 데이터',
       pt: 'dados de shows do Phish'
@@ -84,25 +84,25 @@ const MESSAGES = {
   },
   sequence: {
     message0: {
+      ar: 'المتسلسله %1 %2',
       en: 'Sequence %1 %2',
       es: 'Sequencia %1 %2',
-      ar: 'المتسلسله %1 %2',
       it: 'sequenza %1 %2',
       ko: '배열 %1 %2',
       pt: 'Sequência %1 %2'
     },
     args0_text: {
+      ar: 'اﻹسم',
       en: 'name',
       es: 'nombre',
-      ar: 'اﻹسم',
       it: 'nome',
       ko: '이름',
       pt: 'nome'
     },
     tooltip: {
+      ar: 'إنشاء متسلسله ١..ن',
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
-      ar: 'إنشاء متسلسله ١..ن',
       it: 'genera una sequenza 1..N',
       ko: '배열 실행 1..N',
       pt: 'Gerar uma sequencia 1..N'
@@ -110,25 +110,25 @@ const MESSAGES = {
   },
   data_user: {
     message0: {
+      ar: 'بيانات المسته %1',
       en: 'User data %1',
       es: 'Datos de usuario %1',
-      ar: 'بيانات المسته %1',
       it: 'Dati utenti %1',
       ko: '사용자 데이터 %1', 
       pt: 'Dados de usuario %1'
     },
     args0_text: {
+      ar: 'الإسم',
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم',
       it: 'nome',
       ko: '이름',
       pt: 'nome'
     },
     tooltip: {
+      ar: 'إستخدام بيانات محمله مسبقا',
       en: 'use previously-loaded data',
       es: 'usa datos previamente cargados',
-      ar: 'إستخدام بيانات محمله مسبقا',
       it: 'usa i dati caricati in precedenza',
       ko: '이전에 로드된 데이터 사용',
       pt: 'use dados carregados previamente'
@@ -187,7 +187,8 @@ const setup = (language) => {
     {
       type: 'data_sequence',
       message0: msg.get('sequence.message0'),
-      args0: [{
+      args0: [
+        {
           type: 'field_input',
           name: 'COLUMN',
           text: msg.get('sequence.args0_text')
@@ -208,11 +209,13 @@ const setup = (language) => {
     {
       type: 'data_user',
       message0: msg.get('data_user.message0'),
-      args0: [{
-        type: 'field_input',
-        name: 'NAME',
-        text: msg.get('data_user.args0_text')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'NAME',
+          text: msg.get('data_user.args0_text')
+        }
+      ],
       nextStatement: null,
       style: 'data_block',
       hat: 'cap',
