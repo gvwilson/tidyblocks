@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: Guide</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+  
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/FAQ">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/FAQ">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main>
+    <h1>TidyBlocks: Guide</h1>
+<div class="guide_container">
+<div class="guide_lhs">
+ <a class="data" href="#en_data">DATA</a><br/>
+ <a class="transform" href="#en_transforms">TRANSFORMS</a><br/>
+ <a class="plot" href="#en_plots">PLOTS</a><br/>
+ <a class="stats" href="#en_stats">STATISTICS</a><br/>
+ <a class="op" href="#en_op">OPERATIONS</a><br/>
+ <a class="values" href="#en_values">VALUES</a><br/>
+ <a class="combine" href="#en_combine">COMBINING</a><br/>
+ <a class="control" href="#en_control">CONTROL</a><br/>
+</div>
+<div class="guide_rhs">
+A blocks-based tool for tidy data manipulation and analysis.
+Please see <https://tidyblocks.tech> for a free online version
+or visit [our GitHub repository]().
+<p>This work is made freely available under the <a href="/license/">Hippocratic License</a>.
+Contributions of all kinds are welcome:
+please see <a href="/contributing/">our contributors' guide</a> to get started,
+and please note that all contributors are required to abide by our <a href="/conduct/">Code of Conduct</a>.</p>
+<h1 class="data" id="en_data">DATA</h1>
+<div id="colors">
+<h3>Colors</h3>
+<img class="block" src="./data_colors.svg" alt="color block"/>
+<p>The <code>colors</code> dataset has red-green-blue (RGB) values for eleven standard colors:
+black, red, maroon, lime, green, blue, navy, yellow, fuchsia, aqua, and white
+Each value is an integer in the range 0…255.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Datatype</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>text</td>
+<td>color name</td>
+</tr>
+<tr>
+<td>red</td>
+<td>integer (0…255)</td>
+<td>red value</td>
+</tr>
+<tr>
+<td>green</td>
+<td>integer (0…255)</td>
+<td>green value</td>
+</tr>
+<tr>
+<td>blue</td>
+<td>integer (0…255)</td>
+<td>blue value</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="earthquakes">
+<h3>Earthquakes</h3>
+<img class="block" src="./data_earthquakes.svg" alt="earthquakes block"/>
+<p>This block provides a subset of US Geological Survey data on earthquakes from 2016.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Datatype</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time</td>
+<td>datetime</td>
+<td>Universal Time Coordinates</td>
+</tr>
+<tr>
+<td>Latitude</td>
+<td>number</td>
+<td>fractional degrees</td>
+</tr>
+<tr>
+<td>Longitude</td>
+<td>number</td>
+<td>fractional degrees</td>
+</tr>
+<tr>
+<td>Depth_Km</td>
+<td>number (km)</td>
+<td>depth in fractional kilometers</td>
+</tr>
+<tr>
+<td>Magnitude</td>
+<td>number</td>
+<td>Richter scale</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="penguins">
+<h3>Penguins</h3>
+<img class="block" src="./data_penguins.svg" alt="penguins block"/>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Datatype</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>species</td>
+<td>text</td>
+<td>type of penguin</td>
+</tr>
+<tr>
+<td>island</td>
+<td>text</td>
+<td>where penguin was found</td>
+</tr>
+<tr>
+<td>bill_length_mm</td>
+<td>number (mm)</td>
+<td>length of bill</td>
+</tr>
+<tr>
+<td>bill_depth_mm</td>
+<td>number (mm)</td>
+<td>depth of bill</td>
+</tr>
+<tr>
+<td>flipper_length_mm</td>
+<td>number (mm)</td>
+<td>length of flippers</td>
+</tr>
+<tr>
+<td>body_mass_g</td>
+<td>number (g)</td>
+<td>mass</td>
+</tr>
+<tr>
+<td>sex</td>
+<td>text</td>
+<td>sex</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sequence">
+<h3>Sequence</h3>
+<img class="block" src="./data_sequence.svg" alt="sequence block"/>
+<p>Create a sequence of numbers from 1 to N inclusive.</p>
+<ul>
+<li><strong>name</strong>: The name of the column holding the values.</li>
+<li><strong>range</strong>: The upper limit of the range.</li>
+</ul>
+</div>
+<div id="user">
+<h3>User Data</h3>
+<img class="block" src="./data_user.svg" alt="user data block"/>
+<p>Use a previously-loaded dataset.</p>
+<ul>
+<li><em>drop down</em>: Select dataset by name.</li>
+</ul>
+</div>
+<h1 class="transform" id="en_transforms">TRANSFORMS</h1>
+<div id="bin" markdown="1">
+<h3>Bin</h3>
+<img class="block" src="./transform_bin.svg" alt="bin block"/>
+<p>Divide data into evenly-spaced bins.</p>
+<ul>
+<li><strong>column</strong>: Name of column containing data.</li>
+<li><em>first space</em>: Number of bins (must be 1 or greater).</li>
+<li><strong>label</strong>: Name of new column for bin labels.</li>
+</ul>
+</div>
+<div id="create" markdown="1">
+<h3>Create</h3>
+<img class="block" src="./transform_create.svg" alt="create block"/>
+<p>Add new columns while keeping existing ones.
+A column can be replaced if a new column is given the same name as an existing column.</p>
+<ul>
+<li><strong>new_column</strong>: Name for new column.</li>
+<li><em>first space</em>: A <a href="../value/">value</a> or the result of an <a href="../operation/">operation</a>.</li>
+</ul>
+</div>
+<div id="drop">
+<h3>Drop</h3>
+<img class="block" src="./transform_drop.svg" alt="drop block"/>
+<p>Discard one or more columns from the data.
+This block isn't strictly necessary—you can just ignore a column if you don't need it—but
+dropping columns often makes the display easier to read.
+This block is the opposite of <a href="../transform/#select">select</a>.</p>
+<ul>
+<li><strong>column, column</strong>: A comma-separated list of the names of the columns to drop.</li>
+</ul>
+</div>
+<div id="filter">
+<h3>Filter</h3>
+<img class="block" src="./transform_filter.svg" alt="filter block"/>
+<p>Keep a subset of rows that pass some test such as <code>age &gt; 65</code> or <code>country = &quot;Iceland&quot;</code>.
+The test is checked independently for each row,
+and tests can be combined using the <a href="../operation/#logical">and</a>,
+<a href="../operation/#logical">or</a>,
+and <a href="../operation/#not">not</a> blocks.</p>
+<ul>
+<li><em>expression</em>: the test each row must pass to be included in the result.</li>
+</ul>
+</div>
+<div id="groupBy">
+<h3>Group By</h3>
+<img class="block" src="./transform_groupBy.svg" alt="grouping block"/>
+<p>Most data operations are done on groups of records that share values, such as people from the same country.
+This block adds a new column to the table called <code>_group_</code> that has a unique value for each group.
+Grouping can be removed using the <a href="../transform/#ungroup">ungroup</a> block.</p>
+<ul>
+<li><strong>column, column</strong>: A comma-separated list of the names of the columns to group by.
+Every unique combination of values in these columns produces one group.</li>
+</ul>
+</div>
+<div id="saveAs">
+<h3>Save As</h3>
+<img class="block" src="./transform_saveas.svg" alt="save as block"/>
+<p>Save a result for later inspection or to be <a href="../combine/">combined</a> with a result from another pipeline.</p>
+<ul>
+<li><strong>name</strong> Result name</li>
+</ul>
+</div>
+<div id="select">
+<h3>Select</h3>
+<img class="block" src="./transform_select.svg" alt="select block"/>
+<p>Choose columns from a table: columns that are not named will be dropped.
+This block is not strictly necessary,
+since unneeded columns can simply be ignored,
+but discarding unneeded columns can make the display easier to read.
+This block is the opposite of <a href="../transform/#drop">drop</a>.</p>
+<ul>
+<li><strong>column, column</strong>: One or more columns to keep.</li>
+</ul>
+</div>
+<div id="sort">
+<h3>Sort</h3>
+<img class="block" src="./transform_sort.svg" alt="sort block"/>
+<p>Sort the rows in a table according to the values in one or more columns.</p>
+<ul>
+<li><strong>column, column</strong>: A comma-separated list of the names of the columns to sort by.</li>
+<li><strong>descending</strong>: If checked, sort in descending order (i.e., greatest value first).</li>
+</ul>
+</div>
+<div id="summarize">
+<h3>Summarize</h3>
+<img class="block" src="./transform_summarize.svg" alt="summarize block"/>
+<p>Summarize the values in one or more columns.
+If the data has been <a href="../transform/#group">grouped</a>,
+a summary value is created for each group.
+The summary values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>mean_age</code>.</p>
+<ul>
+<li><em>drop down</em>: which summarization operation to use.</li>
+<li><strong>column</strong>: which column to summarize.</li>
+</ul>
+</div>
+<div id="running">
+<h3>Running Values</h3>
+<img class="block" src="./transform_running.svg" alt="running block"/>
+<p>Calculate a running value for a column,
+such as a running sum.
+If the data has been <a href="../transform/#group">grouped</a>,
+separate running values are calculated for each group.
+The running values are put in a new column <code><em>op</em>_<em>col</em></code>,
+e.g., <code>index_age</code>.</p>
+<ul>
+<li><em>drop down</em>: which summarization operation to use.</li>
+<li><strong>column</strong>: which column to summarize.</li>
+</ul>
+</div>
+<div id="ungroup">
+<h3>Ungroup</h3>
+<img class="block" src="./transform_ungroup.svg" alt="ungroup block"/>
+<p>Undo grouping created by <a href="../transform/#group">group</a>
+by removing the special _group_ column.</p>
+</div>
+<div id="unique">
+<h3>Unique</h3>
+<img class="block" src="./transform_unique.svg" alt="unique block"/>
+<p>Discard rows containing redundant values.
+If several rows have the same values in the specified columns
+but different values in other columns,
+one row from that group will be chosen arbitrarily and kept.</p>
+<ul>
+<li><strong>column, column</strong>: One or more columns to check for distinct values.</li>
+</ul>
+</div>
+<h1 class="plot" id="en_plots">PLOTS</h1>
+<div id="bar">
+<h3>Bar</h3>
+<img class="block" src="./plot_bar.svg" alt="bar block"/>
+<p>The bar block makes the height of the bar proportional to the number of cases in each group.
+A bar chart uses height to represent a value, and so the base of the bar must always be shown to produce a valid visual comparison.</p>
+<ul>
+<li><strong>X_axis</strong>: Which column to use for the X axis.</li>
+<li><strong>Y_axis</strong>: Which column to use for the Y axis.</li>
+</ul>
+</div>
+<div id="box">
+<h3>Box</h3>
+<img class="block" src="./plot_box.svg" alt="box block"/>
+<p>The Tukey box plot block summarizes a distribution of quantitative values using a set of summary statistics.
+The middle tick in the box represents the median.
+The lower and upper parts of the box represent the first and third quartile respectively.
+The whisker spans from the smallest data to the largest data within the range [Q1 - 1.5 * IQR, Q3 + 1.5 * IQR]
+where Q1 and Q3 are the first and third quartiles while IQR is the interquartile range (Q3-Q1).
+Any outlier points beyond the whisker are displayed using point marks.</p>
+<ul>
+<li><strong>X_axis</strong>: Which column to use for the X axis.</li>
+<li><strong>Y_axis</strong>: Which column to use for the Y axis.</li>
+</ul>
+</div>
+<div id="dot">
+<h3>Dot</h3>
+<img class="block" src="./plot_dot.svg" alt="dot block"/>
+<p>Display a dot plot.</p>
+<ul>
+<li><strong>X_axis</strong>: Which column to use for the X axis.</li>
+</ul>
+</div>
+<div id="histogram">
+<h3>Histogram</h3>
+<img class="block" src="./plot_histogram.svg" alt="histogram block"/>
+<p>Visualise the distribution of a single continuous variable
+by dividing the X axis into bins
+and counting the number of observations in each bin.
+Histograms display the counts with bars.</p>
+<ul>
+<li><strong>column</strong>: Which column to bin.</li>
+<li><strong>bins (10)</strong>: The number of bins.</li>
+</ul>
+</div>
+<div id="scatter">
+<h3>Scatter</h3>
+<img class="block" src="./plot_scatter.svg" alt="scatter block"/>
+<p>Display a scatter plot.</p>
+<ul>
+<li><strong>X_axis</strong>: Which column to use for X coordinates.</li>
+<li><strong>Y_axis</strong>: Which column to use for Y coordinates.</li>
+<li><strong>color</strong>: Which column to use for colors (optional).</li>
+<li><strong>Add line</strong>: Show a linear regression line?</li>
+</ul>
+</div>
+<h1 class="stats" id="en_stats">STATISTICS</h1>
+<div id="ttest_one">
+<h3>One-sample T test</h3>
+<img class="block" src="./stats_ttest_one.svg" alt="ttest_one block"/>
+<p>Run a one-sample t-test.</p>
+<ul>
+<li><strong>column</strong>: The column containing the values of interest.</li>
+<li><strong>mean</strong>: The mean to test against.</li>
+<li><strong>significance</strong>: The significance threshold.</li>
+</ul>
+</div>
+<div id="ttest_two">
+<h3>Two-sample T test</h3>
+<img class="block" src="./stats_ttest_two.svg" alt="ttest_two block"/>
+<p>Run a paired t-test.</p>
+<ul>
+<li><strong>column_a</strong>: The column containing one set of values.</li>
+<li><strong>column_b</strong>: The column containing the other set of values.</li>
+<li><strong>significance</strong>: The significance threshold.</li>
+</ul>
+</div>
+<div id="k_means">
+<h3>K-means clustering</h3>
+<img class="block" src="./stats_k_means.svg" alt="k-means clustering block"/>
+<p>Use <a href="../glossary/#k-means-clustering">k-means clustering</a> to group data in two dimensions.</p>
+<ul>
+<li><strong>X_axis</strong>: Which column to use for the X axis.</li>
+<li><strong>Y_axis</strong>: Which column to use for the Y axis.</li>
+<li><strong>number (2)</strong>: The number of clusters to create.</li>
+<li><strong>label</strong>: The new column containing each row's cluster ID.</li>
+</ul>
+</div>
+<div id="silhouette">
+<h3>Silhouette</h3>
+<img class="block" src="./stats_silhouette.svg" alt="silhouette block"/>
+<p>Calculate the <a href="../glossary/#silhouette">silhouette</a> for every two-dimensional point in clustered data.</p>
+<ul>
+<li><strong>X_axis</strong>: Which column to use for the X axis.</li>
+<li><strong>Y_axis</strong>: Which column to use for the Y axis.</li>
+<li><strong>label</strong>: The column containing each row's cluster ID.</li>
+<li><strong>score</strong>: The silhouette score for that point.</li>
+</ul>
+</div>
+<h1 class="op" id="en_op">OPERATIONS</h1>
+<div id="arithmetic">
+<h3>Arithmetic</h3>
+<img class="block" src="./op_arithmetic.svg" alt="arithmetic block"/>
+<p>This block implements mathematical computations on two values.
+It accepts numbers, column names, and nested operation blocks.</p>
+<ul>
+<li><em>left space</em>: The left-hand side of the operation.</li>
+<li><em>drop down</em>: Select addition, subtraction, multiplication, division, remainder, or exponentiation.</li>
+<li><em>right space</em>: The right-hand side of the operation.</li>
+</ul>
+</div>
+<div id="negate">
+<h3>Negate</h3>
+<img class="block" src="./op_negate.svg" alt="negate block"/>
+<p>Negate a number.</p>
+<ul>
+<li><em>space</em>: The value to negate.</li>
+</ul>
+</div>
+<div id="compare">
+<h3>Comparison</h3>
+<img class="block" src="./op_compare.svg" alt="comparison block"/>
+<p>This block compares two values.
+It accepts any values on the left and right side
+and produces either <code>true</code> or <code>false</code>.</p>
+<ul>
+<li><em>left space</em>: The left-hand side of the operation.</li>
+<li><em>drop down</em>: Select equal, not equal, greater, less or equal, and so on.</li>
+<li><em>right space</em>: The right-hand side of the operation.</li>
+</ul>
+</div>
+<div id="extremum">
+<h3>Maximum and Minimum</h3>
+<img class="block" src="./op_extremum.svg" alt="maximum/minimum block"/>
+<p>This block selects the maximum or minimum value from two different columns.</p>
+<ul>
+<li><em>left space</em>: The left-hand side of the operation.</li>
+<li><em>drop down</em>: Select maximum or minimum.</li>
+<li><em>right space</em>: The right-hand side of the operation.</li>
+</ul>
+</div>
+<div id="logical">
+<h3>Logical</h3>
+<img class="block" src="./op_logical.svg" alt="logical operation block"/>
+<p>This block implements logical operations on two values.
+It accepts any values on the left and right side
+and produces either <code>true</code> or <code>false</code>.</p>
+<ul>
+<li><em>left space</em>: The left-hand side of the operation.</li>
+<li><em>drop down</em>: Select logical AND or logical OR.</li>
+<li><em>right space</em>: The right-hand side of the operation.</li>
+</ul>
+<p>Note that logical AND is only true if <em>both</em> sides are true,
+while logical OR is true if <em>either or both</em> sides are true:
+it is not either-or-both rather than one-or-the-other.</p>
+</div>
+<div id="not">
+<h3>Not</h3>
+<img class="block" src="./op_not.svg" alt="not block"/>
+<p>Produce <code>true</code> if the value is <code>false</code> or <code>false</code> if the value is <code>true</code>.</p>
+<ul>
+<li><em>space</em>: The value to invert.</li>
+</ul>
+</div>
+<div id="type">
+<h3>Type</h3>
+<img class="block" src="./op_type.svg" alt="type checking block"/>
+<p>Check if a value is of a particular type.</p>
+<ul>
+<li><em>space</em>: The value to check.</li>
+<li><em>drop down</em>: Select the type to convert for.</li>
+</ul>
+<img class="block" src="./op_convert.svg" alt="type conversion block"/>
+<p>Convert a value from one type to another.</p>
+<ul>
+<li><em>space</em>: The value to convert.</li>
+<li><em>drop down</em>: Select the type to convert to.</li>
+</ul>
+</div>
+<div id="datetime">
+<h3>Dates/Times</h3>
+<img class="block" src="./op_datetime.svg" alt="datetime block"/>
+<p>Extract the year, month, or day from a date/time value.</p>
+<ul>
+<li><em>space</em>: The date/time value to convert.</li>
+<li><em>drop down</em>: Select the sub-value to extract.</li>
+</ul>
+</div>
+<div id="conditional">
+<h3>Conditional</h3>
+<img class="block" src="./op_conditional.svg" alt="conditional block"/>
+<p>Select one of two values based on a condition.
+Any value can be used for the condition or for the results if the condition is true or false,
+but the values used for the true and false cases must have the same type.</p>
+<ul>
+<li><em>first space</em>: The condition to test.</li>
+<li><em>second space</em>: The value if the condition is true.</li>
+<li><em>third space</em>: The value if the condition is false.</li>
+</ul>
+</div>
+<div id="shift">
+<h3>Shift</h3>
+<img class="block" src="./op_shift.svg" alt="shift block"/>
+<p>Shift values up or down in a column.</p>
+<ul>
+<li><strong>column</strong>: Which column to shift</li>
+<li><em>number</em>: How much to shift by (positive to shift up that many places, negative to shift down).</li>
+</ul>
+</div>
+<h1 class="values" id="en_values">VALUES</h1>
+<div id="column">
+<h3>Column</h3>
+<img class="block" src="./value_column.svg" alt="column block"/>
+<p>Specify the name of a single column in the data.</p>
+<ul>
+<li><strong>column</strong>: The name of the column whose value is desired.</li>
+</ul>
+</div>
+<div id="datetime">
+<h3>Datetime</h3>
+<img class="block" src="./value_datetime.svg" alt="datetime block"/>
+<p>Specify a fixed date and time.</p>
+<ul>
+<li><strong>YYYY-MM-DD</strong>: The 4-digit year, month, and day joined with dashes.</li>
+</ul>
+</div>
+<div id="logical">
+<h3>Logical</h3>
+<img class="block" src="./value_logical.svg" alt="logical block"/>
+<p>Select a constant logical value.</p>
+<ul>
+<li><em>pulldown</em>: Select <code>true</code> or <code>false</code>.</li>
+</ul>
+</div>
+<div id="number">
+<h3>Number</h3>
+<img class="block" src="./value_number.svg" alt="number block"/>
+<p>Specify a fixed number.</p>
+<ul>
+<li><strong>number</strong>: The desired number.</li>
+</ul>
+</div>
+<div id="text">
+<h3>Text</h3>
+<img class="block" src="./value_text.svg" alt="text block"/>
+<p>Specify a fixed text.
+The value should <em>not</em> be quoted:
+any single or double quotes provided will be included in the text.</p>
+<ul>
+<li><strong>text</strong>: The desired text.</li>
+</ul>
+</div>
+<div id="missing">
+<h3>Missing Value</h3>
+<img class="block" src="./value_missing.svg" alt="missing value block"/>
+<p>The special value representing missing data.</p>
+</div>
+<div id="rownum">
+<h3>Row Number</h3>
+<img class="block" src="./value_rownum.svg" alt="row number block"/>
+<p>Generate the row number, starting from 1.</p>
+</div>
+<div id="exponential">
+<h3>Exponential Random Value</h3>
+<img class="block" src="./value_exponential.svg" alt="exponential random block"/>
+<p>Generate a random value from the exponential distribution with the rate parameter λ.</p>
+<ul>
+<li><strong>rate</strong>: the rate parameter.</li>
+</ul>
+</div>
+<div id="normal">
+<h3>Normal Random Variable</h3>
+<img class="block" src="./value_normal.svg" alt="normal random value block"/>
+<p>Generate a random value from the normal distribution with mean μ and standard deviation σ.</p>
+<ul>
+<li><strong>mean</strong>: the center of the distribution.</li>
+<li><strong>std dev</strong>: the spread of the distribution.</li>
+</ul>
+</div>
+<div id="uniform">
+<h3>Uniform Random Variable</h3>
+<img class="block" src="./value_uniform.svg" alt="uniforn random value block"/>
+<p>Generate a random value from the uniform distribution across the given range.</p>
+<ul>
+<li><strong>low</strong>: the low end of the range.</li>
+<li><strong>high</strong>: the high end of the range.</li>
+</ul>
+</div>
+<h1 class="combine" id="en_combine">COMBINING</h1>
+<div id="join">
+<h3>Join</h3>
+<img class="block" src="./combine_join.svg" alt="join block"/>
+<p>Join two tables by matching values in column X of table A
+to the values in column Y of table B.
+If table A contains:</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>p1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>p2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>p3</td>
+</tr>
+</tbody>
+</table>
+<p>and table B contains:</p>
+<table>
+<thead>
+<tr>
+<th>val</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>q11</td>
+</tr>
+<tr>
+<td>1</td>
+<td>q12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>q3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>q4</td>
+</tr>
+</tbody>
+</table>
+<p>and the tables are joined on <code>num</code> and <code>val</code>,
+then the final table contains rows for the matches 1 and 3:</p>
+<table>
+<thead>
+<tr>
+<th>_join_</th>
+<th>A_name</th>
+<th>B_label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>p1</td>
+<td>q11</td>
+</tr>
+<tr>
+<td>1</td>
+<td>p1</td>
+<td>q12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>p3</td>
+<td>q3</td>
+</tr>
+</tbody>
+</table>
+<p>The new column <code>_join_</code> contains the values that matched,
+while the other columns appear as <code><em>table</em>_<em>column</em></code>.</p>
+<ul>
+<li><strong>left_table</strong>: The name used to identify a table in a <a href="../transform/#report">report</a> block.</li>
+<li><strong>left_column</strong>: The column to join on from that table.</li>
+<li><strong>right_table</strong>: The name used to identify a table in a <a href="../transform/#report">report</a> block.</li>
+<li><strong>right_column</strong>: The column to join on from that table.</li>
+</ul>
+</div>
+<div id="glue">
+<h3>Glue</h3>
+<img class="block" src="./combine_glue.svg" alt="glue block"/>
+<p>Combine the rows of two tables to create a new table.
+The input tables must have the same number of columns,
+and those columns must have the same names.
+A new column is added to show where each row came from.
+For example,
+if table A contains:</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>p1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>p2</td>
+</tr>
+</tbody>
+</table>
+<p>and table B contains:</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>q2</td>
+</tr>
+<tr>
+<td>3</td>
+<td>q3</td>
+</tr>
+</tbody>
+</table>
+<p>and the label column is called <code>source</code>,
+then the final table contains:</p>
+<table>
+<thead>
+<tr>
+<th>num</th>
+<th>name</th>
+<th>source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>p1</td>
+<td>A</td>
+</tr>
+<tr>
+<td>2</td>
+<td>p2</td>
+<td>A</td>
+</tr>
+<tr>
+<td>2</td>
+<td>q2</td>
+<td>B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>q3</td>
+<td>B</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>left_table</strong>: The name used to identify a table in a <a href="../combine/#report">report</a> block.</li>
+<li><strong>right_table</strong>: The name used to identify a table in a <a href="../combine/#report">report</a> block.</li>
+<li><strong>label</strong>: The name of the column holding the row's source.</li>
+</ul>
+</div>
+<h1 class="control" id="en_control">CONTROL</h1>
+<div id="seed">
+<h3>Seed</h3>
+<img class="block" src="./control_seed.svg" alt="seed block"/>
+<p>Re-seed random number generation.
+Only one seed block is allowed per program, and seeds are reset before any other pipelines run.</p>
+<ul>
+<li><strong>text</strong>: A random phrase to use as a seed.</li>
+</ul>
+</div>
+</div>
+</div>
+    </main>
+    <footer>
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  <a target="_blank" href=""><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+  </body>
+</html>
