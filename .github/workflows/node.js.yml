@@ -24,6 +24,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm run build
+    - run: npx @11ty/eleventy
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3.7.0-6
       with:
@@ -37,5 +38,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
         destination_dir: dist
-        enable_jekyll: true
         keep_files: true
