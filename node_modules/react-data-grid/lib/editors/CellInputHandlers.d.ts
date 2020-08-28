@@ -1,1 +1,0 @@
-export declare function legacyCellInput(event: React.KeyboardEvent<HTMLDivElement>): boolean;

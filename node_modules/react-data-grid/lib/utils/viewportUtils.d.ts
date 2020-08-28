@@ -1,4 +1,0 @@
-import { CalculatedColumn } from '../common/types';
-export declare function getVerticalRangeToRender(height: number, rowHeight: number, scrollTop: number, rowsCount: number): readonly [number, number];
-export declare function getHorizontalRangeToRender<R, SR>(columns: readonly CalculatedColumn<R, SR>[], lastFrozenColumnIndex: number, viewportWidth: number, scrollLeft: number): [number, number];
-export declare function getViewportColumns<R, SR>(columns: readonly CalculatedColumn<R, SR>[], colOverscanStartIdx: number, colOverscanEndIdx: number): CalculatedColumn<R, SR>[];

@@ -1,5 +1,0 @@
-import { isKeyPrintable } from '../utils';
-export function legacyCellInput(event) {
-    return isKeyPrintable(event.keyCode) || ['Backspace', 'Delete'].includes(event.key);
-}
-//# sourceMappingURL=CellInputHandlers.js.map
