@@ -14,7 +14,7 @@ metadata:
   <title>{{ metadata.title }}</title>
   <link href="{{ metadata.feedUrl }}" rel="self"/>
   <link href="{{ metadata.url }}"/>
-  <updated>{{ collections.post | rssLastUpdatedDate }}</updated>
+  <updated>{{ collections.post | map: "date" | last | date: "%Y-%m-%dT%H:%M:%S" }}</updated>
   <id>{{ metadata.url }}</id>
   <author>
     <name>{{ metadata.author.name }}</name>
@@ -25,9 +25,9 @@ metadata:
   <entry>
     <title>{{ post.data.title }}</title>
     <link href="{{ absolutePostUrl }}"/>
-    <updated>{{ post.date | rssDate }}</updated>
+    <updated>{{ post.date | date: "%Y-%m-%dT%H:%M:%S" }}</updated>
     <id>{{ absolutePostUrl }}</id>
-    <content type="html">{{ post.templateContent | htmlToAbsoluteUrls(absolutePostUrl) }}</content>
+    <content type="html">{{ post.templateContent |strip_html | truncatewords: 50 }}</content>
   </entry>
   {%- endfor %}
 </feed>
