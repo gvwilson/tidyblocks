@@ -3,12 +3,64 @@
   <title>TidyBlocks Blog</title>
   <link href="https://tidyblocks.tech/feed.xml" rel="self"/>
   <link href="https://tidyblocks.tech/"/>
-  <updated>2020-08-15T12:00:00+00:00</updated>
+  <updated>2020-08-28T12:00:00+00:00</updated>
   <id>https://tidyblocks.tech/</id>
   <author>
     <name>The TidyBlocks Team</name>
     <email>info@tidyblocks.tech</email>
   </author>
+  
+  <entry>
+    <title>The Other Ninety Percent</title>
+    <link href="https://tidyblocks.tech/blog/2020/08/28/the-other-ninety-percent/"/>
+    <updated>2020-08-28T12:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/08/28/the-other-ninety-percent/</id>
+    <content type="html">&lt;p&gt;We made several improvements to TidyBlocks this week,
+but not all of them are visible to users.
+The ones that are include:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;More of the interface has been translated.&lt;/li&gt;
+&lt;li&gt;We now have a block for calculating running sums and averages.&lt;/li&gt;
+&lt;li&gt;And there is another new block for shifting columns up and down
+so that users can do things like compare today&#39;s rainfall with yesterday&#39;s.&lt;/li&gt;
+&lt;li&gt;Users can also now re-seed the random number generator...&lt;/li&gt;
+&lt;li&gt;...and put data in bins.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;But a lot of this week&#39;s work is behind the scenes---what
+people in theater sometimes call &amp;quot;the other 90%&amp;quot; of getting a show on stage.
+First,
+we moved the functions that do k-means clustering and silhouette scoring
+from our code base into the &lt;a href=&quot;https://simplestatistics.org/&quot;&gt;simple-statistics&lt;/a&gt; package,
+and we&#39;re in the process of moving functions
+that calculate relative error and check for approximate equality as well.
+Having these in the same place as the other statistical tools we rely on
+will make our code easier to understand,
+and hopefully other people will find them useful outside of TidyBlocks.&lt;/p&gt;
+&lt;p&gt;But the big change
+is converting our website from &lt;a href=&quot;https://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt;
+which &lt;a href=&quot;https://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt; uses by default,
+to a JavaScript tool called &lt;a href=&quot;https://www.11ty.dev/&quot;&gt;Eleventy&lt;/a&gt;.
+It took longer than we expected,
+and we still have &lt;a href=&quot;https://github.com/11ty/eleventy/issues/1377&quot;&gt;a few issues&lt;/a&gt; to finish off,
+but now people only have to install one technology stack rather than two
+if they want to make and test contributions.
+We think that&#39;s essential to making TidyBlocks more inclusive,
+because as &lt;a href=&quot;https://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1007296&quot;&gt;this paper&lt;/a&gt; says:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Getting set up to work on a project---going from &amp;quot;I want to help&amp;quot;
+to &amp;quot;I&#39;m able to help&amp;quot; to &amp;quot;I&#39;m helping&amp;quot;---is often someone&#39;s first experience as a community participant.
+Any complexity or confusion at this point is therefore a significant barrier to participation...
+By treating the process of getting involved with the same care and attention you give to the product itself,
+you&#39;re making it clear that you value those contributors&#39; time and effort...&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We&#39;re going to pause work on features for a while
+and try to put together some examples
+to show what TidyBlocks can do
+and uncover what it still can&#39;t.
+If you&#39;d like to help,
+please &lt;a href=&quot;mailto:info@tidyblocks.tech&quot;&gt;get in touch&lt;/a&gt;.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>And Now for Some Statistics</title>
