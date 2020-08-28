@@ -25,17 +25,9 @@ jobs:
     - run: npm install
     - run: npm run build
     - run: npx @11ty/eleventy
-    - name: Deploy
+    - name: Deploy Eleventy Site
       uses: peaceiris/actions-gh-pages@v3.7.0-6
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
-        enable_jekyll: true
-        exclude_assets: '.gitignore'
-    - name: Deploy Dist
-      uses: peaceiris/actions-gh-pages@v3.7.0-6
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./dist
-        destination_dir: dist
-        keep_files: true
+        publish_dir: _site
+        cname: tidyblocks.tech
