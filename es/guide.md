@@ -1,16 +1,11 @@
 ---
 permalink: /es/guide/
-layout: page
+layout: page.liquid
+title: "Guía"
 language: es
 ---
 
 <div class="guide_container">
-<h1><a href="../index.html">TidyBlocks</a></h1>
-
-<!-- these links should hyperlink to the h1s above -->
-
-<br/>
-<br/>
 
 <div class="guide_lhs">
  <a class="data" href="#es_data">DATOS</a><br/>
@@ -32,22 +27,19 @@ Contribuciones de todo tipo son bienvenidas:
 Por favor ve a [nuestra guia de contribuidores]({{ '/contributing/' | relative_url }}) para empezar,
 y tenga en cuenta que todos los contribuyentes deben cumplir con nuestro [Codigo de conducta]({{ '/conduct/' | relative_url }}).
 
-<br/>
-<br/>
-
 <h1 class="data" id="es_data">DATOS</h1>
-{% include_relative data.md %}
+{% include es/data.md %}
 <h1 class="trasforms" id="es_transforms">TRANSFORMAR</h1>
-{% include_relative transform.md %}
+{% include es/transform.md %}
 <h1 class="plot" id="es_plots">GRAFICO</h1>
-{% include_relative plot.md %}
+{% include es/plot.md %}
 <h1 class="stats" id="es_stats">ESTADISTICAS</h1>
-{% include_relative stats.md %}
+{% include es/stats.md %}
 <h1 class="op" id="es_op">OPERACION</h1>
-{% include_relative op.md %}
+{% include es/op.md %}
 <h1 class="values" id="es_values">VALOR</h1>
-{% include_relative value.md %}
+{% include es/value.md %}
 <h1 class="combine" id="es_combine">COMBINAR</h1>
-{% include_relative combine.md %}
+{% include es/combine.md %}
 </div>
 </div>

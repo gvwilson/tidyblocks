@@ -1,6 +1,6 @@
 ---
 permalink: /ko/guide/
-layout: page
+layout: page.liquid
 language: ko
 ---
 

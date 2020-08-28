@@ -1,7 +1,7 @@
-<div id="bar" markdown="1">
-### Bar
+<div id="bar">
+<h3>Bar</h3>
 
-<img class="block" src="{{ 'en/img/plot_bar.svg' | relative_url }}" alt="bar block"/>
+<img class="block" src="{{ './plot_bar.svg' | relative_url }}" alt="bar block"/>
 
 The bar block makes the height of the bar proportional to the number of cases in each group.
 A bar chart uses height to represent a value, and so the base of the bar must always be shown to produce a valid visual comparison.
@@ -10,10 +10,10 @@ A bar chart uses height to represent a value, and so the base of the bar must al
 - **Y_axis**: Which column to use for the Y axis.
 </div>
 
-<div id="box" markdown="1">
-### Box
+<div id="box">
+<h3>Box</h3>
 
-<img class="block" src="{{ 'en/img/plot_box.svg' | relative_url }}" alt="box block"/>
+<img class="block" src="{{ './plot_box.svg' | relative_url }}" alt="box block"/>
 
 The Tukey box plot block summarizes a distribution of quantitative values using a set of summary statistics.
 The middle tick in the box represents the median.
@@ -26,20 +26,20 @@ Any outlier points beyond the whisker are displayed using point marks.
 - **Y_axis**: Which column to use for the Y axis.
 </div>
 
-<div id="dot" markdown="1">
-### Dot
+<div id="dot">
+<h3>Dot</h3>
 
-<img class="block" src="{{ 'en/img/plot_dot.svg' | relative_url }}" alt="dot block"/>
+<img class="block" src="{{ './plot_dot.svg' | relative_url }}" alt="dot block"/>
 
 Display a dot plot.
 
 - **X_axis**: Which column to use for the X axis.
 </div>
 
-<div id="histogram" markdown="1">
-### Histogram
+<div id="histogram">
+<h3>Histogram</h3>
 
-<img class="block" src="{{ 'en/img/plot_histogram.svg' | relative_url }}" alt="histogram block"/>
+<img class="block" src="{{ './plot_histogram.svg' | relative_url }}" alt="histogram block"/>
 
 Visualise the distribution of a single continuous variable
 by dividing the X axis into bins
@@ -50,10 +50,10 @@ Histograms display the counts with bars.
 - **bins (10)**: The number of bins.
 </div>
 
-<div id="scatter" markdown="1">
-### Scatter
+<div id="scatter">
+<h3>Scatter</h3>
 
-<img class="block" src="{{ 'en/img/plot_scatter.svg' | relative_url }}" alt="scatter block"/>
+<img class="block" src="{{ './plot_scatter.svg' | relative_url }}" alt="scatter block"/>
 
 Display a scatter plot.
 

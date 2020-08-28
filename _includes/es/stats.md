@@ -1,7 +1,7 @@
-<div id="ttest_one" markdown="1">
-### T-test de una muestra
+<div id="ttest_one">
+<h3>T-test de una muestra</h3>
 
-<img class="block" src="{{ 'es/img/stats_ttest_one.svg' | relative_url }}" alt="ttest_one block"/>
+<img class="block" src="{{ './stats_ttest_one.svg' | relative_url }}" alt="ttest_one block"/>
 
 Hacer un t-test de una muestra.
 
@@ -10,10 +10,10 @@ Hacer un t-test de una muestra.
 - **significativo**: El limite del valor significativo.
 </div>
 
-<div id="ttest_two" markdown="1">
-### T-test pareado
+<div id="ttest_two">
+<h3>T-test pareado</h3>
 
-<img class="block" src="{{ 'es/img/stats_ttest_two.svg' | relative_url }}" alt="ttest_two block"/>
+<img class="block" src="{{ './stats_ttest_two.svg' | relative_url }}" alt="ttest_two block"/>
 
 Hacer un t-test pareado.
 

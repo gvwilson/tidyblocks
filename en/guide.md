@@ -1,16 +1,11 @@
 ---
 permalink: /en/guide/
-layout: page
+layout: page.liquid
+title: "Guide"
 language: en
 ---
 
 <div class="guide_container">
-<h1><a href="../index.html">TidyBlocks</a></h1>
-
-<!-- these links should hyperlink to the h1s above -->
-
-<br/>
-<br/>
 
 <div class="guide_lhs">
  <a class="data" href="#en_data">DATA</a><br/>
@@ -33,24 +28,21 @@ Contributions of all kinds are welcome:
 please see [our contributors' guide]({{ '/contributing/' | relative_url }}) to get started,
 and please note that all contributors are required to abide by our [Code of Conduct]({{ '/conduct/' | relative_url }}).
 
-<br/>
-<br/>
-
 <h1 class="data" id="en_data">DATA</h1>
-{% include_relative data.md %}
+{% include en/data.md %}
 <h1 class="transform" id="en_transforms">TRANSFORMS</h1>
-{% include_relative transform.md %}
+{% include en/transform.md %}
 <h1 class="plot" id="en_plots">PLOTS</h1>
-{% include_relative plot.md %}
+{% include en/plot.md %}
 <h1 class="stats" id="en_stats">STATISTICS</h1>
-{% include_relative stats.md %}
+{% include en/stats.md %}
 <h1 class="op" id="en_op">OPERATIONS</h1>
-{% include_relative op.md %}
+{% include en/op.md %}
 <h1 class="values" id="en_values">VALUES</h1>
-{% include_relative value.md %}
+{% include en/value.md %}
 <h1 class="combine" id="en_combine">COMBINING</h1>
-{% include_relative combine.md %}
+{% include en/combine.md %}
 <h1 class="control" id="en_control">CONTROL</h1>
-{% include_relative control.md %}
+{% include en/control.md %}
 </div>
 </div>
