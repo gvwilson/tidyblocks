@@ -11,154 +11,353 @@
   </author>
   
   <entry>
-    <title>Project History</title>
-    <link href="https://tidyblocks.tech/blog/2020/07/26/project-history/"/>
-    <updated>2020-07-26T12:00:00+00:00</updated>
-    <id>https://tidyblocks.tech/blog/2020/07/26/project-history/</id>
-    <content type="html">&lt;p&gt;TidyBlocks officially started in May 2019,
-but its roots go back to the creation of &lt;a href=&quot;https://en.wikipedia.org/wiki/Scratch_%28programming_language%29&quot;&gt;Scratch&lt;/a&gt; in the early 2000s,
-and beyond that to the programming language &lt;a href=&quot;https://en.wikipedia.org/wiki/Logo_%28programming_language%29&quot;&gt;Logo&lt;/a&gt; designed in the late 1960s.
-Both use &lt;a href=&quot;https://en.wikipedia.org/wiki/Turtle_graphics&quot;&gt;turtle graphics&lt;/a&gt; to make programming more accessible,
-but Scratch went further by allowing people to build programs by clicking blocks together.
-Its interface reduces &lt;a href=&quot;https://en.wikipedia.org/wiki/Cognitive_load&quot;&gt;cognitive load&lt;/a&gt; by making simple syntax mistakes impossible
-(you can&#39;t forget semi-colons if they aren&#39;t there)
-and makes the structure of the program much easier to see and understand.&lt;/p&gt;
-&lt;p&gt;But &lt;code&gt;for&lt;/code&gt; loops and &lt;code&gt;if&lt;/code&gt;/&lt;code&gt;else&lt;/code&gt; statements that animate sprites are only one kind of computation,
-and judging by the number of students who wrote
-the &lt;a href=&quot;https://research.collegeboard.org/programs/ap/data/archived/ap-2018&quot;&gt;AP exams&lt;/a&gt; in the US between 2008 and 2018,
-it&#39;s not the most widely used:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Subject&lt;/th&gt;
-&lt;th style=&quot;text-align:right&quot;&gt;2008&lt;/th&gt;
-&lt;th style=&quot;text-align:right&quot;&gt;2018&lt;/th&gt;
-&lt;th style=&quot;text-align:right&quot;&gt;Change&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Calculus&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;222,835&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;308,538&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;+38%&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Computer Science&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;15,537&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;65,133&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;+319%&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Statistics&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;108,284&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;222,501&lt;/td&gt;
-&lt;td style=&quot;text-align:right&quot;&gt;+105%&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;The growth of Computer Science is impressive,
-but the absolute numbers for Statistics are still several times higher.
-While Scratch is beautiful and effective, it&#39;s not designed for doing or teaching data science:
-the &lt;a href=&quot;https://scratch.mit.edu/&quot;&gt;online version&lt;/a&gt; doesn&#39;t even include a way to load or store data tables.
-We therefore wanted to create a Scratch-like environment
-capable of handling the kinds of questions that come up on the AP exam
-(and similar exams in other countries like &lt;a href=&quot;https://en.wikipedia.org/wiki/GCE_Advanced_Level&quot;&gt;A Levels&lt;/a&gt; in the UK).
-We also wanted to create something that would prepare users for full-strength data science tools
-in the way that Scratch prepares people for languages like Python and Java.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt; started work in May 2019 as an intern with &lt;a href=&quot;http://rstudio.com/&quot;&gt;RStudio&lt;/a&gt;.
-Over the next three months she built a fully-functional prototype
-using the same &lt;a href=&quot;https://developers.google.com/blockly/&quot;&gt;Blockly toolkit&lt;/a&gt; that underpins in Scratch.
-&lt;a href=&quot;https://education.rstudio.com/blog/2019/10/my-javascript-internship-at-rstudio/&quot;&gt;She learned a lot in a hurry&lt;/a&gt;,
-and wowed the crowd with &lt;a href=&quot;https://resources.rstudio.com/resources/rstudioconf-2020/tidyblocks-using-the-language-of-the-tidyverse-in-a-blocks-based-interface/&quot;&gt;her demo at rstudio::conf 2020&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;Like most prototypes, though, that first version had a lot of &lt;a href=&quot;https://en.wikipedia.org/wiki/Technical_debt&quot;&gt;technical debt&lt;/a&gt;.
-Blockly is a complex framework---in our opinion, more complex than it needs to be---and the code in Version 1 was very brittle as a result.
-To address this,
-&lt;a href=&quot;https://tidyblocks.tech/authors/#wilson-greg&quot;&gt;Greg Wilson&lt;/a&gt; started rewriting TidyBlocks&#39; internals in March 2020,
-and in July &lt;a href=&quot;https://tidyblocks.tech/authors/#singh-justin&quot;&gt;Justin Singh&lt;/a&gt; began work on a modern user interface
-using &lt;a href=&quot;https://reactjs.org/&quot;&gt;React&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;And that brings us to where we are now.
-We have blocks that implement the core operations in &lt;a href=&quot;https://www.tidyverse.org/&quot;&gt;the tidyverse&lt;/a&gt;,
-which we think is the most user-friendly framework for data science available.
-We&#39;re a bit light on statistical tests right now,
-but we can select, filter, mutate, and summarize &lt;a href=&quot;https://en.wikipedia.org/wiki/Tidy_data&quot;&gt;tidy data&lt;/a&gt;,
-join tables in a couple of different ways,
-and create plots with &lt;a href=&quot;https://vega.github.io/vega-lite/&quot;&gt;Vega-Lite&lt;/a&gt;.
-Oh,
-and did we mention 100% branch coverage in our unit tests?&lt;/p&gt;
-&lt;p&gt;We believe we now have a solid foundation for further work.
-A new block can be added and tested in under fifteen minutes,
-so we&#39;re ready to start adding more statistical tests from the &lt;a href=&quot;https://simplestatistics.org/&quot;&gt;Simple Statistics&lt;/a&gt; package,
-working through examples from both old AP exams,
-and seeing how much of the excellent new book &lt;a href=&quot;https://datascienceineducation.com/&quot;&gt;&lt;em&gt;Data Science in Education Using R&lt;/em&gt;&lt;/a&gt;
-we can translate into blocks.
-It&#39;s going to be a lot of work,
-but having a user-friendly interface that can run on school and library computers without any installation requirements
-and that will serve as a bridge to full-strength data science tools is pretty exciting.
-If you&#39;d like to help us,
-please &lt;a href=&quot;mailto:gvwilson@third-bit.com&quot;&gt;get in touch&lt;/a&gt;.&lt;/p&gt;
+    <title>And Now for Some Statistics</title>
+    <link href="https://tidyblocks.tech/blog/2020/08/15/and-now-for-some-statistics/"/>
+    <updated>2020-08-15T12:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/08/15/and-now-for-some-statistics/</id>
+    <content type="html">&lt;p&gt;It has been another busy week for TidyBlocks:
+we have a beautiful new layout courtesy of &lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt;,
+we can download SVG versions of all our blocks at once thanks to &lt;a href=&quot;https://tidyblocks.tech/authors/#singh-justin&quot;&gt;Justin Singh&lt;/a&gt;,
+and we have a new Twitter account &lt;a href=&quot;https://twitter.com/tidyblocks&quot;&gt;@tidyblocks&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We have also started to add more statistical blocks
+so that people can use TidyBlocks in high school and college classrooms.
+We are basing our work on the &lt;a href=&quot;https://simplestatistics.org/&quot;&gt;Simple Statistics&lt;/a&gt; library
+created by &lt;a href=&quot;https://macwright.com/&quot;&gt;Tom MacWright&lt;/a&gt;:
+it is well documentd,
+only 20kb in compressed form,
+and has most of the functions we need.&lt;/p&gt;
+&lt;p&gt;But &amp;quot;most&amp;quot; isn&#39;t &amp;quot;all&amp;quot;,
+so I submitted &lt;a href=&quot;https://github.com/simple-statistics/simple-statistics/pull/482&quot;&gt;our first pull request&lt;/a&gt; this week
+to add k-means clustering.
+I learned something interesting along the way:
+there&#39;s a big difference between algorithms and implementations.
+The naïve k-means clustering algorithm is pretty simple:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Decide how many clusters you want.&lt;/li&gt;
+&lt;li&gt;Create that many &lt;em&gt;centroids&lt;/em&gt; at random.&lt;/li&gt;
+&lt;li&gt;Repeatedly:
+&lt;ol&gt;
+&lt;li&gt;Label each point according to which centroid it&#39;s closest to.&lt;/li&gt;
+&lt;li&gt;Calculate a new centroid for each cluster by finding the average position of the points in that group.&lt;/li&gt;
+&lt;li&gt;If the centroids haven&#39;t moved, stop.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Simple, right?
+But consider this one-dimensional case in the unit square:
+the points are at 0.0 and 0.5,
+and your initial centroids are at 0.25 and 1.0.
+Both points belong to Group 0,
+so Group 1 is empty.
+How do you calculate its new position?
+So far as I can tell by looking at a couple of other implementations (thanks, &lt;a href=&quot;https://juliasilge.com/&quot;&gt;Julia&lt;/a&gt;)
+and asking some questions (thanks, &lt;a href=&quot;https://dhavide.github.io/index.html&quot;&gt;Dhavide&lt;/a&gt;),
+the answer is either:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Ignore the possibility, which effectively becomes case 2 when the code attempts to divide by zero.&lt;/li&gt;
+&lt;li&gt;Raise an error and ask the user to try again with a different random starting point.&lt;/li&gt;
+&lt;li&gt;Return fewer groups than the user asked for.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;None of these are well documented (or documented at all).
+Libraries &lt;em&gt;do&lt;/em&gt; try to prevent this problem from arising in the first place by:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;choosing actual points as initial points, or&lt;/li&gt;
+&lt;li&gt;choosing initial points within the bounding box of the actual points.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The first strategy clearly prevents friendless centroids on the first pass,
+but I cannot find a proof that the second does,
+or that either guarantees friendless centroids won&#39;t arise eventually.
+On the other hand,
+I can&#39;t construct a case that &lt;em&gt;does&lt;/em&gt; produce friendless centroids,
+which means I can&#39;t test the error-handling code in the function I wrote.&lt;/p&gt;
+&lt;p&gt;K-means clustering should be deployed within the week.
+We hope you&#39;ll find it useful;
+if there are other simple statistical methods you&#39;d like us to add,
+please &lt;a href=&quot;mailto:&quot;&gt;let us know&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
   
   <entry>
-    <title>Questions About TidyBlocks</title>
-    <link href="https://tidyblocks.tech/blog/2020/07/27/questions-about-tidyblocks/"/>
-    <updated>2020-07-27T12:00:00+00:00</updated>
-    <id>https://tidyblocks.tech/blog/2020/07/27/questions-about-tidyblocks/</id>
-    <content type="html">&lt;p&gt;Our &lt;a href=&quot;https://tidyblocks.tech/blog/2020/07/26/project-history.html&quot;&gt;first post&lt;/a&gt; described the history of TidyBlocks so far.
-In this post we&#39;d like to answer a few of the questions people have asked.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Is TidyBlocks an RStudio product?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;No.
-The first version was developed by &lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt; while she was a summer intern,
-but TidyBlocks is a free-standing open source project.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Does TidyBlocks use R?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;No.
-We set out to create something that would run entirely in the browser without a back-end server,
-and R does not run in the browser (not even with &lt;a href=&quot;https://webassembly.org/&quot;&gt;WebAssembly&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Does TidyBlocks generate R code?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;No,
-but it could.
-While Version 1 generated executable JavaScript directly,
-Version 2 produces &lt;a href=&quot;https://en.wikipedia.org/wiki/JSON&quot;&gt;JSON&lt;/a&gt;
-that is then translated into runnable code objects.
-Generating R or Python that could be copied and pasted into some other system would be straightforward,
-but from a teaching point of view we think it would be better to get learners to use those systems directly
-once they have learned what they&#39;re trying to do.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;What license does TidyBlocks use?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The &lt;a href=&quot;https://tidyblocks.tech/license/&quot;&gt;Hippocratic License&lt;/a&gt;,
-which allows it to be used for anything that doesn&#39;t violate basic human rights laws.
-(If what you&#39;re teaching or the way you&#39;re teaching it violates
-&lt;a href=&quot;https://www.un.org/en/universal-declaration-human-rights/&quot;&gt;the Universal Declaration of Human Rights&lt;/a&gt;,
-we&#39;d rather not be involvd.)&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How does the project make decisions?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt;,
-&lt;a href=&quot;https://tidyblocks.tech/authors/#singh-justin&quot;&gt;Justin Singh&lt;/a&gt;,
-and &lt;a href=&quot;https://tidyblocks.tech/authors/#wilson-greg&quot;&gt;Greg Wilson&lt;/a&gt;
-are responsible for reviewing and merging pull requests,
-prioritizing issues,
-and deploying updated versions.
-For the moment they make decisions by consensus,
-but if we gain more regular contributors,
-we will start using &lt;a href=&quot;https://third-bit.com/2019/06/13/marthas-rules.html&quot;&gt;Martha&#39;s Rules&lt;/a&gt;
-to give everyone involved an equal voice.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;How can I contribute?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;We&#39;re glad you asked:&lt;/p&gt;
+    <title>The Hippocratic License</title>
+    <link href="https://tidyblocks.tech/blog/2020/08/14/hippocratic-license/"/>
+    <updated>2020-08-14T12:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/08/14/hippocratic-license/</id>
+    <content type="html">&lt;p&gt;Over the past few years,
+more and more people have become concerned with
+the ethical implications of work in data science and machine learning.
+From algorithmic bias to facial recognition,
+the tools we teach people to build and use have the potential to do great harm;
+as teachers,
+we have a responsibility to make our students aware of the issues
+in the same way that the medical profession teaches nurses and doctors
+to think about the human implications of what they do.&lt;/p&gt;
+&lt;p&gt;One example of how we can do this comes up when we discuss software licensing and intellectual property.
+Until recently,
+researchers had three principal options:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;If &lt;em&gt;you are a JavaScript programmer&lt;/em&gt; and know your way around &lt;a href=&quot;https://reactjs.org/&quot;&gt;React&lt;/a&gt;,
-we could use help fixing bugs, adding features, and cleaning up the code.&lt;/li&gt;
-&lt;li&gt;If &lt;em&gt;you are a user experience designer&lt;/em&gt;
-we would be grateful for comments and suggestions on our current UI.
-We would be just as grateful for help with &lt;em&gt;accessibility&lt;/em&gt;,
-though this may require work on &lt;a href=&quot;https://developers.google.com/blockly/&quot;&gt;Blockly toolkit&lt;/a&gt; itself.&lt;/li&gt;
-&lt;li&gt;If &lt;em&gt;you teach introductory statistics or data science&lt;/em&gt;,
-please give us examples of problems that TidyBlocks can&#39;t handle and tell us how it should.&lt;/li&gt;
-&lt;li&gt;If &lt;em&gt;you are fluent in a language other than English&lt;/em&gt;,
-both the interface and the &lt;a href=&quot;https://tidyblocks.tech/guide/&quot;&gt;user guide&lt;/a&gt; can be translated
-and we&#39;d be happy to coordinate.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Make their work closed source, so that others could not use it without permission.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use the &lt;a href=&quot;https://opensource.org/licenses/MIT&quot;&gt;MIT License&lt;/a&gt; or something equivalent,
+which allows users to do whatever they want.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;GNU Public License&lt;/a&gt; (GPL),
+which allows users to do what they want
+but also requires them to share the source of any project
+that modifies or incorporates GPL&#39;d software.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Where can I contribute?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Please use &lt;a href=&quot;https://tidyblocks.tech/blog/2020/07/27/questions-about-tidyblocks/&quot;&gt;our GitHub repository&lt;/a&gt; to file issues and submit pull requests.
-We also have a Slack channel for regular contributors.&lt;/p&gt;
+&lt;p&gt;A fourth option has recently been developed
+by &lt;a href=&quot;https://where.coraline.codes/&quot;&gt;Coraline Ada Ehmke&lt;/a&gt;,
+who is best known until now for creating the &lt;a href=&quot;https://www.contributor-covenant.org/&quot;&gt;Contributor Covenant&lt;/a&gt;
+used by many open source projects.
+Like other open licenses,
+the &lt;a href=&quot;https://firstdonoharm.dev/&quot;&gt;Hippocratic License&lt;/a&gt; allows people to use and share the software,
+but where the GPL requires them to share their own work,
+the Hippocratic License prevents anyone from using the software to do harm.
+To avoid wrangling over what exactly that means,
+the license specifically forbids anyone from using software in ways that violate
+the &lt;a href=&quot;https://www.un.org/en/universal-declaration-human-rights/&quot;&gt;United Nations Universal Declaration of Human Rights&lt;/a&gt;
+and the &lt;a href=&quot;https://www.unglobalcompact.org/&quot;&gt;United Nations Global Compact&lt;/a&gt;.
+These are regarded as landmarks in the history of human rights,
+and more practically,
+have been ratified by many countries
+and argued over by lawyers and scholars
+so that their scope and meaning is clear.&lt;/p&gt;
+&lt;p&gt;Making students aware of the Hippocratic License
+and adopting it for our own projects
+is a small step toward a better world,
+but it &lt;em&gt;is&lt;/em&gt; a step.
+From a teaching point of view,
+discussing it and its implications can turn an otherwise abstract lecture on ethics
+into a lively debate,
+and can give students practice discussing what they &lt;em&gt;should&lt;/em&gt; do
+rather than what they &lt;em&gt;could&lt;/em&gt; do.&lt;/p&gt;
+&lt;div align=&quot;center&quot; markdown=&quot;1&quot;&gt;
+*This post originally appeared on [the RStudio Education blog](https://education.rstudio.com/blog/2020/08/hippocratic-license/).*
+&lt;/div&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title>TidyBlocks Meets React</title>
+    <link href="https://tidyblocks.tech/blog/2020/08/02/react/"/>
+    <updated>2020-08-02T13:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/08/02/react/</id>
+    <content type="html">&lt;p&gt;TidyBlocks was originally developed as purely a JavaScript application, which
+made it difficult to really modify and customize the UI. When it came time to give
+things a fresh coat of paint we decided to build it using React for three main reasons:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Components.&lt;/strong&gt; We&#39;d be able to take advantage of the React ecosystem using
+existing components to enhance the functionality of the application.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Easy Customization.&lt;/strong&gt; When the user alters their screensize, or the size of
+one of the panels it&#39;s easy to dynamically adjust and resize things on the fly.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Stability and a Strong Community.&lt;/strong&gt; The React architecture of passing
+information from the parent to child components mean things flow in only one-direction. This
+vastly reduces the chance of strange corner cases. Beyond that, just being one of the bigger front-end frameworks
+means there&#39;s a significant user base of people that are familiar with it, and capable of working
+with it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;A Few of the Components We Use&lt;/h2&gt;
+&lt;h3&gt;React Data Grid&lt;/h3&gt;
+&lt;p&gt;Integrating components to React immediately bought us a ton of added functionality. For starters,
+using &lt;a href=&quot;https://adazzle.github.io/react-data-grid/canary/?path=/story/demos--common-features&quot;&gt;React Data Grid&lt;/a&gt;
+we were able to provide column sorting, adjustable column sizes, and have our tables scale to fit
+the entire size of the pane.&lt;/p&gt;
+&lt;div align=&quot;center&quot;&gt;
+  &lt;img style=&quot;max-width: 100%; width:700px;&quot; src=&quot;https://tidyblocks.tech/static/blog/2020/08-02/react-data-grid.png&quot; alt=&quot;React Data Grid table&quot;&gt;
+&lt;/div&gt;
+&lt;h3&gt;Material UI&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://material-ui.com/&quot;&gt;Material UI&lt;/a&gt; is a larger framework similar to something
+like &lt;a href=&quot;https://getbootstrap.com/&quot;&gt;Bootstrap&lt;/a&gt;. It provides everything from ways to establish
+layouts/grids, to implementations of things like menus and buttons. Moreover, it allows for some
+pretty robust customization giving the option to go in and tweak styles to avoid everything
+looking too cookie cutter.&lt;/p&gt;
+&lt;p&gt;We took full advantage of a lot of the tools offered by the package for everything from the
+dialogs we display when the user saves, to the tabs on the right panel of the interface, and
+the dropdowns/buttons on our menu bar.&lt;/p&gt;
+&lt;h3&gt;React Select&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://react-select.com/home&quot;&gt;React Select&lt;/a&gt; allows us to quickly swap the data set being displayed.
+It also provides a pretty robust amount of control over the styling of the dropdown items, which allowed
+use to use different colours to indicate user data and reports.&lt;/p&gt;
+&lt;div align=&quot;center&quot;&gt;
+  &lt;img style=&quot;max-width: 100%; width:700px;&quot; src=&quot;https://tidyblocks.tech/static/blog/2020/08-02/react-select.png&quot; alt=&quot;React Select Example&quot;&gt;
+&lt;/div&gt;
+&lt;p&gt;Providing a callback function whenever the selection is changed, it&#39;s simple to look-up
+the requested data set, and update our &#39;state.&#39;&lt;/p&gt;
+&lt;h3&gt;React Splitters&lt;/h3&gt;
+&lt;p&gt;Working with statistical data and graphs it&#39;s apparent that the screen can very quickly get very
+crowded. As a result it was a priority to provide users with the ability to quickly increase their
+screen real-estate. We used &lt;a href=&quot;https://github.com/martinnov92/React-Splitters&quot;&gt;React Splitters&lt;/a&gt; to provide
+a draggable vertical pane.&lt;/p&gt;
+&lt;div align=&quot;center&quot;&gt;
+  &lt;img style=&quot;max-width: 100%; width:700px;&quot; src=&quot;https://tidyblocks.tech/static/blog/2020/08-02/splitter.png&quot; alt=&quot;React Splitter Example, wide right pane&quot;&gt;
+&lt;/div&gt;
+&lt;h2&gt;What&#39;s Next?&lt;/h2&gt;
+&lt;p&gt;Going forward there&#39;s a lot of opportunity to build on our current
+foundation. Users have often brought up cases like wanting to see two different
+plots side-by-side for comparison, or even mobile support.&lt;/p&gt;
+</content>
+  </entry>
+  
+  <entry>
+    <title>Creating a Block</title>
+    <link href="https://tidyblocks.tech/blog/2020/08/02/creating-a-block/"/>
+    <updated>2020-08-02T12:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/08/02/creating-a-block/</id>
+    <content type="html">&lt;p&gt;We love collaborators and welcome any PRs with new block ideas,
+so this developer tutorial will walk you through creating your own statistical block.
+All TidyBlocks blocks have three parts, which we will look at in turn:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;The block UI: what the block looks like and what fields it includes&lt;/li&gt;
+&lt;li&gt;The generator code: how to extract what the user nests inside your block&lt;/li&gt;
+&lt;li&gt;The transform code: the actual instrcutions of what to do with what the user supplied inside your block&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Block UI&lt;/h2&gt;
+&lt;p&gt;Inside the &lt;code&gt;blocks&lt;/code&gt; folder you&#39;ll find JavaScript files with names corresponding to the names of the block categories.
+We&#39;ll be going into &lt;code&gt;stats.js&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The function &lt;code&gt;Blockly.defineBlocksWithJsonArray&lt;/code&gt; lets us use JSON to define a Blockly block.
+Here&#39;s the definition of the one-sample t-test block:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;{
+      type: &#39;stats_ttest_one&#39;,
+      message0: MSG.stats_ttest_one.message0[language],
+      args0: [],
+      message1: MSG.stats_ttest_one.message1[language],
+      args1: [
+        {
+          type: &#39;field_input&#39;,
+          name: &#39;NAME&#39;,
+          text: MSG.stats_ttest_one.args1_name[language]
+        },
+        {
+          type: &#39;field_input&#39;,
+          name: &#39;COLUMN&#39;,
+          text: MSG.stats_ttest_one.args1_column[language]
+        },
+        {
+          type: &#39;field_number&#39;,
+          name: &#39;MEAN&#39;,
+          value: 0.0
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: &#39;stats_blocks&#39;,
+      tooltip: MSG.stats_ttest_one.tooltip[language],
+      helpUrl: &#39;&#39;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;type&lt;/code&gt; is the name of our block &lt;code&gt;stats_ttest_one&lt;/code&gt;.
+This name is how we connect the block UI to the code generator,
+and how we inform Blockly that we want to include it in our workspace.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;message&lt;/code&gt; is the text we want to see on the block.
+Instead of writing &amp;quot;One-sample t-test&amp;quot; directly we look it up in a table called &lt;code&gt;MSG&lt;/code&gt; higher up in the file
+so that we can customize blocks according to the user&#39;s preferred language.
+English is the only language supported so far, but we hope to add others soon.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;args0&lt;/code&gt;: by not including anything here we skip a line between the block&#39;s name and its inputs.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;message1&lt;/code&gt;: like &lt;code&gt;message&lt;/code&gt;, this adds text to the block.
+The text in the lookup table is `&#39;name %1 column %2 mean \u03BC %3&#39;,
+which means &amp;quot;name&amp;quot;, a filler,, &amp;quot;column&amp;quot;, another filler, &amp;quot;mean mu&amp;quot;, and a final filler.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;args1&lt;/code&gt;: this arrays specifies what goes into the three fillers in &lt;code&gt;message1&lt;/code&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;type&lt;/code&gt; is the type of filler, such as &lt;code&gt;field_input&lt;/code&gt; for a text input field or &lt;code&gt;field_number&lt;/code&gt; for a numeric field.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;name&lt;/code&gt; is the field&#39;s name, which we will use in the code generator.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;text&lt;/code&gt;: the default text to display inside the field that the user will supply.
+We have chosen &lt;code&gt;name&lt;/code&gt; as the default for the statistical output
+and &lt;code&gt;column&lt;/code&gt; where the user should put the name of the column to perform the test on.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;value&lt;/code&gt;: if the field is a number, we supply a default value rather than default text.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;inputsInline&lt;/code&gt;: allows the user to drag in blocks for the supplied args.
+This is set to false for this block, but other blocks allow users to do this.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;previousStatement&lt;/code&gt; and &lt;code&gt;nextStatement&lt;/code&gt;: are &lt;code&gt;false&lt;/code&gt; because
+we &lt;em&gt;don&#39;t&lt;/em&gt; want users to be able to add blocks to the left or right of this one.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;style&lt;/code&gt;: each block family has a corresponding color palette defined in &lt;code&gt;blocks.js&lt;/code&gt;.
+Since this is a stats block we give it the &lt;code&gt;stats_block&lt;/code&gt; style.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;tooltip&lt;/code&gt;: this is the text to appear on hover.
+Again, we look this up in a table so that we can internationalize it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div align=&quot;center&quot;&gt;
+  &lt;img src=&quot;https://tidyblocks.tech/en/img/stats_ttest_one.svg&quot; alt=&quot;One Sample T-Test Block UI&quot;&gt;
+&lt;/div&gt;
+&lt;h2&gt;Generator&lt;/h2&gt;
+&lt;p&gt;Now we need to define a function to extract the user&#39;s inputs from the block&#39;s three fields:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  // One-sample two-sided t-test.
+  Blockly.TidyBlocks[&#39;stats_ttest_one&#39;] = (block) =&amp;gt; {
+    const name = block.getFieldValue(&#39;NAME&#39;)
+    const column = block.getFieldValue(&#39;COLUMN&#39;)
+    const mean = block.getFieldValue(&#39;MEAN&#39;)
+    return `[&amp;quot;@transform&amp;quot;, &amp;quot;ttest_one&amp;quot;, &amp;quot;${name}&amp;quot;, &amp;quot;${column}&amp;quot;, ${mean}]`
+  }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;Blockly.TidyBlocks&lt;/code&gt; holds all of the code generators, so we store our function there using its name.
+For &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;column&lt;/code&gt;, and &lt;code&gt;mean&lt;/code&gt; we use &lt;code&gt;block.getFieldValue(&#39;NAME_OF_FIELD&#39;)&lt;/code&gt; to get the user supplied values,
+then include them in a JavaScript array with the strings &lt;code&gt;&amp;quot;@transform&amp;quot;&lt;/code&gt;
+(to indicate what family of blocks this one belongs to)
+and &lt;code&gt;&amp;quot;ttest_one&amp;quot;&lt;/code&gt; (to indicate precisely what type of block this is).
+We have to return a stringified version of this array because Blockly requires code generators to return text;
+we will discuss code generation in more detail in a later post.&lt;/p&gt;
+&lt;h2&gt;Transform&lt;/h2&gt;
+&lt;p&gt;Our final component is a class that knows how to run our statistical test.
+I actually reccomend thinking about this code prior to the  block&#39;s UI and generators
+since you&#39;ll need to think about what values the user needs to input given the block type.
+This class goes in &lt;code&gt;libs/transform.js&lt;/code&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;class TransformTTestOneSample extends TransformBase {
+  constructor (label, colName, mean) {
+    super(&#39;ttest_one&#39;, [], true, true)
+    this.label = label
+    this.colName = colName
+    this.mean = mean
+  }
+
+  run (env, df) {
+    env.appendLog(&#39;log&#39;, `${this.species} ${this.label}`)
+    const samples = df.data.map(row =&amp;gt; row[this.colName])
+    const pValue = stats.tTest(samples, this.mean)
+    env.setStats(this.label, pValue)
+    return df
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;TransformTTestOneSample&lt;/code&gt; takes the three fields stored in the JavaScript array
+and uses the stats library to calculate the statistic using the data supplied by the previous stage in the pipeline.
+We will talk more in a future post about the constructor and the &lt;code&gt;run&lt;/code&gt; method of this class,
+but the most important thing for now is that it stores the result in the environment &lt;code&gt;env&lt;/code&gt;
+so that the user interface can get it and display after the program finishes running.&lt;/p&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;That&#39;s a lot to digest, but the good news is that it only has to be digested once:
+almost all top-level blocks work the same way.
+Digging under the hood to see how your block &amp;quot;knows&amp;quot; about prior blocks,
+or how TidyBlocks figures out what pipeline your block is a not mandatory for creating a block,
+but if you&#39;re curious about that process we outline it in &lt;a href=&quot;https://github.com/tidyblocks/tidyblocks&quot;&gt;the repository&#39;s README&lt;/a&gt;,
+and we&#39;re always happy to answer questions.&lt;/p&gt;
 </content>
   </entry>
   
@@ -368,353 +567,154 @@ and we think it&#39;s a solid base for future work.&lt;/p&gt;
   </entry>
   
   <entry>
-    <title>Creating a Block</title>
-    <link href="https://tidyblocks.tech/blog/2020/08/02/creating-a-block/"/>
-    <updated>2020-08-02T12:00:00+00:00</updated>
-    <id>https://tidyblocks.tech/blog/2020/08/02/creating-a-block/</id>
-    <content type="html">&lt;p&gt;We love collaborators and welcome any PRs with new block ideas,
-so this developer tutorial will walk you through creating your own statistical block.
-All TidyBlocks blocks have three parts, which we will look at in turn:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;The block UI: what the block looks like and what fields it includes&lt;/li&gt;
-&lt;li&gt;The generator code: how to extract what the user nests inside your block&lt;/li&gt;
-&lt;li&gt;The transform code: the actual instrcutions of what to do with what the user supplied inside your block&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;Block UI&lt;/h2&gt;
-&lt;p&gt;Inside the &lt;code&gt;blocks&lt;/code&gt; folder you&#39;ll find JavaScript files with names corresponding to the names of the block categories.
-We&#39;ll be going into &lt;code&gt;stats.js&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The function &lt;code&gt;Blockly.defineBlocksWithJsonArray&lt;/code&gt; lets us use JSON to define a Blockly block.
-Here&#39;s the definition of the one-sample t-test block:&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;{
-      type: &#39;stats_ttest_one&#39;,
-      message0: MSG.stats_ttest_one.message0[language],
-      args0: [],
-      message1: MSG.stats_ttest_one.message1[language],
-      args1: [
-        {
-          type: &#39;field_input&#39;,
-          name: &#39;NAME&#39;,
-          text: MSG.stats_ttest_one.args1_name[language]
-        },
-        {
-          type: &#39;field_input&#39;,
-          name: &#39;COLUMN&#39;,
-          text: MSG.stats_ttest_one.args1_column[language]
-        },
-        {
-          type: &#39;field_number&#39;,
-          name: &#39;MEAN&#39;,
-          value: 0.0
-        }
-      ],
-      inputsInline: false,
-      previousStatement: null,
-      nextStatement: null,
-      style: &#39;stats_blocks&#39;,
-      tooltip: MSG.stats_ttest_one.tooltip[language],
-      helpUrl: &#39;&#39;
-    }
-&lt;/code&gt;&lt;/pre&gt;
+    <title>Questions About TidyBlocks</title>
+    <link href="https://tidyblocks.tech/blog/2020/07/27/questions-about-tidyblocks/"/>
+    <updated>2020-07-27T12:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/07/27/questions-about-tidyblocks/</id>
+    <content type="html">&lt;p&gt;Our &lt;a href=&quot;https://tidyblocks.tech/blog/2020/07/26/project-history.html&quot;&gt;first post&lt;/a&gt; described the history of TidyBlocks so far.
+In this post we&#39;d like to answer a few of the questions people have asked.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Is TidyBlocks an RStudio product?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;No.
+The first version was developed by &lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt; while she was a summer intern,
+but TidyBlocks is a free-standing open source project.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Does TidyBlocks use R?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;No.
+We set out to create something that would run entirely in the browser without a back-end server,
+and R does not run in the browser (not even with &lt;a href=&quot;https://webassembly.org/&quot;&gt;WebAssembly&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Does TidyBlocks generate R code?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;No,
+but it could.
+While Version 1 generated executable JavaScript directly,
+Version 2 produces &lt;a href=&quot;https://en.wikipedia.org/wiki/JSON&quot;&gt;JSON&lt;/a&gt;
+that is then translated into runnable code objects.
+Generating R or Python that could be copied and pasted into some other system would be straightforward,
+but from a teaching point of view we think it would be better to get learners to use those systems directly
+once they have learned what they&#39;re trying to do.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What license does TidyBlocks use?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;a href=&quot;https://tidyblocks.tech/license/&quot;&gt;Hippocratic License&lt;/a&gt;,
+which allows it to be used for anything that doesn&#39;t violate basic human rights laws.
+(If what you&#39;re teaching or the way you&#39;re teaching it violates
+&lt;a href=&quot;https://www.un.org/en/universal-declaration-human-rights/&quot;&gt;the Universal Declaration of Human Rights&lt;/a&gt;,
+we&#39;d rather not be involvd.)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;How does the project make decisions?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt;,
+&lt;a href=&quot;https://tidyblocks.tech/authors/#singh-justin&quot;&gt;Justin Singh&lt;/a&gt;,
+and &lt;a href=&quot;https://tidyblocks.tech/authors/#wilson-greg&quot;&gt;Greg Wilson&lt;/a&gt;
+are responsible for reviewing and merging pull requests,
+prioritizing issues,
+and deploying updated versions.
+For the moment they make decisions by consensus,
+but if we gain more regular contributors,
+we will start using &lt;a href=&quot;https://third-bit.com/2019/06/13/marthas-rules.html&quot;&gt;Martha&#39;s Rules&lt;/a&gt;
+to give everyone involved an equal voice.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;How can I contribute?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;We&#39;re glad you asked:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;type&lt;/code&gt; is the name of our block &lt;code&gt;stats_ttest_one&lt;/code&gt;.
-This name is how we connect the block UI to the code generator,
-and how we inform Blockly that we want to include it in our workspace.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;message&lt;/code&gt; is the text we want to see on the block.
-Instead of writing &amp;quot;One-sample t-test&amp;quot; directly we look it up in a table called &lt;code&gt;MSG&lt;/code&gt; higher up in the file
-so that we can customize blocks according to the user&#39;s preferred language.
-English is the only language supported so far, but we hope to add others soon.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;args0&lt;/code&gt;: by not including anything here we skip a line between the block&#39;s name and its inputs.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;message1&lt;/code&gt;: like &lt;code&gt;message&lt;/code&gt;, this adds text to the block.
-The text in the lookup table is `&#39;name %1 column %2 mean \u03BC %3&#39;,
-which means &amp;quot;name&amp;quot;, a filler,, &amp;quot;column&amp;quot;, another filler, &amp;quot;mean mu&amp;quot;, and a final filler.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;args1&lt;/code&gt;: this arrays specifies what goes into the three fillers in &lt;code&gt;message1&lt;/code&gt;.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;type&lt;/code&gt; is the type of filler, such as &lt;code&gt;field_input&lt;/code&gt; for a text input field or &lt;code&gt;field_number&lt;/code&gt; for a numeric field.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;name&lt;/code&gt; is the field&#39;s name, which we will use in the code generator.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;text&lt;/code&gt;: the default text to display inside the field that the user will supply.
-We have chosen &lt;code&gt;name&lt;/code&gt; as the default for the statistical output
-and &lt;code&gt;column&lt;/code&gt; where the user should put the name of the column to perform the test on.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;value&lt;/code&gt;: if the field is a number, we supply a default value rather than default text.&lt;/li&gt;
+&lt;li&gt;If &lt;em&gt;you are a JavaScript programmer&lt;/em&gt; and know your way around &lt;a href=&quot;https://reactjs.org/&quot;&gt;React&lt;/a&gt;,
+we could use help fixing bugs, adding features, and cleaning up the code.&lt;/li&gt;
+&lt;li&gt;If &lt;em&gt;you are a user experience designer&lt;/em&gt;
+we would be grateful for comments and suggestions on our current UI.
+We would be just as grateful for help with &lt;em&gt;accessibility&lt;/em&gt;,
+though this may require work on &lt;a href=&quot;https://developers.google.com/blockly/&quot;&gt;Blockly toolkit&lt;/a&gt; itself.&lt;/li&gt;
+&lt;li&gt;If &lt;em&gt;you teach introductory statistics or data science&lt;/em&gt;,
+please give us examples of problems that TidyBlocks can&#39;t handle and tell us how it should.&lt;/li&gt;
+&lt;li&gt;If &lt;em&gt;you are fluent in a language other than English&lt;/em&gt;,
+both the interface and the &lt;a href=&quot;https://tidyblocks.tech/guide/&quot;&gt;user guide&lt;/a&gt; can be translated
+and we&#39;d be happy to coordinate.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;inputsInline&lt;/code&gt;: allows the user to drag in blocks for the supplied args.
-This is set to false for this block, but other blocks allow users to do this.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;previousStatement&lt;/code&gt; and &lt;code&gt;nextStatement&lt;/code&gt;: are &lt;code&gt;false&lt;/code&gt; because
-we &lt;em&gt;don&#39;t&lt;/em&gt; want users to be able to add blocks to the left or right of this one.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;style&lt;/code&gt;: each block family has a corresponding color palette defined in &lt;code&gt;blocks.js&lt;/code&gt;.
-Since this is a stats block we give it the &lt;code&gt;stats_block&lt;/code&gt; style.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;tooltip&lt;/code&gt;: this is the text to appear on hover.
-Again, we look this up in a table so that we can internationalize it.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div align=&quot;center&quot;&gt;
-  &lt;img src=&quot;https://tidyblocks.tech/en/img/stats_ttest_one.svg&quot; alt=&quot;One Sample T-Test Block UI&quot;&gt;
-&lt;/div&gt;
-&lt;h2&gt;Generator&lt;/h2&gt;
-&lt;p&gt;Now we need to define a function to extract the user&#39;s inputs from the block&#39;s three fields:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;  // One-sample two-sided t-test.
-  Blockly.TidyBlocks[&#39;stats_ttest_one&#39;] = (block) =&amp;gt; {
-    const name = block.getFieldValue(&#39;NAME&#39;)
-    const column = block.getFieldValue(&#39;COLUMN&#39;)
-    const mean = block.getFieldValue(&#39;MEAN&#39;)
-    return `[&amp;quot;@transform&amp;quot;, &amp;quot;ttest_one&amp;quot;, &amp;quot;${name}&amp;quot;, &amp;quot;${column}&amp;quot;, ${mean}]`
-  }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;Blockly.TidyBlocks&lt;/code&gt; holds all of the code generators, so we store our function there using its name.
-For &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;column&lt;/code&gt;, and &lt;code&gt;mean&lt;/code&gt; we use &lt;code&gt;block.getFieldValue(&#39;NAME_OF_FIELD&#39;)&lt;/code&gt; to get the user supplied values,
-then include them in a JavaScript array with the strings &lt;code&gt;&amp;quot;@transform&amp;quot;&lt;/code&gt;
-(to indicate what family of blocks this one belongs to)
-and &lt;code&gt;&amp;quot;ttest_one&amp;quot;&lt;/code&gt; (to indicate precisely what type of block this is).
-We have to return a stringified version of this array because Blockly requires code generators to return text;
-we will discuss code generation in more detail in a later post.&lt;/p&gt;
-&lt;h2&gt;Transform&lt;/h2&gt;
-&lt;p&gt;Our final component is a class that knows how to run our statistical test.
-I actually reccomend thinking about this code prior to the  block&#39;s UI and generators
-since you&#39;ll need to think about what values the user needs to input given the block type.
-This class goes in &lt;code&gt;libs/transform.js&lt;/code&gt;:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;class TransformTTestOneSample extends TransformBase {
-  constructor (label, colName, mean) {
-    super(&#39;ttest_one&#39;, [], true, true)
-    this.label = label
-    this.colName = colName
-    this.mean = mean
-  }
-
-  run (env, df) {
-    env.appendLog(&#39;log&#39;, `${this.species} ${this.label}`)
-    const samples = df.data.map(row =&amp;gt; row[this.colName])
-    const pValue = stats.tTest(samples, this.mean)
-    env.setStats(this.label, pValue)
-    return df
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;TransformTTestOneSample&lt;/code&gt; takes the three fields stored in the JavaScript array
-and uses the stats library to calculate the statistic using the data supplied by the previous stage in the pipeline.
-We will talk more in a future post about the constructor and the &lt;code&gt;run&lt;/code&gt; method of this class,
-but the most important thing for now is that it stores the result in the environment &lt;code&gt;env&lt;/code&gt;
-so that the user interface can get it and display after the program finishes running.&lt;/p&gt;
-&lt;h2&gt;Conclusion&lt;/h2&gt;
-&lt;p&gt;That&#39;s a lot to digest, but the good news is that it only has to be digested once:
-almost all top-level blocks work the same way.
-Digging under the hood to see how your block &amp;quot;knows&amp;quot; about prior blocks,
-or how TidyBlocks figures out what pipeline your block is a not mandatory for creating a block,
-but if you&#39;re curious about that process we outline it in &lt;a href=&quot;https://github.com/tidyblocks/tidyblocks&quot;&gt;the repository&#39;s README&lt;/a&gt;,
-and we&#39;re always happy to answer questions.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Where can I contribute?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Please use &lt;a href=&quot;https://tidyblocks.tech/blog/2020/07/27/questions-about-tidyblocks/&quot;&gt;our GitHub repository&lt;/a&gt; to file issues and submit pull requests.
+We also have a Slack channel for regular contributors.&lt;/p&gt;
 </content>
   </entry>
   
   <entry>
-    <title>TidyBlocks Meets React</title>
-    <link href="https://tidyblocks.tech/blog/2020/08/02/react/"/>
-    <updated>2020-08-02T13:00:00+00:00</updated>
-    <id>https://tidyblocks.tech/blog/2020/08/02/react/</id>
-    <content type="html">&lt;p&gt;TidyBlocks was originally developed as purely a JavaScript application, which
-made it difficult to really modify and customize the UI. When it came time to give
-things a fresh coat of paint we decided to build it using React for three main reasons:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Components.&lt;/strong&gt; We&#39;d be able to take advantage of the React ecosystem using
-existing components to enhance the functionality of the application.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Easy Customization.&lt;/strong&gt; When the user alters their screensize, or the size of
-one of the panels it&#39;s easy to dynamically adjust and resize things on the fly.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;Stability and a Strong Community.&lt;/strong&gt; The React architecture of passing
-information from the parent to child components mean things flow in only one-direction. This
-vastly reduces the chance of strange corner cases. Beyond that, just being one of the bigger front-end frameworks
-means there&#39;s a significant user base of people that are familiar with it, and capable of working
-with it.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2&gt;A Few of the Components We Use&lt;/h2&gt;
-&lt;h3&gt;React Data Grid&lt;/h3&gt;
-&lt;p&gt;Integrating components to React immediately bought us a ton of added functionality. For starters,
-using &lt;a href=&quot;https://adazzle.github.io/react-data-grid/canary/?path=/story/demos--common-features&quot;&gt;React Data Grid&lt;/a&gt;
-we were able to provide column sorting, adjustable column sizes, and have our tables scale to fit
-the entire size of the pane.&lt;/p&gt;
-&lt;div align=&quot;center&quot;&gt;
-  &lt;img style=&quot;max-width: 100%; width:700px;&quot; src=&quot;https://tidyblocks.tech/static/blog/2020/08-02/react-data-grid.png&quot; alt=&quot;React Data Grid table&quot;&gt;
-&lt;/div&gt;
-&lt;h3&gt;Material UI&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://material-ui.com/&quot;&gt;Material UI&lt;/a&gt; is a larger framework similar to something
-like &lt;a href=&quot;https://getbootstrap.com/&quot;&gt;Bootstrap&lt;/a&gt;. It provides everything from ways to establish
-layouts/grids, to implementations of things like menus and buttons. Moreover, it allows for some
-pretty robust customization giving the option to go in and tweak styles to avoid everything
-looking too cookie cutter.&lt;/p&gt;
-&lt;p&gt;We took full advantage of a lot of the tools offered by the package for everything from the
-dialogs we display when the user saves, to the tabs on the right panel of the interface, and
-the dropdowns/buttons on our menu bar.&lt;/p&gt;
-&lt;h3&gt;React Select&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://react-select.com/home&quot;&gt;React Select&lt;/a&gt; allows us to quickly swap the data set being displayed.
-It also provides a pretty robust amount of control over the styling of the dropdown items, which allowed
-use to use different colours to indicate user data and reports.&lt;/p&gt;
-&lt;div align=&quot;center&quot;&gt;
-  &lt;img style=&quot;max-width: 100%; width:700px;&quot; src=&quot;https://tidyblocks.tech/static/blog/2020/08-02/react-select.png&quot; alt=&quot;React Select Example&quot;&gt;
-&lt;/div&gt;
-&lt;p&gt;Providing a callback function whenever the selection is changed, it&#39;s simple to look-up
-the requested data set, and update our &#39;state.&#39;&lt;/p&gt;
-&lt;h3&gt;React Splitters&lt;/h3&gt;
-&lt;p&gt;Working with statistical data and graphs it&#39;s apparent that the screen can very quickly get very
-crowded. As a result it was a priority to provide users with the ability to quickly increase their
-screen real-estate. We used &lt;a href=&quot;https://github.com/martinnov92/React-Splitters&quot;&gt;React Splitters&lt;/a&gt; to provide
-a draggable vertical pane.&lt;/p&gt;
-&lt;div align=&quot;center&quot;&gt;
-  &lt;img style=&quot;max-width: 100%; width:700px;&quot; src=&quot;https://tidyblocks.tech/static/blog/2020/08-02/splitter.png&quot; alt=&quot;React Splitter Example, wide right pane&quot;&gt;
-&lt;/div&gt;
-&lt;h2&gt;What&#39;s Next?&lt;/h2&gt;
-&lt;p&gt;Going forward there&#39;s a lot of opportunity to build on our current
-foundation. Users have often brought up cases like wanting to see two different
-plots side-by-side for comparison, or even mobile support.&lt;/p&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>The Hippocratic License</title>
-    <link href="https://tidyblocks.tech/blog/2020/08/14/hippocratic-license/"/>
-    <updated>2020-08-14T12:00:00+00:00</updated>
-    <id>https://tidyblocks.tech/blog/2020/08/14/hippocratic-license/</id>
-    <content type="html">&lt;p&gt;Over the past few years,
-more and more people have become concerned with
-the ethical implications of work in data science and machine learning.
-From algorithmic bias to facial recognition,
-the tools we teach people to build and use have the potential to do great harm;
-as teachers,
-we have a responsibility to make our students aware of the issues
-in the same way that the medical profession teaches nurses and doctors
-to think about the human implications of what they do.&lt;/p&gt;
-&lt;p&gt;One example of how we can do this comes up when we discuss software licensing and intellectual property.
-Until recently,
-researchers had three principal options:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Make their work closed source, so that others could not use it without permission.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Use the &lt;a href=&quot;https://opensource.org/licenses/MIT&quot;&gt;MIT License&lt;/a&gt; or something equivalent,
-which allows users to do whatever they want.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Use the &lt;a href=&quot;https://www.gnu.org/licenses/gpl-3.0.en.html&quot;&gt;GNU Public License&lt;/a&gt; (GPL),
-which allows users to do what they want
-but also requires them to share the source of any project
-that modifies or incorporates GPL&#39;d software.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;A fourth option has recently been developed
-by &lt;a href=&quot;https://where.coraline.codes/&quot;&gt;Coraline Ada Ehmke&lt;/a&gt;,
-who is best known until now for creating the &lt;a href=&quot;https://www.contributor-covenant.org/&quot;&gt;Contributor Covenant&lt;/a&gt;
-used by many open source projects.
-Like other open licenses,
-the &lt;a href=&quot;https://firstdonoharm.dev/&quot;&gt;Hippocratic License&lt;/a&gt; allows people to use and share the software,
-but where the GPL requires them to share their own work,
-the Hippocratic License prevents anyone from using the software to do harm.
-To avoid wrangling over what exactly that means,
-the license specifically forbids anyone from using software in ways that violate
-the &lt;a href=&quot;https://www.un.org/en/universal-declaration-human-rights/&quot;&gt;United Nations Universal Declaration of Human Rights&lt;/a&gt;
-and the &lt;a href=&quot;https://www.unglobalcompact.org/&quot;&gt;United Nations Global Compact&lt;/a&gt;.
-These are regarded as landmarks in the history of human rights,
-and more practically,
-have been ratified by many countries
-and argued over by lawyers and scholars
-so that their scope and meaning is clear.&lt;/p&gt;
-&lt;p&gt;Making students aware of the Hippocratic License
-and adopting it for our own projects
-is a small step toward a better world,
-but it &lt;em&gt;is&lt;/em&gt; a step.
-From a teaching point of view,
-discussing it and its implications can turn an otherwise abstract lecture on ethics
-into a lively debate,
-and can give students practice discussing what they &lt;em&gt;should&lt;/em&gt; do
-rather than what they &lt;em&gt;could&lt;/em&gt; do.&lt;/p&gt;
-&lt;div align=&quot;center&quot; markdown=&quot;1&quot;&gt;
-*This post originally appeared on [the RStudio Education blog](https://education.rstudio.com/blog/2020/08/hippocratic-license/).*
-&lt;/div&gt;
-</content>
-  </entry>
-  
-  <entry>
-    <title>And Now for Some Statistics</title>
-    <link href="https://tidyblocks.tech/blog/2020/08/15/and-now-for-some-statistics/"/>
-    <updated>2020-08-15T12:00:00+00:00</updated>
-    <id>https://tidyblocks.tech/blog/2020/08/15/and-now-for-some-statistics/</id>
-    <content type="html">&lt;p&gt;It has been another busy week for TidyBlocks:
-we have a beautiful new layout courtesy of &lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt;,
-we can download SVG versions of all our blocks at once thanks to &lt;a href=&quot;https://tidyblocks.tech/authors/#singh-justin&quot;&gt;Justin Singh&lt;/a&gt;,
-and we have a new Twitter account &lt;a href=&quot;https://twitter.com/tidyblocks&quot;&gt;@tidyblocks&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;We have also started to add more statistical blocks
-so that people can use TidyBlocks in high school and college classrooms.
-We are basing our work on the &lt;a href=&quot;https://simplestatistics.org/&quot;&gt;Simple Statistics&lt;/a&gt; library
-created by &lt;a href=&quot;https://macwright.com/&quot;&gt;Tom MacWright&lt;/a&gt;:
-it is well documentd,
-only 20kb in compressed form,
-and has most of the functions we need.&lt;/p&gt;
-&lt;p&gt;But &amp;quot;most&amp;quot; isn&#39;t &amp;quot;all&amp;quot;,
-so I submitted &lt;a href=&quot;https://github.com/simple-statistics/simple-statistics/pull/482&quot;&gt;our first pull request&lt;/a&gt; this week
-to add k-means clustering.
-I learned something interesting along the way:
-there&#39;s a big difference between algorithms and implementations.
-The naïve k-means clustering algorithm is pretty simple:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Decide how many clusters you want.&lt;/li&gt;
-&lt;li&gt;Create that many &lt;em&gt;centroids&lt;/em&gt; at random.&lt;/li&gt;
-&lt;li&gt;Repeatedly:
-&lt;ol&gt;
-&lt;li&gt;Label each point according to which centroid it&#39;s closest to.&lt;/li&gt;
-&lt;li&gt;Calculate a new centroid for each cluster by finding the average position of the points in that group.&lt;/li&gt;
-&lt;li&gt;If the centroids haven&#39;t moved, stop.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Simple, right?
-But consider this one-dimensional case in the unit square:
-the points are at 0.0 and 0.5,
-and your initial centroids are at 0.25 and 1.0.
-Both points belong to Group 0,
-so Group 1 is empty.
-How do you calculate its new position?
-So far as I can tell by looking at a couple of other implementations (thanks, &lt;a href=&quot;https://juliasilge.com/&quot;&gt;Julia&lt;/a&gt;)
-and asking some questions (thanks, &lt;a href=&quot;https://dhavide.github.io/index.html&quot;&gt;Dhavide&lt;/a&gt;),
-the answer is either:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Ignore the possibility, which effectively becomes case 2 when the code attempts to divide by zero.&lt;/li&gt;
-&lt;li&gt;Raise an error and ask the user to try again with a different random starting point.&lt;/li&gt;
-&lt;li&gt;Return fewer groups than the user asked for.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;None of these are well documented (or documented at all).
-Libraries &lt;em&gt;do&lt;/em&gt; try to prevent this problem from arising in the first place by:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;choosing actual points as initial points, or&lt;/li&gt;
-&lt;li&gt;choosing initial points within the bounding box of the actual points.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;The first strategy clearly prevents friendless centroids on the first pass,
-but I cannot find a proof that the second does,
-or that either guarantees friendless centroids won&#39;t arise eventually.
-On the other hand,
-I can&#39;t construct a case that &lt;em&gt;does&lt;/em&gt; produce friendless centroids,
-which means I can&#39;t test the error-handling code in the function I wrote.&lt;/p&gt;
-&lt;p&gt;K-means clustering should be deployed within the week.
-We hope you&#39;ll find it useful;
-if there are other simple statistical methods you&#39;d like us to add,
-please &lt;a href=&quot;mailto:&quot;&gt;let us know&lt;/a&gt;.&lt;/p&gt;
+    <title>Project History</title>
+    <link href="https://tidyblocks.tech/blog/2020/07/26/project-history/"/>
+    <updated>2020-07-26T12:00:00+00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/07/26/project-history/</id>
+    <content type="html">&lt;p&gt;TidyBlocks officially started in May 2019,
+but its roots go back to the creation of &lt;a href=&quot;https://en.wikipedia.org/wiki/Scratch_%28programming_language%29&quot;&gt;Scratch&lt;/a&gt; in the early 2000s,
+and beyond that to the programming language &lt;a href=&quot;https://en.wikipedia.org/wiki/Logo_%28programming_language%29&quot;&gt;Logo&lt;/a&gt; designed in the late 1960s.
+Both use &lt;a href=&quot;https://en.wikipedia.org/wiki/Turtle_graphics&quot;&gt;turtle graphics&lt;/a&gt; to make programming more accessible,
+but Scratch went further by allowing people to build programs by clicking blocks together.
+Its interface reduces &lt;a href=&quot;https://en.wikipedia.org/wiki/Cognitive_load&quot;&gt;cognitive load&lt;/a&gt; by making simple syntax mistakes impossible
+(you can&#39;t forget semi-colons if they aren&#39;t there)
+and makes the structure of the program much easier to see and understand.&lt;/p&gt;
+&lt;p&gt;But &lt;code&gt;for&lt;/code&gt; loops and &lt;code&gt;if&lt;/code&gt;/&lt;code&gt;else&lt;/code&gt; statements that animate sprites are only one kind of computation,
+and judging by the number of students who wrote
+the &lt;a href=&quot;https://research.collegeboard.org/programs/ap/data/archived/ap-2018&quot;&gt;AP exams&lt;/a&gt; in the US between 2008 and 2018,
+it&#39;s not the most widely used:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Subject&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;2008&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;2018&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;Change&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Calculus&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;222,835&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;308,538&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;+38%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Computer Science&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;15,537&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;65,133&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;+319%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Statistics&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;108,284&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;222,501&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;+105%&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The growth of Computer Science is impressive,
+but the absolute numbers for Statistics are still several times higher.
+While Scratch is beautiful and effective, it&#39;s not designed for doing or teaching data science:
+the &lt;a href=&quot;https://scratch.mit.edu/&quot;&gt;online version&lt;/a&gt; doesn&#39;t even include a way to load or store data tables.
+We therefore wanted to create a Scratch-like environment
+capable of handling the kinds of questions that come up on the AP exam
+(and similar exams in other countries like &lt;a href=&quot;https://en.wikipedia.org/wiki/GCE_Advanced_Level&quot;&gt;A Levels&lt;/a&gt; in the UK).
+We also wanted to create something that would prepare users for full-strength data science tools
+in the way that Scratch prepares people for languages like Python and Java.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://tidyblocks.tech/authors/#gans-maya&quot;&gt;Maya Gans&lt;/a&gt; started work in May 2019 as an intern with &lt;a href=&quot;http://rstudio.com/&quot;&gt;RStudio&lt;/a&gt;.
+Over the next three months she built a fully-functional prototype
+using the same &lt;a href=&quot;https://developers.google.com/blockly/&quot;&gt;Blockly toolkit&lt;/a&gt; that underpins in Scratch.
+&lt;a href=&quot;https://education.rstudio.com/blog/2019/10/my-javascript-internship-at-rstudio/&quot;&gt;She learned a lot in a hurry&lt;/a&gt;,
+and wowed the crowd with &lt;a href=&quot;https://resources.rstudio.com/resources/rstudioconf-2020/tidyblocks-using-the-language-of-the-tidyverse-in-a-blocks-based-interface/&quot;&gt;her demo at rstudio::conf 2020&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Like most prototypes, though, that first version had a lot of &lt;a href=&quot;https://en.wikipedia.org/wiki/Technical_debt&quot;&gt;technical debt&lt;/a&gt;.
+Blockly is a complex framework---in our opinion, more complex than it needs to be---and the code in Version 1 was very brittle as a result.
+To address this,
+&lt;a href=&quot;https://tidyblocks.tech/authors/#wilson-greg&quot;&gt;Greg Wilson&lt;/a&gt; started rewriting TidyBlocks&#39; internals in March 2020,
+and in July &lt;a href=&quot;https://tidyblocks.tech/authors/#singh-justin&quot;&gt;Justin Singh&lt;/a&gt; began work on a modern user interface
+using &lt;a href=&quot;https://reactjs.org/&quot;&gt;React&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;And that brings us to where we are now.
+We have blocks that implement the core operations in &lt;a href=&quot;https://www.tidyverse.org/&quot;&gt;the tidyverse&lt;/a&gt;,
+which we think is the most user-friendly framework for data science available.
+We&#39;re a bit light on statistical tests right now,
+but we can select, filter, mutate, and summarize &lt;a href=&quot;https://en.wikipedia.org/wiki/Tidy_data&quot;&gt;tidy data&lt;/a&gt;,
+join tables in a couple of different ways,
+and create plots with &lt;a href=&quot;https://vega.github.io/vega-lite/&quot;&gt;Vega-Lite&lt;/a&gt;.
+Oh,
+and did we mention 100% branch coverage in our unit tests?&lt;/p&gt;
+&lt;p&gt;We believe we now have a solid foundation for further work.
+A new block can be added and tested in under fifteen minutes,
+so we&#39;re ready to start adding more statistical tests from the &lt;a href=&quot;https://simplestatistics.org/&quot;&gt;Simple Statistics&lt;/a&gt; package,
+working through examples from both old AP exams,
+and seeing how much of the excellent new book &lt;a href=&quot;https://datascienceineducation.com/&quot;&gt;&lt;em&gt;Data Science in Education Using R&lt;/em&gt;&lt;/a&gt;
+we can translate into blocks.
+It&#39;s going to be a lot of work,
+but having a user-friendly interface that can run on school and library computers without any installation requirements
+and that will serve as a bridge to full-strength data science tools is pretty exciting.
+If you&#39;d like to help us,
+please &lt;a href=&quot;mailto:gvwilson@third-bit.com&quot;&gt;get in touch&lt;/a&gt;.&lt;/p&gt;
 </content>
   </entry>
 </feed>
