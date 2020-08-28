@@ -39,3 +39,9 @@ jobs:
         publish_dir: ./dist
         destination_dir: dist
         keep_files: true
+    - name: Deploy Eleventy Site
+      uses: peaceiris/actions-gh-pages@v3.7.0-6
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
+        keep_files: true
