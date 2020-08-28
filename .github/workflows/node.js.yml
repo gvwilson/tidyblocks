@@ -30,7 +30,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
-        enable_jekyll: true
+        enable_jekyll: false
         exclude_assets: '.gitignore'
     - name: Deploy Dist
       uses: peaceiris/actions-gh-pages@v3.7.0-6
