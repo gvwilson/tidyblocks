@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>TidyBlocks</title>
+    <link rel="stylesheet" href="../dist/css/base.min.css">
+    <script src="../dist/tidyblocks.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+    <script>
+      let ui = null
+      window.onload = () => {
+        TidyBlocksUI = tidyblocks.setup('it', 'root', false)
+      }
+    </script>
+  </head>
+  <body>
+    <!-- UI goes here -->
+    <div id="root"></div>
+
+    <!-- Vega-Lite -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.9.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.2.1"></script>
+  </body>
+</html>

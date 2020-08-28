@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: Contributing</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+  
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/FAQ">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/FAQ">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main>
+    <h1>TidyBlocks: Contributing</h1>
+<p>Contributions of all kinds are welcome.
+By offering a contribution, you agree to abide by our <a href="CONDUCT.md">Code of Conduct</a>
+and that your work may be made available under the terms of <a href="LICENSE.md">our license</a>.</p>
+<h2>Who Can Help and How</h2>
+<p><strong>Asha</strong> is a high school mathematics teacher
+whose students are using TidyBlocks to do their homework.
+She can help by filing bug reports and feature suggestions,
+and by providing questions and solutions for us to add to our gallery of examples.</p>
+<p><strong>Lupita</strong> is using TidyBlocks to learn basic data science.
+She can help by translating blocks and block descriptions into Bantu
+to make TidyBlocks more accessible to her fellow students.</p>
+<p><strong>Raniere</strong> is a data scientist
+who uses R and Python in his work.
+He can help by creating code generators for those languages
+and by extending our visualization toolkit.</p>
+<p><strong>Yatindra</strong> is a web programmer who is fluent in JavaScript.
+They can help by bringing our code and tooling into line with modern standards
+and by adding features to make TidyBlocks easier to use.</p>
+<h2>What Goes Where</h2>
+<ol>
+<li>
+<p>To report a bug or request a new feature,
+please check the <a href="https://github.com/tidyblocks/tidyblocks/issues">list of open issues</a>
+to see if it's already there,
+and if not,
+file as complete a description as you can.</p>
+</li>
+<li>
+<p>If you have made a fix or improvement,
+please create a <a href="https://github.com/tidyblocks/tidyblocks/pulls">pull request</a>;
+we review these as quickly as we can.
+If you are tackling an issue that has already been opened,
+please name your branch <code>number-some-description</code>
+(e.g., <code>20-highlighting-active-block</code>)
+and put <code>Closes #N</code> (e.g., <code>Closes #20</code>)
+on a line by itself at the end of the pull request's long description.</p>
+</li>
+<li>
+<p>All contributors will be added to the authors list,
+and if you become a regular contributor
+we will invite you to join our Slack channel.</p>
+</li>
+</ol>
+<h2>Getting Started</h2>
+<ol>
+<li>
+<p>Fork <a href="https://github.com/tidyblocks/tidyblocks/">https://github.com/tidyblocks/tidyblocks/</a> and clone it to your desktop.</p>
+</li>
+<li>
+<p>Go into the newly-created <code>tidyblocks</code> directory
+and run <code>npm run install</code> to install all of the packages we depend on.</p>
+</li>
+<li>
+<p>Run <code>npm run test</code> to re-run the unit tests in the <code>tests/</code> directory
+to make sure everything is working.</p>
+</li>
+<li>
+<p>Please see <a href="https://tidyblocks.tech/blog/">our blog</a>
+for explanations of how our code is organized.
+We will update these periodically.</p>
+</li>
+</ol>
+<h2>Actions</h2>
+<ul>
+<li>
+<p><code>npm run check</code>: print a list of all missing translation strings.
+A line like <code>stats.kerfuffle.message_0: af</code> means that
+there is no translation in Afar (<code>af</code>) for <code>message_0</code>
+in the <code>kerfuffle</code> block in <code>blocks/stats.js</code>.</p>
+</li>
+<li>
+<p><code>npm run build</code>: regenerate <code>dist/tidyblocks.js</code>.
+You can test this by opening <code>en/index.html</code>
+or the <code>index.html</code> file in some other language's directory.</p>
+</li>
+<li>
+<p><code>npm run watch</code>: regenerate and reload <code>dist/tidyblocks.js</code> whenever files change.</p>
+</li>
+<li>
+<p><code>npm run test</code>: run tests without reporting code coverage.
+(You can use <code>npm run test -- -g 'some title string'</code>
+to only run tests whose titles match that string.)</p>
+</li>
+<li>
+<p><code>npm run coverage</code>: run tests and report code coverage to see what isn't being tested.
+(Open <code>coverage/index.html</code> to see the results.)</p>
+</li>
+<li>
+<p><code>npm run data</code>: create loadable JSON file for each CSV file in <code>./data</code>.
+(These files must be loaded in <code>./libs/gui.js</code> to be accessible.)</p>
+</li>
+<li>
+<p><code>npm run docs</code>: regenerate code documentation in the <code>./docs</code> directory.
+Please do <em>not</em> commit changes to this directory yourself:
+we will regenerate the documentation periodically after checking it.</p>
+</li>
+<li>
+<p><code>npm run lint</code>: run coding style checks.</p>
+</li>
+</ul>
+<h2>Translation</h2>
+<p>Blocks are defined in JavaScript files located in <code>./blocks/*.js</code>.
+Each file starts with a lookup table called <code>MESSAGES</code>
+that has one entry for each block
+with one sub-entry for each translatable fragment of text in that block.
+Messages are looked up using two-letter language codes,
+such as <code>pt</code> for Portuguese and <code>ar</code> for Arabic.
+To translate a block's messages:</p>
+<ol>
+<li>
+<p>Run TidyBlocks in a language that already has a translation
+and look at what text appears where in that block.</p>
+</li>
+<li>
+<p>Look at the translation strings for the block in that language.</p>
+</li>
+<li>
+<p>Add the translation string for the target language.</p>
+</li>
+<li>
+<p>When you are done, create a pull request that includes the translations for review.</p>
+</li>
+</ol>
+<p>If you are the first person to do translations in some language,
+please also add a line to <code>./index.html</code> to link to the main page for that language.</p>
+<h2>Organization</h2>
+<p>TidyBlocks uses <a href="https://developers.google.com/blockly/">Blockly</a> for the workspace,
+<a href="https://reactjs.org/">React</a> for the user interface,
+and <a href="https://jekyllrb.com/">Jekyll</a> + <a href="https://pages.github.com/">GitHub Pages</a> for the website as a whole.</p>
+<ul>
+<li>
+<p><code>blocks/*.js</code>: implementation of blocks.</p>
+<ul>
+<li><code>blocks/blocks.js</code>: block initialization and code generation entry point.</li>
+<li><code>blocks/helper.js</code>: utilities.</li>
+<li>All other files implement a set of blocks.</li>
+</ul>
+</li>
+<li>
+<p><code>libs/util.js</code>: low-level utilities.</p>
+</li>
+<li>
+<p><code>libs/dataframe.js</code>: operations on data tables.</p>
+</li>
+<li>
+<p><code>libs/expr.js</code>, <code>libs/value.js</code>, and <code>libs/op.js</code>: things that operate on table rows.
+These may be nested (i.e., <code>add(multiply(2, column('red')), column('blue'))</code></p>
+</li>
+<li>
+<p><code>libs/summarize.js</code>: summarization operations (such as <code>sum</code> and <code>max</code>).</p>
+</li>
+<li>
+<p><code>libs/transform.js</code>: operations on entire tables.
+These use expressions, summarizers, and statistical tests.</p>
+</li>
+<li>
+<p><code>libs/pipeline.js</code>: pipelines made up of stages.</p>
+</li>
+<li>
+<p><code>libs/program.js</code>: programs made up of pipelines.</p>
+</li>
+<li>
+<p><code>libs/persist.js</code>: convert serialized JSON to programs, pipelines, stages, and expressions.</p>
+</li>
+<li>
+<p><code>libs/env.js</code>: the runtime environment for a program that stores datasets, records error messages, and so on.</p>
+</li>
+<li>
+<p><code>libs/gui.js</code> : handle interactions with the user.</p>
+</li>
+</ul>
+<h3>Other Files</h3>
+<ul>
+<li>
+<p><code>index.html</code>: home page containing links to pages for each language.</p>
+</li>
+<li>
+<p><code>ar/index.html</code>, <code>it/index.html</code>, etc.: home pages for specific languages.</p>
+<ul>
+<li><code>LL/index.html</code>: the TidyBlocks workspace page for language <code>LL</code>.</li>
+<li><code>LL/guide.md</code>: the guide for that language.</li>
+<li><code>LL/*.md</code>: documentation for each group of blocks.</li>
+<li><code>LL/img/*.svg</code>: SVG images of blocks used in the guide.</li>
+</ul>
+</li>
+<li>
+<p><code>index.js</code>: gathers blocks for bundling to create <code>tidyblocks.min.js</code> for testing.</p>
+</li>
+<li>
+<p><code>_posts</code>: blog posts.</p>
+</li>
+<li>
+<p><code>_config.yml</code>, <code>_data/*</code>, <code>_includes/*</code>, and <code>_layouts/*</code>: Jekyll site generation files.</p>
+</li>
+<li>
+<p><code>_site</code>: locally-generated copy of the website.
+Please do <em>not</em> add this directory or its contents to Git.</p>
+</li>
+<li>
+<p><code>test/*.js</code>: unit tests.</p>
+</li>
+<li>
+<p><code>static/css/*</code> and <code>static/sass/*</code>: CSS for the user interface.</p>
+</li>
+<li>
+<p><code>coverage/*</code>: code coverage data generated by <code>npm run coverage</code>.
+Please do <em>not</em> add these files to Git.</p>
+</li>
+<li>
+<p><code>data/*</code>: built-in datasets.</p>
+</li>
+<li>
+<p><code>docs/*</code>: JSDoc code documentation generated by <code>npm run docs</code>.
+Please do <em>not</em> add changes to these files to the Git repository:
+we will regenerate them periodically.</p>
+</li>
+<li>
+<p><code>workspaces/*</code>: small programs to load for interactive testing.</p>
+</li>
+</ul>
+
+    </main>
+    <footer>
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  <a target="_blank" href=""><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+  </body>
+</html>

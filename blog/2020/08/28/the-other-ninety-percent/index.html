@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: The Other Ninety Percent</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+  
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/FAQ">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/FAQ">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks: The Other Ninety Percent</h1>
+      <p>We made several improvements to TidyBlocks this week,
+but not all of them are visible to users.
+The ones that are include:</p>
+<ul>
+<li>More of the interface has been translated.</li>
+<li>We now have a block for calculating running sums and averages.</li>
+<li>And there is another new block for shifting columns up and down
+so that users can do things like compare today's rainfall with yesterday's.</li>
+<li>Users can also now re-seed the random number generator...</li>
+<li>...and put data in bins.</li>
+</ul>
+<p>But a lot of this week's work is behind the scenes---what
+people in theater sometimes call &quot;the other 90%&quot; of getting a show on stage.
+First,
+we moved the functions that do k-means clustering and silhouette scoring
+from our code base into the <a href="https://simplestatistics.org/">simple-statistics</a> package,
+and we're in the process of moving functions
+that calculate relative error and check for approximate equality as well.
+Having these in the same place as the other statistical tools we rely on
+will make our code easier to understand,
+and hopefully other people will find them useful outside of TidyBlocks.</p>
+<p>But the big change
+is converting our website from <a href="https://jekyllrb.com/">Jekyll</a>
+which <a href="https://pages.github.com/">GitHub Pages</a> uses by default,
+to a JavaScript tool called <a href="https://www.11ty.dev/">Eleventy</a>.
+It took longer than we expected,
+and we still have <a href="https://github.com/11ty/eleventy/issues/1377">a few issues</a> to finish off,
+but now people only have to install one technology stack rather than two
+if they want to make and test contributions.
+We think that's essential to making TidyBlocks more inclusive,
+because as <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1007296">this paper</a> says:</p>
+<blockquote>
+<p>Getting set up to work on a project---going from &quot;I want to help&quot;
+to &quot;I'm able to help&quot; to &quot;I'm helping&quot;---is often someone's first experience as a community participant.
+Any complexity or confusion at this point is therefore a significant barrier to participation...
+By treating the process of getting involved with the same care and attention you give to the product itself,
+you're making it clear that you value those contributors' time and effort...</p>
+</blockquote>
+<p>We're going to pause work on features for a while
+and try to put together some examples
+to show what TidyBlocks can do
+and uncover what it still can't.
+If you'd like to help,
+please <a href="mailto:info@tidyblocks.tech">get in touch</a>.</p>
+
+      <p align="right"><em>— Greg Wilson / 2020-08-28</em></p>
+    </main>
+    <footer>
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  <a target="_blank" href=""><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+  </body>
+</html>
