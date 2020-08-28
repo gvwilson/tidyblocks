@@ -1,7 +1,7 @@
-<div id="create" markdown="1">
-### Bin
+<div id="bin" markdown="1">
+<h3>Bin</h3>
 
-<img class="block" src="{{ 'en/img/transform_bin.svg' | relative_url }}" alt="bin block"/>
+<img class="block" src="{{ './transform_bin.svg' | relative_url }}" alt="bin block"/>
 
 Divide data into evenly-spaced bins.
 
@@ -11,7 +11,7 @@ Divide data into evenly-spaced bins.
 </div>
 
 <div id="create" markdown="1">
-### Create
+<h3>Create</h3>
 
 <img class="block" src="{{ './transform_create.svg' | relative_url }}" alt="create block"/>
 
@@ -113,10 +113,10 @@ e.g., <code>mean_age</code>.
 -   **column**: which column to summarize.
 </div>
 
-<div id="running" markdown="1">
-### Running Values
+<div id="running">
+<h3>Running Values</h3>
 
-<img class="block" src="{{ 'en/img/transform_running.svg' | relative_url }}" alt="running block"/>
+<img class="block" src="{{ './transform_running.svg' | relative_url }}" alt="running block"/>
 
 Calculate a running value for a column,
 such as a running sum.

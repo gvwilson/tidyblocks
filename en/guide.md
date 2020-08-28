@@ -41,8 +41,8 @@ and please note that all contributors are required to abide by our [Code of Cond
 <h1 class="values" id="en_values">VALUES</h1>
 {% include en/value.md %}
 <h1 class="combine" id="en_combine">COMBINING</h1>
-{% include_relative combine.md %}
+{% include en/combine.md %}
 <h1 class="control" id="en_control">CONTROL</h1>
-{% include_relative control.md %}
+{% include en/control.md %}
 </div>
 </div>
