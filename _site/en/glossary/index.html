@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: Glossary</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+  
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/FAQ">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/FAQ">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main>
+    <h1>TidyBlocks: Glossary</h1>
+<p>{:auto_ids}
+aggregation
+:   A synonym for <a href="#summarize">summarize</a>.</p>
+<p>Boolean
+:   A <a href="#logical">logical</a> value that is either <code>true</code> or <code>false</code>.
+The name comes from the mathematician George Boole.</p>
+<p>column
+:   Every column of a <a href="#table">table</a> contains zero or more rows
+and is referred to by its <a href="#column-name">column name</a>.
+In statistics a column is a <a href="#variable">variable</a> that has been observed or measured,
+but we prefer the term &quot;column&quot; to avoid confusion with variables in programming languages.</p>
+<p>column name
+:   Every column in a <a href="#table">table</a> must have a distinct name
+(though columns in different tables can have the same names).
+A column name must start with the underscore '_' or a letter,
+and may only contain underscores, letters, and digits.
+TidyBlocks automatically creates names for some columns,
+such as <code>_group_</code> for the column containing <a href="#group-id">group IDs</a>.</p>
+<p>datetime
+:   A moment in time represented by years, months, days, hours, minutes, and seconds.
+Datetimes are always stored in <a href="#universal-time-coordinates">Universal Time Coordinates</a>,
+and are also referred to as <a href="#timestamp">timestamps</a>.
+Datetimes are written as &quot;YYYY-MM-DD:hh:mm:ss&quot;.</p>
+<p>expression
+:   Something that performs an <a href="#operation">operation</a> to produce a <a href="#value">value</a>.
+Expressions can be combined to create new expressions:
+for example,
+the expression <code>(temperature - 32) * (5 / 9)</code> uses multiplication
+to combine two smaller expressions that use subtraction and division.</p>
+<p>group
+:   A subset of the <a href="#row">rows</a> in a <a href="#table">table</a>
+that have the same values in one or more <a href="#column">columns</a>.
+TidyBlocks gives each group a unique <a href="#group-id">group ID</a>.</p>
+<p>group ID
+:   The unique identifier for a <a href="#group">group</a> in a <a href="#table">table</a>.
+TidyBlocks automatically stores group IDs in a column called <code>_group_</code>.</p>
+<p>k-means clustering
+:   An <a href="https://en.wikipedia.org/wiki/K-means_clustering">algorithm</a> that clusters data
+by repeatedly approximating where the center of each cluster is.</p>
+<p>logical
+:   A value that is either <code>true</code> or <code>false</code>.</p>
+<p>missing value
+:   A hole in a dataset.
+Missing values are often called <a href="#na">NAs</a> (short for &quot;not available&quot;).
+Missing is technically not the same thing as <a href="#nan">Not a Number</a> (NaN),
+but TidyBlocks treats them the same way.</p>
+<p>NA
+:   A missing value.
+(The abbreviation is short for &quot;not available&quot;.)</p>
+<p>NaN
+:   Short for &quot;Not a Number&quot;,
+this is a special value used to represent infinity and other strange &quot;numbers&quot;.
+TidyBlocks doesn't store NaN,
+but instead treats it as a <a href="#missing-value">missing value</a>.</p>
+<p>operation
+:   Something that can be done to data,
+such as addition or extracting the month from a <a href="#datetime">datetime</a>.</p>
+<p>record
+:  A single set of related observations.
+Records are stored as <a href="#row">rows</a> in <a href="#table">tables</a>.</p>
+<p>row
+:   Every row of a <a href="#table">table</a> spans zero or more <a href="#column">columns</a>
+and stores a single related set of observations.
+Rows are often called <a href="#record">records</a>,
+and most <a href="#operation">operations</a> in TidyBlocks work within rows.</p>
+<p>silhouette
+:   A <a href="https://en.wikipedia.org/wiki/Silhouette_(clustering)">measure</a> of
+how well clustered data is.</p>
+<p>string
+:   A synonym for <a href="#text">text</a>.</p>
+<p>summarize
+:   Combine many values into one.
+Totalling, calculating the average, and finding the minimum are a few ways to summarize values.</p>
+<p>table
+:   A set of <a href="#row">rows</a> and <a href="#column">columns</a> making up a single dataset.
+Most blocks in TidyBlocks create a new table from an existing one.</p>
+<p>text
+:   Data consisting of letters, digits, punctuation, spaces, and other characters.
+The text <code>&quot;123&quot;</code> looks the same as the number 123, but is a different kind of value.</p>
+<p>timestamp
+:   A unique moment in time.
+TidyBlocks prefers the term <a href="#datetime">datetime</a>.</p>
+<p>type
+:   A kind of data.
+TidyBlocks has numbers (which can be integers or have fractional parts),
+text (often called <a href="#string">strings</a> by programmers),
+<a href="#boolean">Booleans</a> (also called <a href="#logical">logical values</a>, although there aren't any illogical values),
+<a href="#datetime">datetimes</a> (also called <a href="#timestamp">timestamps</a>,
+and a special marker for <a href="#missing-value">missing values</a>.</p>
+<p>Universal Time Coordinates
+:   The standard time from which timezones are measured.
+Often abbreviated &quot;UTC&quot;.</p>
+<p>value
+:   A single piece of data in a specific <a href="#row">row</a> and <a href="#column">column</a> of a <a href="#table">table</a>.
+Every value has a <a href="#type">type</a>,
+and some <a href="#operation">operations</a> only work on some types of values.</p>
+<p>variable
+:   In statistics, something that has been observed or measured.
+Variables correspond to <a href="#column">columns</a> in <a href="#tables">tables</a>;
+we often use the term &quot;column&quot; to avoid confusion with
+the idea of a variable in a programming language.</p>
+
+    </main>
+    <footer>
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  <a target="_blank" href=""><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+  </body>
+</html>

@@ -1,6 +1,8 @@
 ---
+layout: post.liquid
 title: "Creating a Block"
 author: "Maya Gans"
+date: "2020-08-02T12:00"
 ---
 
 We love collaborators and welcome any PRs with new block ideas,

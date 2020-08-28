@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: Creating a Block</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+  
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/FAQ">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/FAQ">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks: Creating a Block</h1>
+      <p>We love collaborators and welcome any PRs with new block ideas,
+so this developer tutorial will walk you through creating your own statistical block.
+All TidyBlocks blocks have three parts, which we will look at in turn:</p>
+<ol>
+<li>The block UI: what the block looks like and what fields it includes</li>
+<li>The generator code: how to extract what the user nests inside your block</li>
+<li>The transform code: the actual instrcutions of what to do with what the user supplied inside your block</li>
+</ol>
+<h2>Block UI</h2>
+<p>Inside the <code>blocks</code> folder you'll find JavaScript files with names corresponding to the names of the block categories.
+We'll be going into <code>stats.js</code></p>
+<p>The function <code>Blockly.defineBlocksWithJsonArray</code> lets us use JSON to define a Blockly block.
+Here's the definition of the one-sample t-test block:</p>
+<pre><code class="language-js">{
+      type: 'stats_ttest_one',
+      message0: MSG.stats_ttest_one.message0[language],
+      args0: [],
+      message1: MSG.stats_ttest_one.message1[language],
+      args1: [
+        {
+          type: 'field_input',
+          name: 'NAME',
+          text: MSG.stats_ttest_one.args1_name[language]
+        },
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: MSG.stats_ttest_one.args1_column[language]
+        },
+        {
+          type: 'field_number',
+          name: 'MEAN',
+          value: 0.0
+        }
+      ],
+      inputsInline: false,
+      previousStatement: null,
+      nextStatement: null,
+      style: 'stats_blocks',
+      tooltip: MSG.stats_ttest_one.tooltip[language],
+      helpUrl: ''
+    }
+</code></pre>
+<ul>
+<li>
+<p><code>type</code> is the name of our block <code>stats_ttest_one</code>.
+This name is how we connect the block UI to the code generator,
+and how we inform Blockly that we want to include it in our workspace.</p>
+</li>
+<li>
+<p><code>message</code> is the text we want to see on the block.
+Instead of writing &quot;One-sample t-test&quot; directly we look it up in a table called <code>MSG</code> higher up in the file
+so that we can customize blocks according to the user's preferred language.
+English is the only language supported so far, but we hope to add others soon.</p>
+</li>
+<li>
+<p><code>args0</code>: by not including anything here we skip a line between the block's name and its inputs.</p>
+</li>
+<li>
+<p><code>message1</code>: like <code>message</code>, this adds text to the block.
+The text in the lookup table is `'name %1 column %2 mean \u03BC %3',
+which means &quot;name&quot;, a filler,, &quot;column&quot;, another filler, &quot;mean mu&quot;, and a final filler.</p>
+</li>
+<li>
+<p><code>args1</code>: this arrays specifies what goes into the three fillers in <code>message1</code>.</p>
+<ul>
+<li><code>type</code> is the type of filler, such as <code>field_input</code> for a text input field or <code>field_number</code> for a numeric field.</li>
+<li><code>name</code> is the field's name, which we will use in the code generator.</li>
+<li><code>text</code>: the default text to display inside the field that the user will supply.
+We have chosen <code>name</code> as the default for the statistical output
+and <code>column</code> where the user should put the name of the column to perform the test on.</li>
+<li><code>value</code>: if the field is a number, we supply a default value rather than default text.</li>
+</ul>
+</li>
+<li>
+<p><code>inputsInline</code>: allows the user to drag in blocks for the supplied args.
+This is set to false for this block, but other blocks allow users to do this.</p>
+</li>
+<li>
+<p><code>previousStatement</code> and <code>nextStatement</code>: are <code>false</code> because
+we <em>don't</em> want users to be able to add blocks to the left or right of this one.</p>
+</li>
+<li>
+<p><code>style</code>: each block family has a corresponding color palette defined in <code>blocks.js</code>.
+Since this is a stats block we give it the <code>stats_block</code> style.</p>
+</li>
+<li>
+<p><code>tooltip</code>: this is the text to appear on hover.
+Again, we look this up in a table so that we can internationalize it.</p>
+</li>
+</ul>
+<div align="center">
+  <img src="/en/img/stats_ttest_one.svg" alt="One Sample T-Test Block UI"/>
+</div>
+<h2>Generator</h2>
+<p>Now we need to define a function to extract the user's inputs from the block's three fields:</p>
+<pre><code>  // One-sample two-sided t-test.
+  Blockly.TidyBlocks['stats_ttest_one'] = (block) =&gt; {
+    const name = block.getFieldValue('NAME')
+    const column = block.getFieldValue('COLUMN')
+    const mean = block.getFieldValue('MEAN')
+    return `[&quot;@transform&quot;, &quot;ttest_one&quot;, &quot;${name}&quot;, &quot;${column}&quot;, ${mean}]`
+  }
+</code></pre>
+<p><code>Blockly.TidyBlocks</code> holds all of the code generators, so we store our function there using its name.
+For <code>name</code>, <code>column</code>, and <code>mean</code> we use <code>block.getFieldValue('NAME_OF_FIELD')</code> to get the user supplied values,
+then include them in a JavaScript array with the strings <code>&quot;@transform&quot;</code>
+(to indicate what family of blocks this one belongs to)
+and <code>&quot;ttest_one&quot;</code> (to indicate precisely what type of block this is).
+We have to return a stringified version of this array because Blockly requires code generators to return text;
+we will discuss code generation in more detail in a later post.</p>
+<h2>Transform</h2>
+<p>Our final component is a class that knows how to run our statistical test.
+I actually reccomend thinking about this code prior to the  block's UI and generators
+since you'll need to think about what values the user needs to input given the block type.
+This class goes in <code>libs/transform.js</code>:</p>
+<pre><code>class TransformTTestOneSample extends TransformBase {
+  constructor (label, colName, mean) {
+    super('ttest_one', [], true, true)
+    this.label = label
+    this.colName = colName
+    this.mean = mean
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.label}`)
+    const samples = df.data.map(row =&gt; row[this.colName])
+    const pValue = stats.tTest(samples, this.mean)
+    env.setStats(this.label, pValue)
+    return df
+  }
+}
+</code></pre>
+<p><code>TransformTTestOneSample</code> takes the three fields stored in the JavaScript array
+and uses the stats library to calculate the statistic using the data supplied by the previous stage in the pipeline.
+We will talk more in a future post about the constructor and the <code>run</code> method of this class,
+but the most important thing for now is that it stores the result in the environment <code>env</code>
+so that the user interface can get it and display after the program finishes running.</p>
+<h2>Conclusion</h2>
+<p>That's a lot to digest, but the good news is that it only has to be digested once:
+almost all top-level blocks work the same way.
+Digging under the hood to see how your block &quot;knows&quot; about prior blocks,
+or how TidyBlocks figures out what pipeline your block is a not mandatory for creating a block,
+but if you're curious about that process we outline it in <a href="https://github.com/tidyblocks/tidyblocks">the repository's README</a>,
+and we're always happy to answer questions.</p>
+
+      <p align="right"><em>— Maya Gans / 2020-08-02</em></p>
+    </main>
+    <footer>
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  <a target="_blank" href=""><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+  </body>
+</html>

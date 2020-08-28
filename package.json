@@ -12,6 +12,8 @@
     "data": "data/generate.js data/*.csv",
     "docs": "jsdoc -c .jsdocrc --destination docs --readme README.md libs/*.js",
     "lint": "eslint index.js libs/*.js blocks/*.js",
+    "serve": "npx @11ty/eleventy --serve",
+    "site": "npx @11ty/eleventy",
     "test": "mocha"
   },
   "repository": {
@@ -25,6 +27,8 @@
   },
   "homepage": "https://github.com/gvwilson/briq#readme",
   "dependencies": {
+    "@11ty/eleventy": "^0.11.0",
+    "@11ty/eleventy-plugin-rss": "^1.0.9",
     "@babel/compat-data": "^7.10.4",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
@@ -37,6 +41,7 @@
     "babelify": "^10.0.0",
     "blockly": "^3.20200625.2",
     "browserify": "^16.5.0",
+    "eleventy-plugin-sass": "^1.0.0",
     "eslint": "^7.5.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-node": "^11.0.0",
