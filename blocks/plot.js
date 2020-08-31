@@ -13,21 +13,24 @@ const MESSAGES = {
     es: 'nombre',
     ar: 'الإسم',
     ko: '이름',
-    it: 'nome'
+    it: 'nome', 
+    el: 'όνομα'
   },
   x_axis: {
     en: 'X axis',
     es: 'eje X',
     ar: 'المحور الأفقي',
     ko: 'X축',
-    it: 'asse X'
+    it: 'asse X',
+    el: 'άξονας χι'
   },
   y_axis: {
     en: 'Y axis',
     es: 'eje Y',
     ar: 'المحور الرأسي',
     ko: 'Y축', 
-    it: 'asse Y'
+    it: 'asse Y', 
+    el: 'άξονας ψι'
   },
   plot_bar: {
     message0: {
@@ -35,14 +38,16 @@ const MESSAGES = {
       es: 'Barras %1 %2 %3',
       ar: 'الأعمده %1 %2 %3',
       ko: '막대 %1 %2 %3',
-      it: 'barra %1 %2 %3'
+      it: 'barra %1 %2 %3', 
+      el: 'μπάρα %1 %2 %3'
     },
     tooltip: {
       en: 'create bar plot',
       es: 'crear grafico barras',
       ar: 'إنشاء رسم الأعمده البيانيه',
       ko: '막대 그래프 만들기', 
-      it: 'crea un grafico a barre'
+      it: 'crea un grafico a barre', 
+      el: 'δημιούργησε ραβδογράφημα'
     }
   },
   plot_box: {
@@ -51,14 +56,16 @@ const MESSAGES = {
       es: 'Cajas %1 %2 %3',
       ar: 'الصندوق %1 %2 %3',
       ko: '박스 %1 %2 %3', 
-      it: 'Scatola %1 %2 %3'
+      it: 'Scatola %1 %2 %3', 
+      el: 'παραλληλόγραμμο %1 %2 %3'
     },
     tooltip: {
       en: 'create box plot',
       es: 'crear grafico cajas',
       ar: 'إنشاء مخطط الصندوق ذو العارضتين',
       ko: '박스 그래프 만들기', 
-      it: 'crea diagramma a scatola e baffi'
+      it: 'crea diagramma a scatola e baffi', 
+      el: 'δημιούργησε Θηκόγραµµα'
     }
   },
   plot_dot: {
@@ -67,14 +74,16 @@ const MESSAGES = {
       es: 'Puntos %1 %2',
       ar: 'النقطه %1 %2',
       ko: '도트 %1 %2',
-      it: 'punti %1 %2'
+      it: 'punti %1 %2', 
+      el: 'Σημείο %1 %2'
     },
     tooltip: {
       en: 'create dot plot',
       es: 'crear grafico puntos',
       ar: 'إنشاء المخطط النقطي',
       ko: '도트 그래프 만들기',
-      it: 'crea un diagramma a punti'
+      it: 'crea un diagramma a punti', 
+      el: 'δημιούργησε διάγραμμα πυκνότητας'      
     }
   },
   plot_histogram: {
@@ -83,21 +92,24 @@ const MESSAGES = {
       es: 'Histograma %1 %2 %3',
       ar: 'المدرج التكراري %1 %2 %3',
       ko: '히스토그램 %1 %2 %3', 
-      it: 'istogramma %1 %2 %3'
+      it: 'istogramma %1 %2 %3', 
+      el: 'Ιστόγραμμα %1 %2 %3'
     },
     column: {
       en: 'column',
       es: 'columna',
       ar: 'العمود',
       ko: '열', 
-      it: 'colonna'
+      it: 'colonna', 
+      el: 'στήλη'
     },
     tooltip: {
       en: 'create histogram',
       es: 'crear histograma',
       ar: 'إنشاء المدرج التكراري',
       ko: '히스토그램 만들기', 
-      it: 'crea istogramma'
+      it: 'crea istogramma', 
+      el: 'δημιούργησε ιστόγραμμα'
     }
   },
   plot_scatter: {
@@ -106,14 +118,16 @@ const MESSAGES = {
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
       ar: 'التشتت %1 %2 %3 اللون %4 إضافه خط؟ %5',
       ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5', 
-      it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5'
+      it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5', 
+      el: 'Διασπορά %1 %2 %3 Χρώμα %4 Προσθήκη γραμμής; %5'
     },
     tooltip: {
       en: 'create scatter plot',
       es: 'crear grafico dispersion',
       ar: 'إنشاء مخطط الإنتشار',
       ko: '분산 그래프 만들기', 
-      it: 'crea un grafico di dispersione'
+      it: 'crea un grafico di dispersione', 
+      el: 'δημιούργησε διάγραμμα διασποράς'
     }
   }
 }
