@@ -83,7 +83,7 @@ const MESSAGES = {
     es: 'valor',
     ko: '값', 
     it: 'valore',
-    el: 'στοιχείο'
+    el: 'τιμή'
   }
 }
 
