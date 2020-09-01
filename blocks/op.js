@@ -59,7 +59,7 @@ const MESSAGES = {
   extremum: {
     tooltip: {
       ar: 'إختر أكبر أوأصغر قيمة',
-      // TRANSLATE el
+      el: 'επίλεξε τη μεγαλύτερη ή μικρότερη τιμή',
       en: 'select the largest or smallest value',
       // TRANSLATE es
       // TRANSLATE it
@@ -182,7 +182,7 @@ const MESSAGES = {
   shift: {
     message0: {
       ar: 'أزح %1 بمقدار %2',
-      // TRANSLATE el
+      el: 'Μεταθέτισε %1 κατά %2',
       en: 'Shift %1 by %2',
       // TRANSLATE es
       // TRANSLATE ko
@@ -191,7 +191,7 @@ const MESSAGES = {
     },
     column: {
       ar: 'العمود',
-      // TRANSLATE el
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -200,7 +200,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'أزح في العمود للأعلى أو للأسفل',
-      // TRANSLATE el
+      el: 'μεταθέτισε μία στήλη προς τα πάνω ή προς τα κάτω',
       en: 'shift in a column up or down',
       // TRANSLATE es
       // TRANSLATE ko
