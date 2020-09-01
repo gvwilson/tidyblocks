@@ -71,7 +71,8 @@ const MESSAGES = {
       es: 'constante logica',
       ar: 'ثابت منطقي',
       ko: '논리 상수',
-      it: 'constante logica'
+      it: 'constante logica',
+      el: 'σταθερή τύπου αληθής/ψευδής'
     }
   },
   number: {
@@ -80,7 +81,8 @@ const MESSAGES = {
       es: 'numbero constante',
       ar: 'رقم ثابت',
       ko: '상수',
-      it: 'constante numerica'
+      it: 'constante numerica',
+      el: 'σταθερός αριθμός'
     }
   },
   text: {
@@ -89,14 +91,16 @@ const MESSAGES = {
       es: 'texto',
       ar: 'نص',
       ko: '텍스트',
-      it: 'testo'
+      it: 'testo',
+      el: 'κείμενο'
     },
     tooltip: {
       en: 'constant text', 
       es: 'texto constante',
       ar: 'نص ثابت',
       ko: '상수 텍스트',
-      it: 'testo costante'
+      it: 'testo costante',
+      el: 'σταθερό κείμενο'
     }
   },
   rownum: {
@@ -105,14 +109,16 @@ const MESSAGES = {
       es: 'Numero de fila',
       ar: 'رقم الصف',
       ko: '행 번호',
-      it: 'Numero della riga'
+      it: 'Numero della riga',
+      el: 'Αριθμός γραμμών'
     },
     tooltip: {
       en: 'row number',
       es: 'numero de fila',
       ar: 'رقم الصف',
       ko: '행 번호',
-      it: 'numero della riga'
+      it: 'numero della riga',
+      el: 'αριθμός γραμμών'
     }
   },
   exponential: {
@@ -121,14 +127,16 @@ const MESSAGES = {
       es: 'Exponencial \u03BB %1',
       ar: 'الأسيه \u03BB %1',
       ko: '\u03BB %1 지수로 표현', 
-      it: 'Esponenziale \u03BB %1'
+      it: 'Esponenziale \u03BB %1',
+      el: 'Εκθετική \u03BB %1'
     },
     tooltip: {
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
       ar: 'المتغيرات العشوائه الأسيه',
       ko: '지수 랜덤 값', 
-      it: 'valore aleatorio esponenziale'
+      it: 'valore aleatorio esponenziale',
+      el: 'τυχαία μεταβλητή εκθετικής κατανομής'
     }
   },
   normal: {
@@ -137,14 +145,16 @@ const MESSAGES = {
       es: 'Normal \u03BC %1 \u03C3 %2',
       ar: 'الطبيعي \u03BC %1 \u03C3 %2',
       ko: '\u03BC %1 \u03C3 %2 정규화',
-      it: 'Normale \u03BC %1 \u03C3 %2'
+      it: 'Normale \u03BC %1 \u03C3 %2',
+      el: 'Κανονική \u03BC %1 \u03C3 %2''
     },
     tooltip: {
       en: 'normal random value',
       es: 'valor aleatorio normal',
       ar: 'المتغير العشوائي الطبيعي',
       ko: '정규 랜덤 값',
-      it: 'valore aleatorio normale'
+      it: 'valore aleatorio normale',
+      el: 'τυχαία μεταβλητή κανονικής κατανομής'
     }
   },
   uniform: {
@@ -153,14 +163,16 @@ const MESSAGES = {
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
       ar: 'المنتظم \u03B1 %1 \u03B2 %2',
       ko: '\u03B1 %1 \u03B2 %2 균등화',
-      it: 'Uniforme \u03B1 %1 \u03B2 %2'
+      it: 'Uniforme \u03B1 %1 \u03B2 %2',
+      el: 'Ομοιόμορφη \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
       en: 'uniform random value', 
       es: 'valor aleatorio uniforme',
       ar: 'المتغير العشوائي المنتظم',
       ko: '균등 랜덤 값',
-      it: 'valore aleatorio uniforme'
+      it: 'valore aleatorio uniforme',
+      el: 'τυχαία μεταβλητή ομοιόμορφης κατανομής'
     }
   }
 }
