@@ -59,7 +59,7 @@ const MESSAGES = {
     es: 'grafico',
     ko: '그래프',
     it: 'grafici',
-    el: 'γραφικό'
+    el: 'γράφημα'
   },
   stats: {
     ar: 'إحصائيات',
