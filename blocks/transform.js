@@ -17,7 +17,8 @@ const MESSAGES = {
     es: 'columna, columna',
     ar: 'عمود, عمود',
     ko: '열, 열',
-    it: 'colonna, colonna'
+    it: 'colonna, colonna', 
+    el: 'στήλη, στήλη'
   },
   create: {
     message0: {
@@ -25,21 +26,24 @@ const MESSAGES = {
       es: 'Crear %1 %2',
       ar: 'إنشاء %1 %2',
       ko: '%1 %2 만들기',
-      it: 'crea %1 %2'
+      it: 'crea %1 %2', 
+      el: 'Δημιούργησε %1 %2'
     },
     args0_text: {
       en: 'new_column',
       es: 'nueva_columna',
       ar: 'عمود_جديد',
       ko: '새로운 열', 
-      it: 'nuova colonna'
+      it: 'nuova colonna', 
+      el: 'νέα στήλη'
     },
     tooltip: {
       en: 'create new column from existing columns', 
       es: 'crear nueva columna de las columnas existentes',
       ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
       ko: '기존의 열에서 새로운 열 만들기',
-      it: 'crea una nuova colonna da colonne già esistente'
+      it: 'crea una nuova colonna da colonne già esistente', 
+      el: 'δημιούργησε νέα στήλη από υπάρχοντες στήλες'
     }
   },
   drop: {
@@ -48,14 +52,16 @@ const MESSAGES = {
       es: 'Excluir %1',
       ar: 'حذف %1',
       ko: '%1 삭제', 
-      it: 'escludi %1'
+      it: 'escludi %1', 
+      el: 'Απόκλεισε %1'
     },
     args0_tooltip: {
       en: 'drop columns by name',
       es: 'Excluir columnas por nombre',
       ar: 'حذف الأعمده بإستخدام اسمائها',
       ko: '이름에 따라 열 삭제', 
-      it: 'escludi colonne per nome'
+      it: 'escludi colonne per nome', 
+      el: 'απόκλεισε στήλη βάση ονόματος'
     }
   },
   filter: {
@@ -64,21 +70,24 @@ const MESSAGES = {
       es: 'Filtrar %1',
       ar: 'تصفية أو فلتره %1',
       ko: '%1 거르기',
-      it: 'filtra %1'
+      it: 'filtra %1', 
+      el: 'Φίλταρε %1'
     },
     args0_name: {
       en: 'TEST', 
       es: 'TEST',
       ar: 'إختبار',
       ko: '테스트',
-      it: 'TEST'
+      it: 'TEST', 
+      el: 'ΤΕΣΤ'
     },
     tooltip: {
       en: 'filter rows by condition', 
       es: 'filtrar filas por condicion',
       ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
       ko: '조건에 따라 행 거르기',
-      it: 'Filtra righe per condizione'
+      it: 'Filtra righe per condizione', 
+      el: 'Φίλταρε γραμμές βάση προϋπόθεσης'
     }
   },
   groupBy: {
@@ -87,14 +96,16 @@ const MESSAGES = {
       es: 'Agrupar por %1',
       ar: 'تقسيم البيانات عن طريف: %1',
       ko: '%1 로 그룹화', 
-      it: 'raggruppa per %1'
+      it: 'raggruppa per %1', 
+      el: 'Ομαδοποίησε βάση %1'
     },
     tooltip: {
       en: 'group data by values in columns', 
       es: 'agrupar datos por valores en columnas',
       ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
       ko: '열의 값들로 데이터 그룹화',
-      it: 'raggruppare i dati per valori in colonne'
+      it: 'raggruppare i dati per valori in colonne', 
+      el: 'ομαδοποίησε δεδομένα βάση τιμών στις στήλες' 
     }
   },
   saveAs: {
@@ -103,21 +114,24 @@ const MESSAGES = {
       es: 'Reporte %1', // TRANSLATE ES
       ar: 'التقرير %1', // TRANSLATE AR
       ko: '%1 리포트', // TRANSLATE KO
-      it: 'Salva come %1' // TRANSLATE IT
+      it: 'Salva come %1', // TRANSLATE IT
+      el: 'Αποθήκευσε ως %1' // TRANSLATE EL
     },
     args0_text: {
       en: 'name', 
       es: 'nombre',
       ar: 'الإسم',
       ko: '이름', 
-      it: 'nome'
+      it: 'nome', 
+      el: 'όνομα'
     },
     tooltip: {
       en: 'save a result',
       es: 'reporta un resultado', // TRANSLATE ES
       ar: 'عرض النتائج', // TRANSLATE AR
       ko: '결과 리포트', // TRANSLATE KO
-      it: 'salva risultato' // TRANSLATE IT
+      it: 'salva risultato', // TRANSLATE IT
+      el: 'αποθήκευσε αποτέλεσμα' // TRANSLATE EL
     }
   },
   select: {
@@ -126,14 +140,16 @@ const MESSAGES = {
       es: 'Selecciona %1',
       ar: 'إختيار %1',
       ko: '%1 선택', 
-      it: 'Seleziona %1'
+      it: 'Seleziona %1', 
+      el: 'Επίλεξε %1'
     },
     tooltip: {
       en: 'select columns by name',
       es: 'selecciona columnas por nombre',
       ar: 'إختيار الأعمده بإستخدام اسمائها',
       ko: '이름으로 열 선택', 
-      it: 'seleziona colonne per nome'
+      it: 'seleziona colonne per nome', 
+      el: 'επίλεξε στήλες βάση ονομάτων'
     }
   },
   sort: {
@@ -142,14 +158,16 @@ const MESSAGES = {
       es: 'Ordena %1 descendiente %2',
       ar: 'ترتيب %1 تنازلي %2',
       ko: '%2 내림차순으로 %1 정렬', 
-      it: 'Ordina %1 discendente %2'
+      it: 'Ordina %1 discendente %2', 
+      el: 'Ταξινόμησε %1 κατά φθίνοντα αριθμό %2'
     },
     tooltip: {
       en: 'sort table by multiple columns',
       es: 'ordena tabla por multiples columnas',
       ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
       ko: '다중 열에 따라 테이블 정렬',
-      it: 'ordina la tabella per colonne multiple'
+      it: 'ordina la tabella per colonne multiple', 
+      el: 'αξινόμησε πίνακα βάση πολλών στηλών'
     }
   },
   summarize: {
@@ -158,21 +176,24 @@ const MESSAGES = {
       es: 'Resumen %1 %2',
       ar: 'تلخيص البيانات %1 %2',
       ko: '%1 %2 축소',
-      it: 'Riassumi %1 %2'
+      it: 'Riassumi %1 %2', 
+      el: 'Συνόψισε %1 %2'
     },
     args0_text: {
       en: 'column', 
       es: 'columna',
       ar: 'العمود',
       ko: '열',
-      it: 'colonna'
+      it: 'colonna', 
+      el: 'στήλη'
     },
     tooltip: {
       en: 'summarize values in  column',
       es: 'Resume valores en columna',
       ar: 'تلخيص قيم العمود',
       ko: '열의 값 축소', 
-      it: 'riassumi valori in colonna'
+      it: 'riassumi valori in colonna', 
+      el: 'Συνόψισε τιμές μίας στήλης'
     }
   },
   ungroup: {
@@ -181,14 +202,16 @@ const MESSAGES = {
       es: 'Desagrupar',
       ar: 'الغاء التقسيم',
       ko: '그룹화 해제',
-      it: 'Disaggrega'
+      it: 'Disaggrega', 
+      el: 'βγάλε την ομαδοποίηση'
     },
     tooltip: {
       en: 'remove grouping', 
       es: 'quita agrupamiento',
       ar: 'الغاءتقسيم البيانات',
       ko: '그룹화 삭제',
-      it: 'rimuovi raggruppamento'
+      it: 'rimuovi raggruppamento', 
+      el: 'βγάλε την ομαδοποίηση'
     }
   },
   unique: {
@@ -197,14 +220,16 @@ const MESSAGES = {
       es: 'Unico %1',
       ar: 'فريد %1',
       ko: '%1 을 유일값으로 만들기',
-      it: 'Unico %1'
+      it: 'Unico %1', 
+      el: 'μοναδικό %1'
     },
     tooltip: {
       en: 'select rows with unique values', 
       es: 'selecciona filas con valores unicos',
       ar: 'إختيار الصفوف ذات القيم الفريده',
       ko: '유일값으로 행 선택',
-      it: 'selezionare le righe con valori univoci'
+      it: 'selezionare le righe con valori univoci', 
+      el: 'επίλεξε γραμμές με μοναδικές τιμές'
     }
   }
 }
