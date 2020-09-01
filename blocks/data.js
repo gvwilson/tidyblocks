@@ -13,6 +13,7 @@ const MESSAGES = {
   colors: {
     message0: {
       ar: 'الألوان',
+      el: 'Χρώματα',
       en: 'Colors',
       es: 'Colores',
       it: 'Colori',
@@ -21,6 +22,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'احد عشر لون',
+      el: 'έντεκα χρώματα',
       en: 'eleven colors',
       es: 'once colores',
       it: 'undici colori',
@@ -31,6 +33,7 @@ const MESSAGES = {
   earthquakes: {
     message0: {
       ar: 'الزلزال',
+      el: 'Σεισμοί',
       en: 'Earthquakes',
       es: 'Terremotos',
       it: 'Terremoti',
@@ -39,6 +42,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'بيانات الزلزال',
+      el: 'σεισμολογικά στοιχεία',
       en: 'earthquake data',
       es: 'datos de terremotos',
       it: 'dati sui terremoti',
@@ -49,6 +53,7 @@ const MESSAGES = {
   penguins: {
     message0: {
       ar: 'طيور البطريق',
+      el: 'Πιγκουίνι',
       en: 'Penguins',
       es: 'Pingüinos',
       it: 'Pinguini',
@@ -57,6 +62,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'بيانات طيور البطريق',
+      el: 'στοιχεία πιγκουίνων',
       en: 'penguin data',
       es: 'datos de pingüinos',
       it: 'dati sui pinguini',
@@ -67,6 +73,7 @@ const MESSAGES = {
   phish: {
     message0: {
       ar: 'فرقه الفيش الموسيقيه',
+      el: 'Phish',
       en: 'Phish',
       es: 'Phish',
       it: 'Phish',
@@ -75,6 +82,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'بيانات فرقه الفيش الموسيقيه',
+      el: 'στοιχεία συναυλιών Phish',
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
       it: 'dati sui concerti dei Phish',
@@ -85,6 +93,7 @@ const MESSAGES = {
   sequence: {
     message0: {
       ar: 'المتسلسله %1 %2',
+      el: 'Ακολουθία %1 %2',
       en: 'Sequence %1 %2',
       es: 'Sequencia %1 %2',
       it: 'sequenza %1 %2',
@@ -93,6 +102,7 @@ const MESSAGES = {
     },
     args0_text: {
       ar: 'اﻹسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
       it: 'nome',
@@ -101,6 +111,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إنشاء متسلسله ١..ن',
+      el: 'Πάραγε μία ακολουθία 1..Ν',
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
       it: 'genera una sequenza 1..N',
@@ -111,6 +122,7 @@ const MESSAGES = {
   data_user: {
     message0: {
       ar: 'بيانات المسته %1',
+      el: 'Στοιχεία χρήστη %1',
       en: 'User data %1',
       es: 'Datos de usuario %1',
       it: 'Dati utenti %1',
@@ -119,6 +131,7 @@ const MESSAGES = {
     },
     args0_text: {
       ar: 'الإسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
       it: 'nome',
@@ -127,6 +140,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إستخدام بيانات محمله مسبقا',
+      el: 'χρησιμοποίησε προηγουμένως ανεβασμένα δεδομένα',
       en: 'use previously-loaded data',
       es: 'usa datos previamente cargados',
       it: 'usa i dati caricati in precedenza',

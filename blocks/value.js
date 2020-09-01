@@ -14,6 +14,7 @@ const MESSAGES = {
   absent: {
     message0: {
       ar: 'غائب',
+      el: 'Απών',
       en: 'Absent',
       es: 'Ausente',
       it: 'Assente',
@@ -22,6 +23,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تمثيل فجوه',
+      el: 'συμβόλισε μία τρύπα',
       en: 'represent a hole',
       es: 'representa un agujero',
       it: 'rappresenta un buco',
@@ -32,6 +34,7 @@ const MESSAGES = {
   column: {
     column: {
       ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -40,6 +43,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'الحصول على قيمه من عمود',
+      el: 'βρες την τιμή μιας στήλης',
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
       it: 'ottieni il valore di una colonna',
@@ -50,6 +54,7 @@ const MESSAGES = {
   datetime: {
     text: {
       ar: 'YYYY-MM-DD',
+      el: 'ΕΕΕΕ-ΜΜ-ΗΗ',
       en: 'YYYY-MM-DD',
       es: 'AAAA-MM-DD',
       it: 'AAAA-MM-GG',
@@ -58,6 +63,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'ثابت تاريخ/وقت',
+      el: 'σταθερή ημερομηνία/ώρα',
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
       it: 'data/ora costanti',
@@ -68,6 +74,7 @@ const MESSAGES = {
   logical: {
     tooltip: {
       ar: 'ثابت منطقي',
+      el: 'σταθερή τύπου αληθής/ψευδής',
       en: 'logical constant',
       es: 'constante logica',
       it: 'constante logica',
@@ -78,6 +85,7 @@ const MESSAGES = {
   number: {
     tooltip: {
       ar: 'رقم ثابت',
+      el: 'σταθερός αριθμός',
       en: 'constant number',
       es: 'numbero constante',
       it: 'constante numerica',
@@ -88,6 +96,7 @@ const MESSAGES = {
   text: {
     text: {
       ar: 'نص',
+      el: 'κείμενο',
       en: 'text',
       es: 'texto',
       it: 'testo',
@@ -96,6 +105,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'نص ثابت',
+      el: 'σταθερό κείμενο',
       en: 'constant text',
       es: 'texto constante',
       it: 'testo costante',
@@ -106,6 +116,7 @@ const MESSAGES = {
   missing: {
     message0: {
       ar: 'مفقود',
+      // TRANSLATE el
       en: 'Missing',
       es: 'Falta',
       // TRANSLATE ko
@@ -114,6 +125,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'القيمه المفقوده',
+      // TRANSLATE el
       en: 'missing value',
       es: 'valor que falta',
       // TRANSLATE ko
@@ -124,6 +136,7 @@ const MESSAGES = {
   exponential: {
     message0: {
       ar: 'الأسيه \u03BB %1',
+      el: 'Εκθετική \u03BB %1',
       en: 'Exponential \u03BB %1',
       es: 'Exponencial \u03BB %1',
       it: 'Esponenziale \u03BB %1',
@@ -132,6 +145,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'المتغيرات العشوائه الأسيه',
+      el: 'τυχαία τιμή εκθετικής κατανομής',
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
       it: 'valore aleatorio esponenziale',
@@ -142,6 +156,7 @@ const MESSAGES = {
   normal: {
     message0: {
       ar: 'الطبيعي \u03BC %1 \u03C3 %2',
+      el: 'Κανονική \u03BC %1 \u03C3 %2',
       en: 'Normal \u03BC %1 \u03C3 %2',
       es: 'Normal \u03BC %1 \u03C3 %2',
       it: 'Normale \u03BC %1 \u03C3 %2',
@@ -150,6 +165,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'المتغير العشوائي الطبيعي',
+      el: 'τυχαία τιμή κανονικής κατανομής',
       en: 'normal random value',
       es: 'valor aleatorio normal',
       it: 'valore aleatorio normale',
@@ -160,6 +176,7 @@ const MESSAGES = {
   uniform: {
     message0: {
       ar: 'المنتظم \u03B1 %1 \u03B2 %2',
+      el: 'Ομοιόμορφη \u03B1 %1 \u03B2 %2',
       en: 'Uniform \u03B1 %1 \u03B2 %2',
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
       it: 'Uniforme \u03B1 %1 \u03B2 %2',
@@ -168,6 +185,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'المتغير العشوائي المنتظم',
+      el: 'τυχαία τιμή ομοιόμορφης κατανομής',
       en: 'uniform random value',
       es: 'valor aleatorio uniforme',
       it: 'valore aleatorio uniforme',

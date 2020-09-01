@@ -13,6 +13,7 @@ const MESSAGES = {
   glue: {
     message0: {
       ar: 'دمج من جهة اليسار %1 اليمين %2 الفئات %3',
+      el: 'Επικόλληση αριστερά %1 δεξιά %2 τίτλοι %3',
       en: 'Glue left %1 right %2 labels %3',
       es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
       it: 'incolla sinistra %1 destra %2 etichette %3',
@@ -21,6 +22,7 @@ const MESSAGES = {
     },
     table_name: {
       ar: 'الإسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
       it: 'nome',
@@ -29,6 +31,7 @@ const MESSAGES = {
     },
     label: {
       ar: 'الفئة',
+      el: 'τίτλος',
       en: 'label',
       es: 'etiqueta',
       it: 'etichetta',
@@ -37,6 +40,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'دمج صفوف من جدولين',
+      el: 'εκικόλληση γραμμών από δύο πίνακες',
       en: 'glue rows from two tables together',
       es: 'pegar juntas filas de dos tablas',
       it: 'incolla le righe di due tabelle insieme',
@@ -47,6 +51,7 @@ const MESSAGES = {
   join: {
     message0: {
       ar: 'دمج',
+      el: 'Ένωση',
       en: 'Join',
       es: 'Unir',
       it: 'unisci',
@@ -55,6 +60,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'يسار %1 %2',
+      el: 'αριστερά %1 %2',
       en: 'left %1 %2',
       es: 'izquierda  %1 %2',
       it: 'sinistra %1 %2',
@@ -63,6 +69,7 @@ const MESSAGES = {
     },
     message2: {
       ar: 'يمين %1 %2',
+      el: 'δεξιά %1 %2',
       en: 'right %1 %2',
       es: 'derecha %1 %2',
       it: 'destra %1 %2',
@@ -71,6 +78,7 @@ const MESSAGES = {
     },
     table: {
       ar: 'الجدول',
+      el: 'πίνακας',
       en: 'table',
       es: 'tabla',
       it: 'tabella',
@@ -79,6 +87,7 @@ const MESSAGES = {
     },
     column: {
       ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -87,6 +96,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'دمج جدولين عن طريق تشابه القيم',
+      el: 'ένωση δύο πινάκων βάση κοινών τιμών',
       en: 'join two tables by matching values',
       es: 'unir dos tables emparenjando valores',
       it: 'unisce due tabelle con valori corrispondenti',

@@ -15,6 +15,7 @@ const MESSAGES = {
   arithmetic: {
     tooltip: {
       ar: 'إجراء عمليات حسابيه',
+      el: 'κάνε αριθμητική',
       en: 'do arithmetic',
       es: 'haz la aritmética',
       it: 'eseguire la aritmentica',
@@ -25,6 +26,7 @@ const MESSAGES = {
   negate: {
     tooltip: {
       ar: 'الغاء عمود حسابي',
+      el: 'απόκλεισε μία αριθμητική στήλη',
       en: 'negate a numeric column',
       es: 'excluye una columna numérica',
       it: 'escludere una colonna numerica',
@@ -35,6 +37,7 @@ const MESSAGES = {
   abs: {
     tooltip: {
       ar: 'القيمه المطلقه لعمود حسابي',
+      el: 'απόύτη τιμή αριθμητικής στήλης',
       en: 'absolute value of a numeric column',
       es: 'valor absoluto de una columna numérica',
       it: 'valore assoluto di una colonna numerica',
@@ -45,6 +48,7 @@ const MESSAGES = {
   compare: {
     tooltip: {
       ar: 'مقارنه عمودين',
+      el: 'σύγκρινε δύο στήλες',
       en: 'compare two columns',
       es: 'compara dos columnas',
       it: 'comparare due colonne',
@@ -55,16 +59,18 @@ const MESSAGES = {
   extremum: {
     tooltip: {
       ar: 'إختر أكبر أوأصغر قيمة',
+      // TRANSLATE el
       en: 'select the largest or smallest value',
       // TRANSLATE es
-      // TRANSLATE ko
       // TRANSLATE it
+      // TRANSLATE ko
       pt: 'selecionar o maior ou menor valor'
     }
   },
   logical: {
     tooltip: {
       ar: 'دمج القيم المنطقيه لعمودين',
+      el: 'συνδύασε δύο στήλες με λογικές τιμές',
       en: 'combine logical values of two columns',
       es: 'combina los valores logicos de dos columnas',
       it: 'combinare i valori logici di due colonne',
@@ -75,6 +81,7 @@ const MESSAGES = {
   not: {
     message0: {
       ar: 'غير %1',
+      el: 'όχι %1',
       en: 'not %1',
       es: 'no %1',
       it: 'no %1',
@@ -83,6 +90,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إلغاء عمود منطقي',
+      el: 'απόκλεισε μία στήλη με λογικές τιμές',
       en: 'negate a logical column',
       es: 'excluye una columna logica',
       it: 'escludere una colonna logica',
@@ -93,6 +101,7 @@ const MESSAGES = {
   type: {
     message0: {
       ar: 'هل %1 هو %2؟',
+      el: '%1 είναι %2;',
       en: '%1 is %2 ?',
       es: '¿Es %1 %2 ?',
       it: '%1 è %2',
@@ -101,6 +110,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'التعرف على نوع القيمه',
+      el: 'έλεγξε το είδος μίας τιμής',
       en: 'check the type of a value',
       es: 'comprueba el tipo de valor',
       it: 'controlla il tipo di valore',
@@ -111,6 +121,7 @@ const MESSAGES = {
   convert: {
     message0: {
       ar: 'من %1 إلي %2',
+      el: '%1 σε %2',
       en: '%1 to %2',
       es: '%1 a %2',
       it: '%1 a %2',
@@ -119,6 +130,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تغيير نوع القيمه',
+      el: 'άλλαξε το είδος μίας τιμής',
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       it: 'cambiare il tipo di dato di un valore',
@@ -129,6 +141,7 @@ const MESSAGES = {
   datetime: {
     message0: {
       ar: 'الحصول على %1 من %2',
+      el: 'βρες %1 από %2',
       en: 'get %1 from %2',
       es: 'obten %1 de %2',
       it: 'ottieni %1 da %2',
@@ -137,6 +150,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تغيير نوع القيمه',
+      el: 'άλλαξε το είδος μίας τιμής',
       en: 'change the datatype of a value',
       es: 'cambia el tipo de dato del valor',
       it: 'cambiare il tipo di dato di un valore',
@@ -147,6 +161,8 @@ const MESSAGES = {
   conditional: {
     message0: {
       ar: 'إذا %1 افعل %2 غير ذلك %3',
+      ar: 'إذا %1 افعل %2 غير ذلك %3',
+      el: 'Αν %1 τότε %2 αλλιώς %3',
       en: 'If %1 then %2 else %3',
       es: 'Si %1 entonces %2 sino %3',
       it: 'se %1 allora %2 altrimenti %3',
@@ -155,6 +171,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'اختيار قيمه توافي شرط',
+      el: 'επίλεξε τιμή βάση των συνθηκών',
       en: 'select value based on condition',
       es: 'selecciona el valor basandote en la condicion',
       it: 'seleziona il valore in base alla condizione',
@@ -165,6 +182,7 @@ const MESSAGES = {
   shift: {
     message0: {
       ar: 'أزح %1 بمقدار %2',
+      // TRANSLATE el
       en: 'Shift %1 by %2',
       // TRANSLATE es
       // TRANSLATE ko
@@ -173,6 +191,7 @@ const MESSAGES = {
     },
     column: {
       ar: 'العمود',
+      // TRANSLATE el
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -181,6 +200,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'أزح في العمود للأعلى أو للأسفل',
+      // TRANSLATE el
       en: 'shift in a column up or down',
       // TRANSLATE es
       // TRANSLATE ko

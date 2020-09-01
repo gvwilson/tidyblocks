@@ -13,6 +13,7 @@ const MESSAGES = {
   stats_ttest_one: {
     message0: {
       ar: 'إختبار (ت) لعينه واحده',
+      el: 'Έλεγχος t-test ενός δείγματος',
       en: 'One-sample t-test',
       es: 'T-test para una muestra',
       it: 'T-test di un campione',
@@ -21,6 +22,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
+      el: 'όνομα %1 στήλη %2 μέσος όρος \u03BC %3',
       en: 'name %1 column %2 mean \u03BC %3',
       es: 'nombre %1 columna %2 media \u03BC %3',
       it: 'nome %1 colonna %2 media \u03BC %3',
@@ -29,6 +31,7 @@ const MESSAGES = {
     },
     args1_name: {
       ar: 'الإسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
       it: 'nome',
@@ -37,6 +40,7 @@ const MESSAGES = {
     },
     args1_column: {
       ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -45,6 +49,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده',
+      el: 'Έλεγχος t-test ενός δείγματος με συντελεστή δίπλευρης σημαντικότητας',
       en: 'perform one-sample two-sided t-test',
       es: 'hacer t-test para una muestra dos colas',
       it: 'eseguire il t-test su un solo campione su due lati',
@@ -55,6 +60,7 @@ const MESSAGES = {
   stats_ttest_two: {
     message0: {
       ar: 'إختبار (ت) لعينتين',
+      el: 'Μη συσχετισμένος έλεγχος t-test δύο δειγμάτων',
       en: 'Two-sample t-test',
       es: 'T-test para dos muestras',
       it: 'T-test a due campioni',
@@ -63,6 +69,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'الإسم %1 الفئه %2 القيم %3',
+      el: 'όνομα %1 ετικέτες %2 τιμές %3',
       en: 'name %1 labels %2 values %3',
       es: 'nombre %1 etiquetas %2 valores %3',
       it: 'nome %1 etichette %2 valori %3',
@@ -71,6 +78,7 @@ const MESSAGES = {
     },
     args1_name: {
       ar: 'الإسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
       it: 'nome',
@@ -79,6 +87,7 @@ const MESSAGES = {
     },
     args1_label: {
       ar: 'الفئه',
+      el: 'ετικέτα',
       en: 'label',
       es: 'etiqueta',
       it: 'etichetta',
@@ -87,6 +96,7 @@ const MESSAGES = {
     },
     args1_column: {
       ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -95,6 +105,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
+      el: 'Έλεγχος t-test δύο δειγμάτων με συντελεστή δίπλευρης σημαντικότητας',
       en: 'perform two-sample two-sided t-test',
       es: 'hacer t-test para dos muestras dos colas',
       it: 'eseguire un t-test a due campioni su due lati',
@@ -105,6 +116,7 @@ const MESSAGES = {
   stats_k_means: {
     message0: {
       ar: 'الخوارزمية التصنيفية (k-means)',
+      // TRANSLATE el
       en: 'k-means cluster',
       es: 'agrupamiento por k-medians',
       // TRANSLATE ko
@@ -113,6 +125,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'س %1 ص %2 الرقم %3 الفئه %4',
+      // TRANSLATE el
       en: 'X %1 Y %2 number %3 label %4',
       es: 'X %1 Y %2 numero %3 etiqueta %4',
       // TRANSLATE ko
@@ -121,6 +134,7 @@ const MESSAGES = {
     },
     args1_x: {
       ar: 'المحور الأفقي',
+      // TRANSLATE el
       en: 'X axis',
       es: 'eje X',
       it: 'asse X',
@@ -129,6 +143,7 @@ const MESSAGES = {
     },
     args1_y: {
       ar: 'المحور الرأسي',
+      // TRANSLATE el
       en: 'Y axis',
       es: 'eje Y',
       it: 'asse Y',
@@ -137,6 +152,7 @@ const MESSAGES = {
     },
     args1_label: {
       ar: 'الفئه',
+      // TRANSLATE el
       en: 'label',
       es: 'etiqueta',
       ko: '라벨',
@@ -145,6 +161,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حساب IDs لصنف الخوارزميه التصنيفية',
+      // TRANSLATE el
       en: 'calculate k-means cluster IDs',
       // TRANSLATE es
       // TRANSLATE ko
@@ -155,6 +172,7 @@ const MESSAGES = {
   stats_silhouette: {
     message0: {
       ar: 'رسم صورة ظلية',
+      // TRANSLATE el
       en: 'silhouette',
       es: 'silueta',
       // TRANSLATE ko
@@ -163,6 +181,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'س %1 ص %2 الفئه %3 النتيجه\المعدل %4',
+      // TRANSLATE el
       en: 'X %1 Y %2 label %3 score %4',
       es: 'X %1 Y %2 etiqueta %3 puntuación %4',
       // TRANSLATE ko
@@ -171,6 +190,7 @@ const MESSAGES = {
     },
     args1_x: {
       ar: 'المحور الأفقي',
+      // TRANSLATE el
       en: 'X axis',
       es: 'eje X',
       it: 'asse X',
@@ -179,6 +199,7 @@ const MESSAGES = {
     },
     args1_y: {
       ar: 'المحور الرأسي',
+      // TRANSLATE el
       en: 'Y axis',
       es: 'eje Y',
       it: 'asse Y',
@@ -187,6 +208,7 @@ const MESSAGES = {
     },
     args1_label: {
       ar: 'الفئه',
+      // TRANSLATE el
       en: 'label',
       es: 'etiqueta',
       ko: '라벨',
@@ -194,6 +216,7 @@ const MESSAGES = {
     },
     args1_score: {
       ar: 'المعدل\النتيجه',
+      // TRANSLATE el
       en: 'score',
       es: 'puntuación',
       // TRANSLATE ko
@@ -202,9 +225,9 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حساب معدل رسم الصورة الظلية لتصنيف ذو بعدين',
+      // TRANSLATE el
       en: 'calculate silhouette score of 2D clusters',
       es: 'calcular la puntuación de la silueta de los clústeres 2D',
-      // TRANSLATE ar
       // TRANSLATE ko
       // TRANSLATE it
       pt: 'calcular a pontuação de silhueta dos agrupamentos 2D'

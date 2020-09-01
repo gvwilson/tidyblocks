@@ -14,6 +14,7 @@ const {
 const MESSAGES = {
   multiple_columns: {
     ar: 'عمود, عمود',
+    el: 'στήλη, στήλη',
     en: 'column, column',
     es: 'columna, columna',
     it: 'colonna, colonna',
@@ -23,6 +24,7 @@ const MESSAGES = {
   bin: {
     message0: {
       ar: 'صندوق %1 %2 فئة %3',
+      // TRANSLATE el
       en: 'Bin %1 %2 label %3',
       // TRANSLATE es
       // TRANSLATE ko
@@ -31,6 +33,7 @@ const MESSAGES = {
     },
     column: {
       ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -57,6 +60,7 @@ const MESSAGES = {
   create: {
     message0: {
       ar: 'إنشاء %1 %2',
+      el: 'Δημιούργησε %1 %2',
       en: 'Create %1 %2',
       es: 'Crear %1 %2',
       it: 'crea %1 %2',
@@ -65,6 +69,7 @@ const MESSAGES = {
     },
     args0_text: {
       ar: 'عمود_جديد',
+      el: 'νέα στήλη',
       en: 'new_column',
       es: 'nueva_columna',
       it: 'nuova colonna',
@@ -73,6 +78,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
+      el: 'δημιούργησε νέα στήλη από υπάρχοντες στήλες',
       en: 'create new column from existing columns',
       es: 'crear nueva columna de las columnas existentes',
       it: 'crea una nuova colonna da colonne già esistente',
@@ -83,6 +89,7 @@ const MESSAGES = {
   drop: {
     message0: {
       ar: 'حذف %1',
+      el: 'Απόκλεισε %1',
       en: 'Drop %1',
       es: 'Excluir %1',
       it: 'escludi %1',
@@ -91,6 +98,7 @@ const MESSAGES = {
     },
     args0_tooltip: {
       ar: 'حذف الأعمده بإستخدام اسمائها',
+      el: 'απόκλεισε στήλη βάση ονόματος',
       en: 'drop columns by name',
       es: 'Excluir columnas por nombre',
       it: 'escludi colonne per nome',
@@ -101,6 +109,7 @@ const MESSAGES = {
   filter: {
     message0: {
       ar: 'تصفية أو فلتره %1',
+      el: 'Φίλταρε %1',
       en: 'Filter %1',
       es: 'Filtrar %1',
       it: 'filtra %1',
@@ -109,6 +118,7 @@ const MESSAGES = {
     },
     args0_name: {
       ar: 'إختبار',
+      el: 'ΤΕΣΤ',
       en: 'TEST',
       es: 'TEST',
       it: 'TEST',
@@ -117,6 +127,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
+      el: 'Φίλταρε γραμμές βάση προϋπόθεσης',
       en: 'filter rows by condition',
       es: 'filtrar filas por condicion',
       it: 'Filtra righe per condizione',
@@ -127,6 +138,7 @@ const MESSAGES = {
   groupBy: {
     message0: {
       ar: 'تقسيم البيانات عن طريف: %1',
+      el: 'Ομαδοποίησε βάση %1',
       en: 'Group by %1',
       es: 'Agrupar por %1',
       it: 'raggruppa per %1',
@@ -135,6 +147,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
+      el: 'ομαδοποίησε δεδομένα βάση τιμών στις στήλες',
       en: 'group data by values in columns',
       es: 'agrupar datos por valores en columnas',
       it: 'raggruppare i dati per valori in colonne',
@@ -145,14 +158,16 @@ const MESSAGES = {
   saveAs: {
     message0: {
       ar: 'حفظ ك %1',
+      el: 'Αποθήκευσε ως %1', // CHECK EL
       en: 'Save as %1',
-      es: 'Reporte %1', // TRANSLATE es
+      es: 'Reporte %1', // CHECK es
       it: 'Salva come %1',
-      ko: '%1 리포트', // TRANSLATE ko
+      ko: '%1 리포트', // CHECK ko
       pt: 'Salvar como %1'
     },
     args0_text: {
       ar: 'الإسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
       it: 'nome',
@@ -161,16 +176,18 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حفظ نتيجة',
+      el: 'αποθήκευσε αποτέλεσμα', // CHECK EL
       en: 'save a result',
-      es: 'reporta un resultado', // TRANSLATE es
+      es: 'reporta un resultado', // CHECK es
       it: 'salva risultato',
-      ko: '결과 리포트', // TRANSLATE ko
+      ko: '결과 리포트', // CHECK ko
       pt: 'salvar um resultado'
     }
   },
   select: {
     message0: {
       ar: 'إختيار %1',
+      el: 'Επίλεξε %1',
       en: 'Select %1',
       es: 'Selecciona %1',
       it: 'Seleziona %1',
@@ -179,6 +196,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إختيار الأعمده بإستخدام اسمائها',
+      el: 'επίλεξε στήλες βάση ονομάτων',
       en: 'select columns by name',
       es: 'selecciona columnas por nombre',
       it: 'seleziona colonne per nome',
@@ -189,6 +207,7 @@ const MESSAGES = {
   sort: {
     message0: {
       ar: 'ترتيب %1 تنازلي %2',
+      el: 'Ταξινόμησε %1 κατά φθίνοντα αριθμό %2',
       en: 'Sort %1 descending %2',
       es: 'Ordena %1 descendiente %2',
       it: 'Ordina %1 discendente %2',
@@ -197,6 +216,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
+      el: 'ταξινόμησε πίνακα βάση πολλών στηλών',
       en: 'sort table by multiple columns',
       es: 'ordena tabla por multiples columnas',
       it: 'ordina la tabella per colonne multiple',
@@ -207,6 +227,7 @@ const MESSAGES = {
   summarize: {
     message0: {
       ar: 'تلخيص البيانات %1 %2',
+      el: 'Συνόψισε %1 %2',
       en: 'Summarize %1 %2',
       es: 'Resumen %1 %2',
       it: 'Riassumi %1 %2',
@@ -215,6 +236,7 @@ const MESSAGES = {
     },
     args0_text: {
       ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -223,6 +245,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تلخيص قيم العمود',
+      el: 'Συνόψισε τιμές μίας στήλης',
       en: 'summarize values in  column',
       es: 'Resume valores en columna',
       it: 'riassumi valori in colonna',
@@ -233,6 +256,7 @@ const MESSAGES = {
   running: {
     message0: {
       ar: 'جاري التنفيذ %1 %2',
+      // TRANSLATE el
       en: 'Running %1 %2',
       // TRANSLATE es
       // TRANSLATE ko
@@ -241,6 +265,7 @@ const MESSAGES = {
     },
     args0_text: {
       ar: 'العمود',
+      // TRANSLATE el
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -249,6 +274,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تراكم القيم الجاري تنفيذها',
+      // TRANSLATE el
       en: 'accumulate running values',
       // TRANSLATE es
       // TRANSLATE ko
@@ -259,6 +285,7 @@ const MESSAGES = {
   ungroup: {
     message0: {
       ar: 'الغاء التقسيم',
+      el: 'βγάλε την ομαδοποίηση',
       en: 'Ungroup',
       es: 'Desagrupar',
       it: 'Disaggrega',
@@ -267,6 +294,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'الغاءتقسيم البيانات',
+      el: 'βγάλε την ομαδοποίηση',
       en: 'remove grouping',
       es: 'quita agrupamiento',
       it: 'rimuovi raggruppamento',
@@ -277,6 +305,7 @@ const MESSAGES = {
   unique: {
     message0: {
       ar: 'فريد %1',
+      el: 'μοναδικό %1',
       en: 'Unique %1',
       es: 'Unico %1',
       it: 'Unico %1',
@@ -285,6 +314,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إختيار الصفوف ذات القيم الفريده',
+      el: 'επίλεξε γραμμές με μοναδικές τιμές',
       en: 'select rows with unique values',
       es: 'selecciona filas con valores unicos',
       it: 'selezionare le righe con valori univoci',

@@ -35,6 +35,7 @@ const VALUE_COLOR = '#E7553C'
 const MESSAGES = {
   combine: {
     ar: 'دمج',
+    el: 'ένωση',
     en: 'combine',
     es: 'combinar',
     it: 'unire',
@@ -46,6 +47,7 @@ const MESSAGES = {
   },
   data: {
     ar: 'بيانات',
+    el: 'δεδομένα',
     en: 'data',
     es: 'datos',
     it: 'dati',
@@ -54,6 +56,7 @@ const MESSAGES = {
   },
   op: {
     ar: 'حساب',
+    el: 'λειτουργία',
     en: 'op',
     es: 'operacion',
     it: 'operatori',
@@ -62,6 +65,7 @@ const MESSAGES = {
   },
   plot: {
     ar: 'رسم',
+    el: 'γράφημα',
     en: 'plot',
     es: 'grafico',
     it: 'grafici',
@@ -70,6 +74,7 @@ const MESSAGES = {
   },
   stats: {
     ar: 'إحصائيات',
+    el: 'στατιστική',
     en: 'stats',
     es: 'estadísticas',
     it: 'statistiche',
@@ -78,6 +83,7 @@ const MESSAGES = {
   },
   transform: {
     ar: 'تغيير',
+    el: 'μετασχηματισμός',
     en: 'transform',
     es: 'transformar',
     it: 'trasformazioni',
@@ -86,6 +92,7 @@ const MESSAGES = {
   },
   value: {
     ar: 'القيمه',
+    el: 'τιμή',
     en: 'value',
     es: 'valor',
     it: 'valore',
