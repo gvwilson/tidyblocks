@@ -39,11 +39,17 @@ const MESSAGES = {
     en: 'combine',
     es: 'combinar',
     it: 'unire',
-    ko: '결합', 
+    ko: '결합',
     pt: 'combinar'
   },
   control: {
+    // TRANSLATE ar
+    el: 'ρύθμιση',
     en: 'control'
+    // TRANSLATE es
+    // TRANSLATE it
+    // TRANSLATE ko
+    // TRANSLATE pt
   },
   data: {
     ar: 'بيانات',
@@ -96,7 +102,7 @@ const MESSAGES = {
     en: 'value',
     es: 'valor',
     it: 'valore',
-    ko: '값', 
+    ko: '값',
     pt: 'valor'
   }
 }
