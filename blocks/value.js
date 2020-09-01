@@ -17,14 +17,16 @@ const MESSAGES = {
       es: 'Ausente',
       ar: 'غائب',
       ko: '공백', 
-      it: 'Assente'
+      it: 'Assente',
+      el: 'Απών'
     },
     tooltip: {
       en: 'represent a hole', 
       es: 'representa un agujero',
       ar: 'تمثيل فجوه',
       ko: '홀을 나타내기',
-      it: 'rappresenta un buco'
+      it: 'rappresenta un buco',
+      el: 'συμβόλισε μία τρύπα'
     }
   },
   column: {
@@ -33,14 +35,16 @@ const MESSAGES = {
       es: 'columna',
       ar: 'العمود',
       ko: '열',
-      it: 'colonna'
+      it: 'colonna',
+      el: 'στήλη'
     },
     tooltip: {
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
       ar: 'الحصول على قيمه من عمود',
       ko: '열의 값 가져오기',
-      it: 'ottieni il valore di una colonna'
+      it: 'ottieni il valore di una colonna',
+      el: 'βρες την τιμή μιας στήλης'
     }
   },
   datetime: {
@@ -49,14 +53,16 @@ const MESSAGES = {
       es: 'AAAA-MM-DD',
       ar: 'YYYY-MM-DD',
       ko: '연도-월-일',
-      it: 'AAAA-MM-GG'
+      it: 'AAAA-MM-GG',
+      el: 'ΕΕΕΕ-ΜΜ-ΗΗ'
     },
     tooltip: {
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
       ar: 'ثابت تاريخ/وقت',
       ko: '날짜/시간 유지',
-      it: 'data/ora costanti'
+      it: 'data/ora costanti',
+      el: 'σταθερή ημερομηνία/ώρα'
     }
   },
   logical: {
