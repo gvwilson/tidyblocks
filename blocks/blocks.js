@@ -51,7 +51,7 @@ const MESSAGES = {
     es: 'operacion',
     ko: '작업',
     it: 'operatori',
-    el: 'λειτουργίες'
+    el: 'λειτουργία'
   },
   plot: {
     ar: 'رسم',
