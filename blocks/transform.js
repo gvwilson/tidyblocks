@@ -167,7 +167,7 @@ const MESSAGES = {
       ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
       ko: '다중 열에 따라 테이블 정렬',
       it: 'ordina la tabella per colonne multiple', 
-      el: 'αξινόμησε πίνακα βάση πολλών στηλών'
+      el: 'ταξινόμησε πίνακα βάση πολλών στηλών'
     }
   },
   summarize: {
