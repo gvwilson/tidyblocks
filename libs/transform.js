@@ -27,7 +27,7 @@ class TransformBase {
    * @param {Boolean} savesResult Does this transform automatically save its result in the environment?
    * @param {Boolean} isControl Is this a control block? (False by default)
    */
-  constructor (species, requires, input, savesResult, isControl=false) {
+  constructor (species, requires, input, savesResult, isControl = false) {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')),
@@ -772,7 +772,7 @@ class TransformKMeansClustering extends TransformStats {
   run (env, df) {
     env.appendLog('log', `${this.species}`)
     const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
-    const {labels, centroids} = stats.kMeansCluster(points, this.numClusters)
+    const {labels} = stats.kMeansCluster(points, this.numClusters)
     const data = df.data.map((row, i) => {
       const newRow = Object.assign({}, row)
       newRow[this.labels] = labels[i]

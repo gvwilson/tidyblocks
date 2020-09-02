@@ -39,7 +39,7 @@ const MESSAGES = {
     en: 'combine',
     es: 'combinar',
     it: 'unire',
-    ko: '결합', 
+    ko: '결합',
     pt: 'combinar'
   },
   control: {
@@ -96,7 +96,7 @@ const MESSAGES = {
     en: 'value',
     es: 'valor',
     it: 'valore',
-    ko: '값', 
+    ko: '값',
     pt: 'valor'
   }
 }
@@ -235,7 +235,7 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
   componentStyles: {
     toolboxBackgroundColour: '#e9eff2',
     toolboxForegroundColour: '#1C313A',
-    flyoutBackgroundColour: '#F9F9F9',
+    flyoutBackgroundColour: '#F9F9F9'
   }
 })
 

@@ -161,7 +161,6 @@ const MESSAGES = {
   conditional: {
     message0: {
       ar: 'إذا %1 افعل %2 غير ذلك %3',
-      ar: 'إذا %1 افعل %2 غير ذلك %3',
       el: 'Αν %1 τότε %2 αλλιώς %3',
       en: 'If %1 then %2 else %3',
       es: 'Si %1 entonces %2 sino %3',
@@ -207,7 +206,7 @@ const MESSAGES = {
       // TRANSLATE it
       pt: 'deslocar uma coluna para cima ou para baixo'
     }
-  },
+  }
 }
 
 /**

@@ -323,7 +323,9 @@ class OpToYear extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getFullYear()
+  static CONVERTER (d) {
+    return d.getFullYear()
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -341,7 +343,9 @@ class OpToMonth extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getMonth() + 1
+  static CONVERTER (d) {
+    return d.getMonth() + 1
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -359,7 +363,9 @@ class OpToDay extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getDate()
+  static CONVERTER (d) {
+    return d.getDate()
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -377,7 +383,9 @@ class OpToWeekday extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getDay()
+  static CONVERTER (d) {
+    return d.getDay()
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -395,7 +403,9 @@ class OpToHours extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getHours()
+  static CONVERTER (d) {
+    return d.getHours()
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -413,7 +423,9 @@ class OpToMinutes extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getMinutes()
+  static CONVERTER (d) {
+    return d.getMinutes()
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -431,7 +443,9 @@ class OpToSeconds extends OpDatetimeBase {
   /**
    * Extract year from Date.
    */
-  static CONVERTER = d => d.getSeconds()
+  static CONVERTER (d) {
+    return d.getSeconds()
+  }
 
   /**
    * @param {ExprBase} arg How to get a value.
@@ -480,7 +494,9 @@ class OpAdd extends OpArithmeticBase {
   /**
    * Add values.
    */
-  static OPERATOR = (left, right) => left + right
+  static OPERATOR (left, right) {
+    return left + right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -499,7 +515,9 @@ class OpDivide extends OpArithmeticBase {
   /**
    * Divie values.
    */
-  static OPERATOR = (left, right) => left / right
+  static OPERATOR (left, right) {
+    return left / right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -518,7 +536,9 @@ class OpMultiply extends OpArithmeticBase {
   /**
    * Multiply values.
    */
-  static OPERATOR = (left, right) => left * right
+  static OPERATOR (left, right) {
+    return left * right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -537,7 +557,9 @@ class OpPower extends OpArithmeticBase {
   /**
    * Exponentiate values.
    */
-  static OPERATOR = (left, right) => left ** right
+  static OPERATOR (left, right) {
+    return left ** right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -556,7 +578,9 @@ class OpRemainder extends OpArithmeticBase {
   /**
    * Remainder values.
    */
-  static OPERATOR = (left, right) => left % right
+  static OPERATOR (left, right) {
+    return left % right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -575,7 +599,9 @@ class OpSubtract extends OpArithmeticBase {
   /**
    * Subtract values.
    */
-  static OPERATOR = (left, right) => left - right
+  static OPERATOR (left, right) {
+    return left - right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -620,7 +646,9 @@ class OpMaximum extends OpExtremumBase {
   /**
    * Get maximum of values.
    */
-  static OPERATOR = (left, right) => (left > right ? left : right)
+  static OPERATOR (left, right) {
+    return (left > right) ? left : right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -639,7 +667,9 @@ class OpMinimum extends OpExtremumBase {
   /**
    * Get minimum of values.
    */
-  static OPERATOR = (left, right) => (left < right ? left : right)
+  static OPERATOR (left, right) {
+    return (left < right) ? left : right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -686,7 +716,9 @@ class OpEqual extends OpCompareBase {
   /**
    * Test values for equality.
    */
-  static OPERATOR = (left, right) => util.equal(left, right)
+  static OPERATOR (left, right) {
+    return util.equal(left, right)
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -705,7 +737,9 @@ class OpGreater extends OpCompareBase {
   /**
    * Test values for strict order.
    */
-  static OPERATOR = (left, right) => (left > right)
+  static OPERATOR (left, right) {
+    return left > right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -724,7 +758,9 @@ class OpGreaterEqual extends OpCompareBase {
   /**
    * Test values for order.
    */
-  static OPERATOR = (left, right) => (left >= right)
+  static OPERATOR (left, right) {
+    return left >= right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -743,7 +779,9 @@ class OpLess extends OpCompareBase {
   /**
    * Test values for strict order.
    */
-  static OPERATOR = (left, right) => (left < right)
+  static OPERATOR (left, right) {
+    return left < right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -762,7 +800,9 @@ class OpLessEqual extends OpCompareBase {
   /**
    * Test values for order.
    */
-  static OPERATOR = (left, right) => (left <= right)
+  static OPERATOR (left, right) {
+    return left <= right
+  }
 
   /**
    * @param {ExprBase} left How to get a value.
@@ -781,7 +821,9 @@ class OpNotEqual extends OpCompareBase {
   /**
    * Test values for inequality.
    */
-  static OPERATOR = (left, right) => (!util.equal(left, right))
+  static OPERATOR (left, right) {
+    return !util.equal(left, right)
+  }
 
   /**
    * @param {ExprBase} left How to get a value.

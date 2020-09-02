@@ -12,7 +12,7 @@ class RunningBase {
    * @param {function} func How to accumulate values.
    * @param {string} srcCol Which column to accumulate.
    */
-  constructor (species, srcCol, func=null) {
+  constructor (species, srcCol, func = null) {
     util.check((func === null) || (typeof func === 'function'),
                `Must provide callable function`)
     util.check(species && (typeof species === 'string') &&
@@ -77,7 +77,7 @@ class RunningIndex extends RunningBase {
     util.check(typeof destCol === 'string',
                `Must provide destination column name as string`)
     rows.forEach((row, i) => {
-      row[destCol] = i+1
+      row[destCol] = i + 1
     })
   }
 }
@@ -109,7 +109,7 @@ class RunningMean extends RunningBase {
     let total = 0
     rows.forEach((row, i) => {
       total += row[this.srcCol]
-      row[destCol] = total / (i+1)
+      row[destCol] = total / (i + 1)
     })
   }
 }

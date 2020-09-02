@@ -59,9 +59,9 @@ and by adding features to make TidyBlocks easier to use.
 1.  Run `npm run test` to re-run the unit tests in the `tests/` directory
     to make sure everything is working.
 
-1.  Please see [our blog](https://tidyblocks.tech/blog/)
-    for explanations of how our code is organized.
-    We will update these periodically.
+1.  Run `npm run build` to rebuild the JavaScript,
+    and then `npm run serve` to run a local server to try it out.
+    (Point your browser at <http://localhost:8080>.)
 
 ## Actions
 

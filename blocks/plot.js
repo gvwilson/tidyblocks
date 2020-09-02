@@ -34,7 +34,7 @@ const MESSAGES = {
     en: 'Y axis',
     es: 'eje Y',
     it: 'asse Y',
-    ko: 'Y축', 
+    ko: 'Y축',
     pt: 'eixo Y'
   },
   plot_bar: {
@@ -53,7 +53,7 @@ const MESSAGES = {
       en: 'create bar plot',
       es: 'crear grafico barras',
       it: 'crea un grafico a barre',
-      ko: '막대 그래프 만들기', 
+      ko: '막대 그래프 만들기',
       pt: 'criar gráfico de barras'
     }
   },
@@ -64,7 +64,7 @@ const MESSAGES = {
       en: 'Box %1 %2 %3',
       es: 'Cajas %1 %2 %3',
       it: 'Scatola %1 %2 %3',
-      ko: '박스 %1 %2 %3', 
+      ko: '박스 %1 %2 %3',
       pt: 'Caixa %1 %2 %3'
     },
     tooltip: {
@@ -73,7 +73,7 @@ const MESSAGES = {
       en: 'create box plot',
       es: 'crear grafico cajas',
       it: 'crea diagramma a scatola e baffi',
-      ko: '박스 그래프 만들기', 
+      ko: '박스 그래프 만들기',
       pt: 'criar diagrama de caixas'
     }
   },
@@ -89,7 +89,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'إنشاء المخطط النقطي',
-      el: 'δημιούργησε διάγραμμα πυκνότητας'      ,
+      el: 'δημιούργησε διάγραμμα πυκνότητας',
       en: 'create dot plot',
       es: 'crear grafico puntos',
       it: 'crea un diagramma a punti',
@@ -104,7 +104,7 @@ const MESSAGES = {
       en: 'Histogram %1 %2 %3',
       es: 'Histograma %1 %2 %3',
       it: 'istogramma %1 %2 %3',
-      ko: '히스토그램 %1 %2 %3', 
+      ko: '히스토그램 %1 %2 %3',
       pt: 'Histograma %1 %2 %3'
     },
     column: {
@@ -113,7 +113,7 @@ const MESSAGES = {
       en: 'column',
       es: 'columna',
       it: 'colonna',
-      ko: '열', 
+      ko: '열',
       pt: 'coluna'
     },
     tooltip: {
@@ -122,7 +122,7 @@ const MESSAGES = {
       en: 'create histogram',
       es: 'crear histograma',
       it: 'crea istogramma',
-      ko: '히스토그램 만들기', 
+      ko: '히스토그램 만들기',
       pt: 'criar histograma'
     }
   },
@@ -133,7 +133,7 @@ const MESSAGES = {
       en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
       it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5',
-      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5', 
+      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5',
       pt: 'Disperssão %1 %2 %3 Cor %4 Adicionar Linha? %5'
     },
     tooltip: {
@@ -142,7 +142,7 @@ const MESSAGES = {
       en: 'create scatter plot',
       es: 'crear grafico dispersion',
       it: 'crea un grafico di dispersione',
-      ko: '분산 그래프 만들기', 
+      ko: '분산 그래프 만들기',
       pt: 'criar gráfico de dispersão'
     }
   }

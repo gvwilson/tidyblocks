@@ -17,7 +17,7 @@ const MESSAGES = {
       en: 'Colors',
       es: 'Colores',
       it: 'Colori',
-      ko: '색깔', 
+      ko: '색깔',
       pt: 'Cores'
     },
     tooltip: {
@@ -26,7 +26,7 @@ const MESSAGES = {
       en: 'eleven colors',
       es: 'once colores',
       it: 'undici colori',
-      ko: '11개의 색', 
+      ko: '11개의 색',
       pt: 'onze cores'
     }
   },
@@ -37,7 +37,7 @@ const MESSAGES = {
       en: 'Earthquakes',
       es: 'Terremotos',
       it: 'Terremoti',
-      ko: '지진', 
+      ko: '지진',
       pt: 'Terremotos'
     },
     tooltip: {
@@ -46,7 +46,7 @@ const MESSAGES = {
       en: 'earthquake data',
       es: 'datos de terremotos',
       it: 'dati sui terremoti',
-      ko: '지진 데이터', 
+      ko: '지진 데이터',
       pt: 'dados de terremotos'
     }
   },
@@ -77,7 +77,7 @@ const MESSAGES = {
       en: 'Phish',
       es: 'Phish',
       it: 'Phish',
-      ko: '피시', 
+      ko: '피시',
       pt: 'Phish'
     },
     tooltip: {
@@ -126,7 +126,7 @@ const MESSAGES = {
       en: 'User data %1',
       es: 'Datos de usuario %1',
       it: 'Dati utenti %1',
-      ko: '사용자 데이터 %1', 
+      ko: '사용자 데이터 %1',
       pt: 'Dados de usuario %1'
     },
     args0_text: {

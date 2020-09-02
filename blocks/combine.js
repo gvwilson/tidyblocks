@@ -17,7 +17,7 @@ const MESSAGES = {
       en: 'Glue left %1 right %2 labels %3',
       es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
       it: 'incolla sinistra %1 destra %2 etichette %3',
-      ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3', 
+      ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3',
       pt: 'Juntar esquerda %1 direita %2 etiquetas %3'
     },
     table_name: {
@@ -26,7 +26,7 @@ const MESSAGES = {
       en: 'name',
       es: 'nombre',
       it: 'nome',
-      ko: '이름', 
+      ko: '이름',
       pt: 'nome'
     },
     label: {
@@ -55,7 +55,7 @@ const MESSAGES = {
       en: 'Join',
       es: 'Unir',
       it: 'unisci',
-      ko: '연결', 
+      ko: '연결',
       pt: 'Unir'
     },
     message1: {

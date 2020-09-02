@@ -54,7 +54,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      pt: "Divide os valores em intervalos iguais"
+      pt: 'Divide os valores em intervalos iguais'
     }
   },
   create: {
@@ -261,7 +261,7 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       // TRANSLATE it
-      pt: "Acumular %1 %2"
+      pt: 'Acumular %1 %2'
     },
     args0_text: {
       ar: 'العمود',

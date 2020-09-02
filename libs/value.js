@@ -70,7 +70,7 @@ class ValueColumn extends ExprNullary {
   }
 
   run (row, i, data) {
-    util.check((0 <= i) && (i < data.length),
+    util.check((i >= 0) && (i < data.length),
                `Row index ${i} out of range`)
     util.check(typeof row === 'object',
                `Row must be object`)
