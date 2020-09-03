@@ -161,7 +161,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حساب IDs لصنف الخوارزميه التصنيفية',
-      el: 'υπολόγισε k-μέσων συστάδες',
+      el: 'υπολόγισε συστάδες k-μέσων',
       en: 'calculate k-means cluster IDs',
       // TRANSLATE es
       // TRANSLATE ko
