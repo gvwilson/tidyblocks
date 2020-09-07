@@ -43,7 +43,13 @@ const MESSAGES = {
     pt: 'combinar'
   },
   control: {
+    // TRANSLATE ar
+    el: 'ρύθμιση',
     en: 'control'
+    // TRANSLATE es
+    // TRANSLATE it
+    // TRANSLATE ko
+    // TRANSLATE pt
   },
   data: {
     ar: 'بيانات',

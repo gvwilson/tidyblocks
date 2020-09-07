@@ -116,7 +116,7 @@ const MESSAGES = {
   missing: {
     message0: {
       ar: 'مفقود',
-      // TRANSLATE el
+      el: 'Απών',
       en: 'Missing',
       es: 'Falta',
       // TRANSLATE ko
@@ -125,7 +125,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'القيمه المفقوده',
-      // TRANSLATE el
+      el: 'απούσα τιμή',
       en: 'missing value',
       es: 'valor que falta',
       // TRANSLATE ko

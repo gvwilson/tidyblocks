@@ -24,7 +24,7 @@ const MESSAGES = {
   bin: {
     message0: {
       ar: 'صندوق %1 %2 فئة %3',
-      // TRANSLATE el
+      el: 'Βάλε %1 %2 στην ίδια κλάση με ετικέτα %3',
       en: 'Bin %1 %2 label %3',
       // TRANSLATE es
       // TRANSLATE ko
@@ -42,6 +42,7 @@ const MESSAGES = {
     },
     label: {
       ar: 'الفئه',
+      el: 'ετικέτα',
       en: 'label',
       es: 'etiqueta',
       it: 'etichetta',
@@ -50,6 +51,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تقسيم القيم إلى صناديق متساويه الحجم',
+      el: 'Διαχώρισε τιμές σε ισαπέχουσες κλάσεις',
       en: 'Divide values into equal-sized bins',
       // TRANSLATE es
       // TRANSLATE ko
@@ -158,7 +160,7 @@ const MESSAGES = {
   saveAs: {
     message0: {
       ar: 'حفظ ك %1',
-      el: 'Αποθήκευσε ως %1', // CHECK EL
+      el: 'Αποθήκευσε ως %1',
       en: 'Save as %1',
       es: 'Reporte %1', // CHECK es
       it: 'Salva come %1',
@@ -176,7 +178,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حفظ نتيجة',
-      el: 'αποθήκευσε αποτέλεσμα', // CHECK EL
+      el: 'αποθήκευσε αποτέλεσμα',
       en: 'save a result',
       es: 'reporta un resultado', // CHECK es
       it: 'salva risultato',
@@ -256,7 +258,7 @@ const MESSAGES = {
   running: {
     message0: {
       ar: 'جاري التنفيذ %1 %2',
-      // TRANSLATE el
+      el: 'Συσσώρευση %1 %2',
       en: 'Running %1 %2',
       // TRANSLATE es
       // TRANSLATE ko
@@ -265,7 +267,7 @@ const MESSAGES = {
     },
     args0_text: {
       ar: 'العمود',
-      // TRANSLATE el
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
       it: 'colonna',
@@ -274,7 +276,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'تراكم القيم الجاري تنفيذها',
-      // TRANSLATE el
+      el: 'συσσώρευσε σύνολο τιμών',
       en: 'accumulate running values',
       // TRANSLATE es
       // TRANSLATE ko

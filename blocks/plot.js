@@ -21,7 +21,7 @@ const MESSAGES = {
   },
   x_axis: {
     ar: 'المحور الأفقي',
-    el: 'άξονας χι',
+    el: 'άξονας Χ',
     en: 'X axis',
     es: 'eje X',
     it: 'asse X',
@@ -30,7 +30,7 @@ const MESSAGES = {
   },
   y_axis: {
     ar: 'المحور الرأسي',
-    el: 'άξονας ψι',
+    el: 'άξονας Ψ',
     en: 'Y axis',
     es: 'eje Y',
     it: 'asse Y',

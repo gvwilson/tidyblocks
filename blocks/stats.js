@@ -116,7 +116,7 @@ const MESSAGES = {
   stats_k_means: {
     message0: {
       ar: 'الخوارزمية التصنيفية (k-means)',
-      // TRANSLATE el
+      el: 'ομαδοποίηση k-μέσων',
       en: 'k-means cluster',
       es: 'agrupamiento por k-medians',
       // TRANSLATE ko
@@ -125,7 +125,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'س %1 ص %2 الرقم %3 الفئه %4',
-      // TRANSLATE el
+      el: 'Χ %1 Ψ %2 αριθμός %3 ετικέτα %4',
       en: 'X %1 Y %2 number %3 label %4',
       es: 'X %1 Y %2 numero %3 etiqueta %4',
       // TRANSLATE ko
@@ -134,7 +134,7 @@ const MESSAGES = {
     },
     args1_x: {
       ar: 'المحور الأفقي',
-      // TRANSLATE el
+      el: 'άξονας Χ',
       en: 'X axis',
       es: 'eje X',
       it: 'asse X',
@@ -143,7 +143,7 @@ const MESSAGES = {
     },
     args1_y: {
       ar: 'المحور الرأسي',
-      // TRANSLATE el
+      el: 'άξονας Ψ',
       en: 'Y axis',
       es: 'eje Y',
       it: 'asse Y',
@@ -152,7 +152,7 @@ const MESSAGES = {
     },
     args1_label: {
       ar: 'الفئه',
-      // TRANSLATE el
+      el: 'ετικέτα',
       en: 'label',
       es: 'etiqueta',
       ko: '라벨',
@@ -161,7 +161,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حساب IDs لصنف الخوارزميه التصنيفية',
-      // TRANSLATE el
+      el: 'υπολόγισε συστάδες k-μέσων',
       en: 'calculate k-means cluster IDs',
       // TRANSLATE es
       // TRANSLATE ko
@@ -172,7 +172,7 @@ const MESSAGES = {
   stats_silhouette: {
     message0: {
       ar: 'رسم صورة ظلية',
-      // TRANSLATE el
+      el: 'σιλουέτα',
       en: 'silhouette',
       es: 'silueta',
       // TRANSLATE ko
@@ -181,7 +181,7 @@ const MESSAGES = {
     },
     message1: {
       ar: 'س %1 ص %2 الفئه %3 النتيجه\المعدل %4',
-      // TRANSLATE el
+      el: 'Χ %1 Ψ %2 ετικέτα %3 αποτέλεσμα %4',
       en: 'X %1 Y %2 label %3 score %4',
       es: 'X %1 Y %2 etiqueta %3 puntuación %4',
       // TRANSLATE ko
@@ -190,7 +190,7 @@ const MESSAGES = {
     },
     args1_x: {
       ar: 'المحور الأفقي',
-      // TRANSLATE el
+      el: 'άξονας Χ',
       en: 'X axis',
       es: 'eje X',
       it: 'asse X',
@@ -199,7 +199,7 @@ const MESSAGES = {
     },
     args1_y: {
       ar: 'المحور الرأسي',
-      // TRANSLATE el
+      el: 'άξονας Ψ',
       en: 'Y axis',
       es: 'eje Y',
       it: 'asse Y',
@@ -208,15 +208,16 @@ const MESSAGES = {
     },
     args1_label: {
       ar: 'الفئه',
-      // TRANSLATE el
+      el: 'ετικέτα',
       en: 'label',
       es: 'etiqueta',
       ko: '라벨',
       it: 'etichetta'
+      // TRANSLATE pt
     },
     args1_score: {
       ar: 'المعدل\النتيجه',
-      // TRANSLATE el
+      el: 'αποτέλεσμα',
       en: 'score',
       es: 'puntuación',
       // TRANSLATE ko
@@ -225,7 +226,7 @@ const MESSAGES = {
     },
     tooltip: {
       ar: 'حساب معدل رسم الصورة الظلية لتصنيف ذو بعدين',
-      // TRANSLATE el
+      el: 'υπολόγισε το σκορ σιλουέτας των συστάδων δύο διαστάσεων',
       en: 'calculate silhouette score of 2D clusters',
       es: 'calcular la puntuación de la silueta de los clústeres 2D',
       // TRANSLATE ko
