@@ -42,6 +42,12 @@
           </ul>
         </li>
         <li>
+          <a href="#">Examples</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/examples/">English</a></li>
+          </ul>
+        </li>
+        <li>
           <a href="#">FAQ</a>
           <ul class="hidden-ul">
             <li class="hidden-li"><a class="hidden-a" href="/en/faq/">English</a></li>
@@ -64,7 +70,7 @@ and that your work may be made available under the terms of <a href="LICENSE.md"
 <p><strong>Asha</strong> is a high school mathematics teacher
 whose students are using TidyBlocks to do their homework.
 She can help by filing bug reports and feature suggestions,
-and by providing questions and solutions for us to add to our gallery of examples.</p>
+and by providing questions and solutions for our gallery of examples.</p>
 <p><strong>Lupita</strong> is using TidyBlocks to learn basic data science.
 She can help by translating blocks and block descriptions into Bantu
 to make TidyBlocks more accessible to her fellow students.</p>
@@ -182,6 +188,20 @@ and look at what text appears where in that block.</p>
 </ol>
 <p>If you are the first person to do translations in some language,
 please also add a line to <code>./index.html</code> to link to the main page for that language.</p>
+<h2>Examples</h2>
+<ul>
+<li>
+<p>Example workspaces are stored in the <code>./examples</code> directory.</p>
+</li>
+<li>
+<p>Each one is described in <code>LL/examples.md</code> (where <code>LL</code> is a two-letter language code).
+The h2-level title of the example in this file links to TidyBlocks in that language
+with a <code>?workspace=/examples/some-path.jeff</code> query parameter to auto-load the example.</p>
+</li>
+<li>
+<p>Please include an SVG image for every example.</p>
+</li>
+</ul>
 <h2>Organization</h2>
 <p>TidyBlocks uses <a href="https://developers.google.com/blockly/">Blockly</a> for the workspace,
 <a href="https://reactjs.org/">React</a> for the user interface,
