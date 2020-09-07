@@ -120,7 +120,7 @@ const MESSAGES = {
       en: 'Missing',
       es: 'Falta',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'Mancante',
       pt: 'Faltante'
     },
     tooltip: {
@@ -129,7 +129,7 @@ const MESSAGES = {
       en: 'missing value',
       es: 'valor que falta',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'valore mancante',
       pt: 'valor faltante'
     }
   },

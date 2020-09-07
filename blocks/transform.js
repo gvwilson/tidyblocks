@@ -28,7 +28,7 @@ const MESSAGES = {
       en: 'Bin %1 %2 label %3',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'Intervallo %1 %2 etichetta %3',
       pt: 'Intervalo %1 %2 rótulo %3'
     },
     column: {
@@ -55,7 +55,7 @@ const MESSAGES = {
       en: 'Divide values into equal-sized bins',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'Dividi i valori in intervalli uguali',
       pt: 'Divide os valores em intervalos iguais'
     }
   },
@@ -262,7 +262,7 @@ const MESSAGES = {
       en: 'Running %1 %2',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'In funzione %1 %2', 
       pt: 'Acumular %1 %2'
     },
     args0_text: {
@@ -280,7 +280,7 @@ const MESSAGES = {
       en: 'accumulate running values',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'raggruppa i valori in funzione',
       pt: 'acumular valores totais'
     }
   },

@@ -14,18 +14,18 @@ const MESSAGES = {
     message0: {
       // TRANSLATE ar
       el: 'RNG σπόρος γεννήτριας %1',
-      en: 'RNG seed %1'
+      en: 'RNG seed %1',
       // TRANSLATE es
-      // TRANSLATE it
+      it: 'Effetti casuali %1',
       // TRANSLATE ko
       // TRANSLATE pt
     },
     tooltip: {
       ar: 'إعادة تشغيل مولد الأرقام العشوائية',
       el: 'Επανεκκίνηση αρχικοποίησης γεννήτριας τυχαίων αριθμών',
-      en: 'Restart random number generation'
+      en: 'Restart random number generation',
       // TRANSLATE es
-      // TRANSLATE it
+      it: 'Riavviare la generazione di numeri casuali',
       // TRANSLATE ko
       // TRANSLATE pt
     }
