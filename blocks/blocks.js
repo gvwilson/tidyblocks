@@ -2,9 +2,12 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {Messages} = require('./helpers')
+const {
+  Messages
+} = require('./helpers')
 
 const combine = require('./combine')
+const control = require('./control')
 const data = require('./data')
 const op = require('./op')
 const plot = require('./plot')
@@ -16,7 +19,8 @@ const value = require('./value')
 // Block colors.
 // ----------------------------------------------------------------------
 
-const COMBINE_COLOR = '#404040'
+const COMBINE_COLOR = '#808080'
+const CONTROL_COLOR = '#C0C0C0'
 const DATA_COLOR = '#FEBE4C'
 const OP_COLOR = '#F9B5B2'
 const PLOT_COLOR = '#A4C588'
@@ -31,52 +35,69 @@ const VALUE_COLOR = '#E7553C'
 const MESSAGES = {
   combine: {
     ar: 'دمج',
+    el: 'ένωση',
     en: 'combine',
     es: 'combinar',
-    ko: '결합', 
-    it: 'unire'
+    it: 'unire',
+    ko: '결합',
+    pt: 'combinar'
+  },
+  control: {
+    en: 'control'
   },
   data: {
     ar: 'بيانات',
+    el: 'δεδομένα',
     en: 'data',
     es: 'datos',
+    it: 'dati',
     ko: '데이터',
-    it: 'dati'
+    pt: 'dados'
   },
   op: {
     ar: 'حساب',
+    el: 'λειτουργία',
     en: 'op',
     es: 'operacion',
+    it: 'operatori',
     ko: '작업',
-    it: 'operatori'
+    pt: 'operação'
   },
   plot: {
     ar: 'رسم',
+    el: 'γράφημα',
     en: 'plot',
     es: 'grafico',
+    it: 'grafici',
     ko: '그래프',
-    it: 'grafici'
+    pt: 'gráfico'
   },
   stats: {
     ar: 'إحصائيات',
+    el: 'στατιστική',
     en: 'stats',
     es: 'estadísticas',
+    it: 'statistiche',
     ko: '통계',
-    it: 'statistiche'
+    pt: 'estatísticas'
   },
   transform: {
     ar: 'تغيير',
+    el: 'μετασχηματισμός',
     en: 'transform',
     es: 'transformar',
+    it: 'trasformazioni',
     ko: '변환',
-    it: 'trasformazioni'
+    pt: 'transformar'
   },
   value: {
     ar: 'القيمه',
+    el: 'τιμή',
     en: 'value',
     es: 'valor',
-    ko: '값', 
-    it: 'valore'
+    it: 'valore',
+    ko: '값',
+    pt: 'valor'
   }
 }
 
@@ -96,6 +117,7 @@ const createXmlConfig = (language) => {
       <block type="data_user"></block>
     </category>
     <category name="${msg.get('transform')}" colour="${TRANSFORM_COLOR}">
+      <block type="transform_bin"></block>
       <block type="transform_create"></block>
       <block type="transform_drop"></block>
       <block type="transform_filter"></block>
@@ -104,6 +126,7 @@ const createXmlConfig = (language) => {
       <block type="transform_select"></block>
       <block type="transform_sort"></block>
       <block type="transform_summarize"></block>
+      <block type="transform_running"></block>
       <block type="transform_ungroup"></block>
       <block type="transform_unique"></block>
     </category>
@@ -117,18 +140,22 @@ const createXmlConfig = (language) => {
     <category name="${msg.get('stats')}" colour="${STATS_COLOR}">
       <block type="stats_ttest_one"></block>
       <block type="stats_ttest_two"></block>
+      <block type="stats_k_means"></block>
+      <block type="stats_silhouette"></block>
     </category>
     <category name="${msg.get('op')}" colour="${OP_COLOR}">
       <block type="op_arithmetic"></block>
       <block type="op_negate"></block>
+      <block type="op_abs"></block>
       <block type="op_compare"></block>
+      <block type="op_extremum"></block>
       <block type="op_logical"></block>
       <block type="op_not"></block>
       <block type="op_type"></block>
       <block type="op_convert"></block>
       <block type="op_datetime"></block>
       <block type="op_conditional"></block>
-      <block type="op_abs"></block>
+      <block type="op_shift"></block>
     </category>
     <category name="${msg.get('value')}" colour="${VALUE_COLOR}">
       <block type="value_column"></block>
@@ -136,7 +163,7 @@ const createXmlConfig = (language) => {
       <block type="value_logical"></block>
       <block type="value_number"></block>
       <block type="value_text"></block>
-      <block type="value_rownum"></block>
+      <block type="value_missing"></block>
       <block type="value_exponential"></block>
       <block type="value_normal"></block>
       <block type="value_uniform"></block>
@@ -144,6 +171,9 @@ const createXmlConfig = (language) => {
     <category name="${msg.get('combine')}" colour="${COMBINE_COLOR}">
       <block type="combine_glue"></block>
       <block type="combine_join"></block>
+    </category>
+    <category name="${msg.get('control')}" colour="${CONTROL_COLOR}">
+      <block type="control_seed"></block>
     </category>
   </xml>`
 }
@@ -160,6 +190,12 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
   blockStyles: {
     combine_block: {
       colourPrimary: COMBINE_COLOR,
+      colourSecondary: '#404040',
+      colourTertiary: '#A0A0A0',
+      hat: 'cap'
+    },
+    control_block: {
+      colourPrimary: CONTROL_COLOR,
       colourSecondary: '#404040',
       colourTertiary: '#A0A0A0',
       hat: 'cap'
@@ -199,7 +235,7 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
   componentStyles: {
     toolboxBackgroundColour: '#e9eff2',
     toolboxForegroundColour: '#1C313A',
-    flyoutBackgroundColour: '#F9F9F9',
+    flyoutBackgroundColour: '#F9F9F9'
   }
 })
 
@@ -216,7 +252,7 @@ Blockly.TidyBlocks = new Blockly.Generator('TidyBlocks')
  * Generate code as stringified JSON. (This has to be a string because Blockly's
  * code generator insists on strings.)
  * @param workspace The Blockly workspace containing the program.
- * @returns Stringified JSON representation of the workspace.
+ * @return Stringified JSON representation of the workspace.
  */
 Blockly.TidyBlocks.workspaceToCode = (workspace) => {
   const allTopBlocks = workspace.getTopBlocks()
@@ -225,13 +261,16 @@ Blockly.TidyBlocks.workspaceToCode = (workspace) => {
   const pipelines = cappedBlocks.map(top => _makePipeline(top))
   pipelines.unshift('"@program"')
   const code = `[${pipelines}]`
-  return {code, strayCount}
+  return {
+    code,
+    strayCount
+  }
 }
 
 /**
  * Helper function to generate code given the top block of a stack.
  * @param top Top block of stack.
- * @returns Stringified JSON representation of stack.
+ * @return Stringified JSON representation of stack.
  */
 const _makePipeline = (top) => {
   const blocks = []
@@ -241,7 +280,7 @@ const _makePipeline = (top) => {
     current = current.getNextBlock()
   }
   const transforms =
-        blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
+    blocks.map(block => Blockly.TidyBlocks.blockToCode(block, true))
   transforms.unshift('"@pipeline"')
   return `[${transforms}]`
 }
@@ -262,6 +301,7 @@ const SINGLE_COL_FIELDS = [
   'LEFT_COLUMN',
   'LEFT_TABLE',
   'NAME',
+  'NUMBER',
   'RIGHT_COLUMN',
   'RIGHT_TABLE',
   'VALUES',
@@ -386,6 +426,7 @@ const createBlocks = (language = 'en') => {
     _createBlocksHasRun = true
     _createValidators()
     combine.setup(language)
+    control.setup(language)
     data.setup(language)
     op.setup(language)
     plot.setup(language)
@@ -396,6 +437,7 @@ const createBlocks = (language = 'en') => {
 }
 
 module.exports = {
+  MESSAGES,
   THEME,
   createXmlConfig,
   createBlocks

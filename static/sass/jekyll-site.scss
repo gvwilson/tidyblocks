@@ -1,39 +1,60 @@
 .jekyllBody {
-  font-family: "Helvetica Neue", Helvetica;
+  font-family: 'Open Sans Light', sans-serif;
   font-size: 12pt;
-  width: 70rem;
 
   /* ------------------------------------------------------------ */
-
-  nav {
-      height: 100%;
-      width: 8rem;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      border-right: 1px solid black;
-      overflow-x: hidden;
-  }
-
-  nav p + ul {
-      margin-top: -2ex;
-  }
-
-  nav ul {
-      padding-left: 1rem;
-  }
 
   /* ------------------------------------------------------------ */
 
   main {
-      margin-left: 10rem; /* Same as the width +padding of sidenav */
-      padding-left: 1rem; /* A little extra space around the border */
+      margin-left: 15rem; /* Same as the width +padding of sidenav */
+      margin-right: 15rem;
+      margin-bottom: 2rem;
+      min-height: calc(100vh - 70px);
+      line-height: 1.75em;
+  }
+
+  a {
+    color: #23749a;
+    text-decoration: none;
+  }
+
+  .navDiv {
+    overflow: hidden;
+    padding-left: 20px;
+  }
+
+  .navRight {
+    float: right;
+    margin: 25px;
+  }
+
+  .navRight a {
+    color:grey;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    padding: 15px 20px;
+    position: relative;
+  }
+
+  hr {
+      border: white;
+  }
+
+  a:hover {
+    color: grey;
   }
 
   code {
       background-color: lavender;
+  }
+
+  pre {
+      background-color: lavender;
+      padding: 15px;
+      margin: 15px;
+      border-radius: 5px;
   }
 
   dt {
@@ -58,17 +79,24 @@
       border: 1px solid gray;
   }
 
+  h1, h2, h3, h4 {
+      color: #1C313A;
+  }
+
+  #img_logo {
+    padding-top: 10px;
+  }
   /* ------------------------------------------------------------ */
 
   footer {
-      border-top: 1px solid black;
-      margin-top: 1ex;
-      padding-top: 1ex;
-      text-align: center;
+    height: 90px;
+    background-color: #1C313A;
+    text-align: center;
   }
 
   img.footer {
-      height: 2ex;
+      height: 5ex !important;
+      margin: 20px;
   }
 
   /* ------------------------------------------------------------ */
@@ -109,4 +137,142 @@
       margin-right: 1rem;
       margin-bottom: 1rem;
   }
+  .guide_lhs {
+    position: fixed;
+    bottom: 0;
+    left: 1rem;
+    top: 5rem;
+
+  }
+
+  .guide_rhs {
+    overflow-y: auto;
+  }
+
+   /* ------------------------------------------------------------ */
+
+   .topnav {
+    display: flex;
+    align-items: center;
+
+    & a:after {
+      background: none repeat scroll 0 0 transparent;
+      bottom: 0;
+      content: "";
+      display: block;
+      height: 2px;
+      left: 50%;
+      position: absolute;
+      background: grey;
+      transition: width 0.3s ease 0s, left 0.3s ease 0s;
+      width: 0;
+    }
+
+    & a:hover:after {
+      width: 100%;
+      left: 0;
+    }
+
+    & ul {
+      list-style: none;
+    }
+
+    & li {
+      display: inline-block;
+
+      & a {
+        text-decoration: none;
+        text-transform: uppercase;
+        cursor: pointer;
+        color: grey;
+        padding: 1rem;
+
+        &:hover {
+          color: black;
+        }
+      }
+
+      & .hidden-ul {
+        display: none;
+        position: absolute;
+        min-width: 3rem;
+        z-index: 1;
+        background-color: white;
+      }
+
+      &:hover .hidden-ul {
+        display: block;
+        width: 17rem;
+        margin-top: 1rem;
+        overflow: hidden;
+
+        & a:after {
+          background: white;
+        }
+
+        & .hidden-a {
+          display: block;
+          width: 100%;
+          cursor: pointer;
+          padding: 1rem;
+          text-align: left;
+
+          &:hover {
+            color: black;
+          }
+        }
+      }
+    }
+  }
+  a.hidden-a {
+    margin-left: -2rem;
+  }
+
+  .data {
+    color: #FEBE4C;
+  }
+
+  .transform {
+    color: #76AADB;
+  }
+
+  .plot {
+    color: #A4C588;
+  }
+
+  .stats {
+    color: #BA93DB;
+  }
+
+  .op {
+    color: #F9B5B2;
+  }
+
+  .values {
+    color: #E7553C;
+  }
+
+  .combine {
+    color: #808080;
+  }
+
+  .combine {
+    color: #C0C0C0;
+  }
+
+  .posts {
+    article {
+      padding-bottom:40px;
+      margin-right:15rem;
+
+      p {
+        color: grey;
+      }
+
+      div {
+        color: grey;
+      }
+    }
+  }
+
 }

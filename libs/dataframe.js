@@ -3,6 +3,7 @@
 const util = require('./util')
 const {ExprBase} = require('./expr')
 const Summarize = require('./summarize')
+const Running = require('./running')
 
 /**
  * Store a dataframe. The frame is represented as an array of 0 or more rows,
@@ -27,7 +28,7 @@ class DataFrame {
   /**
    * Check if two dataframes are equal (used primarily in testing).
    * @param {Object} other The other dataframe.
-   * @returns Equality.
+   * @return Equality.
    */
   equal (other) {
     util.check(other instanceof DataFrame,
@@ -73,7 +74,7 @@ class DataFrame {
    * Create a new column using values from existing columns.
    * @param {string} newName New column's name. (If column already exists, it is replaced.)
    * @param {ExprBase} expr The expression object that calculates new values.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   create (newName, expr) {
     util.check(newName,
@@ -82,9 +83,9 @@ class DataFrame {
                `illegal new name for column`)
     util.check(expr instanceof ExprBase,
                `new value expression is not an expression object`)
-    const newData = this.data.map((row, i) => {
+    const newData = this.data.map((row, i, d) => {
       const newRow = {...row}
-      newRow[newName] = expr.run(row, i)
+      newRow[newName] = expr.run(row, i, d)
       return newRow
     })
     const newColumns = this._makeColumns(newData, this.columns,
@@ -96,7 +97,7 @@ class DataFrame {
    * Drop columns.
    * @param {string[]} columns The names of the columns to discard (which must
    * be present).
-   * @returns A new dataframe that doesn't have those columns.
+   * @return A new dataframe that doesn't have those columns.
    */
   drop (columns) {
     util.check(this.hasColumns(columns),
@@ -108,12 +109,12 @@ class DataFrame {
   /**
    * Filter rows, keeping those that pass a test.
    * @param {ExprBase} expr The expression object that tests rows.
-   * @returns A new dataframe (possibly empty).
+   * @return A new dataframe (possibly empty).
    */
   filter (expr) {
     util.check(expr instanceof ExprBase,
                `filter expression is not an expression object`)
-    const newData = this.data.filter((row, i) => expr.run(row, i))
+    const newData = this.data.filter((row, i, d) => expr.run(row, i, d))
     const newColumns = this._makeColumns(newData, this.columns)
     return new DataFrame(newData, newColumns)
   }
@@ -123,7 +124,7 @@ class DataFrame {
    * a special name. Values can be grouped by values in multiple columns; to
    * create sub-groups, group by GROUPCOL and other columns to replace GROUPCOL.
    * @param {string[]} columns The columns that determine groups.
-   * @returns A new dataframe with a group column.
+   * @return A new dataframe with a group column.
    */
   groupBy (columns) {
     util.check(columns.length > 0,
@@ -141,7 +142,7 @@ class DataFrame {
   /**
    * Select columns.
    * @param {string[]} columns The names of the columns to keep.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   select (columns) {
     util.check(this.hasColumns(columns),
@@ -165,7 +166,7 @@ class DataFrame {
    * Sort data by values in specified columns.
    * @param {string[]} columns Names of columns to sort by.
    * @param {Boolean} reverse Sort in reverse (descending) order?
-   * @returns New data frame with sorted data.
+   * @return New data frame with sorted data.
    */
   sort (columns, reverse = false) {
     util.check(columns.length > 0,
@@ -201,7 +202,7 @@ class DataFrame {
 
   /**
    * Summarize values (possibly grouped).
-   * @param {Summarizer} action What summarization to use.
+   * @param {Summarize} action What summarization to use.
    * @returns A new dataframe.
    */
   summarize (action) {
@@ -216,8 +217,24 @@ class DataFrame {
   }
 
   /**
-   * Remove grouping if present.
+   * Calculate running values (possibly grouped).
+   * @param {Running} action What running value to calculate.
    * @returns A new dataframe.
+   */
+  running (action) {
+    util.check(action instanceof Running.base,
+               `Operation must be running value object`)
+    util.check(this.hasColumns([action.srcCol]),
+               `unknown column in summarize`)
+    const newData = this.data.map(row => { return {...row} })
+    const destCol = `${action.srcCol}_${action.species}`
+    this._runningColumn(newData, action, destCol)
+    return new DataFrame(newData, [destCol])
+  }
+
+  /**
+   * Remove grouping if present.
+   * @return A new dataframe.
    */
   ungroup () {
     util.check(this.hasColumns([DataFrame.GROUPCOL]),
@@ -235,7 +252,7 @@ class DataFrame {
   /**
    * Select rows with unique values in columns.
    * @param {string[]} columns The names of the columns to use for uniqueness test.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   unique (columns) {
     util.check(columns.length > 0,
@@ -260,7 +277,7 @@ class DataFrame {
    * @param {string} other Other table to join to.
    * @param {string} otherName Name to use for other table in result.
    * @param {string} labelCol Name of column to put labels in.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   glue (thisName, other, otherName, labelCol) {
     util.check(thisName.match(DataFrame.TABLE_NAME),
@@ -298,7 +315,7 @@ class DataFrame {
    * @param {string} other Other table to join to.
    * @param {string} otherName Name to use for other table in result.
    * @param {string} otherCol Name of column in other table.
-   * @returns A new dataframe.
+   * @return A new dataframe.
    */
   join (thisName, thisCol, other, otherName, otherCol) {
     util.check(thisName.match(DataFrame.TABLE_NAME),
@@ -340,7 +357,7 @@ class DataFrame {
    * Test whether the dataframe has the specified columns.
    * @param {string[]} colNames Names of column to check for.
    * @param {Boolean} exact Must column names match exactly?
-   * @returns {Boolean} Are columns present?
+   * @return {Boolean} Are columns present?
    */
   hasColumns (colNames, exact = false) {
     util.check(Array.isArray(colNames),
@@ -491,17 +508,10 @@ class DataFrame {
   // Summarize a single column in place.
   //
   _summarizeColumn (data, action, destCol) {
-    // Divide values into groups.
-    const groups = new Map()
-    data.forEach(row => {
-      const groupId = (DataFrame.GROUPCOL in row) ? row[DataFrame.GROUPCOL] : null
-      if (!groups.has(groupId)) {
-        groups.set(groupId, [])
-      }
-      groups.get(groupId).push(row)
-    })
+    // Classify.
+    const groups = this._putRowsInGroups(data)
 
-    // Summarize each group.
+    // Calculate a single value for each group.
     for (let groupId of groups.keys()) {
       const result = action.run(groups.get(groupId))
       groups.set(groupId, result)
@@ -512,6 +522,34 @@ class DataFrame {
       const groupId = (DataFrame.GROUPCOL in row) ? row[DataFrame.GROUPCOL] : null
       row[destCol] = groups.get(groupId)
     })
+  }
+
+  //
+  // Calculate running values for a single column in place.
+  //
+  _runningColumn (data, action, destCol) {
+    // Classify.
+    const groups = this._putRowsInGroups(data)
+
+    // Calculate and save running value for each group.
+    for (let groupId of groups.keys()) {
+      action.run(groups.get(groupId), destCol)
+    }
+  }
+
+  //
+  // Divide data into groups, returning map with null for "everything".
+  //
+  _putRowsInGroups (data) {
+    const groups = new Map()
+    data.forEach(row => {
+      const groupId = (DataFrame.GROUPCOL in row) ? row[DataFrame.GROUPCOL] : null
+      if (!groups.has(groupId)) {
+        groups.set(groupId, [])
+      }
+      groups.get(groupId).push(row)
+    })
+    return groups
   }
 }
 

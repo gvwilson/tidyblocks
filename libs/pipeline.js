@@ -16,7 +16,7 @@ class Pipeline {
   /**
    * Equality check (primarily for testing).
    * @param {Pipeline} other Other pipeline to compare to.
-   * @returns Boolean.
+   * @return Boolean.
    */
   equal (other) {
     util.check(other instanceof Pipeline,
@@ -26,8 +26,15 @@ class Pipeline {
   }
 
   /**
+   * Is this a control pipeline (single block of type 'control')?
+   */
+  isControl () {
+    return (this.transforms.length === 1) && this.transforms[0].isControl
+  }
+
+  /**
    * What does this pipeline require?
-   * @returns Array of strings.
+   * @return Array of strings.
    */
   requires () {
     return (this.transforms.length > 0) ? this.transforms[0].requires : []
@@ -55,11 +62,11 @@ class Pipeline {
       data = transform.run(env, data)
     }
 
-    // If the last block of the pipeline does not automatically save its result,
-    // save it manually.
-    if (!(this.transforms[this.transforms.length - 1].savesResult)) {
+    // If the last block of the pipeline produces a result but does not
+    // automatically save, save it manually.
+    if (data && !(this.transforms[this.transforms.length - 1].savesResult)) {
       const label = `${Pipeline.UNNAMED_RESULT} ${env.getNextUnnamedId()}`
-      data = new Transform.saveAs(label).run(env, data)
+      new Transform.saveAs(label).run(env, data)
     }
   }
 }

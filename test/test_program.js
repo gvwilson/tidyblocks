@@ -1,6 +1,7 @@
 'use strict'
 
 const assert = require('assert')
+const random = require('random')
 const Blockly = require('blockly/blockly_compressed.js')
 
 const util = require('../libs/util')
@@ -17,9 +18,23 @@ const INTERFACE = new fixture.TestInterface()
 
 describe('program utilities', () => {
   it('checks program equality', (done) => {
-    const first = new Program(new Pipeline(new Transform.data('some')))
-    const second = new Program(new Pipeline(new Transform.data('thing'),
-                                            new Transform.drop(['red'])))
+    const first = new Program(
+      new Pipeline(
+        new Transform.seed('alpha')
+      ),
+      new Pipeline(
+        new Transform.data('some')
+      )
+    )
+    const second = new Program(
+      new Pipeline(
+        new Transform.data('thing'),
+        new Transform.drop(['red'])
+      ),
+      new Pipeline(
+        new Transform.seed('alpha')
+      )
+    )
     assert(first.equal(first),
            `Program should equal itself`)
     assert(!first.equal(second),
@@ -261,7 +276,13 @@ describe('executes program', () => {
     program.run(env)
     assert(env.getData('keyword').equal(fixture.TABLE),
            `Missing or incorrect table`)
-    assert.deepEqual(env.log, [['log', 'head'], ['log', 'report keyword'], ['log', 'headRequire'], ["log", "report unnamed 1"]],
+    const expectedLog = [
+      ['log', 'head'],
+      ['log', 'report keyword left, right'],
+      ['log', 'headRequire'],
+      ['log', 'report unnamed 1 left, right']
+    ]
+    assert.deepEqual(env.log, expectedLog,
                      `Expected to see report in log`)
     done()
   })
@@ -305,6 +326,85 @@ describe('checks programs for unrunnables', () => {
     assert.deepEqual(env.log,
                      [[ 'warn', '1 pipeline(s) left waiting on alpha, beta' ]],
                     `Did not get expected log message`)
+    done()
+  })
+})
+
+describe('seeds random number generation', () => {
+  it('runs the seed block', (done) => {
+    const phrase = 'another random phrase'
+    const json = [Program.FAMILY,
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'seed', phrase]]]
+    const factory = new Restore()
+    const program = factory.program(json)
+    const env = new Env(INTERFACE)
+    program.run(env)
+    const expectedLog = [['log', `seed ${phrase}`]]
+    assert.deepEqual(env.log, expectedLog,
+                    `Did not get expected log message`)
+    done()
+  })
+
+  it('seeds random number generation', (done) => {
+    const phrase = 'words words words'
+    const firstValue = 0.130834568024656 // found by inspection
+    const json = [Program.FAMILY,
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'seed', phrase]]]
+    const factory = new Restore()
+    const firstProgram = factory.program(json)
+    firstProgram.run(new Env(INTERFACE))
+    assert.equal(random.float(), firstValue,
+                 `Did not seed RNG correctly`)
+    assert.notEqual(random.float(), firstValue,
+                    `Should not generate same value twice`)
+    const secondProgram = factory.program(json)
+    secondProgram.run(new Env(INTERFACE))
+    assert.equal(random.float(), firstValue,
+                 `Did not re-seed RNG correctly`)
+    done()
+  })
+
+  it('runs the seed block first', (done) => {
+    const phrase = 'words words words'
+    const json = [Program.FAMILY,
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'data', 'colors']],
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'seed', phrase]]]
+    const factory = new Restore()
+    const program = factory.program(json)
+    const env = new Env(INTERFACE)
+    program.run(env)
+    const expectedLog = [
+      ['log', `seed ${phrase}`],
+      ['log', 'read colors'],
+      ['log', 'report unnamed 1 blue, green, name, red'],
+    ]
+    assert.deepEqual(env.log, expectedLog,
+                    `Did not get expected running order`)
+    done()
+  })
+})
+
+describe('checks programs for problems', () => {
+  it('checks that only one seed block is allowed', (done) => {
+    const phrase = 'random phrase'
+    const json = [Program.FAMILY,
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'seed', phrase]],
+                  [Pipeline.FAMILY,
+                   [Transform.FAMILY, 'seed', phrase]]]
+    const factory = new Restore()
+    const program = factory.program(json)
+    const env = new Env(INTERFACE)
+    program.run(env)
+    const expectedLog = [
+      ['error', 'Program has 2 random number seed blocks: only allowed 1']
+    ]
+    assert.deepEqual(env.log, expectedLog,
+                    `Did not get expected error message`)
     done()
   })
 })

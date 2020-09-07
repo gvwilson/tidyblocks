@@ -37,11 +37,11 @@ describe('expression persistence', () => {
     done()
   })
 
-  it('restores a row number', (done) => {
+  it('restores a missing value creator', (done) => {
     const factory = new Restore()
-    assert.deepEqual(factory.expr([Value.FAMILY, 'rownum']),
-                     new Value.rownum(),
-                     `Row number`)
+    assert.deepEqual(factory.expr([Value.FAMILY, 'missing']),
+                     new Value.missing(),
+                     `Missing value creator`)
     done()
   })
 
@@ -109,8 +109,14 @@ describe('expression persistence', () => {
     for (const [name, func] of allChecks) {
       const factory = new Restore()
       const json = [Op.FAMILY, name, childJSON, childJSON]
-      assert.deepEqual(factory.expr(json),
-                       new func(childObj, childObj),
+      const actual = factory.expr(json)
+      const expected = new func(childObj, childObj)
+      assert.equal(actual.family, expected.family)
+      assert.equal(actual.kind, expected.kind)
+      assert.deepEqual(actual.left, expected.left)
+      assert.deepEqual(actual.right, expected.right)
+      assert.deepEqual(Object.keys(actual), Object.keys(expected))
+      assert.deepEqual(actual, expected,
                        `Failed to restore binary "${name}"`)
     }
     done()
@@ -124,6 +130,15 @@ describe('expression persistence', () => {
     assert.deepEqual(factory.expr(json),
                      new Op.ifElse(childObj, childObj, childObj),
                      `Failed to restore conditional`)
+    done()
+  })
+
+  it('restores shift operations', (done) => {
+    const factory = new Restore()
+    const json = [Op.FAMILY, 'shift', 'pink', -3]
+    assert.deepEqual(factory.expr(json),
+                     new Op.shift('pink', -3),
+                     `Failed to restore shift`)
     done()
   })
 
@@ -289,6 +304,15 @@ describe('transform persistence', () => {
     assert.deepEqual(factory.transform([Transform.FAMILY, 'summarize', 'mean', 'red']),
                      transform,
                      `summarize`)
+    done()
+  })
+
+  it('restores running from JSON', (done) => {
+    const transform = new Transform.running('sum', 'red')
+    const factory = new Restore()
+    assert.deepEqual(factory.transform([Transform.FAMILY, 'running', 'sum', 'red']),
+                     transform,
+                     `running`)
     done()
   })
 

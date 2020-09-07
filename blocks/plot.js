@@ -2,118 +2,148 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {Messages} = require('./helpers')
+const {
+  Messages
+} = require('./helpers')
 
 /**
  * Lookup table for message strings.
  */
 const MESSAGES = {
   name: {
+    ar: 'الإسم',
+    el: 'όνομα',
     en: 'name',
     es: 'nombre',
-    ar: 'الإسم',
+    it: 'nome',
     ko: '이름',
-    it: 'nome'
+    pt: 'nome'
   },
   x_axis: {
+    ar: 'المحور الأفقي',
+    el: 'άξονας χι',
     en: 'X axis',
     es: 'eje X',
-    ar: 'المحور الأفقي',
+    it: 'asse X',
     ko: 'X축',
-    it: 'asse X'
+    pt: 'eixo X'
   },
   y_axis: {
+    ar: 'المحور الرأسي',
+    el: 'άξονας ψι',
     en: 'Y axis',
     es: 'eje Y',
-    ar: 'المحور الرأسي',
-    ko: 'Y축', 
-    it: 'asse Y'
+    it: 'asse Y',
+    ko: 'Y축',
+    pt: 'eixo Y'
   },
   plot_bar: {
     message0: {
+      ar: 'الأعمده %1 %2 %3',
+      el: 'μπάρα %1 %2 %3',
       en: 'Bar %1 %2 %3',
       es: 'Barras %1 %2 %3',
-      ar: 'الأعمده %1 %2 %3',
+      it: 'barra %1 %2 %3',
       ko: '막대 %1 %2 %3',
-      it: 'barra %1 %2 %3'
+      pt: 'Barra %1 %2 %3'
     },
     tooltip: {
+      ar: 'إنشاء رسم الأعمده البيانيه',
+      el: 'δημιούργησε ραβδογράφημα',
       en: 'create bar plot',
       es: 'crear grafico barras',
-      ar: 'إنشاء رسم الأعمده البيانيه',
-      ko: '막대 그래프 만들기', 
-      it: 'crea un grafico a barre'
+      it: 'crea un grafico a barre',
+      ko: '막대 그래프 만들기',
+      pt: 'criar gráfico de barras'
     }
   },
   plot_box: {
     message0: {
+      ar: 'الصندوق %1 %2 %3',
+      el: 'παραλληλόγραμμο %1 %2 %3',
       en: 'Box %1 %2 %3',
       es: 'Cajas %1 %2 %3',
-      ar: 'الصندوق %1 %2 %3',
-      ko: '박스 %1 %2 %3', 
-      it: 'Scatola %1 %2 %3'
+      it: 'Scatola %1 %2 %3',
+      ko: '박스 %1 %2 %3',
+      pt: 'Caixa %1 %2 %3'
     },
     tooltip: {
+      ar: 'إنشاء مخطط الصندوق ذو العارضتين',
+      el: 'δημιούργησε Θηκόγραµµα',
       en: 'create box plot',
       es: 'crear grafico cajas',
-      ar: 'إنشاء مخطط الصندوق ذو العارضتين',
-      ko: '박스 그래프 만들기', 
-      it: 'crea diagramma a scatola e baffi'
+      it: 'crea diagramma a scatola e baffi',
+      ko: '박스 그래프 만들기',
+      pt: 'criar diagrama de caixas'
     }
   },
   plot_dot: {
     message0: {
+      ar: 'النقطه %1 %2',
+      el: 'Σημείο %1 %2',
       en: 'Dot %1 %2',
       es: 'Puntos %1 %2',
-      ar: 'النقطه %1 %2',
+      it: 'punti %1 %2',
       ko: '도트 %1 %2',
-      it: 'punti %1 %2'
+      pt: 'Ponto %1 %2'
     },
     tooltip: {
+      ar: 'إنشاء المخطط النقطي',
+      el: 'δημιούργησε διάγραμμα πυκνότητας',
       en: 'create dot plot',
       es: 'crear grafico puntos',
-      ar: 'إنشاء المخطط النقطي',
+      it: 'crea un diagramma a punti',
       ko: '도트 그래프 만들기',
-      it: 'crea un diagramma a punti'
+      pt: 'criar gráfico de pontos'
     }
   },
   plot_histogram: {
     message0: {
+      ar: 'المدرج التكراري %1 %2 %3',
+      el: 'Ιστόγραμμα %1 %2 %3',
       en: 'Histogram %1 %2 %3',
       es: 'Histograma %1 %2 %3',
-      ar: 'المدرج التكراري %1 %2 %3',
-      ko: '히스토그램 %1 %2 %3', 
-      it: 'istogramma %1 %2 %3'
+      it: 'istogramma %1 %2 %3',
+      ko: '히스토그램 %1 %2 %3',
+      pt: 'Histograma %1 %2 %3'
     },
     column: {
+      ar: 'العمود',
+      el: 'στήλη',
       en: 'column',
       es: 'columna',
-      ar: 'العمود',
-      ko: '열', 
-      it: 'colonna'
+      it: 'colonna',
+      ko: '열',
+      pt: 'coluna'
     },
     tooltip: {
+      ar: 'إنشاء المدرج التكراري',
+      el: 'δημιούργησε ιστόγραμμα',
       en: 'create histogram',
       es: 'crear histograma',
-      ar: 'إنشاء المدرج التكراري',
-      ko: '히스토그램 만들기', 
-      it: 'crea istogramma'
+      it: 'crea istogramma',
+      ko: '히스토그램 만들기',
+      pt: 'criar histograma'
     }
   },
   plot_scatter: {
     message0: {
+      ar: 'التشتت %1 %2 %3 اللون %4 إضافه خط؟ %5',
+      el: 'Διασπορά %1 %2 %3 Χρώμα %4 Προσθήκη γραμμής; %5',
       en: 'Scatter %1 %2 %3 Color %4 Add Line? %5',
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
-      ar: 'التشتت %1 %2 %3 اللون %4 إضافه خط؟ %5',
-      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5', 
-      it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5'
+      it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5',
+      ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5',
+      pt: 'Disperssão %1 %2 %3 Cor %4 Adicionar Linha? %5'
     },
     tooltip: {
-      en: 'create scatter plot',
-      en: 'crear grafico dispersion',
       ar: 'إنشاء مخطط الإنتشار',
-      ko: '분산 그래프 만들기', 
-      it: 'crea un grafico di dispersione'
+      el: 'δημιούργησε διάγραμμα διασποράς',
+      en: 'create scatter plot',
+      es: 'crear grafico dispersion',
+      it: 'crea un grafico di dispersione',
+      ko: '분산 그래프 만들기',
+      pt: 'criar gráfico de dispersão'
     }
   }
 }
@@ -151,7 +181,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_bar.tooltip'),
-      helpUrl: './plot/#bar',
+      helpUrl: './guide/#bar',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
@@ -181,7 +211,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_box.tooltip'),
-      helpUrl: './plot/#box',
+      helpUrl: './guide/#box',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS']
     },
 
@@ -206,7 +236,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_dot.tooltip'),
-      helpUrl: './plot/#dot',
+      helpUrl: './guide/#dot',
       extensions: ['validate_NAME', 'validate_X_AXIS']
     },
 
@@ -236,7 +266,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_histogram.tooltip'),
-      helpUrl: './plot/#histogram',
+      helpUrl: './guide/#histogram',
       extensions: ['validate_NAME', 'validate_COLUMN']
     },
 
@@ -276,7 +306,7 @@ const setup = (language) => {
       nextStatement: null,
       style: 'plot_block',
       tooltip: msg.get('plot_scatter.tooltip'),
-      helpUrl: './plot/#scatter',
+      helpUrl: './guide/#scatter',
       extensions: ['validate_NAME', 'validate_X_AXIS', 'validate_Y_AXIS', 'validate_COLOR']
     }
   ])
@@ -324,5 +354,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

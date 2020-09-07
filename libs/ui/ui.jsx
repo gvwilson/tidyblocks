@@ -19,7 +19,7 @@ import {csvToTable} from '../util'
 import DataFrame from '../dataframe'
 import { MenuBar } from './menuBar.jsx'
 import { SaveCsvFormDialog, SaveWorkspaceFormDialog,
-  SaveSvgFormDialog, LoadCsvDialog } from './saveDialog.jsx'
+  SaveSvgFormDialog, SaveAllSvgFormDialog, LoadCsvDialog } from './saveDialog.jsx'
 import { DataTabSelect, StatsTabSelect, PlotTabSelect} from './select.jsx'
 import { TabSelectionBar, TabPanels } from './tabs.jsx'
 import { theme } from './theme.jsx'
@@ -50,6 +50,7 @@ export class TidyBlocksApp extends React.Component {
     this.saveCsvNameDialog = React.createRef()
     this.saveWorkspaceDialog = React.createRef()
     this.saveSvgDialog = React.createRef()
+    this.saveAllSvgDialog = React.createRef()
     this.loadCsvDialog = React.createRef()
 
     // Get the initial environment so that we can pre-populate the datasets.
@@ -84,32 +85,32 @@ export class TidyBlocksApp extends React.Component {
       // helper variables for intermediate results.
       env: initialEnv,
       dataKeys: null,
-      data: null,
+      data: [],
       dataColumns: [],
       dataOptions: [],
       dataValue: null,
-      activeDataOption: null,
+      activeDataOptions: [],
       hideDataTable: false,
 
       resultKeys: null,
-      results: null,
+      results: [],
       resultColumns: [],
       resultOptions: [],
       resultValue: null,
-      activeResultOption: null,
+      activeResultOptions: [],
       hideResultTable: false,
 
       plotKeys: null,
-      plotData: null,
+      plotData: [],
       plotOptions: [],
       plotValue: null,
-      activePlotOption: null,
+      activePlotOptions: [],
 
-      stats: null,
+      stats: [],
       statsKeys: null,
       statsOptions: [],
       statsValue: null,
-      activeStatsOption: null,
+      activeStatsOptions: [],
       hideStatsTable: false,
 
       logMessages: null,
@@ -133,6 +134,7 @@ export class TidyBlocksApp extends React.Component {
     this.saveWorkspace = this.saveWorkspace.bind(this)
     this.saveData = this.saveData.bind(this)
     this.saveSvg = this.saveSvg.bind(this)
+    this.saveAllSvg = this.saveAllSvg.bind(this)
     this.maximizePanel = this.maximizePanel.bind(this)
     this.minimizePanel = this.minimizePanel.bind(this)
     this.restorePanel = this.restorePanel.bind(this)
@@ -269,58 +271,106 @@ export class TidyBlocksApp extends React.Component {
     const topRightPane = ReactDOM.findDOMNode(this).querySelector('.topRightPane')
     const WIDTH_OFFSET = 120
     const HEIGHT_OFFSET = 150
-
     if (this.state.plotData) {
-      const plotData = this.state.plotData
-
-      //Only redraw if the pane is visible.
-      if (this.plotOutputRef.current) {
-        if (topRightPane) {
-          plotData.width = topRightPane.offsetWidth - WIDTH_OFFSET
-          plotData.height = topRightPane.offsetHeight - HEIGHT_OFFSET
+      let plotData = this.state.plotData
+      if (this.state.plotData.length == 1){
+        if (this.plotOutputRef.current) {
+          if (topRightPane) {
+            plotData[0].width = topRightPane.offsetWidth - WIDTH_OFFSET
+            plotData[0].height = topRightPane.offsetHeight - HEIGHT_OFFSET
+          }
+          vegaEmbed('#plotOutputTop', plotData[0], {})
+          vegaEmbed('#plotOutputBottom', [], {})
         }
-        vegaEmbed('#plotOutput', plotData, {})
+      } else if (this.state.plotData.length == 2){
+        if (this.plotOutputRef.current) {
+          if (topRightPane) {
+            plotData[0].width = topRightPane.offsetWidth - WIDTH_OFFSET
+            plotData[0].height = (topRightPane.offsetHeight - HEIGHT_OFFSET) / 2
+            plotData[1].width = topRightPane.offsetWidth - WIDTH_OFFSET
+            plotData[1].height = (topRightPane.offsetHeight - HEIGHT_OFFSET) / 2
+          }
+          vegaEmbed('#plotOutputTop', plotData[0], {})
+          vegaEmbed('#plotOutputBottom', plotData[1], {})
+        }
       }
     }
   }
 
   // Handles changing the displayed plot using the react-select dropdown.
   changePlot (e) {
-    const activePlotOption = e
-    const plotData = this.state.env.plots.get(activePlotOption.value)
-    this.setState({activePlotOption: activePlotOption, plotData: plotData}, () => {
-      this.updatePlot()
-    })
+    const activePlotOptions = e
+    let plotData = []
+    if (!e) {
+      this.setState({activePlotOptions: [], plotData: []})
+    } else {
+      for (let optIndex = 0; optIndex < activePlotOptions.length; optIndex++){
+        plotData.push(this.state.env.plots.get(activePlotOptions[optIndex].value))
+      }
+      this.setState({activePlotOptions: activePlotOptions, plotData: plotData}, () => {
+        this.updatePlot()
+      })
+    }
   }
 
   changeData (e) {
-    const activeDataOption = e
+    const activeDataOptions = e ? e : []
     let formattedColumns = []
-    const data = this.state.env.ui.userData.get(activeDataOption.label)['data']
-    const dataColumns = this.state.env.ui.userData.get(activeDataOption.label)['columns']
-    dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-    this.setState({activeDataOption: activeDataOption, data: data,
-      dataColumns: formattedColumns})
+    let data = []
+    let dataColumns = []
+    if (!e) {
+      this.setState({activeDataOptions: [], data: [],
+        dataColumns: []})
+    } else {
+      // Swap the stored data depending on whether we're showing userData or
+      // results.
+      for (let optIndex = 0; optIndex < activeDataOptions.length; optIndex++){
+        let tempColumns = []
+        data.push(this.state.env.ui.userData.get(activeDataOptions[optIndex].label)['data'])
+        dataColumns = this.state.env.ui.userData.get(activeDataOptions[optIndex].label)['columns']
+        dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
+      }
+      this.setState({activeDataOptions: activeDataOptions, data: data,
+        dataColumns: formattedColumns})
+    }
   }
 
   changeResults (e) {
-    const activeResultOption = e
+    const activeResultOptions = e ? e : []
     let formattedColumns = []
-    // Swap the stored data depending on whether we're showing userData or
-    // results.
-    const results = this.state.env.results.get(activeResultOption.label)['data']
-    const resultColumns = this.state.env.results.get(activeResultOption.label)['columns']
-    resultColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-    this.setState({activeResultOption: activeResultOption, results: results,
-      resultColumns: formattedColumns})
+    let results = []
+    let resultColumns = []
+    if (!e) {
+      this.setState({activeResultOptions: [], results: [],
+        resultColumns: []})
+    } else {
+      // Swap the stored data depending on whether we're showing userData or
+      // results.
+      for (let optIndex = 0; optIndex < activeResultOptions.length; optIndex++){
+        let tempColumns = []
+        results.push(this.state.env.results.get(activeResultOptions[optIndex].label)['data'])
+        resultColumns = this.state.env.results.get(activeResultOptions[optIndex].label)['columns']
+        resultColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
+      }
+      this.setState({activeResultOptions: activeResultOptions, results: results,
+        resultColumns: formattedColumns})
+    }
   }
 
-
   changeStats (e) {
-    const activeStatsOption = e
-    let formattedColumns = []
-    const stats = [{'name': activeStatsOption.value, 'result': this.state.env.stats.get(activeStatsOption.value)}]
-    this.setState({activeStatsOption: activeStatsOption, stats: stats})
+    const activeStatsOptions = e
+    let stats = []
+
+    if (!e) {
+      this.setState({activeStatsOptions: [], stats: []})
+    } else {
+      for (let optIndex = 0; optIndex < activeStatsOptions.length; optIndex++){
+        stats.push([{'name': activeStatsOptions[optIndex].value, 'result': this.state.env.stats.get(activeStatsOptions[optIndex].value)}])
+      }
+      this.setState({activeStatsOptions: activeStatsOptions, stats: stats})
+    }
   }
 
   updateLogMessages (env) {
@@ -379,35 +429,51 @@ export class TidyBlocksApp extends React.Component {
     this.updatePlotInformation(env)
     this.updateStatsInformation(env)
     this.updateLogMessages(env)
+
+    // Switch tabs based on precdence if they're showing data.
+    if (!env.plots.keys().next().done) {
+      this.handleTabChange(null, this.state.PLOT_TAB_INDEX)
+    } else if (!env.results.keys().next().done){
+      this.handleTabChange(null, this.state.RESULTS_TAB_INDEX)
+    } else if (!env.stats.keys().next().done) {
+      this.handleTabChange(null, this.state.STATS_TAB_INDEX)
+    } else {
+      this.handleTabChange(null, this.state.DATA_TAB_INDEX)
+    }
   }
 
   updateDataInformation (env) {
     const dataKeys = env.ui.userData.keys()
-    let data = null
-    let dataColumns = [] 
-    let activeDataOption = null
+    let data = []
+    let dataColumns = []
+    let activeDataOptions = []
     let formattedColumns = []
-    // If the active data option no longer exists remove it. This happens
-    // when the currently displayed table has been deleted or renamed.
-    if (this.state.activeDataOption) {
-      if (!(env.ui.userData.has(this.state.activeDataOption.label))){
-        this.state.activeDataOption = null
+    let tempColumns = []
+
+    if (this.state.activeDataOptions.length > 0){
+      for (let optIndex = 0; optIndex < this.state.activeDataOptions.length; optIndex++){
+        tempColumns = []
+        if (this.state.activeDataOptions[optIndex]) {
+          if (env.ui.userData.has(this.state.activeDataOptions[optIndex].label)){
+            data.push(env.ui.userData.get(this.state.activeDataOptions[optIndex].label)['data'])
+            dataColumns = env.ui.userData.get(this.state.activeDataOptions[optIndex].label)['columns']
+            dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+            formattedColumns.push(tempColumns)
+            activeDataOptions.push(this.state.activeDataOptions[optIndex])
+          }
+        }
       }
-    }
-    if (this.state.activeDataOption) {
-      data = env.ui.userData.get(this.state.activeDataOption.label)['data']
-      dataColumns = env.ui.userData.get(this.state.activeDataOption.label)['columns']
-      dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-      activeDataOption = this.state.activeDataOption
     } else {
-      let result = dataKeys.next()
-      if (!result.done){
-        activeDataOption = {value: result.value, label: result.value}
-        data = env.ui.userData.get(activeDataOption.label)['data']
-        dataColumns = env.ui.userData.get(activeDataOption.label)['columns']
-        dataColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      let dataResult = env.ui.userData.keys().next()
+      if (!dataResult.done){
+        activeDataOptions = [{'value': dataResult.value, 'label': dataResult.value}]
+        data = [env.ui.userData.get(activeDataOptions[0].value)['data']]
+        dataColumns = env.ui.userData.get(activeDataOptions[0].label)['columns']
+        dataColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
       }
     }
+
     let dataOptions = []
     for (let key of env.ui.userData.keys()){
       dataOptions.push({value: key, label: key})
@@ -415,41 +481,43 @@ export class TidyBlocksApp extends React.Component {
 
     // Indicate the tab was updated if it has been.
     let tabUpdated = this.state.tabUpdated
-    if (data && data != this.state.data && this.state.tabValue != this.state.DATA_TAB_INDEX){
+    if (data && data.length != this.state.data.length && this.state.tabValue != this.state.DATA_TAB_INDEX){
       tabUpdated.data = true
     }
     this.setState({dataKeys:dataKeys, data: data, dataColumns: formattedColumns,
-      activeDataOption: activeDataOption, dataOptions: dataOptions,
+      activeDataOptions: activeDataOptions, dataOptions: dataOptions,
       tabUpdated: tabUpdated})
   }
 
   updateResultsInformation (env) {
     const resultKeys = env.results.keys()
-    let results = null
+    let results = []
     let resultColumns = []
-    let activeResultOption = null
+    let activeResultOptions = []
     let formattedColumns = []
+    let tempColumns = []
 
-    // If the active data option no longer exists remove it. This happens
-    // when the currently displayed table has been deleted or renamed.
-    if (this.state.activeResultOption) {
-      if (!(env.results.has(this.state.activeResultOption.label)
-        || env.results.has(this.state.activeResultOption.label))){
-        this.state.activeResultOption = null
+    if (this.state.activeResultOptions.length > 0){
+      for (let optIndex = 0; optIndex < this.state.activeResultOptions.length; optIndex++){
+        tempColumns = []
+        if (this.state.activeResultOptions[optIndex]) {
+          if (env.results.has(this.state.activeResultOptions[optIndex].label)){
+            results.push(env.results.get(this.state.activeResultOptions[optIndex].label)['data'])
+            resultColumns = env.results.get(this.state.activeResultOptions[optIndex].label)['columns']
+            resultColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+            formattedColumns.push(tempColumns)
+            activeResultOptions.push(this.state.activeResultOptions[optIndex])
+          }
+        }
       }
-    }
-    if (this.state.activeResultOption) {
-      results = env.results.get(this.state.activeResultOption.label)['data']
-      resultColumns = env.results.get(this.state.activeResultOption.label)['columns']
-      resultColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
-      activeResultOption = this.state.activeResultOption
     } else {
-      let result = resultKeys.next()
-      if (!result.done){
-        activeResultOption = {value: result.value, label: result.value}
-        results = env.results.get(activeResultOption.label)['data']
-        resultColumns = env.results.get(activeResultOption.label)['columns']
-        resultColumns.forEach(c => formattedColumns.push({key: c, name: c, sortable: true, resizable: true}))
+      let reportResult = env.results.keys().next()
+      if (!reportResult.done){
+        activeResultOptions = [{'value': reportResult.value, 'label': reportResult.value}]
+        results = [env.results.get(activeResultOptions[0].value)['data']]
+        resultColumns = env.results.get(activeResultOptions[0].label)['columns']
+        resultColumns.forEach(c => tempColumns.push({key: c, name: c, sortable: true, resizable: true}))
+        formattedColumns.push(tempColumns)
       }
     }
 
@@ -460,32 +528,33 @@ export class TidyBlocksApp extends React.Component {
 
     // Indicate the tab was updated if it has been.
     let tabUpdated = this.state.tabUpdated
-    if (results && results != this.state.results && this.state.tabValue != this.state.RESULTS_TAB_INDEX){
+    if (results && results.length != this.state.results.length && this.state.tabValue != this.state.RESULTS_TAB_INDEX){
       tabUpdated.results = true
     }
     this.setState({resultKeys:resultKeys, results: results, resultColumns: formattedColumns,
-      activeResultOption: activeResultOption, resultOptions: resultOptions,
+      activeResultOptions: activeResultOptions, resultOptions: resultOptions,
       tabUpdated: tabUpdated})
   }
 
 
   updatePlotInformation (env) {
     const plotKeys = env.plots.keys()
-    let plotData = null
-    let activePlotOption = null
-
-    // If there's a current activePlotOption try to load it. Otherwise get the
+    let plotData = []
+    let activePlotOptions = []
+    // If there's a current activePlotOptions try to load it. Otherwise get the
     // first plot provided by env.
-    if (this.state.activePlotOption) {
-      if (env.plots.has(this.state.activePlotOption.value)){
-        plotData = env.plots.get(this.state.activePlotOption.value)
-        activePlotOption = this.state.activePlotOption
+    if (this.state.activePlotOptions.length > 0) {
+      for (let optIndex = 0; optIndex < this.state.activePlotOptions.length; optIndex++){
+        if (env.plots.has(this.state.activePlotOptions[optIndex].value)){
+          plotData.push(env.plots.get(this.state.activePlotOptions[optIndex].value))
+          activePlotOptions.push(this.state.activePlotOptions[optIndex])
+        }
       }
     } else {
       let result = plotKeys.next()
       if (!result.done){
-        activePlotOption = {'value': result.value, 'label': result.value}
-        plotData = env.plots.get(activePlotOption.value)
+        activePlotOptions = [{'value': result.value, 'label': result.value}]
+        plotData = [env.plots.get(activePlotOptions[0].value)]
       }
     }
 
@@ -495,11 +564,11 @@ export class TidyBlocksApp extends React.Component {
     }
     // Indicate the tab was updated if it has been.
     let tabUpdated = this.state.tabUpdated
-    if (plotData && plotData != this.state.plotData && this.state.tabValue != this.state.PLOT_TAB_INDEX){
+    if (plotData && plotData.length != this.state.plotData.length && this.state.tabValue != this.state.PLOT_TAB_INDEX){
       tabUpdated.plot = true
     }
     this.setState({env: env, plotKeys:plotKeys, plotData: plotData,
-      activePlotOption: activePlotOption, plotOptions: plotOptions,
+      activePlotOptions: activePlotOptions, plotOptions: plotOptions,
       tabUpdated: tabUpdated}, () => {
       this.updatePlot()
     })
@@ -508,23 +577,25 @@ export class TidyBlocksApp extends React.Component {
   // Updates Stats information.
   updateStatsInformation (env) {
     const statsKeys = env.stats.keys()
-    let stats = null
-    let statsColumns = null
-    let activeStatsOption = null
+    let stats = []
+    let statsColumns = []
+    let activeStatsOptions = []
     let STATS_COLUMNS = [{key: "name", name: "name", sortable: true, resizable: true},
       {key: "result", name: "result", sortable: true, resizable: true}]
 
-    if (this.state.activeStatsOption) {
-      if (env.stats.has(this.state.activeStatsOption.value)){
-        stats = [{'name': this.state.activeStatsOption.value,
-          'result': env.stats.get(this.state.activeStatsOption.value)}]
-        activeStatsOption = this.state.activeStatsOption
+    if (this.state.activeStatsOptions.length > 0) {
+      for (let optIndex = 0; optIndex < this.state.activeStatsOptions.length; optIndex++){
+        if (env.stats.has(this.state.activeStatsOptions[optIndex].value)){
+          stats.push([{'name': this.state.activeStatsOptions[optIndex].value,
+            'result': env.stats.get(this.state.activeStatsOptions[optIndex].value)}])
+          activeStatsOptions.push(this.state.activeStatsOptions[optIndex])
+        }
       }
     } else {
       let result = statsKeys.next()
       if (!result.done){
-        activeStatsOption = {'value': result.value, 'label': result.value}
-        stats = [{'name': result.value, 'result': env.stats.get(activeStatsOption.value)}]
+        activeStatsOptions = [{'value': result.value, 'label': result.value}]
+        stats = [[{'name': result.value, 'result': env.stats.get(activeStatsOptions[0].value)}]]
       }
     }
 
@@ -534,11 +605,11 @@ export class TidyBlocksApp extends React.Component {
     }
     // Indicate the tab was updated if it has been.
     let tabUpdated = this.state.tabUpdated
-    if (stats && stats != this.state.stats && this.state.tabValue != this.state.STATS_TAB_INDEX){
+    if (stats && stats.length != this.state.stats.length && this.state.tabValue != this.state.STATS_TAB_INDEX){
       tabUpdated.stats = true
     }
     this.setState({statsKeys:statsKeys, stats: stats, statsColumns: STATS_COLUMNS,
-      activeStatsOption: activeStatsOption, statsOptions: statsOptions})
+      activeStatsOptions: activeStatsOptions, statsOptions: statsOptions})
   }
 
   handleTabChange (event, newValue) {
@@ -595,6 +666,10 @@ export class TidyBlocksApp extends React.Component {
     this.saveSvgDialog.current.handleClickOpen()
   }
 
+  // Saves all the svg files (used as a developer tool to update documentation).
+  saveAllSvg(){
+    this.saveAllSvgDialog.current.handleClickOpen()
+  }
 
   // Calls the file upload input.
   loadWorkspaceClick () {
@@ -654,13 +729,13 @@ export class TidyBlocksApp extends React.Component {
           })
     const logMessageList = <ul className="tb-messages">{logMessages}</ul>
     const dataDropdown = <DataTabSelect options={this.state.dataOptions}
-      onChange={this.changeData} value={this.state.activeDataOption}/>
+      onChange={this.changeData} value={this.state.activeDataOptions}/>
     const resultsDropdown = <DataTabSelect options={this.state.resultOptions}
-      onChange={this.changeResults} value={this.state.activeResultOption}/>
+      onChange={this.changeResults} value={this.state.activeResultOptions}/>
     const statsDropdown = <StatsTabSelect options={this.state.statsOptions}
-      onChange={this.changeStats} value={this.state.activeStatsOption}/>
+      onChange={this.changeStats} value={this.state.activeStatsOptions}/>
     const plotDropdown = <PlotTabSelect options={this.state.plotOptions}
-      onChange={this.changePlot} value={this.state.activePlotOption}/>
+      onChange={this.changePlot} value={this.state.activePlotOptions}/>
     let consoleDotClass = "animated fadeIn dotIndicator"
     if (this.state.tabUpdated.console == this.state.CONSOLE_ERROR){
       consoleDotClass = "animated fadeIn dotIndicator errorDotIndicator"
@@ -678,6 +753,11 @@ export class TidyBlocksApp extends React.Component {
             <>
               <SaveWorkspaceFormDialog ref={this.saveWorkspaceDialog} data={this.getWorkspace().state.workspace}/>
               <SaveSvgFormDialog ref={this.saveSvgDialog} data={this.getWorkspace().state.workspace}/>
+              <SaveAllSvgFormDialog ref={this.saveAllSvgDialog}
+                toolbox={this.props.toolbox}
+                blocklyRef={this.blocklyRef}
+                data={this.getWorkspace().state.workspace}/>
+
             </>
           }
           <MenuBar
@@ -685,7 +765,8 @@ export class TidyBlocksApp extends React.Component {
             loadWorkspaceClick={this.loadWorkspaceClick}
             saveWorkspace={this.saveWorkspace}
             saveData={this.saveData}
-            saveSvg={this.saveSvg}/>
+            saveSvg={this.saveSvg}
+            saveAllSvg={this.saveAllSvg}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
             style={{display: "none"}}/>
@@ -696,7 +777,7 @@ export class TidyBlocksApp extends React.Component {
               key="vertical-split"
               postPoned={false}
               position="vertical"
-              secondaryPaneMinWidth="250px%"
+              secondaryPaneMinWidth="250px"
               primaryPaneMinWidth="20px"
               primaryPaneWidth="50%"
               dispatchResize={true}

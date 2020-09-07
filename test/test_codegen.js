@@ -77,10 +77,10 @@ describe('value code generation', () => {
     done()
   })
 
-  it('generates code for row numbers', (done) => {
-    const expected = [Value.FAMILY, 'rownum']
+  it('generates code for missing value creators', (done) => {
+    const expected = [Value.FAMILY, 'missing']
     const w = fixture.workspace()
-    const block = w.newBlock('value_rownum')
+    const block = w.newBlock('value_missing')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
@@ -189,6 +189,24 @@ describe('expression code generation', () => {
     done()
   })
 
+  it('generates code for extrema', (done) => {
+    const expected = [Op.FAMILY, 'maximum',
+                      [Value.FAMILY, 'number', 1],
+                      [Value.FAMILY, 'number', 2]]
+    const w = fixture.workspace()
+    const left = w.newBlock('value_number')
+    left.setFieldValue(1, 'VALUE')
+    const right = w.newBlock('value_number')
+    right.setFieldValue(2, 'VALUE')
+    const block = w.newBlock('op_extremum')
+    block.setFieldValue('maximum', 'OP')
+    fixture.addSubBlock(block, 'LEFT', left)
+    fixture.addSubBlock(block, 'RIGHT', right)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
   it('generates code for binary logical operations', (done) => {
     const expected = [Op.FAMILY, 'and',
                       [Value.FAMILY, 'logical', true],
@@ -214,6 +232,17 @@ describe('expression code generation', () => {
     arg.setFieldValue('false', 'VALUE')
     const block = w.newBlock('op_not')
     fixture.addSubBlock(block, 'VALUE', arg)
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for shift', (done) => {
+    const expected = [Op.FAMILY, 'shift', 'pink', 3]
+    const w = fixture.workspace()
+    const block = w.newBlock('op_shift')
+    block.setFieldValue('pink', 'COLUMN')
+    block.setFieldValue(3, 'NUMBER')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
@@ -290,6 +319,18 @@ describe('transform code generation', () => {
       const actual = getCode(block)
       assert.deepEqual(expected, actual, `Mis-match`)
     }
+    done()
+  })
+
+  it('generates code for binning', (done) => {
+    const expected = [Transform.FAMILY, 'bin', 'source', 3, 'labels']
+    const w = fixture.workspace()
+    const block = w.newBlock('transform_bin')
+    block.setFieldValue('source', 'COLUMN')
+    block.setFieldValue(3, 'BINS')
+    block.setFieldValue('labels', 'LABEL')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
     done()
   })
 
@@ -387,6 +428,17 @@ describe('transform code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('transform_summarize')
     block.setFieldValue('maximum', 'OP')
+    block.setFieldValue('red', 'COLUMN')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('generates code for running values', (done) => {
+    const expected = [Transform.FAMILY, 'running', 'sum', 'red']
+    const w = fixture.workspace()
+    const block = w.newBlock('transform_running')
+    block.setFieldValue('sum', 'OP')
     block.setFieldValue('red', 'COLUMN')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
@@ -499,6 +551,32 @@ describe('stats code generation', () => {
     assert.deepEqual(expected, actual, `Mis-match`)
     done()
   })
+
+  it('creates k-means cluster from blocks', (done) => {
+    const expected = [Transform.FAMILY, 'k_means', 'onX', 'onY', 3, 'flavor']
+    const w = fixture.workspace()
+    const block = w.newBlock('stats_k_means')
+    block.setFieldValue('onX', 'X_AXIS')
+    block.setFieldValue('onY', 'Y_AXIS')
+    block.setFieldValue(3, 'NUMBER')
+    block.setFieldValue('flavor', 'LABEL')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+
+  it('creates silhouette from blocks', (done) => {
+    const expected = [Transform.FAMILY, 'silhouette', 'onX', 'onY', 'flavors', 'scores']
+    const w = fixture.workspace()
+    const block = w.newBlock('stats_silhouette')
+    block.setFieldValue('onX', 'X_AXIS')
+    block.setFieldValue('onY', 'Y_AXIS')
+    block.setFieldValue('flavors', 'LABEL')
+    block.setFieldValue('scores', 'SCORE')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
 })
 
 describe('combiner code generation', () => {
@@ -532,6 +610,19 @@ describe('combiner code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('transform_saveAs')
     block.setFieldValue('stuff', 'NAME')
+    const actual = getCode(block)
+    assert.deepEqual(expected, actual, `Mis-match`)
+    done()
+  })
+})
+
+describe('control code generation', () => {
+  it('generates code for seed', (done) => {
+    const phrase = 'some random phrase'
+    const expected = [Transform.FAMILY, 'seed', phrase]
+    const w = fixture.workspace()
+    const block = w.newBlock('control_seed')
+    block.setFieldValue(phrase, 'SEED')
     const actual = getCode(block)
     assert.deepEqual(expected, actual, `Mis-match`)
     done()

@@ -1,6 +1,7 @@
 'use strict'
 
 const util = require('./util')
+const Transform = require('./transform')
 const Pipeline = require('./pipeline')
 
 /**
@@ -20,22 +21,33 @@ class Program {
   constructor (...pipelines) {
     this.env = null
     this.pipelines = []
+    this.controls = []
     this.queue = []
     this.waiting = new Map()
+    this.showTrace = false
 
-    pipelines.forEach(pipeline => this.register(pipeline))
+    pipelines.forEach(pipeline => {
+      if (pipeline.isControl()) {
+        this.addControl(pipeline)
+      }
+      else {
+        this.register(pipeline)
+      }
+    })
   }
 
   /**
    * Check equality with another program.
    * @param {Program} other The thing to check against.
-   * @returns True or false.
+   * @return True or false.
    */
   equal (other) {
     util.check(other instanceof Program,
                `Can only compare programs to programs`)
-    return (this.pipelines.length === other.pipelines.length) &&
-      this.pipelines.every((pipeline, i) => pipeline.equal(other.pipelines[i]))
+    return (this.controls.length === other.controls.length) &&
+      this.controls.every((p, i) => p.equal(other.controls[i])) &&
+      (this.pipelines.length === other.pipelines.length) &&
+      this.pipelines.every((p, i) => p.equal(other.pipelines[i]))
   }
 
   /**
@@ -61,6 +73,18 @@ class Program {
   }
 
   /**
+   * Add a single-block control pipeline.
+   * @param {Pipeline} pipeline What to register.
+   */
+  addControl (pipeline) {
+    util.check(pipeline instanceof Pipeline,
+               `Pipelines must be instances of the Pipeline class`)
+    util.check(pipeline.transforms.length === 1,
+               `Control pipelines must have a single block each`)
+    this.controls.push(pipeline)
+  }
+
+  /**
    * Register a pipeline. If it doesn't depend on anything, add it to the run
    * queue. If it has dependencies, add it to `waiting` instead.
    * @param {Pipeline} pipeline What to register.
@@ -79,12 +103,41 @@ class Program {
   }
 
   /**
-   * Run all pipelines in an order that respects dependencies.
+   * Check program runnability.
+   * @throws {Error} Error message is a summary of problems.
+   */
+  checkProgram () {
+    const problems = []
+
+    // More than one RNG seed block?
+    const numSeeds = this.controls.filter(p => p.transforms[0] instanceof Transform.seed).length
+    if (numSeeds > 1) {
+      problems.push(`Program has ${numSeeds} random number seed blocks: only allowed 1`)
+    }
+
+    // Report any problems by raising exception to prevent execution.
+    if (problems.length > 0) {
+      throw new Error(problems.join('\n'))
+    }
+  }
+
+  /**
+   * Run all pipelines in an order that respects dependencies.  Single-block
+   * control pipelines are always run before all other pipelines.
    * @param {Env} env The runtime environment of the program.
    */
   run (env) {
     this.env = env
     try {
+      // Check program integrity, throwing an exception if there are problems.
+      this.checkProgram()
+
+      // Run all control pipelines.
+      while (this.controls.length > 0) {
+        const pipeline = this.controls.shift()
+        pipeline.run(this.env)
+      }
+
       // Run until queue is empty, calculating which new results have been added
       // to the environment so that we can notify waiting pipelines.
       while (this.queue.length > 0) {
@@ -106,7 +159,8 @@ class Program {
       }
     }
     catch (err) {
-      this.env.appendLog('error', `${err.message}: ${err.stack}`)
+      const trace = this.showTrace ? `\n${err.trace}` : ''
+      this.env.appendLog('error', `${err.message}${trace}`)
     }
   }
 }

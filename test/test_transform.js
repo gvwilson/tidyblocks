@@ -4,12 +4,12 @@ const assert = require('assert')
 const util = require('../libs/util')
 const DataFrame = require('../libs/dataframe')
 const Value = require('../libs/value')
-const Summarize = require('../libs/summarize')
 const Transform = require('../libs/transform')
 const Env = require('../libs/env')
 
 const fixture = require('./fixture')
 const INTERFACE = new fixture.TestInterface()
+const approx = require('./approx')
 
 describe('build dataframe operations', () => {
   it('builds data loading transform', (done) => {
@@ -19,6 +19,29 @@ describe('build dataframe operations', () => {
     const actual = transform.run(env, null)
     assert(actual.equal(expected),
            `Mis-match in dataframes`)
+    done()
+  })
+
+  it('builds binning transform', (done) => {
+    const env = new Env(INTERFACE)
+    const transform = new Transform.bin('red', 4, 'dst')
+    const result = transform.run(env, new DataFrame(fixture.COLORS))
+    const actual = result.data.map(row => row.dst)
+    const expected = [1, 4, 3, 1, 1, 1, 1, 4, 4, 1, 4]
+    assert.deepEqual(actual, expected,
+                     `Wrong bins in result`)
+    done()
+  })
+
+  it('builds binning transform with a single bin', (done) => {
+    const env = new Env(INTERFACE)
+    const df = new DataFrame([{a: 2.5}, {a: 2.5}, {a: 2.5}])
+    const transform = new Transform.bin('a', 3, 'dst')
+    const result = transform.run(env, df)
+    const actual = result.data.map(row => row.dst)
+    const expected = [1, 1, 1]
+    assert.deepEqual(actual, expected,
+                     `Wrong bins in result`)
     done()
   })
 
@@ -113,6 +136,16 @@ describe('build dataframe operations', () => {
     done()
   })
 
+  it('builds seed transform', (done) => {
+    const phrase = 'some random phrase'
+    const env = new Env(INTERFACE)
+    const transform = new Transform.seed(phrase)
+    const result = transform.run(env, null)
+    assert.equal(result, null,
+                 `Should not have output from seed transform`)
+    done()
+  })
+
   it('builds read data transform', (done) => {
     const env = new Env(INTERFACE)
     const transform = new Transform.data('colors')
@@ -165,6 +198,17 @@ describe('build dataframe operations', () => {
     assert.deepEqual(result.data,
                      [{left: 3, left_maximum: 3}],
                      `Incorrect summary`)
+    done()
+  })
+
+  it('builds running transform', (done) => {
+    const df = new DataFrame([{left: 3}, {left: 5}])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.running('sum', 'left')
+    const result = transform.run(env, df)
+    assert.deepEqual(result.data,
+                     [{left: 3, left_sum: 3}, {left: 5, left_sum: 8}],
+                     `Incorrect running values`)
     done()
   })
 
@@ -363,6 +407,39 @@ describe('build statistics', () => {
     const stats = env.getStats('result')
     done()
   })
+
+  it('clusters points', (done) => {
+    const df = new DataFrame([
+      {x: 0.0, y: 0.0},
+      {x: 1.0, y: 0.5},
+      {x: 0.1, y: 0.0}
+    ])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.k_means('x', 'y', 2, 'label')
+    const result = transform.run(env, df)
+    assert.equal(result.data[0].label, result.data[2].label,
+                 `Points not in the same group`)
+    assert.notEqual(result.data[0].label, result.data[1].label,
+                    `Points should not be in the same group`)
+    done()
+  })
+
+  it('calculates silhouette scores', (done) => {
+    const df = new DataFrame([
+      {x: 0.2, y: 0.0, gid: 0},
+      {x: 0.4, y: 0.0, gid: 0},
+      {x: 0.6, y: 0.0, gid: 1},
+      {x: 0.8, y: 0.0, gid: 1}
+    ])
+    const env = new Env(INTERFACE)
+    const transform = new Transform.silhouette('x', 'y', 'gid', 'result')
+    const result = transform.run(env, df)
+    const expected = [4/5, 2/3, 2/3, 4/5]
+    const actual = result.data.map(row => row.result)
+    assert(approx.allApproxEqual(expected, actual),
+           `Did not get expected stores`)
+    done()
+  })
 })
 
 describe('transform equality tests', () => {
@@ -376,6 +453,19 @@ describe('transform equality tests', () => {
     const groupBy = new Transform.groupBy(['left'])
     assert(!data_a.equal(groupBy),
            `Different transforms should not equal`)
+    done()
+  })
+
+  it('compares binning', (done) => {
+    const src_5_dst = new Transform.bin('src', 5, 'dst')
+    assert(src_5_dst.equal(src_5_dst),
+           `Same should equal`)
+    assert(!src_5_dst.equal(new Transform.bin('other', 5, 'dst')),
+           `Different should not equal`)
+    assert(!src_5_dst.equal(new Transform.bin('src', 3, 'dst')),
+           `Different should not equal`)
+    assert(!src_5_dst.equal(new Transform.bin('src', 5, 'other')),
+           `Different should not equal`)
     done()
   })
 
@@ -476,6 +566,19 @@ describe('transform equality tests', () => {
     done()
   })
 
+  it('compares RNG seed', (done) => {
+    const seed_a = new Transform.seed('alpha')
+    const seed_b = new Transform.seed('beta')
+    assert(seed_a.equal(seed_a),
+           `Same should match`)
+    assert(!seed_a.equal(seed_b),
+           `Names should matter`)
+    const groupBy = new Transform.groupBy(['left'])
+    assert(!seed_a.equal(groupBy),
+           `Different transforms should not equal`)
+    done()
+  })
+
   it('compares select transforms', (done) => {
     const select_left = new Transform.select(['left'])
     const select_right = new Transform.select(['right'])
@@ -523,6 +626,19 @@ describe('transform equality tests', () => {
            `Different summarize functions should be unequal`)
     assert(!max_right.equal(max_left),
            `Different summarize columns should be unequal`)
+    done()
+  })
+
+  it('compares running value transforms', (done) => {
+    const index_left = new Transform.running('index', 'left')
+    const sum_left = new Transform.running('sum', 'left')
+    const index_right = new Transform.running('index', 'right')
+    assert(index_left.equal(index_left),
+           `Same should equal`)
+    assert(!index_left.equal(sum_left),
+           `Different running functions should be unequal`)
+    assert(!index_right.equal(index_left),
+           `Different source columns should be unequal`)
     done()
   })
 

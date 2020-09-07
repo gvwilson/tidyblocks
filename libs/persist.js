@@ -14,7 +14,7 @@ class Restore {
   /**
    * Restore a `Program` from JSON.
    * @params json The JSON containing the program description `['@program', ...pipelines...]`.
-   * @returns A new instance of `Program`.
+   * @return A new instance of `Program`.
    */
   program (json) {
     util.check(Array.isArray(json) &&
@@ -28,7 +28,7 @@ class Restore {
   /**
    * Restore a `Pipeline` from JSON.
    * @params json The JSON containing the pipeline description `['@pipeline', ...transforms...]`.
-   * @returns A new instance of `Pipeline`.
+   * @return A new instance of `Pipeline`.
    */
   pipeline (json) {
     util.check(Array.isArray(json) &&
@@ -45,7 +45,7 @@ class Restore {
    * 'species', ...expressions...]`. The `species` must match one of the names
    * exported from `transform.js` and map to a class derived from
    * `TransformBase`.
-   * @returns A new instance of the class identified by `species`.
+   * @return A new instance of the class identified by `species`.
    */
   transform (json) {
     util.check(Array.isArray(json) &&
@@ -63,7 +63,7 @@ class Restore {
    * @params json The JSON containing the expression description. This must be
    * either an operation or a value, each of which is handled by its own method.
    * `TransformBase`.
-   * @returns A new instance of the class identified by the first element of the
+   * @return A new instance of the class identified by the first element of the
    * JSON.
    */
   expr (json) {
@@ -91,7 +91,7 @@ class Restore {
    * @params json The JSON containing the operation description `['@op',
    * 'species', ...expressions...]`. The `species` must match one of the names
    * exported from `op.js` and map to a class derived from `ExprBase`.
-   * @returns A new instance of the class identified by `species`.
+   * @return A new instance of the class identified by `species`.
    */
   op (json) {
     util.check((json.length > 1) &&
@@ -108,7 +108,7 @@ class Restore {
    * @params json The JSON containing the operation description `['@value',
    * 'species', ...expressions...]`. The `species` must match one of the names
    * exported from `value.js` and map to a class derived from `ExprBase`.
-   * @returns A new instance of the class identified by `species`.
+   * @return A new instance of the class identified by `species`.
    */
   value (json) {
     util.check((json.length > 1) &&

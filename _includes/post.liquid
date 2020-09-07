@@ -1,0 +1,23 @@
+---
+tags: post
+permalink: "/blog/{{page.date | date: '%Y/%m/%d'}}/{{page.fileSlug}}/"
+---
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks{% if title %}: {{title}}{% endif %}</title>
+    <link rel="stylesheet" href="{{ '/dist/css/base.min.css' | relative_url }}" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      {% include nav.html %}
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks{% if title %}: {{title}}{% endif %}</h1>
+      {{content}}
+      <p align="right"><em>— {{author}} / {{date | date: "%Y-%m-%d"}}</em></p>
+    </main>
+    {% include footer.html %}
+  </body>
+</html>

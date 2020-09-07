@@ -27,7 +27,7 @@ const formatMultiColNames = (raw) => {
  * sub-block is missing.
  * @param block The block object.
  * @param label Which field to get a value from.
- * @returns Stringified JSON block representation (possibly 'absent' placeholder).
+ * @return Stringified JSON block representation (possibly 'absent' placeholder).
  */
 const valueToCode = (block, label) => {
   let raw = Blockly.TidyBlocks.valueToCode(block, label, ORDER_NONE)
@@ -57,7 +57,7 @@ class Messages {
    * Look up a value in the preferred language if available, or the default
    * language if not.
    * @param {string} path Dot-separated path such as 'plot_bar.message0'.
-   * @returns String (or 'undefined' if not found).
+   * @return String (or 'undefined' if not found).
    */
   get (path) {
     const components = path.split('.')

@@ -2,7 +2,9 @@
 
 const Blockly = require('blockly/blockly_compressed')
 
-const {Messages} = require('./helpers')
+const {
+  Messages
+} = require('./helpers')
 
 /**
  * Lookup table for message strings.
@@ -10,112 +12,140 @@ const {Messages} = require('./helpers')
 const MESSAGES = {
   colors: {
     message0: {
+      ar: 'الألوان',
+      el: 'Χρώματα',
       en: 'Colors',
       es: 'Colores',
-      ar: 'الألوان',
-      ko: '색깔', 
-      it: 'Colori'
+      it: 'Colori',
+      ko: '색깔',
+      pt: 'Cores'
     },
     tooltip: {
+      ar: 'احد عشر لون',
+      el: 'έντεκα χρώματα',
       en: 'eleven colors',
       es: 'once colores',
-      ar: 'احد عشر لون',
-      ko: '11개의 색', 
-      it: 'undici colori'
+      it: 'undici colori',
+      ko: '11개의 색',
+      pt: 'onze cores'
     }
   },
   earthquakes: {
     message0: {
+      ar: 'الزلزال',
+      el: 'Σεισμοί',
       en: 'Earthquakes',
       es: 'Terremotos',
-      ar: 'الزلزال',
-      ko: '지진', 
-      it: 'Terremoti'
+      it: 'Terremoti',
+      ko: '지진',
+      pt: 'Terremotos'
     },
     tooltip: {
-      en: 'earthquake data', 
-      es: 'datos de terremotos',
       ar: 'بيانات الزلزال',
-      ko: '지진 데이터', 
-      it: 'dati sui terremoti'
+      el: 'σεισμολογικά στοιχεία',
+      en: 'earthquake data',
+      es: 'datos de terremotos',
+      it: 'dati sui terremoti',
+      ko: '지진 데이터',
+      pt: 'dados de terremotos'
     }
   },
   penguins: {
     message0: {
-      en: 'Penguins', 
-      es: 'Pingüinos',
       ar: 'طيور البطريق',
+      el: 'Πιγκουίνι',
+      en: 'Penguins',
+      es: 'Pingüinos',
+      it: 'Pinguini',
       ko: '펭귄',
-      it: 'Pinguini'
+      pt: 'Penguins'
     },
     tooltip: {
+      ar: 'بيانات طيور البطريق',
+      el: 'στοιχεία πιγκουίνων',
       en: 'penguin data',
       es: 'datos de pingüinos',
-      ar: 'بيانات طيور البطريق',
+      it: 'dati sui pinguini',
       ko: '펭귄 데이터',
-      it: 'dati sui pinguini'
+      pt: 'dados de penguins'
     }
   },
   phish: {
     message0: {
-      en: 'Phish', 
-      es: 'Phish',
       ar: 'فرقه الفيش الموسيقيه',
-      ko: '피시', 
-      it: 'Phish'
+      el: 'Phish',
+      en: 'Phish',
+      es: 'Phish',
+      it: 'Phish',
+      ko: '피시',
+      pt: 'Phish'
     },
     tooltip: {
+      ar: 'بيانات فرقه الفيش الموسيقيه',
+      el: 'στοιχεία συναυλιών Phish',
       en: 'Phish concert data',
       es: 'datos de conciertos Phish',
-      ar: 'بيانات فرقه الفيش الموسيقيه',
+      it: 'dati sui concerti dei Phish',
       ko: '피시 콘서트 데이터',
-      it: 'dati sui concerti dei Phish'
+      pt: 'dados de shows do Phish'
     }
   },
   sequence: {
     message0: {
+      ar: 'المتسلسله %1 %2',
+      el: 'Ακολουθία %1 %2',
       en: 'Sequence %1 %2',
       es: 'Sequencia %1 %2',
-      ar: 'المتسلسله %1 %2',
+      it: 'sequenza %1 %2',
       ko: '배열 %1 %2',
-      it: 'sequenza %1 %2'
+      pt: 'Sequência %1 %2'
     },
     args0_text: {
-      en: 'name', 
-      es: 'nombre',
       ar: 'اﻹسم',
+      el: 'όνομα',
+      en: 'name',
+      es: 'nombre',
+      it: 'nome',
       ko: '이름',
-      it: 'nome'
+      pt: 'nome'
     },
     tooltip: {
+      ar: 'إنشاء متسلسله ١..ن',
+      el: 'Πάραγε μία ακολουθία 1..Ν',
       en: 'Generate a sequence 1..N',
       es: 'Generar una sequencia 1..N',
-      ar: 'إنشاء متسلسله ١..ن',
+      it: 'genera una sequenza 1..N',
       ko: '배열 실행 1..N',
-      it: 'genera una sequenza 1..N'
+      pt: 'Gerar uma sequencia 1..N'
     }
   },
   data_user: {
     message0: {
-      en: 'User data %1', 
-      es: 'Datos de usuario %1',
       ar: 'بيانات المسته %1',
-      ko: '사용자 데이터 %1', 
-      it: 'Dati utenti %1'
+      el: 'Στοιχεία χρήστη %1',
+      en: 'User data %1',
+      es: 'Datos de usuario %1',
+      it: 'Dati utenti %1',
+      ko: '사용자 데이터 %1',
+      pt: 'Dados de usuario %1'
     },
     args0_text: {
+      ar: 'الإسم',
+      el: 'όνομα',
       en: 'name',
       es: 'nombre',
-      ar: 'الإسم',
+      it: 'nome',
       ko: '이름',
-      it: 'nome'
+      pt: 'nome'
     },
     tooltip: {
-      en: 'use previously-loaded data', 
-      es: 'usa datos previamente cargados',
       ar: 'إستخدام بيانات محمله مسبقا',
+      el: 'χρησιμοποίησε προηγουμένως ανεβασμένα δεδομένα',
+      en: 'use previously-loaded data',
+      es: 'usa datos previamente cargados',
+      it: 'usa i dati caricati in precedenza',
       ko: '이전에 로드된 데이터 사용',
-      it: 'usa i dati caricati in precedenza'
+      pt: 'use dados carregados previamente'
     }
   }
 }
@@ -135,7 +165,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('colors.tooltip'),
-      helpUrl: './data/#colors'
+      helpUrl: './guide/#colors'
     },
     // Earthquakes
     {
@@ -145,7 +175,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('earthquakes.tooltip'),
-      helpUrl: './data/#earthquakes'
+      helpUrl: './guide/#earthquakes'
     },
     // Penguins
     {
@@ -155,7 +185,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('penguins.tooltip'),
-      helpUrl: './data/#penguins'
+      helpUrl: './guide/#penguins'
     },
     // Phish
     {
@@ -165,7 +195,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('phish.tooltip'),
-      helpUrl: './data/#phish'
+      helpUrl: './guide/#phish'
     },
     // Sequence
     {
@@ -187,7 +217,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('sequence.tooltip'),
-      helpUrl: './data/#sequence'
+      helpUrl: './guide/#sequence'
     },
     // User data
     {
@@ -204,7 +234,7 @@ const setup = (language) => {
       style: 'data_block',
       hat: 'cap',
       tooltip: msg.get('data_user.tooltip'),
-      helpUrl: './data/#user'
+      helpUrl: './guide/#user'
     }
   ])
 
@@ -243,5 +273,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

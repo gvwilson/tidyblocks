@@ -56,8 +56,13 @@ class SaveMenuItems extends React.Component{
         </Link>
         <Link>
           <MenuItem onClick={() => this.handleClick(this.props.saveSvg)}>
-            Save Svg</MenuItem>
+            Save SVG</MenuItem>
         </Link>
+        <Link>
+          <MenuItem onClick={() => this.handleClick(this.props.saveAllSvg)}>
+            Save All SVGs</MenuItem>
+        </Link>
+
       </React.Fragment>
     )
   }
@@ -110,7 +115,7 @@ function MenuItemsButton ({name, icon, handleClick}) {
 }
 
 // Create the Save items for the top TidyBlocks bar.
-function TidyBlocksSaveMenuItems({name, icon, menuItems, saveWorkspace, saveData, saveSvg}) {
+function TidyBlocksSaveMenuItems({name, icon, menuItems, saveWorkspace, saveData, saveSvg, saveAllSvg}) {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
@@ -134,7 +139,9 @@ function TidyBlocksSaveMenuItems({name, icon, menuItems, saveWorkspace, saveData
           onClose={handleClose}
           saveWorkspace={saveWorkspace}
           saveData={saveData}
-          saveSvg={saveSvg}/>
+          saveSvg={saveSvg}
+          saveAllSvg={saveAllSvg}/>
+
       </Menu>
     </div>
   )
@@ -199,6 +206,7 @@ export class MenuBar extends React.Component{
                 saveWorkspace={this.props.saveWorkspace}
                 saveData={this.props.saveData}
                 saveSvg={this.props.saveSvg}
+                saveAllSvg={this.props.saveAllSvg}
                 icon={<SaveIcon className="menuIcon" />}/>
               <TidyBlocksHelpMenuItems edge="start" name="Help"
                 icon={<HelpIcon className="menuIcon" />}/>

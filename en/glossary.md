@@ -1,4 +1,5 @@
 ---
+layout: plain.liquid
 permalink: /en/glossary/
 title: "Glossary"
 language: en
@@ -48,6 +49,10 @@ group ID
 :   The unique identifier for a [group](#group) in a [table](#table).
     TidyBlocks automatically stores group IDs in a column called `_group_`.
 
+k-means clustering
+:   An [algorithm](https://en.wikipedia.org/wiki/K-means_clustering) that clusters data
+    by repeatedly approximating where the center of each cluster is.
+
 logical
 :   A value that is either `true` or `false`.
 
@@ -80,6 +85,10 @@ row
     and stores a single related set of observations.
     Rows are often called [records](#record),
     and most [operations](#operation) in TidyBlocks work within rows.
+
+silhouette
+:   A [measure](https://en.wikipedia.org/wiki/Silhouette_(clustering)) of
+    how well clustered data is.
 
 string
 :   A synonym for [text](#text).

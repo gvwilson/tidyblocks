@@ -13,148 +13,184 @@ const {
 const MESSAGES = {
   absent: {
     message0: {
-      en: 'Absent', 
-      es: 'Ausente',
       ar: 'غائب',
-      ko: '공백', 
-      it: 'Assente'
+      el: 'Απών',
+      en: 'Absent',
+      es: 'Ausente',
+      it: 'Assente',
+      ko: '공백',
+      pt: 'Ausente'
     },
     tooltip: {
-      en: 'represent a hole', 
-      es: 'representa un agujero',
       ar: 'تمثيل فجوه',
+      el: 'συμβόλισε μία τρύπα',
+      en: 'represent a hole',
+      es: 'representa un agujero',
+      it: 'rappresenta un buco',
       ko: '홀을 나타내기',
-      it: 'rappresenta un buco'
+      pt: 'representa um buraco'
     }
   },
   column: {
     column: {
-      en: 'column', 
-      es: 'columna',
       ar: 'العمود',
+      el: 'στήλη',
+      en: 'column',
+      es: 'columna',
+      it: 'colonna',
       ko: '열',
-      it: 'colonna'
+      pt: 'coluna'
     },
     tooltip: {
+      ar: 'الحصول على قيمه من عمود',
+      el: 'βρες την τιμή μιας στήλης',
       en: 'get the value of a column',
       es: 'obten el valor de una columna',
-      ar: 'الحصول على قيمه من عمود',
+      it: 'ottieni il valore di una colonna',
       ko: '열의 값 가져오기',
-      it: 'ottieni il valore di una colonna'
+      pt: 'obtém o valor de uma coluna'
     }
   },
   datetime: {
     text: {
+      ar: 'YYYY-MM-DD',
+      el: 'ΕΕΕΕ-ΜΜ-ΗΗ',
       en: 'YYYY-MM-DD',
       es: 'AAAA-MM-DD',
-      ar: 'YYYY-MM-DD',
+      it: 'AAAA-MM-GG',
       ko: '연도-월-일',
-      it: 'AAAA-MM-GG'
+      pt: 'AAAA-MM-DD'
     },
     tooltip: {
+      ar: 'ثابت تاريخ/وقت',
+      el: 'σταθερή ημερομηνία/ώρα',
       en: 'constant date/time',
       es: 'constante fecha/tiempo',
-      ar: 'ثابت تاريخ/وقت',
+      it: 'data/ora costanti',
       ko: '날짜/시간 유지',
-      it: 'data/ora costanti'
+      pt: 'constante data/tempo'
     }
   },
   logical: {
     tooltip: {
-      en: 'logical constant', 
-      es: 'constante logica',
       ar: 'ثابت منطقي',
+      el: 'σταθερή τύπου αληθής/ψευδής',
+      en: 'logical constant',
+      es: 'constante logica',
+      it: 'constante logica',
       ko: '논리 상수',
-      it: 'constante logica'
+      pt: 'constante lógica'
     }
   },
   number: {
     tooltip: {
+      ar: 'رقم ثابت',
+      el: 'σταθερός αριθμός',
       en: 'constant number',
       es: 'numbero constante',
-      ar: 'رقم ثابت',
+      it: 'constante numerica',
       ko: '상수',
-      it: 'constante numerica'
+      pt: 'número constante'
     }
   },
   text: {
     text: {
+      ar: 'نص',
+      el: 'κείμενο',
       en: 'text',
       es: 'texto',
-      ar: 'نص',
+      it: 'testo',
       ko: '텍스트',
-      it: 'testo'
+      pt: 'texto'
     },
     tooltip: {
-      en: 'constant text', 
-      es: 'texto constante',
       ar: 'نص ثابت',
+      el: 'σταθερό κείμενο',
+      en: 'constant text',
+      es: 'texto constante',
+      it: 'testo costante',
       ko: '상수 텍스트',
-      it: 'testo costante'
+      pt: 'texto constante '
     }
   },
-  rownum: {
+  missing: {
     message0: {
-      en: 'Row number',
-      es: 'Numero de fila',
-      ar: 'رقم الصف',
-      ko: '행 번호',
-      it: 'Numero della riga'
+      ar: 'مفقود',
+      // TRANSLATE el
+      en: 'Missing',
+      es: 'Falta',
+      // TRANSLATE ko
+      // TRANSLATE it
+      pt: 'Faltante'
     },
     tooltip: {
-      en: 'row number',
-      es: 'numero de fila',
-      ar: 'رقم الصف',
-      ko: '행 번호',
-      it: 'numero della riga'
+      ar: 'القيمه المفقوده',
+      // TRANSLATE el
+      en: 'missing value',
+      es: 'valor que falta',
+      // TRANSLATE ko
+      // TRANSLATE it
+      pt: 'valor faltante'
     }
   },
   exponential: {
     message0: {
+      ar: 'الأسيه \u03BB %1',
+      el: 'Εκθετική \u03BB %1',
       en: 'Exponential \u03BB %1',
       es: 'Exponencial \u03BB %1',
-      ar: 'الأسيه \u03BB %1',
-      ko: '\u03BB %1 지수로 표현', 
-      it: 'Esponenziale \u03BB %1'
+      it: 'Esponenziale \u03BB %1',
+      ko: '\u03BB %1 지수로 표현',
+      pt: 'Exponencial \u03BB %1'
     },
     tooltip: {
+      ar: 'المتغيرات العشوائه الأسيه',
+      el: 'τυχαία τιμή εκθετικής κατανομής',
       en: 'exponential random value',
       es: 'valor aleatorio exponencial',
-      ar: 'المتغيرات العشوائه الأسيه',
-      ko: '지수 랜덤 값', 
-      it: 'valore aleatorio esponenziale'
+      it: 'valore aleatorio esponenziale',
+      ko: '지수 랜덤 값',
+      pt: 'valor aleatório exponencial'
     }
   },
   normal: {
     message0: {
+      ar: 'الطبيعي \u03BC %1 \u03C3 %2',
+      el: 'Κανονική \u03BC %1 \u03C3 %2',
       en: 'Normal \u03BC %1 \u03C3 %2',
       es: 'Normal \u03BC %1 \u03C3 %2',
-      ar: 'الطبيعي \u03BC %1 \u03C3 %2',
+      it: 'Normale \u03BC %1 \u03C3 %2',
       ko: '\u03BC %1 \u03C3 %2 정규화',
-      it: 'Normale \u03BC %1 \u03C3 %2'
+      pt: 'Normal \u03BC %1 \u03C3 %2'
     },
     tooltip: {
+      ar: 'المتغير العشوائي الطبيعي',
+      el: 'τυχαία τιμή κανονικής κατανομής',
       en: 'normal random value',
       es: 'valor aleatorio normal',
-      ar: 'المتغير العشوائي الطبيعي',
+      it: 'valore aleatorio normale',
       ko: '정규 랜덤 값',
-      it: 'valore aleatorio normale'
+      pt: 'valor aleatório normal'
     }
   },
   uniform: {
     message0: {
-      en: 'Uniform \u03B1 %1 \u03B2 %2', 
-      es: 'Uniforme \u03B1 %1 \u03B2 %2',
       ar: 'المنتظم \u03B1 %1 \u03B2 %2',
+      el: 'Ομοιόμορφη \u03B1 %1 \u03B2 %2',
+      en: 'Uniform \u03B1 %1 \u03B2 %2',
+      es: 'Uniforme \u03B1 %1 \u03B2 %2',
+      it: 'Uniforme \u03B1 %1 \u03B2 %2',
       ko: '\u03B1 %1 \u03B2 %2 균등화',
-      it: 'Uniforme \u03B1 %1 \u03B2 %2'
+      pt: 'Uniforme \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
-      en: 'uniform random value', 
-      es: 'valor aleatorio uniforme',
       ar: 'المتغير العشوائي المنتظم',
+      el: 'τυχαία τιμή ομοιόμορφης κατανομής',
+      en: 'uniform random value',
+      es: 'valor aleatorio uniforme',
+      it: 'valore aleatorio uniforme',
       ko: '균등 랜덤 값',
-      it: 'valore aleatorio uniforme'
+      pt: 'valor aleatório uniforme'
     }
   }
 }
@@ -173,7 +209,7 @@ const setup = (language) => {
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#absent',
+      helpUrl: './guide/#absent',
       tooltip: msg.get('absent.tooltip')
     },
 
@@ -181,14 +217,16 @@ const setup = (language) => {
     {
       type: 'value_column',
       message0: '%1',
-      args0: [{
-        type: 'field_input',
-        name: 'COLUMN',
-        text: msg.get('column.column')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'COLUMN',
+          text: msg.get('column.column')
+        }
+      ],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#column',
+      helpUrl: './guide/#column',
       tooltip: msg.get('column.tooltip'),
       extensions: ['validate_COLUMN']
     },
@@ -197,14 +235,16 @@ const setup = (language) => {
     {
       type: 'value_datetime',
       message0: '%1',
-      args0: [{
-        type: 'field_input',
-        name: 'DATE',
-        text: msg.get('datetime.text')
-      }],
+      args0: [
+        {
+          type: 'field_input',
+          name: 'DATE',
+          text: msg.get('datetime.text')
+        }
+      ],
       output: 'DateTime',
       style: 'value_block',
-      helpUrl: './value/#datetime',
+      helpUrl: './guide/#datetime',
       tooltip: msg.get('datetime.tooltip'),
       extensions: ['validate_DATE']
     },
@@ -224,7 +264,7 @@ const setup = (language) => {
         }
       ],
       output: 'Boolean',
-      helpUrl: './value/#logical',
+      helpUrl: './guide/#logical',
       style: 'value_block',
       tooltip: msg.get('logical.tooltip')
     },
@@ -233,13 +273,15 @@ const setup = (language) => {
     {
       type: 'value_number',
       message0: '%1',
-      args0: [{
-        type: 'field_number',
-        name: 'VALUE',
-        value: 0
-      }],
+      args0: [
+        {
+          type: 'field_number',
+          name: 'VALUE',
+          value: 0
+        }
+      ],
       output: 'Number',
-      helpUrl: './value/#number',
+      helpUrl: './guide/#number',
       style: 'value_block',
       tooltip: msg.get('number.tooltip')
     },
@@ -257,19 +299,19 @@ const setup = (language) => {
       ],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#text',
+      helpUrl: './guide/#text',
       tooltip: msg.get('text.tooltip')
     },
 
-    // Row number
+    // Missing value
     {
-      type: 'value_rownum',
-      message0: msg.get('rownum.message0'),
+      type: 'value_missing',
+      message0: msg.get('missing.message0'),
       args0: [],
       output: 'String',
       style: 'value_block',
-      helpUrl: './value/#rownum',
-      tooltip: msg.get('rownum.tooltip')
+      helpUrl: './guide/#missing',
+      tooltip: msg.get('missing.tooltip')
     },
 
     // Exponential random variable
@@ -285,7 +327,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: './value/#exponential',
+      helpUrl: './guide/#exponential',
       tooltip: msg.get('exponential.tooltip'),
       extensions: ['validate_RATE']
     },
@@ -308,7 +350,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: './value/#normal',
+      helpUrl: './guide/#normal',
       tooltip: msg.get('normal.tooltip'),
       extensions: ['validate_STDDEV']
     },
@@ -331,7 +373,7 @@ const setup = (language) => {
       ],
       output: 'Number',
       style: 'value_block',
-      helpUrl: './value/#uniform',
+      helpUrl: './guide/#uniform',
       tooltip: msg.get('uniform.tooltip')
     }
   ])
@@ -377,9 +419,9 @@ const setup = (language) => {
     return [code, ORDER_NONE]
   }
 
-  // Row number
-  Blockly.TidyBlocks['value_rownum'] = (block) => {
-    const code = `["@value", "rownum"]`
+  // Missing value
+  Blockly.TidyBlocks['value_missing'] = (block) => {
+    const code = `["@value", "missing"]`
     return [code, ORDER_NONE]
   }
 
@@ -408,5 +450,6 @@ const setup = (language) => {
 }
 
 module.exports = {
+  MESSAGES,
   setup
 }

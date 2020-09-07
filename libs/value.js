@@ -5,7 +5,7 @@ const random = require('random')
 const util = require('./util')
 const {
   ExprBase,
-  ExprValue
+  ExprNullary
 } = require('./expr')
 
 /**
@@ -14,9 +14,11 @@ const {
 const FAMILY = '@value'
 
 /**
- * Absent value (placeholder for incomplete expressions).
+ * @extends ExprBase
+ * Absent value used as placeholder for incomplete expressions.
+ *
  * - Requires no parameters.
- * - Is exactly equal to other incomplete expressions.
+ * - Is exactly equal to other absent values.
  * - Cannot be run.
  */
 class ValueAbsent extends ExprBase {
@@ -28,40 +30,38 @@ class ValueAbsent extends ExprBase {
     return other instanceof ValueAbsent
   }
 
-  run (row, i) {
+  run (row, i, data) {
     util.fail('Missing expression')
   }
 }
 
 /**
- * Row number.
+ * @extends ExprBase
+ * Missing value (called `NULL` in SQL or `NA` in R).
+ *
  * - Requires no parameters.
- * - Is exactly equal to other row number expressions.
- * - Generates the row number.
+ * - Is exactly equal to other missing value expressions.
  */
-class ValueRowNum extends ExprBase {
+class ValueMissing extends ExprBase {
   constructor () {
-    super(FAMILY, 'rownum')
+    super(FAMILY, 'missing')
   }
 
   equal (other) {
-    return other instanceof ValueRowNum
+    return other instanceof ValueMissing
   }
 
-  run (row, i) {
-    return i
+  run (row, i, data) {
+    return util.MISSING
   }
 }
 
 /**
  * Column value.
  */
-class ValueColumn extends ExprValue {
+class ValueColumn extends ExprNullary {
   /**
-   * Construct.
-   * @param {string} column The name of the column to get the value from.  This
-   * cannot be checked against actual columns at construction time because we do
-   * not know what upstream blocks may have added to or remove from the table.
+   * @param {string} name Column to access.
    */
   constructor (name) {
     util.check(name && (typeof name === 'string'),
@@ -69,13 +69,9 @@ class ValueColumn extends ExprValue {
     super(FAMILY, 'column', name)
   }
 
-  /**
-   * Extract the value of a column given its name.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The value (of any type).
-   */
-  run (row, i) {
+  run (row, i, data) {
+    util.check((i >= 0) && (i < data.length),
+               `Row index ${i} out of range`)
     util.check(typeof row === 'object',
                `Row must be object`)
     util.check(this.value in row,
@@ -85,12 +81,16 @@ class ValueColumn extends ExprValue {
 }
 
 /**
+ * @extends ExprNullary
  * A constant datetime value.
+ *
+ * - Can be constructed from `MISSING`, a `Date` object, or a string that can be converted to a `Date`.
+ * - Equal to other datetimes with the same value.
+ * - Produces that constant datetime.
  */
-class ValueDatetime extends ExprValue {
+class ValueDatetime extends ExprNullary {
   /**
-   * Construct.
-   * @param {string} value `MISSING`, a `Date` object, or a string that can be converted to one.
+   * @param {(MISSING|string|Date)} value Value to produce.
    */
   constructor (value) {
     value = util.makeDate(value)
@@ -99,24 +99,22 @@ class ValueDatetime extends ExprValue {
     super(FAMILY, 'datetime', value)
   }
 
-  /**
-   * Produce the constant datetime value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant datetime value.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.value
   }
 }
 
 /**
+ * @extends ExprNullary
  * A constant logical (Boolean) value.
+ *
+ * - Can be constructed from `MISSING` or a `boolean` value.
+ * - Equal to other equally-valued logical values.
+ * - Always produces the logical value.
  */
-class ValueLogical extends ExprValue {
+class ValueLogical extends ExprNullary {
   /**
-   * Construct.
-   * @param {string} value `MISSING` or a `boolean` value.
+   * @param {(MISSING|boolean)} value Value to produce.
    */
   constructor (value) {
     util.check((value === util.MISSING) || (typeof value === 'boolean'),
@@ -124,24 +122,22 @@ class ValueLogical extends ExprValue {
     super(FAMILY, 'logical', value)
   }
 
-  /**
-   * Produce the constant logical value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant logical value.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.value
   }
 }
 
 /**
+ * @extends ExprNullary
  * A constant numeric value.
+ *
+ * - Can be constructed from `MISSING` or the specific number.
+ * - Equal to equal numbers.
+ * - Produces the specified value.
  */
-class ValueNumber extends ExprValue {
+class ValueNumber extends ExprNullary {
   /**
-   * Construct.
-   * @param {string} value `MISSING` or a numeric value.
+   * @param {(MISSING|number)} value Value to produce.
    */
   constructor (value) {
     util.check((value === util.MISSING) || (typeof value === 'number'),
@@ -149,24 +145,22 @@ class ValueNumber extends ExprValue {
     super(FAMILY, 'number', value)
   }
 
-  /**
-   * Produce the constant numeric value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant numeric value.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.value
   }
 }
 
 /**
+ * @extends ExprNullary
  * A constant text value.
+ *
+ * - Can be constructed from `MISSING` or a text value (possibly the empty string).
+ * - Equal to equal-valued text.
+ * - Produces that text.
  */
-class ValueText extends ExprValue {
+class ValueText extends ExprNullary {
   /**
-   * Construct.
-   * @param {string} value `MISSING` or a numeric value.
+   * @param {(MISSING|string)} value Value to produce.
    */
   constructor (value) {
     util.check((value === util.MISSING) || (typeof value === 'string'),
@@ -174,24 +168,22 @@ class ValueText extends ExprValue {
     super(FAMILY, 'text', value)
   }
 
-  /**
-   * Produce the constant text value.
-   * @param row The row.
-   * @param i The row number.
-   * @returns The constant text value.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.value
   }
 }
 
 /**
+ * @extends ExprNullary
  * Sample an exponential distribution.
+ *
+ * - Requires a positive number as a rate parameter when constructed.
+ * - Equal to equivalent exponential distributions.
+ * - Samples the specified distribution.
  */
-class ValueExponential extends ExprValue {
+class ValueExponential extends ExprNullary {
   /**
-   * Construct.
-   * @param {number} rate The rate parameter of the exponential distribution.
+   * @param {number} rate Distribution parameter.
    */
   constructor (rate) {
     util.check((typeof rate === 'number') && (rate > 0),
@@ -200,25 +192,23 @@ class ValueExponential extends ExprValue {
     this.generator = random.exponential(this.value)
   }
 
-  /**
-   * Produce a sample from the exponential distribution.
-   * @param row The row.
-   * @param i The row number.
-   * @returns A sample from the distribution.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.generator()
   }
 }
 
 /**
+ * @extends ExprNullary
  * Sample a normal distribution.
+ *
+ * - Requires a number as mean and a non-negative number as standard deviation.
+ * - Equal to equivalent normal distributions.
+ * - Samples the specified distribution.
  */
 class ValueNormal extends ExprBase {
   /**
-   * Construct.
-   * @param {number} mean The mean of the distribution.
-   * @param {number} stdDev The standard deviation of the distribution.
+   * @param {number} mean Distribution parameter.
+   * @param {number} stdDev Distribution parameter.
    */
   constructor (mean, stdDev) {
     util.check(typeof mean === 'number',
@@ -231,36 +221,29 @@ class ValueNormal extends ExprBase {
     this.generator = random.normal(this.mean, this.stdDev)
   }
 
-  /**
-   * Equal to other normal distributions with the same mean and standard deviation.
-   * @param other The other object.
-   * @returns Equality.
-   */
   equal (other) {
     return (other instanceof ValueNormal) &&
       (this.mean === other.mean) &&
       (this.stdDev === other.stdDev)
   }
 
-  /**
-   * Produce a sample from the normal distribution.
-   * @param row The row.
-   * @param i The row number.
-   * @returns A sample from the distribution.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.generator()
   }
 }
 
 /**
+ * @extends ExprNullary
  * Sample a uniform distribution.
+ *
+ * - Requires an ordered pair of numbers as low and high bounds.
+ * - Equal to equivalent uniform distributions.
+ * - Samples the specified distribution.
  */
 class ValueUniform extends ExprBase {
   /**
-   * Construct.
-   * @param {number} low The low end of the distribution (inclusive).
-   * @param {number} high The high end of the distribution (inclusive).
+   * @param {number} low Distribution parameter.
+   * @param {number} high Distribution parameter.
    */
   constructor (low, high) {
     util.check(typeof low === 'number',
@@ -275,24 +258,13 @@ class ValueUniform extends ExprBase {
     this.generator = random.uniform(this.low, this.high)
   }
 
-  /**
-   * Equal to other uniform distributions with the same range.
-   * @param other The other object.
-   * @returns Equality.
-   */
   equal (other) {
     return (other instanceof ValueUniform) &&
       (this.low === other.low) &&
       (this.high === other.high)
   }
 
-  /**
-   * Produce a sample from the uniform distribution.
-   * @param row The row.
-   * @param i The row number.
-   * @returns A sample from the distribution.
-   */
-  run (row, i) {
+  run (row, i, data) {
     return this.generator()
   }
 }
@@ -300,7 +272,7 @@ class ValueUniform extends ExprBase {
 module.exports = {
   FAMILY: FAMILY,
   absent: ValueAbsent,
-  rownum: ValueRowNum,
+  missing: ValueMissing,
   column: ValueColumn,
   datetime: ValueDatetime,
   logical: ValueLogical,
