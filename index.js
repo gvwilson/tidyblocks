@@ -72,13 +72,39 @@ class ReactInterface extends UserInterface {
 }
 
 /**
+ * @private
+ * Load a pre-defined workspace identified by a query parameter (if present).
+ * @param {UserInterface} ui Where to load.
+ */
+const loadPredefinedWorkspace = (ui) => {
+  const urlParams = new URLSearchParams(window.location.search)
+  if (urlParams.has('workspace')) {
+    const path = urlParams.get('workspace')
+    const protocol = window.location.protocol
+    const host = window.location.host
+    const url = `${protocol}//${host}${path}`
+    const xhr = new XMLHttpRequest()
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        const xml = Blockly.Xml.textToDom(xhr.responseText)
+        Blockly.Xml.clearWorkspaceAndLoadFromXml(xml, ui.workspace)
+      }
+    }
+    xhr.open('GET', url)
+    xhr.send()
+  }
+}
+  
+/**
  * Initialize the interface.
  * @param {string} language What language to use for localizing blocks.
  * @param {string} rootId HTML ID of element that will contain workspace.
  * @param {Boolean} rtl Right-to-left rendering? (default is 'false').
  */
 const setup = (language, rootId, rtl = false) => {
-  return new ReactInterface(language, rootId, rtl)
+  const ui = new ReactInterface(language, rootId, rtl)
+  loadPredefinedWorkspace(ui)
+  return ui
 }
 
 module.exports = {
