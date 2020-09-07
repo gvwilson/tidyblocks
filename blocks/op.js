@@ -185,7 +185,7 @@ const MESSAGES = {
       en: 'Shift %1 by %2',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'Sposta %1 di %2',
       pt: 'Deslocar %1 por %2'
     },
     column: {
@@ -203,7 +203,7 @@ const MESSAGES = {
       en: 'shift in a column up or down',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'sposta in una colonna in alto o in basso',
       pt: 'deslocar uma coluna para cima ou para baixo'
     }
   }
