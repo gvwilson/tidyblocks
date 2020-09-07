@@ -219,7 +219,7 @@ class TransformGlue extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.species)
+    env.appendLog('log', `${this.species} ${this.leftName} ${this.rightName} ${this.label}`)
     util.check(df === null,
                `Cannot provide input dataframe to glue`)
     const left = env.getData(this.leftName)
@@ -271,7 +271,7 @@ class TransformJoin extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', this.species)
+    env.appendLog('log', `${this.species} ${this.leftName} ${this.leftCol} ${this.rightName} ${this.rightCol}`)
     util.check(df === null,
                `Cannot provide input dataframe to join`)
     const left = env.getData(this.leftName)
@@ -519,7 +519,7 @@ class TransformPlot extends TransformBase {
   }
 
   run (env, df) {
-    env.appendLog('log', `${this.species} ${this.label}`)
+    env.appendLog('log', `${this.species} ${this.label} ${this.logParams()}`)
     this.spec.data.values = df.data
     env.setPlot(this.label, this.spec)
     return df
@@ -548,6 +548,10 @@ class TransformBar extends TransformPlot {
     }
     super('bar', label, spec, {axisX, axisY})
   }
+
+  logParams () {
+    return `${this.spec.encoding.x.field} ${this.spec.encoding.y.field}`
+  }
 }
 
 /**
@@ -570,6 +574,10 @@ class TransformBox extends TransformPlot {
       }
     }
     super('box', label, spec, {axisX, axisY})
+  }
+
+  logParams () {
+    return `${this.spec.encoding.x.field} ${this.spec.encoding.y.field}`
   }
 }
 
@@ -601,6 +609,10 @@ class TransformDot extends TransformPlot {
     }
     super('dot', label, spec, {axisX})
   }
+
+  logParams () {
+    return `${this.spec.encoding.x.field}`
+  }
 }
 
 /**
@@ -631,6 +643,10 @@ class TransformHistogram extends TransformPlot {
       }
     }
     super('histogram', label, spec, {column, bins})
+  }
+
+  logParams () {
+    return `${this.spec.encoding.x.field} ${this.spec.encoding.x.bin.maxbins}`
   }
 }
 
@@ -683,6 +699,16 @@ class TransformScatter extends TransformPlot {
       spec.layer[0].encoding.color = {field: color, type: 'nominal'}
     }
     super('scatter', label, spec, {axisX, axisY, color, lm})
+  }
+
+  logParams () {
+    const x = this.spec.layer[0].encoding.x.field
+    const y = this.spec.layer[0].encoding.y.field
+    const color = ('color' in this.spec.layer[0].encoding)
+          ? ` ${this.spec.layer[0].encoding.color.field}`
+          : ' -none-'
+    const lm = ` ${this.spec.layer.length > 1}`
+    return `${x} ${y}${color}${lm}`
   }
 }
 
@@ -770,7 +796,7 @@ class TransformKMeansClustering extends TransformStats {
   }
 
   run (env, df) {
-    env.appendLog('log', `${this.species}`)
+    env.appendLog('log', `${this.species} ${this.axisX} ${this.axisY} ${this.numClusters}`)
     const points = df.data.map(row => [row[this.axisX], row[this.axisY]])
     const {labels} = stats.kMeansCluster(points, this.numClusters)
     const data = df.data.map((row, i) => {
