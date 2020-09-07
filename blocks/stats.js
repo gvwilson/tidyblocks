@@ -120,7 +120,7 @@ const MESSAGES = {
       en: 'k-means cluster',
       es: 'agrupamiento por k-medians',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'suddivisione k-means',
       pt: 'agrupamento por k-means'
     },
     message1: {
@@ -129,7 +129,7 @@ const MESSAGES = {
       en: 'X %1 Y %2 number %3 label %4',
       es: 'X %1 Y %2 numero %3 etiqueta %4',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'X %1 Y %2 numero %3 etichetta %4',
       pt: 'X %1 Y %2 número %3 rótulo %4'
     },
     args1_x: {
@@ -156,8 +156,8 @@ const MESSAGES = {
       en: 'label',
       es: 'etiqueta',
       ko: '라벨',
-      it: 'etichetta'
-      // TRANSLATE pt
+      it: 'etichetta',
+      pt: 'etiqueta'
     },
     tooltip: {
       ar: 'حساب IDs لصنف الخوارزميه التصنيفية',
@@ -165,7 +165,7 @@ const MESSAGES = {
       en: 'calculate k-means cluster IDs',
       // TRANSLATE es
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'calcola gli identificatori di raggruppamento per k-means',
       pt: 'calcular os identificadores do agrupamento por k-means'
     }
   },
@@ -176,7 +176,7 @@ const MESSAGES = {
       en: 'silhouette',
       es: 'silueta',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'silhouette',
       pt: 'silhueta'
     },
     message1: {
@@ -185,7 +185,7 @@ const MESSAGES = {
       en: 'X %1 Y %2 label %3 score %4',
       es: 'X %1 Y %2 etiqueta %3 puntuación %4',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'X %1 Y %2 etichetta %3 punteggio %4',
       pt: 'X %1 Y %2 rótulo %3 pontuação %4'
     },
     args1_x: {
@@ -220,7 +220,7 @@ const MESSAGES = {
       en: 'score',
       es: 'puntuación',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'punteggio',
       pt: 'pontuação'
     },
     tooltip: {
@@ -229,7 +229,7 @@ const MESSAGES = {
       en: 'calculate silhouette score of 2D clusters',
       es: 'calcular la puntuación de la silueta de los clústeres 2D',
       // TRANSLATE ko
-      // TRANSLATE it
+      it: 'calcola il punteggio silhouette per i raggruppamenti 2D',
       pt: 'calcular a pontuação de silhueta dos agrupamentos 2D'
     }
   }
