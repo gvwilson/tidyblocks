@@ -13,7 +13,7 @@ and that your work may be made available under the terms of [our license](LICENS
 **Asha** is a high school mathematics teacher
 whose students are using TidyBlocks to do their homework.
 She can help by filing bug reports and feature suggestions,
-and by providing questions and solutions for us to add to our gallery of examples.
+and by providing questions and solutions for our gallery of examples.
 
 **Lupita** is using TidyBlocks to learn basic data science.
 She can help by translating blocks and block descriptions into Bantu
@@ -113,6 +113,16 @@ To translate a block's messages:
 
 If you are the first person to do translations in some language,
 please also add a line to `./index.html` to link to the main page for that language.
+
+## Examples
+
+-   Example workspaces are stored in the `./examples` directory.
+
+-   Each one is described in `LL/examples.md` (where `LL` is a two-letter language code).
+    The h2-level title of the example in this file links to TidyBlocks in that language
+    with a `?workspace=/examples/some-path.jeff` query parameter to auto-load the example.
+
+-   Please include an SVG image for every example.
 
 ## Organization
 

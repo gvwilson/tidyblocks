@@ -5,6 +5,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPlugin(pluginSass)
 
   eleventyConfig.addPassthroughCopy('dist')
+  eleventyConfig.addPassthroughCopy('examples')
 
   eleventyConfig.setTemplateFormats([
     'css',
