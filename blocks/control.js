@@ -13,17 +13,17 @@ const MESSAGES = {
   seed: {
     message0: {
       // TRANSLATE ar
-      en: 'RNG seed %1'
+      en: 'RNG seed %1',
       // TRANSLATE es
-      it: 'Effetti casuali %1'
+      it: 'Effetti casuali %1',
       // TRANSLATE ko
       // TRANSLATE pt
     },
     tooltip: {
       ar: 'إعادة تشغيل مولد الأرقام العشوائية',
-      en: 'Restart random number generation'
+      en: 'Restart random number generation',
       // TRANSLATE es
-      it: 'Riavviare la generazione di numeri casuali'
+      it: 'Riavviare la generazione di numeri casuali',
       // TRANSLATE ko
       // TRANSLATE pt
     }
