@@ -15,7 +15,7 @@ const MESSAGES = {
       // TRANSLATE ar
       en: 'RNG seed %1'
       // TRANSLATE es
-      // TRANSLATE it
+      it: 'Effetti casuali %1'
       // TRANSLATE ko
       // TRANSLATE pt
     },
@@ -23,7 +23,7 @@ const MESSAGES = {
       ar: 'إعادة تشغيل مولد الأرقام العشوائية',
       en: 'Restart random number generation'
       // TRANSLATE es
-      // TRANSLATE it
+      it: 'Riavviare la generazione di numeri casuali'
       // TRANSLATE ko
       // TRANSLATE pt
     }
