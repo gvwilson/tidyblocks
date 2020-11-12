@@ -11,6 +11,18 @@
   </author>
   
   <entry>
+    <title>Representing Joins</title>
+    <link href="https://tidyblocks.tech/blog/2020/11/12/representing-join/"/>
+    <updated>2020-11-12T02:00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/11/12/representing-join/</id>
+    <content type="html">It has been a quiet couple of months for TidyBlocks development:
+everyone on the team was hit with work deadlines at the same time,
+and our first attempt to secure a bit of funding didn't work out.
+But the break has given us a chance to reflect on our current interface,
+and one thing...</content>
+  </entry>
+  
+  <entry>
     <title>The Other Ninety Percent</title>
     <link href="https://tidyblocks.tech/blog/2020/08/28/the-other-ninety-percent/"/>
     <updated>2020-08-28T12:00:00</updated>

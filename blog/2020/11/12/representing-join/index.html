@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: Representing Joins</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/el/">Ελληνικα</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide/">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Examples</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/examples/">English</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/faq/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/faq/">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks: Representing Joins</h1>
+      <p>It has been a quiet couple of months for TidyBlocks development:
+everyone on the team was hit with work deadlines at the same time,
+and our first attempt to secure a bit of funding didn't work out.
+But the break has given us a chance to reflect on our current interface,
+and one thing has become very clear:</p>
+<blockquote>
+<p>We need a better way to represent joins.</p>
+</blockquote>
+<p>A join combines values from two tables to create a new table.
+For example,
+suppose we have a table with penguin weights in grams:</p>
+<table>
+<thead>
+<tr>
+<th>Island</th>
+<th>Species</th>
+<th>Weight</th>
+<th>Sex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Torgersen</td>
+<td>Adelie</td>
+<td>3750</td>
+<td>male</td>
+</tr>
+<tr>
+<td>Torgersen</td>
+<td>Adelie</td>
+<td>3800</td>
+<td>female</td>
+</tr>
+<tr>
+<td>Biscoe</td>
+<td>Adelie</td>
+<td>3250</td>
+<td>female</td>
+</tr>
+</tbody>
+</table>
+<p>and another table showing the nesting area on each island in square meters:</p>
+<table>
+<thead>
+<tr>
+<th>Island</th>
+<th>Area</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Torgersen</td>
+<td>12560</td>
+</tr>
+<tr>
+<td>Biscoe</td>
+<td>208500</td>
+</tr>
+</tbody>
+</table>
+<p>If we want to see if there's a relationship between weight and nesting area,
+we need to join these two tables by island name:</p>
+<table>
+<thead>
+<tr>
+<th>Island</th>
+<th>Species</th>
+<th>Weight</th>
+<th>Sex</th>
+<th>Area</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Torgersen</td>
+<td>Adelie</td>
+<td>3750</td>
+<td>male</td>
+<td>12560</td>
+</tr>
+<tr>
+<td>Torgersen</td>
+<td>Adelie</td>
+<td>3800</td>
+<td>female</td>
+<td>12560</td>
+</tr>
+<tr>
+<td>Biscoe</td>
+<td>Adelie</td>
+<td>3250</td>
+<td>female</td>
+<td>208500</td>
+</tr>
+</tbody>
+</table>
+<p>Here's the problem:
+unlike every other operation in TidyBlocks,
+join has <em>two</em> tables as input rather than one,
+which doesn't fit our linear-stack-of-blocks metaphor.
+None of the solutions we've come up with satisfies us:</p>
+<ol>
+<li>
+<p>Our existing implementation uses the &quot;listen for a signal&quot; approach found in Scratch.
+If a pipeline ends in a <code>saveAs</code> block,
+its output is saved for display.
+If another pipeline begins with a <code>join</code> block,
+it can &quot;listen&quot; until both of the tables it needs are available,
+at which point it starts to run.
+This works,
+but it means that the join operation is invisible in the user interface:
+there is no visual clue that Pipeline Omega depends on Pipelines Alpha and Beta.</p>
+</li>
+<li>
+<p>Many people have suggested a Y-shaped block with two input connectors on its top edge.
+The problems with this are
+(a) Google Blockly doesn't contain such a block,
+so we'd have to do a lot of work in the guts of a complex framework, and
+(b) it looks pretty clumsy for non-trivial cases.
+As users start adding a few operators to transforms, for example,
+pipelines become wider and wider;
+put two such pipelines side by side
+(or three or four if there are multiple joins)
+and the arrangement quickly becomes incomprehensible.</p>
+</li>
+<li>
+<p>Other people have suggested adding link lines to show connections between pipelines.
+This helps avoid the ever-wider layout problem mentioned above,
+but again,
+link lines aren't part of Blockly,
+so this approach would require more engineering effort than we have.
+Switching to a toolkit like <a href="https://nodered.org/">Node-RED</a> would give us connectors for free,
+but then we lose the instant familiarity we've been striving for---we want
+students and teachers who've used Scratch to look at TidyBlocks and immediately say,
+&quot;Oh, I know this.&quot;</p>
+</li>
+<li>
+<p>Finally, there's the idea of using a C-block
+of the kind that Scratch uses for loops, conditionals, and other cases
+where a sub-pipeline needs to nest in a larger pipeline.
+The C-block would join whatever is stacked on top of it
+to whatever runs inside it.
+It won't handle every case,
+but TidyBlocks isn't supposed to;
+the bigger issue is whether it's intuitive or not,
+and if we have to ask the question,
+the answer is probably &quot;no&quot;.</p>
+</li>
+</ol>
+<p>So in short, we're stuck:
+we need a way to represent joining tables
+that we can build with the toolkit we have,
+and we're out of ideas.
+If you have any, please <a href="mailto:info@tidyblocks.tech">get in touch</a>.</p>
+
+      <p align="right"><em>— Greg Wilson / 2020-11-12</em></p>
+    </main>
+    <footer>
+  <!--
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  -->
+  <a target="_blank" href="https://github.com/tidyblocks/tidyblocks/"><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+
+  </body>
+</html>
