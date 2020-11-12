@@ -29,7 +29,7 @@ The answer is either "no" or "not yet":
     we need to add more blocks to handle the kinds of questions that come up in high school statistics courses.
     Suggestions are very welcome,
     as are examples and help with implementation.
-    Please [contact us](mailto:{{site.email}}) if you would like to contribute.
+    Please [contact us](mailto:info@tidyblocks.tech) if you would like to contribute.
 
 **Is TidyBlocks an RStudio product?**
 No.
@@ -101,4 +101,4 @@ We're glad you asked:
 
 **Where can I contribute?**
 Please use [our GitHub repository]({{site.github.url}}) to file issues and submit pull requests.
-We also have a Slack channel for regular contributors---please [contact us](mailto:{{site.email}}) if you'd like to join.
+We also have a Slack channel for regular contributors---please [contact us](mailto:info@tidyblocks.tech) if you'd like to join.

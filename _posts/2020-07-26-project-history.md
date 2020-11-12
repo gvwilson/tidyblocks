@@ -68,4 +68,4 @@ It's going to be a lot of work,
 but having a user-friendly interface that can run on school and library computers without any installation requirements
 and that will serve as a bridge to full-strength data science tools is pretty exciting.
 If you'd like to help us,
-please [get in touch](mailto:gvwilson@third-bit.com).
+please [get in touch](mailto:info@tidyblocks.tech).

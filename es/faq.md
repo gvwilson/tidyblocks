@@ -33,7 +33,7 @@ La respuesta es "no" o "todavía no":
 2.  Dicho esto necesitamos agregar más bloques para manejar los tipos de
     preguntas que surgen en los cursos de estadística de la escuela
     secundaria.  Las sugerencias son bienvenidas, como son ejemplos y ayuda
-    con la implementación.  Por favor [contact us](mailto:{{site.email}}) si
+    con la implementación.  Por favor [contact us](mailto:info@tidyblocks.tech) si
     le gustaría contribuir.
 
 **¿TidyBlocks es un producto de RStudio?**
@@ -111,4 +111,4 @@ Nos alegra que hayas preguntado:
 Por favor use [our GitHub repository]({{site.github.url}}) para presentar
 problemas y enviar solicitudes de extracción.  También tenemos un canal de
 Slack para colaboradores habituales --- por favor
-[contactanos](mailto:{{site.email}}) si quieres unirte.
+[contactanos](mailto:info@tidyblocks.tech) si quieres unirte.

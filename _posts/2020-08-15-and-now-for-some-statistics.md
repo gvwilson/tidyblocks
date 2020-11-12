@@ -63,4 +63,4 @@ which means I can't test the error-handling code in the function I wrote.
 K-means clustering should be deployed within the week.
 We hope you'll find it useful;
 if there are other simple statistical methods you'd like us to add,
-please [let us know](mailto:{{site.email}}).
+please [let us know](mailto:info@tidyblocks.tech).
