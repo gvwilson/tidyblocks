@@ -185,7 +185,7 @@ const setup = (language) => {
     */
     {
       type: 'combine_join',
-      message0: 'DATA 1 %1 DATA 2%2',
+      message0: 'Right Table 1 %1 Left Table 1 2%2 Join Using: %3 %4',
       args0: [
         {
           type: 'input_statement',
@@ -194,13 +194,24 @@ const setup = (language) => {
         {
           type: 'input_statement',
           name: 'LEFT_TABLE',
-        }
+        },
+        {
+          type: 'field_input',
+          name: 'RIGHT_COLUMN',
+          text: 'right_column'
+        },
+        {
+          type: 'field_input',
+          name: 'LEFT_COLUMN',
+          text: 'left_column'
+        },
       ],
       inputsInline: true,
       nextStatement: null,
       style: 'combine_block',
       tooltip: msg.get('join.tooltip'),
-      helpUrl: './guide/#join'
+      helpUrl: './guide/#join',
+      //extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
     }
   ])
 
