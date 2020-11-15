@@ -143,6 +143,7 @@ const setup = (language) => {
       extensions: ['validate_LEFT_TABLE', 'validate_RIGHT_TABLE', 'validate_COLUMN']
     },
     // Join
+    /*
     {
       type: 'combine_join',
       message0: msg.get('join.message0'),
@@ -180,6 +181,31 @@ const setup = (language) => {
       tooltip: msg.get('join.tooltip'),
       helpUrl: './guide/#join',
       extensions: ['validate_LEFT_TABLE', 'validate_LEFT_COLUMN', 'validate_RIGHT_TABLE', 'validate_RIGHT_COLUMN']
+    },
+    */
+    {
+      type: 'combine_join',
+      message0: 'DATA 1 %1 DATA 2%2',
+      args0: [
+        {
+          type: 'input_statement',
+          name: 'RIGHT_TABLE',
+          // do we want to check that it's a block of type data here?
+          check: '',
+        },
+        {
+          type: 'input_statement',
+          name: 'LEFT_TABLE',
+          // do we want to check that it's a block of type data here?
+          check: ''
+
+        }
+      ],
+      inputsInline: true,
+      nextStatement: null,
+      style: 'combine_block',
+      tooltip: msg.get('join.tooltip'),
+      helpUrl: './guide/#join'
     }
   ])
 

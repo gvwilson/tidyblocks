@@ -209,8 +209,7 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
     data_block: {
       colourPrimary: DATA_COLOR,
       colourSecondary: '#64C7FF',
-      colourTertiary: '#9B732F',
-      hat: 'cap'
+      colourTertiary: '#9B732F'
     },
     op_block: {
       colourPrimary: OP_COLOR,
