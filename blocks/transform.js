@@ -609,6 +609,24 @@ const setup = (language) => {
       tooltip: msg.get('unique.tooltip'),
       helpUrl: './guide/#unique',
       extensions: ['validate_MULTIPLE_COLUMNS']
+    },
+    {
+      type: 'transform_join',
+      message0: "data left %1 data right %2",
+      args0: [
+        {
+          type: 'input_statement',
+          name: 'DATA LEFT'
+        },
+        {
+          "type": 'input_statement',
+          "name": 'DATA RIGHT'
+        }
+      ],
+      nextStatement: null,
+      style: 'transform_block',
+      tooltip: msg.get(''),
+      helpUrl: "./guide/#transform_join"
     }
   ])
 
