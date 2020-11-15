@@ -190,15 +190,10 @@ const setup = (language) => {
         {
           type: 'input_statement',
           name: 'RIGHT_TABLE',
-          // do we want to check that it's a block of type data here?
-          check: '',
         },
         {
           type: 'input_statement',
           name: 'LEFT_TABLE',
-          // do we want to check that it's a block of type data here?
-          check: ''
-
         }
       ],
       inputsInline: true,
