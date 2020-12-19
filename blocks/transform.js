@@ -164,7 +164,7 @@ const MESSAGES = {
       en: 'Save as %1',
       es: 'Reporte %1', // CHECK es
       it: 'Salva come %1',
-      ko: '%1 리포트', // CHECK ko
+      ko: '%1 저장하기',
       pt: 'Salvar como %1'
     },
     args0_text: {
