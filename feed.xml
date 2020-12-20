@@ -11,6 +11,19 @@
   </author>
   
   <entry>
+    <title>A New Design for Join</title>
+    <link href="https://tidyblocks.tech/blog/2020/12/20/a-new-design-for-join/"/>
+    <updated>2020-12-20T02:00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/12/20/a-new-design-for-join/</id>
+    <content type="html">Our previous post
+talked about the problem of representing join operations with blocks.
+Our existing implementation uses a &quot;listen for a signal&quot; approach,
+which means there is no visual clue that pipeline C depends on pipelines A and B.
+In other words,
+one of the most complex operations we support is invisible in the user...</content>
+  </entry>
+  
+  <entry>
     <title>Representing Joins</title>
     <link href="https://tidyblocks.tech/blog/2020/11/12/representing-join/"/>
     <updated>2020-11-12T02:00:00</updated>
