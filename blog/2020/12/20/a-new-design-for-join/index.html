@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: A New Design for Join</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/el/">Ελληνικα</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide/">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Examples</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/examples/">English</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/faq/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/faq/">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks: A New Design for Join</h1>
+      <p>Our <a href="https://tidyblocks.tech/blog/2020/11/12/representing-join/">previous post</a>
+talked about the problem of representing join operations with blocks.
+Our existing implementation uses a &quot;listen for a signal&quot; approach,
+which means there is no visual clue that pipeline C depends on pipelines A and B.
+In other words,
+one of the most complex operations we support is invisible in the user interface.</p>
+<p>A join combines two tables,
+so the most obvious visual representation uses connectors like this:</p>
+<div align="center"><img src="/files/2020/12/join-with-connectors.svg" alt="Join using connectors"/></div>
+<p>However,
+Blockly doesn't support multi-input blocks like this:</p>
+<div align="center"><img src="/files/2020/12/multi-input-blocks.svg" alt="Multi-input blocks"/></div>
+<p>Even if it did, multiple joins would quickly become unwieldy:</p>
+<div align="center"><img src="/files/2020/12/multi-input-double-join.svg" alt="Multi-input double join"/></div>
+<p>We could instead combine vertical and left-to-right control flow:</p>
+<div align="center"><img src="/files/2020/12/sideways-join.svg" alt="Sideways join"/></div>
+<p>but making blocks work both top-to-bottom and left-to-right on the same canvas would be complicated.
+This model also doesn't scale visually to more complicated joins like (A+B)+(C+D),
+but we probably don't care:
+TidyBlocks is only meant to handle cases that come up during first contact with data science,
+and only a handful of the examples in the introductory stats lessons we've looked at require more than one table.</p>
+<p>An alternative is to nest one pipeline in another like the body of a <code>for</code> loop.
+<a href="https://tidyblocks.tech/authors/#gans-maya">Maya Gans</a> has prototyped an E-shaped block
+that treats both incoming data streams as equals:</p>
+<div align="center"><img src="/files/2020/12/e-block-screenshot.png" width="300" alt="E-block joins"/></div>
+<p>and we're also considering a C-shaped block
+where one data stream comes in the top and the other is nested:</p>
+<div align="center"><img src="/files/2020/12/c-block-nesting.svg" alt="C-block joins"/></div>
+<p>But there's a problem.
+One of the datasets in the C-block diagram above is a top block while the other is nested.
+To make this work, we could:</p>
+<ol>
+<li>
+<p>Provide a single uncapped Data block to use in either situation,
+All pipelines would then start without a top (capped) block.
+This would be easy to implement, but isn't consistent with other blocks-based systems.</p>
+</li>
+<li>
+<p>Provide both capped and uncapped Data blocks.
+This will probably be confusing.</p>
+</li>
+<li>
+<p>Have the Data block change shape depending on where it's placed.
+We <em>think</em> this is doable, but would probably also be confusing:
+if a block has a cap, it's signalling pretty clearly that it can't be nested.</p>
+</li>
+<li>
+<p>Provide a new top block called &quot;Name&quot; to give pipelines names.
+All Data blocks would then click together on both top and bottom edges
+no matter where they were placed.</p>
+</li>
+</ol>
+<p>Option #4 appeals right now because it would be easy to build
+and because it would solve the problem of unnamed results.
+Right now,
+users have to add a &quot;Save As&quot; block to the end of a pipeline to name their results.
+Putting the name at the start and carrying that through might (?) be more intuitive,
+and would provide a bit of documentation (e.g., a student could call a pipeline &quot;Question 3&quot;).</p>
+<div align="center"><img src="/files/2020/12/name-block.svg" alt="Adding a Name block"/></div>
+<p>We'd be very grateful for input:
+if you have any suggestions or better ideas,
+please <a href="mailto:info@tidyblocks.tech">email us</a>
+or <a href="https://twitter.com/tidyblocks">reach out on Twitter</a>.
+Thanks in advance:
+we hope you and yours have a safe and happy New Year.</p>
+
+      <p align="right"><em>— Greg Wilson / 2020-12-20</em></p>
+    </main>
+    <footer>
+  <!--
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  -->
+  <a target="_blank" href="https://github.com/tidyblocks/tidyblocks/"><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+
+  </body>
+</html>
