@@ -114,6 +114,10 @@ const MESSAGES = {
 const createXmlConfig = (language) => {
   const msg = new Messages(MESSAGES, language, 'en')
   return `<xml id="toolbox" style="display: none">
+    <category name="${msg.get('control')}" colour="${CONTROL_COLOR}">
+      <block type="control_name"></block>
+      <block type="control_seed"></block>
+    </category>
     <category name="${msg.get('data')}" colour="${DATA_COLOR}">
       <block type="data_colors"></block>
       <block type="data_earthquakes"></block>
@@ -178,9 +182,6 @@ const createXmlConfig = (language) => {
       <block type="combine_glue"></block>
       <block type="combine_join"></block>
     </category>
-    <category name="${msg.get('control')}" colour="${CONTROL_COLOR}">
-      <block type="control_seed"></block>
-    </category>
   </xml>`
 }
 
@@ -209,8 +210,7 @@ const THEME = Blockly.Theme.defineTheme('tidyblocks', {
     data_block: {
       colourPrimary: DATA_COLOR,
       colourSecondary: '#64C7FF',
-      colourTertiary: '#9B732F',
-      hat: 'cap'
+      colourTertiary: '#9B732F'
     },
     op_block: {
       colourPrimary: OP_COLOR,

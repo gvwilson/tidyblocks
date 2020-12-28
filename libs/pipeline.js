@@ -9,7 +9,7 @@ const Transform = require('./transform')
 class Pipeline {
   constructor (...transforms) {
     util.check(transforms.every(s => s instanceof Transform.base),
-               `Pipeline must be made of transforms`)
+      'Pipeline must be made of transforms')
     this.transforms = transforms
   }
 
@@ -20,7 +20,7 @@ class Pipeline {
    */
   equal (other) {
     util.check(other instanceof Pipeline,
-               `Can only compare pipelines to pipelines`)
+      'Can only compare pipelines to pipelines')
     return (this.transforms.length === other.transforms.length) &&
       this.transforms.every((transform, i) => transform.equal(other.transforms[i]))
   }
@@ -50,24 +50,45 @@ class Pipeline {
     util.check(Array.isArray(this.transforms) &&
                (this.transforms.length > 0) &&
                this.transforms.every(transform => transform instanceof Transform.base),
-               `Require non-empty array of transforms`)
+      'Require non-empty array of transforms')
     util.check(!this.transforms[0].input,
-               `First transform of pipeline cannot require input`)
+      'First transform of pipeline cannot require input')
     util.check(this.transforms.slice(1).every(transform => transform.input),
-               `All transforms of pipeline after the first must take input`)
+      'All transforms of pipeline after the first must take input')
 
-    // Run each stage in order.
+    // Run each stage in order, making sure the final result is saved.
     let data = null
     for (const transform of this.transforms) {
       data = transform.run(env, data)
     }
+    this.saveResult(env, data)
+  }
 
-    // If the last block of the pipeline produces a result but does not
-    // automatically save, save it manually.
-    if (data && !(this.transforms[this.transforms.length - 1].savesResult)) {
-      const label = `${Pipeline.UNNAMED_RESULT} ${env.getNextUnnamedId()}`
-      new Transform.saveAs(label).run(env, data)
+  /**
+   * Save the pipeline's result.  If the last block of the pipeline produces a
+   * result but does not save it expicitly, save it using the pipeline's name or
+   * as an unnamed result.
+   * @param {Env} env The runtime environment.
+   * @param {DataFrame} data The data to save (if any).
+   */
+  saveResult (env, data) {
+    // No data?
+    if (!data) {
+      return
     }
+
+    // Last transform saved it.
+    const lastTransform = this.transforms[this.transforms.length - 1]
+    if (lastTransform.savesResult) {
+      return
+    }
+
+    // Save it explicitly.
+    const firstTransform = this.transforms[0]
+    const label = (firstTransform.species === 'name')
+      ? firstTransform.name
+      : `${Pipeline.UNNAMED_RESULT} ${env.getNextUnnamedId()}`
+    new Transform.saveAs(label).run(env, data)
   }
 }
 

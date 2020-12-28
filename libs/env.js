@@ -30,7 +30,7 @@ class Env {
    */
   getData (label) {
     util.check(label && (typeof label === 'string'),
-               `Require non-empty string as dataset label`)
+      'Require non-empty string as dataset label')
     if (this.results.has(label)) {
       return this.results.get(label)
     }
@@ -43,13 +43,16 @@ class Env {
   /**
    * Add a named dataset to results.
    * @param {string} label Identifier for data.
-   * @param {Object[]} data Data table.
+   * @param {Object[]} data Data table (ignored if null).
    */
   setResult (label, data) {
+    if (!data) {
+      return
+    }
     util.check(label && (typeof label === 'string') && (label.length > 0),
-               `Require non-empty string label for result`)
+      'Require non-empty string label for result')
     util.check(data instanceof DataFrame,
-               `Require dataframe for data`)
+      'Require null or dataframe for data')
     if (this.results.has(label)) {
       this.appendLog('warn', `Result with label ${label} already exists`)
     }
@@ -62,9 +65,9 @@ class Env {
    */
   getPlot (label) {
     util.check(label && (typeof label === 'string'),
-               `Require non-empty string as plot label`)
+      'Require non-empty string as plot label')
     util.check(this.plots.has(label),
-               `Unknown plot label ${label}`)
+      `Unknown plot label ${label}`)
     return this.plots.get(label)
   }
 
@@ -75,7 +78,7 @@ class Env {
    */
   setPlot (label, spec) {
     util.check(label && (typeof label === 'string'),
-               `Require non-empty string as plot label`)
+      'Require non-empty string as plot label')
     if (this.plots.has(label)) {
       this.appendLog('warn', `Plot with label ${label} already exists`)
     }
@@ -88,9 +91,9 @@ class Env {
    */
   getStats (label) {
     util.check(label && (typeof label === 'string'),
-               `Require non-empty string as statistics label`)
+      'Require non-empty string as statistics label')
     util.check(this.stats.has(label),
-               `Unknown stats label ${label}`)
+      `Unknown stats label ${label}`)
     return this.stats.get(label)
   }
 
@@ -101,7 +104,7 @@ class Env {
    */
   setStats (label, stats) {
     util.check(label && (typeof label === 'string'),
-               `Require non-empty string as stats label`)
+      'Require non-empty string as stats label')
     if (this.stats.has(label)) {
       this.appendLog('warn', `Statistics with label ${label} already exists`)
     }
@@ -115,7 +118,7 @@ class Env {
    */
   appendLog (level, message) {
     util.check(level && (typeof level === 'string') && Env.LOG_LEVELS.has(level),
-               `Invalid or unknown log level "${level}"`)
+      `Invalid or unknown log level "${level}"`)
     this.log.push([level, message])
   }
 

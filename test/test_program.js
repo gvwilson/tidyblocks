@@ -2,7 +2,6 @@
 
 const assert = require('assert')
 const random = require('random')
-const Blockly = require('blockly/blockly_compressed.js')
 
 const util = require('../libs/util')
 const DataFrame = require('../libs/dataframe')
@@ -278,9 +277,9 @@ describe('executes program', () => {
            `Missing or incorrect table`)
     const expectedLog = [
       ['log', 'head'],
-      ['log', 'report keyword left, right'],
+      ['log', 'saveAs keyword left, right'],
       ['log', 'headRequire'],
-      ['log', 'report unnamed 1 left, right']
+      ['log', 'saveAs unnamed 1 left, right']
     ]
     assert.deepEqual(env.log, expectedLog,
                      `Expected to see report in log`)
@@ -369,18 +368,20 @@ describe('seeds random number generation', () => {
   it('runs the seed block first', (done) => {
     const phrase = 'words words words'
     const json = [Program.FAMILY,
-                  [Pipeline.FAMILY,
-                   [Transform.FAMILY, 'data', 'colors']],
-                  [Pipeline.FAMILY,
-                   [Transform.FAMILY, 'seed', phrase]]]
+                   [Pipeline.FAMILY,
+                     [Transform.FAMILY, 'name', 'title'],
+                     [Transform.FAMILY, 'data', 'colors']],
+                   [Pipeline.FAMILY,
+                     [Transform.FAMILY, 'seed', phrase]]]
     const factory = new Restore()
     const program = factory.program(json)
     const env = new Env(INTERFACE)
     program.run(env)
     const expectedLog = [
       ['log', `seed ${phrase}`],
+      ['log', 'name title'],
       ['log', 'read colors'],
-      ['log', 'report unnamed 1 blue, green, name, red'],
+      ['log', 'saveAs title blue, green, name, red'],
     ]
     assert.deepEqual(env.log, expectedLog,
                     `Did not get expected running order`)

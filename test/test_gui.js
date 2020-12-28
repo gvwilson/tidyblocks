@@ -16,44 +16,41 @@ describe('creates the interface object', () => {
     const actual = gui.getJSON()
     const expected = ['@program', ['@pipeline', ['@transform', 'data', 'colors']]]
     assert.deepEqual(actual, expected,
-                     `Did not generate JSON correctly`)
+                     'Did not generate JSON correctly')
     done()
   })
 
   it('runs a program in the GUI', (done) => {
     const gui = new fixture.TestInterface()
-    const block = gui.workspace.newBlock('data_colors')
+    const block = gui.workspace.newBlock('control_name')
+    block.setFieldValue('title', 'NAME')
     block.hat = 'cap'
     gui.runProgram()
     const expected = [
-      ['log', 'read colors'],
-      ['log', 'report unnamed 1 blue, green, name, red']
+      ['log', 'name title']
     ]
     assert.deepEqual(gui.env.log, expected,
-                     `Program did not run as expected`)
+                     'Program did not run as expected')
     done()
   })
 
-  it('reports stray blocks', (done) => {
+  it('does not generate code for uncapped pipelines', (done) => {
     const gui = new fixture.TestInterface()
-    const colors = gui.workspace.newBlock('data_colors')
-    colors.hat = 'cap'
-    const arg = gui.workspace.newBlock('value_column')
-    arg.setFieldValue('keep', 'COLUMN')
-    const filter = gui.workspace.newBlock('transform_filter')
-    fixture.addSubBlock(filter, 'TEST', arg)
+    const name = gui.workspace.newBlock('control_name')
+    name.setFieldValue('title', 'NAME')
+    name.hat = 'cap'
+    gui.workspace.newBlock('data_colors') // should be no code
     const code = gui.getJSON()
-    const program = ["@program", ["@pipeline", ["@transform", "data", "colors"]]]
+    const program = ['@program', ['@pipeline', ['@transform', 'name', 'title']]]
     assert.deepEqual(code, program,
-                     `Did not generate correct code`)
+                     'Did not generate correct code')
     gui.runProgram()
     const expected = [
       ['warn', '1 stray stacks found'],
-      ['log', 'read colors'],
-      ['log', 'report unnamed 1 blue, green, name, red']
+      ['log', 'name title']
     ]
     assert.deepEqual(gui.env.log, expected,
-                     `Did not get stray count report`)
+                     'Did not get stray count report')
     done()
   })
 })

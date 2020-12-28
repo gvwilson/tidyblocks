@@ -5,7 +5,7 @@ const seedrandom = require('seedrandom')
 const stats = require('simple-statistics')
 
 const util = require('./util')
-const {ExprBase} = require('./expr')
+const { ExprBase } = require('./expr')
 const DataFrame = require('./dataframe')
 const Summarize = require('./summarize')
 const Running = require('./running')
@@ -31,7 +31,7 @@ class TransformBase {
     util.check(species && (typeof species === 'string') &&
                Array.isArray(requires) &&
                requires.every(x => (typeof x === 'string')),
-               `Bad parameters to constructor`)
+               'Bad parameters to constructor')
     this.species = species
     this.requires = requires
     this.input = input
@@ -47,9 +47,9 @@ class TransformBase {
 
   equalColumns (other) {
     util.check('columns' in this,
-               `This object must have columns`)
+               'This object must have columns')
     util.check('columns' in other,
-               `Other object must have columns`)
+               'Other object must have columns')
     return (other instanceof TransformBase) &&
       (this.species === other.species) &&
       (this.columns.length === other.columns.length) &&
@@ -68,11 +68,11 @@ class TransformBase {
 class TransformBin extends TransformBase {
   constructor (column, bins, label) {
     util.check(typeof column === 'string',
-               `Expected string as column name`)
+               'Expected string as column name')
     util.check(Number.isInteger(bins) && (bins > 0),
-               `Number of bins must be integer > 0`)
+               'Number of bins must be integer > 0')
     util.check(typeof label === 'string',
-               `Expected string as label name`)
+               'Expected string as label name')
     super('bins', [], true, false)
     this.column = column
     this.bins = bins
@@ -96,8 +96,7 @@ class TransformBin extends TransformBase {
   pickBin (value, low, high, numBins) {
     if (high === low) {
       return 1
-    }
-    else if (value === high) {
+    } else if (value === high) {
       return numBins
     }
     return 1 + Math.floor(numBins * (value - low) / (high - low))
@@ -112,9 +111,9 @@ class TransformBin extends TransformBase {
 class TransformCreate extends TransformBase {
   constructor (newName, expr) {
     util.check(typeof newName === 'string',
-               `Expected string as new name`)
+      'Expected string as new name')
     util.check(expr instanceof ExprBase,
-               `Expected expression`)
+      'Expected expression')
     super('create', [], true, false)
     this.newName = newName
     this.expr = expr
@@ -138,8 +137,8 @@ class TransformCreate extends TransformBase {
 class TransformData extends TransformBase {
   constructor (name) {
     util.check(typeof name === 'string',
-               `Expected string`)
-    super('read', [], false, false)
+      'Expected string')
+    super('read', [], true, false)
     this.name = name
   }
 
@@ -150,7 +149,7 @@ class TransformData extends TransformBase {
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.name}`)
     util.check(df === null,
-               `Cannot provide input dataframe to reader`)
+      'Cannot provide input dataframe to data block')
     const loaded = env.getData(this.name)
     return new DataFrame(loaded.data, loaded.columns)
   }
@@ -162,7 +161,7 @@ class TransformData extends TransformBase {
 class TransformDrop extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
-               `Expected array of columns`)
+      'Expected array of columns')
     super('drop', [], true, false)
     this.columns = columns
   }
@@ -184,7 +183,7 @@ class TransformDrop extends TransformBase {
 class TransformFilter extends TransformBase {
   constructor (expr) {
     util.check(expr instanceof ExprBase,
-               `Expected expression`)
+      'Expected expression')
     super('filter', [], true, false)
     this.expr = expr
   }
@@ -221,7 +220,7 @@ class TransformGlue extends TransformBase {
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.leftName} ${this.rightName} ${this.label}`)
     util.check(df === null,
-               `Cannot provide input dataframe to glue`)
+      'Cannot provide input dataframe to glue')
     const left = env.getData(this.leftName)
     const right = env.getData(this.rightName)
     return left.glue(this.leftName, right, this.rightName, this.label)
@@ -235,7 +234,7 @@ class TransformGlue extends TransformBase {
 class TransformGroupBy extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
-               `Expected array of columns`)
+      'Expected array of columns')
     super('groupBy', [], true, false)
     this.columns = columns
   }
@@ -273,11 +272,35 @@ class TransformJoin extends TransformBase {
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.leftName} ${this.leftCol} ${this.rightName} ${this.rightCol}`)
     util.check(df === null,
-               `Cannot provide input dataframe to join`)
+      'Cannot provide input dataframe to join')
     const left = env.getData(this.leftName)
     const right = env.getData(this.rightName)
     return left.join(this.leftName, this.leftCol,
                      right, this.rightName, this.rightCol)
+  }
+}
+
+/**
+ * Give a pipeline a name.
+ * @param {String} name Name to use for pipeline
+ */
+class TransformName extends TransformBase {
+  constructor (name) {
+    util.check(typeof name === 'string',
+      'Expected string')
+    super('name', [], false, false)
+    this.name = name
+  }
+
+  equal (other) {
+    return super.equal(other, 'name')
+  }
+
+  run (env, df) {
+    env.appendLog('log', `${this.species} ${this.name}`)
+    util.check(df === null,
+      'Cannot provide input dataframe to name block')
+    return null
   }
 }
 
@@ -288,8 +311,8 @@ class TransformJoin extends TransformBase {
 class TransformSaveAs extends TransformBase {
   constructor (label) {
     util.check(typeof label === 'string',
-               `Expected string`)
-    super('report', [], true, true)
+      'Expected string')
+    super('saveAs', [], true, true)
     this.label = label
   }
 
@@ -312,7 +335,7 @@ class TransformSaveAs extends TransformBase {
 class TransformSeed extends TransformBase {
   constructor (seed) {
     util.check(typeof seed === 'string',
-               `Expected string as seed`)
+      'Expected string as seed')
     super('seed', [], false, false, true) // is a control block
     this.seed = seed
   }
@@ -324,7 +347,7 @@ class TransformSeed extends TransformBase {
 
   run (env, df) {
     util.check(df === null,
-               `Cannot provide input dataframe to seed`)
+      'Cannot provide input dataframe to seed')
     env.appendLog('log', `${this.species} ${this.seed}`)
     random.use(seedrandom(this.seed))
     return df
@@ -338,7 +361,7 @@ class TransformSeed extends TransformBase {
 class TransformSelect extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
-               `Expected array of columns`)
+      'Expected array of columns')
     super('select', [], true, false)
     this.columns = columns
   }
@@ -361,7 +384,7 @@ class TransformSelect extends TransformBase {
 class TransformSequence extends TransformBase {
   constructor (newName, limit) {
     util.check(typeof newName === 'string',
-               `Expected string as new name`)
+      'Expected string as new name')
     super('sequence', [], true, false)
     this.newName = newName
     this.limit = limit
@@ -374,7 +397,7 @@ class TransformSequence extends TransformBase {
   run (env, df) {
     env.appendLog('log', `${this.species} ${this.newName} ${this.limit}`)
     const raw = Array.from(
-      {length: this.limit},
+      { length: this.limit },
       (v, k) => {
         const result = {}
         result[this.newName] = k + 1
@@ -392,9 +415,9 @@ class TransformSequence extends TransformBase {
 class TransformSort extends TransformBase {
   constructor (columns, reverse) {
     util.check(Array.isArray(columns),
-               `Expected array of columns`)
+      'Expected array of columns')
     util.check(typeof reverse === 'boolean',
-               `Expected Boolean`)
+      'Expected Boolean')
     super('sort', [], true, false)
     this.columns = columns
     this.reverse = reverse
@@ -418,11 +441,11 @@ class TransformSort extends TransformBase {
 class TransformSummarize extends TransformBase {
   constructor (action, column) {
     util.check(typeof action === 'string',
-               `Expected string as action`)
+      'Expected string as action')
     util.check(action in Summarize,
-               `Unknown summarization operation ${action}`)
+      `Unknown summarization operation ${action}`)
     util.check(typeof column === 'string',
-               `Expected string as column name`)
+      'Expected string as column name')
     super('summarize', [], true, false)
     this.action = action
     this.column = column
@@ -446,11 +469,11 @@ class TransformSummarize extends TransformBase {
 class TransformRunning extends TransformBase {
   constructor (action, column) {
     util.check(typeof action === 'string',
-               `Expected string as action`)
+      'Expected string as action')
     util.check(action in Running,
-               `Unknown running operation ${action}`)
+      `Unknown running operation ${action}`)
     util.check(typeof column === 'string',
-               `Expected string as column name`)
+      'Expected string as column name')
     super('running', [], true, false)
     this.action = action
     this.column = column
@@ -489,7 +512,7 @@ class TransformUngroup extends TransformBase {
 class TransformUnique extends TransformBase {
   constructor (columns) {
     util.check(Array.isArray(columns),
-               `Expected array of columns`)
+      'Expected array of columns')
     super('unique', [], true, false)
     this.columns = columns
   }
@@ -512,7 +535,7 @@ class TransformUnique extends TransformBase {
 class TransformPlot extends TransformBase {
   constructor (name, label, spec, fillin) {
     util.check(label && (typeof label === 'string'),
-               `Must provide non-empty label`)
+      'Must provide non-empty label')
     super(name, [], true, true)
     this.label = label
     this.spec = Object.assign({}, spec, fillin, {name})
@@ -535,18 +558,18 @@ class TransformBar extends TransformPlot {
   constructor (label, axisX, axisY) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
-               `Must provide non-empty strings for axes`)
+      'Must provide non-empty strings for axes')
     const spec = {
-      data: {values: null},
+      data: { values: null },
       autosize: 'fit',
       mark: 'bar',
       encoding: {
-        x: {field: axisX, type: 'ordinal'},
-        y: {field: axisY, type: 'quantitative'},
-        tooltip: {field: axisY, type: 'quantitative'}
+        x: { field: axisX, type: 'ordinal' },
+        y: { field: axisY, type: 'quantitative' },
+        tooltip: { field: axisY, type: 'quantitative' }
       }
     }
-    super('bar', label, spec, {axisX, axisY})
+    super('bar', label, spec, { axisX, axisY })
   }
 
   logParams () {
@@ -563,17 +586,17 @@ class TransformBox extends TransformPlot {
   constructor (label, axisX, axisY) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
-               `Must provide non-empty strings for axes`)
+      'Must provide non-empty strings for axes')
     const spec = {
-      data: {values: null},
+      data: { values: null },
       autosize: 'fit',
-      mark: {type: 'boxplot', extent: 1.5},
+      mark: { type: 'boxplot', extent: 1.5 },
       encoding: {
-        x: {field: axisX, type: 'ordinal'},
-        y: {field: axisY, type: 'quantitative'}
+        x: { field: axisX, type: 'ordinal' },
+        y: { field: axisY, type: 'quantitative' }
       }
     }
-    super('box', label, spec, {axisX, axisY})
+    super('box', label, spec, { axisX, axisY })
   }
 
   logParams () {
@@ -588,7 +611,7 @@ class TransformBox extends TransformPlot {
 class TransformDot extends TransformPlot {
   constructor (label, axisX) {
     util.check(axisX && (typeof axisX === 'string'),
-               `Must provide non-empty string for axis`)
+               'Must provide non-empty string for axis')
     const spec = {
       data: {values: null},
       autosize: 'fit',
@@ -624,7 +647,7 @@ class TransformHistogram extends TransformPlot {
   constructor (label, column, bins) {
     util.check(column && (typeof column === 'string') &&
                (typeof bins === 'number') && (bins > 0),
-               `Invalid parameters for histogram`)
+               'Invalid parameters for histogram')
     const spec = {
       data: {values: null},
       autosize: 'fit',
@@ -660,9 +683,9 @@ class TransformScatter extends TransformPlot {
   constructor (label, axisX, axisY, color, lm) {
     util.check(axisX && (typeof axisX === 'string') &&
                axisY && (typeof axisY === 'string'),
-               `Must provide non-empty strings for axes`)
+               'Must provide non-empty strings for axes')
     util.check((color === null) || (typeof color === 'string'),
-               `Must provide null or (empty) string for color`)
+               'Must provide null or (empty) string for color')
 
     const spec = {
       data: {values: null},
@@ -762,7 +785,7 @@ class TransformTTestPaired extends TransformStats {
     env.appendLog('log', `${this.species} ${this.label}`)
     const known = new Set(df.data.map(row => row[this.labelCol]))
     util.check(known.size === 2,
-               `Must have exactly two labels for data`)
+               'Must have exactly two labels for data')
     const [leftVal, rightVal] = Array.from(known)
     const leftVals = df.data
       .filter(row => (row[this.labelCol] === leftVal))
@@ -787,7 +810,7 @@ class TransformTTestPaired extends TransformStats {
 class TransformKMeansClustering extends TransformStats {
   constructor (axisX, axisY, numClusters, labels) {
     util.check(numClusters > 0,
-               `Require positive number of clusters`)
+               'Require positive number of clusters')
     super('k_means')
     this.axisX = axisX
     this.axisY = axisY
@@ -851,6 +874,7 @@ module.exports = {
   glue: TransformGlue,
   groupBy: TransformGroupBy,
   join: TransformJoin,
+  name: TransformName,
   saveAs: TransformSaveAs,
   seed: TransformSeed,
   select: TransformSelect,

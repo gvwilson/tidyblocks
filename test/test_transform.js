@@ -553,7 +553,20 @@ describe('transform equality tests', () => {
     done()
   })
 
-  it('compares saveAs reports', (done) => {
+  it('compares name', (done) => {
+    const name_a = new Transform.name('a')
+    const name_b = new Transform.name('b')
+    assert(name_a.equal(name_a),
+           `Same should match`)
+    assert(!name_a.equal(name_b),
+           `Names should matter`)
+    const groupBy = new Transform.groupBy(['left'])
+    assert(!name_a.equal(groupBy),
+           `Different transforms should not equal`)
+    done()
+  })
+
+  it('compares saveAs', (done) => {
     const report_a = new Transform.saveAs('a')
     const report_b = new Transform.saveAs('b')
     assert(report_a.equal(report_a),

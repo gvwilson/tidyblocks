@@ -23,7 +23,7 @@ describe('value code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('value_absent')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -33,7 +33,7 @@ describe('value code generation', () => {
     const block = w.newBlock('value_column')
     block.setFieldValue('orange', 'COLUMN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -43,7 +43,7 @@ describe('value code generation', () => {
     const block = w.newBlock('value_datetime')
     block.setFieldValue('1970-01-01', 'DATE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -53,7 +53,7 @@ describe('value code generation', () => {
     const block = w.newBlock('value_logical')
     block.setFieldValue('false', 'VALUE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -63,7 +63,7 @@ describe('value code generation', () => {
     const block = w.newBlock('value_number')
     block.setFieldValue(99, 'VALUE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -73,7 +73,7 @@ describe('value code generation', () => {
     const block = w.newBlock('value_text')
     block.setFieldValue('orange', 'VALUE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -82,7 +82,7 @@ describe('value code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('value_missing')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -92,7 +92,7 @@ describe('value code generation', () => {
     const block = w.newBlock('value_exponential')
     block.setFieldValue(0.5, 'RATE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -103,7 +103,7 @@ describe('value code generation', () => {
     block.setFieldValue(1.2, 'MEAN')
     block.setFieldValue(3.4, 'STDDEV')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -114,7 +114,7 @@ describe('value code generation', () => {
     block.setFieldValue(1.2, 'LOW')
     block.setFieldValue(3.4, 'HIGH')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
@@ -125,14 +125,16 @@ describe('expression code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('op_not')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for binary arithmetic', (done) => {
-    const expected = [Op.FAMILY, 'power',
-                      [Value.FAMILY, 'number', 1],
-                      [Value.FAMILY, 'number', 2]]
+    const expected = [
+      Op.FAMILY, 'power',
+      [Value.FAMILY, 'number', 1],
+      [Value.FAMILY, 'number', 2]
+    ]
     const w = fixture.workspace()
     const left = w.newBlock('value_number')
     left.setFieldValue(1, 'VALUE')
@@ -143,7 +145,7 @@ describe('expression code generation', () => {
     fixture.addSubBlock(block, 'LEFT', left)
     fixture.addSubBlock(block, 'RIGHT', right)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -155,7 +157,7 @@ describe('expression code generation', () => {
     const block = w.newBlock('op_negate')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -167,14 +169,16 @@ describe('expression code generation', () => {
     const block = w.newBlock('op_abs')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for comparisons', (done) => {
-    const expected = [Op.FAMILY, 'lessEqual',
-                      [Value.FAMILY, 'number', 1],
-                      [Value.FAMILY, 'number', 2]]
+    const expected = [
+      Op.FAMILY, 'lessEqual',
+      [Value.FAMILY, 'number', 1],
+      [Value.FAMILY, 'number', 2]
+    ]
     const w = fixture.workspace()
     const left = w.newBlock('value_number')
     left.setFieldValue(1, 'VALUE')
@@ -185,14 +189,16 @@ describe('expression code generation', () => {
     fixture.addSubBlock(block, 'LEFT', left)
     fixture.addSubBlock(block, 'RIGHT', right)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for extrema', (done) => {
-    const expected = [Op.FAMILY, 'maximum',
-                      [Value.FAMILY, 'number', 1],
-                      [Value.FAMILY, 'number', 2]]
+    const expected = [
+      Op.FAMILY, 'maximum',
+      [Value.FAMILY, 'number', 1],
+      [Value.FAMILY, 'number', 2]
+    ]
     const w = fixture.workspace()
     const left = w.newBlock('value_number')
     left.setFieldValue(1, 'VALUE')
@@ -203,14 +209,16 @@ describe('expression code generation', () => {
     fixture.addSubBlock(block, 'LEFT', left)
     fixture.addSubBlock(block, 'RIGHT', right)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for binary logical operations', (done) => {
-    const expected = [Op.FAMILY, 'and',
-                      [Value.FAMILY, 'logical', true],
-                      [Value.FAMILY, 'logical', false]]
+    const expected = [
+      Op.FAMILY, 'and',
+      [Value.FAMILY, 'logical', true],
+      [Value.FAMILY, 'logical', false]
+    ]
     const w = fixture.workspace()
     const left = w.newBlock('value_logical')
     left.setFieldValue('true', 'VALUE')
@@ -221,19 +229,22 @@ describe('expression code generation', () => {
     fixture.addSubBlock(block, 'LEFT', left)
     fixture.addSubBlock(block, 'RIGHT', right)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for logical negation', (done) => {
-    const expected = [Op.FAMILY, 'not', [Value.FAMILY, 'logical', false]]
+    const expected = [
+      Op.FAMILY, 'not',
+      [Value.FAMILY, 'logical', false]
+    ]
     const w = fixture.workspace()
     const arg = w.newBlock('value_logical')
     arg.setFieldValue('false', 'VALUE')
     const block = w.newBlock('op_not')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -244,12 +255,15 @@ describe('expression code generation', () => {
     block.setFieldValue('pink', 'COLUMN')
     block.setFieldValue(3, 'NUMBER')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for type checking', (done) => {
-    const expected = [Op.FAMILY, 'isLogical', [Value.FAMILY, 'number', 123]]
+    const expected = [
+      Op.FAMILY, 'isLogical',
+      [Value.FAMILY, 'number', 123]
+    ]
     const w = fixture.workspace()
     const arg = w.newBlock('value_number')
     arg.setFieldValue(123, 'VALUE')
@@ -257,12 +271,15 @@ describe('expression code generation', () => {
     block.setFieldValue('isLogical', 'TYPE')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for type conversion', (done) => {
-    const expected = [Op.FAMILY, 'toLogical', [Value.FAMILY, 'number', 123]]
+    const expected = [
+      Op.FAMILY, 'toLogical',
+      [Value.FAMILY, 'number', 123]
+    ]
     const w = fixture.workspace()
     const arg = w.newBlock('value_number')
     arg.setFieldValue(123, 'VALUE')
@@ -270,13 +287,15 @@ describe('expression code generation', () => {
     block.setFieldValue('toLogical', 'TYPE')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for datetime operations', (done) => {
-    const expected = [Op.FAMILY, 'datetime', 'toMonth',
-                      [Value.FAMILY, 'datetime', fixture.CONCERT_STR]]
+    const expected = [
+      Op.FAMILY, 'datetime', 'toMonth',
+      [Value.FAMILY, 'datetime', fixture.CONCERT_STR]
+    ]
     const w = fixture.workspace()
     const arg = w.newBlock('value_datetime')
     arg.setFieldValue(fixture.CONCERT_STR, 'DATE')
@@ -284,15 +303,17 @@ describe('expression code generation', () => {
     block.setFieldValue('toMonth', 'TYPE')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for conditional expressions', (done) => {
-    const expected = [Op.FAMILY, 'ifElse',
-                      [Value.FAMILY, 'logical', true],
-                      [Value.FAMILY, 'text', 'a'],
-                      [Value.FAMILY, 'text', 'b']]
+    const expected = [
+      Op.FAMILY, 'ifElse',
+      [Value.FAMILY, 'logical', true],
+      [Value.FAMILY, 'text', 'a'],
+      [Value.FAMILY, 'text', 'b']
+    ]
     const w = fixture.workspace()
     const cond = w.newBlock('value_logical')
     cond.setFieldValue('true', 'VALUE')
@@ -305,19 +326,19 @@ describe('expression code generation', () => {
     fixture.addSubBlock(block, 'LEFT', left)
     fixture.addSubBlock(block, 'RIGHT', right)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
 
 describe('transform code generation', () => {
   it('generates code for loading standard datasets', (done) => {
-    for (let name of ['colors', 'earthquakes', 'penguins', 'phish']) {
+    for (const name of ['colors', 'earthquakes', 'penguins', 'phish']) {
       const expected = [Transform.FAMILY, 'data', name]
       const w = fixture.workspace()
       const block = w.newBlock(`data_${name}`)
       const actual = getCode(block)
-      assert.deepEqual(expected, actual, `Mis-match`)
+      assert.deepStrictEqual(expected, actual, 'Mis-match')
     }
     done()
   })
@@ -330,13 +351,15 @@ describe('transform code generation', () => {
     block.setFieldValue(3, 'BINS')
     block.setFieldValue('labels', 'LABEL')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for create', (done) => {
-    const expected = [Transform.FAMILY, 'create', 'fresh',
-                      [Value.FAMILY, 'logical', true]]
+    const expected = [
+      Transform.FAMILY, 'create', 'fresh',
+      [Value.FAMILY, 'logical', true]
+    ]
     const w = fixture.workspace()
     const arg = w.newBlock('value_logical')
     arg.setFieldValue('true', 'VALUE')
@@ -344,7 +367,7 @@ describe('transform code generation', () => {
     block.setFieldValue('fresh', 'COLUMN')
     fixture.addSubBlock(block, 'VALUE', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -355,7 +378,7 @@ describe('transform code generation', () => {
     const block = w.newBlock(`data_user`)
     block.setFieldValue(name, 'NAME')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -365,20 +388,22 @@ describe('transform code generation', () => {
     const block = w.newBlock('transform_drop')
     block.setFieldValue('left, right', 'MULTIPLE_COLUMNS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
   it('generates code for filter', (done) => {
-    const expected = [Transform.FAMILY, 'filter',
-                      [Value.FAMILY, 'column', 'keep']]
+    const expected = [
+      Transform.FAMILY, 'filter',
+      [Value.FAMILY, 'column', 'keep']
+    ]
     const w = fixture.workspace()
     const arg = w.newBlock('value_column')
     arg.setFieldValue('keep', 'COLUMN')
     const block = w.newBlock('transform_filter')
     fixture.addSubBlock(block, 'TEST', arg)
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -388,7 +413,7 @@ describe('transform code generation', () => {
     const block = w.newBlock('transform_groupBy')
     block.setFieldValue('left, right', 'MULTIPLE_COLUMNS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -398,7 +423,7 @@ describe('transform code generation', () => {
     const block = w.newBlock('transform_select')
     block.setFieldValue('pink, orange', 'MULTIPLE_COLUMNS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -409,7 +434,7 @@ describe('transform code generation', () => {
     block.setFieldValue('name', 'COLUMN')
     block.setFieldValue(3, 'VALUE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -419,7 +444,7 @@ describe('transform code generation', () => {
     const block = w.newBlock('transform_sort')
     block.setFieldValue('pink, orange', 'MULTIPLE_COLUMNS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -430,7 +455,7 @@ describe('transform code generation', () => {
     block.setFieldValue('maximum', 'OP')
     block.setFieldValue('red', 'COLUMN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -441,7 +466,7 @@ describe('transform code generation', () => {
     block.setFieldValue('sum', 'OP')
     block.setFieldValue('red', 'COLUMN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -450,7 +475,7 @@ describe('transform code generation', () => {
     const w = fixture.workspace()
     const block = w.newBlock('transform_ungroup')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -460,7 +485,7 @@ describe('transform code generation', () => {
     const block = w.newBlock('transform_unique')
     block.setFieldValue('pink, orange', 'MULTIPLE_COLUMNS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
@@ -474,7 +499,7 @@ describe('plot code generation', () => {
     block.setFieldValue('red', 'X_AXIS')
     block.setFieldValue('green', 'Y_AXIS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -486,7 +511,7 @@ describe('plot code generation', () => {
     block.setFieldValue('red', 'X_AXIS')
     block.setFieldValue('green', 'Y_AXIS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -497,7 +522,7 @@ describe('plot code generation', () => {
     block.setFieldValue('figure_1', 'NAME')
     block.setFieldValue('red', 'X_AXIS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -509,7 +534,7 @@ describe('plot code generation', () => {
     block.setFieldValue('red', 'COLUMN')
     block.setFieldValue(5, 'BINS')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -522,7 +547,7 @@ describe('plot code generation', () => {
     block.setFieldValue('green', 'Y_AXIS')
     block.setFieldValue('blue', 'COLOR')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
@@ -536,7 +561,7 @@ describe('stats code generation', () => {
     block.setFieldValue('red', 'COLUMN')
     block.setFieldValue(3.5, 'MEAN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -548,7 +573,7 @@ describe('stats code generation', () => {
     block.setFieldValue('red', 'LABEL_COLUMN')
     block.setFieldValue('green', 'VALUE_COLUMN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -561,7 +586,7 @@ describe('stats code generation', () => {
     block.setFieldValue(3, 'NUMBER')
     block.setFieldValue('flavor', 'LABEL')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -574,7 +599,7 @@ describe('stats code generation', () => {
     block.setFieldValue('flavors', 'LABEL')
     block.setFieldValue('scores', 'SCORE')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
@@ -588,7 +613,7 @@ describe('combiner code generation', () => {
     block.setFieldValue('beta', 'RIGHT_TABLE')
     block.setFieldValue('L', 'COLUMN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -601,7 +626,7 @@ describe('combiner code generation', () => {
     block.setFieldValue('beta', 'RIGHT_TABLE')
     block.setFieldValue('B', 'RIGHT_COLUMN')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 
@@ -611,12 +636,23 @@ describe('combiner code generation', () => {
     const block = w.newBlock('transform_saveAs')
     block.setFieldValue('stuff', 'NAME')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
 
 describe('control code generation', () => {
+  it('generates code for pipeline name', (done) => {
+    const title = 'My Pipeline'
+    const expected = [Transform.FAMILY, 'name', title]
+    const w = fixture.workspace()
+    const block = w.newBlock('control_name')
+    block.setFieldValue(title, 'NAME')
+    const actual = getCode(block)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
+    done()
+  })
+
   it('generates code for seed', (done) => {
     const phrase = 'some random phrase'
     const expected = [Transform.FAMILY, 'seed', phrase]
@@ -624,17 +660,21 @@ describe('control code generation', () => {
     const block = w.newBlock('control_seed')
     block.setFieldValue(phrase, 'SEED')
     const actual = getCode(block)
-    assert.deepEqual(expected, actual, `Mis-match`)
+    assert.deepStrictEqual(expected, actual, 'Mis-match')
     done()
   })
 })
 
 describe('program code generation', () => {
   it('generates code for a program', (done) => {
-    const expected = [Program.FAMILY,
-                      [Pipeline.FAMILY,
-                       [Transform.FAMILY, 'data', 'colors'],
-                       [Transform.FAMILY, 'filter', [Value.FAMILY, 'column', 'keep']]]]
+    const expected = [
+      Program.FAMILY,
+      [Pipeline.FAMILY,
+        [Transform.FAMILY, 'data', 'colors'],
+        [Transform.FAMILY, 'filter',
+          [Value.FAMILY, 'column', 'keep']]
+      ]
+    ]
     const w = fixture.workspace()
     const colors = w.newBlock('data_colors')
     colors.hat = 'cap'
@@ -643,9 +683,10 @@ describe('program code generation', () => {
     const filter = w.newBlock('transform_filter')
     fixture.addSubBlock(filter, 'TEST', arg)
     fixture.stackBlocks(colors, filter)
-    const {code, strayCount} = Blockly.TidyBlocks.workspaceToCode(w)
+    const { code, strayCount } = Blockly.TidyBlocks.workspaceToCode(w)
     const actual = JSON.parse(code)
-    assert.deepEqual(actual, expected, `Mis-match`)
+    assert.deepStrictEqual(actual, expected, 'Mis-match')
+    assert.strictEqual(strayCount, 0, 'Should not find strays')
     done()
   })
 })

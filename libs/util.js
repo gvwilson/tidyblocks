@@ -127,7 +127,16 @@ const makeNumber = (value) => {
  * @return Safe value.
  */
 const safeValue = (value) => {
-  return isFinite(value) ? value : MISSING
+  // Infinities.
+  if (!isFinite(value)) {
+    return MISSING
+  }
+  // Negative zero.
+  if (value === 0) {
+    return 0
+  }
+  // Everything else.
+  return value
 }
 
 /**
