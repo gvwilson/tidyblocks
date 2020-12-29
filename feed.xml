@@ -11,6 +11,22 @@
   </author>
   
   <entry>
+    <title>Update on Join</title>
+    <link href="https://tidyblocks.tech/blog/2020/12/29/update-on-join/"/>
+    <updated>2020-12-29T02:00:00</updated>
+    <id>https://tidyblocks.tech/blog/2020/12/29/update-on-join/</id>
+    <content type="html">Our previous post
+outlined a new design for representing joins.
+To recap,
+in our existing implementation the pipelines that are producing data to be joined
+must use a saveAs block to save that data;
+each join block waits until the data it needs is available.
+This works,
+but the relationship between pipelines that produce data
+and pipelines that...</content>
+  </entry>
+  
+  <entry>
     <title>A New Design for Join</title>
     <link href="https://tidyblocks.tech/blog/2020/12/20/a-new-design-for-join/"/>
     <updated>2020-12-20T02:00:00</updated>
