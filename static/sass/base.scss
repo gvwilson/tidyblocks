@@ -254,6 +254,29 @@ $dotDiameter: 4px;
   background: $midBlue;
 }
 
+.disabledBtn{
+  background: #AAA;
+  color: #fff;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  min-width: 64px;
+  box-sizing: border-box;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 2.2;
+  border-radius: 4px;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  width: 175px;
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
 .dialogBtnIcon{
   color: #fff;
   font-size: 1.5rem;

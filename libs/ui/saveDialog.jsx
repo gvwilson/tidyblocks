@@ -421,6 +421,12 @@ export class LoadCsvDialog extends React.Component{
 
 
   render () {
+    const disabledBtnClass = "disabledBtn"
+    let submitBtnClass = "uploadBtn"
+    if (this.state.csvName.length == 0){
+      submitBtnClass = disabledBtnClass
+    }
+
     return (
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
         <input type="file" id="csvFile" ref="csvFile"
@@ -480,12 +486,11 @@ export class LoadCsvDialog extends React.Component{
             onChange={(evt) => this.handleCsvNameChange(evt)}
             fullWidth
           />
-          <a className={"uploadBtn"}
-            onClick={this.submit} >
+          <a className={submitBtnClass}
+            disabled
+            onClick={submitBtnClass == disabledBtnClass ? undefined : this.submit} >
             Submit
           </a>
-
-
         </DialogContent>
       }
         <DialogActions>
