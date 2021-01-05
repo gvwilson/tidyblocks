@@ -46,7 +46,6 @@ export class TidyBlocksApp extends React.Component {
     this.dataGridRef = React.createRef()
     this.resultGridRef = React.createRef()
     this.workspaceFileUploader = React.createRef()
-    this.csvFileUploader = React.createRef()
     this.saveCsvNameDialog = React.createRef()
     this.saveWorkspaceDialog = React.createRef()
     this.saveSvgDialog = React.createRef()
@@ -691,9 +690,7 @@ export class TidyBlocksApp extends React.Component {
   }
 
   // Processes and loads the csv after the file has been uploaded
-  loadCsv () {
-    const file = this.refs.csvFileUploader.files[0]
-    const name = file.name
+  loadCsv (file, name) {
     file.text().then(text => {
       const label = name.replace('.csv', '')
       const workspace = this.getWorkspace().state.workspace
@@ -706,10 +703,7 @@ export class TidyBlocksApp extends React.Component {
   }
 
   // Loads a csv file from a URL
-  loadCsvUrl(url){
-    // Get the end of the url, removing the extension (if it's there)
-    const formattedUrl = url.replace(/#[^#]+$/, "").replace(/\?[^\?]+$/, "").replace(/\/$/, "");
-    const label = formattedUrl.substr(formattedUrl.lastIndexOf("/") + 1).replace('.csv', '')
+  loadCsvUrl(url, label){
     fetch(url, {mode:'cors'}).then(response => response.text()).then(text => {
       const workspace = this.getWorkspace().state.workspace
       const df = new DataFrame(csvToTable(text))
@@ -747,7 +741,8 @@ export class TidyBlocksApp extends React.Component {
     return (
       <div className="splitPaneWrapper">
         <MuiThemeProvider theme={theme}>
-          <LoadCsvDialog ref={this.loadCsvDialog} fileUploadRef={this.refs.csvFileUploader} loadCsvUrl={this.loadCsvUrl}/>
+          <LoadCsvDialog ref={this.loadCsvDialog}
+            loadCsv={this.loadCsv} loadCsvUrl={this.loadCsvUrl}/>
           <SaveCsvFormDialog ref={this.saveCsvNameDialog} saveData={this.state.saveData}/>
           { this.blocklyRef.current &&
             <>
@@ -769,9 +764,6 @@ export class TidyBlocksApp extends React.Component {
             saveAllSvg={this.saveAllSvg}/>
           <input type="file" id="workspaceFile" ref="workspaceFileUploader"
             onChange={this.loadWorkspace}
-            style={{display: "none"}}/>
-          <input type="file" id="csvFile" ref="csvFileUploader"
-            onChange={this.loadCsv}
             style={{display: "none"}}/>
             <Splitter
               key="vertical-split"

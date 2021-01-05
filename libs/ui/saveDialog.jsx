@@ -280,7 +280,7 @@ export class SaveAllSvgFormDialog extends React.Component{
       filename: filename,
       linkId: 'downloadAllSvg',
       title: 'Save All SVGs',
-      contentText: 'Enter the name for your zip file.'
+      contentText: 'Enter the name for your zip file.',
     }
     this.handleClickOpen = this.handleClickOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
@@ -348,17 +348,25 @@ export class LoadCsvDialog extends React.Component{
     this.state = {
       open: false,
       url: '',
-
+      pageName: 'default',
+      csvName: '',
     }
     this.handleClickOpen = this.handleClickOpen.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.localFileUpload = this.localFileUpload.bind(this)
     this.urlLoad = this.urlLoad.bind(this)
     this.handleUrlChange = this.handleUrlChange.bind(this)
+    this.loadCsv = this.loadCsv.bind(this)
+    this.submit = this.submit.bind(this)
+    this.submitLoadCsv = this.submitLoadCsv.bind(this)
+    this.submitLoadUrlCsv = this.submitLoadUrlCsv.bind(this)
+
+    this.csvFile = React.createRef()
+
   }
 
   handleClickOpen () {
-    this.setState({open: true})
+    this.setState({pageName: 'default', csvName: '', url: '', open: true})
   }
 
   handleClose () {
@@ -370,53 +378,116 @@ export class LoadCsvDialog extends React.Component{
     this.setState({ url: value })
   }
 
+  handleCsvNameChange (evt) {
+    const value = evt.target.value
+    this.setState({ csvName: value })
+  }
+
   localFileUpload (fileUploadRef){
-    fileUploadRef.click()
-    this.handleClose()
+    this.refs.csvFile.click()
   }
 
   urlLoad(){
-    this.props.loadCsvUrl(this.state.url)
+    // Get the end of the url, removing the extension (if it's there)
+    const formattedUrl = this.state.url.replace(/#[^#]+$/, "").replace(/\?[^\?]+$/, "").replace(/\/$/, "");
+    const label = formattedUrl.substr(formattedUrl.lastIndexOf("/") + 1).replace('.csv', '')
+    this.setState({pageName: 'nameCsv', csvName: label, type: 'url'})
+  }
+
+  loadCsv(){
+    const file = this.refs.csvFile.files[0]
+    const name = file.name
+    const label = name.replace('.csv', '')
+    this.setState({pageName: 'nameCsv', csvName: label, type: 'localFile'})
+  }
+
+  submit(){
+      if (this.state.type == 'localFile'){
+        this.submitLoadCsv()
+      } else if (this.state.type == 'url'){
+        this.submitLoadUrlCsv()
+      }
+  }
+
+  submitLoadCsv(){
+    this.props.loadCsv(this.refs.csvFile.files[0], this.state.csvName)
     this.handleClose()
   }
+
+  submitLoadUrlCsv(){
+    this.props.loadCsvUrl(this.state.url, this.state.csvName)
+    this.handleClose()
+  }
+
 
   render () {
     return (
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <input type="file" id="csvFile" ref="csvFile"
+          onChange={this.loadCsv}
+          style={{display: "none"}}/>
+
         <DialogTitle id="form-dialog-title">Load CSV</DialogTitle>
+        { this.state.pageName == 'default' ?
+          <>
+            <DialogContent>
+              <DialogContentText>
+                Load a file from your local machine
+              </DialogContentText>
+
+                <a className={"uploadBtn"}
+                  onClick={(e) => this.localFileUpload(this.csvFile)} >
+                  <FontAwesomeIcon className="dialogBtnIcon"icon={faFileUpload} />
+                  Select a File
+                </a>
+
+            </DialogContent>
+            <DialogContent>
+              <DialogContentText >
+                or upload from a URL
+              </DialogContentText>
+              <TextField
+                autoFocus
+                margin="dense"
+                id="url"
+                placeholder="http://website.com/csvFile.csv"
+                label="Url"
+                type="text"
+                value={this.state.url}
+                onChange={(evt) => this.handleUrlChange(evt)}
+                fullWidth
+              />
+              <a className={"uploadBtn"}
+                onClick={this.urlLoad} >
+                <FontAwesomeIcon className="dialogBtnIcon"icon={faCloudUploadAlt} />
+                Load Url
+              </a>
+            </DialogContent>
+          </>
+      :
         <DialogContent>
           <DialogContentText>
-            Load a file from your local machine
-          </DialogContentText>
-
-            <a className={"uploadBtn"}
-              onClick={(e) => this.localFileUpload(this.props.fileUploadRef)} >
-              <FontAwesomeIcon className="dialogBtnIcon"icon={faFileUpload} />
-              Select a File
-            </a>
-
-        </DialogContent>
-        <DialogContent>
-          <DialogContentText >
-            or upload from a URL
+            What name would you like to use for this CSV?
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="url"
-            placeholder="http://website.com/csvFile.csv"
-            label="Url"
+            placeholder="CSV File Name"
+            label="CSV Name"
             type="text"
-            value={this.state.url}
-            onChange={(evt) => this.handleUrlChange(evt)}
+            value={this.state.csvName}
+            onChange={(evt) => this.handleCsvNameChange(evt)}
             fullWidth
           />
           <a className={"uploadBtn"}
-            onClick={this.urlLoad} >
-            <FontAwesomeIcon className="dialogBtnIcon"icon={faCloudUploadAlt} />
-            Load Url
+            onClick={this.submit} >
+            Submit
           </a>
+
+
         </DialogContent>
+      }
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">
             Cancel
