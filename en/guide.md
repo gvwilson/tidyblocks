@@ -19,9 +19,10 @@ language: en
 </div>
 
 <div class="guide_rhs">
+
 A blocks-based tool for tidy data manipulation and analysis.
 Please see <https://tidyblocks.tech> for a free online version
-or visit [our GitHub repository]({{site.repo}}).
+or visit [our GitHub repository]({{ site.repo | absolute_url }}).
 
 This work is made freely available under the [Hippocratic License]({{ '/license/' | relative_url }}).
 Contributions of all kinds are welcome:
