@@ -206,7 +206,7 @@ function MultiDataGrid (props) {
         <div className="emptyPanelWrapper">
           <FontAwesomeIcon className="panelIcon"icon={faDatabase} />
           <p className="emptyPanelText">You aren't currently displaying any {props.descriptorLabel}.</p>
-          <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+          <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
           </p>
         </div>
       }
@@ -254,7 +254,7 @@ function MultiStatsGrid (props) {
           <div className="emptyPanelWrapper">
             <FontAwesomeIcon className="panelIcon"icon={faTable} />
             <p className="emptyPanelText">You aren't currently displaying any stats.</p>
-            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="/guide/" className="guideLink">our guide</a>.
+            <p className="emptyPanelText"> To learn more about getting started visit&nbsp;<a href="./guide/" className="guideLink">our guide</a>.
             </p>
           </div>
         </div>
