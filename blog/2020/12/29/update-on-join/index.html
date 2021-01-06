@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: Update on Join</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/el/">Ελληνικα</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide/">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Examples</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/examples/">English</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/faq/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/faq/">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks: Update on Join</h1>
+      <p>Our <a href="https://tidyblocks.tech/blog/2020/12/20/a-new-design-for-join/">previous post</a>
+outlined a new design for representing joins.
+To recap,
+in our existing implementation the pipelines that are producing data to be joined
+must use a <code>saveAs</code> block to save that data;
+each <code>join</code> block waits until the data it needs is available.
+This works,
+but the relationship between pipelines that produce data
+and pipelines that consume it is implicit,
+i.e.,
+the most complex operation we support is invisible in the user interface.</p>
+<p>The obvious way to fix this is to draw lines from producers to consumers,
+but Blockly doesn't support that.
+What we have tried instead is to nest the two producing pipelines in an E-shaped block:</p>
+<div align="center"><img src="/files/2020/12/e-block-screenshot.png" width="300" alt="E-block joins"/></div>
+<p>and more recently a C-shaped block
+where one table comes in the top and the other is nested:</p>
+<div align="center"><img src="/files/2020/12/c-block-prototype.png" width="300" alt="Cxs-block joins"/></div>
+<p>But there's a problem:
+what shape should <code>data</code> blocks be?</p>
+<ol>
+<li>
+<p>There's a convention in Scratch-style programs
+that blocks that can be the start of a pipeline have a curved cap on top
+rather than a connector tab
+so that users can see how they're supposed to be used.</p>
+</li>
+<li>
+<p>Our <code>data</code> blocks (and random number generation blocks) currently have these curved caps
+because every pipeline needs to start with data.</p>
+</li>
+<li>
+<p>In order for the inner pipeline of a <code>join</code> to start with a <code>data</code> block,
+the <code>data</code> block must have a connector tab on top instead.</p>
+</li>
+<li>
+<p>But then simple pipelines can't start with <code>data</code> blocks.</p>
+</li>
+</ol>
+<p>We've thought of several fixes, none of which are satisfying.
+The first is to allow pipelines to start with <code>data</code> blocks that have connector tabs on top.
+We can make this work, but it breaks the (very strong) convention that
+pipelines start with capped blocks.</p>
+<p>The second is to create a capped <code>name</code> block whose sole purpose is to start a pipeline.
+This is what the second screenshot above uses,
+and we managed to convince ourselves that it was a good thing in its own right:
+students can use the titles to name parts of a multi-part homework assignment
+and the titles can be used as default names for the pipelines' output
+(instead of the &quot;unnamed result #123&quot; names we are using right now).</p>
+<p>However,
+if we take the second approach,
+there's nothing to stop a user from using something that <em>isn't</em> a <code>data</code> block
+as the first block inside a <code>join</code> block.
+Blocks like <code>filter</code> and <code>select</code> also have a connector tab on top,
+but TidyBlocks shouldn't allow users to start a sub-pipeline with them.</p>
+<p>The ideal solution (for some value of &quot;ideal&quot;) would be
+to provide different kinds of connector tabs
+to show what can be connected to what,
+but Blockly doesn't seem to support that:
+we can change th shape of <em>all</em> connectors,
+but not provide multiple kinds.
+There is a mechanism to forbid certain connections programmatically,
+but we think it would be very frustrating for users,
+who (quite reasonably) will expect that two blocks with identical top connectors ought to be connectable the same way.</p>
+<p>So we're back to square one:
+the things we can implement don't seem intuitive,
+and we can't implement the things that would be intuitive.
+We'd be very grateful for ideas:
+if you have any,
+please <a href="mailto:info@tidyblocks.tech">email us</a>
+or <a href="https://twitter.com/tidyblocks">reach out on Twitter</a>.</p>
+<p>Thanks in advance,
+and have a safe and happy New Year.</p>
+
+      <p align="right"><em>— Greg Wilson / 2020-12-29</em></p>
+    </main>
+    <footer>
+  <!--
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  -->
+  <a target="_blank" href="https://github.com/tidyblocks/tidyblocks/"><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+
+  </body>
+</html>
