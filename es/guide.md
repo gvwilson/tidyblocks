@@ -18,6 +18,7 @@ language: es
 </div>
 
 <div class="guide_rhs">
+
 Una herramienta basada en bloques para la manipulación y el análisis de datos ordenados.
 Por favor ve a <https://tidyblocks.tech> o para una versión gratuita en línea
 visita [nuestro reprositoria de GitHub]({{site.repo}}).
