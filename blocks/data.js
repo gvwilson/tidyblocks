@@ -119,6 +119,14 @@ const MESSAGES = {
       pt: 'Gerar uma sequencia 1..N'
     }
   },
+  spotify: {
+    message0: {
+      en: 'Spotify'
+    },
+    tooltip: {
+      en: 'Spotify song data'
+    }
+  },
   data_user: {
     message0: {
       ar: 'بيانات المسته %1',
@@ -219,6 +227,16 @@ const setup = (language) => {
       tooltip: msg.get('sequence.tooltip'),
       helpUrl: './guide/#sequence'
     },
+    // Spotify
+    {
+      type: 'data_spotify',
+      message0: msg.get('spotify.message0'),
+      nextStatement: null,
+      style: 'data_block',
+      hat: 'cap',
+      tooltip: msg.get('spotify.tooltip'),
+      helpUrl: './guide/#spotify'
+    },
     // User data
     {
       type: 'data_user',
@@ -263,6 +281,11 @@ const setup = (language) => {
     const column = block.getFieldValue('COLUMN')
     const value = block.getFieldValue('VALUE')
     return `["@transform", "sequence", "${column}", ${value}]`
+  }
+
+  // Spotify
+  Blockly.TidyBlocks['data_spotify'] = (block) => {
+    return `["@transform", "data", "spotify"]`
   }
 
   // User data

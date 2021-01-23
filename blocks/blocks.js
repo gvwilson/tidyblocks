@@ -120,6 +120,7 @@ const createXmlConfig = (language) => {
       <block type="data_penguins"></block>
       <block type="data_phish"></block>
       <block type="data_sequence"></block>
+      <block type="data_spotify"></block>
       <block type="data_user"></block>
     </category>
     <category name="${msg.get('transform')}" colour="${TRANSFORM_COLOR}">

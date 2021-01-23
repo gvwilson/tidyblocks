@@ -13,6 +13,7 @@ const COLORS = require('../data/colors')
 const EARTHQUAKES = require('../data/earthquakes')
 const PENGUINS = require('../data/penguins')
 const PHISH = require('../data/phish')
+const SPOTIFY = require('../data/spotify-songs')
 
 /**
  * User interface mediator.
@@ -75,6 +76,7 @@ class UserInterface {
     this.userData.set('earthquakes', new DataFrame(EARTHQUAKES))
     this.userData.set('penguins', new DataFrame(PENGUINS))
     this.userData.set('phish', new DataFrame(PHISH))
+    this.userData.set('spotify', new DataFrame(SPOTIFY))
   }
 }
 

@@ -61,6 +61,36 @@ Create a sequence of numbers from 1 to N inclusive.
 - **range**: The upper limit of the range.
 </div>
 
+<div id="spotify">
+<h3>Spotify</h3>
+
+<img class="block" src="{{ './data_spotify.svg' | relative_url }}" alt="spotify block"/>
+
+| Column            |
+| ----------------- |
+| track_name |
+| track_artist |
+| track_popularity |
+| track_album_name |
+| track_album_release_date |
+| playlist_name |
+| playlist_genre |
+| playlist_subgenre |
+| danceability |
+| energy |
+| key |
+| loudness |
+| mode |
+| speechiness |
+| acousticness |
+| instrumentalness |
+| liveness |
+| valence |
+| tempo |
+| duration_ms |
+
+</div>
+
 <div id="user">
 <h3>User Data</h3>
 
