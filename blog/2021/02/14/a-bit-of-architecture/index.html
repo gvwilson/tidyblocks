@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TidyBlocks: A Bit of Architecture</title>
+    <link rel="stylesheet" href="/dist/css/base.min.css" type="text/css">
+  </head>
+  <body class="jekyllBody">
+    <nav>
+      <div class="navDiv">
+  <a href="/"><img id="img_logo" src="/static/logo.svg" alt="TidyBlocks logo" width="5%" /></a>
+
+  <div class="navRight">
+
+    <nav class="topnav">
+      <ul>
+        <li>
+          <a href="#">TidyBlocks</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ar/">اَلْعَرَبِيَّةُ</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/el/">Ελληνικα</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/en/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/es/">Español</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/it/">Italiano</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/ko/">한국어</a></li>
+            <br/>
+            <li class="hidden-li"><a target="_blank" class="hidden-a" href="/pt/">Português</a></li>
+          </ul>
+        </li>
+        <li><a href="/blog/">Blog</a></li>
+        <li>
+          <a href="#">Guide</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/guide/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/guide/">Español</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Examples</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/examples/">English</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">FAQ</a>
+          <ul class="hidden-ul">
+            <li class="hidden-li"><a class="hidden-a" href="/en/faq/">English</a></li>
+            <br/>
+            <li class="hidden-li"><a class="hidden-a" href="/es/faq/">Español</a></li>
+          </ul>
+        </li>
+        <li><a href="mailto:info@tidyblocks.tech">contact</a></li>
+      </ul>
+    </nav>
+</div>
+
+    </nav>
+    <main style="margin-right:15rem;">
+      <h1>TidyBlocks: A Bit of Architecture</h1>
+      <p>To understand how TidyBlocks works,
+suppose our chains can have two kinds of blocks:
+<code>assign</code> (which creates a  variable and gives it a value)
+and <code>print</code> (which shows the value of a  variable).
+When we create a value it can be a number or the negation,
+addition, or multiplication of an expression.
+Our design has three parts:</p>
+<ol>
+<li>
+<p>The GUI, which is made up of the blocks users drag around.
+We'll ignore that for now.</p>
+</li>
+<li>
+<p>Each block knows how to generate a small JSON array
+containing information about its settings.</p>
+</li>
+<li>
+<p>Finally,
+there is an execution engine that knows how to walk such an array
+and run the requested operations.</p>
+</li>
+</ol>
+<p>We'll look at creating the JSON first.</p>
+<p>Step 1: let's create a generic class that represents a block.</p>
+<pre><code class="language-js">class Block {
+  // Need to know what kind of block this is.
+  constructor (name) {
+    this.name = name
+  }
+
+  // Get the JSON for this block. Every derived class must implement this!
+  getJSON () {
+    assert(false, 'Must implement')
+  }
+}
+</code></pre>
+<p>Step 2: a <code>print</code> block knows how to print a variable.</p>
+<pre><code class="language-js">class PrintBlock extends Block {
+  // We always construct the block with the right name and create an empty
+  // field for the variable name. The GUI is responsible for setting this
+  // field when the user types something.
+  constructor () {
+    super(&quot;print&quot;)
+    this.variable = null
+  }
+
+  // Get a JSON array saying &quot;print this block&quot;.
+  getJSON () {
+    assert(this.variable !== null, &quot;Must set variable name&quot;)
+    return [this.name, this.variable]
+  }
+}
+</code></pre>
+<p>Step 3: an <code>assign</code> block. Notice that its <code>.getJSON</code> method
+relies on the <code>.getJSON()</code> method of the expression being assigned.</p>
+<pre><code class="language-js">class AssignBlock extends Block {
+  // As before, the constructor sets up everything.  The GUI is responsible for
+  // making sure that the .variable and .expression fields are filled in.
+  constructor () {
+    super(&quot;assign&quot;)
+    this.variable = null
+    this.expression = null
+  }
+
+  // Get a JSON array saying &quot;assign to a variable&quot;. The array has the name,
+  // the name of the variable, and _a nested array_ created by the expression's
+  // .getJSON() method. Since we could assign any kind of expression to the
+  // variable, we ask the expression to describe itself.
+  getJSON () {
+    assert(this.variable !== null, &quot;Must set variable name&quot;)
+    assert(this.expression !== null, &quot;Must set expression&quot;)
+    return [this.name, this.variable, this.expression.getJSON()]
+  }
+}
+</code></pre>
+<p>Step 4: we need a generic base class for expressions.</p>
+<pre><code class="language-js">class Expression {
+  // As with blocks, we need to know what kind of expression this is.
+  constructor (name) {
+    this.name = name
+  }
+
+  // Get the JSON for this block. Every derived class must implement this!
+  getJSON () {
+    assert(false, 'Must implement')
+  }
+}
+</code></pre>
+<p>Step 5: let's represent numbers and variables.</p>
+<pre><code class="language-js">class Number extends Expression {
+  // Numbers are just themselves. Again, the GUI is responsible for setting
+  // 'value' to a number.
+  constructor () {
+    super(&quot;number&quot;)
+    this.value = null
+  }
+
+  // The JSON is &quot;what am I?&quot; and &quot;what value do I have?&quot;
+  getJSON () {
+    return [this.name, this.value]
+  }
+}
+
+class Variable extends Expression {
+  // Variables are names to be looked up.
+  constructor () {
+    super(&quot;variable&quot;)
+    this.variable = null
+  }
+
+  getJSON () {
+    return [this.name, this.variable]
+  }
+}
+</code></pre>
+<p>Step 6: we can now create a block that negates a number.</p>
+<pre><code class="language-js">class Negation extends Expression {
+  // The .child member will be another expression - the GUI will set it
+  // when the user inserts a sub-block.
+  constructor () {
+    super(&quot;negation&quot;)
+    this.child = null
+  }
+
+  // As with the top-level 'assign' block, we have to ask the child for
+  // its JSON.
+  getJSON () {
+    return [this.name, this.child.getJSON()]
+  }
+}
+</code></pre>
+<p>We can also create a block that represents a generic binary expression.
+This stores the operator's name as a string
+and the JSON representations of the left and right operands.</p>
+<pre><code class="language-js">class Binary extends Expression {
+  // This is the most complicated expression block, but it's a straightforward
+  // extension of what we've seen before.
+  constructor () {
+    super(&quot;binary&quot;)
+    this.op = null // UI will set it to &quot;add&quot;, &quot;subtract&quot;, etc.
+    this.left = null // Left operand.
+    this.right = null // Right operand.
+  }
+
+  // Now we have to say &quot;this is a binary operation, here's the operation, and
+  // here's the JSON for the two operands.&quot;
+  getJSON () {
+    return [this.name, this.op, this.left.getJSON(), this.right.getJSON()]
+  }
+}
+</code></pre>
+<p>Let's pause for a moment and test this out. I want blocks that represent:</p>
+<pre><code>x := 1
+y := 2
+z := 3 * y + x
+print z
+</code></pre>
+<p>As noted in comments above,
+I'm going to assign values to the member variables of the objects myself.
+In TidyBlocks,
+this happens when the user types a number into a field
+or selects an operator with a pulldown.</p>
+<pre><code class="language-js">// Create the number 1
+const number_1 = new Number()
+number_1.value = 1
+console.log(`number_1 as JSON is ${JSON.stringify(number_1.getJSON())}`)
+</code></pre>
+<pre><code>number_1 as JSON is [&quot;number&quot;,1]
+</code></pre>
+<pre><code class="language-js">// Assign the number 1 to the variable x.
+// Note that this doesn't actually _do_ that - instead, it creates the instruction to do that.
+const assign_to_x = new AssignBlock()
+assign_to_x.variable = 'x'
+assign_to_x.expression = number_1
+console.log(`assign_to_x as JSON is ${JSON.stringify(assign_to_x.getJSON())}`)
+</code></pre>
+<pre><code>assign_to_x as JSON is [&quot;assign&quot;,&quot;x&quot;,[&quot;number&quot;,1]]
+</code></pre>
+<pre><code class="language-js">// Let's ceate some more numbers and variables
+
+const number_2 = new Number()
+number_2.value = 2
+const assign_to_y = new AssignBlock()
+assign_to_y.variable = 'y'
+assign_to_y.expression = number_2
+
+const number_3 = new Number()
+number_3.value = 3
+
+const variable_y = new Variable()
+variable_y.variable = 'y'
+
+const multiply = new Binary() // will represent '3 * y'
+multiply.op = &quot;multiply&quot;
+multiply.left = number_3
+multiply.right = variable_y
+
+const variable_x = new Variable()
+variable_x.variable = 'x'
+
+const add = new Binary() // will represent '3 * y + x'
+add.op = &quot;add&quot;
+add.left = multiply
+add.right = variable_x
+
+const assign_to_z = new AssignBlock()
+assign_to_z.variable = 'z'
+assign_to_z.expression = add
+console.log(`assign_to_z as JSON is ${JSON.stringify(assign_to_z.getJSON())}`)
+</code></pre>
+<pre><code>assign_to_z as JSON is [&quot;assign&quot;,&quot;z&quot;,[&quot;binary&quot;,&quot;add&quot;,[&quot;binary&quot;,&quot;multiply&quot;,[&quot;number&quot;,3],[&quot;variable&quot;,&quot;y&quot;]],[&quot;variable&quot;,&quot;x&quot;]]]
+</code></pre>
+<p>Step 7: create a class to represent a chain of blocks.</p>
+<pre><code class="language-js">class Chain {
+  constructor () {
+    this.name = 'chain'
+    this.blocks = []
+  }
+
+  addBlock (block) {
+    this.blocks.push(block)
+  }
+
+  getJSON () {
+    return [this.name, ...this.blocks.map(child =&gt; child.getJSON())]
+  }
+}
+</code></pre>
+<p>Let's test this out.  It'll be much simpler to read if we pretty-print the JSON.</p>
+<pre><code class="language-js">const print_z = new PrintBlock()
+print_z.variable = 'z'
+
+const chain = new Chain()
+chain.addBlock(assign_to_x)
+chain.addBlock(assign_to_y)
+chain.addBlock(assign_to_z)
+chain.addBlock(print_z)
+console.log(`assign_to_z as JSON is ${JSON.stringify(chain.getJSON(), null, 2)}`)
+</code></pre>
+<pre><code>assign_to_z as JSON is [
+  &quot;chain&quot;,
+  [
+    &quot;assign&quot;,
+    &quot;x&quot;,
+    [&quot;number&quot;, 1]
+  ],
+  [
+    &quot;assign&quot;,
+    &quot;y&quot;,
+    [&quot;number&quot;, 2]
+  ],
+  [
+    &quot;assign&quot;,
+    &quot;z&quot;,
+    [
+      &quot;binary&quot;,
+      &quot;add&quot;,
+      [
+        &quot;binary&quot;,
+        &quot;multiply&quot;,
+        [&quot;number&quot;, 3],
+        [&quot;variable&quot;, &quot;y&quot;]
+      ],
+      [&quot;variable&quot;, &quot;x&quot;]
+    ]
+  ],
+  [&quot;print&quot;, &quot;z&quot;]
+]
+</code></pre>
+<p>This is where the UI ends and the execution engine begins.
+Everything above this point is doing the work of the GUI
+to build some JSON that describes the operations we want to execute.
+Everything below takes that JSON and does calculations.</p>
+<p>Step 8: it's time to evaluate. We need two things:</p>
+<ul>
+<li><code>environment</code>: a lookup table of known variables.</li>
+<li><code>what</code>: the block to evaluate.</li>
+</ul>
+<p>We will rely on a lookup table called HANDLERS that we define below.</p>
+<pre><code class="language-js">const evaluate = (environment, what) =&gt; {
+  const name = what[0]
+  assert(name in HANDLERS, `Don't know how to handle ${name}`)
+  return HANDLERS[name](environment, ...what.slice(1)) // Pass everything else in the block to the handler.
+}
+</code></pre>
+<p>Step 9: here's our table of handlers.
+Each must take the environment as its first argument
+but can take anumber of other other arguments.</p>
+<pre><code class="language-js">const HANDLERS = {
+  chain: (environment, ...blocks) =&gt; {
+    console.log('...chain of blocks')
+    for (const block of blocks) {
+      evaluate(environment, block)
+    }
+    return null // nobody should expect a value
+  },
+
+  print: (environment, name) =&gt; {
+    console.log('...print', name)
+    assert(name in environment, `No such variable ${name}`)
+    console.log(environment[name])
+    return null // nobody should expect a value
+  },
+
+  assign: (environment, name, expression) =&gt; {
+    console.log('...assign', name)
+    environment[name] = evaluate(environment, expression)
+    return null // nobody should expect a value
+  },
+
+  number: (environment, value) =&gt; {
+    console.log('...number', value)
+    return value
+  },
+
+  variable: (environment, name) =&gt; {
+    console.log('...variable', name)
+    assert(name in environment, `No such variable ${name}`)
+    return environment[name]
+  },
+
+  negation: (environment, child) =&gt; {
+    console.log('...negation')
+    return - evaluate(environment, child) // All this work for a forking minus sign...
+  },
+
+  binary: (environment, op, left, right) =&gt; {
+    console.log('...binary', op)
+    left = evaluate(environment, left)
+    right = evaluate(environment, right)
+    let result = null
+    switch (op) {
+    case 'add':
+      result = left + right
+      break
+    case 'multiply':
+      result = left * right
+      break
+    default:
+      assert(false, `Unknown operation ${op}`)
+    }
+    return result
+  }
+}
+</code></pre>
+<p>Let's end by trying this out on the chain we created earlier.</p>
+<pre><code class="language-js">const environment = {} // no variables defined yet
+const program = chain.getJSON()
+const result = evaluate(environment, program)
+</code></pre>
+<pre><code>...chain of blocks
+...assign x
+...number 1
+...assign y
+...number 2
+...assign z
+...binary add
+...binary multiply
+...number 3
+...variable y
+...variable x
+...print z
+7
+</code></pre>
+
+      <p align="right"><em>— Greg Wilson / 2021-02-14</em></p>
+    </main>
+    <footer>
+  <!--
+  <a target="_blank" href="/docs/"><img class="footer" src="/static/source-code.svg" alt="Source Docs" /></a>
+  -->
+  <a target="_blank" href="https://github.com/tidyblocks/tidyblocks/"><img class="footer" src="/static/github.svg" alt="Repository" /></a>
+  <a href="/conduct/"><img class="footer" src="/static/code-of-conduct.svg" alt="Code of Conduct" /></a>
+  <a href="/contributing/"><img class="footer" src="/static/contributing.svg" alt="Contributing" /></a>
+  <a target="_blank" href="https://twitter.com/tidyblocks"><img class="footer" src="/static/twitter.svg" alt="Contributing" /></a>
+</footer>
+
+  </body>
+</html>

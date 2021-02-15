@@ -11,6 +11,20 @@
   </author>
   
   <entry>
+    <title>A Bit of Architecture</title>
+    <link href="https://tidyblocks.tech/blog/2021/02/14/a-bit-of-architecture/"/>
+    <updated>2021-02-14T02:00:00</updated>
+    <id>https://tidyblocks.tech/blog/2021/02/14/a-bit-of-architecture/</id>
+    <content type="html">To understand how TidyBlocks works,
+suppose our chains can have two kinds of blocks:
+assign (which creates a  variable and gives it a value)
+and print (which shows the value of a  variable).
+When we create a value it can be a number or the negation,
+addition, or multiplication of an expression.
+Our design...</content>
+  </entry>
+  
+  <entry>
     <title>Update on Join</title>
     <link href="https://tidyblocks.tech/blog/2020/12/29/update-on-join/"/>
     <updated>2020-12-29T02:00:00</updated>
