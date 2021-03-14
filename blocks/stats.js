@@ -18,7 +18,8 @@ const MESSAGES = {
       es: 'T-test para una muestra',
       it: 'T-test di un campione',
       ko: '독립표본 t-검정',
-      pt: 'Teste-T de amostra única'
+      pt: 'Teste-T de amostra única',
+      ch: '单样本T检验'
     },
     message1: {
       ar: 'الإسم %1 العمود %2 الوسط الحسابي \u03BC %3',
@@ -27,7 +28,8 @@ const MESSAGES = {
       es: 'nombre %1 columna %2 media \u03BC %3',
       it: 'nome %1 colonna %2 media \u03BC %3',
       ko: '이름 %1 열 %2 평균 \u03BC %3',
-      pt: 'nome %1 coluna %2 média \u03BC %3'
+      pt: 'nome %1 coluna %2 média \u03BC %3',
+      ch: '检验结果 %1 列 %2  均值\u03BC  %3  '
     },
     args1_name: {
       ar: 'الإسم',
@@ -36,7 +38,8 @@ const MESSAGES = {
       es: 'nombre',
       it: 'nome',
       ko: '이름',
-      pt: 'nome'
+      pt: 'nome',
+      ch: '命名'
     },
     args1_column: {
       ar: 'العمود',
@@ -45,7 +48,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     tooltip: {
       ar: 'إختبار (ت) ذو الاتجاهين لعينه واحده',
@@ -54,7 +58,8 @@ const MESSAGES = {
       es: 'hacer t-test para una muestra dos colas',
       it: 'eseguire il t-test su un solo campione su due lati',
       ko: '독립표본 양측 t-검정 수행',
-      pt: 'fazer teste-t bilateral de amostra única'
+      pt: 'fazer teste-t bilateral de amostra única',
+      ch: '单样本T检验'
     }
   },
   stats_ttest_two: {
@@ -65,7 +70,8 @@ const MESSAGES = {
       es: 'T-test para dos muestras',
       it: 'T-test a due campioni',
       ko: '이표본 t-검정',
-      pt: 'Teste-T de duas amostras'
+      pt: 'Teste-T de duas amostras',
+      ch: '配对样本t检验'
     },
     message1: {
       ar: 'الإسم %1 الفئه %2 القيم %3',
@@ -74,7 +80,8 @@ const MESSAGES = {
       es: 'nombre %1 etiquetas %2 valores %3',
       it: 'nome %1 etichette %2 valori %3',
       ko: '이름 %1 라벨 %2 값 %3',
-      pt: 'nome %1 rótulos %2 valores %3'
+      pt: 'nome %1 rótulos %2 valores %3',
+      ch: '检验结果 %1 标签 %2 值 %3 '
     },
     args1_name: {
       ar: 'الإسم',
@@ -83,7 +90,8 @@ const MESSAGES = {
       es: 'nombre',
       it: 'nome',
       ko: '이름',
-      pt: 'nome'
+      pt: 'nome',
+      ch: '命名'
     },
     args1_label: {
       ar: 'الفئه',
@@ -92,7 +100,8 @@ const MESSAGES = {
       es: 'etiqueta',
       it: 'etichetta',
       ko: '라벨',
-      pt: 'rótulo'
+      pt: 'rótulo',
+      ch: '标签名'
     },
     args1_column: {
       ar: 'العمود',
@@ -101,7 +110,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     tooltip: {
       ar: 'إختبار (ت) ذو الإتجاهين لعينتين',
@@ -110,7 +120,8 @@ const MESSAGES = {
       es: 'hacer t-test para dos muestras dos colas',
       it: 'eseguire un t-test a due campioni su due lati',
       ko: '이표본 양측 t-검정 수행',
-      pt: 'fazer teste-t bilateral de duas amostras'
+      pt: 'fazer teste-t bilateral de duas amostras',
+      ch: '配对样本t检验'
     }
   },
   stats_k_means: {
@@ -121,7 +132,8 @@ const MESSAGES = {
       es: 'agrupamiento por k-medians',
       // TRANSLATE ko
       it: 'suddivisione k-means',
-      pt: 'agrupamento por k-means'
+      pt: 'agrupamento por k-means',
+      ch: 'K-平均算法'
     },
     message1: {
       ar: 'س %1 ص %2 الرقم %3 الفئه %4',
@@ -130,7 +142,8 @@ const MESSAGES = {
       es: 'X %1 Y %2 numero %3 etiqueta %4',
       // TRANSLATE ko
       it: 'X %1 Y %2 numero %3 etichetta %4',
-      pt: 'X %1 Y %2 número %3 rótulo %4'
+      pt: 'X %1 Y %2 número %3 rótulo %4',
+      ch: 'X %1 Y %2 聚类数 %3 新列名 %4 '
     },
     args1_x: {
       ar: 'المحور الأفقي',
@@ -139,7 +152,8 @@ const MESSAGES = {
       es: 'eje X',
       it: 'asse X',
       ko: 'X축',
-      pt: 'eixo X'
+      pt: 'eixo X',
+      ch: 'X轴'
     },
     args1_y: {
       ar: 'المحور الرأسي',
@@ -148,7 +162,8 @@ const MESSAGES = {
       es: 'eje Y',
       it: 'asse Y',
       ko: 'Y축',
-      pt: 'eixo Y'
+      pt: 'eixo Y',
+      ch: 'Y轴 '
     },
     args1_label: {
       ar: 'الفئه',
@@ -157,7 +172,8 @@ const MESSAGES = {
       es: 'etiqueta',
       ko: '라벨',
       it: 'etichetta',
-      pt: 'etiqueta'
+      pt: 'etiqueta',
+      ch: '标签'
     },
     tooltip: {
       ar: 'حساب IDs لصنف الخوارزميه التصنيفية',
@@ -166,7 +182,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'calcola gli identificatori di raggruppamento per k-means',
-      pt: 'calcular os identificadores do agrupamento por k-means'
+      pt: 'calcular os identificadores do agrupamento por k-means',
+      ch: '计算二维数据K-Means'
     }
   },
   stats_silhouette: {
@@ -177,7 +194,8 @@ const MESSAGES = {
       es: 'silueta',
       // TRANSLATE ko
       it: 'silhouette',
-      pt: 'silhueta'
+      pt: 'silhueta',
+      ch: '轮廓系数'
     },
     message1: {
       ar: 'س %1 ص %2 الفئه %3 النتيجه\المعدل %4',
@@ -186,7 +204,8 @@ const MESSAGES = {
       es: 'X %1 Y %2 etiqueta %3 puntuación %4',
       // TRANSLATE ko
       it: 'X %1 Y %2 etichetta %3 punteggio %4',
-      pt: 'X %1 Y %2 rótulo %3 pontuação %4'
+      pt: 'X %1 Y %2 rótulo %3 pontuação %4',
+      ch: 'X %1 Y %2 标签 %3 分数 %4 '
     },
     args1_x: {
       ar: 'المحور الأفقي',
@@ -195,7 +214,8 @@ const MESSAGES = {
       es: 'eje X',
       it: 'asse X',
       ko: 'X축',
-      pt: 'eixo X'
+      pt: 'eixo X',
+      ch: 'X轴'
     },
     args1_y: {
       ar: 'المحور الرأسي',
@@ -204,7 +224,8 @@ const MESSAGES = {
       es: 'eje Y',
       it: 'asse Y',
       ko: 'Y축',
-      pt: 'eixo Y'
+      pt: 'eixo Y',
+      ch: 'Y轴 '
     },
     args1_label: {
       ar: 'الفئه',
@@ -212,8 +233,9 @@ const MESSAGES = {
       en: 'label',
       es: 'etiqueta',
       ko: '라벨',
-      it: 'etichetta'
+      it: 'etichetta',
       // TRANSLATE pt
+      ch: '标签'
     },
     args1_score: {
       ar: 'المعدل\النتيجه',
@@ -222,7 +244,8 @@ const MESSAGES = {
       es: 'puntuación',
       // TRANSLATE ko
       it: 'punteggio',
-      pt: 'pontuação'
+      pt: 'pontuação',
+      ch: '分数'
     },
     tooltip: {
       ar: 'حساب معدل رسم الصورة الظلية لتصنيف ذو بعدين',
@@ -231,7 +254,8 @@ const MESSAGES = {
       es: 'calcular la puntuación de la silueta de los clústeres 2D',
       // TRANSLATE ko
       it: 'calcola il punteggio silhouette per i raggruppamenti 2D',
-      pt: 'calcular a pontuação de silhueta dos agrupamentos 2D'
+      pt: 'calcular a pontuação de silhueta dos agrupamentos 2D',
+      ch: '计算二维聚类的轮廓系数 '
     }
   }
 }

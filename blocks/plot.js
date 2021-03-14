@@ -17,7 +17,8 @@ const MESSAGES = {
     es: 'nombre',
     it: 'nome',
     ko: '이름',
-    pt: 'nome'
+    pt: 'nome',
+    ch: '图名'
   },
   x_axis: {
     ar: 'المحور الأفقي',
@@ -26,7 +27,8 @@ const MESSAGES = {
     es: 'eje X',
     it: 'asse X',
     ko: 'X축',
-    pt: 'eixo X'
+    pt: 'eixo X',
+    ch: 'X轴'
   },
   y_axis: {
     ar: 'المحور الرأسي',
@@ -35,7 +37,8 @@ const MESSAGES = {
     es: 'eje Y',
     it: 'asse Y',
     ko: 'Y축',
-    pt: 'eixo Y'
+    pt: 'eixo Y',
+    ch: 'Y轴'
   },
   plot_bar: {
     message0: {
@@ -45,7 +48,8 @@ const MESSAGES = {
       es: 'Barras %1 %2 %3',
       it: 'barra %1 %2 %3',
       ko: '막대 %1 %2 %3',
-      pt: 'Barra %1 %2 %3'
+      pt: 'Barra %1 %2 %3',
+      ch: '条形图 %1 %2 %3'
     },
     tooltip: {
       ar: 'إنشاء رسم الأعمده البيانيه',
@@ -54,7 +58,8 @@ const MESSAGES = {
       es: 'crear grafico barras',
       it: 'crea un grafico a barre',
       ko: '막대 그래프 만들기',
-      pt: 'criar gráfico de barras'
+      pt: 'criar gráfico de barras',
+      ch: '创建条形图'
     }
   },
   plot_box: {
@@ -65,7 +70,8 @@ const MESSAGES = {
       es: 'Cajas %1 %2 %3',
       it: 'Scatola %1 %2 %3',
       ko: '박스 %1 %2 %3',
-      pt: 'Caixa %1 %2 %3'
+      pt: 'Caixa %1 %2 %3',
+      ch: '箱形图 %1 %2 %3'
     },
     tooltip: {
       ar: 'إنشاء مخطط الصندوق ذو العارضتين',
@@ -74,7 +80,8 @@ const MESSAGES = {
       es: 'crear grafico cajas',
       it: 'crea diagramma a scatola e baffi',
       ko: '박스 그래프 만들기',
-      pt: 'criar diagrama de caixas'
+      pt: 'criar diagrama de caixas',
+      ch: '创建箱形图'
     }
   },
   plot_dot: {
@@ -85,7 +92,8 @@ const MESSAGES = {
       es: 'Puntos %1 %2',
       it: 'punti %1 %2',
       ko: '도트 %1 %2',
-      pt: 'Ponto %1 %2'
+      pt: 'Ponto %1 %2',
+      ch: '点图 %1 %2'
     },
     tooltip: {
       ar: 'إنشاء المخطط النقطي',
@@ -94,7 +102,8 @@ const MESSAGES = {
       es: 'crear grafico puntos',
       it: 'crea un diagramma a punti',
       ko: '도트 그래프 만들기',
-      pt: 'criar gráfico de pontos'
+      pt: 'criar gráfico de pontos',
+      ch: '创建点图'
     }
   },
   plot_histogram: {
@@ -105,7 +114,8 @@ const MESSAGES = {
       es: 'Histograma %1 %2 %3',
       it: 'istogramma %1 %2 %3',
       ko: '히스토그램 %1 %2 %3',
-      pt: 'Histograma %1 %2 %3'
+      pt: 'Histograma %1 %2 %3',
+      ch: '直方图 %1 %2 %3'
     },
     column: {
       ar: 'العمود',
@@ -114,7 +124,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     tooltip: {
       ar: 'إنشاء المدرج التكراري',
@@ -123,7 +134,8 @@ const MESSAGES = {
       es: 'crear histograma',
       it: 'crea istogramma',
       ko: '히스토그램 만들기',
-      pt: 'criar histograma'
+      pt: 'criar histograma',
+      ch: '创建柱状图'
     }
   },
   plot_scatter: {
@@ -134,7 +146,8 @@ const MESSAGES = {
       es: 'Dispersion %1 %2 %3 Color %4 Añadir linea? %5',
       it: 'Dispersione %1 %2 %3 Colore %4 Aggiungere linea? %5',
       ko: '분산 %1 %2 %3 색깔 %4 선 추가? %5',
-      pt: 'Disperssão %1 %2 %3 Cor %4 Adicionar Linha? %5'
+      pt: 'Disperssão %1 %2 %3 Cor %4 Adicionar Linha? %5',
+      ch: '散点图 %1 %2 %3 颜色 %4 回归线？ %5'
     },
     tooltip: {
       ar: 'إنشاء مخطط الإنتشار',
@@ -143,7 +156,8 @@ const MESSAGES = {
       es: 'crear grafico dispersion',
       it: 'crea un grafico di dispersione',
       ko: '분산 그래프 만들기',
-      pt: 'criar gráfico de dispersão'
+      pt: 'criar gráfico de dispersão',
+      ch: '创建散点图'
     }
   }
 }

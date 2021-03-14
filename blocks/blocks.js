@@ -40,16 +40,18 @@ const MESSAGES = {
     es: 'combinar',
     it: 'unire',
     ko: '결합',
-    pt: 'combinar'
+    pt: 'combinar',
+    ch: '合并'
   },
   control: {
     // TRANSLATE ar
     el: 'ρύθμιση',
-    en: 'control'
+    en: 'control',
     // TRANSLATE es
     // TRANSLATE it
     // TRANSLATE ko
     // TRANSLATE pt
+    ch: '控制'
   },
   data: {
     ar: 'بيانات',
@@ -58,7 +60,8 @@ const MESSAGES = {
     es: 'datos',
     it: 'dati',
     ko: '데이터',
-    pt: 'dados'
+    pt: 'dados',
+    ch: '数据'
   },
   op: {
     ar: 'حساب',
@@ -67,7 +70,8 @@ const MESSAGES = {
     es: 'operacion',
     it: 'operatori',
     ko: '작업',
-    pt: 'operação'
+    pt: 'operação',
+    ch: '操作'
   },
   plot: {
     ar: 'رسم',
@@ -76,7 +80,8 @@ const MESSAGES = {
     es: 'grafico',
     it: 'grafici',
     ko: '그래프',
-    pt: 'gráfico'
+    pt: 'gráfico',
+    ch: '绘图'
   },
   stats: {
     ar: 'إحصائيات',
@@ -85,7 +90,8 @@ const MESSAGES = {
     es: 'estadísticas',
     it: 'statistiche',
     ko: '통계',
-    pt: 'estatísticas'
+    pt: 'estatísticas',
+    ch: '统计'
   },
   transform: {
     ar: 'تغيير',
@@ -94,7 +100,8 @@ const MESSAGES = {
     es: 'transformar',
     it: 'trasformazioni',
     ko: '변환',
-    pt: 'transformar'
+    pt: 'transformar',
+    ch: '转换'
   },
   value: {
     ar: 'القيمه',
@@ -103,7 +110,8 @@ const MESSAGES = {
     es: 'valor',
     it: 'valore',
     ko: '값',
-    pt: 'valor'
+    pt: 'valor',
+    ch: '数值'
   }
 }
 

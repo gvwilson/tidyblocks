@@ -18,7 +18,8 @@ const MESSAGES = {
       es: 'Colores',
       it: 'Colori',
       ko: '색깔',
-      pt: 'Cores'
+      pt: 'Cores',
+      ch: '颜色数据'
     },
     tooltip: {
       ar: 'احد عشر لون',
@@ -27,7 +28,8 @@ const MESSAGES = {
       es: 'once colores',
       it: 'undici colori',
       ko: '11개의 색',
-      pt: 'onze cores'
+      pt: 'onze cores',
+      ch: '11种颜色的RGB数据'
     }
   },
   earthquakes: {
@@ -38,7 +40,8 @@ const MESSAGES = {
       es: 'Terremotos',
       it: 'Terremoti',
       ko: '지진',
-      pt: 'Terremotos'
+      pt: 'Terremotos',
+      ch: '地震数据'
     },
     tooltip: {
       ar: 'بيانات الزلزال',
@@ -47,7 +50,8 @@ const MESSAGES = {
       es: 'datos de terremotos',
       it: 'dati sui terremoti',
       ko: '지진 데이터',
-      pt: 'dados de terremotos'
+      pt: 'dados de terremotos',
+      ch: '2016年地震数据'
     }
   },
   penguins: {
@@ -58,7 +62,8 @@ const MESSAGES = {
       es: 'Pingüinos',
       it: 'Pinguini',
       ko: '펭귄',
-      pt: 'Penguins'
+      pt: 'Penguins',
+      ch: '企鹅数据'
     },
     tooltip: {
       ar: 'بيانات طيور البطريق',
@@ -67,7 +72,8 @@ const MESSAGES = {
       es: 'datos de pingüinos',
       it: 'dati sui pinguini',
       ko: '펭귄 데이터',
-      pt: 'dados de penguins'
+      pt: 'dados de penguins',
+      ch: '企鹅数据'
     }
   },
   phish: {
@@ -78,7 +84,8 @@ const MESSAGES = {
       es: 'Phish',
       it: 'Phish',
       ko: '피시',
-      pt: 'Phish'
+      pt: 'Phish',
+      ch: 'Phish乐队数据'
     },
     tooltip: {
       ar: 'بيانات فرقه الفيش الموسيقيه',
@@ -87,7 +94,8 @@ const MESSAGES = {
       es: 'datos de conciertos Phish',
       it: 'dati sui concerti dei Phish',
       ko: '피시 콘서트 데이터',
-      pt: 'dados de shows do Phish'
+      pt: 'dados de shows do Phish',
+      ch: 'Phish乐队演唱数据'
     }
   },
   sequence: {
@@ -98,7 +106,8 @@ const MESSAGES = {
       es: 'Sequencia %1 %2',
       it: 'sequenza %1 %2',
       ko: '배열 %1 %2',
-      pt: 'Sequência %1 %2'
+      pt: 'Sequência %1 %2',
+      ch: '创建序列 %1 %2'
     },
     args0_text: {
       ar: 'اﻹسم',
@@ -107,7 +116,8 @@ const MESSAGES = {
       es: 'nombre',
       it: 'nome',
       ko: '이름',
-      pt: 'nome'
+      pt: 'nome',
+      ch: '序列名'
     },
     tooltip: {
       ar: 'إنشاء متسلسله ١..ن',
@@ -116,15 +126,18 @@ const MESSAGES = {
       es: 'Generar una sequencia 1..N',
       it: 'genera una sequenza 1..N',
       ko: '배열 실행 1..N',
-      pt: 'Gerar uma sequencia 1..N'
+      pt: 'Gerar uma sequencia 1..N',
+      ch: '生成1到N的序列'
     }
   },
   spotify: {
     message0: {
-      en: 'Spotify'
+      en: 'Spotify',
+      ch: 'Spotify数据'
     },
     tooltip: {
-      en: 'Spotify song data'
+      en: 'Spotify song data',
+      ch: 'Spotify歌曲数据'
     }
   },
   data_user: {
@@ -135,7 +148,8 @@ const MESSAGES = {
       es: 'Datos de usuario %1',
       it: 'Dati utenti %1',
       ko: '사용자 데이터 %1',
-      pt: 'Dados de usuario %1'
+      pt: 'Dados de usuario %1',
+      ch: '用户数据 %1'
     },
     args0_text: {
       ar: 'الإسم',
@@ -144,7 +158,8 @@ const MESSAGES = {
       es: 'nombre',
       it: 'nome',
       ko: '이름',
-      pt: 'nome'
+      pt: 'nome',
+      ch: '数据名'
     },
     tooltip: {
       ar: 'إستخدام بيانات محمله مسبقا',
@@ -153,7 +168,8 @@ const MESSAGES = {
       es: 'usa datos previamente cargados',
       it: 'usa i dati caricati in precedenza',
       ko: '이전에 로드된 데이터 사용',
-      pt: 'use dados carregados previamente'
+      pt: 'use dados carregados previamente',
+      ch: '使用之前加载的数据'
     }
   }
 }

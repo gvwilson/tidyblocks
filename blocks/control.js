@@ -19,6 +19,7 @@ const MESSAGES = {
       it: 'Effetti casuali %1',
       // TRANSLATE ko
       // TRANSLATE pt
+      ch: '重新生成 %1'
     },
     tooltip: {
       ar: 'إعادة تشغيل مولد الأرقام العشوائية',
@@ -28,6 +29,7 @@ const MESSAGES = {
       it: 'Riavviare la generazione di numeri casuali',
       // TRANSLATE ko
       // TRANSLATE pt
+      ch: '重新生成随机数'
     }
   }
 }

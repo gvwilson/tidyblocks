@@ -19,7 +19,8 @@ const MESSAGES = {
       es: 'Ausente',
       it: 'Assente',
       ko: '공백',
-      pt: 'Ausente'
+      pt: 'Ausente',
+      ch: '空'
     },
     tooltip: {
       ar: 'تمثيل فجوه',
@@ -28,7 +29,8 @@ const MESSAGES = {
       es: 'representa un agujero',
       it: 'rappresenta un buco',
       ko: '홀을 나타내기',
-      pt: 'representa um buraco'
+      pt: 'representa um buraco',
+      ch: '代表一个空'
     }
   },
   column: {
@@ -39,7 +41,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     tooltip: {
       ar: 'الحصول على قيمه من عمود',
@@ -48,7 +51,8 @@ const MESSAGES = {
       es: 'obten el valor de una columna',
       it: 'ottieni il valore di una colonna',
       ko: '열의 값 가져오기',
-      pt: 'obtém o valor de uma coluna'
+      pt: 'obtém o valor de uma coluna',
+      ch: '获取列值'
     }
   },
   datetime: {
@@ -59,7 +63,8 @@ const MESSAGES = {
       es: 'AAAA-MM-DD',
       it: 'AAAA-MM-GG',
       ko: '연도-월-일',
-      pt: 'AAAA-MM-DD'
+      pt: 'AAAA-MM-DD',
+      ch: 'YYYY-MM-DD'
     },
     tooltip: {
       ar: 'ثابت تاريخ/وقت',
@@ -68,7 +73,8 @@ const MESSAGES = {
       es: 'constante fecha/tiempo',
       it: 'data/ora costanti',
       ko: '날짜/시간 유지',
-      pt: 'constante data/tempo'
+      pt: 'constante data/tempo',
+      ch: '日期/时间'
     }
   },
   logical: {
@@ -79,7 +85,8 @@ const MESSAGES = {
       es: 'constante logica',
       it: 'constante logica',
       ko: '논리 상수',
-      pt: 'constante lógica'
+      pt: 'constante lógica',
+      ch: '逻辑值'
     }
   },
   number: {
@@ -90,7 +97,8 @@ const MESSAGES = {
       es: 'numbero constante',
       it: 'constante numerica',
       ko: '상수',
-      pt: 'número constante'
+      pt: 'número constante',
+      ch: '常数'
     }
   },
   text: {
@@ -101,7 +109,8 @@ const MESSAGES = {
       es: 'texto',
       it: 'testo',
       ko: '텍스트',
-      pt: 'texto'
+      pt: 'texto',
+      ch: '文本'
     },
     tooltip: {
       ar: 'نص ثابت',
@@ -110,7 +119,8 @@ const MESSAGES = {
       es: 'texto constante',
       it: 'testo costante',
       ko: '상수 텍스트',
-      pt: 'texto constante '
+      pt: 'texto constante ',
+      ch: '文本'
     }
   },
   missing: {
@@ -121,7 +131,8 @@ const MESSAGES = {
       es: 'Falta',
       // TRANSLATE ko
       it: 'Mancante',
-      pt: 'Faltante'
+      pt: 'Faltante',
+      ch: '缺失值'
     },
     tooltip: {
       ar: 'القيمه المفقوده',
@@ -130,7 +141,8 @@ const MESSAGES = {
       es: 'valor que falta',
       // TRANSLATE ko
       it: 'valore mancante',
-      pt: 'valor faltante'
+      pt: 'valor faltante',
+      ch: '缺失值'
     }
   },
   exponential: {
@@ -141,7 +153,8 @@ const MESSAGES = {
       es: 'Exponencial \u03BB %1',
       it: 'Esponenziale \u03BB %1',
       ko: '\u03BB %1 지수로 표현',
-      pt: 'Exponencial \u03BB %1'
+      pt: 'Exponencial \u03BB %1',
+      ch: '指数分布 \u03BB %1'
     },
     tooltip: {
       ar: 'المتغيرات العشوائه الأسيه',
@@ -150,7 +163,8 @@ const MESSAGES = {
       es: 'valor aleatorio exponencial',
       it: 'valore aleatorio esponenziale',
       ko: '지수 랜덤 값',
-      pt: 'valor aleatório exponencial'
+      pt: 'valor aleatório exponencial',
+      ch: '从指数分布中生成随机值'
     }
   },
   normal: {
@@ -161,7 +175,8 @@ const MESSAGES = {
       es: 'Normal \u03BC %1 \u03C3 %2',
       it: 'Normale \u03BC %1 \u03C3 %2',
       ko: '\u03BC %1 \u03C3 %2 정규화',
-      pt: 'Normal \u03BC %1 \u03C3 %2'
+      pt: 'Normal \u03BC %1 \u03C3 %2',
+      ch: '正态分布 \u03BC %1 \u03C3 %2'
     },
     tooltip: {
       ar: 'المتغير العشوائي الطبيعي',
@@ -170,7 +185,8 @@ const MESSAGES = {
       es: 'valor aleatorio normal',
       it: 'valore aleatorio normale',
       ko: '정규 랜덤 값',
-      pt: 'valor aleatório normal'
+      pt: 'valor aleatório normal',
+      ch: '从正态分布中生成随机值'
     }
   },
   uniform: {
@@ -181,7 +197,8 @@ const MESSAGES = {
       es: 'Uniforme \u03B1 %1 \u03B2 %2',
       it: 'Uniforme \u03B1 %1 \u03B2 %2',
       ko: '\u03B1 %1 \u03B2 %2 균등화',
-      pt: 'Uniforme \u03B1 %1 \u03B2 %2'
+      pt: 'Uniforme \u03B1 %1 \u03B2 %2',
+      ch: '均匀分布 \u03B1 %1 \u03B2 %2'
     },
     tooltip: {
       ar: 'المتغير العشوائي المنتظم',
@@ -190,7 +207,8 @@ const MESSAGES = {
       es: 'valor aleatorio uniforme',
       it: 'valore aleatorio uniforme',
       ko: '균등 랜덤 값',
-      pt: 'valor aleatório uniforme'
+      pt: 'valor aleatório uniforme',
+      ch: '从均匀分布中生成随机值'
     }
   }
 }

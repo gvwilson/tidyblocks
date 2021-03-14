@@ -19,7 +19,8 @@ const MESSAGES = {
     es: 'columna, columna',
     it: 'colonna, colonna',
     ko: '열, 열',
-    pt: 'coluna, coluna'
+    pt: 'coluna, coluna',
+    ch: '列名，列名'
   },
   bin: {
     message0: {
@@ -29,7 +30,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'Intervallo %1 %2 etichetta %3',
-      pt: 'Intervalo %1 %2 rótulo %3'
+      pt: 'Intervalo %1 %2 rótulo %3',
+      ch: '将 %1 分为 %2 标签 %3'
     },
     column: {
       ar: 'العمود',
@@ -38,7 +40,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     label: {
       ar: 'الفئه',
@@ -47,7 +50,8 @@ const MESSAGES = {
       es: 'etiqueta',
       it: 'etichetta',
       ko: '라벨',
-      pt: 'rótulo'
+      pt: 'rótulo',
+      ch: '新列名'
     },
     tooltip: {
       ar: 'تقسيم القيم إلى صناديق متساويه الحجم',
@@ -56,7 +60,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'Dividi i valori in intervalli uguali',
-      pt: 'Divide os valores em intervalos iguais'
+      pt: 'Divide os valores em intervalos iguais',
+      ch: '将数值分成大小相等的组'
     }
   },
   create: {
@@ -67,7 +72,8 @@ const MESSAGES = {
       es: 'Crear %1 %2',
       it: 'crea %1 %2',
       ko: '%1 %2 만들기',
-      pt: 'Criar %1 %2'
+      pt: 'Criar %1 %2',
+      ch: '创建 %1 基于 %2'
     },
     args0_text: {
       ar: 'عمود_جديد',
@@ -76,7 +82,8 @@ const MESSAGES = {
       es: 'nueva_columna',
       it: 'nuova colonna',
       ko: '새로운 열',
-      pt: 'nova_coluna'
+      pt: 'nova_coluna',
+      ch: '新列名'
     },
     tooltip: {
       ar: 'إنشاء عمود جديد بإستخدام الأعمده الموجوده مسبقا',
@@ -85,7 +92,8 @@ const MESSAGES = {
       es: 'crear nueva columna de las columnas existentes',
       it: 'crea una nuova colonna da colonne già esistente',
       ko: '기존의 열에서 새로운 열 만들기',
-      pt: 'criar nova coluna a partir de colunas existentes'
+      pt: 'criar nova coluna a partir de colunas existentes',
+      ch: '从现有列中创建新列'
     }
   },
   drop: {
@@ -96,7 +104,8 @@ const MESSAGES = {
       es: 'Excluir %1',
       it: 'escludi %1',
       ko: '%1 삭제',
-      pt: 'Excluir %1'
+      pt: 'Excluir %1',
+      ch: '删除 %1'
     },
     args0_tooltip: {
       ar: 'حذف الأعمده بإستخدام اسمائها',
@@ -105,7 +114,8 @@ const MESSAGES = {
       es: 'Excluir columnas por nombre',
       it: 'escludi colonne per nome',
       ko: '이름에 따라 열 삭제',
-      pt: 'excluir colunas por nome'
+      pt: 'excluir colunas por nome',
+      ch: '删除列'
     }
   },
   filter: {
@@ -116,7 +126,8 @@ const MESSAGES = {
       es: 'Filtrar %1',
       it: 'filtra %1',
       ko: '%1 거르기',
-      pt: 'Filtrar %1'
+      pt: 'Filtrar %1',
+      ch: '筛选条件 %1 '
     },
     args0_name: {
       ar: 'إختبار',
@@ -125,7 +136,8 @@ const MESSAGES = {
       es: 'TEST',
       it: 'TEST',
       ko: '테스트',
-      pt: 'TESTE'
+      pt: 'TESTE',
+      ch: '测试'
     },
     tooltip: {
       ar: 'تصفيه أو فلتره الصفوف بإستخدام شرط',
@@ -134,7 +146,8 @@ const MESSAGES = {
       es: 'filtrar filas por condicion',
       it: 'Filtra righe per condizione',
       ko: '조건에 따라 행 거르기',
-      pt: 'filtrar linhas por condição'
+      pt: 'filtrar linhas por condição',
+      ch: '按条件筛选行'
     }
   },
   groupBy: {
@@ -145,7 +158,8 @@ const MESSAGES = {
       es: 'Agrupar por %1',
       it: 'raggruppa per %1',
       ko: '%1 로 그룹화',
-      pt: 'Agrupar por %1'
+      pt: 'Agrupar por %1',
+      ch: '对 %1 聚类'
     },
     tooltip: {
       ar: 'تقسيم البيانات الى فئات باستخدام قيم الاعمده',
@@ -154,7 +168,8 @@ const MESSAGES = {
       es: 'agrupar datos por valores en columnas',
       it: 'raggruppare i dati per valori in colonne',
       ko: '열의 값들로 데이터 그룹화',
-      pt: 'agrupar dados por valores em colunas'
+      pt: 'agrupar dados por valores em colunas',
+      ch: '按列值聚类'
     }
   },
   saveAs: {
@@ -165,7 +180,8 @@ const MESSAGES = {
       es: 'Reporte %1', // CHECK es
       it: 'Salva come %1',
       ko: '%1 저장하기',
-      pt: 'Salvar como %1'
+      pt: 'Salvar como %1',
+      ch: '保存为 %1'
     },
     args0_text: {
       ar: 'الإسم',
@@ -174,7 +190,8 @@ const MESSAGES = {
       es: 'nombre',
       it: 'nome',
       ko: '이름',
-      pt: 'nome'
+      pt: 'nome',
+      ch: '文件名'
     },
     tooltip: {
       ar: 'حفظ نتيجة',
@@ -183,7 +200,8 @@ const MESSAGES = {
       es: 'reporta un resultado', // CHECK es
       it: 'salva risultato',
       ko: '결과 리포트', // CHECK ko
-      pt: 'salvar um resultado'
+      pt: 'salvar um resultado',
+      ch: '保存结果'
     }
   },
   select: {
@@ -194,7 +212,8 @@ const MESSAGES = {
       es: 'Selecciona %1',
       it: 'Seleziona %1',
       ko: '%1 선택',
-      pt: 'Selecionar %1'
+      pt: 'Selecionar %1',
+      ch: '选择 %1'
     },
     tooltip: {
       ar: 'إختيار الأعمده بإستخدام اسمائها',
@@ -203,7 +222,8 @@ const MESSAGES = {
       es: 'selecciona columnas por nombre',
       it: 'seleziona colonne per nome',
       ko: '이름으로 열 선택',
-      pt: 'seleciona colunas por nome'
+      pt: 'seleciona colunas por nome',
+      ch: '按列名选择'
     }
   },
   sort: {
@@ -214,7 +234,8 @@ const MESSAGES = {
       es: 'Ordena %1 descendiente %2',
       it: 'Ordina %1 discendente %2',
       ko: '%2 내림차순으로 %1 정렬',
-      pt: 'Ordenar %1 descendente %2'
+      pt: 'Ordenar %1 descendente %2',
+      ch: '对 %1 降序排列 %2'
     },
     tooltip: {
       ar: 'ترتيب الجدول بإستخدام اكثر من عمود',
@@ -223,7 +244,8 @@ const MESSAGES = {
       es: 'ordena tabla por multiples columnas',
       it: 'ordina la tabella per colonne multiple',
       ko: '다중 열에 따라 테이블 정렬',
-      pt: 'ordenar a table por múltiplas colunas'
+      pt: 'ordenar a table por múltiplas colunas',
+      ch: '多列排序'
     }
   },
   summarize: {
@@ -234,7 +256,8 @@ const MESSAGES = {
       es: 'Resumen %1 %2',
       it: 'Riassumi %1 %2',
       ko: '%1 %2 축소',
-      pt: 'Agregar %1 %2'
+      pt: 'Agregar %1 %2',
+      ch: '对总和值 %1 标签 %2'
     },
     args0_text: {
       ar: 'العمود',
@@ -243,7 +266,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '新列名'
     },
     tooltip: {
       ar: 'تلخيص قيم العمود',
@@ -252,7 +276,8 @@ const MESSAGES = {
       es: 'Resume valores en columna',
       it: 'riassumi valori in colonna',
       ko: '열의 값 축소',
-      pt: 'agrega valores em coluna'
+      pt: 'agrega valores em coluna',
+      ch: '汇总列值'
     }
   },
   running: {
@@ -263,7 +288,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'In funzione %1 %2', 
-      pt: 'Acumular %1 %2'
+      pt: 'Acumular %1 %2',
+      ch: '对累加值 %1 标签 %2'
     },
     args0_text: {
       ar: 'العمود',
@@ -272,7 +298,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '新列名'
     },
     tooltip: {
       ar: 'تراكم القيم الجاري تنفيذها',
@@ -281,7 +308,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'raggruppa i valori in funzione',
-      pt: 'acumular valores totais'
+      pt: 'acumular valores totais',
+      ch: '计算累加值'
     }
   },
   ungroup: {
@@ -292,7 +320,8 @@ const MESSAGES = {
       es: 'Desagrupar',
       it: 'Disaggrega',
       ko: '그룹화 해제',
-      pt: 'Desagrupar'
+      pt: 'Desagrupar',
+      ch: '撤销聚类'
     },
     tooltip: {
       ar: 'الغاءتقسيم البيانات',
@@ -301,7 +330,8 @@ const MESSAGES = {
       es: 'quita agrupamiento',
       it: 'rimuovi raggruppamento',
       ko: '그룹화 삭제',
-      pt: 'remover agrupamento'
+      pt: 'remover agrupamento',
+      ch: '撤销聚类'
     }
   },
   unique: {
@@ -312,7 +342,8 @@ const MESSAGES = {
       es: 'Unico %1',
       it: 'Unico %1',
       ko: '%1 을 유일값으로 만들기',
-      pt: 'Único %1'
+      pt: 'Único %1',
+      ch: '筛选唯一 %1 '
     },
     tooltip: {
       ar: 'إختيار الصفوف ذات القيم الفريده',
@@ -321,7 +352,8 @@ const MESSAGES = {
       es: 'selecciona filas con valores unicos',
       it: 'selezionare le righe con valori univoci',
       ko: '유일값으로 행 선택',
-      pt: 'seleciona linhas com valores únicos'
+      pt: 'seleciona linhas com valores únicos',
+      ch: '选择具有唯一值的行'
     }
   }
 }
