@@ -18,7 +18,8 @@ const MESSAGES = {
       es: 'Pegar izquierda %1 derecha %2 etiquetas %3',
       it: 'incolla sinistra %1 destra %2 etichette %3',
       ko: '왼쪽에 붙이기 %1 오른쪽 %2 라벨 %3',
-      pt: 'Juntar esquerda %1 direita %2 etiquetas %3'
+      pt: 'Juntar esquerda %1 direita %2 etiquetas %3',
+      ch: '连接左侧 %1 右侧 %2 标签 %3'
     },
     table_name: {
       ar: 'الإسم',
@@ -27,7 +28,8 @@ const MESSAGES = {
       es: 'nombre',
       it: 'nome',
       ko: '이름',
-      pt: 'nome'
+      pt: 'nome',
+      ch: '表名',
     },
     label: {
       ar: 'الفئة',
@@ -36,7 +38,8 @@ const MESSAGES = {
       es: 'etiqueta',
       it: 'etichetta',
       ko: '라벨',
-      pt: 'etiqueta'
+      pt: 'etiqueta',
+      ch: '新列名'
     },
     tooltip: {
       ar: 'دمج صفوف من جدولين',
@@ -45,7 +48,8 @@ const MESSAGES = {
       es: 'pegar juntas filas de dos tablas',
       it: 'incolla le righe di due tabelle insieme',
       ko: '두 테이블의 행을 붙이기',
-      pt: 'juntar linhas de duas tabelas'
+      pt: 'juntar linhas de duas tabelas',
+      ch: '连接两表格'
     }
   },
   join: {
@@ -56,7 +60,8 @@ const MESSAGES = {
       es: 'Unir',
       it: 'unisci',
       ko: '연결',
-      pt: 'Unir'
+      pt: 'Unir',
+      ch: '连接'
     },
     message1: {
       ar: 'يسار %1 %2',
@@ -65,7 +70,8 @@ const MESSAGES = {
       es: 'izquierda  %1 %2',
       it: 'sinistra %1 %2',
       ko: '왼쪽 %1 %2',
-      pt: 'esquerda %1 %2'
+      pt: 'esquerda %1 %2',
+      ch: '左侧 %1 %2'
     },
     message2: {
       ar: 'يمين %1 %2',
@@ -74,7 +80,8 @@ const MESSAGES = {
       es: 'derecha %1 %2',
       it: 'destra %1 %2',
       ko: '오른쪽 %1 %2',
-      pt: 'direita %1 %2'
+      pt: 'direita %1 %2',
+      ch: '右侧  %1 %2'
     },
     table: {
       ar: 'الجدول',
@@ -83,7 +90,8 @@ const MESSAGES = {
       es: 'tabla',
       it: 'tabella',
       ko: '테이블',
-      pt: 'tabela'
+      pt: 'tabela',
+      ch: '表格'
     },
     column: {
       ar: 'العمود',
@@ -92,7 +100,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     tooltip: {
       ar: 'دمج جدولين عن طريق تشابه القيم',
@@ -101,7 +110,8 @@ const MESSAGES = {
       es: 'unir dos tables emparenjando valores',
       it: 'unisce due tabelle con valori corrispondenti',
       ko: '일치하는 값으로 두 테이블 연결',
-      pt: 'unir duas tabelas usando valores coincidentes'
+      pt: 'unir duas tabelas usando valores coincidentes',
+      ch: '通过匹配值连接两表'
     }
   }
 }

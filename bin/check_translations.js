@@ -1,7 +1,7 @@
 // Check for gaps in block message translations.
 
 const BLOCKS = ['blocks', 'combine', 'data', 'op', 'plot', 'stats', 'transform', 'value']
-const LANGUAGES = ['ar', 'en', 'es', 'ko', 'it']
+const LANGUAGES = ['ar', 'en', 'es', 'ko', 'it','ch']
 
 const search = (path, current) => {
   if ('en' in current) {

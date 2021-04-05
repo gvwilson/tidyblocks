@@ -20,7 +20,8 @@ const MESSAGES = {
       es: 'haz la aritmética',
       it: 'eseguire la aritmentica',
       ko: '연산 실행',
-      pt: 'fazer a aritmética'
+      pt: 'fazer a aritmética',
+      ch: '做算术'
     }
   },
   negate: {
@@ -31,7 +32,8 @@ const MESSAGES = {
       es: 'excluye una columna numérica',
       it: 'escludere una colonna numerica',
       ko: '숫자열 취소',
-      pt: 'excluir uma coluna numérica'
+      pt: 'excluir uma coluna numérica',
+      ch: '数值数列的负数'
     }
   },
   abs: {
@@ -42,7 +44,8 @@ const MESSAGES = {
       es: 'valor absoluto de una columna numérica',
       it: 'valore assoluto di una colonna numerica',
       ko: '숫자열의 절대값',
-      pt: 'valor absoluto de uma coluna numérica'
+      pt: 'valor absoluto de uma coluna numérica',
+      ch: '数列的绝对值'
     }
   },
   compare: {
@@ -53,7 +56,8 @@ const MESSAGES = {
       es: 'compara dos columnas',
       it: 'comparare due colonne',
       ko: '두 열을 비교',
-      pt: 'comparar duas colunas'
+      pt: 'comparar duas colunas',
+      ch: '比较两数列'
     }
   },
   extremum: {
@@ -64,7 +68,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE it
       // TRANSLATE ko
-      pt: 'selecionar o maior ou menor valor'
+      pt: 'selecionar o maior ou menor valor',
+      ch: '求最大值或最小值'
     }
   },
   logical: {
@@ -75,7 +80,8 @@ const MESSAGES = {
       es: 'combina los valores logicos de dos columnas',
       it: 'combinare i valori logici di due colonne',
       ko: '두 열의 논리 변수를 결합',
-      pt: 'combinar os valores lógicos de duas colunas'
+      pt: 'combinar os valores lógicos de duas colunas',
+      ch: '逻辑运算'
     }
   },
   not: {
@@ -86,7 +92,8 @@ const MESSAGES = {
       es: 'no %1',
       it: 'no %1',
       ko: '논리 부정 %1',
-      pt: 'não %1'
+      pt: 'não %1',
+      ch: '非 %1'
     },
     tooltip: {
       ar: 'إلغاء عمود منطقي',
@@ -95,7 +102,8 @@ const MESSAGES = {
       es: 'excluye una columna logica',
       it: 'escludere una colonna logica',
       ko: '논리 열 취소',
-      pt: 'excluir uma coluna lógica'
+      pt: 'excluir uma coluna lógica',
+      ch: '求否'
     }
   },
   type: {
@@ -106,7 +114,8 @@ const MESSAGES = {
       es: '¿Es %1 %2 ?',
       it: '%1 è %2',
       ko: '%1 은 %2 ?',
-      pt: '%1 é %2 ?'
+      pt: '%1 é %2 ?',
+      ch: '%1 是 %2 ?'
     },
     tooltip: {
       ar: 'التعرف على نوع القيمه',
@@ -115,7 +124,8 @@ const MESSAGES = {
       es: 'comprueba el tipo de valor',
       it: 'controlla il tipo di valore',
       ko: '값의 유형을 확인',
-      pt: 'confira o tipo de um valor'
+      pt: 'confira o tipo de um valor',
+      ch: '检查数据类型'
     }
   },
   convert: {
@@ -126,7 +136,8 @@ const MESSAGES = {
       es: '%1 a %2',
       it: '%1 a %2',
       ko: '%1 에서 %2',
-      pt: '%1 para %2'
+      pt: '%1 para %2',
+      ch: '%1 改为 %2'
     },
     tooltip: {
       ar: 'تغيير نوع القيمه',
@@ -135,7 +146,8 @@ const MESSAGES = {
       es: 'cambia el tipo de dato del valor',
       it: 'cambiare il tipo di dato di un valore',
       ko: '값의 데이터 유형을 변경',
-      pt: 'mude o tipo de dado de um valor'
+      pt: 'mude o tipo de dado de um valor',
+      ch: '改变数据类型'
     }
   },
   datetime: {
@@ -146,7 +158,8 @@ const MESSAGES = {
       es: 'obten %1 de %2',
       it: 'ottieni %1 da %2',
       ko: '%2 에서 %1 가져오기',
-      pt: 'pegue %1 de %2'
+      pt: 'pegue %1 de %2',
+      ch: '自 %2 获取 %1'
     },
     tooltip: {
       ar: 'تغيير نوع القيمه',
@@ -155,7 +168,8 @@ const MESSAGES = {
       es: 'cambia el tipo de dato del valor',
       it: 'cambiare il tipo di dato di un valore',
       ko: '값의 데이터 유형을 변경',
-      pt: 'mude o tipo de dado de um valor'
+      pt: 'mude o tipo de dado de um valor',
+      ch: '改变数据类型'
     }
   },
   conditional: {
@@ -166,7 +180,8 @@ const MESSAGES = {
       es: 'Si %1 entonces %2 sino %3',
       it: 'se %1 allora %2 altrimenti %3',
       ko: '%1 이면 %2 그렇지 않으면 %3',
-      pt: 'Se %1 então %2 se não %3'
+      pt: 'Se %1 então %2 se não %3',
+      ch: '如果 %1 就 %2 否则 %3'
     },
     tooltip: {
       ar: 'اختيار قيمه توافي شرط',
@@ -175,7 +190,8 @@ const MESSAGES = {
       es: 'selecciona el valor basandote en la condicion',
       it: 'seleziona il valore in base alla condizione',
       ko: '조건에  값을 선택',
-      pt: 'seleciona um valor baseado em uma condição'
+      pt: 'seleciona um valor baseado em uma condição',
+      ch: '按条件取值'
     }
   },
   shift: {
@@ -186,7 +202,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'Sposta %1 di %2',
-      pt: 'Deslocar %1 por %2'
+      pt: 'Deslocar %1 por %2',
+      ch: '将 %1 增减 %2'
     },
     column: {
       ar: 'العمود',
@@ -195,7 +212,8 @@ const MESSAGES = {
       es: 'columna',
       it: 'colonna',
       ko: '열',
-      pt: 'coluna'
+      pt: 'coluna',
+      ch: '列名'
     },
     tooltip: {
       ar: 'أزح في العمود للأعلى أو للأسفل',
@@ -204,7 +222,8 @@ const MESSAGES = {
       // TRANSLATE es
       // TRANSLATE ko
       it: 'sposta in una colonna in alto o in basso',
-      pt: 'deslocar uma coluna para cima ou para baixo'
+      pt: 'deslocar uma coluna para cima ou para baixo',
+      ch: '对整列数值加减 (正数增加，负数减少)'
     }
   }
 }
