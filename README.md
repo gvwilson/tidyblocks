@@ -1,4 +1,8 @@
-# TidyBlocks Revisited
+# TidyBlocks
+
+<div align="center">
+  <img src="static/screenshot.png" alt="TidyBlocks screenshot" />
+</div>
 
 Contributions of all kinds are welcome,
 from translations and examples to bug fixes and new features.
